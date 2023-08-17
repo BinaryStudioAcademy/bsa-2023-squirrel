@@ -1,0 +1,53 @@
+version: '3.1'
+services:
+  squirrel_core:
+    build:
+      context: ./backend
+      dockerfile: ./Squirrel.Core/Dockerfile
+      args:
+        - PROJECT_PORT=5050
+    container_name: 'squirrel_core'
+    restart: on-failure
+    ports:
+        - "5050:5050"
+    networks:
+        - back
+    environment:
+        ASPNETCORE_ENVIRONMENT: 'Development'
+        ConnectionStrings__SquirrelCoreDBConnection: 'Server=sql_server;Database=SquirrelCoreDB;User ID=SA;Password=MySecretPassword!'
+
+  squirrel_notifier:
+      build:
+        context: ./backend
+        dockerfile: ./Squirrel.Notifier/Dockerfile
+        args:
+          - PROJECT_PORT=5070
+      container_name: 'squirrel_notifier'
+      restart: on-failure
+      ports:
+          - "5070:5070"
+      networks:
+          - back
+      environment:
+          ASPNETCORE_ENVIRONMENT: 'Development'
+
+  squirrel_client:
+    depends_on:
+        - squirrel_core
+        - squirrel_notifier
+    build:
+        context: ./frontend
+        dockerfile: Dockerfile.dev
+    container_name: 'squirrel_frontend'
+    restart: on-failure
+    ports:
+        - "4200:80"
+    networks:
+        - back
+        - front
+
+networks:
+    back:
+        driver: bridge
+    front:
+        driver: bridge

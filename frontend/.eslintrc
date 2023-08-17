@@ -1,0 +1,166 @@
+{
+    "root": true,
+    "ignorePatterns": ["projects/**/*"],
+    "settings": {
+        "import/resolver": {
+            "node": {
+                "extensions": [".ts"],
+                "moduleDirectory": ["src", "node_modules"]
+            }
+        }
+    },
+    "env": {
+        "browser": true
+    },
+    "overrides": [
+        {
+            "files": ["*.ts"],
+            "parserOptions": {
+                "project": ["./tsconfig.json"]
+            },
+            "extends": [
+                "plugin:@angular-eslint/recommended",
+                "plugin:@angular-eslint/template/process-inline-templates",
+                "airbnb-typescript/base",
+                "airbnb-base"
+            ],
+            "plugins": ["prettier", "simple-import-sort", "@typescript-eslint"],
+            "parser": "@typescript-eslint/parser",
+            "rules": {
+                "no-shadow": "off",
+                "@angular-eslint/directive-selector": [
+                    "error",
+                    {
+                        "type": "attribute",
+                        "prefix": "app",
+                        "style": "camelCase"
+                    }
+                ],
+                "@angular-eslint/component-selector": [
+                    "error",
+                    {
+                        "type": "element",
+                        "prefix": "app",
+                        "style": "kebab-case"
+                    }
+                ],
+                "spaced-comment": "off",
+                "object-curly-newline": "off",
+                "linebreak-style": "off",
+                "implicit-arrow-linebreak": "off",
+                "class-methods-use-this": "off",
+                "arrow-parens": "off",
+                "@typescript-eslint/type-annotation-spacing": "error",
+                "@typescript-eslint/lines-between-class-members": "off",
+                "@typescript-eslint/indent": ["error", 4],
+                "@typescript-eslint/comma-dangle": "off",
+                "import/prefer-default-export": "off",
+                "import/no-extraneous-dependencies": "off",
+                "no-return-assign": "warn",
+                "no-param-reassign": ["warn", { "props": false }],
+                "import/first": "error",
+                "no-useless-constructor": "off",
+                "import/newline-after-import": "error",
+                "import/no-duplicates": "error",
+                "simple-import-sort/exports": "error",
+                "no-bitwise": "off",
+                "no-underscore-dangle": "off",
+                "operator-linebreak": "off",
+                "dot-notation": "off",
+                "@typescript-eslint/naming-convention": "off",
+                "import/extensions": [
+                    "error",
+                    "ignorePackages",
+                    {
+                        "js": "never",
+                        "ts": "never"
+                    }
+                ],
+                "@typescript-eslint/no-unused-vars": [
+                    "error",
+                    {
+                        "varsIgnorePattern": "^_+$",
+                        "argsIgnorePattern": "^_+$"
+                    }
+                ],
+                "no-empty": "error",
+                "import/no-unresolved": "off",
+                "curly": ["error", "all"],
+                "newline-before-return": "error",
+                "padding-line-between-statements": [
+                    "error",
+                    {
+                        "blankLine": "always",
+                        "prev": ["const", "let", "var"],
+                        "next": "*"
+                    },
+                    {
+                        "blankLine": "any",
+                        "prev": ["const", "let", "var"],
+                        "next": ["const", "let", "var"]
+                    },
+                    {
+                        "blankLine": "always",
+                        "prev": ["function"],
+                        "next": "*"
+                    }
+                ],
+                "sort-imports": "off",
+                "import/order": "off",
+                "comma-spacing": "error",
+                "object-curly-spacing": ["error", "always"],
+                "no-console": [
+                    "warn",
+                    {
+                        "allow": ["warn", "error", "info"]
+                    }
+                ],
+                "no-plusplus": "off",
+                "consistent-return": "off",
+                "func-names": "off",
+                "prefer-regex-literals": "off",
+                "arrow-body-style": [
+                    "warn",
+                    "as-needed",
+                    {
+                        "requireReturnForObjectLiteral": false
+                    }
+                ],
+                "simple-import-sort/imports": [
+                    "error",
+                    {
+                        "groups": [
+                            // Side effect imports.
+                            ["^\\u0000"],
+                            // External packages.
+                            ["^@angular", "^@?\\w"],
+                            // Internal packages.
+                            ["^src/"],
+                            // Parent imports.
+                            ["^\\.\\."],
+                            // Other relative imports. Put same-folder imports last.
+                            ["^\\./(?=[^/]*?/)", "^\\."],
+                            // Style and types imports.
+                            ["\\.s?css$", "\\.sass$", "\\.styles", "\\.types"]
+                        ]
+                    }
+                ],
+                "max-len": [
+                    "error",
+                    {
+                        "tabWidth": 4,
+                        "code": 140,
+                        "ignoreUrls": true,
+                        "ignoreRegExpLiterals": true
+                    }
+                ],
+                "indent": ["error", 4, { "SwitchCase": 1 }]
+            }
+        },
+        {
+            "files": ["*.html"],
+            "extends": ["plugin:@angular-eslint/template/recommended"],
+            "rules": {}
+        }
+    ]
+}

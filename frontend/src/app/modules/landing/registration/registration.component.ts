@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 
 @Component({
     selector: 'app-registration',
@@ -24,8 +24,16 @@ export class RegistrationComponent implements OnInit {
             username: ['', Validators.required],
             email: ['', Validators.required],
             password: ['', Validators.required],
-            confirmPassword: ['', Validators.required],
+            confirmPassword: ['', [Validators.required, this.matchValues('password')]],
         });
+        this.registerForm.controls['password'].valueChanges.subscribe({
+            next: () => this.registerForm.controls['confirmPassword'].updateValueAndValidity(),
+        });
+    }
+
+    matchValues(matchTo: string): ValidatorFn {
+        return (control: AbstractControl) =>
+            (control.value === control.parent?.get(matchTo)?.value ? null : { notMatching: true });
     }
 
     register() {

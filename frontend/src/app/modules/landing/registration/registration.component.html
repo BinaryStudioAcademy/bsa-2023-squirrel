@@ -44,6 +44,10 @@
                  *ngIf="registerForm.controls['confirmPassword'].errors?.['required'] && registerForm.controls['confirmPassword'].touched">
                 Please enter a password again
             </div>
+            <div class="invalid-feedback"
+                 *ngIf="registerForm.controls['confirmPassword'].errors?.['notMatching'] && registerForm.controls['confirmPassword'].touched">
+                Confirm passwords must match password
+            </div>
 
             <button [disabled]="!registerForm.valid" type="submit">Sing Up</button>
         </form>

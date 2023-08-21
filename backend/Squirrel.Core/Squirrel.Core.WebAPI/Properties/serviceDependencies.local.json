@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "storage1": {
+      "secretStore": "LocalSecretsFile",
+      "type": "storage.emulator",
+      "connectionId": "BlobStorageConnectionString"
+    }
+  }
+}

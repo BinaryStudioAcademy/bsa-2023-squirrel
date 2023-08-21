@@ -20,6 +20,7 @@ namespace Squirrel.Core.WebAPI.Extentions
                 .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             services.AddTransient<ISampleService, SampleService>();
+            services.AddTransient<IStorageService, AzureStorageService>();
         }
 
         public static void AddAutoMapper(this IServiceCollection services)
@@ -48,7 +49,6 @@ namespace Squirrel.Core.WebAPI.Extentions
             services.AddAzureClients(clientBuilder =>
             {
                 clientBuilder.AddBlobServiceClient(configuration.GetConnectionString("BlobStorageConnectionString:blob"), preferMsi: true);
-                clientBuilder.AddQueueServiceClient(configuration.GetConnectionString("BlobStorageConnectionString:queue"), preferMsi: true);
             });
         }
     }

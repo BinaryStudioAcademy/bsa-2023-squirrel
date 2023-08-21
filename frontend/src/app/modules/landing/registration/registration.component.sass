@@ -81,11 +81,29 @@ button
         color: #705FF5
 
 input
+    box-sizing: border-box
     border-radius: 7px
-    padding: 15px
+    padding: 15px 40px 15px 15px
     font-size: 14px
     background-color: #F0F3F9
     border: none
 
 input:focus
     outline: none
+
+.password-wrapper
+    position: relative
+    input
+        width: 100%
+
+.hide
+    position: absolute
+    top: 50%
+    right: 10px
+    transform: translateY(-50%)
+    cursor: pointer
+
+    img
+        margin-bottom: -4px
+        width: 24px
+        color: #bfc1c5

@@ -30,16 +30,29 @@
             </div>
 
             <label>Password</label>
-            <input [formControl]="$any(registerForm.controls['password'])" type="password"
-                   placeholder="Enter your Password">
+            <div class="password-wrapper">
+                <input [formControl]="$any(registerForm.controls['password'])" type="{{ showPassword ? 'text' : 'password' }}"
+                       placeholder="Enter your Password">
+                <span class="hide" (click)="showPassword = !showPassword">
+                    <img src="assets/{{ showPassword ? 'hide-1.svg' : 'hide-2.svg' }}" alt="show/hide">
+                </span>
+            </div>
+
+
             <div class="invalid-feedback"
                  *ngIf="registerForm.controls['password'].errors?.['required'] && registerForm.controls['password'].touched">
                 Please enter a password
             </div>
 
             <label>Confirm password</label>
-            <input [formControl]="$any(registerForm.controls['confirmPassword'])" type="password"
-                   placeholder="Enter your Password again">
+            <div class="password-wrapper">
+                <input [formControl]="$any(registerForm.controls['confirmPassword'])" type="{{ showConfirmPassword ? 'text' : 'password' }}"
+                       placeholder="Enter your Password again">
+                <span class="hide" (click)="showConfirmPassword = !showConfirmPassword">
+                    <img src="assets/{{ showConfirmPassword ? 'hide-1.svg' : 'hide-2.svg' }}" alt="show/hide">
+                </span>
+            </div>
+
             <div class="invalid-feedback"
                  *ngIf="registerForm.controls['confirmPassword'].errors?.['required'] && registerForm.controls['confirmPassword'].touched">
                 Please enter a password again

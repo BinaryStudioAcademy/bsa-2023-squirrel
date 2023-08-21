@@ -8,6 +8,8 @@ namespace Squirrel.Core.WebAPI.Controllers
     [Route("[controller]")]
     public class SampleController : ControllerBase
     {
+        private readonly ISampleService _sampleService;
+
         public SampleController(ISampleService sampleService)
         {
             _sampleService = sampleService;
@@ -64,7 +66,5 @@ namespace Squirrel.Core.WebAPI.Controllers
             await _sampleService.DeleteSampleAsync(sampleId);
             return NoContent();
         }
-
-        private readonly ISampleService _sampleService;
     }
 }

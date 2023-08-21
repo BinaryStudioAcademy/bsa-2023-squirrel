@@ -6,6 +6,7 @@ using Squirrel.Core.WebAPI.Validators;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Squirrel.Core.WebAPI.Extentions
 {
@@ -39,6 +40,24 @@ namespace Squirrel.Core.WebAPI.Extentions
                 options.UseSqlServer(
                     connectionsString,
                     opt => opt.MigrationsAssembly(typeof(SquirrelCoreContext).Assembly.GetName().Name)));
+        }
+
+        public static void AddGoogleAuthentication(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            })
+            .AddCookie(options =>
+            {
+                options.LoginPath = "/login-google";
+            })
+            .AddGoogle("Google", options =>
+            {
+                options.ClientId = configuration["Authentication:Google:ClientId"] ?? Environment.GetEnvironmentVariable("GoogleClientId");
+                options.ClientSecret = configuration["Authentication:Google:ClientSecret"] ?? Environment.GetEnvironmentVariable("GoogleClientSecret");
+                options.CallbackPath = new PathString("/signin-google");
+            });
         }
     }
 }

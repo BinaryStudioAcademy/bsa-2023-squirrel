@@ -36,7 +36,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseMiddleware<GenericExceptionHandlerMiddleware>();
 
-app.UseCodiCoreContext();
+app.UseSquirrelCoreContext();
 
 app.UseCors(opt => opt
     .AllowAnyHeader()

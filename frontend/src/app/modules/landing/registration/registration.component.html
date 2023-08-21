@@ -12,20 +12,40 @@
             <p class="barrier-text">or</p>
         </div>
 
-        <form class="registration-form" action="">
+        <form [formGroup]="registerForm" (ngSubmit)="registerForm.valid && register()" class="registration-form"
+              action="">
             <label>Username</label>
-            <input type="text" placeholder="Enter your Username">
+            <input [formControl]="$any(registerForm.controls['username'])" type="text"
+                   placeholder="Enter your Username">
+            <div class="invalid-feedback"
+                 *ngIf="registerForm.controls['username'].errors?.['required'] && registerForm.controls['username'].touched">
+                Please enter a username
+            </div>
 
             <label>Email</label>
-            <input type="text" placeholder="Enter your Email">
+            <input [formControl]="$any(registerForm.controls['email'])" type="text" placeholder="Enter your Email">
+            <div class="invalid-feedback"
+                 *ngIf="registerForm.controls['email'].errors?.['required'] && registerForm.controls['email'].touched">
+                Please enter a email
+            </div>
 
             <label>Password</label>
-            <input type="password" placeholder="Enter your Password">
+            <input [formControl]="$any(registerForm.controls['password'])" type="password"
+                   placeholder="Enter your Password">
+            <div class="invalid-feedback"
+                 *ngIf="registerForm.controls['password'].errors?.['required'] && registerForm.controls['password'].touched">
+                Please enter a password
+            </div>
 
             <label>Confirm password</label>
-            <input type="password" placeholder="Enter your Password again">
+            <input [formControl]="$any(registerForm.controls['confirmPassword'])" type="password"
+                   placeholder="Enter your Password again">
+            <div class="invalid-feedback"
+                 *ngIf="registerForm.controls['confirmPassword'].errors?.['required'] && registerForm.controls['confirmPassword'].touched">
+                Please enter a password again
+            </div>
 
-            <button type="submit">Sing Up</button>
+            <button [disabled]="!registerForm.valid" type="submit">Sing Up</button>
         </form>
     </div>
 

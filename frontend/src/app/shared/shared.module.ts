@@ -5,10 +5,11 @@ import { RouterModule } from '@angular/router';
 
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { ButtonComponent } from './components/button/button.component';
 
 @NgModule({
     imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule, RouterModule],
-    declarations: [LoadingSpinnerComponent, NotFoundComponent],
+    declarations: [LoadingSpinnerComponent, NotFoundComponent, ButtonComponent],
     exports: [
         CommonModule,
         RouterModule,
@@ -17,6 +18,7 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
         RouterModule,
         LoadingSpinnerComponent,
         NotFoundComponent,
+        ButtonComponent,
     ],
 })
 export class SharedModule {}

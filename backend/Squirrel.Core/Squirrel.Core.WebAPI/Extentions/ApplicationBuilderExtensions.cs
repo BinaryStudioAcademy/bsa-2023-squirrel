@@ -5,7 +5,7 @@ namespace Squirrel.Core.WebAPI.Extentions
 {
     public static class ApplicationBuilderExtensions
     {
-        public static void UseCodiCoreContext(this IApplicationBuilder app)
+        public static void UseSquirrelCoreContext(this IApplicationBuilder app)
         {
             using var scope = app.ApplicationServices.GetService<IServiceScopeFactory>()?.CreateScope();
             using var context = scope?.ServiceProvider.GetRequiredService<SquirrelCoreContext>();

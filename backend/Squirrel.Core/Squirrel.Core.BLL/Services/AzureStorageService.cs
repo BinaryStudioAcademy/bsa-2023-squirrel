@@ -4,8 +4,6 @@ using Azure.Storage.Blobs.Models;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.Common.DTO.Blob;
 using Squirrel.Core.DAL.Context;
-using System.Reflection.Metadata;
-using static System.Reflection.Metadata.BlobBuilder;
 
 namespace Squirrel.Core.BLL.Services
 {

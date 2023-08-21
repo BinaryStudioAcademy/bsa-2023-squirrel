@@ -1,4 +1,4 @@
-﻿namespace Squirrel.Core.ConsoleApp
+﻿namespace Squirrel.ConsoleApp
 {
     internal class Program
     {

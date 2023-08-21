@@ -4,6 +4,8 @@ using Azure.Storage.Blobs.Models;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.Common.DTO.Blob;
 using Squirrel.Core.DAL.Context;
+using System.Reflection.Metadata;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace Squirrel.Core.BLL.Services
 {
@@ -18,8 +20,7 @@ namespace Squirrel.Core.BLL.Services
 
         public async Task DeleteAsync(string container, string id)
         {
-            var containerClient = await GetOrCreateContainerByNameAsync(container);
-            var blobClient = containerClient.GetBlobClient(id);
+            var blobClient = await GetBlobClientInternalAsync(container, id);
 
             if (!await blobClient.ExistsAsync())
             {
@@ -30,10 +31,9 @@ namespace Squirrel.Core.BLL.Services
 
         public async Task<BlobDto> DownloadAsync(string container, string id)
         {
-            var containerClient = await GetOrCreateContainerByNameAsync(container);
-            var blobClient = containerClient.GetBlobClient(id);
+            var blobClient = await GetBlobClientInternalAsync(container, id);
 
-            if(await blobClient.ExistsAsync())
+            if (await blobClient.ExistsAsync())
             {
                 var content = await blobClient.DownloadContentAsync();
 
@@ -52,8 +52,7 @@ namespace Squirrel.Core.BLL.Services
 
         public async Task<BlobDto> UpdateAsync(string container, BlobDto blob)
         {
-            var containerClient = await GetOrCreateContainerByNameAsync(container);
-            var blobClient = containerClient.GetBlobClient(blob.Id);
+            var blobClient = await GetBlobClientInternalAsync(container, blob.Id);
 
             if (await blobClient.ExistsAsync())
             {
@@ -68,8 +67,7 @@ namespace Squirrel.Core.BLL.Services
 
         public async Task<BlobDto> UploadAsync(string container, BlobDto blob)
         {
-            var containerClient = await GetOrCreateContainerByNameAsync(container);
-            var blobClient = containerClient.GetBlobClient(blob.Id);
+            var blobClient = await GetBlobClientInternalAsync(container, blob.Id);
             
             if (await blobClient.ExistsAsync())
             {
@@ -90,6 +88,12 @@ namespace Squirrel.Core.BLL.Services
             await containerClient.CreateIfNotExistsAsync();
 
             return containerClient;
+        }
+
+        private async Task<BlobClient> GetBlobClientInternalAsync(string containerName, string blobName)
+        {
+            var container = await GetOrCreateContainerByNameAsync(containerName);
+            return container.GetBlobClient(blobName);
         }
 
     }

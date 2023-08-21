@@ -2,65 +2,61 @@
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using Squirrel.Core.BLL.Interfaces;
-using Squirrel.Core.Common.DTO;
 using Squirrel.Core.Common.Models;
 using Squirrel.Core.DAL.Context;
 using Squirrel.Core.DAL.Entities;
 
 namespace Squirrel.Core.BLL.Services
 {
-    public class MongoService : BaseService, IMongoService
+    public class MongoService<T> : BaseService, IMongoService<T> where T : Entity<long>
     {
-        private readonly IMongoCollection<Sample> _sampleCollection;
+        private readonly IMongoCollection<T> _mongoCollection;
 
-        public MongoService(SquirrelCoreContext context, IMapper mapper, IOptions<MongoDatabaseConnectionSettings> mongoDatabaseSettings) : base(context, mapper)
+        public MongoService(SquirrelCoreContext context, IMapper mapper, IOptions<MongoDatabaseConnectionSettings> mongoDatabaseSettings, string collectionName) : base(context, mapper)
         {
             var mongoClient = new MongoClient(mongoDatabaseSettings.Value.ConnectionString);
 
             var mongoDatabase = mongoClient.GetDatabase(mongoDatabaseSettings.Value.DatabaseName);
 
-            _sampleCollection = mongoDatabase.GetCollection<Sample>(mongoDatabaseSettings.Value.CollectionName);
-        }
-
-        public async Task<SampleDto> CreateAsync(NewSampleDto sampleDto)
-        {
-            var sample = _mapper.Map<Sample>(sampleDto, opts => opts.AfterMap((src, dst) =>
+            collectionName = typeof(T) switch
             {
-                dst.CreatedAt = DateTime.Now;
-                // other assignation logic if needed
-            }));
+                Type t when t == typeof(Sample) => "SampleCollection",
+                // Add more cases for other entity types as needed
+                _ => throw new ArgumentException("Unknown entity type")
+            };
 
-            await _sampleCollection.InsertOneAsync(sample);
-
-            return _mapper.Map<SampleDto>(sample);
+            _mongoCollection = mongoDatabase.GetCollection<T>(collectionName);
         }
 
-        public async Task DeleteAsync(int sampleId)
+        public async Task<T> CreateAsync(T entity)
         {
-            await _sampleCollection.DeleteOneAsync(x => x.Id == sampleId);
+            await _mongoCollection.InsertOneAsync(entity);
+
+            return entity;
         }
 
-        public async Task<ICollection<SampleDto>> GetAllAsync()
+        public async Task DeleteAsync(int entityId)
         {
-            var samples = await _sampleCollection.Find(_ => true).ToListAsync();
-            return _mapper.Map<ICollection<SampleDto>>(samples);
+            await _mongoCollection.DeleteOneAsync(x => x.Id == entityId);
         }
 
-        public async Task<SampleDto> GetByIdAsync(int sampleId)
+        public async Task<ICollection<T>> GetAllAsync()
         {
-            var sampleById = await _sampleCollection.Find(x => x.Id == sampleId).FirstOrDefaultAsync();
-            return _mapper.Map<SampleDto>(sampleById);
+            var entities = await _mongoCollection.Find(_ => true).ToListAsync();
+            return entities;
         }
 
-        public async Task<SampleDto> UpdateAsync(int sampleId, NewSampleDto sampleDto)
+        public async Task<T> GetByIdAsync(int entityId)
         {
-            var existedSample = await _sampleCollection.Find(x => x.Id == sampleId).FirstOrDefaultAsync();
+            var entityById = await _mongoCollection.Find(x => x.Id == entityId).FirstOrDefaultAsync();
+            return entityById;
+        }
 
-            var mergedSample = _mapper.Map(sampleDto, existedSample);
+        public async Task<T> UpdateAsync(int entityId, T editedEntity)
+        {
+            await _mongoCollection.ReplaceOneAsync(x => x.Id == entityId, editedEntity);
 
-            await _sampleCollection.ReplaceOneAsync(x => x.Id == sampleId, mergedSample);
-
-            return _mapper.Map<SampleDto>(mergedSample);
+            return editedEntity;
         }
     }
 }

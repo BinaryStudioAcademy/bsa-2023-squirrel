@@ -23,7 +23,7 @@ namespace Squirrel.Core.WebAPI.Extentions
             services.Configure<MongoDatabaseConnectionSettings>(
                 configuration.GetSection("MongoDatabase"));
 
-            services.AddScoped<IMongoService, MongoService>();
+            services.AddScoped(typeof(IMongoService<>), typeof(MongoService<>));
         }
 
         public static void AddAutoMapper(this IServiceCollection services)

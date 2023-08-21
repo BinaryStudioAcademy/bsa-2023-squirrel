@@ -1,17 +1,17 @@
-﻿using Squirrel.Core.Common.DTO;
+﻿using Squirrel.Core.DAL.Entities;
 
 namespace Squirrel.Core.BLL.Interfaces
 {
-    public interface IMongoService
+    public interface IMongoService<T> where T : Entity<long>
     {
-        Task<ICollection<SampleDto>> GetAllAsync();
+        Task<ICollection<T>> GetAllAsync();
 
-        Task<SampleDto> GetByIdAsync(int sampleId);
+        Task<T> GetByIdAsync(int entityId);
 
-        Task<SampleDto> CreateAsync(NewSampleDto sampleDto);
+        Task<T> CreateAsync(T entity);
 
-        Task<SampleDto> UpdateAsync(int sampleId, NewSampleDto sampleDto);
+        Task<T> UpdateAsync(int entityId, T editedEntity);
 
-        Task DeleteAsync(int sampleId);
+        Task DeleteAsync(int entityId);
     }
 }

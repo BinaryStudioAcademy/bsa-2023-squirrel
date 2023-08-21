@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="11.0.1" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.17.0" />
   </ItemGroup>
 
   <ItemGroup>

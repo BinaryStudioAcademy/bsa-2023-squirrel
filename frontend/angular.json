@@ -46,7 +46,7 @@
                         "tsConfig": "tsconfig.app.json",
                         "inlineStyleLanguage": "sass",
                         "assets": ["src/favicon.ico", "src/assets"],
-                        "styles": ["src/styles/index.sass", "node_modules/ngx-toastr/toastr.css"],
+                        "styles": ["src/styles/index.sass"],
                         "scripts": [],
                         "allowedCommonJsDependencies": ["moment-timezone"]
                     },

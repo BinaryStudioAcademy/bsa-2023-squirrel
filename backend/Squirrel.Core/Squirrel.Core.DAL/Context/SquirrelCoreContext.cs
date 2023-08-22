@@ -6,6 +6,7 @@ namespace Squirrel.Core.DAL.Context
     public class SquirrelCoreContext : DbContext
     {
         public DbSet<Sample> Samples => Set<Sample>();
+        public DbSet<User> Users => Set<User>();
 
         public SquirrelCoreContext(DbContextOptions<SquirrelCoreContext> options) : base(options)
         {

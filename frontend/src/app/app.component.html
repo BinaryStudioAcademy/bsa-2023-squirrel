@@ -1,11 +1,11 @@
 <div class="container" style="max-width: 550px">
     <h2 class="text-center mb-5">Angular Login with Google</h2>
-    <div *ngIf="isLoggedIn === false">
+    <div *ngIf="!isLoggedIn">
         <div>
-            <button type="button" (click)="loginWithGoogle()" class="btn btn-danger">Login with Google</button>
+            <asl-google-signin-button type="icon" size="large"></asl-google-signin-button>
         </div>
     </div>
-    <div *ngIf="isLoggedIn === true">
+    <div *ngIf="isLoggedIn">
         <div class="form-group">
             <label>First Name</label>
             <input type="text" class="form-control" [value]="socialUser.firstName" id="firstname" readonly />
@@ -21,3 +21,5 @@
         <button type="button" (click)="logOut()" class="btn btn-primary">Log Out</button>
     </div>
 </div>
+
+<app-loading-spinner></app-loading-spinner><router-outlet></router-outlet>

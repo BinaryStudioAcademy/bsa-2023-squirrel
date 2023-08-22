@@ -8,7 +8,6 @@ import { SpinnerService } from '@core/services/spinner.service';
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.sass'],
-    template: '<app-loading-spinner></app-loading-spinner><router-outlet></router-outlet>',
 })
 export class AppComponent implements OnInit {
     loginForm!: FormGroup;
@@ -39,7 +38,7 @@ export class AppComponent implements OnInit {
     }
 
     loginWithGoogle(): void {
-        this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID);
+        this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID).then(() => this.router.navigate(['main']));
     }
 
     logOut(): void {

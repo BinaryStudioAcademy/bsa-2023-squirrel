@@ -26,6 +26,8 @@ export class RegistrationComponent implements OnInit {
         this.registerForm = this.fb.group({
             username: ['', Validators.required],
             email: ['', Validators.required],
+            firstName: ['', Validators.required],
+            lastName: ['', Validators.required],
             password: ['', Validators.required],
             confirmPassword: ['', [Validators.required, this.matchValues('password')]],
         });
@@ -46,6 +48,8 @@ export class RegistrationComponent implements OnInit {
         const userRegistrationData: UserRegisterDto = {
             username: this.registerForm.value.username,
             email: this.registerForm.value.email,
+            firstName: this.registerForm.value.firstName,
+            lastName: this.registerForm.value.lastName,
             password: this.registerForm.value.password,
         };
 

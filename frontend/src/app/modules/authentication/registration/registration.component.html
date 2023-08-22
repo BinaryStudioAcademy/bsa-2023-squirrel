@@ -29,6 +29,20 @@
                 Please enter a email
             </div>
 
+            <label>Email</label>
+            <input [formControl]="$any(registerForm.controls['firstName'])" type="text" placeholder="Enter your Email">
+            <div class="invalid-feedback"
+                 *ngIf="validationCheck('firstName', 'required')">
+                Please enter a first name
+            </div>
+
+            <label>Email</label>
+            <input [formControl]="$any(registerForm.controls['lastName'])" type="text" placeholder="Enter your Email">
+            <div class="invalid-feedback"
+                 *ngIf="validationCheck('lastName', 'required')">
+                Please enter a last name
+            </div>
+
             <label>Password</label>
             <div class="password-wrapper">
                 <input [formControl]="$any(registerForm.controls['password'])" type="{{ showPassword ? 'text' : 'password' }}"

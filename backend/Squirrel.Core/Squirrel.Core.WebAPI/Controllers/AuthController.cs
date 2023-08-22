@@ -5,8 +5,8 @@ using Squirrel.Core.Common.DTO.Users;
 
 namespace Squirrel.Core.WebAPI.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("[controller]")]
     public class AuthController : ControllerBase
     {
         private readonly AuthService _authService;
@@ -16,7 +16,7 @@ namespace Squirrel.Core.WebAPI.Controllers
             _authService = authService;
         }
 
-        [HttpPost("login-google")]
+        [HttpPost("login/google")]
         public async Task<ActionResult<AuthUserDTO>> Login(GoogleIdToken dto)
         {
             return Ok(await _authService.AuthorizeWithGoogle(dto));

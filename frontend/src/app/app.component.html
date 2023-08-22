@@ -1,8 +1,8 @@
 <div class="container" style="max-width: 550px">
-    <h2 class="text-center mb-5">Angular Login with Google</h2>
     <div *ngIf="!isLoggedIn">
         <div>
-            <asl-google-signin-button type="icon" size="large"></asl-google-signin-button>
+            <label> Login with Google</label>
+            <asl-google-signin-button type="standard" size="large" data-text="signin_with"></asl-google-signin-button>
         </div>
     </div>
     <div *ngIf="isLoggedIn">

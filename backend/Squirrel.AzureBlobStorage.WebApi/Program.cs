@@ -12,6 +12,7 @@ builder.Configuration
 builder.Services.RegisterCustomServices();
 builder.Services.AddAzureBlobStorage(builder.Configuration);
 builder.Services.AddControllers();
+builder.Services.AddHealthChecks();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -24,6 +25,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();

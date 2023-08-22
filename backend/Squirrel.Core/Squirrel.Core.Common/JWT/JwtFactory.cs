@@ -23,7 +23,7 @@ public sealed class JwtFactory : IJwtFactory
         _jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
     }
 
-    public async Task<AccessToken> GenerateAccessTokenAsync(int id, string userName, string email)
+    public async Task<string> GenerateAccessTokenAsync(int id, string userName, string email)
     {
         var identity = GenerateClaimsIdentity(id, userName);
 
@@ -31,7 +31,7 @@ public sealed class JwtFactory : IJwtFactory
         {
             new Claim(JwtRegisteredClaimNames.Sub, userName),
             new Claim(JwtRegisteredClaimNames.Email, email),
-            new Claim(JwtRegisteredClaimNames.Jti, await _jwtOptions!.JtiGenerator()),
+            new Claim(JwtRegisteredClaimNames.Jti, await _jwtOptions.JtiGenerator()),
             new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(_jwtOptions.IssuedAt).ToString(), ClaimValueTypes.Integer64),
             identity.FindFirst("id")
         };
@@ -44,7 +44,7 @@ public sealed class JwtFactory : IJwtFactory
             _jwtOptions.Expiration,
             _jwtOptions.SigningCredentials);
 
-        return new AccessToken(_jwtSecurityTokenHandler.WriteToken(jwt), (int)_jwtOptions.Lifetime.TotalSeconds);
+        return _jwtSecurityTokenHandler.WriteToken(jwt)!;
     }
 
     public string GenerateRefreshToken() => Convert.ToBase64String(BytesGenerator.GetRandomBytes());

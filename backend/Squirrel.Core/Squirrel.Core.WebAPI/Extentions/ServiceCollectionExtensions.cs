@@ -45,7 +45,7 @@ namespace Squirrel.Core.WebAPI.Extentions
 
         public static void AddAuthenticationSettings(this IServiceCollection services, IConfiguration configuration)
         {
-            services.Configure<AuthenticationSettings>(configuration.GetSection("Authentication"));
+            services.Configure<AuthenticationSettings>(configuration.GetSection(nameof(AuthenticationSettings)));
         }
     }
 }

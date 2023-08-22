@@ -79,4 +79,180 @@ This is a list of the required environment variables:
 **SA_PASSWORD** - MSSQL Server "SA" user password
 
 ## SQL Server Database Schema
-![Database_Schema](Squirrel_DB_Schema.svg)
+
+```mermaid
+
+erDiagram
+
+    Projects {
+        int Id PK
+        int DefaultBranchId FK
+        nvarchar(50) Name
+        int EngineEnum
+    }
+
+    Commits {
+        int Id PK
+        int AuthorId FK
+        int ParentId FK"null"
+        nvarchar(200) Message 
+        datetime CreatedAt 
+        nvarchar(500) SnapshotUrl 
+    }
+
+    BranchCommits {
+        int Id PK
+        int CommitId FK
+        int BranchId FK
+        bit IsMerged 
+        bit IsHead 
+    }
+
+    Tags {
+        int Id PK
+        nvarchar(50) Name    
+    }
+
+    ProjectSettings {
+        int Id PK
+        int ProjectId FK
+        nvarchar(500) SettingsUrl
+    }
+
+    Branches {
+        int Id PK
+        int ProjectId FK
+        nvarchar(200) Name 
+        bit IsActive 
+    }
+
+    PullRequests {
+        int Id PK
+        int ProjectId FK
+        int AuthorId FK
+        int SourceBranchId FK
+        int TargetBranchId FK
+        nvarchar(100) Title 
+        int StatusEnum 
+        bit IsReviewed 
+        datetime CreatedAt 
+        datetime UpdatedAt 
+    }
+
+    PullRequestReviewers {
+        int Id PK
+        int PullRequestId FK
+        int UserId FK
+    }
+
+    Comments {
+        int Id PK
+        int PullRequestId FK
+        int AuthorId FK
+        nvarchar(500) Content 
+        datetime CreatedAt 
+        datetime UpdatedAt 
+    }
+
+    UserGroups {
+        int Id PK
+        int GroupId FK
+        int UserId FK
+    }
+
+    Groups {
+        int Id PK
+        nvarchar(50) Name
+        bit IsDefault
+    }
+
+    Users {
+        int Id PK
+        nvarchar(25) UserName
+        nvarchar(25) FirstName
+        nvarchar(25) LastName
+        nvarchar(50) Email
+        nvarchar(25) Password
+        nvarchar(500) AvatarUrl
+    }
+
+    UserSettings {
+        int Id PK
+        int UserId FK
+        nvarchar(500) SettingsUrl
+    }
+
+    UserProjects {
+        int Id PK
+        int ProjectId FK
+        int UserId FK
+    }
+
+    GroupTags {
+        int Id PK
+        int TagId FK
+        int GroupId FK
+    }
+
+    ProjectTags {
+        int Id PK
+        int TagId FK
+        int ProjectId FK
+    }
+
+    RefreshTokens {
+        bigint Id PK
+        int UserId FK
+        nvarchar(500) Token
+        datetime CreatedAt
+    }
+
+    ProjectFiles {
+        int Id PK
+        int ProjectId FK
+        int AuthorId FK
+        nvarchar(100) Title
+        nvarchar(100) FileName
+        int FileTypeEnum
+        nvarchar(500) FileDataUrl
+        datetime CreatedAt
+        datetime UpdatedAt
+    }
+
+
+Projects ||--|| Branches : ""
+Projects ||--o{ Branches : ""
+Projects ||--o{ PullRequests : ""
+Projects ||--o{ ProjectSettings : ""
+Projects ||--o{ UserProjects : ""
+Projects ||--o{ ProjectFiles : ""
+Projects ||--o{ ProjectTags : ""
+
+Commits ||--|| Commits : ""
+Commits ||--o{ Users : ""
+Commits ||--o{ BranchCommits : ""
+
+Tags ||--o{ BranchCommits : ""
+Tags ||--o{ ProjectTags : ""
+Tags ||--o{ GroupTags : ""
+
+Branches ||--o{ BranchCommits : ""
+Branches ||--o{ PullRequests : ""
+
+PullRequests ||--o{ PullRequestReviewers : ""
+PullRequests ||--o{ Comments : ""
+
+Groups ||--o{ GroupTags : ""
+Groups ||--o{ UserGroups : ""
+
+Users ||--o{ UserGroups : ""
+Users ||--o{ UserSettings : ""
+Users ||--o{ Comments : ""
+Users ||--o{ PullRequestReviewers : ""
+Users ||--o{ PullRequests : ""
+Users ||--o{ ProjectFiles : ""
+Users ||--o{ RefreshTokens : ""
+Users ||--o{ UserProjects : ""
+Users ||--o{ Commits : ""
+
+```

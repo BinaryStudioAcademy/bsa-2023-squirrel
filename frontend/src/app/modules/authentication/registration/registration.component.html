@@ -1,10 +1,10 @@
 <div class="registration-container">
     <div class="registration-content">
-        <h4>Sing Up</h4>
+        <h4>Sign Up</h4>
 
         <div class="additional-sing-up">
-            <button>Sing Up with GitHub</button>
-            <button>Sing Up with Google</button>
+            <button>Sign Up with GitHub</button>
+            <button>Sign Up with Google</button>
         </div>
 
         <div class="barrier">
@@ -18,14 +18,14 @@
             <input [formControl]="$any(registerForm.controls['username'])" type="text"
                    placeholder="Enter your Username">
             <div class="invalid-feedback"
-                 *ngIf="registerForm.controls['username'].errors?.['required'] && registerForm.controls['username'].touched">
+                 *ngIf="validationCheck('username', 'required')">
                 Please enter a username
             </div>
 
             <label>Email</label>
             <input [formControl]="$any(registerForm.controls['email'])" type="text" placeholder="Enter your Email">
             <div class="invalid-feedback"
-                 *ngIf="registerForm.controls['email'].errors?.['required'] && registerForm.controls['email'].touched">
+                 *ngIf="validationCheck('email', 'required')">
                 Please enter a email
             </div>
 
@@ -40,13 +40,14 @@
 
 
             <div class="invalid-feedback"
-                 *ngIf="registerForm.controls['password'].errors?.['required'] && registerForm.controls['password'].touched">
+                 *ngIf="validationCheck('password', 'required')">
                 Please enter a password
             </div>
 
             <label>Confirm password</label>
             <div class="password-wrapper">
-                <input [formControl]="$any(registerForm.controls['confirmPassword'])" type="{{ showConfirmPassword ? 'text' : 'password' }}"
+                <input [formControl]="$any(registerForm.controls['confirmPassword'])"
+                       type="{{ showConfirmPassword ? 'text' : 'password' }}"
                        placeholder="Enter your Password again">
                 <span class="hide" (click)="showConfirmPassword = !showConfirmPassword">
                     <img src="assets/{{ showConfirmPassword ? 'hide-1.svg' : 'hide-2.svg' }}" alt="show/hide">
@@ -54,11 +55,11 @@
             </div>
 
             <div class="invalid-feedback"
-                 *ngIf="registerForm.controls['confirmPassword'].errors?.['required'] && registerForm.controls['confirmPassword'].touched">
+                 *ngIf="validationCheck('confirmPassword', 'required')">
                 Please enter a password again
             </div>
             <div class="invalid-feedback"
-                 *ngIf="registerForm.controls['confirmPassword'].errors?.['notMatching'] && registerForm.controls['confirmPassword'].touched">
+                 *ngIf="validationCheck('confirmPassword', 'notMatching')">
                 Confirm passwords must match password
             </div>
 

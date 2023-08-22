@@ -42,6 +42,9 @@ export class RegistrationComponent implements OnInit {
             (control.value === control.parent?.get(matchTo)?.value ? null : { notMatching: true });
     }
 
+    validationCheck = (control: string, errorName: string) =>
+        this.registerForm.controls[control].errors?.[errorName] && this.registerForm.controls[control].touched;
+
     register() {
         const userRegistrationData: UserRegisterDto = {
             username: this.registerForm.value.username,

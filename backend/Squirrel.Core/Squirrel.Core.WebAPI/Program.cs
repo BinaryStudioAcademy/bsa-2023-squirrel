@@ -31,6 +31,8 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
+
     app.UseSwagger();
     app.UseSwaggerUI();
 }
@@ -44,18 +46,19 @@ app.UseCors(opt => opt
     .AllowAnyMethod()
     .AllowAnyOrigin());
 
-app.UseHttpsRedirection();
-
 app.UseRouting();
 
 app.UseAuthentication();
-
 app.UseAuthorization();
 
-app.UseEndpoints(endpoinds =>
+app.UseEndpoints(endpoints =>
 {
-    endpoinds.MapHealthChecks("/health");
-    endpoinds.MapControllers();
+    endpoints.MapControllers();
+    endpoints.MapHealthChecks("/health");
 });
+
+app.UseHttpsRedirection();
+
+app.MapControllers();
 
 app.Run();

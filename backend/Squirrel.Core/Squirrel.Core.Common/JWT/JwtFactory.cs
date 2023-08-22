@@ -81,39 +81,18 @@ public sealed class JwtFactory : IJwtFactory
             throw new ArgumentException("Lifetime must be a non-zero TimeSpan.", nameof(JwtIssuerOptions.Lifetime));
         }
     }
-    
-    private ClaimsPrincipal? ValidateToken(string token, TokenValidationParameters tokenValidationParameters)
-    {
-        try
-        {
-            var principal = _jwtSecurityTokenHandler.ValidateToken(
-                token, tokenValidationParameters, out var securityToken);
 
-            if (!(securityToken is JwtSecurityToken jwtSecurityToken) ||
-                !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
-                    StringComparison.InvariantCultureIgnoreCase))
-            {
-                throw new SecurityTokenException("Invalid token");
-            }
-
-            return principal;
-        }
-        catch (Exception)
-        {
-            return null;
-        }
-    }
-    
     private ClaimsPrincipal? GetPrincipalFromToken(string token, string signingKey)
-        => ValidateToken(token, new TokenValidationParameters
+        => _jwtSecurityTokenHandler.ValidateToken(token, new TokenValidationParameters
         {
             ValidateAudience = false,
             ValidateIssuer = false,
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(signingKey)),
             ValidateLifetime = false
-        });
-    
+        }, out _);
+
+
     private long ToUnixEpochDate(DateTime date)
     {
         var unixEpoch = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero);

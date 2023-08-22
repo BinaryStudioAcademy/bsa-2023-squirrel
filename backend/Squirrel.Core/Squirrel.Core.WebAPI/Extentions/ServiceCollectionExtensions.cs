@@ -20,6 +20,7 @@ namespace Squirrel.Core.WebAPI.Extentions
                 .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             services.AddTransient<ISampleService, SampleService>();
+            services.AddScoped<IAuthService, AuthService>();
         }
 
         public static void AddAutoMapper(this IServiceCollection services)
@@ -43,7 +44,7 @@ namespace Squirrel.Core.WebAPI.Extentions
                     opt => opt.MigrationsAssembly(typeof(SquirrelCoreContext).Assembly.GetName().Name)));
         }
 
-        public static void AddGoogleSettings(this IServiceCollection services, IConfiguration configuration)
+        public static void AddAuthenticationSettings(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<AuthenticationSettings>(configuration.GetSection("Authentication"));
         }

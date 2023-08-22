@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.BLL.Services;
 using Squirrel.Core.Common.DTO.Auth;
 using Squirrel.Core.Common.DTO.Users;
@@ -9,15 +10,16 @@ namespace Squirrel.Core.WebAPI.Controllers
     [Route("[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly AuthService _authService;
+        private readonly IAuthService _authService;
 
-        public AuthController(AuthService authService)
+        public AuthController(IAuthService authService)
         {
             _authService = authService;
         }
 
         [HttpPost("login/google")]
-        public async Task<ActionResult<AuthUserDTO>> Login(GoogleIdToken dto)
+        [ProducesResponseType(typeof(AuthUserDTO), StatusCodes.Status200OK)]
+        public async Task<ActionResult<AuthUserDTO>> LoginWithGoogle(GoogleToken dto)
         {
             return Ok(await _authService.AuthorizeWithGoogle(dto));
         }

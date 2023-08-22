@@ -4,10 +4,11 @@ using Squirrel.Core.Common.DTO.Users;
 using Squirrel.Core.DAL.Context;
 using Google.Apis.Auth;
 using Microsoft.Extensions.Options;
+using Squirrel.Core.BLL.Interfaces;
 
 namespace Squirrel.Core.BLL.Services
 {
-    public sealed class AuthService : BaseService
+    public sealed class AuthService : BaseService, IAuthService
     {
         private readonly string _googleClientId;
 
@@ -16,8 +17,10 @@ namespace Squirrel.Core.BLL.Services
             _googleClientId = authSettings.Value.GoogleClientId;
         }
 
-        public async Task<AuthUserDTO> AuthorizeWithGoogle(GoogleIdToken googleToken)
+        public async Task<AuthUserDTO> AuthorizeWithGoogle(GoogleToken googleToken)
         {
+            var test = _googleClientId;
+
             var payload = await GoogleJsonWebSignature.ValidateAsync(googleToken.IdToken, new GoogleJsonWebSignature.ValidationSettings
             {
                 Audience = new List<string> { _googleClientId }

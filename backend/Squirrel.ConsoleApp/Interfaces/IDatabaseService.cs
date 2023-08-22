@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Squirrel.ConsoleApp.Interfaces
 {
-    internal interface IDatabaseService
+    public interface IDatabaseService
     {
+        string ConnectionString { get; }
+        string ExecuteQuery(string query);
+        Task<string> ExecuteQueryAsync(string query);
     }
 }

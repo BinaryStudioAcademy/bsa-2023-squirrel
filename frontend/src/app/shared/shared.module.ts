@@ -2,13 +2,22 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { ToastrModule } from 'ngx-toastr';
 
+import { ButtonComponent } from './components/button/button.component';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
-import { ButtonComponent } from './components/button/button.component';
 
 @NgModule({
-    imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule, RouterModule],
+    imports: [
+        CommonModule,
+        RouterModule,
+        FormsModule,
+        ReactiveFormsModule,
+        RouterModule,
+        ToastrModule.forRoot({
+            positionClass: 'toast-bottom-right',
+        })],
     declarations: [LoadingSpinnerComponent, NotFoundComponent, ButtonComponent],
     exports: [
         CommonModule,
@@ -19,6 +28,7 @@ import { ButtonComponent } from './components/button/button.component';
         LoadingSpinnerComponent,
         NotFoundComponent,
         ButtonComponent,
+        ToastrModule,
     ],
 })
 export class SharedModule {}

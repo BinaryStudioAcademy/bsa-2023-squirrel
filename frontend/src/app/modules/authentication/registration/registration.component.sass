@@ -1,3 +1,4 @@
+@import "/src/styles/color"
 .registration-container
     height: 100%
     padding: 0 20%
@@ -11,15 +12,15 @@
     margin-top: 100px
 
     h4
-        color: #282828
+        color: $text-main
 
 .additional-sing-up
     display: flex
     flex-direction: column
 
     button
-        color: #3C26E6
-        border: solid 1px #3C26E6
+        color: $primary-color
+        border: solid 1px $primary-color
         background: none
 
 .barrier
@@ -28,7 +29,7 @@
     margin-top: 30px
 
     hr
-        border: 1px solid #E5E5E5
+        border: 1px solid $light-gray
 
 .barrier-text
     position: absolute
@@ -37,9 +38,9 @@
     top: -50%
     left: 50%
     transform: translateX(-50%)
-    background-color: #FFFFFF
+    background-color: $white
 
-    color: #E5E5E5
+    color: $light-gray
     font-size: 18px
     font-weight: 500
 
@@ -48,12 +49,12 @@
     flex-direction: column
 
     button
-        color: #FFFFFF
-        background-color: #3C26E6
+        color: $white
+        background-color: $primary-color
         border: none
         margin-top: 20px
     label
-        color: #282828
+        color: $text-main
         font-size: 12px
         font-weight: 500
         margin-top: 10px
@@ -68,25 +69,25 @@ button
     cursor: pointer
 
 .invalid-feedback
-    color: red
+    color: $text-danger
     font-size: 12px
     margin-top: 5px
 
 .registration-footer
     margin-bottom: 20px
-    color: #787878
+    color: $text-light
     font-size: 14px
     font-weight: 400
 
     a
-        color: #705FF5
+        color: $link-color
 
 input
     box-sizing: border-box
     border-radius: 7px
     padding: 15px 40px 15px 15px
     font-size: 14px
-    background-color: #F0F3F9
+    background-color: $bg-input
     border: none
 
 input:focus
@@ -107,4 +108,3 @@ input:focus
     img
         margin-bottom: -4px
         width: 24px
-        color: #bfc1c5

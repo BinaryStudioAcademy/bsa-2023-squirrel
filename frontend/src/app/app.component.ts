@@ -16,8 +16,6 @@ export class AppComponent implements OnInit {
 
     isLoggedIn?: boolean;
 
-    private accessToken = '';
-
     constructor(
         private router: Router,
         private spinner: SpinnerService,
@@ -45,12 +43,6 @@ export class AppComponent implements OnInit {
 
     logOut(): void {
         this.socialAuthService.signOut();
-    }
-
-    getAccessToken(): void {
-        this.socialAuthService
-            .getAccessToken(GoogleLoginProvider.PROVIDER_ID)
-            .then((accessToken) => (this.accessToken = accessToken));
     }
 
     private listenRouter() {

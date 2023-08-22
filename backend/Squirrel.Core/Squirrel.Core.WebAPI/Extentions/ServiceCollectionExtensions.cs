@@ -6,7 +6,6 @@ using Squirrel.Core.WebAPI.Validators;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Squirrel.Core.Common.DTO.Auth;
 
 namespace Squirrel.Core.WebAPI.Extentions

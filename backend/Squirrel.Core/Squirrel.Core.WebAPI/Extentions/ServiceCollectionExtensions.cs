@@ -5,6 +5,7 @@ using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.WebAPI.Validators;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using Squirrel.Core.Common.Interfaces;
 using System.Reflection;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -21,6 +22,7 @@ namespace Squirrel.Core.WebAPI.Extentions
                 .AddControllers()
                 .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddScoped<JwtIssuerOptions>();
+            services.AddScoped<IJwtFactory, JwtFactory>();
             services.AddTransient<ISampleService, SampleService>();
         }
 

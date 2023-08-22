@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using FluentValidation.AspNetCore;
+﻿using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Squirrel.Core.BLL.Interfaces;
@@ -26,15 +25,20 @@ namespace Squirrel.Core.WebAPI.Extentions
             services.Configure<MongoDatabaseConnectionSettings>(
                 configuration.GetSection("MongoDatabase"));
 
+            services.AddMongoDbService();
+        }
+
+        public static void AddMongoDbService(this IServiceCollection services)
+        {
             services.AddTransient(typeof(IMongoService<Sample>), serviceProvider =>
             {
-                var context = serviceProvider.GetRequiredService<SquirrelCoreContext>();
-                var mapper = serviceProvider.GetRequiredService<IMapper>();
                 var mongoDatabaseSettings = serviceProvider.GetRequiredService<IOptions<MongoDatabaseConnectionSettings>>();
                 string collectionName = "SampleCollection";
 
                 return new MongoService<Sample>(mongoDatabaseSettings, collectionName);
             });
+
+            // services for other entities and collections
         }
 
         public static void AddAutoMapper(this IServiceCollection services)

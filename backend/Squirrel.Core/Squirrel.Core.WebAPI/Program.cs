@@ -13,7 +13,6 @@ builder.Configuration
 
 builder.Services.AddControllers();
 builder.Services.AddSquirrelCoreContext(builder.Configuration);
-builder.Services.AddAzureBlobStorage(builder.Configuration);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.RegisterCustomServices();

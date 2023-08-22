@@ -6,8 +6,6 @@ using Squirrel.Core.WebAPI.Validators;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
-using Microsoft.Extensions.Azure;
-using Microsoft.Extensions.Configuration;
 
 namespace Squirrel.Core.WebAPI.Extentions
 {
@@ -20,7 +18,6 @@ namespace Squirrel.Core.WebAPI.Extentions
                 .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             services.AddTransient<ISampleService, SampleService>();
-            services.AddTransient<IStorageService, AzureStorageService>();
         }
 
         public static void AddAutoMapper(this IServiceCollection services)
@@ -42,14 +39,6 @@ namespace Squirrel.Core.WebAPI.Extentions
                 options.UseSqlServer(
                     connectionsString,
                     opt => opt.MigrationsAssembly(typeof(SquirrelCoreContext).Assembly.GetName().Name)));
-        }
-
-        public static void AddAzureBlobStorage(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddAzureClients(clientBuilder =>
-            {
-                clientBuilder.AddBlobServiceClient(configuration.GetConnectionString("BlobStorageConnectionString:blob"), preferMsi: true);
-            });
         }
     }
 }

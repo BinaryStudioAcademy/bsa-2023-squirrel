@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Squirrel.Core.BLL.Services;
 using Squirrel.Core.Common.DTO.Auth;
 using Squirrel.Core.Common.DTO.Users;
@@ -18,7 +17,7 @@ namespace Squirrel.Core.WebAPI.Controllers
         }
 
         [HttpPost("login-google")]
-        public async Task<ActionResult<AuthUserDTO>> Login(GoogleTokenDTO dto)
+        public async Task<ActionResult<AuthUserDTO>> Login(GoogleIdToken dto)
         {
             return Ok(await _authService.AuthorizeWithGoogle(dto));
         }

@@ -2,25 +2,30 @@
 using Squirrel.Core.Common.DTO.Auth;
 using Squirrel.Core.Common.DTO.Users;
 using Squirrel.Core.DAL.Context;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Google.Apis.Auth;
+using Microsoft.Extensions.Options;
 
 namespace Squirrel.Core.BLL.Services
 {
     public sealed class AuthService : BaseService
     {
-        public AuthService(SquirrelCoreContext context, IMapper mapper) : base(context, mapper)
+        private readonly string _googleClientId;
+
+        public AuthService(SquirrelCoreContext context, IMapper mapper, IOptions<AuthenticationSettings> authSettings) : base(context, mapper)
         {
+            _googleClientId = authSettings.Value.GoogleClientId;
         }
 
-        public async Task<AuthUserDTO> AuthorizeWithGoogle(GoogleTokenDTO userDto)
+        public async Task<AuthUserDTO> AuthorizeWithGoogle(GoogleIdToken googleToken)
         {
+            var payload = await GoogleJsonWebSignature.ValidateAsync(googleToken.IdToken, new GoogleJsonWebSignature.ValidationSettings
+            {
+                Audience = new List<string> { _googleClientId }
+            });
+
             //var userEntity = await _context.Users
             //    .Include(u => u.Avatar)
-            //    .FirstOrDefaultAsync(u => u.Email == userDto.Email);
+            //    .FirstOrDefaultAsync(u => u.Email == payload.Email);
             //
             //if (userEntity == null)
             //{
@@ -29,10 +34,12 @@ namespace Squirrel.Core.BLL.Services
             //
             //var user = _mapper.Map<UserDTO>(userEntity);
 
+            //var token = JwtGenerator.GenerateNewToken(user);
+
             return new AuthUserDTO
             {
-                //User = user,
-                //Token = token
+                //User = userDTO,
+                //Token = acessTokenDTO
             };
         }
 

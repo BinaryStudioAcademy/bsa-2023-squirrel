@@ -1,13 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { RegistrationComponent } from '@modules/landing/registration/registration.component';
-
-import { LandingPageComponent } from './landing-page/landing-page.component';
+import { AuthenticationPageComponent } from '@modules/authentication/authentication-page/authentication-page.component';
+import { RegistrationComponent } from '@modules/authentication/registration/registration.component';
 
 const routes: Routes = [
     {
         path: '',
-        component: LandingPageComponent,
+        component: AuthenticationPageComponent,
         children: [
             { path: 'registration', component: RegistrationComponent },
         ],
@@ -18,4 +17,4 @@ const routes: Routes = [
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule],
 })
-export class LandingRoutingModule {}
+export class AuthenticationRoutingModule {}

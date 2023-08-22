@@ -9,23 +9,20 @@ import { UserRegisterDto } from '../../../models/auth/user-register-dto';
     styleUrls: ['./registration.component.sass'],
 })
 export class RegistrationComponent implements OnInit {
-    registerForm: FormGroup = new FormGroup({});
+    public registerForm: FormGroup = new FormGroup({});
 
-    showPassword = false;
+    public showPassword = false;
 
-    showConfirmPassword = false;
+    public showConfirmPassword = false;
 
-    private fb: FormBuilder;
-
-    constructor(fb: FormBuilder) {
-        this.fb = fb;
-    }
+    // eslint-disable-next-line no-empty-function
+    constructor(private fb: FormBuilder) {}
 
     ngOnInit() {
         this.initializeForm();
     }
 
-    initializeForm() {
+    private initializeForm() {
         this.registerForm = this.fb.group({
             username: ['', Validators.required],
             email: ['', Validators.required],
@@ -37,15 +34,15 @@ export class RegistrationComponent implements OnInit {
         });
     }
 
-    matchValues(matchTo: string): ValidatorFn {
+    public matchValues(matchTo: string): ValidatorFn {
         return (control: AbstractControl) =>
             (control.value === control.parent?.get(matchTo)?.value ? null : { notMatching: true });
     }
 
-    validationCheck = (control: string, errorName: string) =>
+    public validationCheck = (control: string, errorName: string) =>
         this.registerForm.controls[control].errors?.[errorName] && this.registerForm.controls[control].touched;
 
-    register() {
+    public register() {
         const userRegistrationData: UserRegisterDto = {
             username: this.registerForm.value.username,
             email: this.registerForm.value.email,

@@ -4,7 +4,7 @@ namespace Squirrel.Core.Common.Interfaces;
 
 public interface IJwtFactory
 {
-    Task<AccessToken> GenerateAccessToken(int id, string userName, string email);
+    Task<AccessToken> GenerateAccessTokenAsync(int id, string userName, string email);
     string GenerateRefreshToken();
     int GetUserIdFromToken(string accessToken, string signingKey);
 }

@@ -23,7 +23,7 @@ public sealed class JwtFactory : IJwtFactory
         _jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
     }
 
-    public async Task<AccessToken> GenerateAccessToken(int id, string userName, string email)
+    public async Task<AccessToken> GenerateAccessTokenAsync(int id, string userName, string email)
     {
         var identity = GenerateClaimsIdentity(id, userName);
 

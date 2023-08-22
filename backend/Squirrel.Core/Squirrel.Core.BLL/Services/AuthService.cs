@@ -17,19 +17,19 @@ public sealed class AuthService : BaseService, IAuthService
         _jwtFactory = jwtFactory;
     }
 
-    public async Task<RefreshedAccessTokenDto> Login(UserLoginDto userLoginDto)
+    public async Task<RefreshedAccessTokenDto> LoginAsync(UserLoginDto userLoginDto)
     {
         // TODO: Find user in database by his email and get user info. Exception when not found or invalid credentials.
         // Dummy user info.
         var userId = 0;
         var username = "username";
         
-        var token = await GenerateNewAccessToken(userId, username, userLoginDto.Email);
+        var token = await GenerateNewAccessTokenAsync(userId, username, userLoginDto.Email);
         
         return token;
     }
 
-    public async Task<RefreshedAccessTokenDto> Register(UserRegisterDto userRegisterDto)
+    public async Task<RefreshedAccessTokenDto> RegisterAsync(UserRegisterDto userRegisterDto)
     {
         if (userRegisterDto.Password != userRegisterDto.ConfirmPassword)
         {
@@ -38,12 +38,12 @@ public sealed class AuthService : BaseService, IAuthService
         // Dummy user info.
         var userId = 0;
         
-        var token = await GenerateNewAccessToken(userId, userRegisterDto.Username, userRegisterDto.Email);
+        var token = await GenerateNewAccessTokenAsync(userId, userRegisterDto.Username, userRegisterDto.Email);
         
         return token;
     }
     
-    private async Task<RefreshedAccessTokenDto> GenerateNewAccessToken(int userId, string userName, string email)
+    private async Task<RefreshedAccessTokenDto> GenerateNewAccessTokenAsync(int userId, string userName, string email)
     {
         var refreshToken = _jwtFactory.GenerateRefreshToken();
 
@@ -55,7 +55,7 @@ public sealed class AuthService : BaseService, IAuthService
 
         await _context.SaveChangesAsync();
 
-        var accessToken = await _jwtFactory.GenerateAccessToken(userId, userName, email);
+        var accessToken = await _jwtFactory.GenerateAccessTokenAsync(userId, userName, email);
 
         return new RefreshedAccessTokenDto(accessToken, refreshToken);
     }

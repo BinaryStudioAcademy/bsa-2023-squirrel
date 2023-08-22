@@ -33,7 +33,7 @@ public sealed class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<ActionResult<RefreshedAccessTokenDto>> Login([FromBody] UserLoginDto userLoginData)
     {
-        return Ok(await _authService.Login(userLoginData));
+        return Ok(await _authService.LoginAsync(userLoginData));
     }
     
     /// <summary>
@@ -55,6 +55,6 @@ public sealed class AuthController : ControllerBase
     public async Task<ActionResult<RefreshedAccessTokenDto>> Post([FromBody] UserRegisterDto userRegisterData)
     {
         // TODO: Create user and add him to database via UserService.
-        return Ok(await _authService.Register(userRegisterData));
+        return Ok(await _authService.RegisterAsync(userRegisterData));
     }
 }

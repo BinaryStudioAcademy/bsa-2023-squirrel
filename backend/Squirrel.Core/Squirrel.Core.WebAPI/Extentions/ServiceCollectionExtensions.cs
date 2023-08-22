@@ -1,10 +1,13 @@
-﻿using FluentValidation.AspNetCore;
+﻿using AutoMapper;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.BLL.MappingProfiles;
 using Squirrel.Core.BLL.Services;
 using Squirrel.Core.Common.Models;
 using Squirrel.Core.DAL.Context;
+using Squirrel.Core.DAL.Entities;
 using Squirrel.Core.WebAPI.Validators;
 using System.Reflection;
 
@@ -23,7 +26,15 @@ namespace Squirrel.Core.WebAPI.Extentions
             services.Configure<MongoDatabaseConnectionSettings>(
                 configuration.GetSection("MongoDatabase"));
 
-            services.AddScoped(typeof(IMongoService<>), typeof(MongoService<>));
+            services.AddTransient(typeof(IMongoService<Sample>), serviceProvider =>
+            {
+                var context = serviceProvider.GetRequiredService<SquirrelCoreContext>();
+                var mapper = serviceProvider.GetRequiredService<IMapper>();
+                var mongoDatabaseSettings = serviceProvider.GetRequiredService<IOptions<MongoDatabaseConnectionSettings>>();
+                string collectionName = "SampleCollection";
+
+                return new MongoService<Sample>(mongoDatabaseSettings, collectionName);
+            });
         }
 
         public static void AddAutoMapper(this IServiceCollection services)

@@ -21,9 +21,10 @@ namespace Squirrel.Core.WebAPI.Extentions
             services
                 .AddControllers()
                 .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            services.AddTransient<ISampleService, SampleService>();
             services.AddScoped<JwtIssuerOptions>();
             services.AddScoped<IJwtFactory, JwtFactory>();
-            services.AddTransient<ISampleService, SampleService>();
+            services.AddScoped<IAuthService, AuthService>();
         }
 
         public static void AddAutoMapper(this IServiceCollection services)

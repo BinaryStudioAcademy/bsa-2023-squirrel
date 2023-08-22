@@ -7,7 +7,6 @@ namespace Squirrel.Core.WebAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    [Authorize] // For authentication tests.
     public class SampleController : ControllerBase
     {
         public SampleController(ISampleService sampleService)

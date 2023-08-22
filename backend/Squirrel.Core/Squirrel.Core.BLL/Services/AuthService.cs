@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.Common.DTO.Auth;
-using Squirrel.Core.Common.Exceptions;
 using Squirrel.Core.Common.Interfaces;
 using Squirrel.Core.DAL.Context;
 using Squirrel.Core.DAL.Entities;
@@ -24,23 +23,15 @@ public sealed class AuthService : BaseService, IAuthService
         var userId = 0;
         var username = "username";
         
-        var token = await GenerateNewAccessTokenAsync(userId, username, userLoginDto.Email);
-        
-        return token;
+        return await GenerateNewAccessTokenAsync(userId, username, userLoginDto.Email);
     }
 
     public async Task<RefreshedAccessTokenDto> RegisterAsync(UserRegisterDto userRegisterDto)
     {
-        if (userRegisterDto.Password != userRegisterDto.ConfirmPassword)
-        {
-            throw new IncorrectPasswordConfirmationException();
-        }
         // Dummy user info.
         var userId = 0;
         
-        var token = await GenerateNewAccessTokenAsync(userId, userRegisterDto.Username, userRegisterDto.Email);
-        
-        return token;
+        return await GenerateNewAccessTokenAsync(userId, userRegisterDto.Username, userRegisterDto.Email);
     }
     
     private async Task<RefreshedAccessTokenDto> GenerateNewAccessTokenAsync(int userId, string userName, string email)

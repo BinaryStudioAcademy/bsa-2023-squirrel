@@ -20,7 +20,7 @@ public sealed class AuthController : ControllerBase
     /// <summary>
     /// Generates user token for login
     /// </summary>
-    /// /// <remarks>
+    /// <remarks>
     /// Sample request for login:
     ///
     ///     POST /api/auth/login
@@ -39,7 +39,7 @@ public sealed class AuthController : ControllerBase
     /// <summary>
     /// Registers new user and generates tokens
     /// </summary>
-    /// /// /// <remarks>
+    /// <remarks>
     /// Sample request for registration:
     ///
     ///     POST /api/auth/register
@@ -47,7 +47,6 @@ public sealed class AuthController : ControllerBase
     ///        "email": "test@gmail.com",
     ///        "username": "username",
     ///        "password": "myPassword1",
-    ///        "confirmPassword": "myPassword1"
     ///     }
     ///
     /// </remarks>

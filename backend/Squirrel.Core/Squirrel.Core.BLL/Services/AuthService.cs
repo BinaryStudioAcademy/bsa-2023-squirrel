@@ -19,8 +19,6 @@ namespace Squirrel.Core.BLL.Services
 
         public async Task<AuthUserDTO> AuthorizeWithGoogle(GoogleToken googleToken)
         {
-            var test = _googleClientId;
-
             var payload = await GoogleJsonWebSignature.ValidateAsync(googleToken.IdToken, new GoogleJsonWebSignature.ValidationSettings
             {
                 Audience = new List<string> { _googleClientId }

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Squirrel.Core.BLL.Interfaces;
-using Squirrel.Core.BLL.Services;
 using Squirrel.Core.Common.DTO.Auth;
 using Squirrel.Core.Common.DTO.Users;
 

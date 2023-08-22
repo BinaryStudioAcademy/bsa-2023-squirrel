@@ -12,13 +12,13 @@ namespace Squirrel.Core.BLL.Services
     {
         private readonly IMongoCollection<T> _mongoCollection;
 
-        public MongoService(SquirrelCoreContext context, IMapper mapper, IOptions<MongoDatabaseConnectionSettings> mongoDatabaseSettings, string collectionName) : base(context, mapper)
+        public MongoService(SquirrelCoreContext context, IMapper mapper, IOptions<MongoDatabaseConnectionSettings> mongoDatabaseSettings) : base(context, mapper)
         {
             var mongoClient = new MongoClient(mongoDatabaseSettings.Value.ConnectionString);
 
             var mongoDatabase = mongoClient.GetDatabase(mongoDatabaseSettings.Value.DatabaseName);
 
-            collectionName = typeof(T) switch
+            string collectionName = typeof(T) switch
             {
                 Type t when t == typeof(Sample) => "SampleCollection",
                 // Add more cases for other entity types as needed

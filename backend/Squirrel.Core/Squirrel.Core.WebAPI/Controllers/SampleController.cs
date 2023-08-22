@@ -1,4 +1,5 @@
-﻿using Squirrel.Core.BLL.Interfaces;
+﻿using Microsoft.AspNetCore.Authorization;
+using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.Common.DTO;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,6 +7,7 @@ namespace Squirrel.Core.WebAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize] // For authentication tests.
     public class SampleController : ControllerBase
     {
         public SampleController(ISampleService sampleService)

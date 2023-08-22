@@ -1,3 +1,5 @@
+using Squirrel.AzureBlobStorage.WebApi.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration
@@ -7,7 +9,8 @@ builder.Configuration
     .AddEnvironmentVariables()
     .Build();
 // Add services to the container.
-
+builder.Services.RegisterCustomServices();
+builder.Services.AddAzureBlobStorage(builder.Configuration);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

@@ -16,7 +16,7 @@
         {
             "files": ["*.ts"],
             "parserOptions": {
-                "project": ["./tsconfig.json"]
+                "project": ["./frontend/tsconfig.json"]
             },
             "extends": [
                 "plugin:@angular-eslint/recommended",

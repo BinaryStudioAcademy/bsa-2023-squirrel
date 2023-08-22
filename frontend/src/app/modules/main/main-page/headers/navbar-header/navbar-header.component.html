@@ -1,0 +1,34 @@
+<div class="container">
+    <nav>
+        <ul class="navbar-list">
+            <li class="navbar-item">
+                <a routerLink="./changes" routerLinkActive="active" class="navbar-link">Changes</a>
+            </li>
+            <li class="navbar-item">
+                <a routerLink="./pull-requests" routerLinkActive="active" class="navbar-link">PRs</a>
+            </li>
+            <li class="navbar-item">
+                <a routerLink="./branches" routerLinkActive="active" class="navbar-link">Branches</a>
+            </li>
+            <li class="navbar-item">
+                <a routerLink="./scripts" routerLinkActive="active" class="navbar-link">Scripts</a>
+            </li>
+            <li class="navbar-item"><a routerLink="./code" routerLinkActive="active" class="navbar-link">Code</a></li>
+            <li class="navbar-item">
+                <a routerLink="./settings" routerLinkActive="active" class="navbar-link">Settings</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="right-container">
+        <app-dropdown
+            [options]="branches"
+            [width]="300"
+            (selectedValueChanged)="onBranchSelected($event)"></app-dropdown>
+        <button class="plus-btn">+</button>
+        <app-dropdown
+            class="align-right"
+            [options]="branches"
+            [width]="150"
+            (selectedValueChanged)="onBranchSelected($event)"></app-dropdown>
+    </div>
+</div>

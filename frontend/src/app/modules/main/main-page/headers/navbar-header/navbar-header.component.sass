@@ -1,0 +1,51 @@
+nav
+    width: 35%
+
+.navbar-list
+  list-style-type: none
+  display: flex
+  justify-content: space-around
+  padding: 1rem 0
+
+.navbar-item
+  margin: 0
+
+.navbar-link
+  text-decoration: none
+  color: #000
+  font-weight: 600
+  font-size: 16px
+  transition: color 0.1s ease
+
+.navbar-link:hover,
+.navbar-link.active
+  color: #503AF9
+  position: relative
+  display: inline-block
+
+.navbar-link:hover::after,
+.navbar-link.active::after
+  content: ''
+  position: absolute
+  bottom: -3px
+  left: 0
+  width: 100%
+  height: 2px
+  background-color: #503AF9
+
+.container
+    margin-top: 10px
+    display: flex
+    justify-content: space-between
+    align-items: center
+
+.right-container
+    width: 35%
+    display: flex
+    align-items: center
+    gap: 10px
+
+.align-right
+    margin-left: auto
+    margin-right: 10px
+

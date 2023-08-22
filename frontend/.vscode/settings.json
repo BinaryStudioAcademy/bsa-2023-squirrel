@@ -22,5 +22,6 @@
     "[jsonc]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
-    "cSpell.words": ["devkit", "linebreak", "Parens", "plusplus", "signalr"]
+    "cSpell.words": ["devkit", "linebreak", "Parens", "plusplus", "signalr"],
+    "eslint.workingDirectories": ["src"]
 }

@@ -66,15 +66,11 @@ namespace Squirrel.AzureBlobStorage.WebApi.Services
             throw new InvalidOperationException($"Blob with id:{blobId} does not exist.");
         }
 
-        public async Task DeleteAsync(string containerName, string blobId)
+        public async Task<bool> DeleteAsync(string containerName, string blobId)
         {
             var blobClient = await GetBlobClientInternalAsync(containerName, blobId);
 
-            if (!await blobClient.ExistsAsync())
-            {
-                throw new InvalidOperationException($"Blob with id:{blobId} does not exist.");
-            }
-            await blobClient.DeleteAsync();
+            return await blobClient.DeleteIfExistsAsync();
         }
 
         private async Task<BlobContainerClient> GetOrCreateContainerByNameAsync(string name)

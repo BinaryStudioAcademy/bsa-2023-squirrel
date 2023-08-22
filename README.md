@@ -77,3 +77,6 @@ This is a list of the required environment variables:
 #### MSSQL Server
 
 **SA_PASSWORD** - MSSQL Server "SA" user password
+
+## SQL Server Database Schema
+![Database_Schema](Squirrel_DB_Schema.svg)

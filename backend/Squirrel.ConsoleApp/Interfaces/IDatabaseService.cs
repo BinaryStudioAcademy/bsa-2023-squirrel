@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Squirrel.ConsoleApp.Interfaces
+﻿namespace Squirrel.ConsoleApp.Interfaces
 {
     public interface IDatabaseService
     {

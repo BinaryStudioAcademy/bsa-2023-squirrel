@@ -1,7 +1,6 @@
 ﻿using Npgsql;
 using Squirrel.ConsoleApp.Exceptions;
 using Squirrel.ConsoleApp.Interfaces;
-using System.Data.SqlClient;
 using System.Text;
 
 namespace Squirrel.ConsoleApp.Services

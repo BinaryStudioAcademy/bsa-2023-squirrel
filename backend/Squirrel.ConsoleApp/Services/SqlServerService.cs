@@ -1,6 +1,5 @@
 ﻿using Squirrel.ConsoleApp.Exceptions;
 using Squirrel.ConsoleApp.Interfaces;
-using System.Data;
 using System.Data.SqlClient;
 using System.Text;
 

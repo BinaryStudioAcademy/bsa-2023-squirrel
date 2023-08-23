@@ -29,7 +29,7 @@ public static class ServiceCollectionExtensions
 
     public static void AddAutoMapper(this IServiceCollection services)
     {
-        services.AddAutoMapper(Assembly.GetAssembly(typeof(SampleProfile)));
+        services.AddAutoMapper(Assembly.GetAssembly(typeof(SampleProfile))!);
     }
 
     public static void AddValidation(this IServiceCollection services)

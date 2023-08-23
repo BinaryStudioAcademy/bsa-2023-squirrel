@@ -46,14 +46,15 @@ public sealed class AuthController : ControllerBase
     ///     {
     ///        "email": "test@gmail.com",
     ///        "username": "username",
-    ///        "password": "myPassword1",
+    ///        "firstName": "name",
+    ///        "lastName": "surname",
+    ///        "password": "myPassword1"
     ///     }
     ///
     /// </remarks>
     [HttpPost("register")]
     public async Task<ActionResult<RefreshedAccessTokenDto>> Post([FromBody] UserRegisterDto userRegisterData)
     {
-        // TODO: Create user and add him to database via UserService.
         return Ok(await _authService.RegisterAsync(userRegisterData));
     }
 }

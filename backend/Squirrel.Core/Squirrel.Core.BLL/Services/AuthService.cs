@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.BLL.Services.Abstract;
 using Squirrel.Core.Common.DTO.Auth;
+using Squirrel.Core.Common.Exceptions;
 using Squirrel.Core.Common.Interfaces;
+using Squirrel.Core.Common.Security;
 using Squirrel.Core.DAL.Context;
 using Squirrel.Core.DAL.Entities;
 
@@ -29,10 +32,24 @@ public sealed class AuthService : BaseService, IAuthService
 
     public async Task<RefreshedAccessTokenDto> RegisterAsync(UserRegisterDto userRegisterDto)
     {
-        // Dummy user info.
-        var userId = 0;
+        if (await _context.Users.FirstOrDefaultAsync(u => u.Username == userRegisterDto.Username) is not null)
+        {
+            throw new UsernameAlreadyRegisteredException();
+        }
         
-        return await GenerateNewAccessTokenAsync(userId, userRegisterDto.Username, userRegisterDto.Email);
+        if (await _context.Users.FirstOrDefaultAsync(u => u.Email == userRegisterDto.Email) is not null)
+        {
+            throw new EmailAlreadyRegisteredException();
+        }
+
+        var newUser = _mapper.Map<User>(userRegisterDto)!;
+        var salt = BytesGenerator.GetRandomBytes();
+        newUser.Salt = Convert.ToBase64String(salt);
+        newUser.Password = PasswordProcessor.HashPassword(newUser.Password, salt);
+        var createdUser = (await _context.Users.AddAsync(newUser)).Entity;
+        await _context.SaveChangesAsync();
+        
+        return await GenerateNewAccessTokenAsync(createdUser.Id, createdUser.Username, createdUser.Email);
     }
     
     private async Task<RefreshedAccessTokenDto> GenerateNewAccessTokenAsync(int userId, string userName, string email)

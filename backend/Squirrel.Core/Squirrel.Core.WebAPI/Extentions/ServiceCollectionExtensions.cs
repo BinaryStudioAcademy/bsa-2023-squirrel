@@ -30,13 +30,8 @@ namespace Squirrel.Core.WebAPI.Extentions
 
         public static void AddMongoDbService(this IServiceCollection services)
         {
-            services.AddTransient(typeof(IMongoService<Sample>), serviceProvider =>
-            {
-                var mongoDatabaseSettings = serviceProvider.GetRequiredService<IOptions<MongoDatabaseConnectionSettings>>();
-                string collectionName = "SampleCollection";
-
-                return new MongoService<Sample>(mongoDatabaseSettings, collectionName);
-            });
+            services.AddTransient<IMongoService<Sample>>(s => 
+                new MongoService(s.GetRequiredService<IOptions<MongoDatabaseConnectionSettings>>(), "SampleCollection");
 
             // services for other entities and collections
         }

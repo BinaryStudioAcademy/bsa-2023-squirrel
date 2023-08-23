@@ -12,17 +12,16 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 @NgModule({
     imports: [
         CommonModule,
-        RouterModule,
         FormsModule,
         ReactiveFormsModule,
         RouterModule,
         ToastrModule.forRoot({
             positionClass: 'toast-bottom-right',
-        })],
+        }),
+    ],
     declarations: [LoadingSpinnerComponent, NotFoundComponent, ButtonComponent, SidebarComponent],
     exports: [
         CommonModule,
-        RouterModule,
         FormsModule,
         ReactiveFormsModule,
         RouterModule,

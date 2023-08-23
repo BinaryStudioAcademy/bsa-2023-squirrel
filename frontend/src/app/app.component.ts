@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
-import { GoogleLoginProvider, SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
+import { SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
 import { SpinnerService } from '@core/services/spinner.service';
 
 @Component({
@@ -33,12 +33,7 @@ export class AppComponent implements OnInit {
         this.socialAuthService.authState.subscribe((user) => {
             this.socialUser = user;
             this.isLoggedIn = user != null;
-            console.log(this.socialUser);
         });
-    }
-
-    loginWithGoogle(): void {
-        this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID).then(() => this.router.navigate(['main']));
     }
 
     logOut(): void {

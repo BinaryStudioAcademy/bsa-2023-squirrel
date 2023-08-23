@@ -1,0 +1,27 @@
+@import "/src/styles/color"
+.input-wrapper
+    display: flex
+    flex-direction: column
+
+label
+    color: $text-main
+    font-size: 12px
+    font-weight: 500
+    margin-top: 10px
+    margin-bottom: 5px
+
+input
+    box-sizing: border-box
+    border-radius: 7px
+    padding: 15px 40px 15px 15px
+    font-size: 14px
+    background-color: $bg-input
+    border: none
+
+input:focus
+    outline: none
+
+.invalid-feedback
+    color: $text-danger
+    font-size: 12px
+    margin-top: 5px

@@ -1,0 +1,21 @@
+<div class="input-wrapper">
+    <label>{{label | titlecase}}</label>
+    <input [formControl]="control"
+           type="{{type}}"
+           placeholder="Enter your {{label}}">
+    <div class="invalid-feedback"
+         *ngIf="control.errors?.['required'] && control.touched">
+        Please enter a {{label | titlecase}}
+    </div>
+
+    <div class="invalid-feedback"
+         *ngIf="control.errors?.['minlength'] && control.touched">
+        {{label | titlecase}} must be at least {{control.errors?.['minlength'].requiredLength}} characters
+    </div>
+
+    <div class="invalid-feedback"
+         *ngIf="control.errors?.['maxlength'] && control.touched">
+        {{label | titlecase}} must be at most {{control.errors?.['maxlength'].requiredLength}} characters
+    </div>
+</div>
+

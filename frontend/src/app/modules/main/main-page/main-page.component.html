@@ -8,7 +8,9 @@ Main Page works!
     'display': 'flex',
     'justify-content': 'space-around'
     }">
-    <app-button text="Example action button" height="45px" width="205px" fontSize="16px" btnClass="action-button"></app-button>
-    <app-button text="+" height="25px" width="28px" fontSize="12px" btnClass="add-button"></app-button>
-    <app-button text="Sign In" height="45px" width="250px" btnClass="sign-in-button"></app-button>
+    <app-button text="Example action button" variant="outline-primary"></app-button>
+    <app-button text="Secondary button" [isDisabled]=false variant="outline-secondary"></app-button>
+    <app-button text="+" height="30px" width="35px" padding="" variant="outline-secondary"></app-button>
+    <app-button text="Filled button" [isDisabled]=false variant="filled"></app-button>
+    <app-button text="Disabled" variant="outline-secondary" [isDisabled]=true></app-button>
 </div>

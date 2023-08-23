@@ -1,9 +1,10 @@
-<button 
+<button [disabled]="isDisabled"
     [ngStyle]="{
         height: height,
         width: width,
-        fontSize: fontSize
+        fontSize: fontSize,
+        'padding': padding
     }"
-    class="{{btnClass}} base-button"
+    class="{{btnClass}}"
     (click)="handleClick()"
 >{{ text }}</button>

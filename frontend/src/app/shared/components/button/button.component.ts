@@ -13,6 +13,10 @@ export class ButtonComponent {
   
   @Input() height = 'auto';
 
+  @Input() fontSize = '16px';
+
+  @Input() btnClass = "";
+
   @Output() buttonOnClick: EventEmitter<void> = new EventEmitter<void>();
 
   handleClick(): void{

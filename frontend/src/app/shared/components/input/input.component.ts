@@ -17,13 +17,13 @@ export class InputComponent implements ControlValueAccessor {
         this.ngControl.valueAccessor = this;
     }
 
-    public registerOnChange(fn: any): void {
+    public registerOnChange(): void {
     }
 
-    public registerOnTouched(fn: any): void {
+    public registerOnTouched(): void {
     }
 
-    public writeValue(obj: any): void {
+    public writeValue(): void {
     }
 
     get control(): FormControl {

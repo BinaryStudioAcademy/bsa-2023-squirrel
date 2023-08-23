@@ -4,20 +4,34 @@
     font-family: montserrat-variable-font, sans-serif
     font-weight: 600 
     align: center
+    background-color: transparent
     border-radius: 9px
     cursor: pointer
     transition: background-color 0.3s, color 0.3s
 
-.action-button
+.outline-primary-button
+    @extend .base-button
     color: $link-color
-    background-color: transparent
     border: 1px solid $link-color
 
     &:hover
         background-color: $link-color
         color: white
 
-.sign-in-button
+.outline-secondary-button
+    @extend .base-button
+    color: $add-button-color
+    border: 1px solid $add-button-color
+    border-radius: 9px
+    cursor: pointer
+    transition: background-color 0.3s, color 0.3s
+
+    &:hover 
+        background-color: $add-button-color
+        color: white
+
+.filled-button
+    @extend .base-button
     color: white
     background-color: $primary-color
     border: 1px solid $primary-color
@@ -28,16 +42,8 @@
         background-color: $bg-color
         color: white
 
-.add-button
-    font-family: Inter
-    color: $add-button-color
-    background-color: transparent
-    border: 1px solid $add-button-color
-    border-radius: 4px
-    cursor: pointer
-    transition: background-color 0.3s, color 0.3s
+.disabled-button
+    @extend .base-button
+    cursor: default
 
-    &:hover 
-        background-color: $add-button-color
-        color: white
 

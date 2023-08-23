@@ -1,7 +1,9 @@
 <button 
     [ngStyle]="{
         height: height,
-        width: width
+        width: width,
+        fontSize: fontSize
     }"
+    class="{{btnClass}} base-button"
     (click)="handleClick()"
 >{{ text }}</button>

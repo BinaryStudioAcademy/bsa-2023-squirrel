@@ -2,3 +2,13 @@ Main Page works!
 <div class="main-content-wrp">
     <router-outlet></router-outlet>
 </div>
+
+<!-- this div is an example of how to use reused button -->
+<div [ngStyle]="{
+    'display': 'flex',
+    'justify-content': 'space-around'
+    }">
+    <app-button text="Example action button" height="45px" width="205px" fontSize="16px" btnClass="action-button"></app-button>
+    <app-button text="+" height="25px" width="28px" fontSize="12px" btnClass="add-button"></app-button>
+    <app-button text="Sign In" height="45px" width="250px" btnClass="sign-in-button"></app-button>
+</div>

@@ -11,17 +11,19 @@ export class InputComponent implements ControlValueAccessor {
 
     @Input() type = 'text';
 
+    public show = false;
+
     constructor(@Self() public ngControl: NgControl) {
         this.ngControl.valueAccessor = this;
     }
 
-    registerOnChange(fn: any): void {
+    public registerOnChange(fn: any): void {
     }
 
-    registerOnTouched(fn: any): void {
+    public registerOnTouched(fn: any): void {
     }
 
-    writeValue(obj: any): void {
+    public writeValue(obj: any): void {
     }
 
     get control(): FormControl {

@@ -1,5 +1,5 @@
 @import "/src/styles/color"
-.input-wrapper
+.container
     display: flex
     flex-direction: column
 
@@ -25,3 +25,19 @@ input:focus
     color: $text-danger
     font-size: 12px
     margin-top: 5px
+
+.input-wrapper
+    position: relative
+    input
+        width: 100%
+
+.hide
+    position: absolute
+    top: 50%
+    right: 10px
+    transform: translateY(-50%)
+    cursor: pointer
+
+    img
+        margin-bottom: -4px
+        width: 24px

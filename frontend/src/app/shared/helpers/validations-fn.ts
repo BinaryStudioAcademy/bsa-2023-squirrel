@@ -35,7 +35,7 @@ export class ValidationsFn {
 
     static lowerExist(): ValidatorFn {
         return (control: AbstractControl) =>
-            (/(?=.*[A-Z])/.test(control.value)
+            (/(?=.*[a-z])/.test(control.value)
                 ? null : { lowerExist: true });
     }
 }

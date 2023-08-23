@@ -30,6 +30,7 @@ public sealed class TextController : ControllerBase
     ///
     /// </remarks>
     [HttpPost("compare/inline")]
+    [ProducesResponseType(typeof(InLineDiffResultDto), StatusCodes.Status200OK)]
     public ActionResult<InLineDiffResultDto> CompareInline([FromBody] TextPairRequestDto textPairDto)
     {
         return Ok(_textService.GetInlineDiffs(textPairDto));
@@ -50,6 +51,7 @@ public sealed class TextController : ControllerBase
     ///
     /// </remarks>
     [HttpPost("compare/sidebyside")]
+    [ProducesResponseType(typeof(SideBySideDiffResultDto), StatusCodes.Status200OK)]
     public ActionResult<SideBySideDiffResultDto> CompareSideBySide([FromBody] TextPairRequestDto textPairDto)
     {
         return Ok(_textService.GetSideBySideDiffs(textPairDto));

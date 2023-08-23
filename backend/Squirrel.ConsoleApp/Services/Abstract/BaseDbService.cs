@@ -1,7 +1,6 @@
-﻿using Squirrel.ConsoleApp.Exceptions;
-using Squirrel.ConsoleApp.Interfaces;
+﻿using Squirrel.ConsoleApp.Interfaces;
+using Squirrel.ConsoleApp.Models;
 using System.Data.Common;
-using System.Text;
 
 namespace Squirrel.ConsoleApp.Services.Abstract;
 public abstract class BaseDbService: IDatabaseService
@@ -13,58 +12,46 @@ public abstract class BaseDbService: IDatabaseService
         ConnectionString = connectionString;
     }
 
-    public abstract string ExecuteQuery(string query);
-    public abstract Task<string> ExecuteQueryAsync(string query);
+    public abstract QueryResultTable ExecuteQuery(string query);
+    public abstract Task<QueryResultTable> ExecuteQueryAsync(string query);
 
-    private protected string ExecuteQueryFromConnectionInternal(DbConnection connection, string query)
+    private protected QueryResultTable ExecuteQueryFromConnectionInternal(DbConnection connection, string query)
     {
         using var command = CreateCommandInternal(connection, query);
-        try
-        {
-            connection.Open();
-            using var reader = command.ExecuteReader();
 
-            var result = BuildQueryResultString(reader);
+        connection.Open();
+        using var reader = command.ExecuteReader();
 
-            return result;
-        }
-        catch (Exception ex)
-        {
-            throw new DatabaseException(ex.Message);
-        }
+        var result = BuildTable(reader);
+
+        return result;
     }
 
-    private protected async Task<string> ExecuteQueryFromConnectionInternalAsync(DbConnection connection, string query)
+    private protected async Task<QueryResultTable> ExecuteQueryFromConnectionInternalAsync(DbConnection connection, string query)
     {
         using var command = CreateCommandInternal(connection, query);
-        try
-        {
-            await connection.OpenAsync();
-            await using var reader = await command.ExecuteReaderAsync();
 
-            var result = BuildQueryResultString(reader);
+        await connection.OpenAsync();
+        await using var reader = await command.ExecuteReaderAsync();
 
-            return result;
-        }
-        catch (Exception ex)
-        {
-            throw new DatabaseException(ex.Message);
-        }
-    }
+        var result = BuildTable(reader);
 
-    private string BuildQueryResultString(DbDataReader reader)
+        return result;
+}
+
+    private QueryResultTable BuildTable(DbDataReader reader)
     {
-        var stringBuilder = new StringBuilder();
+        var result = new QueryResultTable(Enumerable.Range(0, reader.FieldCount).Select(reader.GetName).ToArray());
         while (reader.Read())
         {
+            var row = new string[reader.FieldCount];
             for (int i = 0; i < reader.FieldCount; i++)
             {
-                stringBuilder.Append(reader[i] + "\t");
+                row[i] = reader[i].ToString() ?? string.Empty;
             }
-            stringBuilder.AppendLine();
+            result.AddRow(row);
         }
-
-        return stringBuilder.ToString();
+        return result;
     }
 
     private DbCommand CreateCommandInternal(DbConnection connection, string query)

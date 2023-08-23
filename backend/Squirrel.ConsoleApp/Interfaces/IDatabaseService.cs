@@ -1,8 +1,10 @@
-﻿namespace Squirrel.ConsoleApp.Interfaces;
+﻿using Squirrel.ConsoleApp.Models;
+
+namespace Squirrel.ConsoleApp.Interfaces;
 
 public interface IDatabaseService
 {
     string ConnectionString { get; }
-    string ExecuteQuery(string query);
-    Task<string> ExecuteQueryAsync(string query);
+    QueryResultTable ExecuteQuery(string query);
+    Task<QueryResultTable> ExecuteQueryAsync(string query);
 }

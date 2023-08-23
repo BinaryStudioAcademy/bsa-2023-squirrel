@@ -1,5 +1,4 @@
 ﻿using Squirrel.Core.BLL.Interfaces;
-using Squirrel.Core.Common.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Squirrel.Core.Common.DTO.Sample;
 

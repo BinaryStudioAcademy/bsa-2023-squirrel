@@ -3,88 +3,87 @@ using Azure.Storage.Blobs;
 using Squirrel.AzureBlobStorage.Interfaces;
 using Squirrel.AzureBlobStorage.Models;
 
-namespace Squirrel.AzureBlobStorage.Services
+namespace Squirrel.AzureBlobStorage.Services;
+
+public class AzureBlobStorageService : IBlobStorageService
 {
-    public class AzureBlobStorageService: IBlobStorageService
+    private readonly BlobServiceClient _blobServiceClient;
+
+    public AzureBlobStorageService(BlobServiceClient blobServiceClient)
     {
-        private readonly BlobServiceClient _blobServiceClient;
+        _blobServiceClient = blobServiceClient;
+    }
 
-        public AzureBlobStorageService(BlobServiceClient blobServiceClient)
+    public async Task<Blob> UploadAsync(string containerName, Blob blob)
+    {
+        var blobClient = await GetBlobClientInternalAsync(containerName, blob.Id);
+
+        if (await blobClient.ExistsAsync())
         {
-            _blobServiceClient = blobServiceClient;
+            throw new InvalidOperationException($"Blob with id:{blob.Id} already exists.");
         }
 
-        public async Task<Blob> UploadAsync(string containerName, Blob blob)
+        var blobHttpHeader = new BlobHttpHeaders { ContentType = blob.ContentType };
+        await blobClient.UploadAsync(new BinaryData(blob.Content ?? new byte[] { }),
+            new BlobUploadOptions { HttpHeaders = blobHttpHeader });
+
+        return blob;
+    }
+
+    public async Task<Blob> UpdateAsync(string containerName, Blob blob)
+    {
+        var blobClient = await GetBlobClientInternalAsync(containerName, blob.Id);
+
+        if (!await blobClient.ExistsAsync())
         {
-            var blobClient = await GetBlobClientInternalAsync(containerName, blob.Id);
-
-            if (await blobClient.ExistsAsync())
-            {
-                throw new InvalidOperationException($"Blob with id:{blob.Id} already exists.");
-            }
-
-            var blobHttpHeader = new BlobHttpHeaders { ContentType = blob.ContentType };
-            await blobClient.UploadAsync(new BinaryData(blob.Content ?? new byte[] { }),
-                new BlobUploadOptions { HttpHeaders = blobHttpHeader });
-
-            return blob;
+            throw new InvalidOperationException($"Blob with id:{blob.Id} does not exist.");
         }
 
-        public async Task<Blob> UpdateAsync(string containerName, Blob blob)
+        var blobHttpHeader = new BlobHttpHeaders { ContentType = blob.ContentType };
+        await blobClient.UploadAsync(new BinaryData(blob.Content ?? new byte[] { }),
+            new BlobUploadOptions { HttpHeaders = blobHttpHeader });
+
+        return blob;
+    }
+
+    public async Task<Blob> DownloadAsync(string containerName, string blobId)
+    {
+        var blobClient = await GetBlobClientInternalAsync(containerName, blobId);
+
+        if (!await blobClient.ExistsAsync())
         {
-            var blobClient = await GetBlobClientInternalAsync(containerName, blob.Id);
-
-            if (!await blobClient.ExistsAsync())
-            {
-                throw new InvalidOperationException($"Blob with id:{blob.Id} does not exist.");
-            }
-
-            var blobHttpHeader = new BlobHttpHeaders { ContentType = blob.ContentType };
-            await blobClient.UploadAsync(new BinaryData(blob.Content ?? new byte[] { }),
-                new BlobUploadOptions { HttpHeaders = blobHttpHeader });
-
-            return blob;
+            throw new InvalidOperationException($"Blob with id:{blobId} does not exist.");
         }
 
-        public async Task<Blob> DownloadAsync(string containerName, string blobId)
+        var content = await blobClient.DownloadContentAsync();
+        Blob blob = new Blob
         {
-            var blobClient = await GetBlobClientInternalAsync(containerName, blobId);
+            Id = blobId,
+            Content = content.Value.Content.ToArray(),
+            ContentType = content.Value.Details.ContentType,
+        };
 
-            if (!await blobClient.ExistsAsync())
-            {
-                throw new InvalidOperationException($"Blob with id:{blobId} does not exist.");
-            }
+        return blob;
+    }
 
-            var content = await blobClient.DownloadContentAsync();
-            Blob blob = new Blob
-            {
-                Id = blobId,
-                Content = content.Value.Content.ToArray(),
-                ContentType = content.Value.Details.ContentType,
-            };
+    public async Task<bool> DeleteAsync(string containerName, string blobId)
+    {
+        var blobClient = await GetBlobClientInternalAsync(containerName, blobId);
 
-            return blob;
-        }
+        return await blobClient.DeleteIfExistsAsync();
+    }
 
-        public async Task<bool> DeleteAsync(string containerName, string blobId)
-        {
-            var blobClient = await GetBlobClientInternalAsync(containerName, blobId);
+    private async Task<BlobContainerClient> GetOrCreateContainerByNameAsync(string name)
+    {
+        var containerClient = _blobServiceClient.GetBlobContainerClient(name);
+        await containerClient.CreateIfNotExistsAsync();
 
-            return await blobClient.DeleteIfExistsAsync();
-        }
+        return containerClient;
+    }
 
-        private async Task<BlobContainerClient> GetOrCreateContainerByNameAsync(string name)
-        {
-            var containerClient = _blobServiceClient.GetBlobContainerClient(name);
-            await containerClient.CreateIfNotExistsAsync();
-
-            return containerClient;
-        }
-
-        private async Task<BlobClient> GetBlobClientInternalAsync(string containerName, string blobName)
-        {
-            var container = await GetOrCreateContainerByNameAsync(containerName);
-            return container.GetBlobClient(blobName);
-        }
+    private async Task<BlobClient> GetBlobClientInternalAsync(string containerName, string blobName)
+    {
+        var container = await GetOrCreateContainerByNameAsync(containerName);
+        return container.GetBlobClient(blobName);
     }
 }

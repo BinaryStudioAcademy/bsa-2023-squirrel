@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Squirrel.Core.BLL.Interfaces;
-using Squirrel.Core.Common.DTO;
 using Squirrel.Core.DAL.Context;
 using Squirrel.Core.DAL.Entities;
 using Microsoft.EntityFrameworkCore;

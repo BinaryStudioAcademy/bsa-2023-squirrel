@@ -1,5 +1,4 @@
-﻿using Squirrel.Core.Common.DTO;
-using Squirrel.Core.Common.DTO.Sample;
+﻿using Squirrel.Core.Common.DTO.Sample;
 
 namespace Squirrel.Core.BLL.Interfaces;
 

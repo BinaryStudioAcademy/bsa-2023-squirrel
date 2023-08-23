@@ -1,28 +1,24 @@
 ﻿using AutoMapper;
 using Squirrel.Core.Common.DTO.Projects;
-using Squirrel.Core.DAL.Context;
-using Squirrel.Core.DAL.Entities;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Squirrel.Core.BLL.Interfaces;
 
 namespace Squirrel.Core.BLL.Services
 {
-    public class ProjectService: IProjectService
+    public class ProjectService : IProjectService
     {
-        private readonly SquirrelCoreContext _context;
+        // private readonly SquirrelCoreContext _context;
         private readonly IMapper _mapper;
 
-        public ProjectService(SquirrelCoreContext context, IMapper mapper)
+        public ProjectService(/* SquirrelCoreContext context, */ IMapper mapper)
         {
-            _context = context;
+            // _context = context;
             _mapper = mapper;
         }
 
         public async Task<ProjectDTO> AddProject(ProjectDTO projectDto)
         {
             // var projectEntity = _mapper.Map<Project>(projectDto);
+            // projectEntity.Engine = (int)projectDto.Engine;
             // _context.Projects.Add(projectEntity);
             // await _context.SaveChangesAsync();
             // return _mapper.Map<ProjectDTO>(projectEntity);
@@ -37,7 +33,10 @@ namespace Squirrel.Core.BLL.Services
             // {
             //     throw new NotFoundException(nameof(Project));
             // }
-            // _mapper.Map(projectDto, existingProject);
+            
+            // existingProject.Name = projectDto.Name;
+            // existingProject.Engine = (int)projectDto.Engine;
+            
             // await _context.SaveChangesAsync();
             // return _mapper.Map<ProjectDTO>(existingProject);
 
@@ -64,7 +63,9 @@ namespace Squirrel.Core.BLL.Services
             // {
             //     throw new NotFoundException(nameof(Project));
             // }
-            // return _mapper.Map<ProjectDTO>(project);
+            // var projectDto = _mapper.Map<ProjectDTO>(project);
+            // projectDto.Engine = (EngineEnum)project.Engine;
+            // return projectDto;
 
             throw new NotImplementedException();
         }
@@ -72,7 +73,14 @@ namespace Squirrel.Core.BLL.Services
         public async Task<List<ProjectDTO>> GetAllProjects()
         {
             // var projects = await _context.Projects.ToListAsync();
-            // return _mapper.Map<List<ProjectDTO>>(projects);
+            // var projectDtos = _mapper.Map<List<ProjectDTO>>(projects);
+            
+            // foreach (var projectDto in projectDtos)
+            // {
+            //     projectDto.Engine = (EngineEnum)projectDto.Engine;
+            // }
+
+            // return projectDtos;
 
             throw new NotImplementedException();
         }

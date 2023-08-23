@@ -10,5 +10,5 @@ public class DiffLineResult
 
     public string Text { get; set; }
 
-    public List<DiffPiece> SubPieces { get; set; } = new List<DiffPiece>();
+    public List<DiffPiece> SubPieces { get; set; }
 }

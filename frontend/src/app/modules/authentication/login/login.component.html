@@ -15,7 +15,11 @@
         <form class="login-form" (ngSubmit)="loginForm.valid && login()">
 
             <app-input [formControl]="$any(loginForm.controls['email'])" [label]="'email'"></app-input>
-            <app-input [formControl]="$any(loginForm.controls['password'])" [label]="'password'" [type]="'password'"></app-input>
+            <div class="input-wrapper">
+                <app-input [formControl]="$any(loginForm.controls['password'])" [label]="'password'" [type]="'password'"></app-input>
+                <a href="">Forget password</a>
+            </div>
+
 
             <button [disabled]="loginForm.invalid" type="submit">Sing In</button>
         </form>

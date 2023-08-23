@@ -11,6 +11,5 @@ public class SampleConfig : IEntityTypeConfiguration<Sample>
         builder.Property(e => e.Title)
                .IsRequired()
                .HasMaxLength(50);
-
     }
 }

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Squirrel.Core.Common.DTO;
 using Squirrel.Core.Common.DTO.Sample;
 using Squirrel.Core.DAL.Entities;
 

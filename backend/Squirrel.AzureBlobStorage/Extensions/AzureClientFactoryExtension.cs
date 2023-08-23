@@ -2,17 +2,16 @@
 using Azure.Storage.Blobs;
 using Microsoft.Extensions.Azure;
 
-namespace Squirrel.AzureBlobStorage.Extensions
+namespace Squirrel.AzureBlobStorage.Extensions;
+
+public static class AzureClientFactoryExtension
 {
-    public static class AzureClientFactoryExtension
+    public static IAzureClientBuilder<BlobServiceClient, BlobClientOptions> AddBlobServiceClient(this AzureClientFactoryBuilder builder, string serviceUriOrConnectionString, bool preferMsi)
     {
-        public static IAzureClientBuilder<BlobServiceClient, BlobClientOptions> AddBlobServiceClient(this AzureClientFactoryBuilder builder, string serviceUriOrConnectionString, bool preferMsi)
+        if (preferMsi && Uri.TryCreate(serviceUriOrConnectionString, UriKind.Absolute, out Uri? serviceUri))
         {
-            if (preferMsi && Uri.TryCreate(serviceUriOrConnectionString, UriKind.Absolute, out Uri? serviceUri))
-            {
-                return builder.AddBlobServiceClient(serviceUri);
-            }
-            return builder.AddBlobServiceClient(serviceUriOrConnectionString);
+            return builder.AddBlobServiceClient(serviceUri)!;
         }
+        return builder.AddBlobServiceClient(serviceUriOrConnectionString)!;
     }
 }

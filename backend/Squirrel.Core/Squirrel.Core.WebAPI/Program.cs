@@ -20,6 +20,7 @@ builder.Services.RegisterCustomServices();
 builder.Services.AddAutoMapper();
 builder.Services.AddSwaggerGen();
 builder.Services.AddValidation();
+builder.Services.ConfigureJwtAuth(builder.Configuration);
 
 builder.Services.AddCors();
 builder.Services.AddHealthChecks();

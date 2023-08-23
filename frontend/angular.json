@@ -46,7 +46,10 @@
                         "tsConfig": "tsconfig.app.json",
                         "inlineStyleLanguage": "sass",
                         "assets": ["src/favicon.ico", "src/assets"],
-                        "styles": ["src/styles/index.sass"],
+                        "styles": [
+                            "src/styles/index.sass",
+                            "src/assets/fonts/fonts-montserrat.sass"
+                        ],
                         "scripts": [],
                         "allowedCommonJsDependencies": ["moment-timezone"]
                     },

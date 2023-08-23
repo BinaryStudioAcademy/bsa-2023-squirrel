@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using Squirrel.Notifier.Hubs.Interfaces;
+using Squirrel.Notifier.WebAPI.Hubs.Interfaces;
 
-namespace Squirrel.Notifier.Hubs
+namespace Squirrel.Notifier.WebAPI.Hubs;
+
+public class BroadcastHub : Hub<IBroadcastHubClient>
 {
-    public class BroadcastHub : Hub<IBroadcastHubClient>
-    {
-    }
 }

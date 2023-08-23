@@ -1,7 +1,6 @@
-﻿namespace Squirrel.Notifier.Hubs.Interfaces
+﻿namespace Squirrel.Notifier.WebAPI.Hubs.Interfaces;
+
+public interface IBroadcastHubClient
 {
-    public interface IBroadcastHubClient
-    {
-        Task BroadcastMessage(string msg);
-    }
+    Task BroadcastMessage(string msg);
 }

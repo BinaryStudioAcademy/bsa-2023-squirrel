@@ -1,4 +1,4 @@
-using Squirrel.Core.WebAPI.Extentions;
+using Squirrel.Core.WebAPI.Extensions;
 using Squirrel.Core.WebAPI.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +19,7 @@ builder.Services.RegisterCustomServices();
 builder.Services.AddAutoMapper();
 builder.Services.AddSwaggerGen();
 builder.Services.AddValidation();
+builder.Services.ConfigureJwtAuth(builder.Configuration);
 
 builder.Services.AddCors();
 builder.Services.AddHealthChecks();

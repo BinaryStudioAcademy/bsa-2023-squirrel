@@ -22,13 +22,14 @@ public sealed class AuthService : BaseService, IAuthService
        _googleClientId = authSettings.Value.GoogleClientId;
     }
 
-    public async Task<AuthUserDTO> AuthorizeWithGoogle(GoogleToken googleToken)
+    public async Task<AuthUserDTO> AuthorizeWithGoogleAsync(GoogleToken googleToken)
     {
         var payload = await GoogleJsonWebSignature.ValidateAsync(googleToken.IdToken, new GoogleJsonWebSignature.ValidationSettings
         {
             Audience = new List<string> { _googleClientId }
         });
 
+        // TODO: it will be implemented later, after Users
         //var userEntity = await _context.Users
         //    .Include(u => u.Avatar)
         //    .FirstOrDefaultAsync(u => u.Email == payload.Email);

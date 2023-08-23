@@ -10,11 +10,11 @@ import { SpinnerService } from '@core/services/spinner.service';
     styleUrls: ['./app.component.sass'],
 })
 export class AppComponent implements OnInit {
-    loginForm!: FormGroup;
+    public loginForm!: FormGroup;
 
-    socialUser!: SocialUser;
+    public socialUser!: SocialUser;
 
-    isLoggedIn?: boolean;
+    public isLoggedIn?: boolean;
 
     constructor(
         private router: Router,

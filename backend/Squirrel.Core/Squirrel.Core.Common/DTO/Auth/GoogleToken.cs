@@ -1,7 +1,6 @@
-﻿namespace Squirrel.Core.Common.DTO.Auth
+﻿namespace Squirrel.Core.Common.DTO.Auth;
+
+public class GoogleToken
 {
-    public class GoogleToken
-    {
-        public string IdToken { get; set; }
-    }
+    public string IdToken { get; set; }
 }

@@ -1,7 +1,6 @@
-﻿namespace Squirrel.Core.Common.DTO.Auth
+﻿namespace Squirrel.Core.Common.DTO.Auth;
+
+public class AuthenticationSettings
 {
-    public class AuthenticationSettings
-    {
-        public string GoogleClientId { get; set; }
-    }
+    public string GoogleClientId { get; set; }
 }

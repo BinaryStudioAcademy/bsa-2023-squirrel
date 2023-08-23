@@ -4,6 +4,6 @@ namespace Squirrel.Core.BLL.Interfaces;
 
 public interface ITextService
 {
-    InLineDiffResultDto GetInlineDiffs(CompareTextsDto compareTextsDto);
-    SideBySideDiffResultDto GetSideBySideDiffs(CompareTextsDto compareTextsDto);
+    InLineDiffResultDto GetInlineDiffs(TextPairRequestDto textPairDto);
+    SideBySideDiffResultDto GetSideBySideDiffs(TextPairRequestDto textPairDto);
 }

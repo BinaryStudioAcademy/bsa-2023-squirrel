@@ -1,6 +1,6 @@
 ﻿namespace Squirrel.Core.Common.DTO.Text;
 
-public class CompareTextsDto
+public class TextPairRequestDto
 {
     public string OldText { get; set; }
     public string NewText { get; set; }

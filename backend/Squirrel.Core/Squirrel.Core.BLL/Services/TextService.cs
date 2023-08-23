@@ -7,10 +7,10 @@ namespace Squirrel.Core.BLL.Services;
 
 public class TextService : ITextService
 {
-    public InLineDiffResultDto GetInlineDiffs(CompareTextsDto compareTextsDto)
+    public InLineDiffResultDto GetInlineDiffs(TextPairRequestDto textPairDto)
     {
         var inlineBuilder = new InlineDiffBuilder(new Differ());
-        var inlineDiff = inlineBuilder.BuildDiffModel(compareTextsDto.OldText, compareTextsDto.NewText, compareTextsDto.IgnoreWhitespace);
+        var inlineDiff = inlineBuilder.BuildDiffModel(textPairDto.OldText, textPairDto.NewText, textPairDto.IgnoreWhitespace);
 
         var result = inlineDiff.Lines.Select(line => new DiffLineResult
         {
@@ -23,10 +23,10 @@ public class TextService : ITextService
         return new InLineDiffResultDto { HasDifferences = inlineDiff.HasDifferences, DiffLinesResults = result };
     }
 
-    public SideBySideDiffResultDto GetSideBySideDiffs(CompareTextsDto compareTextsDto)
+    public SideBySideDiffResultDto GetSideBySideDiffs(TextPairRequestDto textPairDto)
     {
         var sbsBuilder = new SideBySideDiffBuilder(new Differ());
-        var sbsDiff = sbsBuilder.BuildDiffModel(compareTextsDto.OldText, compareTextsDto.NewText, compareTextsDto.IgnoreWhitespace);
+        var sbsDiff = sbsBuilder.BuildDiffModel(textPairDto.OldText, textPairDto.NewText, textPairDto.IgnoreWhitespace);
 
         var result = new SideBySideDiffResultDto
         {

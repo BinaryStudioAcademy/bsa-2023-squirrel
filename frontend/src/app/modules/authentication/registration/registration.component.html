@@ -1,0 +1,87 @@
+<div class="registration-container">
+    <div class="registration-content">
+        <h4>Sign Up</h4>
+
+        <div class="additional-sing-up">
+            <button>Sign Up with GitHub</button>
+            <button>Sign Up with Google</button>
+        </div>
+
+        <div class="barrier">
+            <hr>
+            <p class="barrier-text">or</p>
+        </div>
+
+        <form [formGroup]="registerForm" (ngSubmit)="registerForm.valid && register()" class="registration-form"
+              action="">
+            <label>Username</label>
+            <input [formControl]="$any(registerForm.controls['username'])" type="text"
+                   placeholder="Enter your Username">
+            <div class="invalid-feedback"
+                 *ngIf="validationCheck('username', 'required')">
+                Please enter a username
+            </div>
+
+            <label>Email</label>
+            <input [formControl]="$any(registerForm.controls['email'])" type="text" placeholder="Enter your Email">
+            <div class="invalid-feedback"
+                 *ngIf="validationCheck('email', 'required')">
+                Please enter a email
+            </div>
+
+            <label>Email</label>
+            <input [formControl]="$any(registerForm.controls['firstName'])" type="text" placeholder="Enter your Email">
+            <div class="invalid-feedback"
+                 *ngIf="validationCheck('firstName', 'required')">
+                Please enter a first name
+            </div>
+
+            <label>Email</label>
+            <input [formControl]="$any(registerForm.controls['lastName'])" type="text" placeholder="Enter your Email">
+            <div class="invalid-feedback"
+                 *ngIf="validationCheck('lastName', 'required')">
+                Please enter a last name
+            </div>
+
+            <label>Password</label>
+            <div class="password-wrapper">
+                <input [formControl]="$any(registerForm.controls['password'])" type="{{ showPassword ? 'text' : 'password' }}"
+                       placeholder="Enter your Password">
+                <span class="hide" (click)="showPassword = !showPassword">
+                    <img src="assets/{{ showPassword ? 'hide-1.svg' : 'hide-2.svg' }}" alt="show/hide">
+                </span>
+            </div>
+
+
+            <div class="invalid-feedback"
+                 *ngIf="validationCheck('password', 'required')">
+                Please enter a password
+            </div>
+
+            <label>Confirm password</label>
+            <div class="password-wrapper">
+                <input [formControl]="$any(registerForm.controls['confirmPassword'])"
+                       type="{{ showConfirmPassword ? 'text' : 'password' }}"
+                       placeholder="Enter your Password again">
+                <span class="hide" (click)="showConfirmPassword = !showConfirmPassword">
+                    <img src="assets/{{ showConfirmPassword ? 'hide-1.svg' : 'hide-2.svg' }}" alt="show/hide">
+                </span>
+            </div>
+
+            <div class="invalid-feedback"
+                 *ngIf="validationCheck('confirmPassword', 'required')">
+                Please enter a password again
+            </div>
+            <div class="invalid-feedback"
+                 *ngIf="validationCheck('confirmPassword', 'notMatching')">
+                Confirm passwords must match password
+            </div>
+
+            <button [disabled]="!registerForm.valid" type="submit">Sing Up</button>
+        </form>
+    </div>
+
+    <div class="registration-footer">
+        Already have account? <a href="">Sign In</a>
+    </div>
+</div>

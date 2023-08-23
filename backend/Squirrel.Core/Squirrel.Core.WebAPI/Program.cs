@@ -1,4 +1,4 @@
-using Squirrel.Core.WebAPI.Extentions;
+using Squirrel.Core.WebAPI.Extensions;
 using Squirrel.Core.WebAPI.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);

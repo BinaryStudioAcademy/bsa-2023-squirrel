@@ -1,40 +1,39 @@
-﻿namespace Squirrel.Core.WebAPI.Middlewares
+﻿namespace Squirrel.Core.WebAPI.Middlewares;
+
+public class GenericExceptionHandlerMiddleware
 {
-    public class GenericExceptionHandlerMiddleware
+    private readonly RequestDelegate _next;
+    private readonly ILogger<GenericExceptionHandlerMiddleware> _logger;
+
+    public GenericExceptionHandlerMiddleware(RequestDelegate next, ILogger<GenericExceptionHandlerMiddleware> logger)
     {
-        private readonly RequestDelegate _next;
-        private readonly ILogger<GenericExceptionHandlerMiddleware> _logger;
+        _next = next;
+        _logger = logger;
+    }
 
-        public GenericExceptionHandlerMiddleware(RequestDelegate next, ILogger<GenericExceptionHandlerMiddleware> logger)
+    public async Task InvokeAsync(HttpContext context)
+    {
+        try
         {
-            _next = next;
-            _logger = logger;
+            await _next(context);
         }
-
-        public async Task InvokeAsync(HttpContext context)
+        catch (Exception ex)
         {
-            try
-            {
-                await _next(context);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Something went wrong: {ex}");
-                await HandleException(context, ex);
-            }
+            _logger.LogError($"Something went wrong: {ex}");
+            await HandleException(context, ex);
         }
+    }
 
-        private static Task HandleException(HttpContext context, Exception exception)
+    private static Task HandleException(HttpContext context, Exception exception)
+    {
+        context.Response.ContentType = "application/json";
+
+        context.Response.StatusCode = exception switch
         {
-            context.Response.ContentType = "application/json";
+            ArgumentNullException => 400,
+            _ => 500
+        };
 
-            context.Response.StatusCode = exception switch
-            {
-                ArgumentNullException => 400,
-                _ => 500
-            };
-
-            return context.Response.WriteAsync(exception.Message);
-        }
+        return context.Response.WriteAsync(exception.Message);
     }
 }

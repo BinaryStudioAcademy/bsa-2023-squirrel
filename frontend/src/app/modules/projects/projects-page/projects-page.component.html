@@ -3,6 +3,12 @@
         <app-sidebar></app-sidebar>
     </div>
     <div class="projects-sector">
-        <router-outlet></router-outlet>
+        <div class="card-container">
+            <mat-card *ngFor="let project of projects">
+                <mat-card-content>
+                    {{ project.name }}
+                </mat-card-content>
+            </mat-card>
+        </div>
     </div>
 </div>

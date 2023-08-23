@@ -10,7 +10,7 @@ public class TextService : ITextService
     public InLineDiffResultDto GetInlineDiffs(CompareTextsDto compareTextsDto)
     {
         var inlineBuilder = new InlineDiffBuilder(new Differ());
-        DiffPlex.DiffBuilder.Model.DiffPaneModel inlineDiff = inlineBuilder.BuildDiffModel(compareTextsDto.OldText, compareTextsDto.NewText, compareTextsDto.IgnoreWhitespace);
+        var inlineDiff = inlineBuilder.BuildDiffModel(compareTextsDto.OldText, compareTextsDto.NewText, compareTextsDto.IgnoreWhitespace);
 
         var result = inlineDiff.Lines.Select(line => new DiffLineResult
         {

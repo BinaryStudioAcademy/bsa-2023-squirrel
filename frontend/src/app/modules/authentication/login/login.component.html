@@ -12,17 +12,16 @@
             <p class="barrier-text">or</p>
         </div>
 
-        <form class="login-form"
-              action="">
+        <form class="login-form" (ngSubmit)="loginForm.valid && login()">
 
             <app-input [formControl]="$any(loginForm.controls['email'])" [label]="'email'"></app-input>
             <app-input [formControl]="$any(loginForm.controls['password'])" [label]="'password'" [type]="'password'"></app-input>
 
-            <button type="submit">Sing In</button>
+            <button [disabled]="loginForm.invalid" type="submit">Sing In</button>
         </form>
     </div>
 
     <div class="login-footer">
-        No account? <a href="">Sign Up</a>
+        No account? <a routerLink="/registration">Sign Up</a>
     </div>
 </div>

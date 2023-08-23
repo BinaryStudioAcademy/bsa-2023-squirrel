@@ -4,11 +4,18 @@
     </div>
     <div class="projects-sector">
         <div class="card-container">
+            <button
+                [ngStyle]="{ height: '40px', width: '120px' }"
+                (click)="openCreateModal()"
+            >
+                Create Project
+            </button>
             <mat-card *ngFor="let project of projects">
                 <mat-card-content>
                     {{ project.name }}
                 </mat-card-content>
             </mat-card>
+            <router-outlet></router-outlet>
         </div>
     </div>
 </div>

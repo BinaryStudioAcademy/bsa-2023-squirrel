@@ -1,0 +1,15 @@
+<h2>Create Project</h2>
+<div>
+    <input [(ngModel)]="projectName" placeholder="Project Name" />
+</div>
+<div>
+    <label for="engineSelect">Database Engine:</label>
+    <select id="engineSelect" [(ngModel)]="selectedEngine">
+        <option value="SqlServer">SQL Server</option>
+        <option value="PostgreSQL">PostgreSQL</option>
+    </select>
+</div>
+<div class="modal-buttons">
+    <button (click)="createProject()">Create</button>
+    <button (click)="close()">Cancel</button>
+</div>

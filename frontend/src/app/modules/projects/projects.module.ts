@@ -1,18 +1,20 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SharedModule } from '@shared/shared.module';
+import { NgModule } from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
+import { CreateProjectModalComponent } from '@modules/projects/create-project-modal/create-project-modal.component';
 import { ProjectsPageComponent } from '@modules/projects/projects-page/projects-page.component';
-import {MatCardModule} from "@angular/material/card";
+import { SharedModule } from '@shared/shared.module';
+import { ProjectsRoutingModule } from '@modules/projects/projects-routing.model';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
-    declarations: [ProjectsPageComponent],
+    declarations: [ProjectsPageComponent, CreateProjectModalComponent],
     imports: [
         CommonModule,
         SharedModule,
         MatCardModule,
+        MatDialogModule,
+        ProjectsRoutingModule,
     ],
-    exports: [
-        ProjectsPageComponent
-    ]
 })
 export class ProjectsModule { }

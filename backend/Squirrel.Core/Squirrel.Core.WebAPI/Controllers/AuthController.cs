@@ -7,7 +7,7 @@ using Squirrel.Core.Common.DTO.Users;
 namespace Squirrel.Core.WebAPI.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 [AllowAnonymous]
 public sealed class AuthController : ControllerBase
 {
@@ -24,7 +24,7 @@ public sealed class AuthController : ControllerBase
     /// <remarks>
     /// Sample request for login:
     ///
-    ///     POST /auth/login
+    ///     POST /api/auth/login
     ///     {
     ///        "email": "test@gmail.com",
     ///        "password": "myPassword1"
@@ -43,7 +43,7 @@ public sealed class AuthController : ControllerBase
     /// <remarks>
     /// Sample request for registration:
     ///
-    ///     POST /auth/register
+    ///     POST /api/auth/register
     ///     {
     ///        "email": "test@gmail.com",
     ///        "username": "username",
@@ -64,7 +64,7 @@ public sealed class AuthController : ControllerBase
     /// <remarks>
     /// Sample request for login:
     ///
-    ///     POST /auth/login/google
+    ///     POST /api/auth/login/google
     ///     {
     ///        "idToken": "token",
     ///     }

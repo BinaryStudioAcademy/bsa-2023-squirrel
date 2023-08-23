@@ -2,7 +2,7 @@
 
 namespace Squirrel.Core.DAL.Entities;
 
-public sealed class User : Entity<long>
+public sealed class User : Entity<int>
 {
     public string Username { get; set; }
     public string FirstName { get; set; }

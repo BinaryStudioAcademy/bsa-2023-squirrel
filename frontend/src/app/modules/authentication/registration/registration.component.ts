@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ValidationsFn } from '@shared/helpers/validations-fn';
 
 import { UserRegisterDto } from '../../../models/auth/user-register-dto';
 
@@ -11,12 +12,9 @@ import { UserRegisterDto } from '../../../models/auth/user-register-dto';
 export class RegistrationComponent implements OnInit {
     public registerForm: FormGroup = new FormGroup({});
 
-    public showPassword = false;
-
-    public showConfirmPassword = false;
-
     // eslint-disable-next-line no-empty-function
-    constructor(private fb: FormBuilder) {}
+    constructor(private fb: FormBuilder) {
+    }
 
     ngOnInit() {
         this.initializeForm();
@@ -24,26 +22,22 @@ export class RegistrationComponent implements OnInit {
 
     private initializeForm() {
         this.registerForm = this.fb.group({
-            username: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25)]],
+            username: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25),
+                ValidationsFn.userNameMatch()]],
             email: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50),
-                Validators.email]],
-            firstName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25)]],
-            lastName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25)]],
-            password: ['', Validators.required],
-            confirmPassword: ['', [Validators.required, this.matchValues('password')]],
+                ValidationsFn.emailMatch()]],
+            firstName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25),
+                ValidationsFn.nameMatch()]],
+            lastName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25),
+                ValidationsFn.nameMatch()]],
+            password: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25),
+                ValidationsFn.wrongCharacters()]],
+            confirmPassword: ['', [Validators.required, ValidationsFn.matchValues('password')]],
         });
         this.registerForm.controls['password'].valueChanges.subscribe({
             next: () => this.registerForm.controls['confirmPassword'].updateValueAndValidity(),
         });
     }
-
-    public matchValues(matchTo: string): ValidatorFn {
-        return (control: AbstractControl) =>
-            (control.value === control.parent?.get(matchTo)?.value ? null : { notMatching: true });
-    }
-
-    public validationCheck = (control: string, errorName: string) =>
-        this.registerForm.controls[control].errors?.[errorName] && this.registerForm.controls[control].touched;
 
     public register() {
         const userRegistrationData: UserRegisterDto = {

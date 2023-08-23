@@ -3,35 +3,52 @@
     <div class="input-wrapper">
         <input [formControl]="control"
                type="{{type === 'text' ? 'text' : show ? 'text' : 'password'}}"
-               placeholder="Enter your {{label}}">
+               placeholder="Enter your {{label | lowercase}}">
         <span *ngIf="type === 'password'" class="hide" (click)="show = !show">
             <img src="assets/{{ show ? 'hide-1.svg' : 'hide-2.svg' }}" alt="show/hide">
         </span>
     </div>
 
-    <div class="invalid-feedback"
-         *ngIf="control.errors?.['required'] && control.touched">
-        Please enter a {{label | titlecase}}
-    </div>
+    <div *ngIf="control.touched">
+        <div class="invalid-feedback"
+             *ngIf="control.errors?.['required']">
+            Please enter a {{label | titlecase}}
+        </div>
 
-    <div class="invalid-feedback"
-         *ngIf="control.errors?.['minlength'] && control.touched">
-        {{label | titlecase}} must be at least {{control.errors?.['minlength'].requiredLength}} characters
-    </div>
+        <div class="invalid-feedback"
+             *ngIf="control.errors?.['minlength']">
+            {{label | titlecase}} must be at least {{control.errors?.['minlength'].requiredLength}} characters
+        </div>
 
-    <div class="invalid-feedback"
-         *ngIf="control.errors?.['maxlength'] && control.touched">
-        {{label | titlecase}} must be at most {{control.errors?.['maxlength'].requiredLength}} characters
-    </div>
+        <div class="invalid-feedback"
+             *ngIf="control.errors?.['maxlength']">
+            {{label | titlecase}} must be at most {{control.errors?.['maxlength'].requiredLength}} characters
+        </div>
 
-    <div class="invalid-feedback"
-         *ngIf="control.errors?.['email'] && control.touched">
-        Not valid email format
-    </div>
+        <div class="invalid-feedback"
+             *ngIf="control.errors?.['emailMatch']">
+            Not valid email format
+        </div>
 
-    <div class="invalid-feedback"
-         *ngIf="control.errors?.['notMatching'] && control.touched">
-        {{label | titlecase}} must match
+        <div class="invalid-feedback"
+             *ngIf="control.errors?.['notMatching']">
+            {{label | titlecase}} must match
+        </div>
+
+        <div class="invalid-feedback"
+             *ngIf="control.errors?.['wrongCharacters']">
+            {{label | titlecase}} can contain only Latin letters, Digits and Special characters
+        </div>
+
+        <div class="invalid-feedback"
+             *ngIf="control.errors?.['userNameMatch']">
+            {{label | titlecase}} must contain only Latin letters, numbers, dashes and underscores
+        </div>
+
+        <div class="invalid-feedback"
+             *ngIf="control.errors?.['nameMatch']">
+            {{label | titlecase}} must contain Latin letters/hyphen
+        </div>
     </div>
 </div>
 

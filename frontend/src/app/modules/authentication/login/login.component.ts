@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ValidationsFn } from '@shared/helpers/validations-fn';
-import {UserLoginDto} from "../../../models/auth/user-login-dto";
+
+import { UserLoginDto } from '../../../models/auth/user-login-dto';
 
 @Component({
     selector: 'app-login',

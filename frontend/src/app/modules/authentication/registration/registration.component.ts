@@ -31,7 +31,7 @@ export class RegistrationComponent implements OnInit {
             lastName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25),
                 ValidationsFn.nameMatch()]],
             password: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25),
-                ValidationsFn.wrongCharacters()]],
+                ValidationsFn.wrongCharacters(), ValidationsFn.lowerExist(), ValidationsFn.upperExist()]],
             confirmPassword: ['', [Validators.required, ValidationsFn.matchValues('password')]],
         });
         this.registerForm.controls['password'].valueChanges.subscribe({

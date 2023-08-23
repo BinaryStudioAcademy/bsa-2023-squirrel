@@ -26,4 +26,16 @@ export class ValidationsFn {
             (/^[A-Z0-9._-]+@[A-Z0-9.-]+\.[A-Z]+$/i.test(control.value)
                 ? null : { emailMatch: true });
     }
+
+    static upperExist(): ValidatorFn {
+        return (control: AbstractControl) =>
+            (/(?=.*[A-Z])/.test(control.value)
+                ? null : { upperExist: true });
+    }
+
+    static lowerExist(): ValidatorFn {
+        return (control: AbstractControl) =>
+            (/(?=.*[A-Z])/.test(control.value)
+                ? null : { lowerExist: true });
+    }
 }

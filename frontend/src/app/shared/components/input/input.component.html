@@ -49,6 +49,16 @@
              *ngIf="control.errors?.['nameMatch']">
             {{label | titlecase}} must contain Latin letters/hyphen
         </div>
+
+        <div class="invalid-feedback"
+             *ngIf="control.errors?.['lowerExist']">
+            At least one lowercase letter
+        </div>
+
+        <div class="invalid-feedback"
+             *ngIf="control.errors?.['upperExist']">
+            At least one uppercase letter
+        </div>
     </div>
 </div>
 

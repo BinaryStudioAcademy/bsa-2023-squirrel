@@ -6,6 +6,9 @@ using Squirrel.Core.WebAPI.Validators;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using Squirrel.Core.Common.Interfaces;
+using Squirrel.Core.Common.JWT;
+using Squirrel.Core.WebAPI.Validators.Sample;
 
 namespace Squirrel.Core.WebAPI.Extentions
 {
@@ -18,6 +21,8 @@ namespace Squirrel.Core.WebAPI.Extentions
                 .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             services.AddTransient<ISampleService, SampleService>();
+            services.AddScoped<IJwtFactory, JwtFactory>();
+            services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IProjectService, ProjectService>();
         }
 

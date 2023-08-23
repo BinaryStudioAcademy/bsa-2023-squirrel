@@ -47,8 +47,7 @@
                         "inlineStyleLanguage": "sass",
                         "assets": ["src/favicon.ico", "src/assets"],
                         "styles": [
-                            "src/styles/index.sass",
-                            "src/assets/fonts/fonts-montserrat.sass"
+                            "src/styles/index.sass"
                         ],
                         "scripts": [],
                         "allowedCommonJsDependencies": ["moment-timezone"]

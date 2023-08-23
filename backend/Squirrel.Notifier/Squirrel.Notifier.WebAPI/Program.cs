@@ -1,4 +1,4 @@
-using Squirrel.Notifier.Hubs;
+using Squirrel.Notifier.WebAPI.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 

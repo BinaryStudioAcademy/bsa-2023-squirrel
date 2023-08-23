@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Squirrel.Core.Common", "Squ
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Squirrel.Core.BLL", "Squirrel.Core\Squirrel.Core.BLL\Squirrel.Core.BLL.csproj", "{0BF81DD6-4BFA-4047-AD37-3C9CAE8E1040}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Squirrel.ConsoleApp", "Squirrel.ConsoleApp\Squirrel.ConsoleApp.csproj", "{A77813D7-094A-4AAE-96F9-4408A7A353E2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{0BF81DD6-4BFA-4047-AD37-3C9CAE8E1040}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0BF81DD6-4BFA-4047-AD37-3C9CAE8E1040}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0BF81DD6-4BFA-4047-AD37-3C9CAE8E1040}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A77813D7-094A-4AAE-96F9-4408A7A353E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A77813D7-094A-4AAE-96F9-4408A7A353E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A77813D7-094A-4AAE-96F9-4408A7A353E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A77813D7-094A-4AAE-96F9-4408A7A353E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

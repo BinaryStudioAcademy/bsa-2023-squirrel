@@ -3,6 +3,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from '@abacritt/angularx-social-login';
+import { CoreModule } from '@core/core.module';
 import { environment } from '@env/environment';
 import { SharedModule } from '@shared/shared.module';
 
@@ -20,6 +21,7 @@ import { AppRoutingModule } from './app-routing.module';
         MaterialModule,
         ReactiveFormsModule,
         SocialLoginModule,
+        CoreModule,
     ],
     providers: [
         {

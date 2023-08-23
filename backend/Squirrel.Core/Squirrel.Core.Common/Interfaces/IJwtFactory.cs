@@ -1,6 +1,4 @@
-﻿using Squirrel.Core.Common.JWT;
-
-namespace Squirrel.Core.Common.Interfaces;
+﻿namespace Squirrel.Core.Common.Interfaces;
 
 public interface IJwtFactory
 {

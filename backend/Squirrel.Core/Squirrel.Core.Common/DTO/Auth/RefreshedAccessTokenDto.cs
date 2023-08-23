@@ -1,6 +1,4 @@
-﻿using Squirrel.Core.Common.JWT;
-
-namespace Squirrel.Core.Common.DTO.Auth;
+﻿namespace Squirrel.Core.Common.DTO.Auth;
 
 public sealed class RefreshedAccessTokenDto
 {

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Squirrel.Core.BLL.Interfaces;
+using Squirrel.Core.BLL.Services.Abstract;
 using Squirrel.Core.Common.DTO.Auth;
 using Squirrel.Core.Common.Interfaces;
 using Squirrel.Core.DAL.Context;

@@ -1,19 +1,18 @@
-﻿using Squirrel.Core.Common.DTO;
+﻿using Squirrel.Core.Common.DTO.Sample;
 
-namespace Squirrel.Core.BLL.Interfaces
+namespace Squirrel.Core.BLL.Interfaces;
+
+public interface ISampleService
 {
-    public interface ISampleService
-    {
-        Task<ICollection<SampleDto>> GetAllSamplesAsync();
+    Task<ICollection<SampleDto>> GetAllSamplesAsync();
 
-        Task<SampleDto> GetSampleAsync(int sampleId);
+    Task<SampleDto> GetSampleAsync(int sampleId);
 
-        Task<ICollection<SampleDto>> GetUserSamplesAsync(int userId);
+    Task<ICollection<SampleDto>> GetUserSamplesAsync(int userId);
 
-        Task<SampleDto> CreateSampleAsync(NewSampleDto sampleDto);
+    Task<SampleDto> CreateSampleAsync(NewSampleDto sampleDto);
 
-        Task<SampleDto> UpdateSampleAsync(int sampleId, NewSampleDto sampleDto);
+    Task<SampleDto> UpdateSampleAsync(int sampleId, NewSampleDto sampleDto);
 
-        Task DeleteSampleAsync(int sampleId);
-    }
+    Task DeleteSampleAsync(int sampleId);
 }

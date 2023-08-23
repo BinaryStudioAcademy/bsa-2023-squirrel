@@ -1,4 +1,6 @@
-﻿namespace Squirrel.Core.DAL.Entities;
+﻿using Squirrel.Core.DAL.Entities.Common.AuditEntity;
+
+namespace Squirrel.Core.DAL.Entities;
 
 public sealed class RefreshToken : AuditEntity<long>
 {

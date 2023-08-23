@@ -12,7 +12,15 @@ import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
     declarations: [AppComponent],
-    imports: [BrowserModule, SharedModule, AppRoutingModule, MaterialModule, ReactiveFormsModule, SocialLoginModule],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        SharedModule,
+        AppRoutingModule,
+        MaterialModule,
+        ReactiveFormsModule,
+        SocialLoginModule,
+    ],
     providers: [
         {
             provide: 'SocialAuthServiceConfig',

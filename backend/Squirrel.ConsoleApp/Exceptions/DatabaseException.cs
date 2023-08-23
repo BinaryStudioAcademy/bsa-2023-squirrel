@@ -1,8 +1,7 @@
-﻿namespace Squirrel.ConsoleApp.Exceptions
+﻿namespace Squirrel.ConsoleApp.Exceptions;
+
+public class DatabaseException : Exception
 {
-    public class DatabaseException : Exception
-    {
-        public DatabaseException(string? message) : base(message)
-        {}
-    }
+    public DatabaseException(string? message) : base(message)
+    {}
 }

@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 import { SpinnerService } from '@core/services/spinner.service';
 
 @Component({
-    selector: 'app-landing-page',
-    templateUrl: './landing-page.component.html',
-    styleUrls: ['./landing-page.component.sass'],
+    selector: 'app-authentication-page',
+    templateUrl: './authentication-page.component.html',
+    styleUrls: ['./authentication-page.component.sass'],
 })
-export class LandingPageComponent {
+export class AuthenticationPageComponent {
     // eslint-disable-next-line no-empty-function
     constructor(private spinnerService: SpinnerService) {}
 }

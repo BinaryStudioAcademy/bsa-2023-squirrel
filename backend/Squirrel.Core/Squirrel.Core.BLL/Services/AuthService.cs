@@ -16,11 +16,11 @@ public sealed class AuthService : BaseService, IAuthService
     private IJwtFactory _jwtFactory;
     private readonly string _googleClientId;
     
-     public AuthService(SquirrelCoreContext context, IMapper mapper, IJwtFactory jwtFactory, IOptions<AuthenticationSettings> authSettings) : base(context, mapper)
-     {
-        _jwtFactory = jwtFactory;
-        _googleClientId = authSettings.Value.GoogleClientId;
-     }
+    public AuthService(SquirrelCoreContext context, IMapper mapper, IJwtFactory jwtFactory, IOptions<AuthenticationSettings> authSettings) : base(context, mapper)
+    {
+       _jwtFactory = jwtFactory;
+       _googleClientId = authSettings.Value.GoogleClientId;
+    }
 
     public async Task<AuthUserDTO> AuthorizeWithGoogle(GoogleToken googleToken)
     {

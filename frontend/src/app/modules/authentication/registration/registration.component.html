@@ -7,10 +7,7 @@
             <button>Sign Up with Google</button>
         </div>
 
-        <div class="barrier">
-            <hr />
-            <p class="barrier-text">or</p>
-        </div>
+        <app-barrier [text]="'or'" style=""></app-barrier>
 
         <form
             [formGroup]="registerForm"
@@ -34,5 +31,5 @@
         </form>
     </div>
 
-    <div class="registration-footer">Already have account? <a href="">Sign In</a></div>
+    <div class="registration-footer">Already have account? <a routerLink="/login">Sign In</a></div>
 </div>

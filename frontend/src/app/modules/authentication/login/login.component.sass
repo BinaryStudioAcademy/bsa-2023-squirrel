@@ -1,5 +1,5 @@
 @import "/src/styles/color"
-.registration-container
+.login-container
     height: 100%
     padding: 0 20%
     display: flex
@@ -7,13 +7,14 @@
     align-items: center
     justify-content: space-between
 
-.registration-content
+.login-content
     width: 100%
+    margin-top: 140px
 
     h4
         color: $text-main
 
-.additional-sing-up
+.additional-sing-in
     display: flex
     flex-direction: column
 
@@ -22,7 +23,7 @@
         border: solid 1px $primary-color
         background: none
 
-.registration-form
+.login-form
     display: flex
     flex-direction: column
 
@@ -40,11 +41,24 @@ button
     margin: 10px 0
     cursor: pointer
 
-.registration-footer
+.login-footer
     margin-bottom: 20px
     color: $text-light
     font-size: 14px
     font-weight: 400
 
+a
+    color: $link-color
+
+.input-wrapper
+    position: relative
+
     a
-        color: $link-color
+        position: absolute
+        top: 10px
+        right: 0
+
+        font-size: 12px
+        font-weight: 400
+
+

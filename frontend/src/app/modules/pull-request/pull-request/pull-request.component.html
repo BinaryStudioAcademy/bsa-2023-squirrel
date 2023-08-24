@@ -30,11 +30,13 @@
         </div>
     </div>
     <div class="reviewiers">
-        <div *ngFor="let reviewer of pullRequest.reviewers.slice(0, 3)" class="avatar">
-            <img src="{{ reviewer.avatarUrl }}" />
-        </div>
-        <div class="overflowed" *ngIf="pullRequest.reviewers.length > 3">
-            <p>+{{ pullRequest.reviewers.length - 3 }}</p>
+        <div class="avatar-container">
+            <div *ngFor="let reviewer of pullRequest.reviewers.slice(0, 3)" class="avatar">
+                <img src="{{ reviewer.avatarUrl }}" />
+            </div>
+            <div class="overflowed" *ngIf="pullRequest.reviewers.length > 3">
+                <p>+{{ pullRequest.reviewers.length - 3 }}</p>
+            </div>
         </div>
     </div>
 </div>

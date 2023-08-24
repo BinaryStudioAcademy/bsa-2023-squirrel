@@ -1,7 +1,17 @@
-<button 
+<button
+    [disabled]="isDisabled"
     [ngStyle]="{
         height: height,
-        width: width
+        width: width,
+        fontSize: fontSize,
+        padding: padding
     }"
-    (click)="handleClick()"
->{{ text }}</button>
+    [ngClass]="{
+        'disabled-button': isDisabled,
+        'outline-primary-button': variant === 'outline-primary' && !isDisabled,
+        'filled-button': variant === 'filled' && !isDisabled,
+        'outline-secondary-button': variant === 'outline-secondary' && !isDisabled
+    }"
+    (click)="handleClick()">
+    {{ text }}
+</button>

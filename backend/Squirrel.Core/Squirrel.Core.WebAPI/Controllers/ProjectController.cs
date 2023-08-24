@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Squirrel.Core.WebAPI.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class ProjectController : ControllerBase
     {
         private readonly ProjectService _projectService;

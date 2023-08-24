@@ -1,17 +1,18 @@
 ﻿using AutoMapper;
 using Squirrel.Core.Common.DTO.Projects;
 using Squirrel.Core.BLL.Interfaces;
+using Squirrel.Core.DAL.Context;
 
 namespace Squirrel.Core.BLL.Services
 {
     public class ProjectService : IProjectService
     {
-        // private readonly SquirrelCoreContext _context;
+        private readonly SquirrelCoreContext _context;
         private readonly IMapper _mapper;
 
-        public ProjectService(/* SquirrelCoreContext context, */ IMapper mapper)
+        public ProjectService(SquirrelCoreContext context, IMapper mapper)
         {
-            // _context = context;
+            _context = context;
             _mapper = mapper;
         }
 

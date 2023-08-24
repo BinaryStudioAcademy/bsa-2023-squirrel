@@ -6,11 +6,12 @@ import { ProjectsPageComponent } from '@modules/projects/projects-page/projects-
 import { SharedModule } from '@shared/shared.module';
 import { ProjectsRoutingModule } from '@modules/projects/projects-routing.model';
 import { MatDialogModule } from '@angular/material/dialog';
-import {MatInputModule} from "@angular/material/input";
-import {MatSelectModule} from "@angular/material/select";
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { ProjectListComponent } from '@modules/projects/project-list/project-list.component';
 
 @NgModule({
-    declarations: [ProjectsPageComponent, CreateProjectModalComponent],
+    declarations: [ProjectsPageComponent, CreateProjectModalComponent, ProjectListComponent],
     imports: [
         CommonModule,
         SharedModule,

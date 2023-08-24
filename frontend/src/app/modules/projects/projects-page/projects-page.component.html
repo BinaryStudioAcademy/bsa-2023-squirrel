@@ -15,12 +15,6 @@
             >
             </app-button>
         </div>
-        <div class="card-container">
-            <mat-card *ngFor="let project of projects">
-                <mat-card-content>
-                    {{ project.name }}
-                </mat-card-content>
-            </mat-card>
-        </div>
+        <app-project-list [projects]="projects"></app-project-list>
     </div>
 </div>

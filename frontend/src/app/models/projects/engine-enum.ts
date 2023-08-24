@@ -1,4 +1,4 @@
 export enum EngineEnum {
     SqlServer = 'SqlServer',
-    Postgre = 'Postgre'
+    PostgreSQL = 'PostgreSQL'
 }

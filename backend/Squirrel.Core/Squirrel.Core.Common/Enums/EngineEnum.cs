@@ -3,6 +3,6 @@
     public enum EngineEnum
     {
         SqlServer,
-        Postgre
+        PostgreSQL
     }
 }

@@ -7,10 +7,7 @@
             <button>Sign In with Google</button>
         </div>
 
-        <div class="barrier">
-            <hr>
-            <p class="barrier-text">or</p>
-        </div>
+        <app-barrier [text]="'or'"></app-barrier>
 
         <form class="login-form" (ngSubmit)="loginForm.valid && login()">
 

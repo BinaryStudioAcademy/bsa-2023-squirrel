@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { SidebarComponent } from '@shared/components/sidebar/sidebar.component';
 import { ToastrModule } from 'ngx-toastr';
 
+import { BarrierComponent } from './components/barrier/barrier.component';
 import { ButtonComponent } from './components/button/button.component';
 import { InputComponent } from './components/input/input.component';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
@@ -20,7 +21,7 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
         ToastrModule.forRoot({
             positionClass: 'toast-bottom-right',
         })],
-    declarations: [LoadingSpinnerComponent, NotFoundComponent, ButtonComponent, SidebarComponent, InputComponent],
+    declarations: [LoadingSpinnerComponent, NotFoundComponent, ButtonComponent, SidebarComponent, InputComponent, BarrierComponent],
     exports: [
         CommonModule,
         RouterModule,
@@ -33,6 +34,7 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
         SidebarComponent,
         ToastrModule,
         InputComponent,
+        BarrierComponent,
     ],
 })
 export class SharedModule {}

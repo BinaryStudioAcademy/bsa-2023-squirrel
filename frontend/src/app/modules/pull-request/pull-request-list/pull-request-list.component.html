@@ -1,1 +1,28 @@
-<p>pull-request-list works!</p>
+<div class="rounded-container">
+    <h5>Pull Request</h5>
+    <div class="actions">
+        <input placeholder="Search..." />
+        <select>
+            <option>Open</option>
+        </select>
+        <select>
+            <option>Author</option>
+        </select>
+        <select>
+            <option>Target branch</option>
+        </select>
+    </div>
+    <div class="table">
+        <div class="table-headers">
+            <p class="first">Summary</p>
+            <p class="second">Activity</p>
+            <p class="third">Reviewers</p>
+        </div>
+        <div class="table-content">
+            <div class="pull-request-container" *ngFor="let pr of pullRequests">
+                <hr class="line" />
+                <app-pull-request [pullRequest]="pr"></app-pull-request>
+            </div>
+        </div>
+    </div>
+</div>

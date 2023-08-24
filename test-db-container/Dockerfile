@@ -13,5 +13,5 @@ WORKDIR /src
 # Copy the initialization SQL script into the container
 COPY init.sql ./init.sql
 
-# Start SQL Server, execute the initialization script, and wait for Service Broker manager to start
-RUN (/opt/mssql/bin/sqlservr --accept-eula &) | grep -q "Service Broker manager has started" && /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P abcDEF123# -i init.sql
+# Start SQL Server
+RUN (/opt/mssql/bin/sqlservr --accept-eula &) | grep -q "Service Broker manager has started" && /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P abcDEF123# -i ${PWD}/init.sql

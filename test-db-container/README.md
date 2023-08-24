@@ -14,7 +14,7 @@ This repository provides a Docker container with a pre-configured SQL Server ins
 
 2. **Run the Docker Container:**
 
-    Start a Docker container from the built image. Replace `YourStrongPassword123` with a strong password for the SQL Server 'sa' user.
+    Start a Docker container from the built image.
 
     ```bash
     docker run -d -p 1433:1433 --name test-db test-db-container
@@ -27,7 +27,7 @@ This repository provides a Docker container with a pre-configured SQL Server ins
     - **Server name:** localhost,1433
     - **Authentication:** SQL Server Authentication
         - **Username:** sa
-        - **Password:** YourStrongPassword123
+        - **Password:** abcDEF123#
 
 5. **Test Database Objects:**
 

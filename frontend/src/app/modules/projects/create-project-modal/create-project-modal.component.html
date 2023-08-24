@@ -16,6 +16,21 @@
     </div>
 </mat-dialog-content>
 <mat-dialog-actions class="modal-buttons">
-    <button mat-button color="primary" (click)="createProject()">Create</button>
-    <button mat-button color="warn" (click)="close()">Cancel</button>
+    <app-button
+        text="Create"
+        width="120px"
+        height="40px"
+        variant="outline-secondary"
+        (click)="createProject()"
+    >
+    </app-button>
+
+    <app-button
+        text="Close"
+        width="120px"
+        height="40px"
+        variant="outline-secondary"
+        (click)="close()"
+    >
+    </app-button>
 </mat-dialog-actions>

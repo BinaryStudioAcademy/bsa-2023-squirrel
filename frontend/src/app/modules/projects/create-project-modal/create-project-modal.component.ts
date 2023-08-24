@@ -28,14 +28,15 @@ export class CreateProjectModalComponent {
                 engine: this.selectedEngine,
             };
 
-            this.projectService.addProject(newProject).subscribe(
+            console.log(newProject);
+            /*this.projectService.addProject(newProject).subscribe(
                 (createdProject: ProjectDto) => {
                     this.dialogRef.close(createdProject);
                 },
                 (error: any) => {
                     console.error('Error creating project:', error);
                 },
-            );
+            );*/
         }
     }
 

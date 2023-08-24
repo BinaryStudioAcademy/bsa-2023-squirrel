@@ -5,12 +5,15 @@
     <div class="projects-sector">
         <div class="upper-panel-container">
             <h3 class="mat-h3">Projects</h3>
-            <button class="create-button"
-                    [ngStyle]="{ height: '40px', width: '120px' }"
-                    (click)="openCreateModal()"
+            <app-button
+                class="create-button"
+                text="Create"
+                width="120px"
+                height="40px"
+                variant="filled"
+                (click)="openCreateModal()"
             >
-                Create Project
-            </button>
+            </app-button>
         </div>
         <div class="card-container">
             <mat-card *ngFor="let project of projects">

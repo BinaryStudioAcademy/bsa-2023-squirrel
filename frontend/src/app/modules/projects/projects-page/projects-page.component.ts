@@ -4,7 +4,6 @@ import { ProjectService } from '@core/services/project.service';
 import { CreateProjectModalComponent } from '@modules/projects/create-project-modal/create-project-modal.component';
 
 import { ProjectDto } from '../../../models/projects/project-dto';
-import {EngineEnum} from "../../../models/projects/engine-enum";
 
 @Component({
     selector: 'app-projects-page',
@@ -25,13 +24,11 @@ export class ProjectsPageComponent implements OnInit {
     }
 
     loadProjects(): void {
-        this.projects = [
-            // eslint-disable-next-line no-undef
-            { name: 'Project 1', engine: EngineEnum.SqlServer },
-            { name: 'Project 2', engine: EngineEnum.Postgre },
-            // Add more projects here
-        ];
-
+        this.projectService.getAllProjects().subscribe(
+            (projects: ProjectDto[]) => {
+                this.projects = projects;
+            },
+        );
     }
 
     openCreateModal(): void {

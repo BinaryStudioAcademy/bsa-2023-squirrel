@@ -1,4 +1,4 @@
-using Squirrel.Core.WebAPI.Extentions;
+using Squirrel.Core.WebAPI.Extensions;
 using Squirrel.Core.WebAPI.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +19,7 @@ builder.Services.RegisterCustomServices();
 builder.Services.AddAutoMapper();
 builder.Services.AddSwaggerGen();
 builder.Services.AddValidation();
+builder.Services.ConfigureJwtAuth(builder.Configuration);
 
 builder.Services.AddCors();
 builder.Services.AddHealthChecks();
@@ -30,29 +31,34 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
+
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
 app.UseMiddleware<GenericExceptionHandlerMiddleware>();
 
+app.UseSquirrelCoreContext();
+
 app.UseCors(opt => opt
     .AllowAnyHeader()
     .AllowAnyMethod()
     .AllowAnyOrigin());
 
-app.UseHttpsRedirection();
-
 app.UseRouting();
 
 app.UseAuthentication();
-
 app.UseAuthorization();
 
-app.UseEndpoints(endpoinds =>
+app.UseEndpoints(endpoints =>
 {
-    endpoinds.MapHealthChecks("/health");
-    endpoinds.MapControllers();
+    endpoints.MapControllers();
+    endpoints.MapHealthChecks("/health");
 });
+
+app.UseHttpsRedirection();
+
+app.MapControllers();
 
 app.Run();

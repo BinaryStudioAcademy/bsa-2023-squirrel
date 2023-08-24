@@ -1,0 +1,34 @@
+<div class="registration-container">
+    <div class="registration-content">
+        <h4>Sign Up</h4>
+
+        <div class="additional-sing-up">
+            <button>Sign Up with GitHub</button>
+            <button>Sign Up with Google</button>
+        </div>
+
+        <div class="barrier">
+            <hr>
+            <p class="barrier-text">or</p>
+        </div>
+
+        <form [formGroup]="registerForm" (ngSubmit)="registerForm.valid && register()" class="registration-form"
+              action="">
+
+            <app-input [formControl]="$any(registerForm.controls['username'])" [label]="'username'"></app-input>
+            <app-input [formControl]="$any(registerForm.controls['email'])" [label]="'email'"></app-input>
+            <app-input [formControl]="$any(registerForm.controls['firstName'])" [label]="'first Name'"></app-input>
+            <app-input [formControl]="$any(registerForm.controls['lastName'])" [label]="'last Name'"></app-input>
+            <app-input [formControl]="$any(registerForm.controls['password'])" [label]="'password'"
+                       [type]="'password'"></app-input>
+            <app-input [formControl]="$any(registerForm.controls['confirmPassword'])" [label]="'confirm Password'"
+                       [type]="'password'"></app-input>
+
+            <button [disabled]="!registerForm.valid" type="submit">Sing Up</button>
+        </form>
+    </div>
+
+    <div class="registration-footer">
+        Already have account? <a href="">Sign In</a>
+    </div>
+</div>

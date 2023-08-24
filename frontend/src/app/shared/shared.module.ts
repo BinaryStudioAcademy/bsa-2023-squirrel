@@ -2,14 +2,20 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-
+import { SidebarComponent } from '@shared/components/sidebar/sidebar.component';
+import { ToastrModule } from 'ngx-toastr';
 import { DropdownComponent } from './components/dropdown/dropdown.component';
+import { ButtonComponent } from './components/button/button.component';
+import { InputComponent } from './components/input/input.component';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 
 @NgModule({
-    imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule, RouterModule],
-    declarations: [LoadingSpinnerComponent, NotFoundComponent, DropdownComponent],
+    imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule, RouterModule,
+        ToastrModule.forRoot({
+            positionClass: 'toast-bottom-right',
+        })],
+    declarations: [LoadingSpinnerComponent, NotFoundComponent, ButtonComponent, SidebarComponent, InputComponent, DropdownComponent],
     exports: [
         CommonModule,
         RouterModule,
@@ -18,7 +24,11 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
         RouterModule,
         LoadingSpinnerComponent,
         NotFoundComponent,
-        DropdownComponent,
+        ButtonComponent,
+        SidebarComponent,
+        ToastrModule,
+        InputComponent,
+
     ],
 })
 export class SharedModule {}

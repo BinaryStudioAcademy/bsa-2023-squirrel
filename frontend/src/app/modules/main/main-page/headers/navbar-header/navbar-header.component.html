@@ -24,11 +24,7 @@
             [options]="branches"
             [width]="300"
             (selectedValueChanged)="onBranchSelected($event)"></app-dropdown>
-        <button class="plus-btn">+</button>
-        <app-dropdown
-            class="align-right"
-            [options]="branches"
-            [width]="150"
-            (selectedValueChanged)="onBranchSelected($event)"></app-dropdown>
+        <app-button text="+" height="30px" width="35px" padding="" variant="outline-secondary"></app-button>
+        <app-button text="Load latest changes" variant="outline-primary" class="align-right"></app-button>
     </div>
 </div>

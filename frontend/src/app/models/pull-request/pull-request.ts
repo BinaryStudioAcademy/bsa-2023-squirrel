@@ -1,4 +1,5 @@
 import { Branch } from '../branch/branch';
+import { Comment } from '../comment/comment';
 import { User } from '../user/user';
 
 export interface PullRequest {
@@ -9,6 +10,6 @@ export interface PullRequest {
     comments: Comment[];
     sourceBranch: Branch;
     destinationBranch: Branch;
-    createdAt: string;
-    updatedAt: string;
+    createdAt: Date;
+    updatedAt: Date;
 }

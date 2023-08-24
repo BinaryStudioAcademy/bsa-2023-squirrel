@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { SharedModule } from '@shared/shared.module';
 
 import { MaterialModule } from 'src/app/material/material.module';
 
@@ -8,7 +9,7 @@ import { PullRequestListComponent } from './pull-request-list/pull-request-list.
 
 @NgModule({
     declarations: [PullRequestListComponent, PullRequestComponent],
-    imports: [CommonModule, MaterialModule],
+    imports: [CommonModule, MaterialModule, SharedModule],
     exports: [PullRequestComponent, PullRequestListComponent],
 })
 export class PullRequestModule {}

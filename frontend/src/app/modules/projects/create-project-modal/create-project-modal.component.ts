@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ProjectService } from '@core/services/project.service';
 
-import { EngineEnum } from '../../../models/engine-enum';
-import { ProjectDto } from '../../../models/project-dto';
+import { EngineEnum } from '../../../models/projects/engine-enum';
+import { ProjectDto } from '../../../models/projects/project-dto';
 
 @Component({
     selector: 'app-create-project-modal',

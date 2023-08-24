@@ -6,6 +6,8 @@ import { ProjectsPageComponent } from '@modules/projects/projects-page/projects-
 import { SharedModule } from '@shared/shared.module';
 import { ProjectsRoutingModule } from '@modules/projects/projects-routing.model';
 import { MatDialogModule } from '@angular/material/dialog';
+import {MatInputModule} from "@angular/material/input";
+import {MatSelectModule} from "@angular/material/select";
 
 @NgModule({
     declarations: [ProjectsPageComponent, CreateProjectModalComponent],
@@ -15,6 +17,8 @@ import { MatDialogModule } from '@angular/material/dialog';
         MatCardModule,
         MatDialogModule,
         ProjectsRoutingModule,
+        MatInputModule,
+        MatSelectModule,
     ],
 })
 export class ProjectsModule { }

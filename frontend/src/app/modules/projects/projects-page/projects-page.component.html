@@ -3,19 +3,21 @@
         <app-sidebar></app-sidebar>
     </div>
     <div class="projects-sector">
-        <div class="card-container">
-            <button
-                [ngStyle]="{ height: '40px', width: '120px' }"
-                (click)="openCreateModal()"
+        <div class="upper-panel-container">
+            <h3 class="mat-h3">Projects</h3>
+            <button class="create-button"
+                    [ngStyle]="{ height: '40px', width: '120px' }"
+                    (click)="openCreateModal()"
             >
                 Create Project
             </button>
+        </div>
+        <div class="card-container">
             <mat-card *ngFor="let project of projects">
                 <mat-card-content>
                     {{ project.name }}
                 </mat-card-content>
             </mat-card>
-            <router-outlet></router-outlet>
         </div>
     </div>
 </div>

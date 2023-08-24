@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { ProjectDto } from '../../models/project-dto';
+import { ProjectDto } from '../../models/projects/project-dto';
 
 import { HttpInternalService } from './http-internal.service';
 

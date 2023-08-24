@@ -3,7 +3,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ProjectService } from '@core/services/project.service';
 import { CreateProjectModalComponent } from '@modules/projects/create-project-modal/create-project-modal.component';
 
-import { ProjectDto } from '../../../models/project-dto';
+import { ProjectDto } from '../../../models/projects/project-dto';
+import {EngineEnum} from "../../../models/projects/engine-enum";
 
 @Component({
     selector: 'app-projects-page',
@@ -24,19 +25,19 @@ export class ProjectsPageComponent implements OnInit {
     }
 
     loadProjects(): void {
-        this.projectService.getAllProjects().subscribe(
-            (projects: ProjectDto[]) => {
-                this.projects = projects;
-            },
-            (error) => {
-                console.error('Error loading projects:', error);
-            },
-        );
+        this.projects = [
+            // eslint-disable-next-line no-undef
+            { name: 'Project 1', engine: EngineEnum.SqlServer },
+            { name: 'Project 2', engine: EngineEnum.Postgre },
+            // Add more projects here
+        ];
+
     }
 
     openCreateModal(): void {
         const dialogRef = this.dialog.open(CreateProjectModalComponent, {
-            width: '300px',
+            width: '35%',
+            height: '45%',
         });
 
         dialogRef.afterClosed().subscribe((result) => {

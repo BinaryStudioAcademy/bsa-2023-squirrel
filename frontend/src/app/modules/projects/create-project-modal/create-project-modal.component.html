@@ -1,15 +1,21 @@
-<h2>Create Project</h2>
-<div>
-    <input [(ngModel)]="projectName" placeholder="Project Name" />
-</div>
-<div>
-    <label for="engineSelect">Database Engine:</label>
-    <select id="engineSelect" [(ngModel)]="selectedEngine">
-        <option value="SqlServer">SQL Server</option>
-        <option value="PostgreSQL">PostgreSQL</option>
-    </select>
-</div>
-<div class="modal-buttons">
-    <button (click)="createProject()">Create</button>
-    <button (click)="close()">Cancel</button>
-</div>
+<mat-dialog-content class="test">
+    <h4 class="mat-h4">Create Project</h4>
+    <div class="input-container">
+        <mat-form-field appearance="outline" class="full-width">
+            <input matInput [(ngModel)]="projectName" placeholder="Project Name" />
+        </mat-form-field>
+    </div>
+    <div class="input-container">
+        <mat-form-field appearance="outline" class="custom-select full-width">
+            <mat-label for="engineSelect">Database Engine:</mat-label>
+            <mat-select id="engineSelect" [(ngModel)]="selectedEngine">
+                <mat-option value="SqlServer">SQL Server</mat-option>
+                <mat-option value="PostgreSQL">PostgreSQL</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions class="modal-buttons">
+    <button mat-button color="primary" (click)="createProject()">Create</button>
+    <button mat-button color="warn" (click)="close()">Cancel</button>
+</mat-dialog-actions>

@@ -1,0 +1,15 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Squirrel.Core.DAL.Entities;
+
+namespace Squirrel.Core.DAL.Context.EntityConfigurations;
+
+public class CommitConfig : IEntityTypeConfiguration<Commit>
+{
+    public void Configure(EntityTypeBuilder<Commit> builder)
+    {
+        builder.Property(x => x.Message).IsRequired().HasMaxLength(200);
+        builder.Property(x => x.CreatedBy).IsRequired();
+        builder.Property(x => x.CreatedAt).IsRequired();
+    }
+}

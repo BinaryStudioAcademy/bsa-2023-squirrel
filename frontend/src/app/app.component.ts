@@ -1,7 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component } from '@angular/core';
 import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
-import { SocialAuthService, SocialUser } from '@abacritt/angularx-social-login';
 import { SpinnerService } from '@core/services/spinner.service';
 
 @Component({
@@ -9,35 +7,9 @@ import { SpinnerService } from '@core/services/spinner.service';
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.sass'],
 })
-export class AppComponent implements OnInit {
-    public loginForm!: FormGroup;
-
-    public socialUser!: SocialUser;
-
-    public isLoggedIn?: boolean;
-
-    constructor(
-        private router: Router,
-        private spinner: SpinnerService,
-        private formBuilder: FormBuilder,
-        private socialAuthService: SocialAuthService,
-    ) {
+export class AppComponent {
+    constructor(private router: Router, private spinner: SpinnerService) {
         this.listenRouter();
-    }
-
-    ngOnInit() {
-        this.loginForm = this.formBuilder.group({
-            email: ['', Validators.required],
-            password: ['', Validators.required],
-        });
-        this.socialAuthService.authState.subscribe((user) => {
-            this.socialUser = user;
-            this.isLoggedIn = user != null;
-        });
-    }
-
-    logOut(): void {
-        this.socialAuthService.signOut();
     }
 
     private listenRouter() {

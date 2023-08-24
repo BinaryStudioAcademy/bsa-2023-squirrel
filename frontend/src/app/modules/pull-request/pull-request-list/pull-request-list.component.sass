@@ -2,7 +2,7 @@
 
 .rounded-container
     border-radius: 10px
-    background: #FAFBFF
+    background: $project-background-color
     margin: 22px
     h5
         padding: 15px 0px 0px 15px
@@ -13,6 +13,8 @@
 
 .actions
     margin-left: 11px
+    display: flex
+    flex-direction: row
     > * 
         margin-right: 25px
 
@@ -24,17 +26,17 @@
     display: flex
     flex-direction: column
     .line
-        border: 1px solid #F0F3F9
+        border: 1px solid $line-color
         padding: 0px
         margin: 0px
     &:first-child
         .line
-            border: 1px solid #E1E4E9
+            border: 1px solid $line-dark-color
 
 .table-headers
     display: flex
     justify-content: space-between
-    color: #979797
+    color: $text-gray
     font-size: 14px
     font-style: normal
     font-weight: 600
@@ -50,3 +52,6 @@
 .table-content
     display: flex
     flex-direction: column
+
+.search-input
+    width: 289px

@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { Branch } from 'src/app/models/branch/branch';
 import { Comment } from 'src/app/models/comment/comment';
@@ -10,10 +11,15 @@ import { User } from 'src/app/models/user/user';
     templateUrl: './pull-request-list.component.html',
     styleUrls: ['./pull-request-list.component.sass'],
 })
-export class PullRequestListComponent implements OnInit {
-    @Input() public pullRequests: PullRequest[];
+export class PullRequestListComponent {
+    public pullRequests: PullRequest[];
 
-    constructor() {
+    public searchForm: FormGroup = new FormGroup({});
+
+    constructor(private fb: FormBuilder) {
+        this.searchForm = this.fb.group({
+            search: ['', []],
+        });
         const user = {
             id: 1,
             avatarUrl: 'https://picsum.photos/200',
@@ -54,6 +60,4 @@ export class PullRequestListComponent implements OnInit {
 
         this.pullRequests = [pullRequest, pullRequest, pullRequest, pullRequest, pullRequest, pullRequest, pullRequest];
     }
-
-    ngOnInit(): void {}
 }

@@ -1,7 +1,9 @@
 <div class="rounded-container">
     <h5>Pull Request</h5>
     <div class="actions">
-        <input placeholder="Search..." />
+        <div class="search-input">
+            <app-input [label]="''" [formControl]="$any(searchForm.controls['search'])"> </app-input>
+        </div>
         <select>
             <option>Open</option>
         </select>

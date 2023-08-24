@@ -37,7 +37,7 @@
                             color="primary"
                             [checked]="descendantsAllSelected(node)"
                             [indeterminate]="descendantsPartiallySelected(node)"
-                            (change)="todoItemSelectionToggle(node)"
+                            (change)="itemSelectionToggle(node)"
                             >{{ node.item }}</mat-checkbox
                         >
                     </ng-container>

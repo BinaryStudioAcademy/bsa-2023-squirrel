@@ -44,12 +44,6 @@ export class TreeComponent implements OnInit {
     /** Map from nested node to flattened node. This helps us to keep the same object for selection */
     nestedNodeMap = new Map<TreeItemNode, TreeItemFlatNode>();
 
-    /** A selected parent node to be inserted */
-    selectedParent: TreeItemFlatNode | null = null;
-
-    /** The new item's name */
-    newItemName = '';
-
     treeControl: FlatTreeControl<TreeItemFlatNode>;
 
     treeFlattener: MatTreeFlattener<TreeItemNode, TreeItemFlatNode>;
@@ -117,7 +111,7 @@ export class TreeComponent implements OnInit {
     }
 
     /** Toggle the to-do item selection. Select/deselect all the descendants node */
-    todoItemSelectionToggle(node: TreeItemFlatNode): void {
+    itemSelectionToggle(node: TreeItemFlatNode): void {
         this.checklistSelection.toggle(node);
         const descendants = this.treeControl.getDescendants(node);
 

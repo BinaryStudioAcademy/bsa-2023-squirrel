@@ -7,7 +7,7 @@ public class SquirrelCoreContext : DbContext
 {
     public DbSet<Sample> Samples => Set<Sample>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
-
+    
     public SquirrelCoreContext(DbContextOptions<SquirrelCoreContext> options) : base(options)
     {
     }

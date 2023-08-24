@@ -25,6 +25,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<JwtIssuerOptions>();
         services.AddScoped<IJwtFactory, JwtFactory>();
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IProjectService, ProjectService>();
     }
 
     public static void AddAutoMapper(this IServiceCollection services)

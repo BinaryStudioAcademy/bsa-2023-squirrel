@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LandingPageComponent } from '@modules/landing/landing-page/landing-page.component';
 import { NotFoundComponent } from '@shared/components/not-found/not-found.component';
 
 import { MainComponent } from './main-page/main-page.component';
@@ -41,7 +40,7 @@ const routes: Routes = [
             },
             {
                 path: '**',
-                component: LandingPageComponent,
+                component: NotFoundComponent,
                 pathMatch: 'full',
             },
         ],

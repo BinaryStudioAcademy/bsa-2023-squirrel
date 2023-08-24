@@ -1,0 +1,64 @@
+$light-grey: #f3f5f7eb
+$dark-grey: #e2e5e8c4
+$placeholder-grey: #d7d3d3
+
+*
+    box-sizing: border-box
+
+.container
+    display: flex
+    flex-direction: column
+    justify-content: space-between
+    width: 20vw
+    height: 75vh
+    border-radius: 5px
+
+.container-background
+  background-color: $light-grey
+
+.searchable-tree-container
+    display: flex
+    flex-direction: column
+    max-height: 60%
+    margin: 10px
+    gap: 10px
+
+.mat-tree-container
+    max-height: 100%
+    overflow-y: auto
+
+.filter-input
+    background-color: $dark-grey
+    width: 100%
+    border: none
+    padding: 12px
+    font-size: 16px
+    border-radius: 10px
+
+.commit-msg-form
+    display: flex
+    flex-direction: column
+    align-items: center
+    height: 30%
+    background-color: $dark-grey
+    margin: 10px
+    border-radius: 10px
+
+#commit-msg-ta
+    resize: none
+    border: 1px solid $placeholder-grey
+    color: $placeholder-grey
+    background-color: $dark-grey
+    border-radius: 5px
+    width: 90%
+    height: 85%
+    font-size: 14px
+    margin-bottom: 10px
+    padding: 5px
+
+.commit-label
+    align-self: flex-start
+    padding: 10px
+    font-weight: bold
+    font-size: 16px
+

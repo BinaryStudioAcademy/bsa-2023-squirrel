@@ -1,4 +1,7 @@
-﻿namespace Squirrel.Core.WebAPI.Middlewares;
+﻿using Newtonsoft.Json;
+using Squirrel.Core.Common.Extensions;
+
+namespace Squirrel.Core.WebAPI.Middlewares;
 
 public class GenericExceptionHandlerMiddleware
 {
@@ -26,14 +29,12 @@ public class GenericExceptionHandlerMiddleware
 
     private static Task HandleException(HttpContext context, Exception exception)
     {
+        var (errorDetails, statusCode) = exception.GetErrorDetailsAndStatusCode();
+        var errorDetailsJson = JsonConvert.SerializeObject(errorDetails);
+        
         context.Response.ContentType = "application/json";
+        context.Response.StatusCode = (int)statusCode;
 
-        context.Response.StatusCode = exception switch
-        {
-            ArgumentNullException => 400,
-            _ => 500
-        };
-
-        return context.Response.WriteAsync(exception.Message);
+        return context.Response.WriteAsync(errorDetailsJson);
     }
 }

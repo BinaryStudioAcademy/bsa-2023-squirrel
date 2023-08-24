@@ -107,6 +107,11 @@ public static class ServiceCollectionExtensions
 
     public static void AddAuthenticationSettings(this IServiceCollection services, IConfiguration configuration)
     {
-        services.Configure<AuthenticationSettings>(configuration.GetSection(nameof(AuthenticationSettings)));
+        services.Configure<AuthenticationSettings>(configuration.GetSection<AuthenticationSettings>());
+    }
+
+    private static IConfigurationSection GetSection<T>(this IConfiguration configuration)
+    {
+        return configuration.GetSection(typeof(T).Name);
     }
 }

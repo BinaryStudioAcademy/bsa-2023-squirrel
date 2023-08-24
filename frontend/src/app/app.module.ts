@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -5,6 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from '@abacritt/angularx-social-login';
 import { CoreModule } from '@core/core.module';
 import { environment } from '@env/environment';
+import { AuthenticationModule } from '@modules/authentication/authentication.module';
 import { SharedModule } from '@shared/shared.module';
 
 import { MaterialModule } from './material/material.module';
@@ -22,6 +24,8 @@ import { AppRoutingModule } from './app-routing.module';
         ReactiveFormsModule,
         SocialLoginModule,
         CoreModule,
+        HttpClientModule,
+        AuthenticationModule,
     ],
     providers: [
         {

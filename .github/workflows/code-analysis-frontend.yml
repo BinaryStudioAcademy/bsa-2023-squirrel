@@ -1,0 +1,25 @@
+name: Code Analysis Frontend
+on:
+  push:
+    branches: [main, development ]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [main, development ]
+jobs:
+  analyze_frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+      - name: Install packages
+        run: |
+          cd frontend
+          yarn install --frozen-lockfile
+      - name: Eslint and Prettier checks
+        run: |
+          cd frontend
+          yarn lint:check
+          yarn prettier:check

@@ -1,0 +1,47 @@
+@import "/src/styles/color"
+
+.base-button
+    font-family: montserrat-variable-font, sans-serif
+    font-weight: 600
+    align: center
+    border-radius: 9px
+    cursor: pointer
+    transition: background-color 0.3s, color 0.3s
+
+.outline-primary-button
+    @extend .base-button
+    background-color: transparent
+    color: $link-color
+    border: 1px solid $link-color
+
+    &:hover
+        background-color: $link-color
+        color: white
+
+.outline-secondary-button
+    @extend .base-button
+    background-color: transparent
+    color: $add-button-color
+    border: 1px solid $add-button-color
+
+    &:hover
+        background-color: $add-button-color
+        color: white
+
+.filled-button
+    @extend .base-button
+    background-color: $primary-color
+    color: white
+    border: 1px solid $primary-color
+
+    &:hover
+        background-color: $bg-color
+        color: white
+
+.disabled-button
+    @extend .base-button
+    background-color: transparent
+    color: $text-light
+    cursor: default
+    pointer-events: none
+    border: 1px solid $text-light

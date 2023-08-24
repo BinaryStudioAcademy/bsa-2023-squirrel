@@ -77,3 +77,145 @@ This is a list of the required environment variables:
 #### MSSQL Server
 
 **SA_PASSWORD** - MSSQL Server "SA" user password
+
+## SQL Server Database Schema
+
+```mermaid
+
+erDiagram
+
+    UserProjects {
+        int Id PK
+        int ProjectId FK
+        int UserId FK
+        int RoleEnum
+    }
+
+    Users {
+        int Id PK
+        nvarchar(25) UserName
+        nvarchar(25) FirstName
+        nvarchar(25) LastName
+        nvarchar(50) Email
+        nvarchar(500) Salt
+        nvarchar(500) PasswordHash
+        nvarchar(500) AvatarUrl
+    }
+
+    RefreshTokens {
+        bigint Id PK
+        int UserId FK
+        nvarchar(500) Token
+        datetime CreatedAt
+    }
+
+    Commits {
+        int Id PK
+        int AuthorId FK
+        nvarchar(200) Message 
+        datetime CreatedAt 
+    }
+
+    Projects {
+        int Id PK
+        int DefaultBranchId FK
+        nvarchar(50) Name
+        int EngineEnum
+    }
+
+    BranchCommits {
+        int Id PK
+        int BranchId FK
+        int CommitId FK
+        bit IsMerged 
+        bit IsHead 
+    }
+
+    CommitParents {
+        int Id PK
+        int CommitId FK
+        int ParentId FK
+    }
+
+    CommitFiles {
+        int Id PK
+        int CommitId FK
+        nvarchar(100) FileName
+        int FileTypeEnum
+        nvarchar(100) BlobId
+    }
+
+    ProjectTags {
+        int Id PK
+        int TagId FK
+        int ProjectId FK
+    }
+
+    Tags {
+        int Id PK
+        nvarchar(50) Name    
+    }
+
+    Branches {
+        int Id PK
+        int ProjectId FK
+        nvarchar(200) Name 
+        bit IsActive 
+    }
+
+    PullRequests {
+        int Id PK
+        int ProjectId FK
+        int AuthorId FK
+        int SourceBranchId FK
+        int TargetBranchId FK
+        nvarchar(100) Title 
+        int StatusEnum 
+        bit IsReviewed 
+        datetime CreatedAt 
+        datetime UpdatedAt 
+    }
+
+    PullRequestReviewers {
+        int Id PK
+        int PullRequestId FK
+        int UserId FK
+    }
+
+    Comments {
+        int Id PK
+        int AuthorId FK
+        nvarchar(500) Content 
+        datetime CreatedAt 
+        datetime UpdatedAt 
+        int CommentedEntityId  
+        int CommentedEntityTypeEnum
+    }
+
+
+Users ||--|{ UserProjects : ""
+Users ||--|{ RefreshTokens : ""
+Users ||--|{ Commits : ""
+Users ||--|{ PullRequests : ""
+Users ||--|{ PullRequestReviewers : ""
+Users ||--|{ Comments : ""
+
+Commits ||--|{ CommitParents : ""
+Commits ||--|{ CommitFiles : ""
+
+Projects ||--|{ UserProjects : ""
+Projects ||--|{ ProjectTags : ""
+Projects ||--|{ Branches : ""
+Projects ||--|| Branches : ""
+Projects ||--|{ PullRequests : ""
+
+CommitParents ||--|{ BranchCommits : ""
+
+Branches ||--|{ BranchCommits : ""
+Branches ||--|{ PullRequests : ""
+
+PullRequests ||--|{ PullRequestReviewers : ""
+
+Tags ||--|{ ProjectTags : ""
+
+```

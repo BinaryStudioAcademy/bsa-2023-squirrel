@@ -1,10 +1,11 @@
 /* eslint-disable no-empty-function */
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BaseComponent } from '@core/base/base.component';
 import { AuthService } from '@core/services/auth.service';
 import { SpinnerService } from '@core/services/spinner.service';
+import { ValidationsFn } from '@shared/helpers/validations-fn';
 import { takeUntil } from 'rxjs';
 
 import { ErrorType } from 'src/app/models/error/error-type';
@@ -41,14 +42,41 @@ export class RegistrationComponent extends BaseComponent implements OnInit {
         this.initializeForm();
     }
 
-    public matchValues(matchTo: string): ValidatorFn {
-        // eslint-disable-next-line no-confusing-arrow
-        return (control: AbstractControl) =>
-            control.value === control.parent?.get(matchTo)?.value ? null : { notMatching: true };
+    private initializeForm() {
+        this.registerForm = this.fb.group({
+            username: [
+                '',
+                [Validators.required, Validators.minLength(2), Validators.maxLength(25), ValidationsFn.userNameMatch()],
+            ],
+            email: [
+                '',
+                [Validators.required, Validators.minLength(3), Validators.maxLength(50), ValidationsFn.emailMatch()],
+            ],
+            firstName: [
+                '',
+                [Validators.required, Validators.minLength(2), Validators.maxLength(25), ValidationsFn.nameMatch()],
+            ],
+            lastName: [
+                '',
+                [Validators.required, Validators.minLength(2), Validators.maxLength(25), ValidationsFn.nameMatch()],
+            ],
+            password: [
+                '',
+                [
+                    Validators.required,
+                    Validators.minLength(2),
+                    Validators.maxLength(25),
+                    ValidationsFn.wrongCharacters(),
+                    ValidationsFn.lowerExist(),
+                    ValidationsFn.upperExist(),
+                ],
+            ],
+            confirmPassword: ['', [Validators.required, ValidationsFn.matchValues('password')]],
+        });
+        this.registerForm.controls['password'].valueChanges.subscribe({
+            next: () => this.registerForm.controls['confirmPassword'].updateValueAndValidity(),
+        });
     }
-
-    public validationCheck = (control: string, errorName: string) =>
-        this.registerForm.controls[control].errors?.[errorName] && this.registerForm.controls[control].touched;
 
     public register() {
         this.spinner.show();
@@ -73,19 +101,5 @@ export class RegistrationComponent extends BaseComponent implements OnInit {
                     this.isUsernameInvalid = result.error?.errorType === ErrorType.InvalidUsername;
                 }
             });
-    }
-
-    private initializeForm() {
-        this.registerForm = this.fb.group({
-            username: ['', Validators.required],
-            email: ['', Validators.required],
-            firstName: ['', Validators.required],
-            lastName: ['', Validators.required],
-            password: ['', Validators.required],
-            confirmPassword: ['', [Validators.required, this.matchValues('password')]],
-        });
-        this.registerForm.controls['password'].valueChanges.subscribe({
-            next: () => this.registerForm.controls['confirmPassword'].updateValueAndValidity(),
-        });
     }
 }

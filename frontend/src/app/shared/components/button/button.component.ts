@@ -1,22 +1,28 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-  selector: 'app-button',
-  templateUrl: './button.component.html',
-  styleUrls: ['./button.component.sass']
+    selector: 'app-button',
+    templateUrl: './button.component.html',
+    styleUrls: ['./button.component.sass'],
 })
 export class ButtonComponent {
+    @Input() text = '';
 
-  @Input() text = '';
+    @Input() width = 'auto';
 
-  @Input() width = 'auto';
-  
-  @Input() height = 'auto';
+    @Input() height = 'auto';
 
-  @Output() buttonOnClick: EventEmitter<void> = new EventEmitter<void>();
+    @Input() padding = '10px 20px';
 
-  handleClick(): void{
-    this.buttonOnClick.emit();
-  }
+    @Input() fontSize = '16px';
 
+    @Input() variant = 'outline-primary';
+
+    @Input() isDisabled = false;
+
+    @Output() buttonOnClick: EventEmitter<void> = new EventEmitter<void>();
+
+    handleClick(): void {
+        this.buttonOnClick.emit();
+    }
 }

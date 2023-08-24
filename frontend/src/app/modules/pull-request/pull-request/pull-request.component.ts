@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { TimeSpanStringifierService } from '@core/services/time-span-stringifier.service';
 
 import { Branch } from 'src/app/models/branch/branch';
 import { Comment } from 'src/app/models/comment/comment';
@@ -10,10 +11,10 @@ import { User } from 'src/app/models/user/user';
     templateUrl: './pull-request.component.html',
     styleUrls: ['./pull-request.component.sass'],
 })
-export class PullRequestComponent implements OnInit {
+export class PullRequestComponent {
     @Input() public pullRequest: PullRequest;
 
-    constructor() {
+    constructor(private timeService: TimeSpanStringifierService) {
         const user = {
             id: 1,
             avatarUrl: 'https://picsum.photos/200',
@@ -53,9 +54,7 @@ export class PullRequestComponent implements OnInit {
         } as PullRequest;
     }
 
-    ngOnInit(): void {}
-
     public calculateTime(date: Date): string {
-        return date.toLocaleTimeString();
+        return this.timeService.stringify(date);
     }
 }

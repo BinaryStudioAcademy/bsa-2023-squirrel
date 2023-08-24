@@ -13,6 +13,7 @@ import { UserAuthDto } from '../models/auth/user-auth-dto';
 export class ExternalAuthService {
     private readonly APIUrl = environment.coreUrl;
 
+    // eslint-disable-next-line no-empty-function
     constructor(private http: HttpClient, private googleAuthService: SocialAuthService, private router: Router) {}
 
     public signInWithGoogle = () =>
@@ -28,9 +29,9 @@ export class ExternalAuthService {
     };
 
     private validateExternalAuth(user: SocialUser) {
-        const auth: ExternalAuthDto = { provider: user.provider, idToken: user.idToken };
+        const auth: ExternalAuthDto = { idToken: user.idToken };
 
-        return this.http.post<UserAuthDto>(`${this.APIUrl}/api/auth/login/google`, auth).subscribe({
+        return this.http.post<UserAuthDto>(`${this.APIUrl}/api/auth/login/${user.provider}`, auth).subscribe({
             next: (data: UserAuthDto) => {
                 localStorage.setItem('accessToken', JSON.stringify(data.token.accessToken));
                 localStorage.setItem('refreshToken', JSON.stringify(data.token.refreshToken));

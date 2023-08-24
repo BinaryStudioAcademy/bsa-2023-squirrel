@@ -1,52 +1,28 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-  selector: 'app-button',
-  templateUrl: './button.component.html',
-  styleUrls: ['./button.component.sass']
+    selector: 'app-button',
+    templateUrl: './button.component.html',
+    styleUrls: ['./button.component.sass'],
 })
-export class ButtonComponent implements OnChanges{
-  @Input() text = '';
+export class ButtonComponent {
+    @Input() text = '';
 
-  @Input() width = 'auto';
-  
-  @Input() height = 'auto';
+    @Input() width = 'auto';
 
-  @Input() padding = "10px 20px";
+    @Input() height = 'auto';
 
-  @Input() fontSize = '16px';
+    @Input() padding = '10px 20px';
 
-  @Input() variant = "outline-primary";
+    @Input() fontSize = '16px';
 
-  @Input() isDisabled = false;
+    @Input() variant = 'outline-primary';
 
-  @Output() buttonOnClick: EventEmitter<void> = new EventEmitter<void>();
+    @Input() isDisabled = false;
 
-  btnClass = "";
+    @Output() buttonOnClick: EventEmitter<void> = new EventEmitter<void>();
 
-  ngOnChanges(): void {
-    switch (this.variant){
-      case "outline-primary":{
-        this.btnClass = "outline-primary-button";
-        break;
-      }
-      case "outline-secondary":{
-        this.btnClass = "outline-secondary-button";
-        break;
-      }
-      case "filled": {
-        this.btnClass = "filled-button";
-        break;
-      }
+    handleClick(): void {
+        this.buttonOnClick.emit();
     }
-
-    if(this.isDisabled == true){
-      this.btnClass="disabled-button";
-    }
-  }
-
-  handleClick(): void{
-    this.buttonOnClick.emit();
-  }
-
 }

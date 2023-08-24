@@ -20,11 +20,17 @@
             <div class="invalid-feedback" *ngIf="validationCheck('username', 'required')">
                 Please enter a username
             </div>
+            <div class="invalid-feedback" *ngIf="isUsernameInvalid">
+                Username is already registered. Try another one
+            </div>
 
             <label>Email</label>
             <input [formControl]="$any(registerForm.controls['email'])" type="text" placeholder="Enter your Email">
             <div class="invalid-feedback" *ngIf="validationCheck('email', 'required')">
                 Please enter a email
+            </div>
+            <div class="invalid-feedback" *ngIf="isEmailInvalid">
+                Email is already registered. Try another one
             </div>
 
             <label>Email</label>

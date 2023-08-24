@@ -1,9 +1,11 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { catchError, Observable, of, switchMap } from 'rxjs';
 
 import { AccessTokenDto } from 'src/app/models/auth/access-token-dto';
-import { AuthFailedInfo } from 'src/app/models/auth/auth-failed-info';
 import { UserRegisterDto } from 'src/app/models/auth/user-register-dto';
+import { ErrorDetailsDto } from 'src/app/models/error/error-details-dto';
+import { WebApiResponse } from 'src/app/models/http/web-api-response';
 
 import { HttpInternalService } from './http-internal.service';
 
@@ -14,18 +16,27 @@ export class AuthService {
     // eslint-disable-next-line no-empty-function
     constructor(private httpService: HttpInternalService) {}
 
-    public register(userRegisterDto: UserRegisterDto): Observable<AccessTokenDto | AuthFailedInfo> {
+    public register(userRegisterDto: UserRegisterDto): Observable<WebApiResponse<null>> {
         return this.httpService
-            .postFullRequest<AccessTokenDto>(`${this.authRoutePrefix}/register`, userRegisterDto)
+            .postFullRequest<AccessTokenDto | ErrorDetailsDto>(`${this.authRoutePrefix}/register`, userRegisterDto)
             .pipe(
-                map((response) => {
+                catchError((error: HttpErrorResponse) => of(error.error)),
+                switchMap((response) => {
                     if (response.ok && response.body) {
-                        this.saveTokens(response.body);
+                        this.saveTokens(response.body as AccessTokenDto);
 
-                        return response.body;
+                        return of({
+                            success: true,
+                            data: null,
+                            error: null,
+                        });
                     }
 
-                    return { statusCode: response.status, errorMessage: response.statusText };
+                    return of({
+                        success: false,
+                        data: null,
+                        error: response as ErrorDetailsDto,
+                    });
                 }),
             );
     }

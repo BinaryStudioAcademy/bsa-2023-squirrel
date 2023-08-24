@@ -1,119 +1,60 @@
-﻿using Squirrel.Core.BLL.MappingProfiles;
-using Squirrel.Core.BLL.Services;
-using Squirrel.Core.DAL.Context;
-using Squirrel.Core.BLL.Interfaces;
-using FluentValidation.AspNetCore;
+﻿using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
-using Squirrel.Core.Common.Interfaces;
+using Microsoft.Extensions.Options;
+using Squirrel.Core.BLL.Interfaces;
+using Squirrel.Core.BLL.MappingProfiles;
+using Squirrel.Core.BLL.Services;
+using Squirrel.Core.Common.Models;
+using Squirrel.Core.DAL.Context;
+using Squirrel.Core.DAL.Entities;
+using Squirrel.Core.WebAPI.Validators;
 using System.Reflection;
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using Squirrel.Core.Common.JWT;
-using Squirrel.Core.WebAPI.Validators.Sample;
 
-namespace Squirrel.Core.WebAPI.Extensions;
-
-public static class ServiceCollectionExtensions
+namespace Squirrel.Core.WebAPI.Extentions
 {
-    public static void RegisterCustomServices(this IServiceCollection services, IConfiguration configuration)
+    public static class ServiceCollectionExtensions
     {
-        services
-            .AddControllers()
-            .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-        services.AddTransient<ISampleService, SampleService>();
-        services.AddScoped<JwtIssuerOptions>();
-        services.AddScoped<IJwtFactory, JwtFactory>();
-        services.AddScoped<IAuthService, AuthService>();
-        services.Configure<MongoDatabaseConnectionSettings>(
-                    configuration.GetSection("MongoDatabase"));
-
-        services.AddMongoDbService();
-    }
-
-    public static void AddMongoDbService(this IServiceCollection services)
-    {
-        services.AddTransient<IMongoService<Sample>>(s =>
-            new MongoService(s.GetRequiredService<IOptions<MongoDatabaseConnectionSettings>>(), "SampleCollection")
-        );
-
-        // services for other entities and collections
-    }
-
-    public static void AddAutoMapper(this IServiceCollection services)
-    {
-        services.AddAutoMapper(Assembly.GetAssembly(typeof(SampleProfile)));
-    }
-
-    public static void AddValidation(this IServiceCollection services)
-    {
-        services
-            .AddControllers()
-            .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<NewSampleDtoValidator>());
-    }
-
-    public static void AddSquirrelCoreContext(this IServiceCollection services, IConfiguration configuration)
-    {
-        var connectionsString = configuration.GetConnectionString("SquirrelCoreDBConnection");
-        services.AddDbContext<SquirrelCoreContext>(options =>
-            options.UseSqlServer(
-                connectionsString,
-                opt => opt.MigrationsAssembly(typeof(SquirrelCoreContext).Assembly.GetName().Name)));
-    }
-
-    public static void ConfigureJwtAuth(this IServiceCollection services, IConfiguration configuration)
-    {
-        var jwtAppSettingOptions = configuration.GetSection(nameof(JwtIssuerOptions))!;
-        // Get secret key from appsettings for testing.
-        var secretKey = jwtAppSettingOptions[nameof(JwtIssuerOptions.SecretJwtKey)];
-        var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey!));
-
-        services.Configure<JwtIssuerOptions>(options =>
+        public static void RegisterCustomServices(this IServiceCollection services, IConfiguration configuration)
         {
-            options.Issuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)]!;
-            options.Audience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)]!;
-            options.SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
-        });
+            services
+                .AddControllers()
+                .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
-        var tokenValidationParameters = new TokenValidationParameters
+            services.AddTransient<ISampleService, SampleService>();
+
+            services.Configure<MongoDatabaseConnectionSettings>(
+                configuration.GetSection("MongoDatabase"));
+
+            services.AddMongoDbService();
+        }
+
+        public static void AddMongoDbService(this IServiceCollection services)
         {
-            ValidateIssuer = true,
-            ValidIssuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)],
+            services.AddTransient<IMongoService<Sample>>(s => 
+                new MongoService(s.GetRequiredService<IOptions<MongoDatabaseConnectionSettings>>(), "SampleCollection");
 
-            ValidateAudience = true,
-            ValidAudience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)],
+            // services for other entities and collections
+        }
 
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = signingKey,
+        public static void AddAutoMapper(this IServiceCollection services)
+        {
+            services.AddAutoMapper(Assembly.GetAssembly(typeof(SampleProfile)));
+        }
 
-            RequireExpirationTime = false,
-            ValidateLifetime = true,
-            ClockSkew = TimeSpan.Zero
-        };
+        public static void AddValidation(this IServiceCollection services)
+        {
+            services
+                .AddControllers()
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<NewSampleDtoValidator>());
+        }
 
-        services
-            .AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(configureOptions =>
-            {
-                configureOptions.ClaimsIssuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)];
-                configureOptions.TokenValidationParameters = tokenValidationParameters;
-                configureOptions.SaveToken = true;
-                configureOptions.Events = new JwtBearerEvents
-                {
-                    OnAuthenticationFailed = context =>
-                    {
-                        if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
-                        {
-                            context.Response.Headers.Add("Token-Expired", "true");
-                        }
-
-                        return Task.CompletedTask;
-                    }
-                };
-            });
+        public static void AddSquirrelCoreContext(this IServiceCollection services, IConfiguration configuration)
+        {
+            var connectionsString = configuration.GetConnectionString("SquirrelCoreDBConnection");
+            services.AddDbContext<SquirrelCoreContext>(options =>
+                options.UseSqlServer(
+                    connectionsString,
+                    opt => opt.MigrationsAssembly(typeof(SquirrelCoreContext).Assembly.GetName().Name)));
+        }
     }
 }

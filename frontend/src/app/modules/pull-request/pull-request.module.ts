@@ -9,6 +9,6 @@ import { PullRequestListComponent } from './pull-request-list/pull-request-list.
 @NgModule({
     declarations: [PullRequestListComponent, PullRequestComponent],
     imports: [CommonModule, MaterialModule],
-    exports: [PullRequestComponent],
+    exports: [PullRequestComponent, PullRequestListComponent],
 })
 export class PullRequestModule {}

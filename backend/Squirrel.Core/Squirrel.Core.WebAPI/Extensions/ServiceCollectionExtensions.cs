@@ -14,10 +14,6 @@ using Squirrel.Core.DAL.Entities;
 using Squirrel.Core.WebAPI.Validators.Sample;
 using System.Reflection;
 using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using Squirrel.Core.Common.JWT;
-using Squirrel.Core.WebAPI.Validators.Sample;
 using System.Text.Json.Serialization;
 
 namespace Squirrel.Core.WebAPI.Extensions;

@@ -37,6 +37,10 @@ export class ProjectsPageComponent implements OnInit {
             height: '45%',
         });
 
+        dialogRef.componentInstance.projectCreated.subscribe((createdProject: ProjectDto) => {
+            this.projects.push(createdProject);
+        });
+
         dialogRef.afterClosed().subscribe((result) => {
             if (result) {
                 this.loadProjects();

@@ -9,6 +9,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { ProjectListComponent } from '@modules/projects/project-list/project-list.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
     declarations: [ProjectsPageComponent, CreateProjectModalComponent, ProjectListComponent],
@@ -20,6 +21,7 @@ import { ProjectListComponent } from '@modules/projects/project-list/project-lis
         ProjectsRoutingModule,
         MatInputModule,
         MatSelectModule,
+        FormsModule,
     ],
 })
 export class ProjectsModule { }

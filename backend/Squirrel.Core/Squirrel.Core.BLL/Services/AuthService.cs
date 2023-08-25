@@ -22,9 +22,9 @@ public sealed class AuthService : BaseService, IAuthService
        _googleClientId = authSettings.Value.GoogleClientId;
     }
 
-    public async Task<AuthUserDTO> AuthorizeWithGoogleAsync(GoogleToken googleToken)
+    public async Task<AuthUserDTO> AuthorizeWithGoogleAsync(string googleToken)
     {
-        var payload = await GoogleJsonWebSignature.ValidateAsync(googleToken.IdToken, new GoogleJsonWebSignature.ValidationSettings
+        var payload = await GoogleJsonWebSignature.ValidateAsync(googleToken, new GoogleJsonWebSignature.ValidationSettings
         {
             Audience = new List<string> { _googleClientId }
         });

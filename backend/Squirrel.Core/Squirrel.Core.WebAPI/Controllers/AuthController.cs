@@ -72,8 +72,8 @@ public sealed class AuthController : ControllerBase
     /// </remarks>
     [HttpPost("login/google")]
     [ProducesResponseType(typeof(AuthUserDTO), StatusCodes.Status200OK)]
-    public async Task<ActionResult<AuthUserDTO>> LoginWithGoogle(GoogleToken googleTokenData)
+    public async Task<ActionResult<AuthUserDTO>> LoginWithGoogle([FromForm] string credential)
     {
-        return Ok(await _authService.AuthorizeWithGoogleAsync(googleTokenData));
+        return Ok(await _authService.AuthorizeWithGoogleAsync(credential));
     }
 }

@@ -4,25 +4,41 @@
 
         <div class="additional-sing-in">
             <button>Sign In with GitHub</button>
-            <button>Sign In with Google</button>
+            <button (click)="googleLogin($event)">Sign In with Google</button>
         </div>
+
+        <div
+            id="g_id_onload"
+            data-client_id="914510104037-k5ft2q9qjia33jgmh9mo3nm99ea04kbn.apps.googleusercontent.com"
+            data-context="use"
+            data-ux_mode="redirect"
+            data-login_uri="http://localhost:5050/api/auth/login/google"
+            data-auto_prompt="false"></div>
+
+        <div
+            class="g_id_signin"
+            data-type="standard"
+            data-shape="rectangular"
+            data-theme="filled_blue"
+            data-text="signin_with"
+            data-size="large"
+            data-logo_alignment="left"></div>
 
         <app-barrier [text]="'or'"></app-barrier>
 
         <form class="login-form" (ngSubmit)="loginForm.valid && login()">
-
             <app-input [formControl]="$any(loginForm.controls['email'])" [label]="'email'"></app-input>
             <div class="input-wrapper">
-                <app-input [formControl]="$any(loginForm.controls['password'])" [label]="'password'" [type]="'password'"></app-input>
+                <app-input
+                    [formControl]="$any(loginForm.controls['password'])"
+                    [label]="'password'"
+                    [type]="'password'"></app-input>
                 <a href="">Forget password</a>
             </div>
-
 
             <button [disabled]="loginForm.invalid" type="submit">Sing In</button>
         </form>
     </div>
 
-    <div class="login-footer">
-        No account? <a routerLink="/registration">Sign Up</a>
-    </div>
+    <div class="login-footer">No account? <a routerLink="/registration">Sign Up</a></div>
 </div>

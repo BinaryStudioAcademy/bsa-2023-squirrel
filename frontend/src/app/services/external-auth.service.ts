@@ -16,12 +16,16 @@ export class ExternalAuthService {
     // eslint-disable-next-line no-empty-function
     constructor(private http: HttpClient, private googleAuthService: SocialAuthService, private router: Router) {}
 
-    public signInWithGoogle = () =>
-        this.googleAuthService.signIn(GoogleLoginProvider.PROVIDER_ID).then((res) => {
+    public signInWithGoogle() {
+        debugger;
+
+        return this.googleAuthService.signIn(GoogleLoginProvider.PROVIDER_ID).then((res) => {
             const user: SocialUser = { ...res };
 
+            debugger;
             this.validateExternalAuth(user);
         });
+    }
 
     public signOutGoogle = () => {
         this.googleAuthService.signOut();

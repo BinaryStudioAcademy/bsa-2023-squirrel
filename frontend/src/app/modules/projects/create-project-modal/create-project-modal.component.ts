@@ -57,7 +57,6 @@ export class CreateProjectModalComponent implements OnInit {
         );
     }
 
-
     close(): void {
         this.dialogRef.close();
     }

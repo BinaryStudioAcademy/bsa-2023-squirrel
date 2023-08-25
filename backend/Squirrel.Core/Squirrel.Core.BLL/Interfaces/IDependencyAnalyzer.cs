@@ -1,7 +1,6 @@
-﻿namespace Squirrel.Core.BLL.Interfaces
+﻿namespace Squirrel.Core.BLL.Interfaces;
+public interface IDependencyAnalyzer
 {
-    public interface IDependencyAnalyzer
-    {
-        List<string> AnalyzeDependencies(string spContent, List<string>? objectList = null);
-    }
+    List<string> AnalyzeDependencies(string spContent, List<string>? objectList = null);
 }
+

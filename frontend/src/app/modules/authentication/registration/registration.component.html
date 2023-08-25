@@ -3,32 +3,60 @@
         <h4>Sign Up</h4>
 
         <div class="additional-sing-up">
-            <button>Sign Up with GitHub</button>
-            <button>Sign Up with Google</button>
+            <app-button class="margin-top"
+                        text="Sign Up with GitHub"
+                        variant="outline-primary"
+                        width="100%">
+            </app-button>
+            <app-button class="margin-top"
+                        text="Sign Up with Google"
+                        variant="outline-primary"
+                        width="100%">
+            </app-button>
         </div>
 
-        <div class="barrier">
-            <hr>
-            <p class="barrier-text">or</p>
-        </div>
+        <app-barrier [text]="'or'"></app-barrier>
 
         <form [formGroup]="registerForm" (ngSubmit)="registerForm.valid && register()" class="registration-form"
               action="">
 
-            <app-input [formControl]="$any(registerForm.controls['username'])" [label]="'username'"></app-input>
-            <app-input [formControl]="$any(registerForm.controls['email'])" [label]="'email'"></app-input>
-            <app-input [formControl]="$any(registerForm.controls['firstName'])" [label]="'first Name'"></app-input>
-            <app-input [formControl]="$any(registerForm.controls['lastName'])" [label]="'last Name'"></app-input>
-            <app-input [formControl]="$any(registerForm.controls['password'])" [label]="'password'"
-                       [type]="'password'"></app-input>
-            <app-input [formControl]="$any(registerForm.controls['confirmPassword'])" [label]="'confirm Password'"
-                       [type]="'password'"></app-input>
+            <app-input [formControl]="$any(registerForm.controls['username'])"
+                       [label]="'username'"
+                       placeholder="Enter your Username">
+            </app-input>
+            <app-input [formControl]="$any(registerForm.controls['email'])"
+                       [label]="'email'"
+                       placeholder="Enter your Email">
+            </app-input>
+            <app-input [formControl]="$any(registerForm.controls['firstName'])"
+                       [label]="'first Name'"
+                       placeholder="Enter your FirstName">
+            </app-input>
+            <app-input [formControl]="$any(registerForm.controls['lastName'])"
+                       [label]="'last Name'"
+                       placeholder="Enter your LastName">
+            </app-input>
+            <app-input [formControl]="$any(registerForm.controls['password'])"
+                       [label]="'password'"
+                       [type]="'password'"
+                       placeholder="Enter your Password">
+            </app-input>
+            <app-input [formControl]="$any(registerForm.controls['confirmPassword'])"
+                       [label]="'confirm Password'"
+                       [type]="'password'"
+                       placeholder="Enter your Password again">
+            </app-input>
 
-            <button [disabled]="!registerForm.valid" type="submit">Sing Up</button>
+            <app-button class="margin-top"
+                        [isDisabled]="registerForm.invalid"
+                        text="Sing Up"
+                        variant="filled"
+                        width="100%">
+            </app-button>
         </form>
     </div>
 
-    <div class="registration-footer">
-        Already have account? <a href="">Sign In</a>
+    <div class="registration-footer margin-top">
+        Already have account? <a routerLink="/login">Sign In</a>
     </div>
 </div>

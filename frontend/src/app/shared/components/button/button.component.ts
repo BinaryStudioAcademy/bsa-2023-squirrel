@@ -10,7 +10,7 @@ export class ButtonComponent {
 
     @Input() width = 'auto';
 
-    @Input() height = 'auto';
+    @Input() height = '45px';
 
     @Input() padding = '10px 20px';
 

@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '@env/environment';
 import { Observable } from 'rxjs';
@@ -41,13 +41,6 @@ export class HttpInternalService {
      */
     public postRequest<T>(url: string, payload: object): Observable<T> {
         return this.httpClient.post<T>(this.buildUrl(url), payload, { headers: this.getHeaders() });
-    }
-
-    public postFullRequest<T>(url: string, payload: object): Observable<HttpResponse<T>> {
-        return this.httpClient.post<T>(this.buildUrl(url), payload, {
-            headers: this.getHeaders(),
-            observe: 'response',
-        });
     }
 
     /**

@@ -11,20 +11,18 @@ import { HttpInternalService } from './http-internal.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-    private authRoutePrefix = '/api/auth';
+    private readonly authRoutePrefix = '/api/auth';
 
     // eslint-disable-next-line no-empty-function
     constructor(private httpService: HttpInternalService) {}
 
     public register(userRegisterDto: UserRegisterDto): Observable<WebApiResponse<null>> {
         return this.httpService
-            .postFullRequest<AccessTokenDto | ErrorDetailsDto>(`${this.authRoutePrefix}/register`, userRegisterDto)
+            .postRequest<AccessTokenDto | ErrorDetailsDto>(`${this.authRoutePrefix}/register`, userRegisterDto)
             .pipe(
                 catchError((error: HttpErrorResponse) => of(error.error)),
                 switchMap((response) => {
-                    if (response.ok && response.body) {
-                        this.saveTokens(response.body as AccessTokenDto);
-
+                    if (this.trySaveTokens(response as AccessTokenDto)) {
                         return of({
                             success: true,
                             data: null,
@@ -41,10 +39,14 @@ export class AuthService {
             );
     }
 
-    private saveTokens(tokens: AccessTokenDto) {
+    private trySaveTokens(tokens: AccessTokenDto): boolean {
         if (tokens.accessToken && tokens.refreshToken) {
             localStorage.setItem('accessToken', JSON.stringify(tokens.accessToken));
             localStorage.setItem('refreshToken', JSON.stringify(tokens.refreshToken));
+
+            return true;
         }
+
+        return false;
     }
 }

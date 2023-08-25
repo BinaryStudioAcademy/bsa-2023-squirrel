@@ -1,16 +1,17 @@
 ﻿using AutoMapper;
 using Squirrel.Core.Common.DTO.Projects;
 using Squirrel.Core.BLL.Interfaces;
+using Squirrel.Core.BLL.Services.Abstract;
 using Squirrel.Core.DAL.Context;
 
 namespace Squirrel.Core.BLL.Services
 {
-    public class ProjectService : IProjectService
+    public class ProjectService : BaseService, IProjectService
     {
         private readonly SquirrelCoreContext _context;
         private readonly IMapper _mapper;
 
-        public ProjectService(SquirrelCoreContext context, IMapper mapper)
+        public ProjectService(SquirrelCoreContext context, IMapper mapper): base(context, mapper)
         {
             _context = context;
             _mapper = mapper;
@@ -27,7 +28,7 @@ namespace Squirrel.Core.BLL.Services
             throw new NotImplementedException();
         }
 
-        public async Task<ProjectDTO> UpdateProject(Guid projectId, ProjectDTO projectDto)
+        public async Task<ProjectDTO> UpdateProject(int projectId, ProjectDTO projectDto)
         {
             // var existingProject = await _context.Projects.FindAsync(projectId);
             // if (existingProject == null)
@@ -44,7 +45,7 @@ namespace Squirrel.Core.BLL.Services
             throw new NotImplementedException();
         }
 
-        public async Task DeleteProject(Guid projectId)
+        public async Task DeleteProject(int projectId)
         {
             // var project = await _context.Projects.FindAsync(projectId);
             // if (project == null)
@@ -57,7 +58,7 @@ namespace Squirrel.Core.BLL.Services
             throw new NotImplementedException();
         }
 
-        public async Task<ProjectDTO> GetProject(Guid projectId)
+        public async Task<ProjectDTO> GetProject(int projectId)
         {
             // var project = await _context.Projects.FindAsync(projectId);
             // if (project == null)

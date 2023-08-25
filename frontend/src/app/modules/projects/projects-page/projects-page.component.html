@@ -7,14 +7,16 @@
             <h3 class="mat-h3">Projects</h3>
             <app-button
                 class="create-button"
-                text="Create"
-                width="120px"
-                height="40px"
+                text="Create Project"
+                width="100%"
+                height="45px"
                 variant="filled"
                 (click)="openCreateModal()"
             >
             </app-button>
         </div>
-        <app-project-list [projects]="projects"></app-project-list>
+        <div class="card-container">
+            <app-project-list *ngFor="let project of projects" [project]="project"></app-project-list>
+        </div>
     </div>
 </div>

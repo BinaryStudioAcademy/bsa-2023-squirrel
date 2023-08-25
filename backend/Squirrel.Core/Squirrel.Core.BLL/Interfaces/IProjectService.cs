@@ -5,9 +5,9 @@ namespace Squirrel.Core.BLL.Interfaces
     public interface IProjectService
     {
         Task<ProjectDTO> AddProject(ProjectDTO projectDto);
-        Task<ProjectDTO> UpdateProject(Guid projectId, ProjectDTO projectDto);
-        Task DeleteProject(Guid projectId);
-        Task<ProjectDTO> GetProject(Guid projectId);
+        Task<ProjectDTO> UpdateProject(int projectId, ProjectDTO projectDto);
+        Task DeleteProject(int projectId);
+        Task<ProjectDTO> GetProject(int projectId);
         Task<List<ProjectDTO>> GetAllProjects();
     }
 }

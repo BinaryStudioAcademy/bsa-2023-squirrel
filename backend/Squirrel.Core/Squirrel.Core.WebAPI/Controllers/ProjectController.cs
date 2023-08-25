@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Squirrel.Core.BLL.Services;
 using Squirrel.Core.Common.DTO.Projects;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using Squirrel.Core.BLL.Interfaces;
+using Squirrel.Core.Common.Enums;
 
 namespace Squirrel.Core.WebAPI.Controllers
 {
@@ -11,9 +9,9 @@ namespace Squirrel.Core.WebAPI.Controllers
     [Route("api/[controller]")]
     public class ProjectController : ControllerBase
     {
-        private readonly ProjectService _projectService;
+        private readonly IProjectService _projectService;
 
-        public ProjectController(ProjectService projectService)
+        public ProjectController(IProjectService projectService)
         {
             _projectService = projectService;
         }
@@ -61,11 +59,17 @@ namespace Squirrel.Core.WebAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<List<ProjectDTO>>> GetAllProjects()
         {
-            // TODO: Implement logic to get all projects
-            // var projects = await _projectService.GetAllProjects();
-            // return Ok(projects);
+            // var projects = await _context.Projects.ToListAsync();
+            // var projectDtos = _mapper.Map<List<ProjectDTO>>(projects);
 
-            return BadRequest("Not implemented");
+            // foreach (var projectDto in projectDtos)
+            // {
+            //     projectDto.Engine = (EngineEnum)projectDto.Engine;
+            // }
+
+            // return projectDtos;
+
+            throw new NotImplementedException();
         }
     }
 }

@@ -32,23 +32,21 @@ public class DependencyAnalyzer : IDependencyAnalyzer
     {
         List<string> references = FindReferences(spContent);
 
-        if (objectList != null)
-        {
-            List<string> dependencies = new List<string>();
-
-            foreach (string reference in references)
-            {
-                if (objectList.Contains(reference))
-                {
-                    dependencies.Add(reference);
-                }
-            }
-            return dependencies;
-
-        }
-        else
+        if (objectList == null)
         {
             return references;
         }
+
+        List<string> dependencies = new List<string>();
+
+        foreach (string reference in references)
+        {
+            if (objectList.Contains(reference))
+            {
+                dependencies.Add(reference);
+            }
+        }
+
+        return dependencies;
     }
 }

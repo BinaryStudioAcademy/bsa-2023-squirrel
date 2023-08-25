@@ -20,13 +20,15 @@
         <form class="login-form" (ngSubmit)="loginForm.valid && login()">
 
             <app-input [formControl]="$any(loginForm.controls['email'])"
-                       [label]="'email'">
+                       [label]="'email'"
+                       placeholder="Enter your Email">
             </app-input>
 
             <div class="input-wrapper">
                 <app-input [formControl]="$any(loginForm.controls['password'])"
                            [label]="'password'"
-                           [type]="'password'">
+                           [type]="'password'"
+                           placeholder="Enter your Password">
                 </app-input>
                 <a href="">Forget password</a>
             </div>
@@ -41,7 +43,7 @@
         </form>
     </div>
 
-    <div class="login-footer">
+    <div class="login-footer margin-top">
         No account? <a routerLink="/registration">Sign Up</a>
     </div>
 </div>

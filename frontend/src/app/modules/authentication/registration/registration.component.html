@@ -20,14 +20,32 @@
         <form [formGroup]="registerForm" (ngSubmit)="registerForm.valid && register()" class="registration-form"
               action="">
 
-            <app-input [formControl]="$any(registerForm.controls['username'])" [label]="'username'"></app-input>
-            <app-input [formControl]="$any(registerForm.controls['email'])" [label]="'email'"></app-input>
-            <app-input [formControl]="$any(registerForm.controls['firstName'])" [label]="'first Name'"></app-input>
-            <app-input [formControl]="$any(registerForm.controls['lastName'])" [label]="'last Name'"></app-input>
-            <app-input [formControl]="$any(registerForm.controls['password'])" [label]="'password'"
-                       [type]="'password'"></app-input>
-            <app-input [formControl]="$any(registerForm.controls['confirmPassword'])" [label]="'confirm Password'"
-                       [type]="'password'"></app-input>
+            <app-input [formControl]="$any(registerForm.controls['username'])"
+                       [label]="'username'"
+                       placeholder="Enter your Username">
+            </app-input>
+            <app-input [formControl]="$any(registerForm.controls['email'])"
+                       [label]="'email'"
+                       placeholder="Enter your Email">
+            </app-input>
+            <app-input [formControl]="$any(registerForm.controls['firstName'])"
+                       [label]="'first Name'"
+                       placeholder="Enter your FirstName">
+            </app-input>
+            <app-input [formControl]="$any(registerForm.controls['lastName'])"
+                       [label]="'last Name'"
+                       placeholder="Enter your LastName">
+            </app-input>
+            <app-input [formControl]="$any(registerForm.controls['password'])"
+                       [label]="'password'"
+                       [type]="'password'"
+                       placeholder="Enter your Password">
+            </app-input>
+            <app-input [formControl]="$any(registerForm.controls['confirmPassword'])"
+                       [label]="'confirm Password'"
+                       [type]="'password'"
+                       placeholder="Enter your Password again">
+            </app-input>
 
             <app-button class="margin-top"
                         [isDisabled]="registerForm.invalid"
@@ -38,7 +56,7 @@
         </form>
     </div>
 
-    <div class="registration-footer">
+    <div class="registration-footer margin-top">
         Already have account? <a routerLink="/login">Sign In</a>
     </div>
 </div>

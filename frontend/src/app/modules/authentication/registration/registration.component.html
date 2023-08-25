@@ -3,14 +3,19 @@
         <h4>Sign Up</h4>
 
         <div class="additional-sing-up">
-            <button>Sign Up with GitHub</button>
-            <button>Sign Up with Google</button>
+            <app-button class="margin-top"
+                        text="Sign Up with GitHub"
+                        variant="outline-primary"
+                        width="100%">
+            </app-button>
+            <app-button class="margin-top"
+                        text="Sign Up with Google"
+                        variant="outline-primary"
+                        width="100%">
+            </app-button>
         </div>
 
-        <div class="barrier">
-            <hr>
-            <p class="barrier-text">or</p>
-        </div>
+        <app-barrier [text]="'or'"></app-barrier>
 
         <form [formGroup]="registerForm" (ngSubmit)="registerForm.valid && register()" class="registration-form"
               action="">
@@ -24,11 +29,16 @@
             <app-input [formControl]="$any(registerForm.controls['confirmPassword'])" [label]="'confirm Password'"
                        [type]="'password'"></app-input>
 
-            <button [disabled]="!registerForm.valid" type="submit">Sing Up</button>
+            <app-button class="margin-top"
+                        [isDisabled]="registerForm.invalid"
+                        text="Sing Up"
+                        variant="filled"
+                        width="100%">
+            </app-button>
         </form>
     </div>
 
     <div class="registration-footer">
-        Already have account? <a href="">Sign In</a>
+        Already have account? <a routerLink="/login">Sign In</a>
     </div>
 </div>

@@ -4,12 +4,12 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BaseComponent } from '@core/base/base.component';
 import { AuthService } from '@core/services/auth.service';
+import { NotificationService } from '@core/services/notification.service';
 import { SpinnerService } from '@core/services/spinner.service';
 import { ValidationsFn } from '@shared/helpers/validations-fn';
 import { takeUntil } from 'rxjs';
 
-import { ErrorType } from 'src/app/models/error/error-type';
-import { WebApiResponse } from 'src/app/models/http/web-api-response';
+import { ErrorDetailsDto } from 'src/app/models/error/error-details-dto';
 
 import { UserRegisterDto } from '../../../models/auth/user-register-dto';
 
@@ -21,19 +21,12 @@ import { UserRegisterDto } from '../../../models/auth/user-register-dto';
 export class RegistrationComponent extends BaseComponent implements OnInit {
     public registerForm: FormGroup = new FormGroup({});
 
-    public showPassword = false;
-
-    public showConfirmPassword = false;
-
-    public isEmailInvalid = false;
-
-    public isUsernameInvalid = false;
-
     constructor(
         private fb: FormBuilder,
         private router: Router,
         private spinner: SpinnerService,
         private authService: AuthService,
+        private notificationService: NotificationService,
     ) {
         super();
     }
@@ -92,14 +85,14 @@ export class RegistrationComponent extends BaseComponent implements OnInit {
         this.authService
             .register(userRegistrationData)
             .pipe(takeUntil(this.unsubscribe$))
-            .subscribe((result: WebApiResponse<null>) => {
-                this.spinner.hide();
-                if (result.success) {
+            .subscribe(
+                () => {
                     this.router.navigateByUrl('/main');
-                } else {
-                    this.isEmailInvalid = result.error?.errorType === ErrorType.InvalidEmail;
-                    this.isUsernameInvalid = result.error?.errorType === ErrorType.InvalidUsername;
-                }
-            });
+                },
+                (err: ErrorDetailsDto) => {
+                    this.spinner.hide();
+                    this.notificationService.error(err.message);
+                },
+            );
     }
 }

@@ -4,25 +4,8 @@
 
         <div class="additional-sing-in">
             <button>Sign In with GitHub</button>
-            <button (click)="googleLogin($event)">Sign In with Google</button>
+            <button id="buttonDiv">Sign In with Google</button>
         </div>
-
-        <div
-            id="g_id_onload"
-            data-client_id="914510104037-k5ft2q9qjia33jgmh9mo3nm99ea04kbn.apps.googleusercontent.com"
-            data-context="use"
-            data-ux_mode="redirect"
-            data-login_uri="http://localhost:5050/api/auth/login/google"
-            data-auto_prompt="false"></div>
-
-        <div
-            class="g_id_signin"
-            data-type="standard"
-            data-shape="rectangular"
-            data-theme="filled_blue"
-            data-text="signin_with"
-            data-size="large"
-            data-logo_alignment="left"></div>
 
         <app-barrier [text]="'or'"></app-barrier>
 

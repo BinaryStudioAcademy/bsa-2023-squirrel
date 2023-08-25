@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { environment } from '@env/environment';
 import { ValidationsFn } from '@shared/helpers/validations-fn';
 
 import { ExternalAuthService } from 'src/app/services/external-auth.service';
@@ -19,6 +20,7 @@ export class LoginComponent implements OnInit {
 
     ngOnInit(): void {
         this.initializeForm();
+        this.initializeGoogleSignIn();
     }
 
     private initializeForm() {
@@ -31,6 +33,24 @@ export class LoginComponent implements OnInit {
         });
     }
 
+    private initializeGoogleSignIn() {
+        google.accounts.id.initialize({
+            client_id: environment.googleClientId,
+            callback: this.handleCredentialResponse.bind(this),
+        });
+
+        google.accounts.id.renderButton(
+            this.elRef.nativeElement.querySelector('#buttonDiv'),
+            { theme: 'outline', size: 'large' }, // customization attributes
+        );
+
+        google.accounts.id.prompt(); // also display the One Tap dialog
+    }
+
+    private handleCredentialResponse(response: any) {
+        console.log(`Encoded JWT ID token: ${response.credential}`);
+    }
+
     public login() {
         const user: UserLoginDto = this.loginForm.value;
 
@@ -38,12 +58,4 @@ export class LoginComponent implements OnInit {
         // eslint-disable-next-line no-console
         console.log(user);
     }
-
-    public googleLogin = (event: FocusEvent) => {
-        event.preventDefault();
-        debugger;
-        this.externalAuthService.signInWithGoogle().catch((err) => {
-            console.error(err);
-        });
-    };
 }

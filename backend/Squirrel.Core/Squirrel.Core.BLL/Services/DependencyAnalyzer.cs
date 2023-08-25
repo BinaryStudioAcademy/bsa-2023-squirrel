@@ -23,11 +23,7 @@ public class DependencyAnalyzer : IDependencyAnalyzer
         MatchCollection functionMatches = functionRegex.Matches(spContent);
 
         // Combined the results into a single list
-        List<Match> matches = new List<Match>();
-        matches.AddRange(spMatches);
-        matches.AddRange(functionMatches);
-
-        references.AddRange(matches.Select(m => m.Value));
+        references.AddRange(spMatches.Concat(functionMatches).Select(m => m.Value));
 
         return references;
     }

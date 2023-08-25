@@ -1,9 +1,9 @@
 @import "/src/styles/color"
+@import "/src/styles/reusable"
 .login-container
     height: 100%
     padding: 0 20%
-    display: flex
-    flex-direction: column
+    @extend .flex-column
     align-items: center
     justify-content: space-between
 
@@ -15,12 +15,10 @@
         color: $text-main
 
 .additional-sing-in
-    display: flex
-    flex-direction: column
+    @extend .flex-column
 
 .login-form
-    display: flex
-    flex-direction: column
+    @extend .flex-column
 
 .login-footer
     margin-bottom: 20px

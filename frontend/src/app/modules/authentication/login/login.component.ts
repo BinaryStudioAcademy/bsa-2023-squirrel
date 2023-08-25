@@ -1,6 +1,8 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatButton } from '@angular/material/button';
 import { environment } from '@env/environment';
+import { ButtonComponent } from '@shared/components/button/button.component';
 import { ValidationsFn } from '@shared/helpers/validations-fn';
 
 import { ExternalAuthService } from 'src/app/services/external-auth.service';
@@ -38,21 +40,24 @@ export class LoginComponent implements OnInit {
     private initializeGoogleSignIn() {
         google.accounts.id.initialize({
             client_id: environment.googleClientId,
+            context: 'signin',
+            ux_mode: 'popup',
             callback: this.handleCredentialResponse.bind(this),
         });
 
         google.accounts.id.renderButton(
-            this.elRef.nativeElement.querySelector('#buttonDiv'),
-            { theme: 'outline', size: 'large' }, // customization attributes
+            document.getElementById('signInGoogle'),
+            { theme: 'outline', size: 'large', width: '360px', text: 'signin_with', locale: 'en_US' }, // customization attributes
         );
 
-        google.accounts.id.prompt(); // also display the One Tap dialog
+        // also display the One Tap dialog
+        google.accounts.id.prompt();
     }
 
     private handleCredentialResponse(response: any) {
+        // eslint-disable-next-line no-console
         console.log(`Encoded JWT ID token: ${response.credential}`);
-        debugger;
-        this.externalAuthService.validateExternalAuth2(response.credential);
+        this.externalAuthService.validateGoogleAuth(response.credential);
     }
 
     public login() {

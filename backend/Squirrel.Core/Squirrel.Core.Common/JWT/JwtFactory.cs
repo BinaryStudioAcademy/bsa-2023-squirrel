@@ -47,7 +47,7 @@ public sealed class JwtFactory : IJwtFactory
         return _jwtSecurityTokenHandler.WriteToken(jwt)!;
     }
 
-    public string GenerateRefreshToken() => Convert.ToBase64String(BytesGenerator.GetRandomBytes());
+    public string GenerateRefreshToken() => SecurityUtils.GenerateRandomSalt();
     
     public int GetUserIdFromToken(string accessToken, string signingKey)
     {

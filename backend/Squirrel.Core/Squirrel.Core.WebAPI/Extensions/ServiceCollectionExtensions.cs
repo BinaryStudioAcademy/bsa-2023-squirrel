@@ -14,33 +14,32 @@ using Squirrel.Core.DAL.Entities;
 using Squirrel.Core.WebAPI.Validators.Sample;
 using System.Reflection;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace Squirrel.Core.WebAPI.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static void RegisterCustomServices(this IServiceCollection services, IConfiguration configuration)
+    public static void RegisterCustomServices(this IServiceCollection services)
     {
         services
             .AddControllers()
-            .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
+            .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+
         services.AddTransient<ISampleService, SampleService>();
         services.AddScoped<JwtIssuerOptions>();
         services.AddScoped<IJwtFactory, JwtFactory>();
         services.AddScoped<IAuthService, AuthService>();
-
-        services.AddMongoDbService(configuration);
+        services.AddScoped<ITextService, TextService>();
     }
 
     public static void AddMongoDbService(this IServiceCollection services, IConfiguration configuration)
     {
-        services.Configure<MongoDatabaseConnectionSettings>(
-                    configuration.GetSection("MongoDatabase"));
+        services.Configure<MongoDatabaseConnectionSettings>(configuration.GetSection("MongoDatabase"));
 
         services.AddTransient<IMongoService<Sample>>(s =>
             new MongoService<Sample>(s.GetRequiredService<IOptions<MongoDatabaseConnectionSettings>>(), "SampleCollection"));
-
-        // services for other entities and collections
     }
 
     public static void AddAutoMapper(this IServiceCollection services)

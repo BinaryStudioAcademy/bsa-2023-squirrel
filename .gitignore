@@ -397,4 +397,3 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 backend/.idea/
-frontend/yarn.lock

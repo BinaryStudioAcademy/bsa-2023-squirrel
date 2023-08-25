@@ -47,7 +47,7 @@
                         "inlineStyleLanguage": "sass",
                         "assets": ["src/favicon.ico", "src/assets"],
                         "styles": ["src/styles/index.sass"],
-                        "scripts": ["https://accounts.google.com/gsi/client"],
+                        "scripts": [],
                         "allowedCommonJsDependencies": ["moment-timezone"]
                     },
                     "configurations": {

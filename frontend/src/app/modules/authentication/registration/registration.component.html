@@ -3,11 +3,19 @@
         <h4>Sign Up</h4>
 
         <div class="additional-sing-up">
-            <button>Sign Up with GitHub</button>
-            <button>Sign Up with Google</button>
+            <app-button class="margin-top"
+                        text="Sign Up with GitHub"
+                        variant="outline-primary"
+                        width="100%">
+            </app-button>
+            <app-button class="margin-top"
+                        text="Sign Up with Google"
+                        variant="outline-primary"
+                        width="100%">
+            </app-button>
         </div>
 
-        <app-barrier [text]="'or'" style=""></app-barrier>
+        <app-barrier [text]="'or'"></app-barrier>
 
         <form
             [formGroup]="registerForm"
@@ -27,7 +35,12 @@
                 [label]="'confirm Password'"
                 [type]="'password'"></app-input>
 
-            <button [disabled]="!registerForm.valid" type="submit">Sing Up</button>
+            <app-button class="margin-top"
+                        [isDisabled]="registerForm.invalid"
+                        text="Sing Up"
+                        variant="filled"
+                        width="100%">
+            </app-button>
         </form>
     </div>
 

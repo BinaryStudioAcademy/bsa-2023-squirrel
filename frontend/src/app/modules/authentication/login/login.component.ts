@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { environment } from '@env/environment';
 import { ValidationsFn } from '@shared/helpers/validations-fn';
@@ -6,6 +6,8 @@ import { ValidationsFn } from '@shared/helpers/validations-fn';
 import { ExternalAuthService } from 'src/app/services/external-auth.service';
 
 import { UserLoginDto } from '../../../models/auth/user-login-dto';
+
+declare const google: any;
 
 @Component({
     selector: 'app-login',
@@ -16,7 +18,7 @@ export class LoginComponent implements OnInit {
     public loginForm: FormGroup = new FormGroup({});
 
     // eslint-disable-next-line no-empty-function
-    constructor(private fb: FormBuilder, private externalAuthService: ExternalAuthService) {}
+    constructor(private fb: FormBuilder, private externalAuthService: ExternalAuthService, private elRef: ElementRef) {}
 
     ngOnInit(): void {
         this.initializeForm();
@@ -49,6 +51,8 @@ export class LoginComponent implements OnInit {
 
     private handleCredentialResponse(response: any) {
         console.log(`Encoded JWT ID token: ${response.credential}`);
+        debugger;
+        this.externalAuthService.validateExternalAuth2(response.credential);
     }
 
     public login() {

@@ -46,4 +46,21 @@ export class ExternalAuthService {
             },
         });
     }
+
+    public validateExternalAuth2(credentials: string) {
+        const auth: ExternalAuthDto = { idToken: credentials };
+
+        debugger;
+
+        return this.http.post<UserAuthDto>(`${this.APIUrl}/api/auth/login/google`, auth).subscribe({
+            next: (data: UserAuthDto) => {
+                localStorage.setItem('accessToken', JSON.stringify(data.token.accessToken));
+                localStorage.setItem('refreshToken', JSON.stringify(data.token.refreshToken));
+                this.router.navigate(['/main']);
+            },
+            error: () => {
+                this.signOutGoogle();
+            },
+        });
+    }
 }

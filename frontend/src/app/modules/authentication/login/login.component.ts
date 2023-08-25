@@ -1,8 +1,6 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatButton } from '@angular/material/button';
 import { environment } from '@env/environment';
-import { ButtonComponent } from '@shared/components/button/button.component';
 import { ValidationsFn } from '@shared/helpers/validations-fn';
 
 import { ExternalAuthService } from 'src/app/services/external-auth.service';

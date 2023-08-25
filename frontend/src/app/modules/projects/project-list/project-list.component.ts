@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
     selector: 'app-project-list',
@@ -6,11 +6,9 @@ import { Component, Input, OnInit } from '@angular/core';
     styleUrls: ['./project-list.component.sass'],
 })
 
-export class ProjectListComponent implements OnInit {
+export class ProjectListComponent {
     @Input() project: any;
 
+    // eslint-disable-next-line @typescript-eslint/no-useless-constructor,no-empty-function,@typescript-eslint/no-empty-function
     constructor() { }
-
-    ngOnInit(): void {
-    }
 }

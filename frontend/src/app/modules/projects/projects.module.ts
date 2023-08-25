@@ -1,15 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
-import { CreateProjectModalComponent } from '@modules/projects/create-project-modal/create-project-modal.component';
-import { ProjectsPageComponent } from '@modules/projects/projects-page/projects-page.component';
-import { SharedModule } from '@shared/shared.module';
-import { ProjectsRoutingModule } from '@modules/projects/projects-routing.model';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { CreateProjectModalComponent } from '@modules/projects/create-project-modal/create-project-modal.component';
 import { ProjectListComponent } from '@modules/projects/project-list/project-list.component';
-import { FormsModule } from '@angular/forms';
+import { ProjectsPageComponent } from '@modules/projects/projects-page/projects-page.component';
+import { ProjectsRoutingModule } from '@modules/projects/projects-routing.model';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
     declarations: [ProjectsPageComponent, CreateProjectModalComponent, ProjectListComponent],

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ProjectService } from '@core/services/project.service';
@@ -12,7 +12,6 @@ import { ProjectDto } from '../../../models/projects/project-dto';
     styleUrls: ['./create-project-modal.component.sass'],
 })
 export class CreateProjectModalComponent implements OnInit {
-
     @Output() projectCreated = new EventEmitter<ProjectDto>();
 
     selectedEngine: EngineEnum = EngineEnum.SqlServer;

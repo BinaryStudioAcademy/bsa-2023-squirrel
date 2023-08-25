@@ -31,12 +31,20 @@ public class GenericExceptionHandlerMiddleware
     private static Task HandleException(HttpContext context, Exception exception)
     {
         var (errorDetails, statusCode) = exception.GetErrorDetailsAndStatusCode();
-        var toCamelCase = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
-        var errorDetailsJson = JsonConvert.SerializeObject(errorDetails, toCamelCase);
         
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = (int)statusCode;
 
-        return context.Response.WriteAsync(errorDetailsJson);
+        return context.Response.WriteAsync(SerializeJson(errorDetails));
+    }
+
+    private static string SerializeJson<T>(T data)
+    {
+        var camelCasePropertiesSetting = new JsonSerializerSettings
+        {
+            ContractResolver = new CamelCasePropertyNamesContractResolver()
+        };
+        
+        return JsonConvert.SerializeObject(data, camelCasePropertiesSetting);
     }
 }

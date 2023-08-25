@@ -14,13 +14,9 @@ namespace Squirrel.Core.BLL.Services
         private readonly SquirrelCoreContext _context;
         private readonly IMapper _mapper;
 
-        public ProjectService(SquirrelCoreContext context, IMapper mapper): base(context, mapper)
-        {
-            _context = context;
-            _mapper = mapper;
-        }
+        public ProjectService(SquirrelCoreContext context, IMapper mapper): base(context, mapper){ }
 
-        public async Task<ProjectDto> AddProject(ProjectDto projectDto)
+        public async Task<ProjectDto> AddProjectAsync(ProjectDto projectDto)
         {
             var projectEntity = _mapper.Map<Project>(projectDto);
             
@@ -33,12 +29,14 @@ namespace Squirrel.Core.BLL.Services
             return _mapper.Map<ProjectDto>(projectEntity);
         }
 
-        public async Task<ProjectDto> UpdateProject(int projectId, ProjectDto projectDto)
+        public async Task<ProjectDto> UpdateProjectAsync(int projectId, ProjectDto projectDto)
         {
             var existingProject = await _context.Projects.FindAsync(projectId);
 
             if (existingProject == null)
-                return _mapper.Map<ProjectDto>(existingProject);
+            {
+                return null;
+            }
             
             existingProject.Name = projectDto.Name; 
             existingProject.Engine = (int)projectDto.Engine;
@@ -47,11 +45,13 @@ namespace Squirrel.Core.BLL.Services
             return _mapper.Map<ProjectDto>(existingProject);
         }
 
-        public async Task<ProjectDto> DeleteProject(int projectId)
+        public async Task<ProjectDto> DeleteProjectAsync(int projectId)
         {
             var project = await _context.Projects.FindAsync(projectId);
             if (project == null)
-                return _mapper.Map<ProjectDto>(project);
+            {
+                return null;
+            }
                  
             _context.Projects.Remove(project);
             
@@ -60,25 +60,28 @@ namespace Squirrel.Core.BLL.Services
             return _mapper.Map<ProjectDto>(project);
         }
 
-        public async Task<ProjectDto> GetProject(int projectId)
+        public async Task<ProjectDto> GetProjectAsync(int projectId)
         {
             var project = await _context.Projects.FindAsync(projectId);
             if (project == null)
-                return _mapper.Map<ProjectDto>(project);
-            
+            {
+                return null;
+            }            
             var projectDto = _mapper.Map<ProjectDto>(project);
             projectDto.Engine = (EngineEnum)project.Engine;
             
             return projectDto;
         }
 
-        public async Task<List<ProjectDto>> GetAllProjects()
+        public async Task<List<ProjectDto>> GetAllProjectsAsync()
         {
             var projects = await _context.Projects.ToListAsync();
             var projectDtos = _mapper.Map<List<ProjectDto>>(projects);
-            
+
             foreach (var projectDto in projectDtos)
+            {
                 projectDto.Engine = projectDto.Engine;
+            }
 
             return projectDtos;
         }

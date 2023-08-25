@@ -19,7 +19,7 @@ namespace Squirrel.Core.WebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<ProjectDto>> AddProject(ProjectDto projectDto)
         {
-            var addedProject = await _projectService.AddProject(projectDto);
+            var addedProject = await _projectService.AddProjectAsync(projectDto);
             
             return Ok(addedProject);
         }
@@ -27,9 +27,11 @@ namespace Squirrel.Core.WebAPI.Controllers
         [HttpPut("{projectId}")]
         public async Task<ActionResult<ProjectDto>> UpdateProject(int projectId, ProjectDto projectDto)
         {
-            var updatedProject = await _projectService.UpdateProject(projectId, projectDto);
+            var updatedProject = await _projectService.UpdateProjectAsync(projectId, projectDto);
             if (updatedProject == null)
+            {
                 return NotFound();
+            }
             
             return Ok(updatedProject);
         }
@@ -37,19 +39,23 @@ namespace Squirrel.Core.WebAPI.Controllers
         [HttpDelete("{projectId}")]
         public async Task<IActionResult> DeleteProject(int projectId)
         {
-            var deletedProject = await _projectService.DeleteProject(projectId);
+            var deletedProject = await _projectService.DeleteProjectAsync(projectId);
             if (deletedProject == null)
+            {
                 return NotFound();
-
+            }
+            
             return Ok(deletedProject);
         }
 
         [HttpGet("{projectId}")]
         public async Task<ActionResult<ProjectDto>> GetProject(int projectId)
         {
-            var project = await _projectService.GetProject(projectId);
+            var project = await _projectService.GetProjectAsync(projectId);
             if (project == null)
+            {
                 return NotFound();
+            }
             
             return Ok(project);
         }
@@ -57,7 +63,7 @@ namespace Squirrel.Core.WebAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<List<ProjectDto>>> GetAllProjects()
         {
-            var projects = await _projectService.GetAllProjects();
+            var projects = await _projectService.GetAllProjectsAsync();
             return Ok(projects);
         }
     }

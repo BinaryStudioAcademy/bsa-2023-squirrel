@@ -9,7 +9,6 @@ public sealed class ProjectProfile : Profile
 {
     public ProjectProfile()
     {
-        CreateMap<Project, ProjectDto>();
-        CreateMap<ProjectDto, Project>();
+        CreateMap<Project, ProjectDto>().ReverseMap();
     }
 }

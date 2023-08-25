@@ -27,11 +27,6 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IAuthService, AuthService>();
     }
 
-    public static void AddAutoMapper(this IServiceCollection services)
-    {
-        services.AddAutoMapper(Assembly.GetAssembly(typeof(SampleProfile))!);
-    }
-
     public static void AddValidation(this IServiceCollection services)
     {
         services

@@ -17,59 +17,48 @@ namespace Squirrel.Core.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ProjectDTO>> AddProject(ProjectDTO projectDto)
+        public async Task<ActionResult<ProjectDto>> AddProject(ProjectDto projectDto)
         {
-            // TODO: Implement logic to add a project
-            // var addedProject = await _projectService.AddProject(projectDto);
-            // return Ok(addedProject);
-
-            return BadRequest("Not implemented");
+            var addedProject = await _projectService.AddProject(projectDto);
+            
+            return Ok(addedProject);
         }
 
         [HttpPut("{projectId}")]
-        public async Task<ActionResult<ProjectDTO>> UpdateProject(Guid projectId, ProjectDTO projectDto)
+        public async Task<ActionResult<ProjectDto>> UpdateProject(int projectId, ProjectDto projectDto)
         {
-            // TODO: Implement logic to update a project by projectId
-            // var updatedProject = await _projectService.UpdateProject(projectId, projectDto);
-            // return Ok(updatedProject);
-
-            return BadRequest("Not implemented");
+            var updatedProject = await _projectService.UpdateProject(projectId, projectDto);
+            if (updatedProject == null)
+                return NotFound();
+            
+            return Ok(updatedProject);
         }
 
         [HttpDelete("{projectId}")]
-        public async Task<IActionResult> DeleteProject(Guid projectId)
+        public async Task<IActionResult> DeleteProject(int projectId)
         {
-            // TODO: Implement logic to delete a project by projectId
-            // await _projectService.DeleteProject(projectId);
-            // return NoContent();
+            var deletedProject = await _projectService.DeleteProject(projectId);
+            if (deletedProject == null)
+                return NotFound();
 
-            return BadRequest("Not implemented");
+            return Ok(deletedProject);
         }
 
         [HttpGet("{projectId}")]
-        public async Task<ActionResult<ProjectDTO>> GetProject(Guid projectId)
+        public async Task<ActionResult<ProjectDto>> GetProject(int projectId)
         {
-            // TODO: Implement logic to get a project by projectId
-            // var project = await _projectService.GetProject(projectId);
-            // return Ok(project);
-
-            return BadRequest("Not implemented");
+            var project = await _projectService.GetProject(projectId);
+            if (project == null)
+                return NotFound();
+            
+            return Ok(project);
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ProjectDTO>>> GetAllProjects()
+        public async Task<ActionResult<List<ProjectDto>>> GetAllProjects()
         {
-            // var projects = await _context.Projects.ToListAsync();
-            // var projectDtos = _mapper.Map<List<ProjectDTO>>(projects);
-
-            // foreach (var projectDto in projectDtos)
-            // {
-            //     projectDto.Engine = (EngineEnum)projectDto.Engine;
-            // }
-
-            // return projectDtos;
-
-            throw new NotImplementedException();
+            var projects = await _projectService.GetAllProjects();
+            return Ok(projects);
         }
     }
 }

@@ -10,6 +10,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Squirrel.Core.Common.JWT;
+using Squirrel.Core.WebAPI.Validators.Project;
 using Squirrel.Core.WebAPI.Validators.Sample;
 
 namespace Squirrel.Core.WebAPI.Extensions;
@@ -31,6 +32,7 @@ public static class ServiceCollectionExtensions
     public static void AddAutoMapper(this IServiceCollection services)
     {
         services.AddAutoMapper(Assembly.GetAssembly(typeof(SampleProfile)));
+        services.AddAutoMapper(Assembly.GetAssembly(typeof(ProjectProfile)));
     }
 
     public static void AddValidation(this IServiceCollection services)
@@ -38,6 +40,10 @@ public static class ServiceCollectionExtensions
         services
             .AddControllers()
             .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<NewSampleDtoValidator>());
+
+        services
+            .AddControllers()
+            .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<ProjectDtoValidator>());
     }
 
     public static void AddSquirrelCoreContext(this IServiceCollection services, IConfiguration configuration)

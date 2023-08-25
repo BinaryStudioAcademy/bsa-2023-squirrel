@@ -37,23 +37,26 @@ export class CreateProjectModalComponent implements OnInit {
     }
 
     createProject(): void {
-        if (this.projectForm.valid) {
-            const newProject: ProjectDto = {
-                name: this.projectForm.value.projectName,
-                engine: this.projectForm.value.selectedEngine,
-            };
-
-            this.projectService.addProject(newProject).subscribe(
-                (createdProject: ProjectDto) => {
-                    this.dialogRef.close(createdProject);
-                    this.projectCreated.emit(newProject);
-                },
-                (error: any) => {
-                    console.error('Error creating project:', error);
-                },
-            );
+        if (!this.projectForm.valid) {
+            return;
         }
+
+        const newProject: ProjectDto = {
+            name: this.projectForm.value.projectName,
+            engine: this.projectForm.value.selectedEngine,
+        };
+
+        this.projectService.addProject(newProject).subscribe(
+            (createdProject: ProjectDto) => {
+                this.dialogRef.close(createdProject);
+                this.projectCreated.emit(newProject);
+            },
+            (error: any) => {
+                console.error('Error creating project:', error);
+            },
+        );
     }
+
 
     close(): void {
         this.dialogRef.close();

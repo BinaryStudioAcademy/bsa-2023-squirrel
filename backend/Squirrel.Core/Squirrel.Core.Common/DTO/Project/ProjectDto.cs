@@ -2,7 +2,7 @@
 
 namespace Squirrel.Core.Common.DTO.Projects
 {
-    public sealed class ProjectDTO
+    public sealed class ProjectDto
     {
         public string Name { get; set; }
         public EngineEnum Engine { get; set; }

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { environment } from '../../environments/environment';
-import { ExternalAuthDto } from '../models/auth/external-auth-dto';
+import { GoogleAuthDto } from '../models/auth/google-auth-dto';
 import { UserAuthDto } from '../models/auth/user-auth-dto';
 
 @Injectable({
@@ -25,8 +25,8 @@ export class ExternalAuthService {
         this.router.navigate(['/login']);
     };
 
-    public validateGoogleAuth(credentials: string) {
-        const auth: ExternalAuthDto = { idToken: credentials };
+    public validateGoogleAuth(token: string) {
+        const auth: GoogleAuthDto = { idToken: token };
 
         return this.http.post<UserAuthDto>(`${this.APIUrl}/api/auth/login/google`, auth).subscribe({
             next: (data: UserAuthDto) => {

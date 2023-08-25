@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { environment } from '@env/environment';
 import { ValidationsFn } from '@shared/helpers/validations-fn';
@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
     public loginForm: FormGroup = new FormGroup({});
 
     // eslint-disable-next-line no-empty-function
-    constructor(private fb: FormBuilder, private externalAuthService: ExternalAuthService, private elRef: ElementRef) {}
+    constructor(private fb: FormBuilder, private externalAuthService: ExternalAuthService) {}
 
     ngOnInit(): void {
         this.initializeForm();

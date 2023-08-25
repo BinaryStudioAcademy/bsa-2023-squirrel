@@ -20,7 +20,7 @@ namespace Squirrel.Core.WebAPI.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static void RegisterCustomServices(this IServiceCollection services, IConfiguration configuration)
+    public static void RegisterCustomServices(this IServiceCollection services)
     {
         services
             .AddControllers()

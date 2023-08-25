@@ -14,4 +14,4 @@ WORKDIR /src
 COPY init.sql ./init.sql
 
 # Start SQL Server
-RUN (/opt/mssql/bin/sqlservr --accept-eula &) | grep -q "Service Broker manager has started" && /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P abcDEF123# -i ${PWD}/init.sql
+RUN (/opt/mssql/bin/sqlservr ${ACCEPT_EULA} &) | grep -q "Service Broker manager has started" && /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P ${SA_PASSWORD} -i ${PWD}/init.sql

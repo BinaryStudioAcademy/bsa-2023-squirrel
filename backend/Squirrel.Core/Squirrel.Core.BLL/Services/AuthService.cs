@@ -58,13 +58,21 @@ public sealed class AuthService : BaseService, IAuthService
     }
 
     public async Task<RefreshedAccessTokenDto> LoginAsync(UserLoginDto userLoginDto)
-    {
-        // TODO: Find user in database by his email and get user info. Exception when not found or invalid credentials.
-        // Dummy user info.
-        var userId = 0;
-        var username = "username";
+    { 
+        var userEntity = await _context.Users
+            .FirstOrDefaultAsync(u => u.Email == userLoginDto.Email);
 
-        return await GenerateNewAccessTokenAsync(userId, username, userLoginDto.Email);
+        if (userEntity == null)
+        {
+            throw new NotFoundException(nameof(User));
+        }
+
+        if (!SecurityUtils.ValidatePassword(userLoginDto.Password, userEntity.Password, userEntity.Salt))
+        {
+            throw new InvalidUsernameOrPasswordException();
+        }
+
+        return await GenerateNewAccessTokenAsync(userEntity.Id, userEntity.Username, userLoginDto.Email);
     }
 
     public async Task<RefreshedAccessTokenDto> RegisterAsync(UserRegisterDto userRegisterDto)

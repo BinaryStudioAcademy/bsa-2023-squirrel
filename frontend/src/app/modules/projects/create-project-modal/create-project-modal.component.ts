@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import { NotificationService } from '@core/services/notification.service';
 import { ProjectService } from '@core/services/project.service';
 
 import { EngineEnum } from '../../../models/projects/engine-enum';
@@ -22,6 +23,7 @@ export class CreateProjectModalComponent implements OnInit {
         private fb: FormBuilder,
         private projectService: ProjectService,
         public dialogRef: MatDialogRef<CreateProjectModalComponent>,
+        private notificationService: NotificationService,
         // eslint-disable-next-line no-empty-function
     ) {}
 
@@ -49,10 +51,11 @@ export class CreateProjectModalComponent implements OnInit {
         this.projectService.addProject(newProject).subscribe(
             (createdProject: ProjectDto) => {
                 this.dialogRef.close(createdProject);
+                this.notificationService.info('Project created successfully');
                 this.projectCreated.emit(newProject);
             },
-            (error: any) => {
-                console.error('Error creating project:', error);
+            () => {
+                this.notificationService.error('Failed to create project');
             },
         );
     }

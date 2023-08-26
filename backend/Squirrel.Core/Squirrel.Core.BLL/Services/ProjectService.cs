@@ -11,9 +11,6 @@ namespace Squirrel.Core.BLL.Services
 {
     public class ProjectService : BaseService, IProjectService
     {
-        private readonly SquirrelCoreContext _context;
-        private readonly IMapper _mapper;
-
         public ProjectService(SquirrelCoreContext context, IMapper mapper): base(context, mapper){ }
 
         public async Task<ProjectDto> AddProjectAsync(ProjectDto projectDto)

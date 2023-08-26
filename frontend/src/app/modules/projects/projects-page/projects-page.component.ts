@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { NotificationService } from '@core/services/notification.service';
 import { ProjectService } from '@core/services/project.service';
 import { CreateProjectModalComponent } from '@modules/projects/create-project-modal/create-project-modal.component';
 
@@ -16,6 +17,7 @@ export class ProjectsPageComponent implements OnInit {
     constructor(
         private projectService: ProjectService,
         public dialog: MatDialog,
+        private notificationService: NotificationService,
         // eslint-disable-next-line no-empty-function
     ) {}
 
@@ -28,6 +30,9 @@ export class ProjectsPageComponent implements OnInit {
             (projects: ProjectDto[]) => {
                 this.projects = projects;
             },
+            () => {
+                this.notificationService.error('Failed to load projects');
+            },
         );
     }
 
@@ -39,12 +44,6 @@ export class ProjectsPageComponent implements OnInit {
 
         dialogRef.componentInstance.projectCreated.subscribe((createdProject: ProjectDto) => {
             this.projects.push(createdProject);
-        });
-
-        dialogRef.afterClosed().subscribe((result) => {
-            if (result) {
-                this.loadProjects();
-            }
         });
     }
 }

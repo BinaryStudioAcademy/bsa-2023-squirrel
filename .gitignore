@@ -397,3 +397,6 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 backend/.idea/
+
+# .exe files of ConsoleApp
+ExecutableFiles/

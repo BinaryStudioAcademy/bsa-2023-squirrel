@@ -1,7 +1,15 @@
+/* eslint-disable no-empty-function */
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { BaseComponent } from '@core/base/base.component';
+import { AuthService } from '@core/services/auth.service';
+import { NotificationService } from '@core/services/notification.service';
+import { SpinnerService } from '@core/services/spinner.service';
 import { ValidationsFn } from '@shared/helpers/validations-fn';
+import { takeUntil } from 'rxjs';
 
+import { ErrorDetailsDto } from 'src/app/models/error/error-details-dto';
 import { UserRegisterDto } from 'src/app/models/user/user-register-dto';
 
 @Component({
@@ -9,13 +17,20 @@ import { UserRegisterDto } from 'src/app/models/user/user-register-dto';
     templateUrl: './registration.component.html',
     styleUrls: ['./registration.component.sass'],
 })
-export class RegistrationComponent implements OnInit {
+export class RegistrationComponent extends BaseComponent implements OnInit {
     public registerForm: FormGroup = new FormGroup({});
 
-    // eslint-disable-next-line no-empty-function
-    constructor(private fb: FormBuilder) {}
+    constructor(
+        private fb: FormBuilder,
+        private router: Router,
+        private spinner: SpinnerService,
+        private authService: AuthService,
+        private notificationService: NotificationService,
+    ) {
+        super();
+    }
 
-    ngOnInit() {
+    public ngOnInit() {
         this.initializeForm();
     }
 
@@ -56,6 +71,8 @@ export class RegistrationComponent implements OnInit {
     }
 
     public register() {
+        this.spinner.show();
+
         const userRegistrationData: UserRegisterDto = {
             username: this.registerForm.value.username,
             email: this.registerForm.value.email,
@@ -64,8 +81,17 @@ export class RegistrationComponent implements OnInit {
             password: this.registerForm.value.password,
         };
 
-        // temporary solution
-        // eslint-disable-next-line no-console
-        console.log(userRegistrationData);
+        this.authService
+            .register(userRegistrationData)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe(
+                () => {
+                    this.router.navigateByUrl('/main');
+                },
+                (err: ErrorDetailsDto) => {
+                    this.spinner.hide();
+                    this.notificationService.error(err.message);
+                },
+            );
     }
 }

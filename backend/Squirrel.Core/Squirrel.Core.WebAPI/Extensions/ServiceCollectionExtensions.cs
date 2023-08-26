@@ -43,11 +43,6 @@ public static class ServiceCollectionExtensions
             new MongoService<Sample>(s.GetRequiredService<IOptions<MongoDatabaseConnectionSettings>>(), "SampleCollection"));
     }
 
-    public static void AddAutoMapper(this IServiceCollection services)
-    {
-        services.AddAutoMapper(Assembly.GetAssembly(typeof(SampleProfile)));
-    }
-
     public static void AddValidation(this IServiceCollection services)
     {
         services

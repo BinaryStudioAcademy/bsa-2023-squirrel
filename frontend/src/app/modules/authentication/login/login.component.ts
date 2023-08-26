@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '@core/services/auth.service';
 import { environment } from '@env/environment';
 import { ValidationsFn } from '@shared/helpers/validations-fn';
 
-import { ExternalAuthService } from 'src/app/services/external-auth.service';
-
-import { UserLoginDto } from '../../../models/auth/user-login-dto';
+import { UserLoginDto } from 'src/app/models/user/user-login-dto';
 
 declare const google: any;
 
@@ -18,7 +17,7 @@ export class LoginComponent implements OnInit {
     public loginForm: FormGroup = new FormGroup({});
 
     // eslint-disable-next-line no-empty-function
-    constructor(private fb: FormBuilder, private externalAuthService: ExternalAuthService) {}
+    constructor(private fb: FormBuilder, private externalAuthService: AuthService) {}
 
     ngOnInit(): void {
         this.initializeForm();

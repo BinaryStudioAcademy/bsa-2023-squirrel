@@ -14,7 +14,6 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 @NgModule({
     imports: [
         CommonModule,
-        RouterModule,
         FormsModule,
         ReactiveFormsModule,
         RouterModule,
@@ -24,7 +23,6 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
     declarations: [LoadingSpinnerComponent, NotFoundComponent, ButtonComponent, SidebarComponent, InputComponent, BarrierComponent],
     exports: [
         CommonModule,
-        RouterModule,
         FormsModule,
         ReactiveFormsModule,
         RouterModule,

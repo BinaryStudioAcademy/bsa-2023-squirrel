@@ -1,3 +1,4 @@
+using Squirrel.Core.BLL.Extensions;
 using Squirrel.Core.WebAPI.Extensions;
 using Squirrel.Core.WebAPI.Middlewares;
 

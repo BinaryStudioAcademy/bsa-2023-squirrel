@@ -1,4 +1,8 @@
-﻿namespace Squirrel.Core.WebAPI.Middlewares;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using Squirrel.Core.Common.Extensions;
+
+namespace Squirrel.Core.WebAPI.Middlewares;
 
 public class GenericExceptionHandlerMiddleware
 {
@@ -26,14 +30,21 @@ public class GenericExceptionHandlerMiddleware
 
     private static Task HandleException(HttpContext context, Exception exception)
     {
+        var (errorDetails, statusCode) = exception.GetErrorDetailsAndStatusCode();
+        
         context.Response.ContentType = "application/json";
+        context.Response.StatusCode = (int)statusCode;
 
-        context.Response.StatusCode = exception switch
+        return context.Response.WriteAsync(SerializeJson(errorDetails));
+    }
+
+    private static string SerializeJson<T>(T data)
+    {
+        var camelCasePropertiesSetting = new JsonSerializerSettings
         {
-            ArgumentNullException => 400,
-            _ => 500
+            ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
-
-        return context.Response.WriteAsync(exception.Message);
+        
+        return JsonConvert.SerializeObject(data, camelCasePropertiesSetting);
     }
 }

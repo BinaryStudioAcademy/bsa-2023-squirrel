@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProjectListComponent } from './project-list.component';
+import { ProjectCardComponent } from './project-card.component';
 
 // eslint-disable-next-line no-undef
 describe('ProjectListComponent', () => {
-    let component: ProjectListComponent;
-    let fixture: ComponentFixture<ProjectListComponent>;
+    let component: ProjectCardComponent;
+    let fixture: ComponentFixture<ProjectCardComponent>;
 
     // eslint-disable-next-line no-undef
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [ProjectListComponent],
+            declarations: [ProjectCardComponent],
         })
             .compileComponents();
 
-        fixture = TestBed.createComponent(ProjectListComponent);
+        fixture = TestBed.createComponent(ProjectCardComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

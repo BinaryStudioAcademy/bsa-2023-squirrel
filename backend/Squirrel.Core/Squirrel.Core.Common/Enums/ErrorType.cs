@@ -5,5 +5,7 @@ public enum ErrorType
     InvalidEmail = 1,
     InvalidUsername,
     InvalidPassword,
+    NotFound,
+    InvalidEmailOrPassword,
     Internal
 }

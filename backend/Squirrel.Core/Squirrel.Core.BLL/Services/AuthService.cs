@@ -69,7 +69,7 @@ public sealed class AuthService : BaseService, IAuthService
 
         if (!SecurityUtils.ValidatePassword(userLoginDto.Password, userEntity.Password, userEntity.Salt))
         {
-            throw new InvalidUsernameOrPasswordException();
+            throw new InvalidEmailOrPasswordException();
         }
 
         return await GenerateNewAccessTokenAsync(userEntity.Id, userEntity.Username, userLoginDto.Email);

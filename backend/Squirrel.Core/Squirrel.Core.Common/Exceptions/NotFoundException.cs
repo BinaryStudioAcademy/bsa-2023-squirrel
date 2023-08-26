@@ -1,11 +1,15 @@
-﻿namespace Squirrel.Core.Common.Exceptions;
+﻿using System.Net;
+using Squirrel.Core.Common.Enums;
+using Squirrel.Core.Common.Exceptions.Abstract;
 
-public class NotFoundException: Exception
+namespace Squirrel.Core.Common.Exceptions;
+
+public class NotFoundException : RequestException
 {
     public NotFoundException(string name, int id)
-        : base($"Entity {name} with id ({id}) was not found.")
-    {
-    }
+        : base($"Entity {name} with id ({id}) was not found.", ErrorType.NotFound,
+            HttpStatusCode.NotFound) { }
 
-    public NotFoundException(string name) : base($"Entity {name} was not found.") { }
+    public NotFoundException(string name) : base($"Entity {name} was not found.", ErrorType.NotFound,
+        HttpStatusCode.NotFound) { }
 }

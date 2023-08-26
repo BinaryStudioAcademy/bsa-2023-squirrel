@@ -19,9 +19,9 @@ public class SettingController: ControllerBase
     [Route("connect")]
     public IActionResult Post(ConnectionString connectionString)
     {
-        Console.WriteLine(connectionString);
         _connectionFileService.SaveToFile(connectionString);
 
+        //Connection unique ID
         var randomId = Guid.NewGuid();
         return Ok(randomId);
     }

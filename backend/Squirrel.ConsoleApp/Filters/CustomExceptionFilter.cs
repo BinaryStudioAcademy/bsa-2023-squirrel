@@ -4,7 +4,7 @@ using Squirrel.ConsoleApp.Extensions;
 
 namespace Squirrel.ConsoleApp.Filters;
 
-public class CustomExceptionFilter
+public class CustomExceptionFilter: IExceptionFilter
 {
     public void OnException(ExceptionContext context)
     {

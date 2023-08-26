@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.Common.DTO.Auth;
+using Squirrel.Core.Common.DTO.Users;
 
 namespace Squirrel.Core.WebAPI.Controllers;
 
@@ -35,7 +36,7 @@ public sealed class AuthController : ControllerBase
     {
         return Ok(await _authService.LoginAsync(userLoginData));
     }
-    
+
     /// <summary>
     /// Registers new user and generates tokens
     /// </summary>
@@ -56,5 +57,24 @@ public sealed class AuthController : ControllerBase
     public async Task<ActionResult<RefreshedAccessTokenDto>> Post([FromBody] UserRegisterDto userRegisterData)
     {
         return Ok(await _authService.RegisterAsync(userRegisterData));
+    }
+
+    /// <summary>
+    /// Generates user token for login with google tokenId
+    /// </summary>
+    /// <remarks>
+    /// Sample request for login:
+    ///
+    ///     POST /api/auth/login/google
+    ///     {
+    ///        "idToken": "token",
+    ///     }
+    ///
+    /// </remarks>
+    [HttpPost("login/google")]
+    [ProducesResponseType(typeof(AuthUserDTO), StatusCodes.Status200OK)]
+    public async Task<ActionResult<AuthUserDTO>> LoginWithGoogle([FromBody] GoogleToken googleToken)
+    {
+        return Ok(await _authService.AuthorizeWithGoogleAsync(googleToken.IdToken));
     }
 }

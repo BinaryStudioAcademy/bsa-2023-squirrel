@@ -14,6 +14,7 @@ using Squirrel.Core.DAL.Entities;
 using Squirrel.Core.WebAPI.Validators.Sample;
 using System.Reflection;
 using System.Text;
+using Squirrel.Core.Common.DTO.Auth;
 using System.Text.Json.Serialization;
 
 namespace Squirrel.Core.WebAPI.Extensions;
@@ -112,5 +113,15 @@ public static class ServiceCollectionExtensions
                     }
                 };
             });
+    }
+
+    public static void AddAuthenticationSettings(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<AuthenticationSettings>(configuration.GetSection<AuthenticationSettings>());
+    }
+
+    private static IConfigurationSection GetSection<T>(this IConfiguration configuration)
+    {
+        return configuration.GetSection(typeof(T).Name);
     }
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 
 import { AccessTokenDto } from 'src/app/models/auth/access-token-dto';
-import { UserRegisterDto } from 'src/app/models/auth/user-register-dto';
+import { UserRegisterDto } from 'src/app/models/user/user-register-dto';
 
 import { HttpInternalService } from './http-internal.service';
 

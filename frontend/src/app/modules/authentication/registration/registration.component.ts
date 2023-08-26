@@ -10,8 +10,7 @@ import { ValidationsFn } from '@shared/helpers/validations-fn';
 import { takeUntil } from 'rxjs';
 
 import { ErrorDetailsDto } from 'src/app/models/error/error-details-dto';
-
-import { UserRegisterDto } from '../../../models/auth/user-register-dto';
+import { UserRegisterDto } from 'src/app/models/user/user-register-dto';
 
 @Component({
     selector: 'app-registration',

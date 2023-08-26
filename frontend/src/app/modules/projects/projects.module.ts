@@ -6,7 +6,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { CreateProjectModalComponent } from '@modules/projects/create-project-modal/create-project-modal.component';
-import { ProjectCardComponent } from '@modules/projects/project-list/project-card.component';
+import { ProjectCardComponent } from '@modules/projects/project-card/project-card.component';
 import { ProjectsPageComponent } from '@modules/projects/projects-page/projects-page.component';
 import { ProjectsRoutingModule } from '@modules/projects/projects-routing.model';
 import { SharedModule } from '@shared/shared.module';

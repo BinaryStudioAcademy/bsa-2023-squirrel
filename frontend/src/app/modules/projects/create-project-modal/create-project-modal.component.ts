@@ -57,7 +57,7 @@ export class CreateProjectModalComponent implements OnInit {
             () => {
                 this.notificationService.error('Failed to create project');
             },
-        );
+        ).unsubscribe();
     }
 
     close(): void {

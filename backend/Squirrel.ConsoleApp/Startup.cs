@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Squirrel.ConsoleApp.BL.Interfaces;
+using Squirrel.ConsoleApp.BL.Services;
 using Squirrel.ConsoleApp.Filters;
-using Squirrel.ConsoleApp.Interfaces;
-using Squirrel.ConsoleApp.Services;
 
 namespace Squirrel.ConsoleApp;
 

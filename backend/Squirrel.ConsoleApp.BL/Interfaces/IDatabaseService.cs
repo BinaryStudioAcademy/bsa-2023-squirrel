@@ -1,6 +1,6 @@
-﻿using Squirrel.ConsoleApp.Models;
+﻿using Squirrel.ConsoleApp.Models.Models;
 
-namespace Squirrel.ConsoleApp.Interfaces;
+namespace Squirrel.ConsoleApp.BL.Interfaces;
 
 public interface IDatabaseService
 {

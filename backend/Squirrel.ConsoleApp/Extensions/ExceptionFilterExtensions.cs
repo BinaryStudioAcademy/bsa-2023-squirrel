@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using Squirrel.ConsoleApp.Models;
+using Squirrel.ConsoleApp.Models.Models;
 
 namespace Squirrel.ConsoleApp.Extensions;
 

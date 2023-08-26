@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
-using Squirrel.ConsoleApp.Interfaces;
-using Squirrel.ConsoleApp.Models;
+using Squirrel.ConsoleApp.BL.Interfaces;
+using Squirrel.ConsoleApp.Models.Models;
 
-namespace Squirrel.ConsoleApp.Services;
+namespace Squirrel.ConsoleApp.BL.Services;
 
 public class ConnectionFileService: IConnectionFileService
 {

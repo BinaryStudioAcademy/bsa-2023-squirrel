@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ProjectCardComponent } from './project-card.component';
 
 // eslint-disable-next-line no-undef
-describe('ProjectListComponent', () => {
+describe('ProjectCardComponent', () => {
     let component: ProjectCardComponent;
     let fixture: ComponentFixture<ProjectCardComponent>;
 

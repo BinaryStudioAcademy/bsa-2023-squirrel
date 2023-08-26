@@ -9,7 +9,10 @@ public class ConnectionFileService: IConnectionFileService
     public void CreateEmptyFile()
     {
         var filePath = GetFilePath();
-        File.WriteAllText(filePath, "{}");
+        if (!File.Exists(filePath))
+        {
+            File.WriteAllText(filePath, "{}");
+        }
     }
 
     public ConnectionString ReadFromFile()

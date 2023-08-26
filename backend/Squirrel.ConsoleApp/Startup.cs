@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Squirrel.ConsoleApp.Filters;
 using Squirrel.ConsoleApp.Interfaces;
 using Squirrel.ConsoleApp.Services;
 
@@ -9,8 +10,12 @@ public class Startup
 {
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddControllers();
         services.AddScoped<IConnectionFileService, ConnectionFileService>();
+        
+        services.AddControllers(options =>
+        {
+            options.Filters.Add(typeof(CustomExceptionFilter));
+        });
     }
     
     public void Configure(IApplicationBuilder app)

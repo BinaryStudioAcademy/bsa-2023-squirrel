@@ -7,8 +7,9 @@ import { GoogleAuthDto } from 'src/app/models/auth/google-auth-dto';
 import { UserAuthDto } from 'src/app/models/auth/user-auth-dto';
 import { UserRegisterDto } from 'src/app/models/user/user-register-dto';
 
+import { UserLoginDto } from '../../models/user/user-login-dto';
+
 import { HttpInternalService } from './http-internal.service';
-import {UserLoginDto} from "../../models/user/user-login-dto";
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {

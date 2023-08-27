@@ -8,6 +8,7 @@ import { UserAuthDto } from 'src/app/models/auth/user-auth-dto';
 import { UserRegisterDto } from 'src/app/models/user/user-register-dto';
 
 import { HttpInternalService } from './http-internal.service';
+import {UserLoginDto} from "../../models/user/user-login-dto";
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -42,6 +43,14 @@ export class AuthService {
 
     public register(userRegisterDto: UserRegisterDto): Observable<AccessTokenDto> {
         return this.httpService.postRequest<AccessTokenDto>(`${this.authRoutePrefix}/register`, userRegisterDto).pipe(
+            tap((tokens) => {
+                this.saveTokens(tokens);
+            }),
+        );
+    }
+
+    public login(userLoginDto: UserLoginDto): Observable<AccessTokenDto> {
+        return this.httpService.postRequest<AccessTokenDto>(`${this.authRoutePrefix}/login`, userLoginDto).pipe(
             tap((tokens) => {
                 this.saveTokens(tokens);
             }),

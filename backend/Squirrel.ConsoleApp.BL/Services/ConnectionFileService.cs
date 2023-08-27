@@ -9,7 +9,7 @@ public class ConnectionFileService : IConnectionFileService
 {
     public void CreateEmptyFile()
     {
-        var filePath = GetFilePath();
+        var filePath = ConnectionFilePath;
         if (!File.Exists(filePath))
         {
             File.WriteAllText(filePath, "{}");
@@ -18,26 +18,29 @@ public class ConnectionFileService : IConnectionFileService
 
     public ConnectionString ReadFromFile()
     {
-        var filePath = GetFilePath();
+        var filePath = ConnectionFilePath;
         if (!File.Exists(filePath))
         {
             throw new ConnectionFileNotFound(filePath);
         }
-        
+
         var json = File.ReadAllText(filePath);
         return JsonConvert.DeserializeObject<ConnectionString>(json) ?? throw new JsonReadFailed(filePath);
     }
 
     public void SaveToFile(ConnectionString connectionString)
     {
-        var filePath = GetFilePath();
+        var filePath = ConnectionFilePath;
         string json = JsonConvert.SerializeObject(connectionString, Formatting.Indented);
         File.WriteAllText(filePath, json);
     }
 
-    private string GetFilePath()
+    private string ConnectionFilePath
     {
-        string userFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-        return Path.Combine(userFolder, "squirrel-connection.json");
+        get
+        {
+            string userFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            return Path.Combine(userFolder, "squirrel-connection.json");
+        }
     }
 }

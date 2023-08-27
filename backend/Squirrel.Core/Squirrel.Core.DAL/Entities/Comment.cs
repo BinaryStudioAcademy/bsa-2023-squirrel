@@ -5,9 +5,10 @@ namespace Squirrel.Core.DAL.Entities;
 
 public sealed class Comment : AuditEntity<int>
 {
-    public string Content { get; set; }
+    public string Content { get; set; } = string.Empty;
     public DateTime UpdatedAt { get; set; }
     public CommentedEntity CommentedEntity { get; set; }
+    
     public int CommentedEntityId { get; set; }
 
     public Comment()

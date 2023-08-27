@@ -4,5 +4,5 @@ namespace Squirrel.Core.DAL.Entities;
 
 public sealed class Commit : AuditEntity<int>
 {
-    public string Message { get; set; }
+    public string Message { get; set; } = string.Empty;
 }

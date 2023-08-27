@@ -4,5 +4,5 @@ namespace Squirrel.Core.DAL.Entities;
 
 public sealed class Tag : Entity<int>
 {
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 }

@@ -3,16 +3,16 @@ using Squirrel.Core.DAL.Enums;
 
 namespace Squirrel.Core.DAL.Entities;
 
-public class PullRequest : AuditEntity<int>
+public sealed class PullRequest : AuditEntity<int>
 {
-    public string Title { get; set; }
+    public string Title { get; set; } = string.Empty;
     public PullRequestStatus Status { get; set; }
     public bool IsReviewed { get; set; }
-
+    public DateTime UpdatedAt { get; set; }
+    
     public int ProjectId { get; set; }
     public int SourceBranchId { get; set; }
     public int TargetBranchId { get; set; }
-    public DateTime UpdatedAt { get; set; }
     
     public PullRequest()
     {

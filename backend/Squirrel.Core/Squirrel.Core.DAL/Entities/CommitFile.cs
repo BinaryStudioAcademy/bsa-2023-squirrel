@@ -10,4 +10,5 @@ public sealed class CommitFile : Entity<int>
     public string BlobId { get; set; } = string.Empty;
     
     public int CommitId { get; set; }
+    public Commit Commit { get; set; } = null!;
 }

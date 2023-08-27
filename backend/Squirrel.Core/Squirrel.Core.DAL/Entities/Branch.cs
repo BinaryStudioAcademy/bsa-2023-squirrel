@@ -9,6 +9,7 @@ public sealed class Branch : Entity<int>
     public bool IsActive { get; set; }
     
     public int ProjectId { get; set; }
+    public Project Project { get; set; } = null!;
     public ICollection<CommitParent> CommitParents { get; set; } = new List<CommitParent>();
     public ICollection<BranchCommit> BranchCommits { get; set; } = new List<BranchCommit>();
     public ICollection<PullRequest> PullRequestsFromThisBranch { get; set; } = new List<PullRequest>();

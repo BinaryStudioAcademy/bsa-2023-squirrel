@@ -15,6 +15,7 @@ public sealed class PullRequest : AuditEntity<int>
     public int ProjectId { get; set; }
     public int SourceBranchId { get; set; }
     public int TargetBranchId { get; set; }
+    public Project Project { get; set; } = null!;
     public User Author { get; set; } = null!;
     public Branch SourceBranch { get; set; } = null!;
     public Branch TargetBranch { get; set; } = null!;

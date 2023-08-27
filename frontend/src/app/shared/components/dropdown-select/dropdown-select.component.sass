@@ -1,0 +1,80 @@
+@import "/src/styles/color"
+
+.img
+    width: 44px
+    height: 44px
+    min-width: 44px
+    min-height: 44px
+    border-radius: 50%
+    overflow: hidden
+
+.input-wrapper
+    width: 100%
+
+.vertical-line
+    height: 100%
+    margin: 0px
+    padding: 0px
+    width: 2px
+    background-color: $primary-color
+    display: none
+    position: relative
+
+.dropdown-collection
+    font-size: 12px
+    font-weight: 500
+    display: flex
+    position: relative
+    margin-right: 8px
+
+.dropdown-input
+    background-color: $bg-input
+    box-sizing: border-box
+    border-radius: 7px
+    border: none    
+    position: relative
+    justify-content: space-between
+    padding: 12px 32px 12px 12px
+    display: flex
+    width: 100%
+    cursor: pointer
+    align-items: center
+    background-image: url("/assets/expand_more_24px.svg")
+    background-size: 10px
+    background-position: right 16px bottom 45%
+    background-repeat: no-repeat
+
+.dropdown-list
+    display: none
+    list-style: none
+    border-radius: 10px
+    background: white    
+    box-shadow: 0px 0px 15px -1px fade_out(#F0F3F9, 0.6)
+    position: absolute
+    bottom: -15px
+    left: 0
+    padding: 10px 0px 10px 0px
+    z-index: 10
+    right: 0
+    transform: translateY(100%)
+
+    li
+        display: flex
+        cursor: pointer
+        align-items: center
+
+        .option-container
+            padding: 4px 16px
+            display: flex
+
+        &.selected
+            background: darken($bg-input, 1)            
+            .vertical-line
+                display: block
+
+        &:not(.selected):hover 
+            background: lighten($bg-input, 1)
+
+    &.dropdown-open 
+        display: block
+        

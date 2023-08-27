@@ -1,0 +1,40 @@
+<div class="dropdown-collection" [ngStyle]="{ width: width }">
+    <div class="input-wrapper">
+        <mat-chip-list #chipList>
+            <mat-chip *ngFor="let option of selectedOptions" (click)="select(option)">
+                <span *ngIf="!template" class="dropdown-value" [innerHTML]="sanitize(option)"></span>
+                <span *ngIf="chipTemplate">
+                    <ng-template *ngTemplateOutlet="chipTemplate; context: { $implicit: option }"></ng-template
+                ></span>
+            </mat-chip>
+            <input
+                type="text"
+                [(ngModel)]="input"
+                (ngModelChange)="onInputChanged()"
+                (focus)="toggleDropdown()"
+                [ngStyle]="{ height: height }"
+                class="dropdown-input"
+                aria-haspopup="listbox"
+                aria-labelledby="dropdown-label"
+                #inputTrigger
+                placeholder="{{ placeholder }}"
+                [matChipInputFor]="chipList" />
+        </mat-chip-list>
+    </div>
+    <ul class="dropdown-list" role="listbox" aria-expanded="false" [ngClass]="{ 'dropdown-open': dropdownOpen }">
+        <li
+            *ngFor="let o of filteredOptions"
+            [ngStyle]="{ height: height }"
+            [value]="o"
+            tabindex="0"
+            (click)="select(o)"
+            [ngClass]="{ selected: isSelected(o) }"
+            role="option">
+            <div class="vertical-line"></div>
+            <div class="option-container">
+                <div *ngIf="!template" [innerHTML]="sanitize(o)"></div>
+                <ng-template *ngTemplateOutlet="template; context: { $implicit: o }"></ng-template>
+            </div>
+        </li>
+    </ul>
+</div>

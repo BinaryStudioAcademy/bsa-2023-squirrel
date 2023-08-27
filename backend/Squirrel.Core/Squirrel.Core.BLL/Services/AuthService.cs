@@ -82,7 +82,7 @@ public sealed class AuthService : BaseService, IAuthService
         var newUser = _mapper.Map<User>(userRegisterDto)!;
         var salt = SecurityUtils.GenerateRandomSalt();
         newUser.Salt = salt;
-        newUser.Password = SecurityUtils.HashPassword(newUser.Password, salt);
+        newUser.PasswordHash = SecurityUtils.HashPassword(newUser.PasswordHash, salt);
         var createdUser = (await _context.Users.AddAsync(newUser)).Entity;
         await _context.SaveChangesAsync();
         

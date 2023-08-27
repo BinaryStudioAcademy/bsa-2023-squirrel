@@ -16,6 +16,8 @@ public sealed class PullRequest : AuditEntity<int>
     public int SourceBranchId { get; set; }
     public int TargetBranchId { get; set; }
     public User Author { get; set; } = null!;
+    public Branch SourceBranch { get; set; } = null!;
+    public Branch TargetBranch { get; set; } = null!;
     public ICollection<User> Reviewers = new List<User>();
     public ICollection<PullRequestReviewer> PullRequestReviewers { get; set; } = new List<PullRequestReviewer>();
 

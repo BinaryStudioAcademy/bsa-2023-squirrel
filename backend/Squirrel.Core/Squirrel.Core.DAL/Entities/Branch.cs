@@ -1,4 +1,5 @@
 ﻿using Squirrel.Core.DAL.Entities.Common;
+using Squirrel.Core.DAL.Entities.JoinEntities;
 
 namespace Squirrel.Core.DAL.Entities;
 
@@ -8,4 +9,8 @@ public sealed class Branch : Entity<int>
     public bool IsActive { get; set; }
     
     public int ProjectId { get; set; }
+    public ICollection<CommitParent> CommitParents { get; set; } = new List<CommitParent>();
+    public ICollection<BranchCommit> BranchCommits { get; set; } = new List<BranchCommit>();
+    public ICollection<PullRequest> PullRequestsFromThisBranch { get; set; } = new List<PullRequest>();
+    public ICollection<PullRequest> PullRequestsIntoThisBranch { get; set; } = new List<PullRequest>();
 }

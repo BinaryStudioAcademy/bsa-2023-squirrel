@@ -6,6 +6,7 @@ namespace Squirrel.Core.DAL.Context;
 public class SquirrelCoreContext : DbContext
 {
     public DbSet<Sample> Samples => Set<Sample>();
+    public DbSet<User> Users => Set<User>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
     public DbSet<Project> Projects => Set<Project>();
     

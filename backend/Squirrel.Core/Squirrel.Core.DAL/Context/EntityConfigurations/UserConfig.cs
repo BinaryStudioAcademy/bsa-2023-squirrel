@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Squirrel.Core.DAL.Entities;
+using Squirrel.Core.DAL.Entities.JoinEntities;
 
 namespace Squirrel.Core.DAL.Context.EntityConfigurations;
 
@@ -17,5 +18,43 @@ public sealed class UserConfig : IEntityTypeConfiguration<User>
         builder.Property(x => x.PasswordHash).IsRequired().HasMaxLength(100);
         builder.Property(x => x.Salt).IsRequired().HasMaxLength(100);
         builder.Property(x => x.AvatarUrl).HasMaxLength(500);
+
+        builder.HasMany(x => x.Commits)
+               .WithOne(x => x.Author)
+               .HasForeignKey(x => x.CreatedBy)
+               .IsRequired()
+               .OnDelete(DeleteBehavior.NoAction);
+        
+        builder.HasMany(x => x.Comments)
+               .WithOne(x => x.Author)
+               .HasForeignKey(x => x.CreatedBy)
+               .IsRequired()
+               .OnDelete(DeleteBehavior.NoAction);
+        
+        builder.HasMany(x => x.PullRequests)
+               .WithOne(x => x.Author)
+               .HasForeignKey(x => x.CreatedBy)
+               .IsRequired()
+               .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasMany(x => x.ReviewedRequests)
+               .WithMany(x => x.Reviewers)
+               .UsingEntity<PullRequestReviewer>(
+                      l => l.HasOne(x => x.PullRequest)
+                            .WithMany(x => x.PullRequestReviewers)
+                            .HasForeignKey(x => x.PullRequestId),
+                      r => r.HasOne(x => x.User)
+                            .WithMany(x => x.PullRequestReviewers)
+                            .HasForeignKey(x => x.UserId));
+        
+        builder.HasMany(x => x.Projects)
+               .WithMany(x => x.Users)
+               .UsingEntity<UserProject>(
+                      l => l.HasOne(x => x.Project)
+                            .WithMany(x => x.UserProjects)
+                            .HasForeignKey(x => x.ProjectId),
+                      r => r.HasOne(x => x.User)
+                            .WithMany(x => x.UserProjects)
+                            .HasForeignKey(x => x.UserId));
     }
 }

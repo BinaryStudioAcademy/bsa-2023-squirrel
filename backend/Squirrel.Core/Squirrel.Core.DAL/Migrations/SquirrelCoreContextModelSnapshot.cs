@@ -36,7 +36,7 @@ namespace Squirrel.Core.DAL.Migrations
                     b.Property<int?>("CreatedBy")
                         .HasColumnType("int");
 
-                    b.Property<int>("Engine")
+                    b.Property<int>("DbEngine")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")

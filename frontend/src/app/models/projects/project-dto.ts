@@ -1,6 +1,6 @@
-import { EngineEnum } from './engine-enum';
+import { DbEngine } from './db-engine';
 
 export interface ProjectDto {
     name: string;
-    engine: EngineEnum;
+    engine: DbEngine;
 }

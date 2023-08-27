@@ -1,6 +1,6 @@
 ﻿namespace Squirrel.Core.Common.Enums
 {
-    public enum EngineEnum
+    public enum DbEngine
     {
         SqlServer,
         PostgreSQL

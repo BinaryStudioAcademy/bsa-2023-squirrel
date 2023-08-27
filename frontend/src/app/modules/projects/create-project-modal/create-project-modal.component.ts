@@ -3,8 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { NotificationService } from '@core/services/notification.service';
 import { ProjectService } from '@core/services/project.service';
+import { Subject, takeUntil } from 'rxjs';
 
-import { EngineEnum } from '../../../models/projects/engine-enum';
+import { DbEngine } from '../../../models/projects/db-engine';
 import { ProjectDto } from '../../../models/projects/project-dto';
 
 @Component({
@@ -15,14 +16,16 @@ import { ProjectDto } from '../../../models/projects/project-dto';
 export class CreateProjectModalComponent implements OnInit {
     @Output() projectCreated = new EventEmitter<ProjectDto>();
 
-    selectedEngine: EngineEnum = EngineEnum.SqlServer;
+    private unsubscribe$ = new Subject<void>();
+
+    selectedEngine: DbEngine = DbEngine.SqlServer;
 
     projectForm: FormGroup;
 
     constructor(
+        public dialogRef: MatDialogRef<CreateProjectModalComponent>,
         private fb: FormBuilder,
         private projectService: ProjectService,
-        public dialogRef: MatDialogRef<CreateProjectModalComponent>,
         private notificationService: NotificationService,
         // eslint-disable-next-line no-empty-function
     ) {}
@@ -34,7 +37,7 @@ export class CreateProjectModalComponent implements OnInit {
     createForm() {
         this.projectForm = this.fb.group({
             projectName: ['', Validators.required],
-            selectedEngine: [EngineEnum.SqlServer],
+            selectedEngine: [DbEngine.SqlServer],
         });
     }
 
@@ -48,7 +51,9 @@ export class CreateProjectModalComponent implements OnInit {
             engine: this.projectForm.value.selectedEngine,
         };
 
-        this.projectService.addProject(newProject).subscribe(
+        this.projectService.addProject(newProject).pipe(
+            takeUntil(this.unsubscribe$),
+        ).subscribe(
             (createdProject: ProjectDto) => {
                 this.dialogRef.close(createdProject);
                 this.notificationService.info('Project created successfully');
@@ -57,7 +62,7 @@ export class CreateProjectModalComponent implements OnInit {
             () => {
                 this.notificationService.error('Failed to create project');
             },
-        ).unsubscribe();
+        );
     }
 
     close(): void {

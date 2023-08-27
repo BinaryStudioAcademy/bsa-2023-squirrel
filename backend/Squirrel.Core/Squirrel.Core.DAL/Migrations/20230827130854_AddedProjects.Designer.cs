@@ -12,7 +12,7 @@ using Squirrel.Core.DAL.Context;
 namespace Squirrel.Core.DAL.Migrations
 {
     [DbContext(typeof(SquirrelCoreContext))]
-    [Migration("20230825171625_AddedProjects")]
+    [Migration("20230827130854_AddedProjects")]
     partial class AddedProjects
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,7 +38,7 @@ namespace Squirrel.Core.DAL.Migrations
                     b.Property<int?>("CreatedBy")
                         .HasColumnType("int");
 
-                    b.Property<int>("Engine")
+                    b.Property<int>("DbEngine")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")

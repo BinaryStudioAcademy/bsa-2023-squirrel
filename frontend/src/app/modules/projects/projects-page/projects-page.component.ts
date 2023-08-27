@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { NotificationService } from '@core/services/notification.service';
 import { ProjectService } from '@core/services/project.service';
 import { CreateProjectModalComponent } from '@modules/projects/create-project-modal/create-project-modal.component';
+import { Subject, takeUntil } from 'rxjs';
 
 import { ProjectDto } from '../../../models/projects/project-dto';
 
@@ -14,9 +15,11 @@ import { ProjectDto } from '../../../models/projects/project-dto';
 export class ProjectsPageComponent implements OnInit {
     projects: ProjectDto[] = [];
 
+    private unsubscribe$ = new Subject<void>();
+
     constructor(
-        private projectService: ProjectService,
         public dialog: MatDialog,
+        private projectService: ProjectService,
         private notificationService: NotificationService,
         // eslint-disable-next-line no-empty-function
     ) {}
@@ -26,7 +29,9 @@ export class ProjectsPageComponent implements OnInit {
     }
 
     loadProjects(): void {
-        this.projectService.getAllProjects().subscribe(
+        this.projectService.getAllProjects().pipe(
+            takeUntil(this.unsubscribe$),
+        ).subscribe(
             (projects: ProjectDto[]) => {
                 this.projects = projects;
             },

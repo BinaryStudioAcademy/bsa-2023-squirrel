@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Squirrel.Core.Common.DTO.Projects;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.BLL.Services.Abstract;
-using Squirrel.Core.Common.Enums;
+using Squirrel.Core.Common.Exceptions;
 using Squirrel.Core.DAL.Context;
 using Squirrel.Core.DAL.Entities;
 
@@ -17,9 +17,9 @@ namespace Squirrel.Core.BLL.Services
         {
             var projectEntity = _mapper.Map<Project>(projectDto);
             
-            projectEntity.Engine = (int)projectDto.Engine;
+            projectEntity.DbEngine = projectDto.DbEngine;
             
-            _context.Projects.Add(projectEntity);
+            await _context.Projects.AddAsync(projectEntity);
             
             await _context.SaveChangesAsync();
             
@@ -30,13 +30,13 @@ namespace Squirrel.Core.BLL.Services
         {
             var existingProject = await _context.Projects.FindAsync(projectId);
 
-            if (existingProject == null)
+            if (existingProject is null)
             {
-                return null;
+                throw new EntityNotFoundException();
             }
             
             existingProject.Name = projectDto.Name; 
-            existingProject.Engine = (int)projectDto.Engine;
+            existingProject.DbEngine = projectDto.DbEngine;
             
             await _context.SaveChangesAsync();
             return _mapper.Map<ProjectDto>(existingProject);
@@ -45,9 +45,9 @@ namespace Squirrel.Core.BLL.Services
         public async Task<ProjectDto> DeleteProjectAsync(int projectId)
         {
             var project = await _context.Projects.FindAsync(projectId);
-            if (project == null)
+            if (project is null)
             {
-                return null;
+                throw new EntityNotFoundException();
             }
                  
             _context.Projects.Remove(project);
@@ -60,12 +60,12 @@ namespace Squirrel.Core.BLL.Services
         public async Task<ProjectDto> GetProjectAsync(int projectId)
         {
             var project = await _context.Projects.FindAsync(projectId);
-            if (project == null)
+            if (project is null)
             {
-                return null;
+                throw new EntityNotFoundException();
             }            
             var projectDto = _mapper.Map<ProjectDto>(project);
-            projectDto.Engine = (EngineEnum)project.Engine;
+            projectDto.DbEngine = project.DbEngine;
             
             return projectDto;
         }
@@ -77,7 +77,7 @@ namespace Squirrel.Core.BLL.Services
 
             foreach (var projectDto in projectDtos)
             {
-                projectDto.Engine = projectDto.Engine;
+                projectDto.DbEngine = projectDto.DbEngine;
             }
 
             return projectDtos;

@@ -8,6 +8,6 @@ public class ProjectDtoValidator : AbstractValidator<ProjectDto>
     public ProjectDtoValidator()
     {
         RuleFor(u => u.Name)!.NotNull();
-        RuleFor(u => u.Engine)!.NotNull();
+        RuleFor(u => u.DbEngine)!.NotNull();
     }
 }

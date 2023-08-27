@@ -19,52 +19,31 @@ namespace Squirrel.Core.WebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<ProjectDto>> AddProject(ProjectDto projectDto)
         {
-            var addedProject = await _projectService.AddProjectAsync(projectDto);
-            
-            return Ok(addedProject);
+            return Ok(await _projectService.AddProjectAsync(projectDto));
         }
 
         [HttpPut("{projectId}")]
         public async Task<ActionResult<ProjectDto>> UpdateProject(int projectId, ProjectDto projectDto)
         {
-            var updatedProject = await _projectService.UpdateProjectAsync(projectId, projectDto);
-            if (updatedProject == null)
-            {
-                return NotFound();
-            }
-            
-            return Ok(updatedProject);
+            return Ok(await _projectService.UpdateProjectAsync(projectId, projectDto));
         }
 
         [HttpDelete("{projectId}")]
         public async Task<IActionResult> DeleteProject(int projectId)
         {
-            var deletedProject = await _projectService.DeleteProjectAsync(projectId);
-            if (deletedProject == null)
-            {
-                return NotFound();
-            }
-            
-            return Ok(deletedProject);
+            return Ok(await _projectService.DeleteProjectAsync(projectId));
         }
 
         [HttpGet("{projectId}")]
         public async Task<ActionResult<ProjectDto>> GetProject(int projectId)
         {
-            var project = await _projectService.GetProjectAsync(projectId);
-            if (project == null)
-            {
-                return NotFound();
-            }
-            
-            return Ok(project);
+            return Ok(await _projectService.GetProjectAsync(projectId));
         }
 
         [HttpGet]
         public async Task<ActionResult<List<ProjectDto>>> GetAllProjects()
         {
-            var projects = await _projectService.GetAllProjectsAsync();
-            return Ok(projects);
+            return Ok(await _projectService.GetAllProjectsAsync());
         }
     }
 }

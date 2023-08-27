@@ -8,10 +8,10 @@ public sealed class RefreshTokenConfig : IEntityTypeConfiguration<RefreshToken>
 {
     public void Configure(EntityTypeBuilder<RefreshToken> builder)
     {
-        builder.Property(x => x.Token)
-               .IsRequired()
-               .HasMaxLength(500);
+        builder.Property(x => x.Token).IsRequired().HasMaxLength(500);
         builder.Property(x => x.ExpiresAt).IsRequired();
+        builder.Property(x => x.CreatedAt).IsRequired();
+        
         builder.HasOne(x => x.User);
     }
 }

@@ -7,6 +7,7 @@ import { ToastrModule } from 'ngx-toastr';
 
 import { MaterialModule } from '../material/material.module';
 
+import { BarrierComponent } from './components/barrier/barrier.component';
 import { ButtonComponent } from './components/button/button.component';
 import { DropdownSelectComponent } from './components/dropdown-select/dropdown-select.component';
 import { InputComponent } from './components/input/input.component';
@@ -16,7 +17,6 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 @NgModule({
     imports: [
         CommonModule,
-        RouterModule,
         FormsModule,
         ReactiveFormsModule,
         RouterModule,
@@ -32,6 +32,7 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
         SidebarComponent,
         InputComponent,
         DropdownSelectComponent,
+        BarrierComponent,
     ],
     exports: [
         CommonModule,
@@ -47,6 +48,7 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
         DropdownSelectComponent,
         ToastrModule,
         InputComponent,
+        BarrierComponent,
     ],
 })
 export class SharedModule {}

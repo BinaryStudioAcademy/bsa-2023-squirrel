@@ -4,7 +4,8 @@ import { SpinnerService } from '@core/services/spinner.service';
 
 @Component({
     selector: 'app-root',
-    template: '<app-loading-spinner></app-loading-spinner><router-outlet></router-outlet>',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.sass'],
 })
 export class AppComponent {
     constructor(private router: Router, private spinner: SpinnerService) {

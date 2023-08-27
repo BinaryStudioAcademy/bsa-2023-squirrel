@@ -14,6 +14,7 @@ using Squirrel.Core.DAL.Entities;
 using Squirrel.Core.WebAPI.Validators.Sample;
 using System.Reflection;
 using System.Text;
+using Squirrel.Core.Common.DTO.Auth;
 using System.Text.Json.Serialization;
 
 namespace Squirrel.Core.WebAPI.Extensions;
@@ -40,11 +41,6 @@ public static class ServiceCollectionExtensions
 
         services.AddTransient<IMongoService<Sample>>(s =>
             new MongoService<Sample>(s.GetRequiredService<IOptions<MongoDatabaseConnectionSettings>>(), "SampleCollection"));
-    }
-
-    public static void AddAutoMapper(this IServiceCollection services)
-    {
-        services.AddAutoMapper(Assembly.GetAssembly(typeof(SampleProfile)));
     }
 
     public static void AddValidation(this IServiceCollection services)
@@ -117,5 +113,15 @@ public static class ServiceCollectionExtensions
                     }
                 };
             });
+    }
+
+    public static void AddAuthenticationSettings(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<AuthenticationSettings>(configuration.GetSection<AuthenticationSettings>());
+    }
+
+    private static IConfigurationSection GetSection<T>(this IConfiguration configuration)
+    {
+        return configuration.GetSection(typeof(T).Name);
     }
 }

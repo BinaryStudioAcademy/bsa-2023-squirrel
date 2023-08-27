@@ -1,13 +1,23 @@
 
+:: Setting common parameters
 SET outputDir=.\ExecutableFiles
 SET exeFileName=Squirrel.ConsoleApp
 SET exeCustomFileNamePrefix=Squirrel
 SET pathToSln=.\backend\Squirrel.ConsoleApp.sln
 
+
+:: Script body
 del /s /q "%outputDir%"
 
-dotnet publish "%pathToSln%" -r win-x64 -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:PublishTrimmed=true -p:EnableCompressionInSingleFile=true --output "%outputDir%"
-ren "%outputDir%\%exeFileName%.exe" "%exeCustomFileNamePrefix%-win-x64.exe"
+call :PublishApp win-x64
+call :PublishApp win-x86
 
-dotnet publish "%pathToSln%" -r win-x86 -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:PublishTrimmed=true -p:EnableCompressionInSingleFile=true --output "%outputDir%"
-ren "%outputDir%\%exeFileName%.exe" "%exeCustomFileNamePrefix%-win-x86.exe"
+exit /b
+
+
+:: Subroutine description
+:PublishApp
+set architecture=%1
+
+dotnet publish "%pathToSln%" -r %architecture% -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:PublishTrimmed=true -p:EnableCompressionInSingleFile=true --output "%outputDir%"
+ren "%outputDir%\%exeFileName%.exe" "%exeCustomFileNamePrefix%-%architecture%.exe"

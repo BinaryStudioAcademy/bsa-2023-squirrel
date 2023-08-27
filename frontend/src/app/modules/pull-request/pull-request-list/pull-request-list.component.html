@@ -1,18 +1,35 @@
 <div class="rounded-container">
     <h5>Pull Request</h5>
     <div class="actions">
-        <div class="search-input">
-            <app-input [label]="''" [formControl]="$any(searchForm.controls['search'])"> </app-input>
+        <app-input [label]="''" [formControl]="$any(searchForm.controls['search'])"> </app-input>
+        <app-dropdown-select
+            width="194px"
+            placeholder="Branch type"
+            [options]="dropdownItems"
+            (valueChange)="onBranchTypeSelectionChange($event)">
+        </app-dropdown-select>
+        <app-dropdown-select
+            [width]="'194px'"
+            [placeholder]="'Author'"
+            [options]="dropdownAuthors"
+            [template]="usertemplate"
+            [chipTemplate]="chiptemplate"
+            [filterPredicate]="filterUsers"
+            (valueChange)="onAuthorSelectionChange($event)">
+        </app-dropdown-select>
+        <ng-template #usertemplate let-item>
+            <div class="user-container">
+                <img src="{{ item.avatarUrl }}" />
+                <p>{{ item.firstName + ' ' + item.lastName }} {{ item.userName ? '(' + item.userName + ')' : '' }}</p>
+            </div>
+        </ng-template>
+        <ng-template #chiptemplate let-item>
+            <p>{{ item.email }}</p>
+        </ng-template>
+        <div class="checkbox">
+            <input type="checkbox" id="reviewing" />
+            <label for="reviewing">I'm reviewing</label>
         </div>
-        <select>
-            <option>Open</option>
-        </select>
-        <select>
-            <option>Author</option>
-        </select>
-        <select>
-            <option>Target branch</option>
-        </select>
     </div>
     <div class="table">
         <div class="table-headers">

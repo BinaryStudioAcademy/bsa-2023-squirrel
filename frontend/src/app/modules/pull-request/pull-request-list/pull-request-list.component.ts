@@ -12,14 +12,61 @@ import { User } from 'src/app/models/user/user';
     styleUrls: ['./pull-request-list.component.sass'],
 })
 export class PullRequestListComponent {
+    public dropdownItems: string[];
+
+    public dropdownAuthors: User[];
+
     public pullRequests: PullRequest[];
 
     public searchForm: FormGroup = new FormGroup({});
 
     constructor(private fb: FormBuilder) {
+        this.dropdownItems = this.getBranchTypes();
         this.searchForm = this.fb.group({
             search: ['', []],
         });
+
+        this.pullRequests = this.getPullRequests();
+        this.dropdownAuthors = this.getAuthors();
+    }
+
+    getBranchTypes() {
+        // TODO: fetch data from server, remove placeholder data
+        return ['Open', 'Merged', 'Closed'];
+    }
+
+    getAuthors() {
+        // TODO: fetch data from server, remove placeholder data
+        const user = {
+            id: 1,
+            avatarUrl: 'https://picsum.photos/200',
+            email: 'test@test.test',
+            firstName: 'John',
+            lastName: 'Smith',
+            userName: 'Johnny',
+        } as User;
+        const user2 = {
+            id: 2,
+            avatarUrl: 'https://picsum.photos/200',
+            email: 'test@test.test',
+            firstName: 'Test',
+            lastName: 'Smith',
+            userName: '',
+        } as User;
+        const user3 = {
+            id: 3,
+            avatarUrl: 'https://picsum.photos/200',
+            email: 'test@test.test',
+            firstName: 'Test',
+            lastName: 'Smith',
+            userName: 'Johnny',
+        } as User;
+
+        return [user, user2, user3];
+    }
+
+    getPullRequests() {
+        // TODO: fetch data from server, remove placeholder data
         const user = {
             id: 1,
             avatarUrl: 'https://picsum.photos/200',
@@ -58,6 +105,29 @@ export class PullRequestListComponent {
             reviewers: [user, user, user, user],
         } as PullRequest;
 
-        this.pullRequests = [pullRequest, pullRequest, pullRequest, pullRequest, pullRequest, pullRequest, pullRequest];
+        return [pullRequest, pullRequest, pullRequest, pullRequest, pullRequest, pullRequest, pullRequest];
+    }
+
+    filterUsers(item: any, value: string) {
+        const lowerValue = value.toLowerCase();
+        const fullName = `${item.firstName} ${item.lastName}`;
+        let result = fullName.toLowerCase().indexOf(lowerValue) >= 0;
+
+        result = result || item.userName.toLowerCase().indexOf(lowerValue) >= 0;
+        result = result || item.email.indexOf(lowerValue) >= 0;
+
+        return result;
+    }
+
+    onAuthorSelectionChange($event: any) {
+        // TODO: add filter logic, remove log
+        // eslint-disable-next-line no-console
+        console.log($event);
+    }
+
+    onBranchTypeSelectionChange($event: any) {
+        // TODO: add filter logic, remove log
+        // eslint-disable-next-line no-console
+        console.log($event);
     }
 }

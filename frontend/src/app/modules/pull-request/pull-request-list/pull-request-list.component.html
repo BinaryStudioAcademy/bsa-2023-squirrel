@@ -1,22 +1,29 @@
 <div class="rounded-container">
     <h5>Pull Request</h5>
     <div class="actions">
-        <app-input [label]="''" [formControl]="$any(searchForm.controls['search'])"> </app-input>
-        <app-dropdown-select
-            width="194px"
-            placeholder="Branch type"
-            [options]="dropdownItems"
-            (valueChange)="onBranchTypeSelectionChange($event)">
-        </app-dropdown-select>
-        <app-dropdown-select
-            [width]="'194px'"
-            [placeholder]="'Author'"
-            [options]="dropdownAuthors"
-            [template]="usertemplate"
-            [chipTemplate]="chiptemplate"
-            [filterPredicate]="filterUsers"
-            (valueChange)="onAuthorSelectionChange($event)">
-        </app-dropdown-select>
+        <div class="inputs-container">
+            <app-input [width]="'100%'" [placeholder]="'Search...'" [formControl]="$any(searchForm.controls['search'])">
+            </app-input>
+            <app-dropdown-select
+                [width]="'100%'"
+                placeholder="Branch type"
+                [options]="dropdownItems"
+                (valueChange)="onBranchTypeSelectionChange($event)">
+            </app-dropdown-select>
+            <app-dropdown-select
+                [width]="'100%'"
+                [placeholder]="'Author'"
+                [options]="dropdownAuthors"
+                [template]="usertemplate"
+                [chipTemplate]="chiptemplate"
+                [filterPredicate]="filterUsers"
+                (valueChange)="onAuthorSelectionChange($event)">
+            </app-dropdown-select>
+        </div>
+        <div class="checkbox">
+            <input type="checkbox" id="reviewing" />
+            <label for="reviewing">I'm reviewing</label>
+        </div>
         <ng-template #usertemplate let-item>
             <div class="user-container">
                 <img src="{{ item.avatarUrl }}" />
@@ -26,10 +33,6 @@
         <ng-template #chiptemplate let-item>
             <p>{{ item.email }}</p>
         </ng-template>
-        <div class="checkbox">
-            <input type="checkbox" id="reviewing" />
-            <label for="reviewing">I'm reviewing</label>
-        </div>
     </div>
     <div class="table">
         <div class="table-headers">

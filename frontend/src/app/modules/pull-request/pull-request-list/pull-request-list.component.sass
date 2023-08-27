@@ -12,13 +12,24 @@
         font-weight: 600
         color: $text-main
 
+.inputs-container
+    @extend .actions
+    align-items: flex-end!important
+    flex-wrap: nowrap !important
+    margin-left: 0px !important 
+    > *
+        min-width: 100px
+
+
 .actions
     margin-left: 11px
+    margin-bottom: 5px
     display: flex
     flex-direction: row
-    align-items: flex-end
-    > * 
-        margin-right: 25px
+    align-items: center
+    flex-wrap: wrap
+    > *:not(last-child)
+        padding-right: 25px
 
 .table
     margin-left: 32px
@@ -65,8 +76,8 @@
     cursor: pointer
     *
         cursor: pointer
-    input
-        background: none
+    label
+        user-select: none
 
 .user-container
     display: flex

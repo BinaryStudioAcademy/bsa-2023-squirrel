@@ -1,5 +1,5 @@
 ﻿using System.Net;
-using Squirrel.ConsoleApp.Models;
+using Squirrel.ConsoleApp.BL.Exceptions;
 using Squirrel.ConsoleApp.Models.Models;
 
 namespace Squirrel.ConsoleApp.Extensions;
@@ -10,8 +10,8 @@ public static class ExceptionFilterExtensions
     {
         return exception switch
         {
-            FileNotFoundException _ => (HttpStatusCode.NotFound, ErrorCode.FileNotFound),
-            InvalidOperationException _ => (HttpStatusCode.NotFound, ErrorCode.FileDamage),
+            ConnectionFileNotFound _ => (HttpStatusCode.NotFound, ErrorCode.FileNotFound),
+            JsonReadFailed _ => (HttpStatusCode.NotFound, ErrorCode.FileDamage),
             _ => (HttpStatusCode.InternalServerError, ErrorCode.General),
         };
     }

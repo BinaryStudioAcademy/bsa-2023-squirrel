@@ -1,10 +1,11 @@
 ﻿using Newtonsoft.Json;
+using Squirrel.ConsoleApp.BL.Exceptions;
 using Squirrel.ConsoleApp.BL.Interfaces;
 using Squirrel.ConsoleApp.Models.Models;
 
 namespace Squirrel.ConsoleApp.BL.Services;
 
-public class ConnectionFileService: IConnectionFileService
+public class ConnectionFileService : IConnectionFileService
 {
     public void CreateEmptyFile()
     {
@@ -18,13 +19,13 @@ public class ConnectionFileService: IConnectionFileService
     public ConnectionString ReadFromFile()
     {
         var filePath = GetFilePath();
-        if (File.Exists(filePath))
+        if (!File.Exists(filePath))
         {
-            var json = File.ReadAllText(filePath);
-            return JsonConvert.DeserializeObject<ConnectionString>(json) ?? throw new InvalidOperationException();
+            throw new ConnectionFileNotFound(filePath);
         }
-
-        throw new FileNotFoundException(filePath);
+        
+        var json = File.ReadAllText(filePath);
+        return JsonConvert.DeserializeObject<ConnectionString>(json) ?? throw new JsonReadFailed(filePath);
     }
 
     public void SaveToFile(ConnectionString connectionString)

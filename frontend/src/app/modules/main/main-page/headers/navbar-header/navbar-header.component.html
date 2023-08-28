@@ -2,9 +2,9 @@
     <nav>
         <ul class="navbar-list">
             <li *ngFor="let navLink of navLinks" class="navbar-item">
-                <a routerLink="{{ navLink.path }}" routerLinkActive="active" class="navbar-link">{{
-                    navLink.displayName
-                }}</a>
+                <a routerLink="{{ navLink.path }}" routerLinkActive="active" class="navbar-link">
+                    {{ navLink.displayName }}
+                </a>
             </li>
         </ul>
     </nav>

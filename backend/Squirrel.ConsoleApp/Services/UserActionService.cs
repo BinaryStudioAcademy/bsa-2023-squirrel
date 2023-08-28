@@ -64,7 +64,7 @@ namespace Squirrel.ConsoleApp.Services
             {
                 Name = name,
                 Type = dataType,
-                Data = string.Join(Environment.NewLine, result.Rows.Select(ConvertRowToString))
+                Data = string.Join(';' + Environment.NewLine, result.Rows.Select(ConvertRowToString))
             };
         }
 

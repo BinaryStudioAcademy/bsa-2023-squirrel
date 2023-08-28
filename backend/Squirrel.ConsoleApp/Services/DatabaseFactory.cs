@@ -39,8 +39,8 @@ public class DatabaseFactory
     {
         return dbType switch
         {
-            DbType.SqlServer => "SELECT TableName FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='BASE TABLE'",
-            DbType.PostgreSQL => "SELECT TableName FROM pg_catalog.pg_tables WHERE schemaname != 'pg_catalog' AND schemaname != 'information_schema'",
+            DbType.SqlServer => "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='BASE TABLE'",
+            DbType.PostgreSQL => "SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname != 'pg_catalog' AND schemaname != 'information_schema'",
             _ => throw new NotImplementedException($"Database type {dbType} is not supported.")
         };
     }

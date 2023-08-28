@@ -1,6 +1,8 @@
-﻿namespace Squirrel.Core.DAL.Entities.JoinEntities;
+﻿using Squirrel.Core.DAL.Entities.Common;
 
-public sealed class PullRequestReviewer
+namespace Squirrel.Core.DAL.Entities.JoinEntities;
+
+public sealed class PullRequestReviewer : Entity<int>
 {
     public int PullRequestId { get; set; }
     public int UserId { get; set; }

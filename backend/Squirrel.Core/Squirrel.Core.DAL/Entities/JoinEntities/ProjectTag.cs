@@ -1,6 +1,8 @@
-﻿namespace Squirrel.Core.DAL.Entities.JoinEntities;
+﻿using Squirrel.Core.DAL.Entities.Common;
 
-public sealed class ProjectTag
+namespace Squirrel.Core.DAL.Entities.JoinEntities;
+
+public sealed class ProjectTag : Entity<int>
 {
     public int TagId { get; set; }
     public int ProjectId { get; set; }

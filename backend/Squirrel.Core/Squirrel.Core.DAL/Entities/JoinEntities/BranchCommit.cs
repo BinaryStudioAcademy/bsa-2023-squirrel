@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Squirrel.Core.DAL.Entities.Common;
 
 namespace Squirrel.Core.DAL.Entities.JoinEntities;
 
-public sealed class BranchCommit
+public sealed class BranchCommit : Entity<int>
 {
     [Required]
     public bool IsMerged { get; set; }

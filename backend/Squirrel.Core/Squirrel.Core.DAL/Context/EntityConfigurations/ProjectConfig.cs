@@ -12,7 +12,7 @@ public sealed class ProjectConfig : IEntityTypeConfiguration<Project>
         builder.Property(x => x.Name).IsRequired().HasMaxLength(50);
         builder.Property(x => x.DbEngine).IsRequired();
         builder.Property(x => x.DefaultBranchId).IsRequired();
-
+        
         builder.HasMany(x => x.Branches)
                .WithOne(x => x.Project)
                .HasForeignKey(x => x.ProjectId)

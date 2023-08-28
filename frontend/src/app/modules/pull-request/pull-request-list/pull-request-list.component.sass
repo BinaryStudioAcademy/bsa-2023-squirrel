@@ -21,13 +21,12 @@
 
 .inputs-container
     @extend .actions
-    align-items: flex-end!important
-    flex-wrap: nowrap !important
-    margin-left: 0px !important 
+    align-items: flex-end
+    flex-wrap: nowrap
+    margin-left: 0px 
     > *
         min-width: 100px
-        max-width: 200px
-
+        margin-bottom: 5px 
 
 .actions
     margin-left: 11px
@@ -90,8 +89,11 @@
 .user-container
     display: flex
     align-items: center
+    
     img
         padding: 5px
+        min-height: 36px
+        min-width: 36px
         width: 36px
         height: 36px
         border-radius: 50%

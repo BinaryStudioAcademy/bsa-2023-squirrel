@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { UserPredicates } from '@shared/helpers/user-predicates';
 
 import { Branch } from 'src/app/models/branch/branch';
 import { Comment } from 'src/app/models/comment/comment';
@@ -32,7 +33,7 @@ export class PullRequestListComponent {
 
     getBranchTypes() {
         // TODO: fetch data from server, remove placeholder data
-        return ['Open', 'Declined', 'Merged'];
+        return ['All', 'Open', 'Declined', 'Merged'];
     }
 
     getAuthors() {
@@ -63,6 +64,10 @@ export class PullRequestListComponent {
         } as User;
 
         return [user, user2, user3];
+    }
+
+    getFullName(item: User) {
+        return `${item.firstName} ${item.lastName} ${item.userName ? `(${item.userName})` : ''}`;
     }
 
     getPullRequests() {
@@ -108,15 +113,8 @@ export class PullRequestListComponent {
         return [pullRequest, pullRequest, pullRequest, pullRequest, pullRequest, pullRequest, pullRequest];
     }
 
-    filterUsers(item: any, value: string) {
-        const lowerValue = value.toLowerCase();
-        const fullName = `${item.firstName} ${item.lastName}`;
-        let result = fullName.toLowerCase().indexOf(lowerValue) >= 0;
-
-        result = result || item.userName.toLowerCase().indexOf(lowerValue) >= 0;
-        result = result || item.email.indexOf(lowerValue) >= 0;
-
-        return result;
+    filter(item: any, value: string) {
+        return UserPredicates.findByFullNameOrUsernameOrEmail(item, value);
     }
 
     onAuthorSelectionChange($event: any) {

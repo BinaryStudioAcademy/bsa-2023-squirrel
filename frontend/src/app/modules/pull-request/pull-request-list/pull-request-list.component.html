@@ -6,16 +6,13 @@
 
     <div class="actions">
         <div class="inputs-container">
-            <app-input
-                [width]="'100%'"
-                [width]="'100px'"
-                [placeholder]="'Search...'"
-                [formControl]="$any(searchForm.controls['search'])">
+            <app-input [width]="'100%'" [placeholder]="'Search...'" [formControl]="$any(searchForm.controls['search'])">
             </app-input>
             <app-dropdown-select
                 [width]="'100%'"
-                [placeholder]="'All'"
+                [placeholder]="'Branch type'"
                 [options]="dropdownItems"
+                [selectedIds]="[0]"
                 (valueChange)="onBranchTypeSelectionChange($event)">
             </app-dropdown-select>
             <app-dropdown-select
@@ -24,7 +21,7 @@
                 [options]="dropdownAuthors"
                 [template]="usertemplate"
                 [chipTemplate]="chiptemplate"
-                [filterPredicate]="filterUsers"
+                [filterPredicate]="filter"
                 (valueChange)="onAuthorSelectionChange($event)">
             </app-dropdown-select>
         </div>
@@ -35,7 +32,7 @@
         <ng-template #usertemplate let-item>
             <div class="user-container">
                 <img src="{{ item.avatarUrl }}" />
-                <p>{{ item.firstName + ' ' + item.lastName }} {{ item.userName ? '(' + item.userName + ')' : '' }}</p>
+                <p>{{ getFullName(item) }}</p>
             </div>
         </ng-template>
         <ng-template #chiptemplate let-item>

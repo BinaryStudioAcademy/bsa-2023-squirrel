@@ -15,11 +15,7 @@
                 </div>
             </div>
             <div class="secondary-info">
-                <p>
-                    {{ pullRequest.author.firstName }} {{ pullRequest.author.lastName }} -#{{ pullRequest.id }}, created
-                    {{ calculateTime(pullRequest.createdAt) }} ago, updated
-                    {{ calculateTime(pullRequest.updatedAt) }} ago
-                </p>
+                <p>{{ getSecondaryInfo() }}</p>
             </div>
         </div>
     </div>

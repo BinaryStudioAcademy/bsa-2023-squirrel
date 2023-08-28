@@ -14,4 +14,11 @@ export class PullRequestComponent {
     public calculateTime(date: Date): string {
         return moment(date).startOf('seconds').fromNow();
     }
+
+    public getSecondaryInfo() {
+        return `${this.pullRequest.author.firstName} ${this.pullRequest.author.lastName} -# ${
+            this.pullRequest.id
+        }, created ${this.calculateTime(this.pullRequest.createdAt)}, 
+        updated ${this.calculateTime(this.pullRequest.updatedAt)}`;
+    }
 }

@@ -5,5 +5,7 @@ public enum DataType
     Function,
     StoredProcedure,
     Table,
+    FunctionData,
+    StoredProcedureData,
     TableData
 }

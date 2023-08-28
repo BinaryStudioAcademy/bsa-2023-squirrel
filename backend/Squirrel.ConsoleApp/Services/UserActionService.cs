@@ -35,14 +35,14 @@ namespace Squirrel.ConsoleApp.Services
         public async Task<UserAction> GetFunctionAsync(string functionName)
         {
             return await GetUserActionAsync($"Data from '{functionName}' Function",
-                                            DataType.Function,
+                                            DataType.FunctionData,
                                             DatabaseFactory.GetFunctionQuery(_dbType, functionName));
         }
 
         public async Task<UserAction> GetStoredProcedureAsync(string storedProcedureName)
         {
             return await GetUserActionAsync($"Data from '{storedProcedureName}' StoredProcedure",
-                                            DataType.StoredProcedure,
+                                            DataType.StoredProcedureData,
                                             DatabaseFactory.GetStoredProcedureQuery(_dbType, storedProcedureName));
         }
 

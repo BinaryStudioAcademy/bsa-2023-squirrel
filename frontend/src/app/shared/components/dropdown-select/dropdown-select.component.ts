@@ -20,7 +20,9 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class DropdownSelectComponent implements OnInit {
     @Input() options: any[];
 
-    @Input() selectedIds: number[];
+    @Input() selectedIds: number[] = [];
+
+    @Input() placeholderId?: number;
 
     @Input() height: string = '45px';
 
@@ -64,6 +66,9 @@ export class DropdownSelectComponent implements OnInit {
         this.filteredOptions = this.internalOptions;
         this.selectedOptions = [];
         this.selectedIds.forEach((item) => this.selectByIndex(item));
+        if (this.placeholderId !== undefined) {
+            this.selectByIndex(this.placeholderId);
+        }
     }
 
     onInputChanged() {
@@ -101,12 +106,30 @@ export class DropdownSelectComponent implements OnInit {
     }
 
     select(value: any) {
-        if (this.selectedOptions.some((x) => x === value)) {
-            this.selectedOptions = this.selectedOptions.filter((x) => x !== value);
+        if (this.internalOptions.indexOf(value) === this.placeholderId) {
+            this.selectedOptions = [value];
         } else {
-            this.selectedOptions = this.selectedOptions.concat(value);
+            if (this.selectedOptions.some((x) => x === value)) {
+                this.selectedOptions = this.selectedOptions.filter((x) => x !== value);
+            } else {
+                this.selectedOptions = this.selectedOptions.concat(value);
+            }
+            this.ensurePlaceholderBehavior();
         }
         this.valueChange.emit(this.selectedOptions);
+    }
+
+    ensurePlaceholderBehavior() {
+        if (this.placeholderId === undefined) {
+            return;
+        }
+        const placeholder = this.internalOptions[this.placeholderId];
+
+        if (this.selectedOptions.length === 0) {
+            this.selectedOptions.push(placeholder);
+        } else {
+            this.selectedOptions = this.selectedOptions.filter((x) => x !== placeholder);
+        }
     }
 
     isSelected(option: any) {

@@ -58,6 +58,10 @@ export class AuthService {
         );
     }
 
+    public tokenExist() {
+        return localStorage.getItem('accessToken') && localStorage.getItem('refreshToken');
+    }
+
     private saveTokens(tokens: AccessTokenDto) {
         if (tokens.accessToken && tokens.refreshToken) {
             localStorage.setItem(this.accessTokenKey, JSON.stringify(tokens.accessToken));

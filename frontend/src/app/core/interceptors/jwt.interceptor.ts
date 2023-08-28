@@ -18,6 +18,7 @@ export class JwtInterceptor implements HttpInterceptor {
         const accessToken = JSON.parse(localJwt);
 
         if (accessToken) {
+            // eslint-disable-next-line no-param-reassign
             request = request.clone({ setHeaders: { Authorization: `Bearer ${accessToken}` } });
         }
 

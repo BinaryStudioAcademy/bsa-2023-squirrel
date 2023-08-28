@@ -2,5 +2,5 @@
 
 public enum FileType
 {
-    
+    Script = 1,
 }

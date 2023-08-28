@@ -4,5 +4,5 @@ public enum PullRequestStatus
 {
     Open = 1,
     Merged,
-    Closed
+    Declined
 }

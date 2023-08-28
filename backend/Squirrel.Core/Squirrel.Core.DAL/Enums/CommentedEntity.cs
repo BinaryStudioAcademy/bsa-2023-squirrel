@@ -2,7 +2,6 @@
 
 public enum CommentedEntity
 {
-    Project = 1,
-    Commit,
+    Commit = 1,
     PullRequest,
 }

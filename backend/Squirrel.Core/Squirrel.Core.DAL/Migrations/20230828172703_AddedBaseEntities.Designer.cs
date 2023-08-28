@@ -12,7 +12,7 @@ using Squirrel.Core.DAL.Context;
 namespace Squirrel.Core.DAL.Migrations
 {
     [DbContext(typeof(SquirrelCoreContext))]
-    [Migration("20230827161909_AddedBaseEntities")]
+    [Migration("20230828172703_AddedBaseEntities")]
     partial class AddedBaseEntities
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,7 +47,7 @@ namespace Squirrel.Core.DAL.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.ToTable("Branch");
+                    b.ToTable("Branches");
                 });
 
             modelBuilder.Entity("Squirrel.Core.DAL.Entities.Comment", b =>
@@ -70,20 +70,24 @@ namespace Squirrel.Core.DAL.Migrations
                         .HasColumnType("nvarchar(500)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<int?>("CreatedBy")
                         .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedBy");
 
-                    b.ToTable("Comment");
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("Squirrel.Core.DAL.Entities.Commit", b =>
@@ -95,7 +99,9 @@ namespace Squirrel.Core.DAL.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<int?>("CreatedBy")
                         .IsRequired()
@@ -110,7 +116,7 @@ namespace Squirrel.Core.DAL.Migrations
 
                     b.HasIndex("CreatedBy");
 
-                    b.ToTable("Commit");
+                    b.ToTable("Commits");
                 });
 
             modelBuilder.Entity("Squirrel.Core.DAL.Entities.CommitFile", b =>
@@ -141,31 +147,10 @@ namespace Squirrel.Core.DAL.Migrations
 
                     b.HasIndex("CommitId");
 
-                    b.ToTable("CommitFile");
+                    b.ToTable("CommitFiles");
                 });
 
-            modelBuilder.Entity("Squirrel.Core.DAL.Entities.JoinEntities.BranchCommit", b =>
-                {
-                    b.Property<int>("BranchId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CommitParentId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsHead")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsMerged")
-                        .HasColumnType("bit");
-
-                    b.HasKey("BranchId", "CommitParentId");
-
-                    b.HasIndex("CommitParentId");
-
-                    b.ToTable("BranchCommit");
-                });
-
-            modelBuilder.Entity("Squirrel.Core.DAL.Entities.JoinEntities.CommitParent", b =>
+            modelBuilder.Entity("Squirrel.Core.DAL.Entities.CommitParent", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -183,41 +168,94 @@ namespace Squirrel.Core.DAL.Migrations
 
                     b.HasIndex("CommitId");
 
-                    b.ToTable("CommitParent");
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("CommitParents");
+                });
+
+            modelBuilder.Entity("Squirrel.Core.DAL.Entities.JoinEntities.BranchCommit", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("BranchId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CommitId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsHead")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsMerged")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("CommitId");
+
+                    b.ToTable("BranchCommits");
                 });
 
             modelBuilder.Entity("Squirrel.Core.DAL.Entities.JoinEntities.ProjectTag", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
 
                     b.Property<int>("TagId")
                         .HasColumnType("int");
 
-                    b.HasKey("ProjectId", "TagId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("ProjectTag");
+                    b.ToTable("ProjectTags");
                 });
 
             modelBuilder.Entity("Squirrel.Core.DAL.Entities.JoinEntities.PullRequestReviewer", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
                     b.Property<int>("PullRequestId")
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("PullRequestId", "UserId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("PullRequestId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("PullRequestReviewer");
+                    b.ToTable("PullRequestReviewers");
                 });
 
             modelBuilder.Entity("Squirrel.Core.DAL.Entities.JoinEntities.UserProject", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
 
@@ -227,11 +265,13 @@ namespace Squirrel.Core.DAL.Migrations
                     b.Property<int>("UserRole")
                         .HasColumnType("int");
 
-                    b.HasKey("ProjectId", "UserId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserProject");
+                    b.ToTable("UserProjects");
                 });
 
             modelBuilder.Entity("Squirrel.Core.DAL.Entities.Project", b =>
@@ -255,7 +295,10 @@ namespace Squirrel.Core.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Project");
+                    b.HasIndex("DefaultBranchId")
+                        .IsUnique();
+
+                    b.ToTable("Projects");
                 });
 
             modelBuilder.Entity("Squirrel.Core.DAL.Entities.PullRequest", b =>
@@ -267,7 +310,9 @@ namespace Squirrel.Core.DAL.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<int?>("CreatedBy")
                         .IsRequired()
@@ -294,7 +339,9 @@ namespace Squirrel.Core.DAL.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
 
                     b.HasKey("Id");
 
@@ -306,7 +353,7 @@ namespace Squirrel.Core.DAL.Migrations
 
                     b.HasIndex("TargetBranchId");
 
-                    b.ToTable("PullRequest");
+                    b.ToTable("PullRequests");
                 });
 
             modelBuilder.Entity("Squirrel.Core.DAL.Entities.RefreshToken", b =>
@@ -318,7 +365,9 @@ namespace Squirrel.Core.DAL.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<int?>("CreatedBy")
                         .HasColumnType("int");
@@ -465,7 +514,7 @@ namespace Squirrel.Core.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tag");
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("Squirrel.Core.DAL.Entities.User", b =>
@@ -563,6 +612,25 @@ namespace Squirrel.Core.DAL.Migrations
                     b.Navigation("Commit");
                 });
 
+            modelBuilder.Entity("Squirrel.Core.DAL.Entities.CommitParent", b =>
+                {
+                    b.HasOne("Squirrel.Core.DAL.Entities.Commit", "Commit")
+                        .WithMany("CommitsAsChild")
+                        .HasForeignKey("CommitId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Squirrel.Core.DAL.Entities.Commit", "ParentCommit")
+                        .WithMany("CommitsAsParent")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Commit");
+
+                    b.Navigation("ParentCommit");
+                });
+
             modelBuilder.Entity("Squirrel.Core.DAL.Entities.JoinEntities.BranchCommit", b =>
                 {
                     b.HasOne("Squirrel.Core.DAL.Entities.Branch", "Branch")
@@ -571,24 +639,13 @@ namespace Squirrel.Core.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Squirrel.Core.DAL.Entities.JoinEntities.CommitParent", "CommitParent")
+                    b.HasOne("Squirrel.Core.DAL.Entities.Commit", "Commit")
                         .WithMany("BranchCommits")
-                        .HasForeignKey("CommitParentId")
+                        .HasForeignKey("CommitId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Branch");
-
-                    b.Navigation("CommitParent");
-                });
-
-            modelBuilder.Entity("Squirrel.Core.DAL.Entities.JoinEntities.CommitParent", b =>
-                {
-                    b.HasOne("Squirrel.Core.DAL.Entities.Commit", "Commit")
-                        .WithMany("CommitParents")
-                        .HasForeignKey("CommitId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
 
                     b.Navigation("Commit");
                 });
@@ -650,6 +707,17 @@ namespace Squirrel.Core.DAL.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Squirrel.Core.DAL.Entities.Project", b =>
+                {
+                    b.HasOne("Squirrel.Core.DAL.Entities.Branch", "DefaultBranch")
+                        .WithOne("ProjectForDefaultBranch")
+                        .HasForeignKey("Squirrel.Core.DAL.Entities.Project", "DefaultBranchId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("DefaultBranch");
+                });
+
             modelBuilder.Entity("Squirrel.Core.DAL.Entities.PullRequest", b =>
                 {
                     b.HasOne("Squirrel.Core.DAL.Entities.User", "Author")
@@ -700,6 +768,8 @@ namespace Squirrel.Core.DAL.Migrations
                 {
                     b.Navigation("BranchCommits");
 
+                    b.Navigation("ProjectForDefaultBranch");
+
                     b.Navigation("PullRequestsFromThisBranch");
 
                     b.Navigation("PullRequestsIntoThisBranch");
@@ -707,14 +777,13 @@ namespace Squirrel.Core.DAL.Migrations
 
             modelBuilder.Entity("Squirrel.Core.DAL.Entities.Commit", b =>
                 {
+                    b.Navigation("BranchCommits");
+
                     b.Navigation("CommitFiles");
 
-                    b.Navigation("CommitParents");
-                });
+                    b.Navigation("CommitsAsChild");
 
-            modelBuilder.Entity("Squirrel.Core.DAL.Entities.JoinEntities.CommitParent", b =>
-                {
-                    b.Navigation("BranchCommits");
+                    b.Navigation("CommitsAsParent");
                 });
 
             modelBuilder.Entity("Squirrel.Core.DAL.Entities.Project", b =>

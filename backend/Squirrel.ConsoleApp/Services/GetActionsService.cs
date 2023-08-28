@@ -1,33 +1,34 @@
 ﻿using Squirrel.ConsoleApp.Interfaces;
 using Squirrel.ConsoleApp.Models;
+using Squirrel.ConsoleApp.Providers;
 using System.Data;
 using DbType = Squirrel.ConsoleApp.Models.DbType;
 
 namespace Squirrel.ConsoleApp.Services
 {
-    public class UserActionService : IGetActionsService
+    public class GetActionsService : IGetActionsService
     {
         private readonly DbType _dbType;
         private readonly IDatabaseService _databaseService;
 
-        public UserActionService(DbType dbType, string connection)
+        public GetActionsService(DbType dbType, string connection)
         {
             _dbType = dbType;
             _databaseService = DatabaseFactory.CreateDatabaseService(dbType, connection);
         }
 
-        public async Task<IEnumerable<UserAction>> GetAllFunctionsAsync()
-            => await GetActionsAsync(DataType.Function, DatabaseFactory.GetFunctionsQuery(_dbType));
+        public async Task<UserAction> GetAllFunctionsAsync()
+            => await GetActionsAsync(DataType.Functions, DatabaseFactory.GetFunctionsQuery(_dbType));
 
-        public async Task<IEnumerable<UserAction>> GetAllStoredProceduresAsync()
-            => await GetActionsAsync(DataType.StoredProcedure, DatabaseFactory.GetStoredProceduresQuery(_dbType));
+        public async Task<UserAction> GetAllStoredProceduresAsync()
+            => await GetActionsAsync(DataType.StoredProcedures, DatabaseFactory.GetStoredProceduresQuery(_dbType));
 
-        public async Task<IEnumerable<UserAction>> GetAllTablesAsync()
-            => await GetActionsAsync(DataType.Table, DatabaseFactory.GetTablesQuery(_dbType));
+        public async Task<UserAction> GetAllTablesAsync()
+            => await GetActionsAsync(DataType.Tables, DatabaseFactory.GetTablesQuery(_dbType));
 
-        public async Task<UserAction> GetTableDataAsync(string tableName, int rowsCount)
+        public async Task<TableData> GetTableDataAsync(string tableName, int rowsCount)
         {
-            return await GetUserActionAsync($"Data from '{tableName}' Table for first '{rowsCount}' rows",
+            return await GetTableDataInternalAsync($"Data from '{tableName}' Table for first '{rowsCount}' rows",
                                             DataType.TableData,
                                             DatabaseFactory.GetTableDataQuery(_dbType, tableName, rowsCount));
         }
@@ -46,25 +47,41 @@ namespace Squirrel.ConsoleApp.Services
                                             DatabaseFactory.GetStoredProcedureQuery(_dbType, storedProcedureName));
         }
 
-        private async Task<IEnumerable<UserAction>> GetActionsAsync(DataType dataType, string query)
+        private async Task<UserAction> GetActionsAsync(DataType dataType, string query)
         {
             var result = await _databaseService.ExecuteQueryAsync(query);
-            return result.Rows.Select(row => new UserAction
+            var data = result.Rows.Select(ConvertRowToString).ToList();
+
+            return new UserAction
             {
-                Name = row[0],
+                Name = dataType.ToString(),
                 Type = dataType,
-                Data = ConvertRowToString(row)
-            });
+                Data = data
+            };
         }
 
         private async Task<UserAction> GetUserActionAsync(string name, DataType dataType, string query)
         {
             var result = await _databaseService.ExecuteQueryAsync(query);
+            var data = result.Rows.Select(ConvertRowToString).ToList();
+
             return new UserAction
             {
                 Name = name,
                 Type = dataType,
-                Data = string.Join(';' + Environment.NewLine, result.Rows.Select(ConvertRowToString))
+                Data = data
+            };
+        }
+
+        private async Task<TableData> GetTableDataInternalAsync(string name, DataType dataType, string query)
+        {
+            var result = await _databaseService.ExecuteQueryAsync(query);
+
+            return new TableData
+            {
+                Name = name,
+                Type = dataType,
+                Table = result
             };
         }
 

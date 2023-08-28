@@ -1,7 +1,8 @@
 ﻿using Squirrel.ConsoleApp.Interfaces;
 using Squirrel.ConsoleApp.Models;
+using Squirrel.ConsoleApp.Services;
 
-namespace Squirrel.ConsoleApp.Services;
+namespace Squirrel.ConsoleApp.Providers;
 
 public class DatabaseFactory
 {
@@ -59,7 +60,7 @@ public class DatabaseFactory
     {
         return dbType switch
         {
-            DbType.SqlServer => $"SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_TYPE = 'PROCEDURE' AND ROUTINE_NAME = '{storedProcedureName}'",
+            DbType.SqlServer => $"SELECT ROUTINE_DEFINITION FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_TYPE = 'PROCEDURE' AND ROUTINE_NAME = '{storedProcedureName}'",
             DbType.PostgreSQL => $"SELECT * FROM information_schema.routines WHERE routine_name = '{storedProcedureName}' AND type_udt_name != 'void'",
             _ => throw new NotImplementedException($"Database type {dbType} is not supported.")
         };

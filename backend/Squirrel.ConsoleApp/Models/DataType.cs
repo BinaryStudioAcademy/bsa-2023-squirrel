@@ -2,9 +2,9 @@
 
 public enum DataType
 {
-    Function,
-    StoredProcedure,
-    Table,
+    Functions,
+    StoredProcedures,
+    Tables,
     FunctionData,
     StoredProcedureData,
     TableData

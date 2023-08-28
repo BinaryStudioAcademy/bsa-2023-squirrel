@@ -23,24 +23,23 @@ internal class Program
                 return;
             }
 
-            var service = new UserActionService(DbType.SqlServer, connection);
-            var getTables = await service.GetAllTablesAsync();
+            var service = new GetActionsService(DbType.SqlServer, connection);
+            var procedures = await service.GetAllStoredProceduresAsync();
 
-            var tables = getTables.ToList();
-            if (!tables.Any())
+            if (procedures.Data == null || procedures.Data.Count == 0)
             {
                 Console.WriteLine("No Tables");
                 return;
             }
 
-            foreach (var table in tables)
+            foreach (var tableName in procedures.Data)
             {
-                var tableData = await service.GetTableDataAsync(table.Name, 10);
+                var tableData = await service.GetStoredProcedureAsync(tableName);
 
                 Console.WriteLine($"tableData.Name: {tableData.Name}");
                 Console.WriteLine($"tableData.Type: {tableData.Type}");
                 Console.WriteLine($"tableData.Data:");
-                Console.WriteLine(tableData.Data);
+                Console.WriteLine(string.Join(Environment.NewLine, tableData.Data.Select(e => string.Join(", ", e))));
                 Console.WriteLine("=============================");
             }
 

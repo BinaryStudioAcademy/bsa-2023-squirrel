@@ -28,23 +28,10 @@ export class DropdownSelectComponent implements OnInit {
 
     @Input() placeholder: string = 'Select...';
 
-    /**
-     * Template for displaying your custom entity in a drop-down list.
-     * You should set it if you are using non-string objects as options.
-     * */
     @Input() template: TemplateRef<any>;
 
-    /**
-     * Template for displaying your custom entity in a chip list.
-     * You should set it if you are using non-string objects as options.
-     * */
     @Input() chipTemplate: TemplateRef<any>;
 
-    /**
-     * Predicate for auto-complete filtering.
-     * You should set it if you are using non-string objects as options.
-     * You should set it if you want to change a default filtering logic.
-     * */
     @Input() filterPredicate?: (item: any, value: string) => boolean;
 
     @Output() valueChange = new EventEmitter();

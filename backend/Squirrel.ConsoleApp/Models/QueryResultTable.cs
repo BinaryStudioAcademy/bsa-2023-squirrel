@@ -1,4 +1,5 @@
 ﻿namespace Squirrel.ConsoleApp.Models;
+
 public class QueryResultTable
 {
     public string[] ColumnNames { get; set; }

@@ -3,6 +3,7 @@ using Squirrel.ConsoleApp.Models;
 using System.Data.Common;
 
 namespace Squirrel.ConsoleApp.Services.Abstract;
+
 public abstract class BaseDbService: IDatabaseService
 {
     public string ConnectionString { get; set; }

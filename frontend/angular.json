@@ -11,7 +11,8 @@
             "projectType": "application",
             "schematics": {
                 "@schematics/angular:component": {
-                    "style": "sass"
+                    "style": "sass",
+                    "skipTests": true
                 },
                 "@schematics/angular:application": {
                     "strict": true

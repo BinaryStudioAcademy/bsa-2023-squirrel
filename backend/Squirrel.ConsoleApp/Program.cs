@@ -13,6 +13,7 @@ internal class Program
 
     async static Task Main(string[] args)
     {
+        // This is for testing needs
         try
         {
             var connection = Configuration.GetConnectionString("SquirrelCoreDBConnection");

@@ -5,12 +5,19 @@
     background: $project-background-color
     min-width: 650px
     margin: 22px
-    h5
-        padding: 15px 0px 0px 15px
+    .header
+        padding: 15px 15px 10px 15px
         font-size: 18px
         font-style: normal
         font-weight: 600
         color: $text-main
+        h5
+            margin: 0px
+
+.header
+    display: flex
+    justify-content: space-between
+    align-items: center
 
 .inputs-container
     @extend .actions
@@ -19,6 +26,7 @@
     margin-left: 0px !important 
     > *
         min-width: 100px
+        max-width: 200px
 
 
 .actions

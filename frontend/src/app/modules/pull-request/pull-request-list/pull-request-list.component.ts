@@ -32,7 +32,7 @@ export class PullRequestListComponent {
 
     getBranchTypes() {
         // TODO: fetch data from server, remove placeholder data
-        return ['Open', 'Merged', 'Closed'];
+        return ['Open', 'Declined', 'Merged'];
     }
 
     getAuthors() {

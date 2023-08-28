@@ -2,49 +2,48 @@
 using Squirrel.ConsoleApp.Models;
 using Squirrel.ConsoleApp.Providers;
 using System.Data;
-using DbType = Squirrel.ConsoleApp.Models.DbType;
 
 namespace Squirrel.ConsoleApp.Services
 {
     public class GetActionsService : IGetActionsService
     {
-        private readonly DbType _dbType;
+        private readonly IDbQueryProvider _queryProvider;
         private readonly IDatabaseService _databaseService;
 
-        public GetActionsService(DbType dbType, string connection)
+        public GetActionsService(DatabaseType dbType, IDbQueryProvider queryProvider, string connection)
         {
-            _dbType = dbType;
+            _queryProvider = queryProvider;
             _databaseService = DatabaseFactory.CreateDatabaseService(dbType, connection);
         }
 
         public async Task<UserAction> GetAllFunctionsAsync()
-            => await GetActionsAsync(DataType.Functions, DatabaseFactory.GetFunctionsQuery(_dbType));
+            => await GetActionsAsync(DataType.Functions, _queryProvider.GetFunctionsQuery());
 
         public async Task<UserAction> GetAllStoredProceduresAsync()
-            => await GetActionsAsync(DataType.StoredProcedures, DatabaseFactory.GetStoredProceduresQuery(_dbType));
+            => await GetActionsAsync(DataType.StoredProcedures, _queryProvider.GetStoredProceduresQuery());
 
         public async Task<UserAction> GetAllTablesAsync()
-            => await GetActionsAsync(DataType.Tables, DatabaseFactory.GetTablesQuery(_dbType));
+            => await GetActionsAsync(DataType.Tables, _queryProvider.GetTablesQuery());
 
         public async Task<TableData> GetTableDataAsync(string tableName, int rowsCount)
         {
             return await GetTableDataInternalAsync($"Data from '{tableName}' Table for first '{rowsCount}' rows",
                                             DataType.TableData,
-                                            DatabaseFactory.GetTableDataQuery(_dbType, tableName, rowsCount));
+                                            _queryProvider.GetTableDataQuery(tableName, rowsCount));
         }
 
         public async Task<UserAction> GetFunctionAsync(string functionName)
         {
             return await GetUserActionAsync($"Data from '{functionName}' Function",
                                             DataType.FunctionData,
-                                            DatabaseFactory.GetFunctionQuery(_dbType, functionName));
+                                            _queryProvider.GetFunctionQuery(functionName));
         }
 
         public async Task<UserAction> GetStoredProcedureAsync(string storedProcedureName)
         {
             return await GetUserActionAsync($"Data from '{storedProcedureName}' StoredProcedure",
                                             DataType.StoredProcedureData,
-                                            DatabaseFactory.GetStoredProcedureQuery(_dbType, storedProcedureName));
+                                            _queryProvider.GetStoredProcedureQuery(storedProcedureName));
         }
 
         private async Task<UserAction> GetActionsAsync(DataType dataType, string query)

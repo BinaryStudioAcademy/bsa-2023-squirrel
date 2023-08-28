@@ -14,7 +14,13 @@ public sealed class PullRequestConfig : IEntityTypeConfiguration<PullRequest>
         builder.Property(x => x.Title).IsRequired().HasMaxLength(100);
         builder.Property(x => x.Status).IsRequired();
         builder.Property(x => x.IsReviewed).IsRequired();
-        builder.Property(x => x.CreatedAt).IsRequired();
-        builder.Property(x => x.UpdatedAt).IsRequired();
+        builder.Property(x => x.UpdatedAt)
+               .IsRequired()
+               .HasDefaultValueSql("getdate()")
+               .ValueGeneratedOnAddOrUpdate();
+        builder.Property(x => x.CreatedAt)
+               .IsRequired()
+               .HasDefaultValueSql("getdate()")
+               .ValueGeneratedOnAdd();
     }
 }

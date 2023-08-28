@@ -11,9 +11,4 @@ public sealed class Comment : AuditEntity<int>
     
     public int CommentedEntityId { get; set; }
     public User Author { get; set; } = null!;
-
-    public Comment()
-    {
-        UpdatedAt = CreatedAt;
-    }
 }

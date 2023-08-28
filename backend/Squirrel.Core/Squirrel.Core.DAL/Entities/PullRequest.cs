@@ -21,9 +21,4 @@ public sealed class PullRequest : AuditEntity<int>
     public Branch TargetBranch { get; set; } = null!;
     public ICollection<User> Reviewers = new List<User>();
     public ICollection<PullRequestReviewer> PullRequestReviewers { get; set; } = new List<PullRequestReviewer>();
-
-    public PullRequest()
-    {
-        UpdatedAt = CreatedAt;
-    }
 }

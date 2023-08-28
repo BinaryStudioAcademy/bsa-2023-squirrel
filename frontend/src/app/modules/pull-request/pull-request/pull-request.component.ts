@@ -1,10 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { TimeSpanStringifierService } from '@core/services/time-span-stringifier.service';
+import * as moment from 'moment';
 
-import { Branch } from 'src/app/models/branch/branch';
-import { Comment } from 'src/app/models/comment/comment';
 import { PullRequest } from 'src/app/models/pull-request/pull-request';
-import { User } from 'src/app/models/user/user';
 
 @Component({
     selector: 'app-pull-request',
@@ -14,10 +11,7 @@ import { User } from 'src/app/models/user/user';
 export class PullRequestComponent {
     @Input() public pullRequest: PullRequest;
 
-    // eslint-disable-next-line no-empty-function
-    constructor(private timeService: TimeSpanStringifierService) {}
-
     public calculateTime(date: Date): string {
-        return this.timeService.stringify(date);
+        return moment(date).startOf('seconds').fromNow();
     }
 }

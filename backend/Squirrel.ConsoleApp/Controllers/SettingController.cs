@@ -20,8 +20,9 @@ public class SettingController: ControllerBase
     public IActionResult Post(ConnectionString connectionString)
     {
         _connectionFileService.SaveToFile(connectionString);
-
-        //Connection unique ID
+        
+        //TODO: Connection unique ID
+        //TODO: 55 - As a developer I want to setup SignalR connection from console app to webAPI
         var randomId = Guid.NewGuid();
         return Ok(randomId);
     }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 
 namespace Squirrel.ConsoleApp;
@@ -7,14 +8,20 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        CreateHostBuilder(args).Build().Run();
+        var config = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json")
+            .Build();
+
+        var baseUrl = config.GetSection("WebServerSettings")["BaseUrl"];
+        
+        CreateHostBuilder(args, baseUrl).Build().Run();
     }
 
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
+    public static IHostBuilder CreateHostBuilder(string[] args, string baseUrl) =>
         Host.CreateDefaultBuilder(args)
             .ConfigureWebHostDefaults(webBuilder =>
             {
-                webBuilder.UseUrls("http://localhost:44567");
+                webBuilder.UseUrls(baseUrl);
                 webBuilder.UseStartup<Startup>();
             });
 }

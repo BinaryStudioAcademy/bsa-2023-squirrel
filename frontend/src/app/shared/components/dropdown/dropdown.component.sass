@@ -1,8 +1,4 @@
-@import '../../../../styles/global'
-
-$bg-color: #ebebeb
-$shadow: rgba(0,0,0,0.05)
-$arrow-color: #8e8c8c
+@import "/src/styles/color"
 
 .dropdown
     position: relative
@@ -20,8 +16,8 @@ $arrow-color: #8e8c8c
     right: 20px
     top: 15px
     border: 2px solid $arrow-color
-    border-top: 2px solid $bg-color
-    border-right: 2px solid $bg-color
+    border-top: 2px solid $light-gray
+    border-right: 2px solid $light-gray
     z-index: 1000
     transform: rotate(-45deg)
     transition: 0.5s
@@ -41,7 +37,7 @@ $arrow-color: #8e8c8c
     cursor: pointer
     border: none
     outline: none
-    background-color: $bg-color
+    background-color: $light-gray
     padding: 12px 20px
     border-radius: 10px
     box-shadow: 0 5px 20px $shadow
@@ -51,7 +47,7 @@ $arrow-color: #8e8c8c
     position: absolute
     width: 100%
     top: 70px
-    background-color: #fff
+    background-color: $white
     box-shadow: 0 5px 20px $shadow
     border-radius: 10px
     overflow: hidden
@@ -62,14 +58,8 @@ $arrow-color: #8e8c8c
     cursor: pointer
 
 .dropdown .option div:hover
-    color: #fff
-    background-color: $primary-violet
+    color: $white
+    background-color: $primary-color
 
 .dropdown.active .option
     display: block
-
-
-
-
-
-

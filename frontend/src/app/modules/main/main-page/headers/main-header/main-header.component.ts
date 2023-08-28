@@ -6,17 +6,15 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./main-header.component.sass'],
 })
 export class MainHeaderComponent implements OnInit {
-    projectName: string;
+    public projectName: string = 'Project Name';
 
-    selectedDbName: string;
+    public selectedDbName: string;
 
-    dbNames: string[] = ['Branch 1', 'Branch 2', 'Branch 3', 'Branch 4'];
+    public dbNames: string[] = ['Branch 1', 'Branch 2', 'Branch 3', 'Branch 4'];
 
-    ngOnInit(): void {
-        this.projectName = 'Project Name';
-    }
+    ngOnInit(): void {}
 
-    onDatabaseSelected(value: string) {
+    public onDatabaseSelected(value: string) {
         this.selectedDbName = value;
     }
 }

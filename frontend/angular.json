@@ -11,7 +11,8 @@
             "projectType": "application",
             "schematics": {
                 "@schematics/angular:component": {
-                    "style": "sass"
+                    "style": "sass",
+                    "skipTests": true
                 },
                 "@schematics/angular:application": {
                     "strict": true
@@ -46,10 +47,7 @@
                         "tsConfig": "tsconfig.app.json",
                         "inlineStyleLanguage": "sass",
                         "assets": ["src/favicon.ico", "src/assets"],
-                        "styles": [
-                            "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
-                            "src/styles/index.sass"
-                        ],
+                        "styles": ["src/styles/index.sass"],
                         "scripts": [],
                         "allowedCommonJsDependencies": ["moment-timezone"]
                     },

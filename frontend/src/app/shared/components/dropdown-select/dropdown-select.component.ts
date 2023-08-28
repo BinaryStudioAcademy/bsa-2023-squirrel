@@ -8,6 +8,7 @@ import {
     Output,
     SecurityContext,
     TemplateRef,
+    ViewChild,
 } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -45,6 +46,8 @@ export class DropdownSelectComponent implements OnInit {
     @Input() filterPredicate?: (item: any, value: string) => boolean;
 
     @Output() valueChange = new EventEmitter();
+
+    @ViewChild('inputTrigger') inputElement: ElementRef;
 
     public input: string;
 
@@ -86,6 +89,10 @@ export class DropdownSelectComponent implements OnInit {
         if (!this.element.nativeElement.contains(event.target)) {
             this.closeDropdown();
         }
+    }
+
+    focusToInput() {
+        this.inputElement.nativeElement.focus();
     }
 
     closeDropdown() {

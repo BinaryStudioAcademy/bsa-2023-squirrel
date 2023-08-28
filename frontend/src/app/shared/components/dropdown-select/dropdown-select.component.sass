@@ -8,8 +8,18 @@
     border-radius: 50%
     overflow: hidden
 
-.input-wrapper
-    width: 100%
+.chiplist-container
+    padding-top: 2px 
+    display: flex
+    flex-direction: row
+    align-items: center
+    .chip-list
+        display: flex
+        flex-direction: row
+        flex-wrap: wrap
+        .chip
+            white-space: nowrap
+            flex-grow: 1
 
 .vertical-line
     height: 100%
@@ -23,7 +33,6 @@
 .dropdown-collection
     font-size: 12px
     font-weight: 500
-    display: flex
     position: relative
     margin-right: 8px
 
@@ -34,15 +43,18 @@
     border: none    
     position: relative
     justify-content: space-between
-    padding: 12px 32px 12px 12px
+    padding: 0px 32px 0px 12px
     display: flex
-    width: 100%
     cursor: pointer
-    align-items: center
     background-image: url("/assets/expand_more_24px.svg")
     background-size: 10px
     background-position: right 16px bottom 45%
     background-repeat: no-repeat
+    input
+        background: none
+        border: none
+    input:focus
+        outline: none
 
 .dropdown-list
     display: none

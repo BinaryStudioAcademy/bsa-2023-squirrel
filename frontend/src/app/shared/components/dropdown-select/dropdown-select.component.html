@@ -1,26 +1,31 @@
-<div class="dropdown-collection" [ngStyle]="{ width: width }">
-    <div class="input-wrapper">
-        <mat-chip-list #chipList>
-            <mat-chip *ngFor="let option of selectedOptions" (click)="select(option)">
-                <span *ngIf="!template" class="dropdown-value" [innerHTML]="sanitize(option)"></span>
-                <span *ngIf="chipTemplate">
-                    <ng-template *ngTemplateOutlet="chipTemplate; context: { $implicit: option }"></ng-template
-                ></span>
-            </mat-chip>
+<div class="dropdown-collection">
+    <div
+        (click)="dropdownOpen || focusToInput()"
+        class="dropdown-input"
+        [ngStyle]="{ 'min-height': height, width: width }">
+        <div class="chiplist-container">
+            <mat-chip-list class="chip-list" #chipList>
+                <mat-chip class="chip" *ngFor="let option of selectedOptions" (click)="select(option)">
+                    <span *ngIf="!template" class="dropdown-value" [innerHTML]="sanitize(option)"></span>
+                    <span *ngIf="chipTemplate">
+                        <ng-template *ngTemplateOutlet="chipTemplate; context: { $implicit: option }"></ng-template
+                    ></span>
+                </mat-chip>
+            </mat-chip-list>
             <input
                 type="text"
                 [(ngModel)]="input"
                 (ngModelChange)="onInputChanged()"
                 (focus)="toggleDropdown()"
-                [ngStyle]="{ height: height }"
-                class="dropdown-input"
                 aria-haspopup="listbox"
                 aria-labelledby="dropdown-label"
                 #inputTrigger
                 placeholder="{{ placeholder }}"
-                [matChipInputFor]="chipList" />
-        </mat-chip-list>
+                [matChipInputFor]="chipList"
+                [matChipInputAddOnBlur]="true" />
+        </div>
     </div>
+
     <ul class="dropdown-list" role="listbox" aria-expanded="false" [ngClass]="{ 'dropdown-open': dropdownOpen }">
         <li
             *ngFor="let o of filteredOptions"

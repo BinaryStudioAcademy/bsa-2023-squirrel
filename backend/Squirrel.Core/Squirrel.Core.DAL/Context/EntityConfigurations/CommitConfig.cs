@@ -17,11 +17,5 @@ public class CommitConfig : IEntityTypeConfiguration<Commit>
                .HasForeignKey(x => x.CommitId)
                .IsRequired()
                .OnDelete(DeleteBehavior.NoAction);
-
-        builder.HasMany(x => x.CommitParents)
-               .WithOne(x => x.Commit)
-               .HasForeignKey(x => x.CommitId)
-               .IsRequired()
-               .OnDelete(DeleteBehavior.NoAction);
     }
 }

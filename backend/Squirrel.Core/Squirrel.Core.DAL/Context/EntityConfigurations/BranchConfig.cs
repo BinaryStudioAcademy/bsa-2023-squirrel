@@ -25,12 +25,12 @@ public sealed class BranchConfig : IEntityTypeConfiguration<Branch>
                .IsRequired()
                .OnDelete(DeleteBehavior.NoAction);
 
-        builder.HasMany(x => x.CommitParents)
+        builder.HasMany(x => x.Commits)
                .WithMany(x => x.Branches)
                .UsingEntity<BranchCommit>(
-                   l => l.HasOne(x => x.CommitParent)
+                   l => l.HasOne(x => x.Commit)
                          .WithMany(x => x.BranchCommits)
-                         .HasForeignKey(x => x.CommitParentId),
+                         .HasForeignKey(x => x.CommitId),
                    r => r.HasOne(x => x.Branch)
                          .WithMany(x => x.BranchCommits)
                          .HasForeignKey(x => x.BranchId));

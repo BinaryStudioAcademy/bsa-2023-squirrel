@@ -20,6 +20,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class DropdownSelectComponent implements OnInit {
     @Input() options: any[];
 
+    @Input() selectedIds: number[];
+
     @Input() height: string = '45px';
 
     @Input() width: string = '200px';
@@ -74,6 +76,7 @@ export class DropdownSelectComponent implements OnInit {
         this.internalOptions = [...this.options];
         this.filteredOptions = this.internalOptions;
         this.selectedOptions = [];
+        this.selectedIds.forEach((item) => this.selectByIndex(item));
     }
 
     onInputChanged() {

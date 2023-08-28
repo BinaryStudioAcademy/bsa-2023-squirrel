@@ -5,9 +5,31 @@ namespace Squirrel.Core.BLL.Services;
 
 public class DependencyAnalyzer : IDependencyAnalyzer
 {
+    public List<string> AnalyzeDependencies(string spContent, List<string>? objectList = null)
+    {
+        var references = FindReferences(spContent);
+
+        if (objectList is null)
+        {
+            return references;
+        }
+
+        var dependencies = new List<string>();
+
+        foreach (string reference in references)
+        {
+            if (objectList.Contains(reference))
+            {
+                dependencies.Add(reference);
+            }
+        }
+
+        return dependencies;
+    }
+
     private List<string> FindReferences(string spContent)
     {
-        List<string> references = new List<string>();
+        var references = new List<string>();
 
         // Used regular expressions to find references
         Regex spRegex = new Regex(
@@ -26,27 +48,5 @@ public class DependencyAnalyzer : IDependencyAnalyzer
         references.AddRange(spMatches.Concat(functionMatches).Select(m => m.Value));
 
         return references;
-    }
-
-    public List<string> AnalyzeDependencies(string spContent, List<string>? objectList = null)
-    {
-        List<string> references = FindReferences(spContent);
-
-        if (objectList == null)
-        {
-            return references;
-        }
-
-        List<string> dependencies = new List<string>();
-
-        foreach (string reference in references)
-        {
-            if (objectList.Contains(reference))
-            {
-                dependencies.Add(reference);
-            }
-        }
-
-        return dependencies;
     }
 }

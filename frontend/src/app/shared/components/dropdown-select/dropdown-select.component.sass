@@ -84,8 +84,12 @@
             .vertical-line
                 display: block
 
-        &:not(.selected):hover 
+        &:not(.selected):hover
             background: lighten($bg-input, 1)
+
+        &:not(.selected):focus
+            background: lighten($bg-input, 1)
+            outline: none
 
     &.dropdown-open 
         display: block

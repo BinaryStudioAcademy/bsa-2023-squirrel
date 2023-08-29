@@ -1,0 +1,100 @@
+@import "/src/styles/color"
+
+.rounded-container
+    border-radius: 10px
+    background: $project-background-color
+    min-width: 650px
+    margin: 22px
+    .header
+        padding: 15px 15px 10px 15px
+        font-size: 18px
+        font-style: normal
+        font-weight: 600
+        color: $text-main
+        h5
+            margin: 0px
+
+.header
+    display: flex
+    justify-content: space-between
+    align-items: center
+
+.inputs-container
+    @extend .actions
+    align-items: flex-end
+    flex-wrap: nowrap
+    margin-left: 0px 
+    > *
+        min-width: 100px
+        margin-bottom: 5px 
+
+.actions
+    margin-left: 11px
+    margin-bottom: 5px
+    display: flex
+    flex-direction: row
+    align-items: center
+    flex-wrap: wrap
+    > *:not(last-child)
+        padding-right: 25px
+
+.table
+    margin-left: 32px
+    margin-right: 32px  
+
+.pull-request-container
+    display: flex
+    flex-direction: column
+    .line
+        border: 1px solid $line-color
+        padding: 0px
+        margin: 0px
+    &:first-child
+        .line
+            border: 1px solid $line-dark-color
+
+.table-headers
+    display: flex
+    justify-content: space-between
+    color: $text-gray
+    font-size: 14px
+    font-style: normal
+    font-weight: 600
+    >.first
+        flex: 50
+    >.second
+        flex: 35
+        text-align: center
+    >.third
+        flex: 15
+        text-align: center      
+
+.table-content
+    display: flex
+    flex-direction: column
+
+.search-input
+    width: 289px
+
+.dropdown-input
+    width: 194px
+
+.checkbox
+    cursor: pointer
+    *
+        cursor: pointer
+    label
+        user-select: none
+
+.user-container
+    display: flex
+    align-items: center
+    
+    img
+        padding: 5px
+        min-height: 36px
+        min-width: 36px
+        width: 36px
+        height: 36px
+        border-radius: 50%
+        overflow: hidden

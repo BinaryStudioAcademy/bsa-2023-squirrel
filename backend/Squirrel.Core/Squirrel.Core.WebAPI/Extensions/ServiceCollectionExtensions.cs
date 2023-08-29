@@ -50,15 +50,6 @@ public static class ServiceCollectionExtensions
             .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<NewSampleDtoValidator>());
     }
 
-    public static void AddSquirrelCoreContext(this IServiceCollection services, IConfiguration configuration)
-    {
-        var connectionsString = configuration.GetConnectionString("SquirrelCoreDBConnection");
-        services.AddDbContext<SquirrelCoreContext>(options =>
-            options.UseSqlServer(
-                connectionsString,
-                opt => opt.MigrationsAssembly(typeof(SquirrelCoreContext).Assembly.GetName().Name)));
-    }
-
     public static void ConfigureJwtAuth(this IServiceCollection services, IConfiguration configuration)
     {
         var jwtAppSettingOptions = configuration.GetSection(nameof(JwtIssuerOptions))!;

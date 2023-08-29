@@ -12,7 +12,7 @@ public interface IDbQueryProvider
     string GetFunctionDefinitionQuery(string functionName);
 
     string GetViewsNamesQuery();
-    string GetViewDefinitionQuery(string functionName);
+    string GetViewDefinitionQuery(string viewName);
 
     string GetTablesStructureQuery();
     string GetTablesCheckAndUniqueConstraintsQuery();

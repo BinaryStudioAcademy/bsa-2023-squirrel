@@ -1,12 +1,12 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Microsoft.AspNetCore.Http;
 using Squirrel.Shared.Extensions;
 
-namespace Squirrel.Shared.Middleware;
+namespace Squirrel.Shared.Middlewares;
 
-public class GenericExceptionHandlerMiddleware
+public sealed class GenericExceptionHandlerMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly ILogger<GenericExceptionHandlerMiddleware> _logger;

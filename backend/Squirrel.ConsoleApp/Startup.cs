@@ -21,12 +21,9 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        var tempCollection = new ServiceCollection();
-        tempCollection.Configure<DbSettings>(Configuration.GetSection(nameof(DbSettings)));
+        services.Configure<DbSettings>(Configuration.GetSection(nameof(DbSettings)));
         var serviceProvider = services.BuildServiceProvider();
         var databaseType = serviceProvider.GetRequiredService<IOptions<DbSettings>>().Value.DbType;
-
-        services.AddScoped<IConnectionFileService, ConnectionFileService>();
 
         switch (databaseType)
         {
@@ -41,6 +38,8 @@ public class Startup
             default:
                 throw new NotImplementedException($"Database type {databaseType} is not supported.");
         }
+
+        services.AddScoped<IConnectionFileService, ConnectionFileService>();
 
         services.AddScoped<IGetActionsService, GetActionsService>();
 

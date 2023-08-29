@@ -1,50 +1,45 @@
 ﻿using Squirrel.ConsoleApp.Interfaces;
+using static Squirrel.ConsoleApp.Providers.PostgreSqlScripts.GetTables;
+using static Squirrel.ConsoleApp.Providers.PostgreSqlScripts.GetObjects;
+using static Squirrel.ConsoleApp.Providers.PostgreSqlScripts.GetUserDefinedTypes;
 
 namespace Squirrel.ConsoleApp.Providers;
 
 public class PostgreSqlQueryProvider : IDbQueryProvider
 {
-    public string GetTablesQuery()
-    {
-        return "SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname != 'pg_catalog' AND schemaname != 'information_schema'";
-    }
+    public string GetTablesNamesQuery() => GetTablesNamesScript;
 
     public string GetTableDataQuery(string tableName, int rowsCount)
     {
         string[] parts = tableName.Split('.');
         string schema = parts.Length > 1 ? parts[0] : "public";
         string table = parts.Length > 1 ? parts[1] : tableName;
-        return $"SELECT * FROM \"{schema}\".\"{table}\" LIMIT {rowsCount}";
+        return GetTableDataQueryScript(rowsCount, schema, table);
     }
 
+    public string GetStoredProceduresNamesQuery() => GetStoredProceduresNamesScript;
 
-    public string GetStoredProceduresQuery()
-    {
-        return @"SELECT routine_name as ProcedureName FROM information_schema.routines WHERE specific_schema='public' AND type_udt_name!='void'";
-    }
+    public string GetStoredProcedureDefinitionQuery(string storedProcedureName) => GetStoredProcedureDefinitionScript(storedProcedureName);
 
-    public string GetStoredProcedureDefinitionQuery(string storedProcedureName)
-    {
-        return $"SELECT * FROM information_schema.routines WHERE routine_name = '{storedProcedureName}' AND type_udt_name != 'void'";
-    }
+    public string GetFunctionsNamesQuery() => GetFunctionsNamesScript;
 
-    public string GetFunctionsQuery()
-    {
-        return @"SELECT routine_name as ProcedureName FROM information_schema.routines WHERE specific_schema='public' AND type_udt_name = 'void'";
-    }
+    public string GetFunctionDefinitionQuery(string functionName) => GetFunctionDefinitionScript(functionName);
 
-    public string GetFunctionDefinitionQuery(string functionName)
-    {
-        return $"SELECT * FROM information_schema.routines WHERE routine_name = '{functionName}' AND type_udt_name = 'void'";
-    }
+    public string GetViewsNamesQuery() => GetViewsNamesScript;
 
-    public string GetViewsQuery()
-    {
-        return "SELECT table_name AS ViewName FROM information_schema.views";
-    }
+    public string GetViewDefinitionQuery(string viewName) => GetViewDefinitionScript(viewName);
 
-    public string GetViewDefinitionQuery(string viewName)
-    {
-        return $"SELECT view_definition FROM information_schema.views WHERE table_name = '{viewName}'";
-    }
+    public string GetTablesStructureQuery() => GetTablesStructureScript;
+
+    public string GetTablesCheckAndUniqueConstraintsQuery() => GetDbTablesCheckAndUniqueConstraintsScript;
+
+    public string GetStoredProceduresWithDetailsQuery() => GetStoredProceduresScript;
+
+    public string GetFunctionsWithDetailsQuery() => GetFunctionsScript;
+
+    public string GetViewsWithDetailsQuery() => GetViewsScript;
+
+    public string GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionQuery() => GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionScript;
+
+    public string GetUserDefinedTableTypesStructureQuery() => GetUserDefinedTableTypesStructureScript;
 }

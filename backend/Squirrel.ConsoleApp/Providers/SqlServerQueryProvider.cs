@@ -1,49 +1,45 @@
 ﻿using Squirrel.ConsoleApp.Interfaces;
+using static Squirrel.ConsoleApp.Providers.SqlServerScripts.GetTables;
+using static Squirrel.ConsoleApp.Providers.SqlServerScripts.GetObjects;
+using static Squirrel.ConsoleApp.Providers.SqlServerScripts.GetUserDefinedTypes;
 
 namespace Squirrel.ConsoleApp.Providers;
 
 public class SqlServerQueryProvider : IDbQueryProvider
 {
-    public string GetTablesQuery()
-    {
-        return "SELECT TABLE_SCHEMA + '.' + TABLE_NAME AS FULL_TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE';";
-    }
+    public string GetTablesNamesQuery() => GetTablesNamesScript;
 
     public string GetTableDataQuery(string tableName, int rowsCount)
     {
         string[] parts = tableName.Split('.');
         string schema = parts.Length > 1 ? parts[0] : "dbo";
         string table = parts.Length > 1 ? parts[1] : tableName;
-        return $"SELECT TOP {rowsCount} * FROM [{schema}].[{table}]";
+        return GetTableDataQueryScript(rowsCount, schema, table);
     }
 
-    public string GetStoredProceduresQuery()
-    {
-        return @"SELECT NAME as ProcedureName FROM SYS.OBJECTS WHERE TYPE_DESC = 'SQL_STORED_PROCEDURE'";
-    }
+    public string GetStoredProceduresNamesQuery() => GetStoredProceduresNamesScript;
 
-    public string GetStoredProcedureDefinitionQuery(string storedProcedureName)
-    {
-        return $"SELECT ROUTINE_DEFINITION FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_TYPE = 'PROCEDURE' AND ROUTINE_NAME = '{storedProcedureName}'";
-    }
+    public string GetStoredProcedureDefinitionQuery(string storedProcedureName) => GetStoredProcedureDefinitionScript(storedProcedureName);
 
-    public string GetFunctionsQuery()
-    {
-        return @"SELECT NAME as FunctionName FROM SYS.OBJECTS WHERE TYPE_DESC = 'SQL_SCALAR_FUNCTION' OR TYPE_DESC = 'SQL_TABLE_VALUED_FUNCTION' OR TYPE_DESC = 'SQL_INLINE_TABLE_VALUED_FUNCTION'";
-    }
+    public string GetFunctionsNamesQuery() => GetFunctionsNamesScript;
 
-    public string GetFunctionDefinitionQuery(string functionName)
-    {
-        return $"SELECT ROUTINE_DEFINITION FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_TYPE = 'FUNCTION' AND ROUTINE_NAME = '{functionName}'";
-    }
+    public string GetFunctionDefinitionQuery(string functionName) => GetFunctionDefinitionScript(functionName);
 
-    public string GetViewsQuery()
-    {
-        return $"SELECT NAME as ViewName FROM SYS.OBJECTS WHERE TYPE_DESC = 'VIEW'";
-    }
+    public string GetViewsNamesQuery() => GetViewsNamesScript;
 
-    public string GetViewDefinitionQuery(string viewName)
-    {
-        return $"SELECT VIEW_DEFINITION FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = '{viewName}'";
-    }
+    public string GetViewDefinitionQuery(string viewName) => GetViewDefinitionScript(viewName);
+
+    public string GetTablesStructureQuery() => GetTablesStructureScript;
+
+    public string GetTablesCheckAndUniqueConstraintsQuery() => GetDbTablesCheckAndUniqueConstraintsScript;
+
+    public string GetStoredProceduresWithDetailsQuery() => GetStoredProceduresScript;
+
+    public string GetFunctionsWithDetailsQuery() => GetFunctionsScript;
+
+    public string GetViewsWithDetailsQuery() => GetViewsScript;
+
+    public string GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionQuery() => GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionScript;
+
+    public string GetUserDefinedTableTypesStructureQuery() => GetUserDefinedTableTypesStructureScript;
 }

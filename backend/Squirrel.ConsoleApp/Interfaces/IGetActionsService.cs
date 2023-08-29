@@ -16,9 +16,13 @@ public interface IGetActionsService
     Task<QueryResultTable> GetAllViewsNamesAsync();
     Task<QueryResultTable> GetViewDefinitionAsync(string viewName);
 
-    //Task<QueryResultTable> GetDbTablesStructureAsync();
-    //Task<QueryResultTable> GetDbTablesCheckAndUniqueConstraintsAsync();
-    //Task<QueryResultTable> GetStoredProceduresAsync();
-    //Task<QueryResultTable> GetFunctionsAsync();
-    //Task<QueryResultTable> GetViewsAsync();
+    Task<QueryResultTable> GetDbTablesStructureAsync();
+    Task<QueryResultTable> GetDbTablesCheckAndUniqueConstraintsAsync();
+
+    Task<QueryResultTable> GetStoredProceduresWithDetailAsync();
+    Task<QueryResultTable> GetFunctionsWithDetailAsync();
+    Task<QueryResultTable> GetViewsWithDetailAsync();
+
+    Task<QueryResultTable> GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync();
+    Task<QueryResultTable> GetUserDefinedTableTypesAsync();
 }

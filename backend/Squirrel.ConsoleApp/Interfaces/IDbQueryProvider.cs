@@ -2,15 +2,25 @@
 
 public interface IDbQueryProvider
 {
-    string GetTablesQuery();
+    string GetTablesNamesQuery();
     string GetTableDataQuery(string tableName, int rowsCount);
 
-    string GetStoredProceduresQuery();
+    string GetStoredProceduresNamesQuery();
     string GetStoredProcedureDefinitionQuery(string storedProcedureName);
 
-    string GetFunctionsQuery();
+    string GetFunctionsNamesQuery();
     string GetFunctionDefinitionQuery(string functionName);
 
-    string GetViewsQuery();
+    string GetViewsNamesQuery();
     string GetViewDefinitionQuery(string functionName);
+
+    string GetTablesStructureQuery();
+    string GetTablesCheckAndUniqueConstraintsQuery();
+
+    string GetStoredProceduresWithDetailsQuery();
+    string GetFunctionsWithDetailsQuery();
+    string GetViewsWithDetailsQuery();
+
+    string GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionQuery();
+    string GetUserDefinedTableTypesStructureQuery();
 }

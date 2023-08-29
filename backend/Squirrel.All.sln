@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Squirrel.ConsoleApp.Models"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Squirrel.ConsoleApp.BL", "Squirrel.ConsoleApp.BL\Squirrel.ConsoleApp.BL.csproj", "{414FC4D4-D013-45FB-A435-61C0CAE22389}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Squirrel.Shared", "Squirrel.Shared\Squirrel.Shared.csproj", "{48092366-1949-48AA-969F-C3CC7382B98F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{414FC4D4-D013-45FB-A435-61C0CAE22389}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{414FC4D4-D013-45FB-A435-61C0CAE22389}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{414FC4D4-D013-45FB-A435-61C0CAE22389}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48092366-1949-48AA-969F-C3CC7382B98F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48092366-1949-48AA-969F-C3CC7382B98F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48092366-1949-48AA-969F-C3CC7382B98F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48092366-1949-48AA-969F-C3CC7382B98F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

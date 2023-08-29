@@ -33,6 +33,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IJwtFactory, JwtFactory>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ITextService, TextService>();
+        services.AddTransient<IDependencyAnalyzer, DependencyAnalyzer>();
     }
 
     public static void AddMongoDbService(this IServiceCollection services, IConfiguration configuration)
@@ -41,11 +42,6 @@ public static class ServiceCollectionExtensions
 
         services.AddTransient<IMongoService<Sample>>(s =>
             new MongoService<Sample>(s.GetRequiredService<IOptions<MongoDatabaseConnectionSettings>>(), "SampleCollection"));
-    }
-
-    public static void AddAutoMapper(this IServiceCollection services)
-    {
-        services.AddAutoMapper(Assembly.GetAssembly(typeof(SampleProfile)));
     }
 
     public static void AddValidation(this IServiceCollection services)

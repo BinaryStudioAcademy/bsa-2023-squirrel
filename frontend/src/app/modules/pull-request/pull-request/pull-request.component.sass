@@ -1,0 +1,117 @@
+@import "/src/styles/color"
+@import '/src/styles/global'
+
+.container
+    display: flex
+    width: 100%
+    justify-content: space-between
+    margin-top: 13px
+    > *:not(:last-child)
+        margin-right: 15px 
+
+.main-text
+    margin: 3px
+    font-size: 14px
+    font-style: normal
+    font-weight: 400
+    color: $text-main
+
+.summary
+    display: flex
+    align-items: center
+    width: 50%
+    > *:not(:last-child)
+        margin-right: 12px 
+
+.activity
+    width: 35%
+    display: flex
+    justify-content: center
+    > div
+        display: flex
+        align-items: center
+
+.comments
+    > * 
+        padding-right: 3px
+
+.avatar-container
+    list-style-type: none
+    display: flex
+    margin: auto
+    padding:0px
+    flex-direction: row
+    .avatar:not(:first-child)
+        margin-left: -10px
+    .overflowed
+        @extend .avatar
+        display: flex
+        justify-content: center
+        align-items: center
+        background-color: $misc-background-color
+        color: $text-light
+        font-weight: 600 
+        font-size: 14px 
+        outline-color: white !important
+
+.reviewiers
+    width: 15%
+    display: flex
+    justify-content: center
+    padding: 0px 30px 0px 30px
+
+.avatar
+    width: 44px
+    height: 44px
+    min-width: 44px
+    min-height: 44px
+    border-radius: 50%
+    overflow: hidden
+    outline: 4px solid $avatar-offline-outline
+    .online
+        outline: 4px solid $avatar-online-outline
+    img
+        width: 100%
+        height: 100%
+        border-radius: 50%
+        object-fit: cover
+
+.primary-info
+    display: flex
+    align-items: center
+
+.primary-info > *:not(:last-child)
+        margin-right: 12px 
+
+.secondary-info
+    p
+        font-size: 12px
+        opacity: 0.5
+        font-style: normal
+        font-weight: 400
+        margin-top: 0px
+
+.branch
+    background-color: $misc-background-color
+    border-radius: 10px
+    text-align: center
+    display: inline-block
+    white-space: nowrap
+    align-items: center
+    p
+        padding: 9px
+        margin-block: 0px
+
+@media screen and (max-width: 750px)
+    .activity
+        display: none
+
+    .summary
+        width: 85%
+
+@media screen and (max-width: 700px)
+    .reviewiers
+        display: none
+
+    .summary
+        width: 100%

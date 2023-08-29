@@ -1,7 +1,7 @@
 using Squirrel.Core.BLL.Extensions;
 using Squirrel.Core.DAL.Extensions;
 using Squirrel.Core.WebAPI.Extensions;
-using Squirrel.Core.WebAPI.Middlewares;
+using Squirrel.Shared.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 

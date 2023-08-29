@@ -5,11 +5,10 @@
         [width]="size"
         [height]="size"
         [ngStyle]="avatarStyle"
-        (error)="handleImgError($event)"
-        class="avatar-content"
+        (error)="handleImgError()"
         loading="lazy" />
     <ng-template #textAvatar>
-        <div *ngIf="avatarText" class="avatar-content" [ngStyle]="avatarStyle">
+        <div *ngIf="avatarText" [ngStyle]="avatarStyle">
             {{ avatarText }}
         </div>
     </ng-template>

@@ -128,8 +128,7 @@ export class AvatarComponent implements OnInit {
         return this.constructInitials(initials);
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
-    handleImgError(event: Event) {
+    handleImgError() {
         this.imgLink = '';
         this.initializeAvatar();
     }

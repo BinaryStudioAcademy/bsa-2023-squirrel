@@ -11,10 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Extensions\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\..\Squirrel.Core\Squirrel.Core.Common\Squirrel.Core.Common.csproj" />
     <ProjectReference Include="..\..\Squirrel.Core\Squirrel.Core.DAL\Squirrel.Core.DAL.csproj" />
   </ItemGroup>
 

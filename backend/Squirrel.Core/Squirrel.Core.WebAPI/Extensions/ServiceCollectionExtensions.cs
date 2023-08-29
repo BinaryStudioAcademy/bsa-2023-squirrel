@@ -8,7 +8,6 @@ using Squirrel.Core.BLL.MappingProfiles;
 using Squirrel.Core.BLL.Services;
 using Squirrel.Core.Common.Interfaces;
 using Squirrel.Core.Common.JWT;
-using Squirrel.Core.Common.Models;
 using Squirrel.Core.DAL.Context;
 using Squirrel.Core.DAL.Entities;
 using Squirrel.Core.WebAPI.Validators.Sample;
@@ -32,14 +31,6 @@ public static class ServiceCollectionExtensions
         services.AddScoped<JwtIssuerOptions>();
         services.AddScoped<IJwtFactory, JwtFactory>();
         services.AddScoped<IAuthService, AuthService>();
-    }
-
-    public static void AddMongoDbService(this IServiceCollection services, IConfiguration configuration)
-    {
-        services.Configure<MongoDatabaseConnectionSettings>(configuration.GetSection("MongoDatabase"));
-
-        services.AddTransient<IMongoService<Sample>>(s =>
-            new MongoService<Sample>(s.GetRequiredService<IOptions<MongoDatabaseConnectionSettings>>(), "SampleCollection"));
     }
 
     public static void AddValidation(this IServiceCollection services)

@@ -10,6 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSquirrelCoreContext(builder.Configuration);
 builder.Services.ConfigureCors(builder.Configuration);
+builder.Services.AddMongoDbService(builder.Configuration);
 builder.Services.RegisterCustomServices();
 builder.Services.AddSwaggerGen();
 

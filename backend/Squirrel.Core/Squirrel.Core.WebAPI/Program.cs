@@ -15,7 +15,6 @@ builder.Configuration
 
 builder.Services.AddControllers();
 builder.Services.AddSquirrelCoreContext(builder.Configuration);
-builder.Services.AddMongoDbService(builder.Configuration);
 builder.Services.AddAuthenticationSettings(builder.Configuration);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

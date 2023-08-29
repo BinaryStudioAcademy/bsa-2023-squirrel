@@ -1,4 +1,7 @@
-﻿using Squirrel.SqlService.WebApi.Interfaces;
+﻿using Microsoft.Extensions.Options;
+using Squirrel.Core.DAL.Entities;
+using Squirrel.SqlService.WebApi.Interfaces;
+using Squirrel.SqlService.WebApi.Options;
 using Squirrel.SqlService.WebApi.Services;
 
 namespace Squirrel.SqlService.WebApi.Extensions;
@@ -19,5 +22,13 @@ public static class ServiceCollectionExtensions
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .WithOrigins(allowedOrigin)));
+    }
+
+    public static void AddMongoDbService(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<MongoDatabaseConnectionSettings>(configuration.GetSection("MongoDatabase"));
+
+        services.AddTransient<IMongoService<Sample>>(s =>
+            new MongoService<Sample>(s.GetRequiredService<IOptions<MongoDatabaseConnectionSettings>>(), "SampleCollection"));
     }
 }

@@ -20,10 +20,9 @@ declare const google: any;
 export class LoginComponent extends BaseComponent implements OnInit {
     public loginForm: FormGroup = new FormGroup({});
 
-    // eslint-disable-next-line no-empty-function
     constructor(
         private fb: FormBuilder,
-        private externalAuthService: AuthService,
+        private authService: AuthService,
         private notificationService: NotificationService,
         private router: Router,
     ) {
@@ -65,14 +64,15 @@ export class LoginComponent extends BaseComponent implements OnInit {
     private handleCredentialResponse(response: any) {
         // eslint-disable-next-line no-console
         console.log(`Encoded JWT ID token: ${response.credential}`);
-        this.externalAuthService.validateGoogleAuth(response.credential);
+        this.authService.validateGoogleAuth(response.credential);
     }
 
     public login() {
         const user: UserLoginDto = this.loginForm.value;
 
-        this.externalAuthService.login(user)
-            .pipe(takeUntil(this.unsubscribe$)).subscribe({
+        this.authService.login(user)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe({
                 next: () => this.router.navigateByUrl('/main'),
                 error: err => this.notificationService.error(err.message),
             });

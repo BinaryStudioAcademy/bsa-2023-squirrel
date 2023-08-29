@@ -15,40 +15,28 @@ namespace Squirrel.ConsoleApp.Services
             _databaseService = DatabaseFactory.CreateDatabaseService(dbType, connection);
         }
 
-        public async Task<QueryResultTable> GetAllTablesAsync()
-        {
-            var query = _queryProvider.GetTablesQuery();
-            return await _databaseService.ExecuteQueryAsync(query);
-        }
+        public async Task<QueryResultTable> GetAllTablesNamesAsync() 
+            => await _databaseService.ExecuteQueryAsync(_queryProvider.GetTablesQuery());
 
-        public async Task<QueryResultTable> GetTableDataAsync(string tableName, int rowsCount)
-        {
-            var query = _queryProvider.GetTableDataQuery(tableName, rowsCount);
-            return await _databaseService.ExecuteQueryAsync(query);
-        }
+        public async Task<QueryResultTable> GetTableDataAsync(string tableName, int rowsCount) 
+            => await _databaseService.ExecuteQueryAsync(_queryProvider.GetTableDataQuery(tableName, rowsCount));
 
-        public async Task<QueryResultTable> GetAllStoredProceduresAsync()
-        {
-            var query = _queryProvider.GetStoredProceduresQuery();
-            return await _databaseService.ExecuteQueryAsync(query);
-        }
+        public async Task<QueryResultTable> GetAllStoredProceduresNamesAsync() 
+            => await _databaseService.ExecuteQueryAsync(_queryProvider.GetStoredProceduresQuery());
 
-        public async Task<QueryResultTable> GetStoredProcedureDefinitionAsync(string storedProcedureName)
-        {
-            var query = _queryProvider.GetStoredProcedureDefinitionQuery(storedProcedureName);
-            return await _databaseService.ExecuteQueryAsync(query);
-        }
+        public async Task<QueryResultTable> GetStoredProcedureDefinitionAsync(string storedProcedureName) 
+            => await _databaseService.ExecuteQueryAsync(_queryProvider.GetStoredProcedureDefinitionQuery(storedProcedureName));
 
-        public async Task<QueryResultTable> GetAllFunctionsAsync()
-        {
-            var query = _queryProvider.GetFunctionsQuery();
-            return await _databaseService.ExecuteQueryAsync(query);
-        }
+        public async Task<QueryResultTable> GetAllFunctionsNamesAsync() 
+            => await _databaseService.ExecuteQueryAsync(_queryProvider.GetFunctionsQuery());
 
-        public async Task<QueryResultTable> GetFunctionDefinitionAsync(string functionName)
-        {
-            var query = _queryProvider.GetFunctionDefinitionQuery(functionName);
-            return await _databaseService.ExecuteQueryAsync(query);
-        }
+        public async Task<QueryResultTable> GetFunctionDefinitionAsync(string functionName) 
+            => await _databaseService.ExecuteQueryAsync(_queryProvider.GetFunctionDefinitionQuery(functionName));
+
+        public async Task<QueryResultTable> GetAllViewsNamesAsync() 
+            => await _databaseService.ExecuteQueryAsync(_queryProvider.GetViewsQuery());
+
+        public async Task<QueryResultTable> GetViewDefinitionAsync(string viewName) 
+            => await _databaseService.ExecuteQueryAsync(_queryProvider.GetViewDefinitionQuery(viewName));
     }
 }

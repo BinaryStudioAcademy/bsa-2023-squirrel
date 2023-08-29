@@ -37,7 +37,7 @@ internal class Program
 
     private static async Task DisplayStoredProceduresAsync(IGetActionsService service)
     {
-        var procedures = await service.GetAllStoredProceduresAsync();
+        var procedures = await service.GetAllStoredProceduresNamesAsync();
         var names = procedures.Rows.SelectMany(e => e).ToList();
         foreach (var procedure in names)
         {
@@ -51,7 +51,7 @@ internal class Program
 
     private static async Task DisplayTablesAsync(IGetActionsService service)
     {
-        var tables = await service.GetAllTablesAsync();
+        var tables = await service.GetAllTablesNamesAsync();
         var names = tables.Rows.SelectMany(e => e).ToList();
         foreach (var tableName in names)
         {

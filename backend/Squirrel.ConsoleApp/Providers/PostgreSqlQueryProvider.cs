@@ -11,8 +11,12 @@ public class PostgreSqlQueryProvider : IDbQueryProvider
 
     public string GetTableDataQuery(string tableName, int rowsCount)
     {
-        return $"SELECT * FROM {tableName} LIMIT {rowsCount}";
+        string[] parts = tableName.Split('.');
+        string schema = parts.Length > 1 ? parts[0] : "public";
+        string table = parts.Length > 1 ? parts[1] : tableName;
+        return $"SELECT * FROM \"{schema}\".\"{table}\" LIMIT {rowsCount}";
     }
+
 
     public string GetStoredProceduresQuery()
     {
@@ -32,5 +36,15 @@ public class PostgreSqlQueryProvider : IDbQueryProvider
     public string GetFunctionDefinitionQuery(string functionName)
     {
         return $"SELECT * FROM information_schema.routines WHERE routine_name = '{functionName}' AND type_udt_name = 'void'";
+    }
+
+    public string GetViewsQuery()
+    {
+        return "SELECT table_name AS ViewName FROM information_schema.views";
+    }
+
+    public string GetViewDefinitionQuery(string viewName)
+    {
+        return $"SELECT view_definition FROM information_schema.views WHERE table_name = '{viewName}'";
     }
 }

@@ -36,4 +36,14 @@ public class SqlServerQueryProvider : IDbQueryProvider
     {
         return $"SELECT ROUTINE_DEFINITION FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_TYPE = 'FUNCTION' AND ROUTINE_NAME = '{functionName}'";
     }
+
+    public string GetViewsQuery()
+    {
+        return $"SELECT NAME as ViewName FROM SYS.OBJECTS WHERE TYPE_DESC = 'VIEW'";
+    }
+
+    public string GetViewDefinitionQuery(string viewName)
+    {
+        return $"SELECT VIEW_DEFINITION FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_NAME = '{viewName}'";
+    }
 }

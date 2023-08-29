@@ -9,5 +9,8 @@ public interface IDbQueryProvider
     string GetStoredProcedureDefinitionQuery(string storedProcedureName);
 
     string GetFunctionsQuery();
-    string GetFunctionDefinitionQuery(string functionName); 
+    string GetFunctionDefinitionQuery(string functionName);
+
+    string GetViewsQuery();
+    string GetViewDefinitionQuery(string functionName);
 }

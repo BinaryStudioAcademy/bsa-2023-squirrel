@@ -2,10 +2,12 @@
 
 public interface IDbQueryProvider
 {
-    string GetFunctionsQuery();
-    string GetStoredProceduresQuery();
     string GetTablesQuery();
-    string GetFunctionQuery(string functionName);
-    string GetStoredProcedureQuery(string storedProcedureName);
     string GetTableDataQuery(string tableName, int rowsCount);
+
+    string GetStoredProceduresQuery();
+    string GetStoredProcedureQuery(string storedProcedureName);
+
+    string GetFunctionsQuery();
+    string GetFunctionQuery(string functionName); 
 }

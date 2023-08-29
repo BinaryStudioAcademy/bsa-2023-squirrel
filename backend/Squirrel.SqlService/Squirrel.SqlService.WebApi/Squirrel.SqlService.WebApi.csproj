@@ -10,4 +10,12 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Squirrel.Core\Squirrel.Core.DAL\Squirrel.Core.DAL.csproj" />
+  </ItemGroup>
+
 </Project>

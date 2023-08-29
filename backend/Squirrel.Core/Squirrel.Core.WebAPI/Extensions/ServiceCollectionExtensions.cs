@@ -32,7 +32,6 @@ public static class ServiceCollectionExtensions
         services.AddScoped<JwtIssuerOptions>();
         services.AddScoped<IJwtFactory, JwtFactory>();
         services.AddScoped<IAuthService, AuthService>();
-        services.AddScoped<ITextService, TextService>();
     }
 
     public static void AddMongoDbService(this IServiceCollection services, IConfiguration configuration)

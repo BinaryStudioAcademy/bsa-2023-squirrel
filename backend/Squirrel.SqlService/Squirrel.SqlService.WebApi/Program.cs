@@ -1,5 +1,5 @@
 using Squirrel.Core.DAL.Extensions;
-using Squirrel.Core.WebAPI.Extensions;
+using Squirrel.SqlService.WebApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +9,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSquirrelCoreContext(builder.Configuration);
+builder.Services.RegisterCustomServices();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();

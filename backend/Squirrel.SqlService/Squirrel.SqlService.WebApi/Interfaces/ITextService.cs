@@ -1,6 +1,6 @@
 ﻿using Squirrel.Core.Common.DTO.Text;
 
-namespace Squirrel.Core.BLL.Interfaces;
+namespace Squirrel.SqlService.WebApi.Interfaces;
 
 public interface ITextService
 {

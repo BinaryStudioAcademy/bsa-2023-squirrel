@@ -18,23 +18,24 @@ public sealed class AuthService : BaseService, IAuthService
 {
     private IJwtFactory _jwtFactory;
     private readonly string _googleClientId;
-    
+
     public AuthService(
         SquirrelCoreContext context,
         IMapper mapper,
         IJwtFactory jwtFactory,
         IOptions<AuthenticationSettings> authSettings) : base(context, mapper)
     {
-       _jwtFactory = jwtFactory;
-       _googleClientId = authSettings.Value.GoogleClientId;
+        _jwtFactory = jwtFactory;
+        _googleClientId = authSettings.Value.GoogleClientId;
     }
 
     public async Task<AuthUserDTO> AuthorizeWithGoogleAsync(string googleToken)
     {
-        var payload = await GoogleJsonWebSignature.ValidateAsync(googleToken, new GoogleJsonWebSignature.ValidationSettings
-        {
-            Audience = new List<string> { _googleClientId }
-        });
+        var payload = await GoogleJsonWebSignature.ValidateAsync(googleToken,
+            new GoogleJsonWebSignature.ValidationSettings
+            {
+                Audience = new List<string> { _googleClientId }
+            });
 
         // TODO: it will be implemented later, after Users
         //var userEntity = await _context.Users
@@ -59,12 +60,16 @@ public sealed class AuthService : BaseService, IAuthService
 
     public async Task<RefreshedAccessTokenDto> LoginAsync(UserLoginDto userLoginDto)
     {
-        // TODO: Find user in database by his email and get user info. Exception when not found or invalid credentials.
-        // Dummy user info.
-        var userId = 0;
-        var username = "username";
+        var userEntity = await _context.Users
+            .FirstOrDefaultAsync(u => u.Email == userLoginDto.Email);
 
-        return await GenerateNewAccessTokenAsync(userId, username, userLoginDto.Email);
+        if (userEntity == null ||
+            !SecurityUtils.ValidatePassword(userLoginDto.Password, userEntity.Password, userEntity.Salt))
+        {
+            throw new InvalidEmailOrPasswordException();
+        }
+
+        return await GenerateNewAccessTokenAsync(userEntity.Id, userEntity.Username, userLoginDto.Email);
     }
 
     public async Task<RefreshedAccessTokenDto> RegisterAsync(UserRegisterDto userRegisterDto)
@@ -73,7 +78,7 @@ public sealed class AuthService : BaseService, IAuthService
         {
             throw new UsernameAlreadyRegisteredException();
         }
-        
+
         if (await _context.Users.FirstOrDefaultAsync(u => u.Email == userRegisterDto.Email) is not null)
         {
             throw new EmailAlreadyRegisteredException();
@@ -85,7 +90,7 @@ public sealed class AuthService : BaseService, IAuthService
         newUser.PasswordHash = SecurityUtils.HashPassword(newUser.PasswordHash, salt);
         var createdUser = (await _context.Users.AddAsync(newUser)).Entity;
         await _context.SaveChangesAsync();
-        
+
         return await GenerateNewAccessTokenAsync(createdUser.Id, createdUser.Username, createdUser.Email);
     }
 

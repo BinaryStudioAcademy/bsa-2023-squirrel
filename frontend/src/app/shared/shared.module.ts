@@ -7,6 +7,7 @@ import { ToastrModule } from 'ngx-toastr';
 
 import { MaterialModule } from '../material/material.module';
 
+import { AvatarComponent } from './components/avatar/avatar.component';
 import { BarrierComponent } from './components/barrier/barrier.component';
 import { ButtonComponent } from './components/button/button.component';
 import { DropdownSelectComponent } from './components/dropdown-select/dropdown-select.component';
@@ -31,8 +32,9 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
         ButtonComponent,
         SidebarComponent,
         InputComponent,
-        DropdownSelectComponent,
         BarrierComponent,
+        AvatarComponent,
+        DropdownSelectComponent,
     ],
     exports: [
         CommonModule,
@@ -49,6 +51,7 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
         ToastrModule,
         InputComponent,
         BarrierComponent,
+        AvatarComponent,
     ],
 })
 export class SharedModule {}

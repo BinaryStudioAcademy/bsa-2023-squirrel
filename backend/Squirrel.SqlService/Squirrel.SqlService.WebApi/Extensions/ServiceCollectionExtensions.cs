@@ -9,4 +9,15 @@ public static class ServiceCollectionExtensions
     {
         services.AddScoped<ITextService, TextService>();
     }
+
+    public static void ConfigureCors(this IServiceCollection services, IConfiguration configuration)
+    {
+        var allowedOrigin = configuration.GetRequiredSection("CoreWebAPIDomain").Value;
+        services.AddCors(options => 
+            options.AddDefaultPolicy(policy => 
+                policy
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .WithOrigins(allowedOrigin)));
+    }
 }

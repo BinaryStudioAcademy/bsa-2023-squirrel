@@ -1,4 +1,5 @@
 using Squirrel.Core.DAL.Extensions;
+using Squirrel.Shared.Middlewares;
 using Squirrel.SqlService.WebApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +23,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<GenericExceptionHandlerMiddleware>();
 
 app.UseHttpsRedirection();
 

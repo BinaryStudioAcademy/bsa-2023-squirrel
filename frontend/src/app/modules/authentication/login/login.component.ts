@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { BaseComponent } from '@core/base/base.component';
 import { AuthService } from '@core/services/auth.service';
+import { NotificationService } from '@core/services/notification.service';
 import { environment } from '@env/environment';
 import { ValidationsFn } from '@shared/helpers/validations-fn';
+import { takeUntil } from 'rxjs';
 
 import { UserLoginDto } from 'src/app/models/user/user-login-dto';
 
@@ -13,11 +17,17 @@ declare const google: any;
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.sass'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent extends BaseComponent implements OnInit {
     public loginForm: FormGroup = new FormGroup({});
 
-    // eslint-disable-next-line no-empty-function
-    constructor(private fb: FormBuilder, private externalAuthService: AuthService) {}
+    constructor(
+        private fb: FormBuilder,
+        private authService: AuthService,
+        private notificationService: NotificationService,
+        private router: Router,
+    ) {
+        super();
+    }
 
     ngOnInit(): void {
         this.initializeForm();
@@ -54,14 +64,17 @@ export class LoginComponent implements OnInit {
     private handleCredentialResponse(response: any) {
         // eslint-disable-next-line no-console
         console.log(`Encoded JWT ID token: ${response.credential}`);
-        this.externalAuthService.validateGoogleAuth(response.credential);
+        this.authService.validateGoogleAuth(response.credential);
     }
 
     public login() {
         const user: UserLoginDto = this.loginForm.value;
 
-        // temporary solution
-        // eslint-disable-next-line no-console
-        console.log(user);
+        this.authService.login(user)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe({
+                next: () => this.router.navigateByUrl('/main'),
+                error: err => this.notificationService.error(err.message),
+            });
     }
 }

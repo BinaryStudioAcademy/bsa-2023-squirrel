@@ -1,0 +1,16 @@
+<div class="avatar-container" [ngStyle]="hostStyle">
+    <img
+        *ngIf="avatarSrc; else textAvatar"
+        [src]="avatarSrc"
+        [width]="size"
+        [height]="size"
+        [ngStyle]="avatarStyle"
+        (error)="handleImgError($event)"
+        class="avatar-content"
+        loading="lazy" />
+    <ng-template #textAvatar>
+        <div *ngIf="avatarText" class="avatar-content" [ngStyle]="avatarStyle">
+            {{ avatarText }}
+        </div>
+    </ng-template>
+</div>

@@ -22,7 +22,7 @@
 
         public static string GetStoredProceduresScript =>
             @"
-            TBD
+            TBD - All TBD will be updated after scipts will be written
             ";
 
         public static string GetFunctionsScript =>

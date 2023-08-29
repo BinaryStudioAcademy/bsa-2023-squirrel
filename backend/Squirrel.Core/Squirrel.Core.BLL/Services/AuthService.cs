@@ -2,7 +2,6 @@
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.BLL.Services.Abstract;
 using Squirrel.Core.Common.DTO.Auth;
-using Squirrel.Core.Common.Exceptions;
 using Squirrel.Core.Common.Interfaces;
 using Squirrel.Core.DAL.Context;
 using Squirrel.Core.DAL.Entities;
@@ -11,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Squirrel.Core.Common.DTO.Users;
 using Squirrel.Core.Common.Security;
+using Squirrel.Shared.Exceptions;
 
 namespace Squirrel.Core.BLL.Services;
 
@@ -64,7 +64,7 @@ public sealed class AuthService : BaseService, IAuthService
             .FirstOrDefaultAsync(u => u.Email == userLoginDto.Email);
 
         if (userEntity == null ||
-            !SecurityUtils.ValidatePassword(userLoginDto.Password, userEntity.Password, userEntity.Salt))
+            !SecurityUtils.ValidatePassword(userLoginDto.Password, userEntity.PasswordHash, userEntity.Salt))
         {
             throw new InvalidEmailOrPasswordException();
         }

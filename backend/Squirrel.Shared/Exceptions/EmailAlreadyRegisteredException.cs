@@ -1,8 +1,8 @@
 ﻿using System.Net;
-using Squirrel.Core.Common.Enums;
-using Squirrel.Core.Common.Exceptions.Abstract;
+using Squirrel.Shared.Enums;
+using Squirrel.Shared.Exceptions.Abstract;
 
-namespace Squirrel.Core.Common.Exceptions;
+namespace Squirrel.Shared.Exceptions;
 
 public sealed class EmailAlreadyRegisteredException : RequestException
 {

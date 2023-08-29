@@ -4,12 +4,12 @@ namespace Squirrel.ConsoleApp.Interfaces;
 
 public interface IGetActionsService
 {
-    Task<UserAction> GetAllTablesAsync();
-    Task<TableData> GetTableDataAsync(string tableName, int rowsCount);
+    Task<QueryResultTable> GetAllTablesAsync();
+    Task<QueryResultTable> GetTableDataAsync(string tableName, int rowsCount);
 
-    Task<UserAction> GetAllFunctionsAsync();
-    Task<UserAction> GetFunctionAsync(string functionName);
+    Task<QueryResultTable> GetAllStoredProceduresAsync();
+    Task<QueryResultTable> GetStoredProcedureDefinitionAsync(string storedProcedureName);
 
-    Task<UserAction> GetAllStoredProceduresAsync();
-    Task<UserAction> GetStoredProcedureAsync(string storedProcedureName);
+    Task<QueryResultTable> GetAllFunctionsAsync();
+    Task<QueryResultTable> GetFunctionDefinitionAsync(string functionName);
 }

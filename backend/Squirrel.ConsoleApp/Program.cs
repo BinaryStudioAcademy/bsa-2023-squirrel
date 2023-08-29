@@ -38,14 +38,13 @@ internal class Program
     private static async Task DisplayStoredProceduresAsync(IGetActionsService service)
     {
         var procedures = await service.GetAllStoredProceduresAsync();
-        foreach (var procedure in procedures.Data)
+        var names = procedures.Rows.SelectMany(e => e).ToList();
+        foreach (var procedure in names)
         {
-            var tableData = await service.GetStoredProcedureAsync(procedure);
+            var result = await service.GetStoredProcedureDefinitionAsync(procedure);
 
-            Console.WriteLine($"tableData.Name: {tableData.Name}");
-            Console.WriteLine($"tableData.Type: {tableData.Type}");
-            Console.WriteLine($"tableData.Data:");
-            Console.WriteLine(string.Join(Environment.NewLine, tableData.Data.Select(e => string.Join(", ", e))));
+            Console.WriteLine($"result.Data: {string.Join(" | ", result.ColumnNames)}");
+            Console.WriteLine(string.Join(Environment.NewLine, result.Rows.Select(e => string.Join(", ", e))));
             Console.WriteLine("=============================");
         }
     }
@@ -53,15 +52,14 @@ internal class Program
     private static async Task DisplayTablesAsync(IGetActionsService service)
     {
         var tables = await service.GetAllTablesAsync();
-        foreach (var tableName in tables.Data)
+        var names = tables.Rows.SelectMany(e => e).ToList();
+        foreach (var tableName in names)
         {
             var tableData = await service.GetTableDataAsync(tableName, 10);
 
-            Console.WriteLine($"tableData.Name: {tableData.Name}");
-            Console.WriteLine($"tableData.Type: {tableData.Type}");
-            Console.WriteLine($"tableData.Data:");
-            Console.WriteLine(string.Join(" | ", tableData.Table.ColumnNames));
-            Console.WriteLine(string.Join(Environment.NewLine, tableData.Table.Rows.Select(e => string.Join(", ", e))));
+            Console.WriteLine($"tableData.Data for '{tableName}'");
+            Console.WriteLine(string.Join(" | ", tableData.ColumnNames));
+            Console.WriteLine(string.Join(Environment.NewLine, tableData.Rows.Select(e => string.Join(", ", e))));
             Console.WriteLine("=============================");
         }
     }

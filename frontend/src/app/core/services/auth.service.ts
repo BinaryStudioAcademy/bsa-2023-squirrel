@@ -7,6 +7,8 @@ import { GoogleAuthDto } from 'src/app/models/auth/google-auth-dto';
 import { UserAuthDto } from 'src/app/models/auth/user-auth-dto';
 import { UserRegisterDto } from 'src/app/models/user/user-register-dto';
 
+import { UserLoginDto } from '../../models/user/user-login-dto';
+
 import { HttpInternalService } from './http-internal.service';
 
 @Injectable({ providedIn: 'root' })
@@ -46,6 +48,28 @@ export class AuthService {
                 this.saveTokens(tokens);
             }),
         );
+    }
+
+    public login(userLoginDto: UserLoginDto): Observable<AccessTokenDto> {
+        return this.httpService.postRequest<AccessTokenDto>(`${this.authRoutePrefix}/login`, userLoginDto).pipe(
+            tap((tokens) => {
+                this.saveTokens(tokens);
+            }),
+        );
+    }
+
+    public tokenExist() {
+        return localStorage.getItem('accessToken') && localStorage.getItem('refreshToken');
+    }
+
+    public get accessToken(): string | null {
+        const localJwt = localStorage.getItem('accessToken');
+
+        if (!localJwt) {
+            return null;
+        }
+
+        return JSON.parse(localJwt);
     }
 
     private saveTokens(tokens: AccessTokenDto) {

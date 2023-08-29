@@ -5,8 +5,12 @@ import { RouterModule } from '@angular/router';
 import { SidebarComponent } from '@shared/components/sidebar/sidebar.component';
 import { ToastrModule } from 'ngx-toastr';
 
+import { MaterialModule } from '../material/material.module';
+
+import { AvatarComponent } from './components/avatar/avatar.component';
 import { BarrierComponent } from './components/barrier/barrier.component';
 import { ButtonComponent } from './components/button/button.component';
+import { DropdownSelectComponent } from './components/dropdown-select/dropdown-select.component';
 import { InputComponent } from './components/input/input.component';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
@@ -17,12 +21,25 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
         FormsModule,
         ReactiveFormsModule,
         RouterModule,
+        MaterialModule,
         ToastrModule.forRoot({
             positionClass: 'toast-bottom-right',
-        })],
-    declarations: [LoadingSpinnerComponent, NotFoundComponent, ButtonComponent, SidebarComponent, InputComponent, BarrierComponent],
+        }),
+    ],
+    declarations: [
+        LoadingSpinnerComponent,
+        NotFoundComponent,
+        ButtonComponent,
+        SidebarComponent,
+        InputComponent,
+        BarrierComponent,
+        AvatarComponent,
+        DropdownSelectComponent,
+    ],
     exports: [
         CommonModule,
+        RouterModule,
+        MaterialModule,
         FormsModule,
         ReactiveFormsModule,
         RouterModule,
@@ -30,9 +47,11 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
         NotFoundComponent,
         ButtonComponent,
         SidebarComponent,
+        DropdownSelectComponent,
         ToastrModule,
         InputComponent,
         BarrierComponent,
+        AvatarComponent,
     ],
 })
 export class SharedModule {}

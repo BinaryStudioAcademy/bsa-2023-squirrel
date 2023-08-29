@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
+using Squirrel.ConsoleApp.BL.Interfaces;
 using Squirrel.ConsoleApp.Interfaces;
 using Squirrel.ConsoleApp.Models;
-using Squirrel.ConsoleApp.Providers;
 
 namespace Squirrel.ConsoleApp.Services
 {

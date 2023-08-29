@@ -2,9 +2,9 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Microsoft.AspNetCore.Http;
-using Squirrel.ExceptionHandling.Extensions;
+using Squirrel.Shared.Extensions;
 
-namespace Squirrel.ExceptionHandling.Middleware;
+namespace Squirrel.Shared.Middleware;
 
 public class GenericExceptionHandlerMiddleware
 {

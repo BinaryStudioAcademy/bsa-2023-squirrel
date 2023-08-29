@@ -1,4 +1,4 @@
-﻿namespace Squirrel.ExceptionHandling.Exceptions;
+﻿namespace Squirrel.Shared.Exceptions;
 
 public sealed class ExpiredRefreshTokenException : Exception
 {

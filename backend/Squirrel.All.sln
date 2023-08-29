@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Squirrel.AzureBlobStorage",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Squirrel.ConsoleApp", "Squirrel.ConsoleApp\Squirrel.ConsoleApp.csproj", "{A77813D7-094A-4AAE-96F9-4408A7A353E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Squirrel.ExceptionHandling", "Squirrel.ExceptionHandling\Squirrel.ExceptionHandling.csproj", "{48092366-1949-48AA-969F-C3CC7382B98F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Squirrel.Shared", "Squirrel.Shared\Squirrel.Shared.csproj", "{48092366-1949-48AA-969F-C3CC7382B98F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

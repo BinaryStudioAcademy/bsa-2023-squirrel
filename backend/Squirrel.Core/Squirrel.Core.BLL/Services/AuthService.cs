@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Squirrel.Core.Common.DTO.Users;
 using Squirrel.Core.Common.Security;
-using Squirrel.ExceptionHandling.Exceptions;
+using Squirrel.Shared.Exceptions;
 
 namespace Squirrel.Core.BLL.Services;
 

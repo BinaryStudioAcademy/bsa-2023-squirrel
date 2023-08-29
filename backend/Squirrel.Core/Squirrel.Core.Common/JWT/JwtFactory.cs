@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Squirrel.Core.Common.Interfaces;
 using Squirrel.Core.Common.Security;
-using Squirrel.ExceptionHandling.Exceptions;
+using Squirrel.Shared.Exceptions;
 
 namespace Squirrel.Core.Common.JWT;
 

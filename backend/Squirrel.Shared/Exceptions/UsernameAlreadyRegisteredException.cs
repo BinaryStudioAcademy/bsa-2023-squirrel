@@ -1,8 +1,8 @@
 ﻿using System.Net;
-using Squirrel.ExceptionHandling.Enums;
-using Squirrel.ExceptionHandling.Exceptions.Abstract;
+using Squirrel.Shared.Enums;
+using Squirrel.Shared.Exceptions.Abstract;
 
-namespace Squirrel.ExceptionHandling.Exceptions;
+namespace Squirrel.Shared.Exceptions;
 
 public sealed class UsernameAlreadyRegisteredException : RequestException
 {

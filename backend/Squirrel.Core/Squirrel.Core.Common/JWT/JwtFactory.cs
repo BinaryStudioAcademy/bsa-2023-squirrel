@@ -4,9 +4,9 @@ using System.Security.Principal;
 using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Squirrel.Core.Common.Exceptions;
 using Squirrel.Core.Common.Interfaces;
 using Squirrel.Core.Common.Security;
+using Squirrel.ExceptionHandling.Exceptions;
 
 namespace Squirrel.Core.Common.JWT;
 

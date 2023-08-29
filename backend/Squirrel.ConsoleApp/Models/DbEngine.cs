@@ -1,6 +1,6 @@
 ﻿namespace Squirrel.ConsoleApp.Models;
 
-public enum DatabaseType
+public enum DbEngine
 {
     SqlServer,
     PostgreSQL

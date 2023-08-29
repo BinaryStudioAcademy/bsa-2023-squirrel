@@ -10,7 +10,7 @@ namespace Squirrel.ConsoleApp.Services
         private readonly IDbQueryProvider _queryProvider;
         private readonly IDatabaseService _databaseService;
 
-        public GetActionsService(DatabaseType dbType, IDbQueryProvider queryProvider, string connection)
+        public GetActionsService(DbEngine dbType, IDbQueryProvider queryProvider, string connection)
         {
             _queryProvider = queryProvider;
             _databaseService = DatabaseFactory.CreateDatabaseService(dbType, connection);

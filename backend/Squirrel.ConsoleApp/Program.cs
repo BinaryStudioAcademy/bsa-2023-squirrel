@@ -74,25 +74,25 @@ internal class Program
         Console.WriteLine("-----------------------------");
     }
 
-    public static DatabaseType ParseDatabaseType(string value)
+    public static DbEngine ParseDatabaseType(string value)
     {
-        if (!Enum.TryParse(value, out DatabaseType dbType))
+        if (!Enum.TryParse(value, out DbEngine dbType))
             throw new ArgumentException("Invalid DatabaseType provided.");
 
         return dbType;
     }
 
-    public static ServiceProvider BuildServiceProvider(DatabaseType databaseType)
+    public static ServiceProvider BuildServiceProvider(DbEngine databaseType)
     {
         var services = new ServiceCollection();
 
         switch (databaseType)
         {
-            case DatabaseType.SqlServer:
+            case DbEngine.SqlServer:
                 services.AddSingleton<IDbQueryProvider, SqlServerQueryProvider>();
                 services.AddTransient<IDatabaseService, SqlServerService>();
                 break;
-            case DatabaseType.PostgreSQL:
+            case DbEngine.PostgreSQL:
                 services.AddSingleton<IDbQueryProvider, PostgreSqlQueryProvider>();
                 services.AddTransient<IDatabaseService, PostgreSqlService>();
                 break;

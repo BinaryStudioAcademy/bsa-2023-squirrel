@@ -1,8 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Squirrel.Core.Common.Extensions;
+using Microsoft.AspNetCore.Http;
+using Squirrel.ExceptionHandling.Extensions;
 
-namespace Squirrel.Core.WebAPI.Middlewares;
+namespace Squirrel.ExceptionHandling.Middleware;
 
 public class GenericExceptionHandlerMiddleware
 {

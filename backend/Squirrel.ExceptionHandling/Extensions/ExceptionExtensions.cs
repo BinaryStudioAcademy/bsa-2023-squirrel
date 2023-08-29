@@ -1,9 +1,9 @@
 ﻿using System.Net;
-using Squirrel.Core.Common.DTO.Error;
-using Squirrel.Core.Common.Enums;
-using Squirrel.Core.Common.Exceptions.Abstract;
+using Squirrel.ExceptionHandling.DTO.Error;
+using Squirrel.ExceptionHandling.Enums;
+using Squirrel.ExceptionHandling.Exceptions.Abstract;
 
-namespace Squirrel.Core.Common.Extensions;
+namespace Squirrel.ExceptionHandling.Extensions;
 
 public static class ExceptionExtensions
 {

@@ -1,4 +1,4 @@
-﻿namespace Squirrel.Core.Common.Enums;
+﻿namespace Squirrel.ExceptionHandling.Enums;
 
 public enum ErrorType
 {

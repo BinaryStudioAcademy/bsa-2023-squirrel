@@ -1,7 +1,7 @@
 ﻿using System.Net;
-using Squirrel.Core.Common.Enums;
+using Squirrel.ExceptionHandling.Enums;
 
-namespace Squirrel.Core.Common.Exceptions.Abstract;
+namespace Squirrel.ExceptionHandling.Exceptions.Abstract;
 
 public abstract class RequestException : Exception
 {

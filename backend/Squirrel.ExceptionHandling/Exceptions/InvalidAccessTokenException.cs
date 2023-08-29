@@ -1,4 +1,4 @@
-﻿namespace Squirrel.Core.Common.Exceptions;
+﻿namespace Squirrel.ExceptionHandling.Exceptions;
 
 public sealed class InvalidAccessTokenException : Exception
 {

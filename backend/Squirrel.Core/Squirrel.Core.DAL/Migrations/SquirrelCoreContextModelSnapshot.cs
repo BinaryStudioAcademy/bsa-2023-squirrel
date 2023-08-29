@@ -22,32 +22,6 @@ namespace Squirrel.Core.DAL.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Squirrel.Core.DAL.Entities.Project", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("CreatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DbEngine")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Projects");
-                });
-
             modelBuilder.Entity("Squirrel.Core.DAL.Entities.RefreshToken", b =>
                 {
                     b.Property<int>("Id")
@@ -77,7 +51,7 @@ namespace Squirrel.Core.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RefreshTokens");
+                    b.ToTable("RefreshTokens", (string)null);
                 });
 
             modelBuilder.Entity("Squirrel.Core.DAL.Entities.Sample", b =>
@@ -104,7 +78,7 @@ namespace Squirrel.Core.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Samples");
+                    b.ToTable("Samples", (string)null);
 
                     b.HasData(
                         new
@@ -233,7 +207,7 @@ namespace Squirrel.Core.DAL.Migrations
 
                     b.HasAlternateKey("Username");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Squirrel.Core.DAL.Entities.RefreshToken", b =>

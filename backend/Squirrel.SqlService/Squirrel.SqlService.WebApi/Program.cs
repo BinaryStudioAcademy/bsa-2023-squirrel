@@ -1,3 +1,4 @@
+using Squirrel.AzureBlobStorage.Extensions;
 using Squirrel.Core.DAL.Extensions;
 using Squirrel.Shared.Middlewares;
 using Squirrel.SqlService.WebApi.Extensions;
@@ -9,10 +10,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSquirrelCoreContext(builder.Configuration);
 builder.Services.ConfigureCors(builder.Configuration);
 builder.Services.AddMongoDbService(builder.Configuration);
+builder.Services.AddAzureBlobStorage(builder.Configuration);
 builder.Services.RegisterCustomServices();
+
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();

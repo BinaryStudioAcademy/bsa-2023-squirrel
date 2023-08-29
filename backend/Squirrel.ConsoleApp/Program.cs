@@ -14,7 +14,7 @@ internal class Program
         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
         .Build();
 
-    // TESTING NEEDS 
+    // ALL IN Program is for TESTING NEEDS 
 
     async static Task Main(string[] args)
     {

@@ -62,6 +62,16 @@ export class AuthService {
         return localStorage.getItem('accessToken') && localStorage.getItem('refreshToken');
     }
 
+    public get accessToken(): string | null {
+        const localJwt = localStorage.getItem('accessToken');
+
+        if (!localJwt) {
+            return null;
+        }
+
+        return JSON.parse(localJwt);
+    }
+
     private saveTokens(tokens: AccessTokenDto) {
         if (tokens.accessToken && tokens.refreshToken) {
             localStorage.setItem(this.accessTokenKey, JSON.stringify(tokens.accessToken));

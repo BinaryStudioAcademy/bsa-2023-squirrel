@@ -5,10 +5,11 @@
         [width]="size"
         [height]="size"
         [ngStyle]="avatarStyle"
+        class="default-img-avatar"
         (error)="handleImgError()"
         loading="lazy" />
     <ng-template #textAvatar>
-        <div *ngIf="avatarText" [ngStyle]="avatarStyle">
+        <div *ngIf="avatarText" [ngStyle]="avatarStyle" class="default-initials-avatar">
             {{ avatarText }}
         </div>
     </ng-template>

@@ -56,8 +56,6 @@ export class AvatarComponent implements OnInit {
 
     private getImageStyle(): Style {
         return {
-            maxWidth: '100%',
-            borderRadius: '50%',
             width: `${this.size}px`,
             height: `${this.size}px`,
             ...this.style,
@@ -66,10 +64,6 @@ export class AvatarComponent implements OnInit {
 
     private getInitialsStyle(avatarValue: string): Style {
         return {
-            textAlign: 'center',
-            borderRadius: '100%',
-            textTransform: 'uppercase',
-            color: '#FFFFFF',
             backgroundColor: this.hslGenerator.generateHSLString(avatarValue),
             font: `${Math.floor(+this.size / this.textSizeRatio)}px montserrat-variable-font`,
             lineHeight: `${this.size}px`,

@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { HslGeneratorService } from '@shared/helpers/hsl-generator.service';
 
 type Style = Partial<CSSStyleDeclaration>;
 
@@ -35,6 +36,9 @@ export class AvatarComponent implements OnInit {
         this.initializeAvatar();
     }
 
+    // eslint-disable-next-line no-empty-function
+    constructor(private hslGenerator: HslGeneratorService) {}
+
     private initializeAvatar(): void {
         this.hostStyle = {
             width: `${this.size}px`,
@@ -66,39 +70,11 @@ export class AvatarComponent implements OnInit {
             borderRadius: '100%',
             textTransform: 'uppercase',
             color: '#FFFFFF',
-            backgroundColor: this.generateHSLString(avatarValue),
+            backgroundColor: this.hslGenerator.generateHSLString(avatarValue),
             font: `${Math.floor(+this.size / this.textSizeRatio)}px montserrat-variable-font`,
             lineHeight: `${this.size}px`,
             ...this.style,
         };
-    }
-
-    private calculateHash(value: string): number {
-        let hash = 0;
-
-        for (let i = 0; i < value.length; i++) {
-            hash = value.charCodeAt(i) + ((hash << 5) - hash);
-        }
-        hash = Math.abs(hash);
-
-        return hash;
-    }
-
-    private normalizeHash(hash: number, min: number, max: number): number {
-        return Math.floor((hash % (max - min)) + min);
-    }
-
-    private generateHSLString(name: string): string {
-        const hRange = [0, 360];
-        const sRange = [50, 75];
-        const lRange = [25, 60];
-
-        const hash = this.calculateHash(name);
-        const h = this.normalizeHash(hash, hRange[0], hRange[1]);
-        const s = this.normalizeHash(hash, sRange[0], sRange[1]);
-        const l = this.normalizeHash(hash, lRange[0], lRange[1]);
-
-        return `hsl(${h}, ${s}%, ${l}%)`;
     }
 
     private constructInitials(elements: string[]): string {

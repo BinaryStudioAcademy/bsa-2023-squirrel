@@ -22,17 +22,17 @@
 
         public static string GetStoredProceduresScript =>
             @"
-             
+            TBD
             ";
 
         public static string GetFunctionsScript =>
             @"
-            
+            TBD
             ";
 
         public static string GetViewsScript =>
             @"
-            
+            TBD
             ";
     }
 }

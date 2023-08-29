@@ -10,12 +10,12 @@
 
         public static string GetTablesStructureScript =>
             @"
-             
+            TBD
             ";
 
         public static string GetDbTablesCheckAndUniqueConstraintsScript =>
             @"
-            
+            TBD
             ";
     }
 }

@@ -4,12 +4,12 @@
     {
         public static string GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionScript =>
             @"
-            
+            TBD
             ";
 
         public static string GetUserDefinedTableTypesStructureScript =>
             @"
-            
+            TBD
             ";
     }
 }

@@ -21,7 +21,7 @@ internal class Program
         try
         {
             var dbType = ParseDatabaseType(Configuration.GetSection("DatabaseType").Value);
-            var connection = Configuration.GetConnectionString("SquirrelCoreDBConnection");
+            var connection = Configuration.GetConnectionString("SquirrelConsoleAppDbConnection");
             var serviceProvider = BuildServiceProvider(dbType);
             var provider = serviceProvider.GetRequiredService<IDbQueryProvider>();
             var service = new GetActionsService(dbType, provider, connection);

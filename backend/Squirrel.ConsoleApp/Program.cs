@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Squirrel.ConsoleApp.Interfaces;
 using Squirrel.ConsoleApp.Models;
 using Squirrel.ConsoleApp.Providers;
@@ -20,11 +21,8 @@ internal class Program
     {
         try
         {
-            var dbType = ParseDatabaseType(Configuration.GetSection("DatabaseType").Value);
-            var connection = Configuration.GetConnectionString("SquirrelConsoleAppDbConnection");
-            var serviceProvider = BuildServiceProvider(dbType);
-            var provider = serviceProvider.GetRequiredService<IDbQueryProvider>();
-            var service = new GetActionsService(dbType, provider, connection);
+            var serviceProvider = BuildServiceProvider();
+            var service = serviceProvider.GetRequiredService<IGetActionsService>();
 
             await DisplayStoredProceduresAsync(service);
             await DisplayTablesAsync(service);
@@ -80,24 +78,31 @@ internal class Program
         return dbType;
     }
 
-    public static ServiceProvider BuildServiceProvider(DbEngine databaseType)
+    public static ServiceProvider BuildServiceProvider()
     {
         var services = new ServiceCollection();
+        services.Configure<DbSettings>(Configuration.GetSection(nameof(DbSettings)));
+        var serviceProvider = services.BuildServiceProvider();
+        var databaseType = serviceProvider.GetRequiredService<IOptions<DbSettings>>().Value.DbType;
 
         switch (databaseType)
         {
             case DbEngine.SqlServer:
                 services.AddSingleton<IDbQueryProvider, SqlServerQueryProvider>();
-                services.AddTransient<IDatabaseService, SqlServerService>();
+                services.AddSingleton<IDatabaseService, SqlServerService>();
                 break;
             case DbEngine.PostgreSQL:
                 services.AddSingleton<IDbQueryProvider, PostgreSqlQueryProvider>();
-                services.AddTransient<IDatabaseService, PostgreSqlService>();
+                services.AddSingleton<IDatabaseService, PostgreSqlService>();
                 break;
             default:
                 throw new NotImplementedException($"Database type {databaseType} is not supported.");
         }
 
+        services.AddScoped<IGetActionsService, GetActionsService>();
+
         return services.BuildServiceProvider();
     }
+
+
 }

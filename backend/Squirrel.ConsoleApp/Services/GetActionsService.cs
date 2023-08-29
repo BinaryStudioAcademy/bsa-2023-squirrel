@@ -1,4 +1,5 @@
-﻿using Squirrel.ConsoleApp.Interfaces;
+﻿using Microsoft.Extensions.Options;
+using Squirrel.ConsoleApp.Interfaces;
 using Squirrel.ConsoleApp.Models;
 using Squirrel.ConsoleApp.Providers;
 
@@ -9,10 +10,10 @@ namespace Squirrel.ConsoleApp.Services
         private readonly IDbQueryProvider _queryProvider;
         private readonly IDatabaseService _databaseService;
 
-        public GetActionsService(DbEngine dbType, IDbQueryProvider queryProvider, string connection)
+        public GetActionsService(IDbQueryProvider queryProvider, IOptions<DbSettings> dbSettingsOptions)
         {
             _queryProvider = queryProvider;
-            _databaseService = DatabaseFactory.CreateDatabaseService(dbType, connection);
+            _databaseService = DatabaseFactory.CreateDatabaseService(dbSettingsOptions.Value.DbType, dbSettingsOptions.Value.ConnectionString);
         }
 
         public async Task<QueryResultTable> GetAllTablesNamesAsync() 

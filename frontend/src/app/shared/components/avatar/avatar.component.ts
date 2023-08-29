@@ -67,7 +67,7 @@ export class AvatarComponent implements OnInit {
             textTransform: 'uppercase',
             color: '#FFFFFF',
             backgroundColor: this.generateHSLString(avatarValue),
-            font: `${Math.floor(+this.size / this.textSizeRatio)}px Helvetica, Arial, sans-serif`,
+            font: `${Math.floor(+this.size / this.textSizeRatio)}px montserrat-variable-font`,
             lineHeight: `${this.size}px`,
             ...this.style,
         };

@@ -1,3 +1,5 @@
+@import "/src/styles/color"
+
 .sidebar
     width: 79px
     height: 100vh
@@ -5,27 +7,49 @@
     position: fixed
     top: 0
     left: 0
-    display: flex
-    flex-direction: column
-    align-items: center
 
     .logo
         width: 54px
         height: 54px
         border-radius: 27px
-        margin-top: 12px
 
     .folder-icon
         width: 21px
         height: 16px
-        margin-top: 22px
 
     .bell-icon
         width: 16px
         height: 20px
-        margin-top: 36px
 
     .account-icon
         width: 20px
         height: 20px
-        margin-top: 36px
+
+.tab
+    display: flex
+    justify-content: center
+    padding: 20px 0
+    cursor: pointer
+
+.nav
+    position: relative
+
+    &:after
+        content: ""
+        display: none
+        position: absolute
+        top: 10%
+        left: 0
+        height: 80%
+        width: 5px
+        border-radius: 5px
+        background-color: $white
+
+    &:hover
+        &:after
+            display: block
+
+.active
+    &:after
+        display: block
+

@@ -1,8 +1,8 @@
-﻿using Squirrel.ConsoleApp.Models;
-using Squirrel.ConsoleApp.Services.Abstract;
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
+using Squirrel.ConsoleApp.BL.Services.Abstract;
+using Squirrel.ConsoleApp.Models;
 
-namespace Squirrel.ConsoleApp.Services;
+namespace Squirrel.ConsoleApp.BL.Services;
 
 public class SqlServerService : BaseDbService
 {

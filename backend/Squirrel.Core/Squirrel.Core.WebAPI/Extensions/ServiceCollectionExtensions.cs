@@ -31,6 +31,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<JwtIssuerOptions>();
         services.AddScoped<IJwtFactory, JwtFactory>();
         services.AddScoped<IAuthService, AuthService>();
+        services.AddTransient<IDependencyAnalyzer, DependencyAnalyzer>();
     }
 
     public static void AddValidation(this IServiceCollection services)

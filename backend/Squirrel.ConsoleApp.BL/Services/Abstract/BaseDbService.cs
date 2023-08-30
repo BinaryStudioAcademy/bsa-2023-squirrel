@@ -1,8 +1,8 @@
-﻿using Squirrel.ConsoleApp.Interfaces;
+﻿using System.Data.Common;
+using Squirrel.ConsoleApp.BL.Interfaces;
 using Squirrel.ConsoleApp.Models;
-using System.Data.Common;
 
-namespace Squirrel.ConsoleApp.Services.Abstract;
+namespace Squirrel.ConsoleApp.BL.Services.Abstract;
 public abstract class BaseDbService: IDatabaseService
 {
     public string ConnectionString { get; set; }

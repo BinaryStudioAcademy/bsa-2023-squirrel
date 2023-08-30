@@ -52,12 +52,12 @@ public sealed class UserService : BaseService, IUserService
     }
 
     private string GenerateRandomUsername()
-        => ("user" + SecurityUtils.GenerateRandomSalt()).Substring(MaxNameLength);
+        => TruncateString("user" + SecurityUtils.GenerateRandomSalt(), MaxNameLength);
 
     private void TruncateName(UserRegisterDto user)
     {
-        user.FirstName = user.FirstName.Substring(MaxNameLength);
-        user.LastName = user.LastName.Substring(MaxNameLength);
+        user.FirstName = TruncateString(user.FirstName, MaxNameLength);
+        user.LastName = TruncateString(user.LastName, MaxNameLength);
     }
 
     private void HashUserPassword(User newUser, string password)
@@ -66,6 +66,9 @@ public sealed class UserService : BaseService, IUserService
         newUser.Salt = salt;
         newUser.PasswordHash = SecurityUtils.HashPassword(password, salt);
     }
+
+    private string TruncateString(string value, int maxLength) 
+        => value.Length <= maxLength ? value : value.Substring(0, maxLength);
 
     private User PrepareNewUserData(UserRegisterDto userDto, bool isGoogleAuth)
     {

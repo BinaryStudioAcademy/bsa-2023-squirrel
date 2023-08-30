@@ -48,14 +48,10 @@ public static class ServiceCollectionExtensions
 
     public static void AddValidation(this IServiceCollection services)
     {
-        services
-            .AddControllers()
-            .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<NewSampleDtoValidator>());
-
-        services
-            .AddControllers()
+        services.AddControllers()
             .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()));
     }
+
 
     public static void AddSquirrelCoreContext(this IServiceCollection services, IConfiguration configuration)
     {

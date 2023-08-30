@@ -4,26 +4,28 @@
     <div class="edit-profile-content">
         <h5>Edit profile</h5>
         <div class="avatar-container">
-            <img class="avatar avatar-style" src="{{ user.avatarUrl }}" alt="Here should be an avatar" />
+            <img
+                *ngIf="user.avatarUrl"
+                class="avatar avatar-style"
+                src="{{ user.avatarUrl }}"
+                alt="Here should be an avatar" />
+            <div *ngIf="!user.avatarUrl" class="avatar-initials">{{ getUserInitials() }}</div>
         </div>
 
         <form [formGroup]="editProfileForm" (ngSubmit)="saveNewInfo()" class="edit-profile-form" action="">
             <app-input
                 [formControl]="$any(editProfileForm.controls['username'])"
                 [label]="'username'"
-                [(ngModel)]="user.userName"
                 placeholder="Enter Username">
             </app-input>
             <app-input
                 [formControl]="$any(editProfileForm.controls['firstName'])"
                 [label]="'first Name'"
-                [(ngModel)]="user.firstName"
                 placeholder="Enter FirstName">
             </app-input>
             <app-input
                 [formControl]="$any(editProfileForm.controls['lastName'])"
                 [label]="'last Name'"
-                [(ngModel)]="user.lastName"
                 placeholder="Enter your LastName">
             </app-input>
 

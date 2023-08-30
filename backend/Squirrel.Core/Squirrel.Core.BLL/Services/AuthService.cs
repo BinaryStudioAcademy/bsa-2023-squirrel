@@ -60,11 +60,16 @@ public sealed class AuthService : BaseService, IAuthService
 
     public async Task<AuthUserDTO> LoginAsync(UserLoginDto userLoginDto)
     {
-        User? userEntity = await _context.Users
-            .FirstOrDefaultAsync(u => u.Email == userLoginDto.Email);
+        var userEntity = await _context.Users.FirstOrDefaultAsync(u => u.Email == userLoginDto.Email);
 
-        if (userEntity == null ||
-            !SecurityUtils.ValidatePassword(userLoginDto.Password, userEntity.PasswordHash, userEntity.Salt))
+        if (userEntity == null)
+        {
+            throw new InvalidEmailOrPasswordException();
+        }
+
+        var isPasswordValid = SecurityUtils.ValidatePassword(userLoginDto.Password, userEntity.PasswordHash, userEntity.Salt);
+
+        if (!isPasswordValid)
         {
             throw new InvalidEmailOrPasswordException();
         }
@@ -95,7 +100,7 @@ public sealed class AuthService : BaseService, IAuthService
         var newUser = _mapper.Map<User>(userRegisterDto)!;
         var salt = SecurityUtils.GenerateRandomSalt();
         newUser.Salt = salt;
-        newUser.PasswordHash = SecurityUtils.HashPassword(newUser.PasswordHash, salt);
+        newUser.PasswordHash = SecurityUtils.HashPassword(userRegisterDto.Password, salt);
         var createdUser = (await _context.Users.AddAsync(newUser)).Entity;
         await _context.SaveChangesAsync();
 

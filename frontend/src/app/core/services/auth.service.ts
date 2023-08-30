@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 import { AccessTokenDto } from 'src/app/models/auth/access-token-dto';
 import { GoogleAuthDto } from 'src/app/models/auth/google-auth-dto';
@@ -20,7 +20,7 @@ export class AuthService {
 
     private readonly refreshTokenKey = 'refreshToken';
 
-    private userSubject: BehaviorSubject<UserDto | null> = new BehaviorSubject<UserDto | null>(null);
+    private readonly currentUserKey = 'currentUser';
 
     // eslint-disable-next-line no-empty-function
     constructor(private httpService: HttpInternalService, private router: Router) {}
@@ -28,6 +28,7 @@ export class AuthService {
     public signOut = () => {
         localStorage.removeItem(this.accessTokenKey);
         localStorage.removeItem(this.refreshTokenKey);
+        localStorage.removeItem(this.currentUserKey);
         this.router.navigate(['/login']);
     };
 
@@ -37,7 +38,7 @@ export class AuthService {
         return this.httpService.postRequest<UserAuthDto>(`${this.authRoutePrefix}/login/google`, auth).subscribe({
             next: (data: UserAuthDto) => {
                 this.saveTokens(data.token);
-                this.setUser(data.user);
+                this.setCurrentUser(data.user);
                 this.router.navigate(['/main']);
             },
             error: () => {
@@ -46,19 +47,11 @@ export class AuthService {
         });
     }
 
-    public setUser(user: UserDto) {
-        this.userSubject.next(user);
-    }
-
-    public getUserObservable(): Observable<UserDto | null> {
-        return this.userSubject.asObservable();
-    }
-
     public register(userRegisterDto: UserRegisterDto): Observable<UserAuthDto> {
         return this.httpService.postRequest<UserAuthDto>(`${this.authRoutePrefix}/register`, userRegisterDto).pipe(
             tap((data) => {
                 this.saveTokens(data.token);
-                this.setUser(data.user);
+                this.setCurrentUser(data.user);
             }),
         );
     }
@@ -67,7 +60,7 @@ export class AuthService {
         return this.httpService.postRequest<UserAuthDto>(`${this.authRoutePrefix}/login`, userLoginDto).pipe(
             tap((data) => {
                 this.saveTokens(data.token);
-                this.setUser(data.user);
+                this.setCurrentUser(data.user);
             }),
         );
     }
@@ -93,7 +86,17 @@ export class AuthService {
         }
     }
 
+    public setCurrentUser(user: UserDto) {
+        localStorage.setItem(this.currentUserKey, JSON.stringify(user));
+    }
+
     public getCurrentUser(): UserDto | null {
-        return this.userSubject.value;
+        const currentUser = localStorage.getItem(this.currentUserKey);
+
+        if (!currentUser) {
+            return null;
+        }
+
+        return JSON.parse(currentUser);
     }
 }

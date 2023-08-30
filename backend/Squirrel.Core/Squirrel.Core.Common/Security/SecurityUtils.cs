@@ -29,5 +29,8 @@ public static class SecurityUtils
         );
 
     public static bool ValidatePassword(string password, string hash, string salt)
-        => HashPassword(password, salt) == hash;
+    {
+        var hashPassword = HashPassword(password, salt);
+        return hashPassword == hash;
+    }
 }

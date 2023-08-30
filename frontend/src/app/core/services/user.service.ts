@@ -14,7 +14,7 @@ export class UserService {
     constructor(private httpService: HttpInternalService) {}
 
     public getUserById(id: number): Observable<UserDto> {
-        return this.httpService.getRequest<UserDto>(`${this.routePrefix}`, { id });
+        return this.httpService.getRequest<UserDto>(`${this.routePrefix}/${id}`);
     }
 
     public updateUser(user: UpdateUserDto): Observable<UserDto> {

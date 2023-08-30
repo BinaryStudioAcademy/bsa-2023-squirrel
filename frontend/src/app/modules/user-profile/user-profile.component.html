@@ -11,16 +11,19 @@
             <app-input
                 [formControl]="$any(editProfileForm.controls['username'])"
                 [label]="'username'"
+                [(ngModel)]="user.userName"
                 placeholder="Enter Username">
             </app-input>
             <app-input
                 [formControl]="$any(editProfileForm.controls['firstName'])"
                 [label]="'first Name'"
+                [(ngModel)]="user.firstName"
                 placeholder="Enter FirstName">
             </app-input>
             <app-input
                 [formControl]="$any(editProfileForm.controls['lastName'])"
                 [label]="'last Name'"
+                [(ngModel)]="user.lastName"
                 placeholder="Enter your LastName">
             </app-input>
 

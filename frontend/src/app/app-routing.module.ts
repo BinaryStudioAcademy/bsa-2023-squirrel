@@ -19,6 +19,7 @@ const routes: Routes = [
     },
     {
         path: 'profile',
+        data: { requiresToken: true },
         component: UserProfileComponent,
         canActivate: [AuthGuard],
     },

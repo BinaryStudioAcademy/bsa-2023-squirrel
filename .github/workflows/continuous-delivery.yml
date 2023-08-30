@@ -26,9 +26,8 @@ jobs:
       -
         name: Login to DockerHub
         uses: docker/login-action@v2
-        with:
-          username: $DOCKERHUB_USERNAME
-          password: $DOCKERHUB_TOKEN
+        run: |
+        docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_TOKEN  
       -
         name: Build and push Core Service
         uses: docker/build-push-action@v4
@@ -51,9 +50,8 @@ jobs:
       -
         name: Login to DockerHub
         uses: docker/login-action@v2
-        with:
-          username: $DOCKERHUB_USERNAME
-          password: $DOCKERHUB_TOKEN
+        run: |
+        docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_TOKEN 
       -
         name: Build and push Notifier Service
         uses: docker/build-push-action@v4
@@ -76,9 +74,8 @@ jobs:
       -
         name: Login to DockerHub
         uses: docker/login-action@v2
-        with:
-          username: $DOCKERHUB_USERNAME
-          password: $DOCKERHUB_TOKEN
+        run: |
+        docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_TOKEN 
       -
         name: Build Frontend
         uses: docker/build-push-action@v4

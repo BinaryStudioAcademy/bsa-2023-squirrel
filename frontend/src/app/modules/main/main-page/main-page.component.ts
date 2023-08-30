@@ -11,7 +11,8 @@ import { ConfirmationModalInterface } from 'src/app/models/confirmation-modal/co
 })
 export class MainComponent implements OnInit, OnDestroy {
     // eslint-disable-next-line no-empty-function
-    constructor(private broadcastHub: BroadcastHubService, public confirmationModal: MatDialog) { }
+    constructor(private broadcastHub: BroadcastHubService, 
+        public confirmationModal: MatDialog) { }
 
     async ngOnInit() {
         await this.broadcastHub.start();
@@ -25,13 +26,13 @@ export class MainComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This method invokes the first Confirmation Modal
+     * Example method to demonstrate invoking the first Confirmation Modal
      */
     public confirmationModalMessage: string = '';
     openConfirmationModalOne() {
         const modal: ConfirmationModalInterface = {
-            modalHeader: 'Created by reusable Confirmation Modal',
-            modalDescription: 'I am first Confirmation Modal',
+            modalHeader: 'Reusable Confirmation Modal',
+            modalDescription: 'I am first Confirmation Modal to show the example of usage',
             cancelButtonLabel: 'Cancel',
             confirmButtonLabel: 'Submit',
             callbackMethod: () => {
@@ -39,13 +40,12 @@ export class MainComponent implements OnInit, OnDestroy {
             },
         };
         this.confirmationModal.open(ConfirmationModalComponent, {
-            width: '400px',
-            data: modal,
+            data: modal
         });
     }
 
     /**
-     * This method invokes the second Confirmation Modal
+     * Example method to demonstrate invoking the second Confirmation Modal
      */
     openConfirmationModalTwo() {
         const modal: ConfirmationModalInterface = {
@@ -58,16 +58,15 @@ export class MainComponent implements OnInit, OnDestroy {
             },
         };
         this.confirmationModal.open(ConfirmationModalComponent, {
-            width: '400px',
-            data: modal,
+            data: modal
         });
     }
 
     performConfirmationModalOne() {
-        this.confirmationModalMessage = 'The dialog submitted from the Dialog ONE';
+        this.confirmationModalMessage = 'The text submitted from the Confirmation Modal ONE';
     }
 
     performConfirmationModalTwo() {
-        this.confirmationModalMessage = 'The dialog submitted from the Dialog TWO';
+        this.confirmationModalMessage = 'The text submitted from the Confirmation Modal TWO';
     }
 }

@@ -5,7 +5,7 @@ import { UserPredicates } from '@shared/helpers/user-predicates';
 import { Branch } from 'src/app/models/branch/branch';
 import { Comment } from 'src/app/models/comment/comment';
 import { PullRequest } from 'src/app/models/pull-request/pull-request';
-import { User } from 'src/app/models/user/user-dto';
+import { UserDto } from 'src/app/models/user/user-dto';
 
 @Component({
     selector: 'app-pull-request-list',
@@ -15,7 +15,7 @@ import { User } from 'src/app/models/user/user-dto';
 export class PullRequestListComponent {
     public dropdownItems: string[];
 
-    public dropdownAuthors: User[];
+    public dropdownAuthors: UserDto[];
 
     public pullRequests: PullRequest[];
 

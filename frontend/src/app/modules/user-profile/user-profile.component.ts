@@ -1,11 +1,12 @@
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { BaseComponent } from '@core/base/base.component';
 import { AuthService } from '@core/services/auth.service';
 import { NotificationService } from '@core/services/notification.service';
 import { UserService } from '@core/services/user.service';
-import { takeUntil } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
+import { filter, switchMap, takeUntil } from 'rxjs/operators';
 
 import { UserDto } from 'src/app/models/user/user-dto';
 
@@ -14,12 +15,14 @@ import { UserDto } from 'src/app/models/user/user-dto';
     templateUrl: './user-profile.component.html',
     styleUrls: ['./user-profile.component.sass'],
 })
-export class UserProfileComponent extends BaseComponent implements OnInit {
-    public user = {} as UserDto;
+export class UserProfileComponent extends BaseComponent implements OnInit, OnDestroy {
+    public user: UserDto;
 
     public editProfileForm: FormGroup = new FormGroup({});
 
     public loading = false;
+
+    private userSubscription: Subscription;
 
     constructor(
         private location: Location,
@@ -31,15 +34,24 @@ export class UserProfileComponent extends BaseComponent implements OnInit {
     }
 
     public ngOnInit() {
-        const userId = this.authService.getUser().id;
-        const userSubscription = this.userService.getUserById(userId);
+        this.authService
+            .getUserObservable()
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe(
+                (user) => {
+                    console.log(`==============${user}==============`);
+                    if (user) {
+                        this.user = user;
+                    }
+                },
+                (error) => {
+                    this.notificationService.error(error.message);
+                },
+            );
+    }
 
-        userSubscription.pipe(takeUntil(this.unsubscribe$)).subscribe(
-            (user) => {
-                this.user = user;
-            },
-            (error) => this.notificationService.error(error.message),
-        );
+    public override ngOnDestroy() {
+        super.ngOnDestroy();
     }
 
     public saveNewInfo() {

@@ -1,15 +1,11 @@
 ﻿using AutoMapper;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.BLL.Services.Abstract;
-using Squirrel.Core.Common.DTO.Auth;
 using Squirrel.Core.DAL.Context;
 using Squirrel.Core.DAL.Entities;
-using Google.Apis.Auth;
 using Microsoft.EntityFrameworkCore;
 using Squirrel.Core.Common.DTO.Users;
-using Squirrel.Core.Common.Security;
 using Squirrel.Shared.Exceptions;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Squirrel.Core.BLL.Services;
 

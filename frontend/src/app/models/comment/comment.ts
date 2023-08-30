@@ -1,8 +1,8 @@
-import { User } from '../user/user-dto';
+import { UserDto } from '../user/user-dto';
 
 export interface Comment {
     id: number;
-    author: User;
+    author: UserDto;
     content: string;
     createdAt: Date;
     updatedAt: Date;

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 
 import { AccessTokenDto } from 'src/app/models/auth/access-token-dto';
 import { GoogleAuthDto } from 'src/app/models/auth/google-auth-dto';
@@ -20,7 +20,7 @@ export class AuthService {
 
     private readonly refreshTokenKey = 'refreshToken';
 
-    private user: UserDto;
+    private userSubject: BehaviorSubject<UserDto | null> = new BehaviorSubject<UserDto | null>(null);
 
     // eslint-disable-next-line no-empty-function
     constructor(private httpService: HttpInternalService, private router: Router) {}
@@ -37,7 +37,7 @@ export class AuthService {
         return this.httpService.postRequest<UserAuthDto>(`${this.authRoutePrefix}/login/google`, auth).subscribe({
             next: (data: UserAuthDto) => {
                 this.saveTokens(data.token);
-                this.user = data.user;
+                this.setUser(data.user);
                 this.router.navigate(['/main']);
             },
             error: () => {
@@ -46,11 +46,19 @@ export class AuthService {
         });
     }
 
+    public setUser(user: UserDto) {
+        this.userSubject.next(user);
+    }
+
+    public getUserObservable(): Observable<UserDto | null> {
+        return this.userSubject.asObservable();
+    }
+
     public register(userRegisterDto: UserRegisterDto): Observable<UserAuthDto> {
         return this.httpService.postRequest<UserAuthDto>(`${this.authRoutePrefix}/register`, userRegisterDto).pipe(
             tap((data) => {
                 this.saveTokens(data.token);
-                this.user = data.user;
+                this.setUser(data.user);
             }),
         );
     }
@@ -59,7 +67,7 @@ export class AuthService {
         return this.httpService.postRequest<UserAuthDto>(`${this.authRoutePrefix}/login`, userLoginDto).pipe(
             tap((data) => {
                 this.saveTokens(data.token);
-                this.user = data.user;
+                this.setUser(data.user);
             }),
         );
     }
@@ -85,7 +93,7 @@ export class AuthService {
         }
     }
 
-    public getUser() {
-        return this.user;
+    public getCurrentUser(): UserDto | null {
+        return this.userSubject.value;
     }
 }

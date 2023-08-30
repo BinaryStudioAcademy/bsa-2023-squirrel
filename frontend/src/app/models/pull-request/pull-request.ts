@@ -1,12 +1,12 @@
 import { Branch } from '../branch/branch';
 import { Comment } from '../comment/comment';
-import { User } from '../user/user-dto';
+import { UserDto } from '../user/user-dto';
 
 export interface PullRequest {
     id: number;
     title: string;
-    author: User;
-    reviewers: User[];
+    author: UserDto;
+    reviewers: UserDto[];
     comments: Comment[];
     sourceBranch: Branch;
     destinationBranch: Branch;

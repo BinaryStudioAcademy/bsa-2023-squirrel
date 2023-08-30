@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using Squirrel.ConsoleApp.BL.Exceptions;
-using Squirrel.ConsoleApp.Models.Models;
+using Squirrel.ConsoleApp.Models;
 
 namespace Squirrel.ConsoleApp.Extensions;
 

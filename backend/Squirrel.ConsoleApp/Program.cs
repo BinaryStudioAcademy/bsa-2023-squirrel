@@ -13,7 +13,7 @@ internal class Program
             .Build();
 
         var baseUrl = config.GetSection("WebServerSettings")["BaseUrl"];
-        
+
         CreateHostBuilder(args, baseUrl).Build().Run();
     }
 

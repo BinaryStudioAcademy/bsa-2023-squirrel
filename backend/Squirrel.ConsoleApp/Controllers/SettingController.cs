@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Squirrel.ConsoleApp.BL.Interfaces;
-using Squirrel.ConsoleApp.Models.Models;
+using Squirrel.ConsoleApp.Models;
 
 namespace Squirrel.ConsoleApp.Controllers;
 

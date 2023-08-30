@@ -10,6 +10,7 @@ import { MaterialModule } from '../material/material.module';
 import { AvatarComponent } from './components/avatar/avatar.component';
 import { BarrierComponent } from './components/barrier/barrier.component';
 import { ButtonComponent } from './components/button/button.component';
+import { DropdownComponent } from './components/dropdown/dropdown.component';
 import { DropdownSelectComponent } from './components/dropdown-select/dropdown-select.component';
 import { InputComponent } from './components/input/input.component';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
@@ -37,6 +38,7 @@ import { ConfirmationModalComponent } from './components/confirmation-modal/conf
         AvatarComponent,
         DropdownSelectComponent,
         ConfirmationModalComponent,
+        DropdownComponent
     ],
     exports: [
         CommonModule,
@@ -54,7 +56,8 @@ import { ConfirmationModalComponent } from './components/confirmation-modal/conf
         InputComponent,
         BarrierComponent,
         AvatarComponent,
-        ConfirmationModalComponent
+        ConfirmationModalComponent,
+        DropdownComponent
     ],
 })
 export class SharedModule {}

@@ -1,4 +1,4 @@
-﻿using Squirrel.ConsoleApp.Models.Models;
+﻿using Squirrel.ConsoleApp.Models;
 
 namespace Squirrel.ConsoleApp.BL.Interfaces;
 

@@ -15,6 +15,7 @@ import { DropdownSelectComponent } from './components/dropdown-select/dropdown-s
 import { InputComponent } from './components/input/input.component';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { TreeComponent } from './components/tree/tree.component';
 
 @NgModule({
     imports: [
@@ -37,6 +38,7 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
         AvatarComponent,
         DropdownSelectComponent,
         DropdownComponent,
+        TreeComponent,
     ],
     exports: [
         CommonModule,
@@ -55,6 +57,7 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
         BarrierComponent,
         AvatarComponent,
         DropdownComponent,
+        TreeComponent,
     ],
 })
 export class SharedModule {}

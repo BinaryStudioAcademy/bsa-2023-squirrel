@@ -1,4 +1,5 @@
-﻿using Squirrel.Core.Common.Enums;
+﻿
+using Squirrel.Core.DAL.Enums;
 
 namespace Squirrel.Core.Common.DTO.Projects
 {

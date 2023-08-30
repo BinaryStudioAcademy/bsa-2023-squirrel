@@ -1,0 +1,96 @@
+@import "/src/styles/color"
+
+.img
+    width: 44px
+    height: 44px
+    min-width: 44px
+    min-height: 44px
+    border-radius: 50%
+    overflow: hidden
+
+.chiplist-container
+    padding-top: 2px 
+    display: flex
+    flex-direction: row
+    align-items: center
+    .chip-list
+        display: flex
+        flex-direction: row
+        flex-wrap: wrap
+        .chip
+            white-space: nowrap
+            flex-grow: 1
+
+.vertical-line
+    height: 100%
+    margin: 0px
+    padding: 0px
+    width: 2px
+    background-color: $primary-color
+    display: none
+    position: relative
+
+.dropdown-collection
+    font-size: 12px
+    font-weight: 500
+    position: relative
+    margin-right: 8px
+
+.dropdown-input
+    background-color: $bg-input
+    box-sizing: border-box
+    border-radius: 7px
+    border: none    
+    position: relative
+    justify-content: space-between
+    padding: 0px 32px 0px 12px
+    display: flex
+    cursor: pointer
+    background-image: url("/assets/expand_more_24px.svg")
+    background-size: 20px
+    background-position: right 16px bottom 45%
+    background-repeat: no-repeat
+    input
+        background: none
+        border: none
+    input:focus
+        outline: none
+
+.dropdown-list
+    display: none
+    list-style: none
+    border-radius: 10px
+    background: white    
+    box-shadow: 0px 0px 15px -1px fade_out(#F0F3F9, 0.6)
+    position: absolute
+    bottom: -15px
+    left: 0
+    padding: 10px 0px 10px 0px
+    z-index: 10
+    right: 0
+    transform: translateY(100%)
+
+    li
+        display: flex
+        cursor: pointer
+        align-items: center
+
+        .option-container
+            padding: 4px 16px
+            display: flex
+
+        &.selected
+            background: darken($bg-input, 1)            
+            .vertical-line
+                display: block
+
+        &:not(.selected):hover
+            background: lighten($bg-input, 1)
+
+        &:not(.selected):focus
+            background: lighten($bg-input, 1)
+            outline: none
+
+    &.dropdown-open 
+        display: block
+        

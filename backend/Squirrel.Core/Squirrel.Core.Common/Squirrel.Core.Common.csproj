@@ -15,4 +15,9 @@
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.10.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Squirrel.Shared\Squirrel.Shared.csproj" />
+    <ProjectReference Include="..\Squirrel.Core.DAL\Squirrel.Core.DAL.csproj" />
+  </ItemGroup>
+
 </Project>

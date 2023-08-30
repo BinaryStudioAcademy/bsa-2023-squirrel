@@ -18,7 +18,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Squirrel.Core.Common\Squirrel.Core.Common.csproj" />
-    <ProjectReference Include="..\Squirrel.Core.DAL\Squirrel.Core.DAL.csproj" />
   </ItemGroup>
 
 </Project>

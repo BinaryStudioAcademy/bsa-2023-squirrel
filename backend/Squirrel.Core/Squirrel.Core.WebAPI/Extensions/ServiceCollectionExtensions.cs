@@ -35,6 +35,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IProjectService, ProjectService>();
         services.AddScoped<ITextService, TextService>();
+        services.AddTransient<IDependencyAnalyzer, DependencyAnalyzer>();
     }
 
     public static void AddMongoDbService(this IServiceCollection services, IConfiguration configuration)
@@ -53,7 +54,7 @@ public static class ServiceCollectionExtensions
 
         services
             .AddControllers()
-            .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<ProjectDtoValidator>());
+            .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()));
     }
 
     public static void AddSquirrelCoreContext(this IServiceCollection services, IConfiguration configuration)

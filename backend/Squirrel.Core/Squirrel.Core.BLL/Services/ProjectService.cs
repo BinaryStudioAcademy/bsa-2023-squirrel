@@ -75,11 +75,6 @@ namespace Squirrel.Core.BLL.Services
             var projects = await _context.Projects.ToListAsync();
             var projectDtos = _mapper.Map<List<ProjectDto>>(projects);
 
-            foreach (var projectDto in projectDtos)
-            {
-                projectDto.DbEngine = projectDto.DbEngine;
-            }
-
             return projectDtos;
         }
     }

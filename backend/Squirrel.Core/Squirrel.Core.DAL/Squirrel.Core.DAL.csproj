@@ -16,8 +16,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Squirrel.Core.Common\Squirrel.Core.Common.csproj" />
-  </ItemGroup>
-
 </Project>

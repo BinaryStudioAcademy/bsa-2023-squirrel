@@ -51,6 +51,9 @@ export class CreateProjectModalComponent implements OnInit {
             engine: this.projectForm.value.selectedEngine,
         };
 
+        // TODO: make it through the BranchService
+        // created default branch for this project
+
         this.projectService.addProject(newProject).pipe(
             takeUntil(this.unsubscribe$),
         ).subscribe(

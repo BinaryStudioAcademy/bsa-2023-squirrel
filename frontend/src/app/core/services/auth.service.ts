@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { CredentialResponse } from 'google-one-tap';
 import { Observable, tap } from 'rxjs';
 
 import { AccessTokenDto } from 'src/app/models/auth/access-token-dto';
@@ -28,18 +29,21 @@ export class AuthService {
         this.router.navigate(['/login']);
     };
 
-    public validateGoogleAuth(token: string) {
-        const auth: GoogleAuthDto = { idToken: token };
+    public signInViaGoogle(googleCredentialsToken: CredentialResponse) {
+        const credentials: GoogleAuthDto = { idToken: googleCredentialsToken.credential };
 
-        return this.httpService.postRequest<UserAuthDto>(`${this.authRoutePrefix}/login/google`, auth).subscribe({
-            next: (data: UserAuthDto) => {
-                this.saveTokens(data.token);
-                this.router.navigate(['/main']);
-            },
-            error: () => {
-                this.signOut();
-            },
-        });
+        return this.httpService
+            .postRequest<UserAuthDto>(`${this.authRoutePrefix}/login/google`, credentials)
+            .subscribe({
+                next: (response: UserAuthDto) => {
+                    this.saveTokens(response.token);
+                    console.log(`received UserAuthDto: ${response}`);
+                    this.router.navigate(['/main']);
+                },
+                error: () => {
+                    this.signOut();
+                },
+            });
     }
 
     public register(userRegisterDto: UserRegisterDto): Observable<AccessTokenDto> {

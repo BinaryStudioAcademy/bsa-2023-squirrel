@@ -6,6 +6,7 @@ import { AuthService } from '@core/services/auth.service';
 import { NotificationService } from '@core/services/notification.service';
 import { environment } from '@env/environment';
 import { ValidationsFn } from '@shared/helpers/validations-fn';
+import { CredentialResponse } from 'google-one-tap';
 import { takeUntil } from 'rxjs';
 
 import { UserLoginDto } from 'src/app/models/user/user-login-dto';
@@ -32,6 +33,18 @@ export class LoginComponent extends BaseComponent implements OnInit {
     ngOnInit(): void {
         this.initializeForm();
         this.initializeGoogleSignIn();
+    }
+
+    public login() {
+        const user: UserLoginDto = this.loginForm.value;
+
+        this.authService
+            .login(user)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe({
+                next: () => this.router.navigateByUrl('/main'),
+                error: (err) => this.notificationService.error(err.message),
+            });
     }
 
     private initializeForm() {
@@ -61,20 +74,9 @@ export class LoginComponent extends BaseComponent implements OnInit {
         google.accounts.id.prompt();
     }
 
-    private handleCredentialResponse(response: any) {
+    private handleCredentialResponse(response: CredentialResponse) {
         // eslint-disable-next-line no-console
         console.log(`Encoded JWT ID token: ${response.credential}`);
-        this.authService.validateGoogleAuth(response.credential);
-    }
-
-    public login() {
-        const user: UserLoginDto = this.loginForm.value;
-
-        this.authService.login(user)
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe({
-                next: () => this.router.navigateByUrl('/main'),
-                error: err => this.notificationService.error(err.message),
-            });
+        this.authService.signInViaGoogle(response);
     }
 }

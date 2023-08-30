@@ -15,8 +15,8 @@ namespace Squirrel.Core.BLL.Services;
 
 public sealed class AuthService : BaseService, IAuthService
 {
-    private readonly IJwtFactory _jwtFactory;
     private readonly string _googleClientId;
+    private readonly IJwtFactory _jwtFactory;
     private readonly IUserService _userService;
 
     public AuthService(

@@ -98,4 +98,4 @@ jobs:
          host: $SSH_HOST
          username: $SSH_USERNAME
          key: $SSH_KEY
-         script: cd ~/bsa-2023-squirrel && sudo docker-compose -f docker-compose.apps.prod.yml stop && sudo docker-compose -f docker-compose.apps.prod.yml pull && sudo docker system prune -f && sudo docker-compose -f docker-compose.apps.prod.yml up -d
+         script: cd ~/squirrel && sudo docker-compose -f docker-compose.apps.prod.yml stop && sudo docker-compose -f docker-compose.apps.prod.yml pull && sudo docker system prune -f && sudo docker-compose -f docker-compose.apps.prod.yml up -d

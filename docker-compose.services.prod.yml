@@ -9,8 +9,9 @@ services:
         networks:
             - back
         environment:
-            SA_PASSWORD: ${SA_PASSWORD}
             ACCEPT_EULA: "Y"
+        env_file:
+            - ~/env/db.env
         volumes:
             - ./mssql:/var/opt/mssql
 

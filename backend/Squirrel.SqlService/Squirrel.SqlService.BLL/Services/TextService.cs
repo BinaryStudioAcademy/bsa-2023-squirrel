@@ -1,9 +1,9 @@
 ﻿using DiffPlex.DiffBuilder;
 using DiffPlex;
-using Squirrel.Core.Common.DTO.Text;
-using Squirrel.SqlService.WebApi.Interfaces;
+using Squirrel.Shared.DTO.Text;
+using Squirrel.SqlService.BLL.Interfaces;
 
-namespace Squirrel.SqlService.WebApi.Services;
+namespace Squirrel.SqlService.BLL.Services;
 
 public class TextService : ITextService
 {

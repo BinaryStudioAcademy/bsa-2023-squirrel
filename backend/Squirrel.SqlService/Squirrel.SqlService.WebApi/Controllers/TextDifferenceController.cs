@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Squirrel.Core.Common.DTO.Text;
-using Squirrel.SqlService.WebApi.Interfaces;
+using Squirrel.Shared.DTO.Text;
+using Squirrel.SqlService.BLL.Interfaces;
 
 namespace Squirrel.SqlService.WebApi.Controllers;
 

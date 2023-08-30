@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using Squirrel.Core.DAL.Entities.Common;
-using Squirrel.SqlService.WebApi.Interfaces;
-using Squirrel.SqlService.WebApi.Options;
+using Squirrel.SqlService.BLL.Interfaces;
+using Squirrel.SqlService.BLL.Models.Options;
 
-namespace Squirrel.SqlService.WebApi.Services;
+namespace Squirrel.SqlService.BLL.Services;
 public class MongoService<T> : IMongoService<T> where T : Entity<long>
 {
     private readonly IMongoCollection<T> _mongoCollection;

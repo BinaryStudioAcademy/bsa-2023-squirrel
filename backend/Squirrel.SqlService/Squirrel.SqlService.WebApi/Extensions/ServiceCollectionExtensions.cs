@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Options;
 using Squirrel.Core.DAL.Entities;
-using Squirrel.SqlService.WebApi.Interfaces;
-using Squirrel.SqlService.WebApi.Options;
-using Squirrel.SqlService.WebApi.Services;
+using Squirrel.SqlService.BLL.Interfaces;
+using Squirrel.SqlService.BLL.Models.Options;
+using Squirrel.SqlService.BLL.Services;
 
 namespace Squirrel.SqlService.WebApi.Extensions;
 

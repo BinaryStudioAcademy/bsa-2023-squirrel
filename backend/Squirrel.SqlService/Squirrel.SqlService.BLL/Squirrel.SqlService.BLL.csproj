@@ -1,21 +1,20 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="DiffPlex" Version="1.7.1" />
     <PackageReference Include="MongoDB.Driver" Version="2.21.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Squirrel.AzureBlobStorage\Squirrel.AzureBlobStorage.csproj" />
     <ProjectReference Include="..\..\Squirrel.Core\Squirrel.Core.DAL\Squirrel.Core.DAL.csproj" />
     <ProjectReference Include="..\..\Squirrel.Shared\Squirrel.Shared.csproj" />
-    <ProjectReference Include="..\Squirrel.SqlService.BLL\Squirrel.SqlService.BLL.csproj" />
   </ItemGroup>
 
 </Project>

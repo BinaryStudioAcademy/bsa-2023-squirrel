@@ -6,7 +6,7 @@ import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Outpu
     styleUrls: ['./dropdown.component.sass'],
 })
 export class DropdownComponent implements OnInit {
-    isActive = false;
+    public isActive = false;
 
     @Input() options: string[] = [];
 
@@ -14,7 +14,7 @@ export class DropdownComponent implements OnInit {
 
     @Output() selectedValueChanged = new EventEmitter<string>();
 
-    selectedOption: string;
+    public selectedOption: string;
 
     @HostListener('document:click', ['$event'])
     onClick(event: Event): void {
@@ -30,12 +30,12 @@ export class DropdownComponent implements OnInit {
         [this.selectedOption] = this.options;
     }
 
-    onOptionSelected(value: string) {
+    public onOptionSelected(value: string) {
         this.selectedOption = value;
         this.selectedValueChanged.emit(this.selectedOption);
     }
 
-    toggleActiveClass() {
+    public toggleActiveClass() {
         this.isActive = !this.isActive;
     }
 }

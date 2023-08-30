@@ -1,0 +1,101 @@
+name: Continuous Delivery
+
+on:
+  push:
+    branches: [ development ]
+      # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+env:
+  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+  DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+  SSH_HOST: ${{secrets.SSH_HOST}}
+  SSH_USERNAME: ${{secrets.SSH_USERNAME}}
+  SSH_KEY: ${{secrets.SSH_KEY}}
+
+jobs:
+  build_core_service:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_TOKEN
+      -
+        name: Build and push Core Service
+        uses: docker/build-push-action@v4
+        with:
+          tags: $DOCKERHUB_USERNAME/squirrel_core:latest
+          context: ./backend
+          file: ./backend/Squirrel.Core/Dockerfile
+          build-args: PROJECT_PORT=5050
+          push: true
+
+  build_notifier_service:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_TOKEN
+      -
+        name: Build and push Notifier Service
+        uses: docker/build-push-action@v4
+        with:
+          tags: $DOCKERHUB_USERNAME/squirrel_notifier:latest
+          context: ./backend
+          file: ./backend/Squirrel.Notifier/Dockerfile
+          build-args: PROJECT_PORT=5070
+          push: true
+
+  build_frontend:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_TOKEN
+      -
+        name: Build Frontend
+        uses: docker/build-push-action@v4
+        with:
+          tags: $DOCKERHUB_USERNAME/squirrel_frontend:latest
+          context: ./frontend
+          push: true
+
+  deploy_images:
+    runs-on: ubuntu-latest
+    needs: [ build_core_service, build_notifier_service, build_frontend ]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Update PROD images
+      uses: appleboy/ssh-action@master
+      with:
+         host: $SSH_HOST
+         username: $SSH_USERNAME
+         key: $SSH_KEY
+         script: cd ~/bsa-2023-squirrel && sudo docker-compose -f docker-compose.apps.prod.yml stop && sudo docker-compose -f docker-compose.apps.prod.yml pull && sudo docker system prune -f && sudo docker-compose -f docker-compose.apps.prod.yml up -d

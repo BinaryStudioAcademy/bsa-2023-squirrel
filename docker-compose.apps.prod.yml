@@ -1,0 +1,52 @@
+version: '3.1'
+services:
+
+    squirrel_core:
+        image: alinasielina/squirrel_core:latest
+        container_name: 'squirrel_core'
+        restart: on-failure
+        networks:
+            - back
+        ports:
+            - "5050:5050"
+        environment:
+            ASPNETCORE_ENVIRONMENT: 'Production'
+        env_file:
+            - /etc/environment
+        volumes:
+           - ./resources:/app/Resources
+
+
+    squirrel_notifier:
+        image: alinasielina/squirrel_notifier:latest
+        container_name: 'squirrel_notifier'
+        restart: on-failure
+        networks:
+            - back
+        ports:
+            - "5070:5070"
+        environment:
+            ASPNETCORE_ENVIRONMENT: 'Production'
+        env_file:
+            - /etc/environment
+
+    squirrel_frontend:
+        depends_on:
+            - squirrel_core
+            - squirrel_notifier
+        image: alinasielina/squirrel_frontend:latest
+        container_name: 'squirrel_frontend'
+        restart: on-failure
+        networks:
+            - back
+            - front
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - /etc/letsencrypt:/etc/letsencrypt
+networks:
+    back:
+        driver: bridge
+    front:
+        driver: bridge

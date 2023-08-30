@@ -1,0 +1,6 @@
+<div class="container">
+    <h2>{{ projectName }}</h2>
+    <app-dropdown [options]="dbNames" [width]="250" (selectedValueChanged)="onDatabaseSelected($event)"></app-dropdown>
+    <app-button text="+" height="30px" width="35px" padding="" variant="outline-secondary"></app-button>
+</div>
+<div class="horizontal-separator"></div>

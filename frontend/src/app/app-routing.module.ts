@@ -11,6 +11,7 @@ const routes: Routes = [
         data: { requiresToken: false },
         loadChildren: () => import('@modules/authentication/authentication.module').then((m) => m.AuthenticationModule),
     },
+
     {
         path: 'main',
         canActivate: [AuthGuard],

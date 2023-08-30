@@ -12,6 +12,8 @@ builder.Configuration
     .AddEnvironmentVariables()
     .Build();
 
+builder.AddSerilog();
+
 builder.Services.AddControllers();
 builder.Services.AddSquirrelCoreContext(builder.Configuration);
 builder.Services.AddMongoDbService(builder.Configuration);

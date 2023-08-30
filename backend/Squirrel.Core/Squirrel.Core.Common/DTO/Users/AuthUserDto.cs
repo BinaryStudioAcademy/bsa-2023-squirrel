@@ -2,8 +2,8 @@
 
 namespace Squirrel.Core.Common.DTO.Users;
 
-public sealed class AuthUserDTO
+public sealed class AuthUserDto
 {
-    public UserDTO User { get; set; }
+    public UserDto User { get; set; }
     public RefreshedAccessTokenDto Token { get; set; }
 }

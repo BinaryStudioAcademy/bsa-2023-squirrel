@@ -1,6 +1,6 @@
 ﻿namespace Squirrel.Core.Common.DTO.Users;
 
-public class UserDTO
+public sealed class UserDto
 {
     public int Id { get; set; }
     public string Avatar { get; set; }

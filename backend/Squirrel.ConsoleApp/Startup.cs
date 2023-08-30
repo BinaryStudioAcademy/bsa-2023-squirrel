@@ -31,7 +31,7 @@ public class Startup
                 services.AddSingleton<IDbQueryProvider, SqlServerQueryProvider>();
                 services.AddSingleton<IDatabaseService, SqlServerService>();
                 break;
-            case DbEngine.PostgreSQL:
+            case DbEngine.PostgreSql:
                 services.AddSingleton<IDbQueryProvider, PostgreSqlQueryProvider>();
                 services.AddSingleton<IDatabaseService, PostgreSqlService>();
                 break;

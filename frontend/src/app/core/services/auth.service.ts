@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { CredentialResponse } from 'google-one-tap';
 import { Observable, tap } from 'rxjs';
@@ -21,7 +21,7 @@ export class AuthService {
     private readonly refreshTokenKey = 'refreshToken';
 
     // eslint-disable-next-line no-empty-function
-    constructor(private httpService: HttpInternalService, private router: Router) {}
+    constructor(private httpService: HttpInternalService, private router: Router, private ngZone: NgZone) {}
 
     public signOut = () => {
         localStorage.removeItem(this.accessTokenKey);
@@ -38,7 +38,7 @@ export class AuthService {
                 next: (response: UserAuthDto) => {
                     this.saveTokens(response.token);
                     console.log(`received UserAuthDto: ${response}`);
-                    this.router.navigate(['/main']);
+                    this.ngZone.run(() => this.router.navigateByUrl('/main'));
                 },
                 error: () => {
                     this.signOut();

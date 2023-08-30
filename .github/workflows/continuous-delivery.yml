@@ -6,13 +6,6 @@ on:
       # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-env:
-  DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-  DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-  SSH_HOST: ${{secrets.SSH_HOST}}
-  SSH_USERNAME: ${{secrets.SSH_USERNAME}}
-  SSH_KEY: ${{secrets.SSH_KEY}}
-
 jobs:
   build_core_service:
     runs-on: ubuntu-latest
@@ -33,7 +26,7 @@ jobs:
         name: Build and push Core Service
         uses: docker/build-push-action@v4
         with:
-          tags: $DOCKERHUB_USERNAME/squirrel_core:latest
+          tags: alinasielina/squirrel_core:latest
           context: ./backend
           file: ./backend/Squirrel.Core/Dockerfile
           build-args: PROJECT_PORT=5050
@@ -58,7 +51,7 @@ jobs:
         name: Build and push Notifier Service
         uses: docker/build-push-action@v4
         with:
-          tags: $DOCKERHUB_USERNAME/squirrel_notifier:latest
+          tags: alinasielina/squirrel_notifier:latest
           context: ./backend
           file: ./backend/Squirrel.Notifier/Dockerfile
           build-args: PROJECT_PORT=5070
@@ -83,7 +76,7 @@ jobs:
         name: Build Frontend
         uses: docker/build-push-action@v4
         with:
-          tags: $DOCKERHUB_USERNAME/squirrel_frontend:latest
+          tags: alinasielina/squirrel_frontend:latest
           context: ./frontend
           push: true
 
@@ -95,7 +88,7 @@ jobs:
     - name: Update PROD images
       uses: appleboy/ssh-action@master
       with:
-         host: $SSH_HOST
-         username: $SSH_USERNAME
-         key: $SSH_KEY
+         host: ${{secrets.SSH_HOST}}
+         username: ${{secrets.SSH_USERNAME}}
+         key: ${{secrets.SSH_KEY}}
          script: cd ~/squirrel && sudo docker-compose -f docker-compose.apps.prod.yml stop && sudo docker-compose -f docker-compose.apps.prod.yml pull && sudo docker system prune -f && sudo docker-compose -f docker-compose.apps.prod.yml up -d

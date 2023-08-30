@@ -20,9 +20,9 @@ const routes: Routes = [
     },
     {
         path: 'profile',
+        canActivate: [AuthGuard],
         data: { requiresToken: true },
         component: UserProfileComponent,
-        canActivate: [AuthGuard],
     },
     {
         path: '**',

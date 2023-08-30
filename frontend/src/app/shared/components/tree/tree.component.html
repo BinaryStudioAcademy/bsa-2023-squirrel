@@ -1,0 +1,34 @@
+<div class="container-background container">
+    <div class="tree-container">
+        <input class="search-input" type="text" placeholder="Search..." (input)="filterTree($event)" />
+
+        <ul class="tree-items">
+            <li *ngFor="let category of filteredTreeData" class="tree-item">
+                <label class="flex-align-center parent-tree-item">
+                    <input
+                        *ngIf="asCheckList"
+                        type="checkbox"
+                        [checked]="category.selected"
+                        (change)="toggleSelect(category)" />
+                    <span [ngClass]="{ selected: category.selected }">{{ category.name }}</span>
+                </label>
+                <ul class="tree-item-children">
+                    <li *ngFor="let subcategory of category.children" class="tree-item child-tree-item">
+                        <label class="flex-align-center">
+                            <input
+                                *ngIf="asCheckList"
+                                type="checkbox"
+                                [checked]="subcategory.selected"
+                                (change)="toggleSelect(subcategory)" />
+                            <span [ngClass]="{ selected: subcategory.selected }">{{ subcategory.name }}</span>
+                        </label>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div class="commit-msg-form">
+        <label class="commit-label" for="commit-msg-ta">Commit message</label>
+        <textarea class="commit-msg-input" placeholder="Type your commit message here..." rows="4"></textarea>
+    </div>
+</div>

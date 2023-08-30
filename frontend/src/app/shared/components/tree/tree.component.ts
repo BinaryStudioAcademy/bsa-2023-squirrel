@@ -1,0 +1,107 @@
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+
+import { TreeNode } from './models/TreeNode.model';
+
+@Component({
+    selector: 'app-tree',
+    templateUrl: './tree.component.html',
+    styleUrls: ['./tree.component.sass'],
+})
+export class TreeComponent implements OnInit {
+    @Input() asCheckList: boolean = false;
+
+    @Output() selectionChange = new EventEmitter<{ selectedNodes: TreeNode[]; originalStructure: TreeNode[] }>();
+
+    @Input() treeData: TreeNode[] = [
+        {
+            name: 'Category 1',
+            children: [{ name: 'Subcategory 1.1' }, { name: 'Subcategory 1.2' }],
+        },
+        {
+            name: 'Category 2',
+            children: [{ name: 'Subcategory 2.1' }, { name: 'Subcategory 2.2' }],
+        },
+    ];
+
+    public filteredTreeData: TreeNode[] = [];
+
+    ngOnInit(): void {
+        this.filteredTreeData = this.treeData;
+    }
+
+    public filterTree(event: Event): void {
+        const searchTerm = (event.target as HTMLInputElement).value;
+
+        if (!searchTerm) {
+            this.filteredTreeData = this.treeData;
+
+            return;
+        }
+
+        const filteredData: TreeNode[] = [];
+
+        this.treeData.forEach((category) => {
+            const matchingSubcategories = category.children?.filter((subcategory) => {
+                return subcategory.name.toLowerCase().includes(searchTerm.toLowerCase());
+            });
+
+            if (matchingSubcategories?.length) {
+                filteredData.push({
+                    name: category.name,
+                    children: matchingSubcategories,
+                });
+            }
+        });
+
+        this.filteredTreeData = filteredData;
+    }
+
+    public toggleSelect(node: TreeNode): void {
+        if (node.children) {
+            const allChildrenSelected = node.children.every((child) => child.selected);
+
+            node.selected = !allChildrenSelected;
+            node.children.forEach((child) => (child.selected = node.selected));
+            this.updateParentSelect(node);
+        } else {
+            node.selected = !node.selected;
+            this.updateParentSelect(node);
+        }
+
+        const selectedNodes = this.getSelectedNodes(this.treeData);
+
+        this.selectionChange.emit({ selectedNodes, originalStructure: this.treeData });
+    }
+
+    private getSelectedNodes(nodes: TreeNode[]): TreeNode[] {
+        const selectedNodes: TreeNode[] = [];
+
+        nodes.forEach((node) => {
+            if (node.selected) {
+                selectedNodes.push(node);
+            }
+            if (node.children) {
+                selectedNodes.push(...this.getSelectedNodes(node.children));
+            }
+        });
+
+        return selectedNodes;
+    }
+
+    private updateParentSelect(node: TreeNode): void {
+        const parent = this.getParentNode(node);
+
+        if (parent) {
+            const allChildrenSelected = parent.children?.every((child) => child.selected);
+
+            parent.selected = allChildrenSelected;
+            this.updateParentSelect(parent); // Recursively update parents
+        }
+    }
+
+    private getParentNode(node: TreeNode): TreeNode | null {
+        const parent = this.treeData.find((category) => category.children?.some((child) => child === node));
+
+        return parent || null;
+    }
+}

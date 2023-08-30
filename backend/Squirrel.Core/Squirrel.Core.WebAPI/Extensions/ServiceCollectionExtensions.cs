@@ -31,6 +31,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient<ISampleService, SampleService>();
         services.AddScoped<JwtIssuerOptions>();
         services.AddScoped<IJwtFactory, JwtFactory>();
+        services.AddScoped<IUserService, UserService>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ITextService, TextService>();
         services.AddTransient<IDependencyAnalyzer, DependencyAnalyzer>();

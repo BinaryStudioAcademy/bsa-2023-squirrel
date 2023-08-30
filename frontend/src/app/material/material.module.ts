@@ -6,6 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
     declarations: [],
@@ -17,6 +18,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
         MatCardModule,
         MatAutocompleteModule,
         MatChipsModule,
+        MatDialogModule
     ],
     exports: [
         CommonModule,
@@ -26,6 +28,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
         MatCardModule,
         MatAutocompleteModule,
         MatChipsModule,
+        MatDialogModule
     ],
 })
 export class MaterialModule {}

@@ -14,3 +14,12 @@ Main Page works!
     <app-button text="Filled button" variant="filled"></app-button>
     <app-button text="Disabled" variant="outline-secondary" [isDisabled]=true></app-button>
 </div>
+<!-- this div is an example of how to use reusable modals -->
+<div [ngStyle]="{
+    'margin-top': '20px',
+    'display': 'flex',
+    'justify-content': 'space-around'
+    }">
+    <app-button (click)="openConfirmationModalOne()" text="Confirmation Modal One" variant="filled"></app-button>
+    <app-button (click)="openConfirmationModalTwo()" text="Confirmation Modal Two" variant="filled"></app-button>
+</div>

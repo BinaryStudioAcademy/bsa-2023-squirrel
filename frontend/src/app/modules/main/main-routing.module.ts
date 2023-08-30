@@ -15,7 +15,7 @@ const routes: Routes = [
             },
             {
                 path: 'pull-requests',
-                component: NotFoundComponent,
+                loadChildren: () => import('../pull-request/pull-request.module').then((m) => m.PullRequestModule),
             },
             {
                 path: 'branches',

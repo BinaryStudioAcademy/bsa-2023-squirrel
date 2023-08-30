@@ -1,6 +1,6 @@
 import { Branch } from '../branch/branch';
 import { Comment } from '../comment/comment';
-import { User } from '../user/user';
+import { User } from '../user/user-dto';
 
 export interface PullRequest {
     id: number;

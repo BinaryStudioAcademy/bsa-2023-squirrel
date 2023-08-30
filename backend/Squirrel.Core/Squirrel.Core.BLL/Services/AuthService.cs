@@ -58,9 +58,9 @@ public sealed class AuthService : BaseService, IAuthService
         };
     }
 
-    public async Task<RefreshedAccessTokenDto> LoginAsync(UserLoginDto userLoginDto)
+    public async Task<AuthUserDTO> LoginAsync(UserLoginDto userLoginDto)
     {
-        var userEntity = await _context.Users
+        User? userEntity = await _context.Users
             .FirstOrDefaultAsync(u => u.Email == userLoginDto.Email);
 
         if (userEntity == null ||
@@ -69,10 +69,18 @@ public sealed class AuthService : BaseService, IAuthService
             throw new InvalidEmailOrPasswordException();
         }
 
-        return await GenerateNewAccessTokenAsync(userEntity.Id, userEntity.Username, userLoginDto.Email);
+        var user = _mapper.Map<UserDTO>(userEntity);
+
+        var token = await GenerateNewAccessTokenAsync(userEntity.Id, userEntity.Username, userLoginDto.Email);
+
+        return new AuthUserDTO
+        {
+            User = user,
+            Token = token
+        };
     }
 
-    public async Task<RefreshedAccessTokenDto> RegisterAsync(UserRegisterDto userRegisterDto)
+    public async Task<AuthUserDTO> RegisterAsync(UserRegisterDto userRegisterDto)
     {
         if (await _context.Users.FirstOrDefaultAsync(u => u.Username == userRegisterDto.Username) is not null)
         {
@@ -91,7 +99,15 @@ public sealed class AuthService : BaseService, IAuthService
         var createdUser = (await _context.Users.AddAsync(newUser)).Entity;
         await _context.SaveChangesAsync();
 
-        return await GenerateNewAccessTokenAsync(createdUser.Id, createdUser.Username, createdUser.Email);
+        var user = _mapper.Map<UserDTO>(createdUser);
+
+        var token = await GenerateNewAccessTokenAsync(createdUser.Id, createdUser.Username, createdUser.Email);
+
+        return new AuthUserDTO
+        {
+            User = user,
+            Token = token
+        };
     }
 
     private async Task<RefreshedAccessTokenDto> GenerateNewAccessTokenAsync(int userId, string userName, string email)

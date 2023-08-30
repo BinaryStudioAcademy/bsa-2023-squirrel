@@ -5,7 +5,7 @@ import { UserPredicates } from '@shared/helpers/user-predicates';
 import { Branch } from 'src/app/models/branch/branch';
 import { Comment } from 'src/app/models/comment/comment';
 import { PullRequest } from 'src/app/models/pull-request/pull-request';
-import { User } from 'src/app/models/user/user';
+import { User } from 'src/app/models/user/user-dto';
 
 @Component({
     selector: 'app-pull-request-list',

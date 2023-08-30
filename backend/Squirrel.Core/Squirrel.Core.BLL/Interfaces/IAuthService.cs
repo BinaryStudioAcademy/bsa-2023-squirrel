@@ -5,7 +5,7 @@ namespace Squirrel.Core.BLL.Interfaces;
 
 public interface IAuthService
 {
-    Task<RefreshedAccessTokenDto> LoginAsync(UserLoginDto userLoginDto);
-    Task<RefreshedAccessTokenDto> RegisterAsync(UserRegisterDto userRegisterDto);
+    Task<AuthUserDTO> LoginAsync(UserLoginDto userLoginDto);
+    Task<AuthUserDTO> RegisterAsync(UserRegisterDto userRegisterDto);
     Task<AuthUserDTO> AuthorizeWithGoogleAsync(string googleToken);
 }

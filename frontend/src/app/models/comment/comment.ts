@@ -1,4 +1,4 @@
-import { User } from '../user/user';
+import { User } from '../user/user-dto';
 
 export interface Comment {
     id: number;

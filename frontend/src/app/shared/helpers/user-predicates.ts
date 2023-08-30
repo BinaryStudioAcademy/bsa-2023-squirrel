@@ -1,4 +1,4 @@
-import { User } from 'src/app/models/user/user';
+import { User } from 'src/app/models/user/user-dto';
 
 export class UserPredicates {
     static findByFullNameOrUsernameOrEmail(item: User, value: string) {

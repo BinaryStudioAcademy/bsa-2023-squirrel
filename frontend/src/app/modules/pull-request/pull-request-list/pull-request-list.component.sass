@@ -1,4 +1,5 @@
 @import "/src/styles/color"
+@import "/src/styles/reusable"
 
 .rounded-container
     border-radius: 10px
@@ -12,7 +13,8 @@
         font-weight: 600
         color: $text-main
         h5
-            margin: 0px
+            font-size: 18px
+            @extend .title
 
 .header
     display: flex
@@ -23,10 +25,10 @@
     @extend .actions
     align-items: flex-end
     flex-wrap: nowrap
-    margin-left: 0px 
+    margin-left: 0px
     > *
         min-width: 100px
-        margin-bottom: 5px 
+        margin-bottom: 5px
 
 .actions
     margin-left: 11px
@@ -40,7 +42,7 @@
 
 .table
     margin-left: 32px
-    margin-right: 32px  
+    margin-right: 32px
 
 .pull-request-container
     display: flex
@@ -67,7 +69,7 @@
         text-align: center
     >.third
         flex: 15
-        text-align: center      
+        text-align: center
 
 .table-content
     display: flex
@@ -89,7 +91,7 @@
 .user-container
     display: flex
     align-items: center
-    
+
     img
         padding: 5px
         min-height: 36px

@@ -11,6 +11,7 @@ public static class ServiceCollectionExtensions
     public static void RegisterCustomServices(this IServiceCollection services)
     {
         services.AddScoped<ITextService, TextService>();
+        services.AddScoped<IDependencyAnalyzer, DependencyAnalyzer>();
     }
 
     public static void ConfigureCors(this IServiceCollection services, IConfiguration configuration)

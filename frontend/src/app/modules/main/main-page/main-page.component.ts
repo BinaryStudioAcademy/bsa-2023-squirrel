@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { BroadcastHubService } from '@core/hubs/broadcast-hub.service';
 import { ConfirmationModalComponent } from '@shared/components/confirmation-modal/confirmation-modal.component';
+
 import { ConfirmationModalInterface } from 'src/app/models/confirmation-modal/confirmation-modal';
 
 @Component({
@@ -10,9 +11,12 @@ import { ConfirmationModalInterface } from 'src/app/models/confirmation-modal/co
     styleUrls: ['./main-page.component.sass'],
 })
 export class MainComponent implements OnInit, OnDestroy {
-    // eslint-disable-next-line no-empty-function
-    constructor(private broadcastHub: BroadcastHubService, 
-        public confirmationModal: MatDialog) { }
+    constructor(
+        private broadcastHub: BroadcastHubService,
+        public confirmationModal: MatDialog,
+    ) {
+        // do nothing.
+    }
 
     async ngOnInit() {
         await this.broadcastHub.start();
@@ -29,6 +33,7 @@ export class MainComponent implements OnInit, OnDestroy {
      * Example method to demonstrate invoking the first Confirmation Modal
      */
     public confirmationModalMessage: string = '';
+
     openConfirmationModalOne() {
         const modal: ConfirmationModalInterface = {
             modalHeader: 'Reusable Confirmation Modal',
@@ -39,8 +44,9 @@ export class MainComponent implements OnInit, OnDestroy {
                 this.performConfirmationModalOne();
             },
         };
+
         this.confirmationModal.open(ConfirmationModalComponent, {
-            data: modal
+            data: modal,
         });
     }
 
@@ -57,8 +63,9 @@ export class MainComponent implements OnInit, OnDestroy {
                 this.performConfirmationModalTwo();
             },
         };
+
         this.confirmationModal.open(ConfirmationModalComponent, {
-            data: modal
+            data: modal,
         });
     }
 

@@ -1,6 +1,6 @@
 ﻿using System.Data.Common;
 using Squirrel.ConsoleApp.BL.Interfaces;
-using Squirrel.ConsoleApp.Models.Models;
+using Squirrel.ConsoleApp.Models;
 
 namespace Squirrel.ConsoleApp.BL.Services.Abstract;
 public abstract class BaseDbService: IDatabaseService

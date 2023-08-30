@@ -1,4 +1,4 @@
-﻿namespace Squirrel.ConsoleApp.Models.Models;
+﻿namespace Squirrel.ConsoleApp.Models;
 
 public class ConnectionString
 {

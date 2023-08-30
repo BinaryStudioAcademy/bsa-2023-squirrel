@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Squirrel.ConsoleApp.BL.Exceptions;
 using Squirrel.ConsoleApp.BL.Interfaces;
-using Squirrel.ConsoleApp.Models.Models;
+using Squirrel.ConsoleApp.Models;
 
 namespace Squirrel.ConsoleApp.BL.Services;
 

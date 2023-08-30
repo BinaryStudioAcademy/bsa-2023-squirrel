@@ -1,6 +1,6 @@
 ﻿using System.Data.SqlClient;
 using Squirrel.ConsoleApp.BL.Services.Abstract;
-using Squirrel.ConsoleApp.Models.Models;
+using Squirrel.ConsoleApp.Models;
 
 namespace Squirrel.ConsoleApp.BL.Services;
 

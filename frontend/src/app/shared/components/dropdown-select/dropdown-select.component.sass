@@ -9,7 +9,7 @@
     overflow: hidden
 
 .chiplist-container
-    padding-top: 2px 
+    padding-top: 2px
     display: flex
     flex-direction: row
     align-items: center
@@ -23,8 +23,8 @@
 
 .vertical-line
     height: 100%
-    margin: 0px
-    padding: 0px
+    margin: 0
+    padding: 0
     width: 2px
     background-color: $primary-color
     display: none
@@ -40,10 +40,10 @@
     background-color: $bg-input
     box-sizing: border-box
     border-radius: 7px
-    border: none    
+    border: none
     position: relative
     justify-content: space-between
-    padding: 0px 32px 0px 12px
+    padding: 0 32px 0 12px
     display: flex
     cursor: pointer
     background-image: url("/assets/expand_more_24px.svg")
@@ -53,6 +53,7 @@
     input
         background: none
         border: none
+        font-weight: 500
     input:focus
         outline: none
 
@@ -60,12 +61,12 @@
     display: none
     list-style: none
     border-radius: 10px
-    background: white    
-    box-shadow: 0px 0px 15px -1px fade_out(#F0F3F9, 0.6)
+    background: white
+    box-shadow: 0 0 15px -1px fade_out(#F0F3F9, 0.6)
     position: absolute
     bottom: -15px
     left: 0
-    padding: 10px 0px 10px 0px
+    padding: 10px 0 10px 0
     z-index: 10
     right: 0
     transform: translateY(100%)
@@ -80,7 +81,7 @@
             display: flex
 
         &.selected
-            background: darken($bg-input, 1)            
+            background: darken($bg-input, 1)
             .vertical-line
                 display: block
 
@@ -91,6 +92,5 @@
             background: lighten($bg-input, 1)
             outline: none
 
-    &.dropdown-open 
+    &.dropdown-open
         display: block
-        

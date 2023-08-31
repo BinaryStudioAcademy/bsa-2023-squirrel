@@ -1,10 +1,50 @@
-.avatar-initials
-  width: 40px
-  height: 40px
-  border-radius: 50%
-  background-color: #ccc
-  display: flex
-  align-items: center
-  justify-content: center
-  font-weight: bold
-  color: white
+.profile-container
+  max-width: 600px
+  margin: 50px auto
+  padding: 20px
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1)
+  
+  .header
+    display: flex
+    justify-content: space-between
+    align-items: center
+    border-bottom: 1px solid #e0e0e0
+    padding-bottom: 20px
+
+    .initials
+      font-size: 24px
+      font-weight: bold
+      background-color: #f5f5f5
+      padding: 10px
+      border-radius: 50%
+      
+  .section
+    margin-top: 20px
+
+    h2
+      margin-bottom: 20px
+      
+    .form-group
+      margin-bottom: 20px
+
+      label
+        display: block
+        margin-bottom: 10px
+        
+      input[type="text"], input[type="password"]
+        width: 100%
+        padding: 10px
+        border: 1px solid #e0e0e0
+        border-radius: 5px
+
+    button
+      padding: 10px 15px
+      background-color: #007BFF
+      color: white
+      border: none
+      border-radius: 5px
+      cursor: pointer
+      transition: background-color 0.3s
+
+      &:hover
+        background-color: darken(#007BFF, 10%)

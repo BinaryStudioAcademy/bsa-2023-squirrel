@@ -1,37 +1,67 @@
-<div class="user-profile-container">
-    <h4>User Profile</h4>
+<div class="profile-container">
+    <h2>User Profile</h2>
 
-    <div class="edit-profile-content">
-        <h5>Edit profile</h5>
-        <div class="avatar-container">
-            <img
-                *ngIf="user.avatarUrl"
-                class="avatar avatar-style"
-                src="{{ user.avatarUrl }}"
-                alt="Here should be an avatar" />
-            <div *ngIf="!user.avatarUrl" class="avatar-initials">{{ getUserInitials() }}</div>
-        </div>
+    <div class="header">
+        <span class="initials">{{ getUserInitials() }}</span>
+        <app-button text="Go Back" (click)="goBack()"></app-button>
+    </div>
 
-        <form [formGroup]="editProfileForm" (ngSubmit)="saveNewInfo()" class="edit-profile-form" action="">
+    <section class="section">
+        <h3>Edit Profile</h3>
+        <form [formGroup]="userNamesForm" (ngSubmit)="updateUserNames()">
             <app-input
-                [formControl]="$any(editProfileForm.controls['username'])"
+                [formControl]="$any(userNamesForm.controls['username'])"
                 [label]="'username'"
+                [type]="'text'"
                 placeholder="Enter Username">
             </app-input>
             <app-input
-                [formControl]="$any(editProfileForm.controls['firstName'])"
-                [label]="'first Name'"
-                placeholder="Enter FirstName">
+                [formControl]="$any(userNamesForm.controls['firstName'])"
+                [label]="'first name'"
+                [type]="'text'"
+                placeholder="Enter First Name">
             </app-input>
             <app-input
-                [formControl]="$any(editProfileForm.controls['lastName'])"
-                [label]="'last Name'"
-                placeholder="Enter your LastName">
+                [formControl]="$any(userNamesForm.controls['lastName'])"
+                [label]="'last name'"
+                [type]="'text'"
+                placeholder="Enter Last Name">
             </app-input>
-
-            <app-button class="margin-top" text="Save" variant="filled"> </app-button>
+            <app-button text="Save" type="submit"></app-button>
         </form>
-    </div>
+    </section>
 
-    <app-button class="margin-top" text="Go Back" variant="filled" (click)="goBack()"> </app-button>
+    <section class="section">
+        <h2>Password</h2>
+        <form [formGroup]="passwordForm" (ngSubmit)="updateUserPassword()">
+            <div class="form-group">
+                <label for="currentPassword">Current Password:</label>
+                <input type="password" id="currentPassword" formControlName="currentPassword" />
+            </div>
+            <div class="form-group">
+                <label for="newPassword">New Password:</label>
+                <input type="password" id="newPassword" formControlName="newPassword" />
+            </div>
+            <div class="form-group">
+                <label for="repeatPassword">Repeat New Password:</label>
+                <input type="password" id="repeatPassword" formControlName="repeatPassword" />
+            </div>
+            <button type="submit">Change Password</button>
+        </form>
+    </section>
+
+    <section class="section">
+        <h2>Notifications</h2>
+        <form [formGroup]="notificationsForm" (ngSubmit)="updateUserNotifications()">
+            <div class="form-group">
+                <input type="checkbox" id="notifyOnSquirrel" formControlName="notifyOnSquirrel" />
+                <label for="notifyOnSquirrel">Notify on Squirrel</label>
+            </div>
+            <div class="form-group">
+                <input type="checkbox" id="notifyByEmail" formControlName="notifyByEmail" />
+                <label for="notifyByEmail">Notify by Email</label>
+            </div>
+            <button type="submit">Update Notifications</button>
+        </form>
+    </section>
 </div>

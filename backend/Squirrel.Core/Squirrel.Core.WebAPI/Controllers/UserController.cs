@@ -49,9 +49,9 @@ namespace Squirrel.Core.WebAPI.Controllers
         /// Update user notifications
         /// </summary>
         [HttpPut("update-notifications")]
-        public async Task<ActionResult<UserDTO>> UpdateUserNotifications([FromBody] UpdateUserNamesDTO updateUserDTO)
+        public async Task<ActionResult<UserDTO>> UpdateUserNotifications([FromBody] UpdateUserNotificationsdDTO updateUserNotificationsdDTO)
         {
-            return Ok(await _userService.UpdateUserAsync(updateUserDTO));
+            return Ok(await _userService.UpdateNotificationsAsync(updateUserNotificationsdDTO));
         }
     }
 }

@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AuthService } from '@core/services/auth.service';
+import { SpinnerService } from '@core/services/spinner.service';
 import { environment } from '@env/environment';
 import { CredentialResponse } from 'google-one-tap';
 
@@ -14,10 +15,15 @@ export class GoogleButtonComponent implements OnInit {
     @Input() authType = 'signin_with';
 
     // eslint-disable-next-line no-empty-function
-    constructor(private authService: AuthService) {}
+    constructor(private authService: AuthService, private spinner: SpinnerService) {}
 
     ngOnInit(): void {
-        this.initializeGoogleSignIn();
+        this.spinner.show();
+        // button rendering should be done asynchronously
+        setTimeout(() => {
+            this.initializeGoogleSignIn();
+            this.spinner.hide();
+        }, 0);
     }
 
     private initializeGoogleSignIn() {

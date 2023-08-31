@@ -1,4 +1,4 @@
-﻿namespace Squirrel.Core.Common.DTO.Text;
+﻿namespace Squirrel.Shared.DTO.Text;
 
 public class InLineDiffResultDto
 {

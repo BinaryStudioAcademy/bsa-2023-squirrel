@@ -6,6 +6,8 @@ using Squirrel.Core.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 using Squirrel.Core.Common.DTO.Users;
 using Squirrel.Shared.Exceptions;
+using Squirrel.Core.Common.DTO.Auth;
+using Squirrel.Core.Common.Security;
 
 namespace Squirrel.Core.BLL.Services;
 
@@ -19,18 +21,37 @@ public sealed class UserService : BaseService, IUserService
         return _mapper.Map<UserDTO>(userEntity);
     }
 
-    public async Task<UserDTO> UpdateUserAsync(UpdateUserDTO userDto)
+    public async Task<UserDTO> UpdateUserAsync(UpdateUserDTO updateUserDTO)
     {
-        var userEntity = await GetUserByIdInternal(userDto.Id);
+        var userEntity = await GetUserByIdInternal(updateUserDTO.Id);
 
-        userEntity.Username = userDto.Username;
-        userEntity.FirstName = userDto.FirstName;
-        userEntity.LastName = userDto.LastName;
+        userEntity.Username = updateUserDTO.Username;
+        userEntity.FirstName = updateUserDTO.FirstName;
+        userEntity.LastName = updateUserDTO.LastName;
 
         _context.Users.Update(userEntity);
         await _context.SaveChangesAsync();
 
         return _mapper.Map<UserDTO>(userEntity);
+    }
+
+    public async Task ChangePasswordAsync(ChangePasswordDTO changePasswordDTO)
+    {
+        var userEntity = await GetUserByIdInternal(changePasswordDTO.Id);
+
+        var isPasswordValid = SecurityUtils.ValidatePassword(changePasswordDTO.CurrentPassword, userEntity.PasswordHash, userEntity.Salt);
+
+        if (!isPasswordValid)
+        {
+            throw new InvalidEmailOrPasswordException();
+        }
+
+        var newPasswordHash = SecurityUtils.HashPassword(changePasswordDTO.NewPassword, userEntity.Salt);
+
+        userEntity.PasswordHash = newPasswordHash;
+
+        _context.Users.Update(userEntity);
+        await _context.SaveChangesAsync();
     }
 
     private async Task<User> GetUserByIdInternal(int id)

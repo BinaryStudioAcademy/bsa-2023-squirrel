@@ -8,4 +8,6 @@ public class UserDTO
     public string LastName { get; set; }
     public string Email { get; set; }
     public string? AvatarUrl { get; set; }
+    public bool SquirrelNotification { get; set; }
+    public bool EmailNotification { get; set; }
 }

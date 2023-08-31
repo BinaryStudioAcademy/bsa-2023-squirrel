@@ -30,9 +30,19 @@ namespace Squirrel.Core.WebAPI.Controllers
         /// Update user
         /// </summary>
         [HttpPut("update")]
-        public async Task<ActionResult<UserDTO>> Put([FromBody] UpdateUserDTO user)
+        public async Task<ActionResult<UserDTO>> Put([FromBody] UpdateUserDTO updateUserDTO)
         {
-            return Ok(await _userService.UpdateUserAsync(user));
+            return Ok(await _userService.UpdateUserAsync(updateUserDTO));
+        }
+
+        /// <summary>
+        /// Update user password
+        /// </summary>
+        [HttpPut("change-password")]
+        public async Task<ActionResult> Put([FromBody] ChangePasswordDTO changePassword)
+        {
+            await _userService.ChangePasswordAsync(changePassword);
+            return NoContent();
         }
     }
 }

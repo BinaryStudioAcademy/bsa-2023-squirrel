@@ -13,6 +13,8 @@ public sealed class User : Entity<int>
     public string PasswordHash { get; set; } = string.Empty;
     public string Salt { get; set; } = string.Empty;
     public string? AvatarUrl { get; set; }
+    public bool SquirrelNotification { get; set; } = true;
+    public bool EmailNotification { get; set; } = false;
 
     public ICollection<Commit> Commits { get; set; } = new List<Commit>();
     public ICollection<Comment> Comments { get; set; } = new List<Comment>();

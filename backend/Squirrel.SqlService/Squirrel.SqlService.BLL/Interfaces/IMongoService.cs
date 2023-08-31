@@ -1,6 +1,6 @@
 ﻿using Squirrel.Core.DAL.Entities.Common;
 
-namespace Squirrel.Core.BLL.Interfaces;
+namespace Squirrel.SqlService.BLL.Interfaces;
 
 public interface IMongoService<T> where T : Entity<long>
 {

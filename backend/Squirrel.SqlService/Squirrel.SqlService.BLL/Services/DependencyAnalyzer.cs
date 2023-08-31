@@ -1,7 +1,7 @@
-﻿using Squirrel.Core.BLL.Interfaces;
+﻿using Squirrel.SqlService.BLL.Interfaces;
 using System.Text.RegularExpressions;
 
-namespace Squirrel.Core.BLL.Services;
+namespace Squirrel.SqlService.BLL.Services;
 
 public class DependencyAnalyzer : IDependencyAnalyzer
 {

@@ -1,0 +1,24 @@
+<div class="confirmation-modal">
+    <app-loading-spinner *ngIf="this.spinnerService.isLoading$ | async"></app-loading-spinner>
+    <h4 class="confirmation-modal-title">{{ confirmationModalData.modalHeader }}</h4>
+    <div mat-dialog-content>
+      <p>{{ confirmationModalData.modalDescription }}</p>
+    </div>
+    <div mat-dialog-actions class="confirmation-modal-actions">
+        <app-button class="confirmation-modal-btn" 
+        text="{{ confirmationModalData.confirmButtonLabel }}"
+        (click)="handleConfirmationModalSubmit()"
+        [isDisabled]="((this.spinnerService.isLoading$ | async) || false)"
+        variant="filled" 
+        width="100%">
+        </app-button>
+
+        <app-button class="confirmation-modal-btn"
+        text="{{ confirmationModalData.cancelButtonLabel }}"
+        (click)="closeConfirmationModal()"
+        [isDisabled]="((this.spinnerService.isLoading$ | async) || false)"
+        variant="outline-primary" 
+        width="100%">
+        </app-button>
+    </div>
+  </div>

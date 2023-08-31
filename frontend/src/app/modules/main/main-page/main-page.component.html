@@ -19,3 +19,15 @@
 <div class="tree">
     <app-tree [asCheckList]="true"></app-tree>
 </div>
+<!-- this div is an example of how to use reusable modals -->
+<div [ngStyle]="{
+    'margin-top': '20px',
+    'display': 'flex',
+    'justify-content': 'space-around'
+    }">
+    <div>
+        {{ confirmationModalMessage }}
+    </div>
+    <app-button (click)="openConfirmationModalOne()" text="Confirmation Modal One" variant="filled"></app-button>
+    <app-button (click)="openConfirmationModalTwo()" text="Confirmation Modal Two" variant="filled"></app-button>
+</div>

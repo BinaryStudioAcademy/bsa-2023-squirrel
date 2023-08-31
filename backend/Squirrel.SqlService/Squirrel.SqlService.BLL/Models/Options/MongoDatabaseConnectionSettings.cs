@@ -1,4 +1,4 @@
-﻿namespace Squirrel.Core.Common.Models;
+﻿namespace Squirrel.SqlService.BLL.Models.Options;
 
 public class MongoDatabaseConnectionSettings
 {

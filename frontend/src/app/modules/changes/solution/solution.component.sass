@@ -4,6 +4,8 @@
 .container
     height: 100%
     margin-right: 10px
+    border-radius: 5px
+    background-color: $line-color
 
 .header
     height: 38px
@@ -11,7 +13,6 @@
     display: flex
     justify-content: space-between
     align-items: center
-    background-color: $line-color
 
 .name
     @extend .title
@@ -21,19 +22,17 @@
 
 .code-section
     display: flex
-    height: 100%
+    height: calc(100% - 38px)
 
 .line-numbers
     height: 100%
     width: 40px
     padding: 4px 0
-    display: flex
-    flex-direction: column
+    @extend .flex-column
     align-items: center
-    background-color: $line-color
+    text-align: center
 
     color: $text-main
-    opacity: 0.5
 
 .code
     width: calc(100% - 40px)
@@ -42,3 +41,5 @@
 
 ul
     list-style-type: none
+li
+    opacity: 0.5

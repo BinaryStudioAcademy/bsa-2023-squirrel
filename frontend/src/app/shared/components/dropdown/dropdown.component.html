@@ -1,0 +1,8 @@
+<div class="dropdown" [ngClass]="{ active: isActive }" (click)="toggleActiveClass()" [style.width.px]="width">
+    <input type="text" readonly [(ngModel)]="selectedOption" />
+    <div class="option">
+        <div (click)="onOptionSelected(option)" *ngFor="let option of options">
+            {{ option }}
+        </div>
+    </div>
+</div>

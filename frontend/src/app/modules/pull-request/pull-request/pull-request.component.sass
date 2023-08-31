@@ -1,5 +1,6 @@
 @import "/src/styles/color"
 @import '/src/styles/global'
+@import "/src/styles/weights"
 
 .container
     display: flex
@@ -7,13 +8,13 @@
     justify-content: space-between
     margin-top: 13px
     > *:not(:last-child)
-        margin-right: 15px 
+        margin-right: 15px
 
 .main-text
     margin: 3px
     font-size: 14px
     font-style: normal
-    font-weight: 400
+    font-weight: $normal-weight
     color: $text-main
 
 .summary
@@ -21,7 +22,7 @@
     align-items: center
     width: 50%
     > *:not(:last-child)
-        margin-right: 12px 
+        margin-right: 12px
 
 .activity
     width: 35%
@@ -32,14 +33,16 @@
         align-items: center
 
 .comments
-    > * 
+    > *
         padding-right: 3px
+    p
+        margin-bottom: 4px
 
 .avatar-container
     list-style-type: none
     display: flex
     margin: auto
-    padding:0px
+    padding: 0
     flex-direction: row
     .avatar:not(:first-child)
         margin-left: -10px
@@ -50,15 +53,15 @@
         align-items: center
         background-color: $misc-background-color
         color: $text-light
-        font-weight: 600 
-        font-size: 14px 
+        font-weight: $semi-bold-weight
+        font-size: 14px
         outline-color: white !important
 
 .reviewiers
     width: 15%
     display: flex
     justify-content: center
-    padding: 0px 30px 0px 30px
+    padding: 0 30px 0 30px
 
 .avatar
     width: 44px
@@ -79,9 +82,10 @@
 .primary-info
     display: flex
     align-items: center
+    font-weight: $medium-weight
 
 .primary-info > *:not(:last-child)
-        margin-right: 12px 
+        margin-right: 12px
 
 .secondary-info
     p
@@ -89,7 +93,7 @@
         opacity: 0.5
         font-style: normal
         font-weight: 400
-        margin-top: 0px
+        margin-top: 0
 
 .branch
     background-color: $misc-background-color
@@ -100,7 +104,9 @@
     align-items: center
     p
         padding: 9px
-        margin-block: 0px
+        margin-block: 0
+p
+    margin-bottom: 0
 
 @media screen and (max-width: 750px)
     .activity

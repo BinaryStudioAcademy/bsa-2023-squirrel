@@ -11,6 +11,7 @@ import { UserRegisterDto } from 'src/app/models/user/user-register-dto';
 import { UserLoginDto } from '../../models/user/user-login-dto';
 
 import { HttpInternalService } from './http-internal.service';
+import { SpinnerService } from './spinner.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -20,8 +21,12 @@ export class AuthService {
 
     private readonly refreshTokenKey = 'refreshToken';
 
-    // eslint-disable-next-line no-empty-function
-    constructor(private httpService: HttpInternalService, private router: Router, private ngZone: NgZone) {}
+    constructor(
+        private httpService: HttpInternalService,
+        private router: Router,
+        private ngZone: NgZone,
+        private spinner: SpinnerService, // eslint-disable-next-line no-empty-function
+    ) {}
 
     public signOut = () => {
         localStorage.removeItem(this.accessTokenKey);
@@ -32,15 +37,21 @@ export class AuthService {
     public signInViaGoogle(googleCredentialsToken: CredentialResponse) {
         const credentials: GoogleAuthDto = { idToken: googleCredentialsToken.credential };
 
+        this.ngZone.run(() => this.spinner.show());
+
         return this.httpService
             .postRequest<UserAuthDto>(`${this.authRoutePrefix}/login/google`, credentials)
             .subscribe({
                 next: (response: UserAuthDto) => {
                     this.saveTokens(response.token);
                     console.log(`received UserAuthDto: ${response}`);
-                    this.ngZone.run(() => this.router.navigateByUrl('/main'));
+                    this.ngZone.run(() => {
+                        this.spinner.hide();
+                        this.router.navigateByUrl('/main');
+                    });
                 },
                 error: () => {
+                    this.ngZone.run(() => this.spinner.hide());
                     this.signOut();
                 },
             });

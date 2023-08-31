@@ -5,7 +5,7 @@ namespace Squirrel.Core.BLL.Interfaces;
 public interface IUserService
 {
     Task<UserDTO> GetUserByIdAsync(int id);
-    Task<UserDTO> UpdateUserAsync(UpdateUserDTO updateUserDTO);
-    Task ChangePasswordAsync(ChangePasswordDTO userDto);
-    Task<UserDTO> UpdateNotificationsAsync(UpdateNotificationsdDTO updateNotificationsdDTO);
+    Task<UserDTO> UpdateUserAsync(UpdateUserNamesDTO updateUserDTO);
+    Task ChangePasswordAsync(UpdateUserPasswordDTO userDto);
+    Task<UserDTO> UpdateNotificationsAsync(UpdateUserNotificationsdDTO updateNotificationsdDTO);
 }

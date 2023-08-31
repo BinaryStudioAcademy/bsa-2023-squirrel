@@ -1,4 +1,4 @@
-export interface UpdateUserDto {
+export interface UpdateUserNamesDto {
     id: number;
     userName: string;
     firstName: string;

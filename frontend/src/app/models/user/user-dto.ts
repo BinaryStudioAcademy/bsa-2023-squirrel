@@ -5,4 +5,6 @@ export interface UserDto {
     lastName: string;
     email: string;
     avatarUrl: string;
+    squirrelNotification: boolean;
+    emailNotification: boolean;
 }

@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 
-import { UpdateUserDto } from 'src/app/models/user/update-user.dto';
+import { UpdateUserNamesDto } from 'src/app/models/user/update-userNames.dto';
+import { UpdateUserNotificationsDto } from 'src/app/models/user/update-userNotifications.dto';
+import { UpdateUserPasswordDto } from 'src/app/models/user/update-userPassword.dto';
 import { UserDto } from 'src/app/models/user/user-dto';
 
 import { HttpInternalService } from './http-internal.service';
@@ -17,7 +19,15 @@ export class UserService {
         return this.httpService.getRequest<UserDto>(`${this.routePrefix}/${id}`);
     }
 
-    public updateUser(user: UpdateUserDto): Observable<UserDto> {
-        return this.httpService.putRequest<UserDto>(`${this.routePrefix}/update`, user);
+    public updateUserNames(dto: UpdateUserNamesDto): Observable<UserDto> {
+        return this.httpService.putRequest<UserDto>(`${this.routePrefix}/update-names`, dto);
+    }
+
+    public updateUserPassword(dto: UpdateUserPasswordDto): Observable<void> {
+        return this.httpService.putRequest<void>(`${this.routePrefix}/update-password`, dto);
+    }
+
+    public updateUserNotifications(dto: UpdateUserNotificationsDto): Observable<UserDto> {
+        return this.httpService.putRequest<UserDto>(`${this.routePrefix}/update-notifications`, dto);
     }
 }

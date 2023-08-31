@@ -20,7 +20,7 @@ public sealed class UserService : BaseService, IUserService
         return _mapper.Map<UserDTO>(userEntity);
     }
 
-    public async Task<UserDTO> UpdateUserAsync(UpdateUserDTO updateUserDTO)
+    public async Task<UserDTO> UpdateUserAsync(UpdateUserNamesDTO updateUserDTO)
     {
         var userEntity = await GetUserByIdInternal(updateUserDTO.Id);
 
@@ -34,7 +34,7 @@ public sealed class UserService : BaseService, IUserService
         return _mapper.Map<UserDTO>(userEntity);
     }
 
-    public async Task ChangePasswordAsync(ChangePasswordDTO changePasswordDTO)
+    public async Task ChangePasswordAsync(UpdateUserPasswordDTO changePasswordDTO)
     {
         var userEntity = await GetUserByIdInternal(changePasswordDTO.Id);
 
@@ -53,7 +53,7 @@ public sealed class UserService : BaseService, IUserService
         await _context.SaveChangesAsync();
     }
 
-    public async Task<UserDTO> UpdateNotificationsAsync(UpdateNotificationsdDTO updateNotificationsdDTO)
+    public async Task<UserDTO> UpdateNotificationsAsync(UpdateUserNotificationsdDTO updateNotificationsdDTO)
     {
         var userEntity = await GetUserByIdInternal(updateNotificationsdDTO.Id);
 

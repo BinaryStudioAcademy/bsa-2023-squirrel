@@ -30,16 +30,7 @@ namespace Squirrel.Core.WebAPI.Controllers
         /// Update user names
         /// </summary>
         [HttpPut("update-names")]
-        public async Task<ActionResult<UserDTO>> UpdateUserNames([FromBody] UpdateUserDTO updateUserDTO)
-        {
-            return Ok(await _userService.UpdateUserAsync(updateUserDTO));
-        }
-
-        /// <summary>
-        /// Update user notifications
-        /// </summary>
-        [HttpPut("update-notifications")]
-        public async Task<ActionResult<UserDTO>> UpdateUserNotifications([FromBody] UpdateUserDTO updateUserDTO)
+        public async Task<ActionResult<UserDTO>> UpdateUserNames([FromBody] UpdateUserNamesDTO updateUserDTO)
         {
             return Ok(await _userService.UpdateUserAsync(updateUserDTO));
         }
@@ -47,11 +38,20 @@ namespace Squirrel.Core.WebAPI.Controllers
         /// <summary>
         /// Update user password
         /// </summary>
-        [HttpPut("change-password")]
-        public async Task<ActionResult> UpdatePassword([FromBody] ChangePasswordDTO changePassword)
+        [HttpPut("update-password")]
+        public async Task<ActionResult> UpdatePassword([FromBody] UpdateUserPasswordDTO changePassword)
         {
             await _userService.ChangePasswordAsync(changePassword);
             return NoContent();
+        }
+
+        /// <summary>
+        /// Update user notifications
+        /// </summary>
+        [HttpPut("update-notifications")]
+        public async Task<ActionResult<UserDTO>> UpdateUserNotifications([FromBody] UpdateUserNamesDTO updateUserDTO)
+        {
+            return Ok(await _userService.UpdateUserAsync(updateUserDTO));
         }
     }
 }

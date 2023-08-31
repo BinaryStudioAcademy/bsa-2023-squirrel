@@ -8,7 +8,7 @@ import { SpinnerService } from '@core/services/spinner.service';
 import { UserService } from '@core/services/user.service';
 import { takeUntil } from 'rxjs';
 
-import { UpdateUserDto } from 'src/app/models/user/update-user.dto';
+import { UpdateUserNamesDto } from 'src/app/models/user/update-userNames.dto';
 import { UserDto } from 'src/app/models/user/user-dto';
 
 @Component({
@@ -70,14 +70,14 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
     public saveNewInfo() {
         this.spinner.show();
 
-        const userData: UpdateUserDto = {
+        const userData: UpdateUserNamesDto = {
             userName: this.editProfileForm.value.username,
             firstName: this.editProfileForm.value.firstName,
             lastName: this.editProfileForm.value.lastName,
             id: this.user.id,
         };
 
-        const userSubscription = this.userService.updateUser(userData);
+        const userSubscription = this.userService.updateUserNames(userData);
 
         userSubscription.pipe(takeUntil(this.unsubscribe$)).subscribe(
             (user) => {

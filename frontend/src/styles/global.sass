@@ -3,15 +3,6 @@
 
 @include mat-core()
 
-html,
-body
-    height: 100%
-    margin: 0
-    font-family: 'Montserrat', sans-serif
-    font-size: 16px
-h4
-    font-size: 24px
-
 $app-primary: mat-palette($mat-blue, 500)
 $app-accent: mat-palette($mat-pink, 500)
 $app-warn: mat-palette($mat-orange, 500)
@@ -24,3 +15,8 @@ $app-theme: mat-light-theme($app-primary, $app-accent, $app-warn)
     padding: 0
     box-sizing: border-box
     font-family: 'Montserrat', 'sans-serif'
+
+html,
+body
+    height: 100%
+    font-size: 16px

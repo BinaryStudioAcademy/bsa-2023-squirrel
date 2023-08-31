@@ -1,5 +1,5 @@
 <div class="profile-container">
-    <h2>User Profile</h2>
+    <h3>User Profile</h3>
 
     <div class="header">
         <span class="initials">{{ getUserInitials() }}</span>
@@ -7,32 +7,34 @@
     </div>
 
     <section class="section">
-        <h3>Edit Profile</h3>
-        <form [formGroup]="userNamesForm" (ngSubmit)="updateUserNames()">
-            <app-input
-                [formControl]="$any(userNamesForm.controls['username'])"
-                [label]="'username'"
-                [type]="'text'"
-                placeholder="Enter Username">
-            </app-input>
-            <app-input
-                [formControl]="$any(userNamesForm.controls['firstName'])"
-                [label]="'first name'"
-                [type]="'text'"
-                placeholder="Enter First Name">
-            </app-input>
-            <app-input
-                [formControl]="$any(userNamesForm.controls['lastName'])"
-                [label]="'last name'"
-                [type]="'text'"
-                placeholder="Enter Last Name">
-            </app-input>
-            <app-button text="Save" type="submit"></app-button>
-        </form>
+        <h4>Edit Profile</h4>
+        <div class="section-container">
+            <form [formGroup]="userNamesForm" (ngSubmit)="updateUserNames()">
+                <app-input
+                    [formControl]="$any(userNamesForm.controls['username'])"
+                    [label]="'username'"
+                    [type]="'text'"
+                    placeholder="Enter Username">
+                </app-input>
+                <app-input
+                    [formControl]="$any(userNamesForm.controls['firstName'])"
+                    [label]="'first name'"
+                    [type]="'text'"
+                    placeholder="Enter First Name">
+                </app-input>
+                <app-input
+                    [formControl]="$any(userNamesForm.controls['lastName'])"
+                    [label]="'last name'"
+                    [type]="'text'"
+                    placeholder="Enter Last Name">
+                </app-input>
+                <app-button text="Save" type="submit"></app-button>
+            </form>
+        </div>
     </section>
 
     <section class="section">
-        <h2>Password</h2>
+        <h4>Password</h4>
         <form [formGroup]="passwordForm" (ngSubmit)="updateUserPassword()">
             <div class="form-group">
                 <label for="currentPassword">Current Password:</label>
@@ -51,7 +53,7 @@
     </section>
 
     <section class="section">
-        <h2>Notifications</h2>
+        <h4>Notifications</h4>
         <form [formGroup]="notificationsForm" (ngSubmit)="updateUserNotifications()">
             <div class="form-group">
                 <input type="checkbox" id="notifyOnSquirrel" formControlName="notifyOnSquirrel" />

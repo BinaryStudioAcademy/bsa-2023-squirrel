@@ -1,9 +1,15 @@
+@import "/src/styles/color"
+
 .profile-container
-  max-width: 600px
+  width: 100%
   margin: 50px auto
-  padding: 20px
+  padding: 30px
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1)
   
+  .section-container 
+    max-width: 600px
+    margin: 50px auto
+
   .header
     display: flex
     justify-content: space-between
@@ -20,6 +26,8 @@
       
   .section
     margin-top: 20px
+    background-color: $project-background-color
+
 
     h2
       margin-bottom: 20px

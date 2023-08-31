@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input } from '@angular/core';
 import { AuthService } from '@core/services/auth.service';
 import { SpinnerService } from '@core/services/spinner.service';
 import { environment } from '@env/environment';
@@ -11,14 +11,18 @@ declare const google: any;
     templateUrl: './google-button.component.html',
     styleUrls: ['./google-button.component.sass'],
 })
-export class GoogleButtonComponent implements OnInit {
+export class GoogleButtonComponent implements AfterViewInit {
     @Input() authType = 'signin_with';
 
-    // eslint-disable-next-line no-empty-function
-    constructor(private authService: AuthService, private spinner: SpinnerService) {}
+    public width: string;
 
-    ngOnInit(): void {
+    // eslint-disable-next-line no-empty-function
+    constructor(private authService: AuthService, private spinner: SpinnerService, private elementRef: ElementRef) {}
+
+    ngAfterViewInit(): void {
         this.spinner.show();
+        this.width = `${this.elementRef.nativeElement.querySelector('#signInGoogle').offsetWidth.toString()}px`;
+        console.log(this.width);
         // button rendering should be done asynchronously
         setTimeout(() => {
             this.initializeGoogleSignIn();
@@ -37,7 +41,7 @@ export class GoogleButtonComponent implements OnInit {
         google.accounts.id.renderButton(document.getElementById('signInGoogle'), {
             theme: 'outline',
             size: 'large',
-            width: '302px',
+            width: this.width,
             text: this.authType,
             locale: 'en_US',
             logo_alignment: 'left',

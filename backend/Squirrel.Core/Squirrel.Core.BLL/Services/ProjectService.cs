@@ -17,8 +17,6 @@ namespace Squirrel.Core.BLL.Services
         {
             var projectEntity = _mapper.Map<Project>(projectDto);
             
-            projectEntity.DbEngine = projectDto.DbEngine;
-            
             await _context.Projects.AddAsync(projectEntity);
             
             await _context.SaveChangesAsync();
@@ -35,26 +33,22 @@ namespace Squirrel.Core.BLL.Services
                 throw new EntityNotFoundException();
             }
             
-            existingProject.Name = projectDto.Name; 
-            existingProject.DbEngine = projectDto.DbEngine;
+            _mapper.Map(projectDto, existingProject);
             
             await _context.SaveChangesAsync();
             return _mapper.Map<ProjectDto>(existingProject);
         }
 
-        public async Task<ProjectDto> DeleteProjectAsync(int projectId)
+        public async Task DeleteProjectAsync(int projectId)
         {
             var project = await _context.Projects.FindAsync(projectId);
             if (project is null)
             {
                 throw new EntityNotFoundException();
             }
-                 
+    
             _context.Projects.Remove(project);
-            
             await _context.SaveChangesAsync();
-            
-            return _mapper.Map<ProjectDto>(project);
         }
 
         public async Task<ProjectDto> GetProjectAsync(int projectId)
@@ -64,18 +58,15 @@ namespace Squirrel.Core.BLL.Services
             {
                 throw new EntityNotFoundException();
             }            
-            var projectDto = _mapper.Map<ProjectDto>(project);
-            projectDto.DbEngine = project.DbEngine;
             
-            return projectDto;
+            return _mapper.Map<ProjectDto>(project);;
         }
 
         public async Task<List<ProjectDto>> GetAllProjectsAsync()
         {
             var projects = await _context.Projects.ToListAsync();
-            var projectDtos = _mapper.Map<List<ProjectDto>>(projects);
 
-            return projectDtos;
+            return _mapper.Map<List<ProjectDto>>(projects);
         }
     }
 }

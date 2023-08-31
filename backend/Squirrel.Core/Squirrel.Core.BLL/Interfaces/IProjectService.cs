@@ -6,7 +6,7 @@ namespace Squirrel.Core.BLL.Interfaces
     {
         Task<ProjectDto> AddProjectAsync(ProjectDto projectDto);
         Task<ProjectDto> UpdateProjectAsync(int projectId, ProjectDto projectDto);
-        Task<ProjectDto> DeleteProjectAsync(int projectId);
+        Task DeleteProjectAsync(int projectId);
         Task<ProjectDto> GetProjectAsync(int projectId);
         Task<List<ProjectDto>> GetAllProjectsAsync();
     }

@@ -30,7 +30,8 @@ namespace Squirrel.Core.WebAPI.Controllers
         [HttpDelete("{projectId}")]
         public async Task<IActionResult> DeleteProject(int projectId)
         {
-            return Ok(await _projectService.DeleteProjectAsync(projectId));
+            await _projectService.DeleteProjectAsync(projectId);
+            return NoContent();
         }
 
         [HttpGet("{projectId}")]

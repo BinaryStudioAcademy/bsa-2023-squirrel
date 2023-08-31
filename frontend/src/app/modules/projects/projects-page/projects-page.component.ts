@@ -43,7 +43,7 @@ export class ProjectsPageComponent implements OnInit {
 
     openCreateModal(): void {
         const dialogRef = this.dialog.open(CreateProjectModalComponent, {
-            width: '35%',
+            width: '500px',
             height: '45%',
         });
 

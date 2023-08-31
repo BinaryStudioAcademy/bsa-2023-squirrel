@@ -24,6 +24,7 @@ export class ConfirmationModalComponent {
         setTimeout(() => {
             this.confirmationModalData.callbackMethod();
             this.spinnerService.hide();
+            this.confirmationModalRef.close();
         }, 500);
     }
 

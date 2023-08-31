@@ -74,16 +74,13 @@ export class TreeComponent implements OnInit {
     }
 
     private getSelectedNodes(nodes: TreeNode[]): TreeNode[] {
-        const selectedNodes: TreeNode[] = [];
+        const selectedNodes = nodes
+            .map((node) => {
+                const selectedChildren = node.children ? this.getSelectedNodes(node.children) : [];
 
-        nodes.forEach((node) => {
-            if (node.selected) {
-                selectedNodes.push(node);
-            }
-            if (node.children) {
-                selectedNodes.push(...this.getSelectedNodes(node.children));
-            }
-        });
+                return node.selected ? [node, ...selectedChildren] : selectedChildren;
+            })
+            .flat();
 
         return selectedNodes;
     }

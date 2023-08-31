@@ -28,9 +28,6 @@
   margin-left: 10px
   font-weight: 600
 
-.tree-item input[type="checkbox"]
-  margin-right: 5px
-
 .tree-item-children
   margin-left: 20px
 
@@ -39,7 +36,6 @@
     margin: 15px 0
 
 .child-tree-item
-    font-size: 14px
     margin-bottom: 10px
 
 .child-tree-item:last-child
@@ -53,44 +49,6 @@
   font-size: 16px
   border-radius: 10px
 
-input[type="checkbox"]
-  appearance: none
-  -webkit-appearance: none
-  -moz-appearance: none
-
-  width: 18px
-  height: 18px
-
-  border: 1px solid $text-gray
-  background-color: transparent
-  border-radius: 1px
-  position: relative
-
-input[type="checkbox"]:checked::before
-  content: ""
-  height: 5px
-  width: 10px
-  border-bottom: 3px solid $white
-  border-right: 3px solid $white
-  position: absolute
-  transform: rotate(135deg) scaleY(-1)
-  top: 20%
-  left: 10%
-
-input[type="checkbox"]:checked
-  border: 1px solid $add-button-color
-  background-color: $add-button-color
-  background-size: cover
-
-input[type="checkbox"]::-webkit-inner-spin-button,
-input[type="checkbox"]::-webkit-outer-spin-button
-  appearance: none
-  display: none
-
-.flex-align-center
-    display: flex
-    align-items: center
-
 .commit-msg-form
     display: flex
     flex-direction: column
@@ -103,7 +61,7 @@ input[type="checkbox"]::-webkit-outer-spin-button
 .commit-msg-input
     resize: none
     border: 1px solid $placeholder-grey
-    color: $text-light
+    color: $black
     background-color: $dark-grey
     border-radius: 5px
     width: 90%

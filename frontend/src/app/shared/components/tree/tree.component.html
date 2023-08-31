@@ -4,24 +4,22 @@
 
         <ul class="tree-items">
             <li *ngFor="let category of filteredTreeData" class="tree-item">
-                <label class="flex-align-center parent-tree-item">
-                    <input
+                <div class="parent-tree-item">
+                    <app-checkbox
                         *ngIf="asCheckList"
-                        type="checkbox"
+                        [label]="category.name"
                         [checked]="category.selected"
-                        (change)="toggleSelect(category)" />
-                    <span [ngClass]="{ selected: category.selected }">{{ category.name }}</span>
-                </label>
+                        (change)="toggleSelect(category)"></app-checkbox>
+                    <span *ngIf="!asCheckList">{{ category.name }}</span>
+                </div>
                 <ul class="tree-item-children">
                     <li *ngFor="let subcategory of category.children" class="tree-item child-tree-item">
-                        <label class="flex-align-center">
-                            <input
-                                *ngIf="asCheckList"
-                                type="checkbox"
-                                [checked]="subcategory.selected"
-                                (change)="toggleSelect(subcategory)" />
-                            <span [ngClass]="{ selected: subcategory.selected }">{{ subcategory.name }}</span>
-                        </label>
+                        <app-checkbox
+                            *ngIf="asCheckList"
+                            [label]="subcategory.name"
+                            [checked]="subcategory.selected"
+                            (change)="toggleSelect(subcategory)"></app-checkbox>
+                        <span *ngIf="!asCheckList">{{ subcategory.name }}</span>
                     </li>
                 </ul>
             </li>

@@ -10,11 +10,6 @@ const routes: Routes = [
         component: MainComponent,
         children: [
             {
-                path: '',
-                component: NotFoundComponent,
-                pathMatch: 'full',
-            },
-            {
                 path: 'changes',
                 component: NotFoundComponent,
             },

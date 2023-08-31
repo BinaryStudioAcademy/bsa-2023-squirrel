@@ -42,11 +42,7 @@ export class DropdownComponent implements OnInit {
         [this.selectedOption] = this.options;
     }
 
-    private openModal() {
-        this.matDialog.open(this.customTemplate);
-    }
-
-    public onOptionSelected(value: string) {
+    onOptionSelected(value: string) {
         this.selectedOption = value;
         this.selectedValueChanged.emit(this.selectedOption);
 

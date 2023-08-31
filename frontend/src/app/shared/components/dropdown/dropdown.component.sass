@@ -48,8 +48,8 @@
     position: absolute
     width: 100%
     top: 70px
-    background-color: $white
-    box-shadow: 0 5px 20px $light-shadow
+    background-color: #fff
+    box-shadow: 0 5px 20px $shadow
     border-radius: 10px
     overflow: hidden
     display: none
@@ -61,37 +61,15 @@
     cursor: pointer
     padding-right: 10px
 
-.option:hover
-    color: $white
+.dropdown .option div:hover
+    color: #fff
     background-color: $primary-violet
 
 .dropdown.active .options
     display: block
 
-.search-input
-    border: none
-    padding: 8px
-    margin-left: 15px
-    width: 90%
-    border-radius: 5px
-    color: $text-light
-    border: 1px solid $text-light
 
-.search-input:focus
-    border: 1px solid $primary-violet
-    outline: none
-    box-shadow: $light-shadow
 
-.option-text
-    margin-left: 24px
 
-.selection-icon + .option-text
-    margin-left: 10px
 
-.dropdown-icon
-    z-index: 3000
-    margin-left: 10px
-    margin-top: 4px
 
-.dropdown-selected-option-with-icon
-    padding-left: 40px

@@ -1,9 +1,14 @@
 <div class="container">
-    <label>{{label | titlecase}}</label>
+    <label *ngIf="label">{{label | titlecase}}</label>
     <div class="input-wrapper">
         <input [formControl]="control"
                type="{{type === 'text' ? 'text' : show ? 'text' : 'password'}}"
-               placeholder="Enter your {{label | lowercase}}">
+               placeholder="{{placeholder}}"
+               [ngStyle]="{
+               width: width,
+               height: height,
+               'padding-right': type === 'password' ? '40px' : '15px'
+               }">
         <span *ngIf="type === 'password'" class="hide" (click)="show = !show">
             <img src="assets/{{ show ? 'hide-1.svg' : 'hide-2.svg' }}" alt="show/hide">
         </span>

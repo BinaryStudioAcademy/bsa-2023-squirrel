@@ -202,14 +202,13 @@ Users ||--|{ Comments : ""
 
 Commits ||--|{ CommitParents : ""
 Commits ||--|{ CommitFiles : ""
+Commits ||--|{ BranchCommits : ""
 
 Projects ||--|{ UserProjects : ""
 Projects ||--|{ ProjectTags : ""
 Projects ||--|{ Branches : ""
 Projects ||--|| Branches : ""
 Projects ||--|{ PullRequests : ""
-
-CommitParents ||--|{ BranchCommits : ""
 
 Branches ||--|{ BranchCommits : ""
 Branches ||--|{ PullRequests : ""

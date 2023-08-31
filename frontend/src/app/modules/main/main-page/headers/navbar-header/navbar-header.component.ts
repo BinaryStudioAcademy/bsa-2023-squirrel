@@ -14,10 +14,18 @@ export class NavbarHeaderComponent implements OnInit {
 
     modalComponent: ComponentType<NotFoundComponent> = NotFoundComponent;
 
-    branches: string[];
+    public branches: string[];
 
-    selectedBranch: string;
+    public selectedBranch: string;
 
+    public navLinks: { path: string; displayName: string }[] = [
+        { displayName: 'Changes', path: './changes' },
+        { displayName: 'PRs', path: './pull-requests' },
+        { displayName: 'Branches', path: './branches' },
+        { displayName: 'Scripts', path: './scripts' },
+        { displayName: 'Code', path: './code' },
+        { displayName: 'Settings', path: './settings' },
+    ];
     branchesIconPath = 'assets/git-branch.svg';
 
     branchesIcon: SafeHtml;
@@ -38,7 +46,7 @@ export class NavbarHeaderComponent implements OnInit {
         });
     }
 
-    onBranchSelected(value: string) {
+    public onBranchSelected(value: string) {
         this.selectedBranch = value;
     }
 }

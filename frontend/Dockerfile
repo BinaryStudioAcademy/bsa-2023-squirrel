@@ -1,4 +1,4 @@
-FROM node:14.17.3-alpine3.14 as builder
+FROM node:18.15.0-alpine3.17 as builder
 COPY package.json yarn.lock ./
 RUN yarn && mkdir /client && mv ./node_modules ./client
 WORKDIR /client

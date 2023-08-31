@@ -1,21 +1,10 @@
 <div class="container">
     <nav>
         <ul class="navbar-list">
-            <li class="navbar-item">
-                <a routerLink="./changes" routerLinkActive="active" class="navbar-link">Changes</a>
-            </li>
-            <li class="navbar-item">
-                <a routerLink="./pull-requests" routerLinkActive="active" class="navbar-link">PRs</a>
-            </li>
-            <li class="navbar-item">
-                <a routerLink="./branches" routerLinkActive="active" class="navbar-link">Branches</a>
-            </li>
-            <li class="navbar-item">
-                <a routerLink="./scripts" routerLinkActive="active" class="navbar-link">Scripts</a>
-            </li>
-            <li class="navbar-item"><a routerLink="./code" routerLinkActive="active" class="navbar-link">Code</a></li>
-            <li class="navbar-item">
-                <a routerLink="./settings" routerLinkActive="active" class="navbar-link">Settings</a>
+            <li *ngFor="let navLink of navLinks" class="navbar-item">
+                <a routerLink="{{ navLink.path }}" routerLinkActive="active" class="navbar-link">
+                    {{ navLink.displayName }}
+                </a>
             </li>
         </ul>
     </nav>

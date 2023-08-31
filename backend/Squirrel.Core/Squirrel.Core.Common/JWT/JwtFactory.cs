@@ -4,9 +4,9 @@ using System.Security.Principal;
 using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Squirrel.Core.Common.Exceptions;
 using Squirrel.Core.Common.Interfaces;
 using Squirrel.Core.Common.Security;
+using Squirrel.Shared.Exceptions;
 
 namespace Squirrel.Core.Common.JWT;
 
@@ -47,7 +47,7 @@ public sealed class JwtFactory : IJwtFactory
         return _jwtSecurityTokenHandler.WriteToken(jwt)!;
     }
 
-    public string GenerateRefreshToken() => Convert.ToBase64String(BytesGenerator.GetRandomBytes());
+    public string GenerateRefreshToken() => SecurityUtils.GenerateRandomSalt();
     
     public int GetUserIdFromToken(string accessToken, string signingKey)
     {

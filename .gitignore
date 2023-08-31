@@ -397,4 +397,6 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 backend/.idea/
-frontend/yarn.lock
+
+# .exe files of ConsoleApp
+ExecutableFiles/

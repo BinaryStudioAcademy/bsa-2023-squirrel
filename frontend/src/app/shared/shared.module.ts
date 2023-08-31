@@ -10,6 +10,7 @@ import { MaterialModule } from '../material/material.module';
 import { AvatarComponent } from './components/avatar/avatar.component';
 import { BarrierComponent } from './components/barrier/barrier.component';
 import { ButtonComponent } from './components/button/button.component';
+import { CheckboxComponent } from './components/checkbox/checkbox.component';
 import { DropdownComponent } from './components/dropdown/dropdown.component';
 import { DropdownSelectComponent } from './components/dropdown-select/dropdown-select.component';
 import { InputComponent } from './components/input/input.component';
@@ -39,6 +40,7 @@ import { TreeComponent } from './components/tree/tree.component';
         DropdownSelectComponent,
         DropdownComponent,
         TreeComponent,
+        CheckboxComponent,
     ],
     exports: [
         CommonModule,
@@ -58,6 +60,7 @@ import { TreeComponent } from './components/tree/tree.component';
         AvatarComponent,
         DropdownComponent,
         TreeComponent,
+        CheckboxComponent,
     ],
 })
 export class SharedModule {}

@@ -6,7 +6,7 @@ using Squirrel.Core.Common.DTO.Users;
 namespace Squirrel.Core.WebAPI.Controllers
 {
     [ApiController]
-    [Authorize]
+    //[Authorize]
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {

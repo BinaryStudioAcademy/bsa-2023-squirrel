@@ -1,6 +1,7 @@
 @import "/src/styles/color"
 @import "/src/styles/reusable"
 .registration-container
+    min-width: 302px
     height: 100%
     padding: 0 20%
     @extend .flex-column
@@ -9,12 +10,13 @@
 
 .registration-content
     width: 100%
-
+    min-width: 302px
     h4
         color: $text-main
 
 .additional-sing-up
     @extend .flex-column
+    gap: 10px
 
 .registration-form
     @extend .flex-column

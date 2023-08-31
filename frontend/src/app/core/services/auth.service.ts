@@ -44,7 +44,6 @@ export class AuthService {
             .subscribe({
                 next: (response: UserAuthDto) => {
                     this.saveTokens(response.token);
-                    console.log(`received UserAuthDto: ${response}`);
                     this.ngZone.run(() => {
                         this.spinner.hide();
                         this.router.navigateByUrl('/main');

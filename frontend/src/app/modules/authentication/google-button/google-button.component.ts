@@ -22,7 +22,6 @@ export class GoogleButtonComponent implements AfterViewInit {
     ngAfterViewInit(): void {
         this.spinner.show();
         this.width = `${this.elementRef.nativeElement.querySelector('#signInGoogle').offsetWidth.toString()}px`;
-        console.log(this.width);
         // button rendering should be done asynchronously
         setTimeout(() => {
             this.initializeGoogleSignIn();

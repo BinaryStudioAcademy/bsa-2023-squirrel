@@ -7,8 +7,10 @@ import { ToastrModule } from 'ngx-toastr';
 
 import { MaterialModule } from '../material/material.module';
 
+import { AvatarComponent } from './components/avatar/avatar.component';
 import { BarrierComponent } from './components/barrier/barrier.component';
 import { ButtonComponent } from './components/button/button.component';
+import { DropdownComponent } from './components/dropdown/dropdown.component';
 import { DropdownSelectComponent } from './components/dropdown-select/dropdown-select.component';
 import { InputComponent } from './components/input/input.component';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
@@ -31,8 +33,10 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
         ButtonComponent,
         SidebarComponent,
         InputComponent,
-        DropdownSelectComponent,
         BarrierComponent,
+        AvatarComponent,
+        DropdownSelectComponent,
+        DropdownComponent,
     ],
     exports: [
         CommonModule,
@@ -49,6 +53,8 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
         ToastrModule,
         InputComponent,
         BarrierComponent,
+        AvatarComponent,
+        DropdownComponent,
     ],
 })
 export class SharedModule {}

@@ -1,4 +1,5 @@
 using Squirrel.Core.BLL.Extensions;
+using Squirrel.Core.DAL.Extensions;
 using Squirrel.Core.WebAPI.Extensions;
 using Squirrel.Shared.Middlewares;
 
@@ -12,9 +13,10 @@ builder.Configuration
     .AddEnvironmentVariables()
     .Build();
 
+builder.AddSerilog();
+
 builder.Services.AddControllers();
 builder.Services.AddSquirrelCoreContext(builder.Configuration);
-builder.Services.AddMongoDbService(builder.Configuration);
 builder.Services.AddAuthenticationSettings(builder.Configuration);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

@@ -5,6 +5,10 @@ VisualStudioVersion = 17.7.34009.444
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Squirrel.ConsoleApp", "Squirrel.ConsoleApp\Squirrel.ConsoleApp.csproj", "{7A445AA8-96C5-4753-ABDB-47FD093D29F6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Squirrel.ConsoleApp.BL", "Squirrel.ConsoleApp.BL\Squirrel.ConsoleApp.BL.csproj", "{3263AEDE-93D3-4CF3-8657-3962D16580CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Squirrel.ConsoleApp.Models", "Squirrel.ConsoleApp.Models\Squirrel.ConsoleApp.Models.csproj", "{58914655-451B-42BF-AA6A-A390DAFEE4ED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{7A445AA8-96C5-4753-ABDB-47FD093D29F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A445AA8-96C5-4753-ABDB-47FD093D29F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A445AA8-96C5-4753-ABDB-47FD093D29F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3263AEDE-93D3-4CF3-8657-3962D16580CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3263AEDE-93D3-4CF3-8657-3962D16580CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3263AEDE-93D3-4CF3-8657-3962D16580CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3263AEDE-93D3-4CF3-8657-3962D16580CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58914655-451B-42BF-AA6A-A390DAFEE4ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58914655-451B-42BF-AA6A-A390DAFEE4ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58914655-451B-42BF-AA6A-A390DAFEE4ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58914655-451B-42BF-AA6A-A390DAFEE4ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

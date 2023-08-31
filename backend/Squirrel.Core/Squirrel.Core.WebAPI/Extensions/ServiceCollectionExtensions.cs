@@ -62,6 +62,7 @@ public static class ServiceCollectionExtensions
                 opt => opt.MigrationsAssembly(typeof(SquirrelCoreContext).Assembly.GetName().Name)));
     }
 
+
     public static void ConfigureJwtAuth(this IServiceCollection services, IConfiguration configuration)
     {
         var jwtAppSettingOptions = configuration.GetSection(nameof(JwtIssuerOptions))!;

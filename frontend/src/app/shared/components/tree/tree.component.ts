@@ -1,3 +1,4 @@
+/* eslint-disable function-paren-newline */
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { TreeNode } from './models/TreeNode.model';
@@ -38,22 +39,14 @@ export class TreeComponent implements OnInit {
             return;
         }
 
-        const filteredData: TreeNode[] = [];
-
-        this.treeData.forEach((category) => {
-            const matchingSubcategories = category.children?.filter((subcategory) => {
-                return subcategory.name.toLowerCase().includes(searchTerm.toLowerCase());
-            });
-
-            if (matchingSubcategories?.length) {
-                filteredData.push({
-                    name: category.name,
-                    children: matchingSubcategories,
-                });
-            }
-        });
-
-        this.filteredTreeData = filteredData;
+        this.filteredTreeData = this.treeData
+            .map((category) => ({
+                name: category.name,
+                children: category.children?.filter((subcategory) =>
+                    subcategory.name.toLowerCase().includes(searchTerm.toLowerCase()),
+                ),
+            }))
+            .filter((category) => category.children?.length && category.children?.length > 0);
     }
 
     public toggleSelect(node: TreeNode): void {
@@ -61,7 +54,12 @@ export class TreeComponent implements OnInit {
             const allChildrenSelected = node.children.every((child) => child.selected);
 
             node.selected = !allChildrenSelected;
-            node.children.forEach((child) => (child.selected = node.selected));
+
+            node.children = node.children.map((child) => ({
+                ...child,
+                selected: node.selected,
+            }));
+
             this.updateParentSelect(node);
         } else {
             node.selected = !node.selected;

@@ -1,18 +1,14 @@
 ﻿using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.BLL.Services;
 using Squirrel.Core.Common.Interfaces;
 using Squirrel.Core.Common.JWT;
-using Squirrel.Core.DAL.Context;
-using Squirrel.Core.DAL.Entities;
-using Squirrel.Core.WebAPI.Validators.Sample;
 using System.Text;
 using Squirrel.Core.Common.DTO.Auth;
 using System.Text.Json.Serialization;
+using System.Reflection;
 
 namespace Squirrel.Core.WebAPI.Extensions;
 
@@ -30,13 +26,13 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IJwtFactory, JwtFactory>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IProjectService, ProjectService>();
     }
 
     public static void AddValidation(this IServiceCollection services)
     {
-        services
-            .AddControllers()
-            .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<NewSampleDtoValidator>());
+        services.AddControllers()
+            .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()));
     }
 
     public static void ConfigureJwtAuth(this IServiceCollection services, IConfiguration configuration)

@@ -11,7 +11,10 @@ const routes: Routes = [
         data: { requiresToken: false },
         loadChildren: () => import('@modules/authentication/authentication.module').then((m) => m.AuthenticationModule),
     },
-
+    {
+        path: 'projects',
+        loadChildren: () => import('./modules/projects/projects.module').then((m) => m.ProjectsModule),
+    },
     {
         path: 'main',
         canActivate: [AuthGuard],

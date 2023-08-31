@@ -10,6 +10,7 @@ import { MaterialModule } from '../material/material.module';
 import { AvatarComponent } from './components/avatar/avatar.component';
 import { BarrierComponent } from './components/barrier/barrier.component';
 import { ButtonComponent } from './components/button/button.component';
+import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
 import { DropdownComponent } from './components/dropdown/dropdown.component';
 import { DropdownSelectComponent } from './components/dropdown-select/dropdown-select.component';
 import { InputComponent } from './components/input/input.component';
@@ -36,6 +37,7 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
         BarrierComponent,
         AvatarComponent,
         DropdownSelectComponent,
+        ConfirmationModalComponent,
         DropdownComponent,
     ],
     exports: [
@@ -54,6 +56,7 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
         InputComponent,
         BarrierComponent,
         AvatarComponent,
+        ConfirmationModalComponent,
         DropdownComponent,
     ],
 })

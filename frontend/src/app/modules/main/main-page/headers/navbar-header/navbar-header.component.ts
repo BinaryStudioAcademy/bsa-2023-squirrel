@@ -1,7 +1,5 @@
-import { ComponentType } from '@angular/cdk/portal';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { SafeHtml } from '@angular/platform-browser';
-import { NotFoundComponent } from '@shared/components/not-found/not-found.component';
 import { SvgFileContentFetcher } from '@shared/helpers/svgFileContentFetcher';
 
 @Component({
@@ -10,9 +8,12 @@ import { SvgFileContentFetcher } from '@shared/helpers/svgFileContentFetcher';
     styleUrls: ['./navbar-header.component.sass'],
 })
 export class NavbarHeaderComponent implements OnInit {
-    @ViewChild('myModalContent') modalContent: TemplateRef<any>;
+    @ViewChild('modalContent') modalContent: TemplateRef<any>;
 
-    modalComponent: ComponentType<NotFoundComponent> = NotFoundComponent;
+    /*  component for passing as a modal
+        import { ComponentType } from '@angular/cdk/portal';
+    */
+    // modalComponent: ComponentType<NotFoundComponent> = NotFoundComponent;
 
     public branches: string[];
 
@@ -26,19 +27,20 @@ export class NavbarHeaderComponent implements OnInit {
         { displayName: 'Code', path: './code' },
         { displayName: 'Settings', path: './settings' },
     ];
-    branchesIconPath = 'assets/git-branch.svg';
 
-    branchesIcon: SafeHtml;
+    private branchesIconPath = 'assets/git-branch.svg';
+
+    public branchesIcon: SafeHtml;
 
     // eslint-disable-next-line no-empty-function
     constructor(private svgFileContentFetcher: SvgFileContentFetcher) {}
 
     ngOnInit(): void {
-        this.fetchSvgContent();
+        this.getBranchIcon();
         this.branches = ['Branch 1', 'Branch 2', 'Branch 3', 'Branch 4'];
     }
 
-    fetchSvgContent() {
+    private getBranchIcon() {
         this.svgFileContentFetcher.fetchSvgContent(this.branchesIconPath).subscribe((response) => {
             if (response !== null) {
                 this.branchesIcon = response;

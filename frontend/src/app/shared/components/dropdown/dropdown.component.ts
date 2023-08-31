@@ -51,6 +51,10 @@ export class DropdownComponent implements OnInit {
         }
     }
 
+    private openModal() {
+        this.matDialog.open(this.customTemplate);
+    }
+
     public filterOptions(): string[] {
         const filteredOptions = this.options.filter((option) => {
             return option.toLowerCase().includes(this.searchTerm.toLowerCase());

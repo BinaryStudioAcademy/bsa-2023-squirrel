@@ -45,7 +45,7 @@ export class PullRequestListComponent {
             firstName: 'John',
             lastName: 'Smith',
             userName: 'Johnny',
-        } as User;
+        } as UserDto;
         const user2 = {
             id: 2,
             avatarUrl: 'https://picsum.photos/200',
@@ -53,7 +53,7 @@ export class PullRequestListComponent {
             firstName: 'Test',
             lastName: 'Smith',
             userName: '',
-        } as User;
+        } as UserDto;
         const user3 = {
             id: 3,
             avatarUrl: 'https://picsum.photos/200',
@@ -61,12 +61,12 @@ export class PullRequestListComponent {
             firstName: 'Test',
             lastName: 'Smith',
             userName: 'Johnny',
-        } as User;
+        } as UserDto;
 
         return [user, user2, user3];
     }
 
-    getFullName(item: User) {
+    getFullName(item: UserDto) {
         return `${item.firstName} ${item.lastName} ${item.userName ? `(${item.userName})` : ''}`;
     }
 
@@ -79,7 +79,7 @@ export class PullRequestListComponent {
             firstName: 'John',
             lastName: 'Smith',
             userName: 'Johnny',
-        } as User;
+        } as UserDto;
         const branch = {
             id: 1,
             name: 'DEV',

@@ -1,0 +1,44 @@
+@import "/src/styles/color"
+@import "/src/styles/reusable"
+
+.container
+    height: 100%
+    margin-right: 10px
+
+.header
+    height: 38px
+    padding: 0 5px
+    display: flex
+    justify-content: space-between
+    align-items: center
+    background-color: $line-color
+
+.name
+    @extend .title
+    font-weight: 600
+    font-size: 18px
+    margin: 0
+
+.code-section
+    display: flex
+    height: 100%
+
+.line-numbers
+    height: 100%
+    width: 40px
+    padding: 4px 0
+    display: flex
+    flex-direction: column
+    align-items: center
+    background-color: $line-color
+
+    color: $text-main
+    opacity: 0.5
+
+.code
+    width: calc(100% - 40px)
+    background-color: $white
+    padding: 4px 8px
+
+ul
+    list-style-type: none

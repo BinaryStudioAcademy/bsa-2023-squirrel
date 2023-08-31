@@ -1,5 +1,6 @@
 @import "/src/styles/color"
 @import "/src/styles/reusable"
+@import "/src/styles/weights"
 
 .container
     height: 100%
@@ -19,7 +20,7 @@
 
 .name
     @extend .title
-    font-weight: 600
+    font-weight: $semi-bold-weight
     font-size: 18px
     margin: 0
 
@@ -34,7 +35,6 @@
     @extend .flex-column
     align-items: center
     text-align: center
-
     color: $text-main
 
 .code

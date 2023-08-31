@@ -1,5 +1,6 @@
 @import "/src/styles/color"
 @import '/src/styles/global'
+@import "/src/styles/weights"
 
 .container
     display: flex
@@ -13,7 +14,7 @@
     margin: 3px
     font-size: 14px
     font-style: normal
-    font-weight: 400
+    font-weight: $normal-weight
     color: $text-main
 
 .summary
@@ -52,7 +53,7 @@
         align-items: center
         background-color: $misc-background-color
         color: $text-light
-        font-weight: 600
+        font-weight: $semi-bold-weight
         font-size: 14px
         outline-color: white !important
 
@@ -81,7 +82,7 @@
 .primary-info
     display: flex
     align-items: center
-    font-weight: 500
+    font-weight: $medium-weight
 
 .primary-info > *:not(:last-child)
         margin-right: 12px

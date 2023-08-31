@@ -25,9 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Squirrel.Shared\Squirrel.Shared.csproj" />
     <ProjectReference Include="..\Squirrel.Core.BLL\Squirrel.Core.BLL.csproj" />
-    <ProjectReference Include="..\Squirrel.Core.Common\Squirrel.Core.Common.csproj" />
   </ItemGroup>
 
 </Project>

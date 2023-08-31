@@ -1,0 +1,21 @@
+<div class="projects-container">
+    <div class="sidebar">
+        <app-sidebar></app-sidebar>
+    </div>
+    <div class="projects-sector">
+        <div class="upper-panel-container">
+            <h3 class="mat-h3">Projects</h3>
+            <app-button
+                class="create-button"
+                text="Create Project"
+                width="100%"
+                variant="filled"
+                (click)="openCreateModal()"
+            >
+            </app-button>
+        </div>
+        <div class="card-container">
+            <app-project-card *ngFor="let project of projects" [project]="project"></app-project-card>
+        </div>
+    </div>
+</div>

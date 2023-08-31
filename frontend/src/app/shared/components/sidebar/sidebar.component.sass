@@ -3,7 +3,7 @@
 .sidebar
     width: 79px
     height: 100vh
-    background-color: #503AF9
+    background-color: $primary-color
     position: fixed
     top: 0
     left: 0
@@ -11,19 +11,18 @@
     .logo
         width: 54px
         height: 54px
-        border-radius: 27px
 
-    .folder-icon
-        width: 21px
-        height: 16px
+    .folder-icon, .bell-icon, .account-icon
+        width: 22px
+        height: 22px
+        padding: 2px
+        cursor: pointer
 
     .bell-icon
-        width: 16px
-        height: 20px
+        padding: 0 1px
 
-    .account-icon
-        width: 20px
-        height: 20px
+    .folder-icon
+        padding: 2px 0
 
 .tab
     display: flex
@@ -53,3 +52,8 @@
     &:after
         display: block
 
+.nav-container
+    height: calc(100% - 100px)
+    display: flex
+    flex-direction: column
+    justify-content: space-between

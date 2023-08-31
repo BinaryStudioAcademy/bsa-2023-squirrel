@@ -31,13 +31,13 @@ public static class ServiceCollectionExtensions
         services.AddScoped<JwtIssuerOptions>();
         services.AddScoped<IJwtFactory, JwtFactory>();
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IProjectService, ProjectService>();
     }
 
     public static void AddValidation(this IServiceCollection services)
     {
-        services
-            .AddControllers()
-            .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<NewSampleDtoValidator>());
+        services.AddControllers()
+            .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()));
     }
 
     public static void ConfigureJwtAuth(this IServiceCollection services, IConfiguration configuration)

@@ -11,7 +11,7 @@ const routes: Routes = [
         children: [
             {
                 path: 'changes',
-                component: NotFoundComponent,
+                loadChildren: () => import('../changes/changes.module').then((m) => m.ChangesModule),
             },
             {
                 path: 'pull-requests',

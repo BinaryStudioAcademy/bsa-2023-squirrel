@@ -11,6 +11,7 @@ import { MaterialModule } from '../material/material.module';
 import { AvatarComponent } from './components/avatar/avatar.component';
 import { BarrierComponent } from './components/barrier/barrier.component';
 import { ButtonComponent } from './components/button/button.component';
+import { CheckboxComponent } from './components/checkbox/checkbox.component';
 import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
 import { DropdownComponent } from './components/dropdown/dropdown.component';
 import { DropdownSelectComponent } from './components/dropdown-select/dropdown-select.component';
@@ -18,6 +19,7 @@ import { InputComponent } from './components/input/input.component';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { ProfileMenuComponent } from './components/profile-menu/profile-menu.component';
+import { TreeComponent } from './components/tree/tree.component';
 
 @NgModule({
     imports: [
@@ -43,6 +45,8 @@ import { ProfileMenuComponent } from './components/profile-menu/profile-menu.com
         DropdownSelectComponent,
         ConfirmationModalComponent,
         DropdownComponent,
+        TreeComponent,
+        CheckboxComponent,
     ],
     exports: [
         CommonModule,
@@ -63,6 +67,8 @@ import { ProfileMenuComponent } from './components/profile-menu/profile-menu.com
         AvatarComponent,
         ConfirmationModalComponent,
         DropdownComponent,
+        TreeComponent,
+        CheckboxComponent,
     ],
 })
 export class SharedModule {}

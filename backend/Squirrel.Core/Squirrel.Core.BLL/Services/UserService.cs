@@ -6,7 +6,6 @@ using Squirrel.Core.DAL.Entities;
 using Microsoft.EntityFrameworkCore;
 using Squirrel.Core.Common.DTO.Users;
 using Squirrel.Shared.Exceptions;
-using Squirrel.Core.Common.DTO.Auth;
 using Squirrel.Core.Common.Security;
 
 namespace Squirrel.Core.BLL.Services;
@@ -52,6 +51,19 @@ public sealed class UserService : BaseService, IUserService
 
         _context.Users.Update(userEntity);
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<UserDTO> UpdateNotificationsAsync(UpdateNotificationsdDTO updateNotificationsdDTO)
+    {
+        var userEntity = await GetUserByIdInternal(updateNotificationsdDTO.Id);
+
+        userEntity.SquirrelNotification = updateNotificationsdDTO.SquirrelNotification;
+        userEntity.EmailNotification = updateNotificationsdDTO.EmailNotification;
+
+        _context.Users.Update(userEntity);
+        await _context.SaveChangesAsync();
+
+        return _mapper.Map<UserDTO>(userEntity);
     }
 
     private async Task<User> GetUserByIdInternal(int id)

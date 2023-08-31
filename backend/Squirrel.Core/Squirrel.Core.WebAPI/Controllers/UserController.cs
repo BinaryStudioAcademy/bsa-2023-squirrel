@@ -21,16 +21,25 @@ namespace Squirrel.Core.WebAPI.Controllers
         /// Get user information by ID
         /// </summary>
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserDTO>> GetById(int id)
+        public async Task<ActionResult<UserDTO>> GetUserById(int id)
         {
             return Ok(await _userService.GetUserByIdAsync(id));
         }
 
         /// <summary>
-        /// Update user
+        /// Update user names
         /// </summary>
-        [HttpPut("update")]
-        public async Task<ActionResult<UserDTO>> Put([FromBody] UpdateUserDTO updateUserDTO)
+        [HttpPut("update-names")]
+        public async Task<ActionResult<UserDTO>> UpdateUserNames([FromBody] UpdateUserDTO updateUserDTO)
+        {
+            return Ok(await _userService.UpdateUserAsync(updateUserDTO));
+        }
+
+        /// <summary>
+        /// Update user notifications
+        /// </summary>
+        [HttpPut("update-notifications")]
+        public async Task<ActionResult<UserDTO>> UpdateUserNotifications([FromBody] UpdateUserDTO updateUserDTO)
         {
             return Ok(await _userService.UpdateUserAsync(updateUserDTO));
         }
@@ -39,7 +48,7 @@ namespace Squirrel.Core.WebAPI.Controllers
         /// Update user password
         /// </summary>
         [HttpPut("change-password")]
-        public async Task<ActionResult> Put([FromBody] ChangePasswordDTO changePassword)
+        public async Task<ActionResult> UpdatePassword([FromBody] ChangePasswordDTO changePassword)
         {
             await _userService.ChangePasswordAsync(changePassword);
             return NoContent();

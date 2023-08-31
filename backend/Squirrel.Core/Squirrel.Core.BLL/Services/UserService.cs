@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Squirrel.Core.BLL.Extensions;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.BLL.Services.Abstract;
 using Squirrel.Core.Common.DTO.Auth;
@@ -13,6 +14,7 @@ namespace Squirrel.Core.BLL.Services;
 public sealed class UserService : BaseService, IUserService
 {
     private const int MaxNameLength = 25;
+    private const int MinNameLength = 2;
     
     public UserService(SquirrelCoreContext context, IMapper mapper) : base(context, mapper)
     {
@@ -52,12 +54,12 @@ public sealed class UserService : BaseService, IUserService
     }
 
     private string GenerateRandomUsername()
-        => TruncateString("user" + SecurityUtils.GenerateRandomSalt(), MaxNameLength);
+        => ("user" + Guid.NewGuid()).Truncate(MaxNameLength);
 
-    private void TruncateName(UserRegisterDto user)
+    private void AdaptUserNames(UserRegisterDto user)
     {
-        user.FirstName = TruncateString(user.FirstName, MaxNameLength);
-        user.LastName = TruncateString(user.LastName, MaxNameLength);
+        user.FirstName = user.FirstName.PadRight(MinNameLength, '_').Truncate(MaxNameLength);
+        user.LastName = user.LastName.PadRight(MinNameLength, '_').Truncate(MaxNameLength);
     }
 
     private void HashUserPassword(User newUser, string password)
@@ -67,13 +69,11 @@ public sealed class UserService : BaseService, IUserService
         newUser.PasswordHash = SecurityUtils.HashPassword(password, salt);
     }
 
-    private string TruncateString(string value, int maxLength) 
-        => value.Length <= maxLength ? value : value.Substring(0, maxLength);
-
     private User PrepareNewUserData(UserRegisterDto userDto, bool isGoogleAuth)
     {
-        // User's name from Google account might be too long, so we need to truncate it.
-        TruncateName(userDto);
+        // User's first name and last name from Google account might be too long or too short,
+        // so we need to adapt it to meet our requirements.
+        AdaptUserNames(userDto);
         var newUser = _mapper.Map<User>(userDto)!;
         newUser.IsGoogleAuth = isGoogleAuth;
         if (!isGoogleAuth)

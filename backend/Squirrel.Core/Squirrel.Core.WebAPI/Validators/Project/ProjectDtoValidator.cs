@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using Squirrel.Core.Common.DTO.Projects;
+using Squirrel.Core.Common.DTO.Project;
 
 namespace Squirrel.Core.WebAPI.Validators.Project;
 

@@ -1,6 +1,6 @@
 ﻿using Squirrel.Core.DAL.Enums;
 
-namespace Squirrel.Core.Common.DTO.Projects
+namespace Squirrel.Core.Common.DTO.Project
 {
     public sealed class ProjectDto
     {

@@ -6,7 +6,6 @@ using Squirrel.Core.Common.Interfaces;
 using Squirrel.Core.DAL.Context;
 using Squirrel.Core.DAL.Entities;
 using Google.Apis.Auth;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Squirrel.Core.Common.DTO.Users;
 using Squirrel.Core.Common.Security;
@@ -16,54 +15,45 @@ namespace Squirrel.Core.BLL.Services;
 
 public sealed class AuthService : BaseService, IAuthService
 {
-    private IJwtFactory _jwtFactory;
     private readonly string _googleClientId;
+    private readonly IJwtFactory _jwtFactory;
+    private readonly IUserService _userService;
 
     public AuthService(
         SquirrelCoreContext context,
         IMapper mapper,
         IJwtFactory jwtFactory,
-        IOptions<AuthenticationSettings> authSettings) : base(context, mapper)
+        IOptions<AuthenticationSettings> authSettings,
+        IUserService userService) : base(context, mapper)
     {
         _jwtFactory = jwtFactory;
-        _googleClientId = authSettings.Value.GoogleClientId;
+        _userService = userService;
+        _googleClientId = authSettings.Value!.GoogleClientId;
     }
 
-    public async Task<AuthUserDTO> AuthorizeWithGoogleAsync(string googleToken)
+    public async Task<AuthUserDto> AuthorizeWithGoogleAsync(string googleCredentialsToken)
     {
-        var payload = await GoogleJsonWebSignature.ValidateAsync(googleToken,
+        var googleCredentials = await GoogleJsonWebSignature.ValidateAsync(googleCredentialsToken,
             new GoogleJsonWebSignature.ValidationSettings
             {
                 Audience = new List<string> { _googleClientId }
             });
 
-        // TODO: it will be implemented later, after Users
-        //var userEntity = await _context.Users
-        //    .Include(u => u.Avatar)
-        //    .FirstOrDefaultAsync(u => u.Email == payload.Email);
-        //
-        //if (userEntity == null)
-        //{
-        //    throw new NotFoundException(nameof(User));
-        //}
-        //
-        //var user = _mapper.Map<UserDTO>(userEntity);
-
-        //var token = JwtGenerator.GenerateNewToken(user);
-
-        return new AuthUserDTO
+        var user = await _userService.GetUserByEmailAsync(googleCredentials.Email) ?? await _userService.CreateUserAsync(
+                       _mapper.Map<UserRegisterDto>(googleCredentials), isGoogleAuth: true);
+        
+        return new AuthUserDto
         {
-            //User = userDTO,
-            //Token = acessTokenDTO
+            User = _mapper.Map<UserDto>(user),
+            Token = await GenerateNewAccessTokenAsync(user.Id, user.Username, user.Email)
         };
     }
 
     public async Task<RefreshedAccessTokenDto> LoginAsync(UserLoginDto userLoginDto)
     {
-        var userEntity = await _context.Users
-            .FirstOrDefaultAsync(u => u.Email == userLoginDto.Email);
+        var userEntity = await _userService.GetUserByEmailAsync(userLoginDto.Email);
 
-        if (userEntity == null ||
+        if (userEntity is null ||
             !SecurityUtils.ValidatePassword(userLoginDto.Password, userEntity.PasswordHash, userEntity.Salt))
         {
             throw new InvalidEmailOrPasswordException();
@@ -74,23 +64,8 @@ public sealed class AuthService : BaseService, IAuthService
 
     public async Task<RefreshedAccessTokenDto> RegisterAsync(UserRegisterDto userRegisterDto)
     {
-        if (await _context.Users.FirstOrDefaultAsync(u => u.Username == userRegisterDto.Username) is not null)
-        {
-            throw new UsernameAlreadyRegisteredException();
-        }
-
-        if (await _context.Users.FirstOrDefaultAsync(u => u.Email == userRegisterDto.Email) is not null)
-        {
-            throw new EmailAlreadyRegisteredException();
-        }
-
-        var newUser = _mapper.Map<User>(userRegisterDto)!;
-        var salt = SecurityUtils.GenerateRandomSalt();
-        newUser.Salt = salt;
-        newUser.PasswordHash = SecurityUtils.HashPassword(newUser.PasswordHash, salt);
-        var createdUser = (await _context.Users.AddAsync(newUser)).Entity;
-        await _context.SaveChangesAsync();
-
+        var createdUser = await _userService.CreateUserAsync(userRegisterDto, isGoogleAuth: false);
+        
         return await GenerateNewAccessTokenAsync(createdUser.Id, createdUser.Username, createdUser.Email);
     }
 

@@ -7,5 +7,5 @@ public interface IAuthService
 {
     Task<RefreshedAccessTokenDto> LoginAsync(UserLoginDto userLoginDto);
     Task<RefreshedAccessTokenDto> RegisterAsync(UserRegisterDto userRegisterDto);
-    Task<AuthUserDTO> AuthorizeWithGoogleAsync(string googleToken);
+    Task<AuthUserDto> AuthorizeWithGoogleAsync(string googleCredentialsToken);
 }

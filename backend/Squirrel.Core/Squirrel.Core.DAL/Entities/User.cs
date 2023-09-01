@@ -10,9 +10,10 @@ public sealed class User : Entity<int>
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
-    public string PasswordHash { get; set; } = string.Empty;
-    public string Salt { get; set; } = string.Empty;
+    public string? PasswordHash { get; set; }
+    public string? Salt { get; set; }
     public string? AvatarUrl { get; set; }
+    public bool IsGoogleAuth { get; set; }
 
     public ICollection<Commit> Commits { get; set; } = new List<Commit>();
     public ICollection<Comment> Comments { get; set; } = new List<Comment>();

@@ -3,6 +3,7 @@
 @import "/src/styles/weights"
 
 .registration-container
+    min-width: 305px
     height: 100%
     padding: 40px 20% 0 20%
     @extend .flex-column
@@ -11,13 +12,15 @@
 
 .registration-content
     width: 100%
-
+    min-width: 275px
+    max-width: 400px
     h4
         font-size: 24px
         @extend .title
 
 .additional-sing-up
     @extend .flex-column
+    gap: 10px
 
 .registration-form
     @extend .flex-column

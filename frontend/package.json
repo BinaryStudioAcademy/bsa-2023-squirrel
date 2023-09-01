@@ -28,6 +28,7 @@
         "@fortawesome/fontawesome-svg-core": "^6.4.2",
         "@fortawesome/free-solid-svg-icons": "^5.15.4",
         "@microsoft/signalr": "^6.0.7",
+        "@types/google-one-tap": "^1.2.2",
         "eslint-plugin-prettier": "^4.2.1",
         "moment": "^2.29.4",
         "ngx-toastr": "^15.2.2",

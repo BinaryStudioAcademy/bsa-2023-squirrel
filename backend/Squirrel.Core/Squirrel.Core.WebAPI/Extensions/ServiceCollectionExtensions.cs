@@ -16,6 +16,8 @@ using System.Reflection;
 using System.Text;
 using Squirrel.Core.Common.DTO.Auth;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.SignalR;
+using Squirrel.Core.BLL.Hubs;
 
 namespace Squirrel.Core.WebAPI.Extensions;
 
@@ -33,6 +35,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IJwtFactory, JwtFactory>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<ITextService, TextService>();
+        services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
         services.AddTransient<IDependencyAnalyzer, DependencyAnalyzer>();
     }
 

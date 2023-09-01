@@ -24,6 +24,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddValidation();
 builder.Services.ConfigureJwtAuth(builder.Configuration);
 
+builder.Services.AddSignalR();
 builder.Services.AddCors();
 builder.Services.AddHealthChecks();
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
@@ -43,6 +44,7 @@ if (app.Environment.IsDevelopment())
 app.UseMiddleware<GenericExceptionHandlerMiddleware>();
 
 app.UseSquirrelCoreContext();
+app.UseSquirrelHub();
 
 app.UseCors(opt => opt
     .AllowAnyHeader()

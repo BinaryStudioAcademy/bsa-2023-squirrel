@@ -1,0 +1,66 @@
+@import "/src/styles/color"
+@import "/src/styles/weights"
+
+.dropdown
+    position: relative
+    display: flex
+    align-items: center
+    justify-content: flex-start
+    height: 50px
+    font-weight: $semi-bold-weight
+
+.dropdown::before
+    content: ''
+    position: absolute
+    width: 8px
+    height: 8px
+    right: 20px
+    top: 15px
+    border: 2px solid $arrow-color
+    border-top: 2px solid $light-gray
+    border-right: 2px solid $light-gray
+    z-index: 10
+    transform: rotate(-45deg)
+    transition: 0.5s
+    pointer-events: none
+
+.dropdown.active::before
+    transform: rotate(-225deg)
+    top: 22px
+
+.dropdown input
+    font-weight: $semi-bold-weight
+    position: absolute
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    cursor: pointer
+    border: none
+    outline: none
+    background-color: $light-gray
+    padding: 12px 20px
+    border-radius: 10px
+    box-shadow: 0 5px 20px $shadow
+
+.dropdown .option
+    z-index: 20
+    position: absolute
+    width: 100%
+    top: 70px
+    background-color: $white
+    box-shadow: 0 5px 20px $shadow
+    border-radius: 10px
+    overflow: hidden
+    display: none
+
+.dropdown .option div
+    padding: 12px 20px
+    cursor: pointer
+
+.dropdown .option div:hover
+    color: $white
+    background-color: $primary-color
+
+.dropdown.active .option
+    display: block

@@ -1,0 +1,40 @@
+@import "/src/styles/color"
+
+input[type="checkbox"]
+  appearance: none
+  -webkit-appearance: none
+  -moz-appearance: none
+
+  width: 18px
+  height: 18px
+
+  border: 1px solid $text-gray
+  background-color: transparent
+  border-radius: 1px
+  position: relative
+  margin-right: 5px
+
+input[type="checkbox"]:checked::before
+  content: ""
+  height: 5px
+  width: 10px
+  border-bottom: 3px solid $white
+  border-right: 3px solid $white
+  position: absolute
+  transform: rotate(135deg) scaleY(-1)
+  top: 20%
+  left: 10%
+
+input[type="checkbox"]:checked
+  border: 1px solid $add-button-color
+  background-color: $add-button-color
+  background-size: cover
+
+input[type="checkbox"]::-webkit-inner-spin-button,
+input[type="checkbox"]::-webkit-outer-spin-button
+  appearance: none
+  display: none
+
+.flex-align-center
+    display: flex
+    align-items: center

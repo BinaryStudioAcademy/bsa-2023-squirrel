@@ -1,34 +1,62 @@
+@import "/src/styles/color"
+
 .sidebar
     width: 79px
     height: 100vh
-    background-color: #503AF9
+    background-color: $primary-color
     position: fixed
     top: 0
     left: 0
-    display: flex
-    flex-direction: column
-    align-items: center
 
     .logo
         width: 54px
         height: 54px
-        border-radius: 27px
-        margin-top: 12px
 
-    .folder-icon
-        width: 21px
-        height: 16px
-        padding: 4px 2px
-        margin-top: 22px
+    .folder-icon, .bell-icon
+        width: 22px
+        height: 22px
+        padding: 2px
 
     .bell-icon
-        width: 16px
-        height: 20px
-        padding: 2px 4px
-        margin-top: 36px
+        padding: 0 1px
+
+    .folder-icon
+        padding: 2px 0
 
     .account-icon
-        width: 20px
-        height: 20px
-        padding: 2px 2px
-        margin-top: 36px
+        width: 24px
+        height: 24px
+
+.tab
+    display: flex
+    justify-content: center
+    padding: 20px 0
+    cursor: pointer
+
+.nav
+    position: relative
+
+    &:after
+        content: ""
+        display: none
+        position: absolute
+        top: 10%
+        left: 0
+        height: 80%
+        width: 5px
+        border-radius: 5px
+        background-color: $white
+
+    &:hover
+        &:after
+            display: block
+
+.active
+    &:after
+        display: block
+
+.nav-container
+    height: calc(100% - 100px)
+    display: flex
+    flex-direction: column
+    justify-content: space-between

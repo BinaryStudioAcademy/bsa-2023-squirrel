@@ -1,16 +1,8 @@
-Main Page works!
-<div class="main-content-wrp">
-    <router-outlet></router-outlet>
+<div class="container">
+    <app-sidebar></app-sidebar>
 </div>
-
-<!-- this div is an example of how to use reused button -->
-<div [ngStyle]="{
-    'display': 'flex',
-    'justify-content': 'space-around'
-    }">
-    <app-button text="Example action button" variant="outline-primary"></app-button>
-    <app-button text="Secondary button" variant="outline-secondary"></app-button>
-    <app-button text="+" height="30px" width="35px" padding="" variant="outline-secondary"></app-button>
-    <app-button text="Filled button" variant="filled"></app-button>
-    <app-button text="Disabled" variant="outline-secondary" [isDisabled]=true></app-button>
+<div class="main-content-wrp">
+    <app-main-header></app-main-header>
+    <app-navbar-header></app-navbar-header>
+    <router-outlet></router-outlet>
 </div>

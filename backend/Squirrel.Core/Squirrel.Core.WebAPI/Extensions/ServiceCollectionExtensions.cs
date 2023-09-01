@@ -8,7 +8,6 @@ using Squirrel.Core.BLL.MappingProfiles;
 using Squirrel.Core.BLL.Services;
 using Squirrel.Core.Common.Interfaces;
 using Squirrel.Core.Common.JWT;
-using Squirrel.Core.Common.Models;
 using Squirrel.Core.DAL.Context;
 using Squirrel.Core.DAL.Entities;
 using Squirrel.Core.WebAPI.Validators.Sample;
@@ -32,32 +31,13 @@ public static class ServiceCollectionExtensions
         services.AddScoped<JwtIssuerOptions>();
         services.AddScoped<IJwtFactory, JwtFactory>();
         services.AddScoped<IAuthService, AuthService>();
-        services.AddScoped<ITextService, TextService>();
-        services.AddTransient<IDependencyAnalyzer, DependencyAnalyzer>();
-    }
-
-    public static void AddMongoDbService(this IServiceCollection services, IConfiguration configuration)
-    {
-        services.Configure<MongoDatabaseConnectionSettings>(configuration.GetSection("MongoDatabase"));
-
-        services.AddTransient<IMongoService<Sample>>(s =>
-            new MongoService<Sample>(s.GetRequiredService<IOptions<MongoDatabaseConnectionSettings>>(), "SampleCollection"));
+        services.AddScoped<IProjectService, ProjectService>();
     }
 
     public static void AddValidation(this IServiceCollection services)
     {
-        services
-            .AddControllers()
-            .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<NewSampleDtoValidator>());
-    }
-
-    public static void AddSquirrelCoreContext(this IServiceCollection services, IConfiguration configuration)
-    {
-        var connectionsString = configuration.GetConnectionString("SquirrelCoreDBConnection");
-        services.AddDbContext<SquirrelCoreContext>(options =>
-            options.UseSqlServer(
-                connectionsString,
-                opt => opt.MigrationsAssembly(typeof(SquirrelCoreContext).Assembly.GetName().Name)));
+        services.AddControllers()
+            .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()));
     }
 
     public static void ConfigureJwtAuth(this IServiceCollection services, IConfiguration configuration)

@@ -1,0 +1,34 @@
+<mat-dialog-content>
+    <h4 class="mat-h4">Create Project</h4>
+    <div class="input-container">
+        <app-input
+            [formControl]="$any(projectForm.controls['projectName'])" [label]="'Project Name'"
+        ></app-input>
+    </div>
+    <div class="drop-down-container">
+        <mat-form-field appearance="outline" class="custom-select full-width">
+            <mat-label for="engineSelect">Database Engine:</mat-label>
+            <mat-select id="engineSelect" [formControl]="$any(projectForm.controls['selectedEngine'])">
+                <mat-option value="SqlServer">SQL Server</mat-option>
+                <mat-option value="PostgreSQL">PostgreSQL</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions class="modal-buttons">
+    <app-button
+        text="Create"
+        width="100%"
+        variant="outline-secondary"
+        (click)="createProject()"
+    >
+    </app-button>
+
+    <app-button
+        text="Close"
+        width="100%"
+        variant="outline-secondary"
+        (click)="close()"
+    >
+    </app-button>
+</mat-dialog-actions>

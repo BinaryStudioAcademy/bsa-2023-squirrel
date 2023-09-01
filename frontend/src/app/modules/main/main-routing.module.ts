@@ -10,6 +10,30 @@ const routes: Routes = [
         component: MainComponent,
         children: [
             {
+                path: 'changes',
+                loadChildren: () => import('../changes/changes.module').then((m) => m.ChangesModule),
+            },
+            {
+                path: 'pull-requests',
+                loadChildren: () => import('../pull-request/pull-request.module').then((m) => m.PullRequestModule),
+            },
+            {
+                path: 'branches',
+                component: NotFoundComponent,
+            },
+            {
+                path: 'scripts',
+                component: NotFoundComponent,
+            },
+            {
+                path: 'code',
+                component: NotFoundComponent,
+            },
+            {
+                path: 'settings',
+                component: NotFoundComponent,
+            },
+            {
                 path: '**',
                 component: NotFoundComponent,
                 pathMatch: 'full',

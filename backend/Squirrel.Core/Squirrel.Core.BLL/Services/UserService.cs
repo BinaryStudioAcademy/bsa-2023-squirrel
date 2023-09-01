@@ -58,8 +58,8 @@ public sealed class UserService : BaseService, IUserService
 
     private void AdaptUserNames(UserRegisterDto user)
     {
-        user.FirstName = user.FirstName.PadRight(MinNameLength, '_').Truncate(MaxNameLength);
-        user.LastName = user.LastName.PadRight(MinNameLength, '_').Truncate(MaxNameLength);
+        user.FirstName = user.FirstName.PadRight(MinNameLength, '-').Truncate(MaxNameLength);
+        user.LastName = user.LastName.PadRight(MinNameLength, '-').Truncate(MaxNameLength);
     }
 
     private void HashUserPassword(User newUser, string password)

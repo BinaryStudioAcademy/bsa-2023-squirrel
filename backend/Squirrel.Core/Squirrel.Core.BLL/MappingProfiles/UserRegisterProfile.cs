@@ -11,7 +11,6 @@ public sealed class UserRegisterProfile : Profile
     {
         CreateMap<User, UserRegisterDto>()!.ReverseMap();
         CreateMap<GoogleJsonWebSignature.Payload, UserRegisterDto>()
-            .ForMember(m => m.Email, s => s.MapFrom(f => f.Email))
             .ForMember(m => m.FirstName, s => s.MapFrom(f => ReplaceSpaces(f.GivenName)))
             .ForMember(m => m.LastName, s => s.MapFrom(f => ReplaceSpaces(f.FamilyName)))
             .ForMember(m => m.Username, s => s.MapFrom(f => ReplaceSpaces(f.Name)));

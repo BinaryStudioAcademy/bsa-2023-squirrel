@@ -1,9 +1,11 @@
 @import "/src/styles/color"
 @import "/src/styles/reusable"
+@import "/src/styles/weights"
+
 .registration-container
     min-width: 305px
     height: 100%
-    padding: 0 20%
+    padding: 40px 20% 0 20%
     @extend .flex-column
     align-items: center
     justify-content: space-between
@@ -13,7 +15,8 @@
     min-width: 275px
     max-width: 400px
     h4
-        color: $text-main
+        font-size: 24px
+        @extend .title
 
 .additional-sing-up
     @extend .flex-column
@@ -26,7 +29,7 @@
     margin-bottom: 20px
     color: $text-light
     font-size: 14px
-    font-weight: 400
+    font-weight: $normal-weight
 
     a
         color: $link-color

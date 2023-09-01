@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from '@core/guards/auth.guard';
-//import { environment } from '@env/environment';
 import { NotFoundComponent } from '@shared/components/not-found/not-found.component';
 
 import { SwaggerComponent } from './testing/swagger/swagger.component';

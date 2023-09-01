@@ -46,7 +46,7 @@ export class AuthService {
                     this.saveTokens(response.token);
                     this.ngZone.run(() => {
                         this.spinner.hide();
-                        this.router.navigateByUrl('/main');
+                        this.router.navigateByUrl('/projects');
                     });
                 },
                 error: () => {

@@ -1,6 +1,6 @@
 ﻿using Squirrel.ConsoleApp.Models;
 
-namespace Squirrel.ConsoleApp.Interfaces;
+namespace Squirrel.ConsoleApp.BL.Interfaces;
 
 public interface IGetActionsService
 {

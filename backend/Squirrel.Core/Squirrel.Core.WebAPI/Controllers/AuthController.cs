@@ -32,7 +32,7 @@ public sealed class AuthController : ControllerBase
     ///
     /// </remarks>
     [HttpPost("login")]
-    public async Task<ActionResult<AuthUserDTO>> Login([FromBody] UserLoginDto userLoginData)
+    public async Task<ActionResult<AuthUserDto>> Login([FromBody] UserLoginDto userLoginData)
     {
         return Ok(await _authService.LoginAsync(userLoginData));
     }
@@ -54,7 +54,7 @@ public sealed class AuthController : ControllerBase
     ///
     /// </remarks>
     [HttpPost("register")]
-    public async Task<ActionResult<AuthUserDTO>> Post([FromBody] UserRegisterDto userRegisterData)
+    public async Task<ActionResult<AuthUserDto>> Post([FromBody] UserRegisterDto userRegisterData)
     {
         return Ok(await _authService.RegisterAsync(userRegisterData));
     }
@@ -72,8 +72,8 @@ public sealed class AuthController : ControllerBase
     ///
     /// </remarks>
     [HttpPost("login/google")]
-    [ProducesResponseType(typeof(AuthUserDTO), StatusCodes.Status200OK)]
-    public async Task<ActionResult<AuthUserDTO>> LoginWithGoogle([FromBody] GoogleToken googleToken)
+    [ProducesResponseType(typeof(AuthUserDto), StatusCodes.Status200OK)]
+    public async Task<ActionResult<AuthUserDto>> LoginWithGoogle([FromBody] GoogleToken googleToken)
     {
         return Ok(await _authService.AuthorizeWithGoogleAsync(googleToken.IdToken));
     }

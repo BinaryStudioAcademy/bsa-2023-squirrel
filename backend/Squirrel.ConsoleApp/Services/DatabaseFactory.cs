@@ -11,7 +11,7 @@ public class DatabaseFactory
         return dbType switch
         {
             DbEngine.SqlServer => new SqlServerService(connection),
-            DbEngine.PostgreSQL => new PostgreSqlService(connection),
+            DbEngine.PostgreSql => new PostgreSqlService(connection),
             _ => throw new NotImplementedException($"Database type {dbType} is not supported."),
         };
     }

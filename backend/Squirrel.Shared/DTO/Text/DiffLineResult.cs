@@ -8,7 +8,7 @@ public class DiffLineResult
 
     public int? Position { get; set; }
 
-    public string Text { get; set; }
+    public string Text { get; set; } = string.Empty;
 
-    public List<DiffPiece> SubPieces { get; set; }
+    public List<DiffPiece> SubPieces { get; set; } = new();
 }

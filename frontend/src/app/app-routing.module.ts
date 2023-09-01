@@ -3,8 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from '@core/guards/auth.guard';
 import { NotFoundComponent } from '@shared/components/not-found/not-found.component';
 
-import { SwaggerComponent } from './testing/swagger/swagger.component';
-
 const routes: Routes = [
     {
         path: '',
@@ -21,11 +19,6 @@ const routes: Routes = [
         canActivate: [AuthGuard],
         data: { requiresToken: true },
         loadChildren: () => import('./modules/main/main.module').then((m) => m.MainModule),
-    },
-    // for testing purpose
-    {
-        path: 'swagger',
-        component: SwaggerComponent,
     },
     {
         path: '**',

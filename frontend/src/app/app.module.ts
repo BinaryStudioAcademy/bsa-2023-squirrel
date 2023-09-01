@@ -8,12 +8,11 @@ import { AuthenticationModule } from '@modules/authentication/authentication.mod
 import { SharedModule } from '@shared/shared.module';
 
 import { MaterialModule } from './material/material.module';
-import { SwaggerComponent } from './testing/swagger/swagger.component';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
-    declarations: [AppComponent, SwaggerComponent],
+    declarations: [AppComponent],
     imports: [
         BrowserModule,
         BrowserAnimationsModule,

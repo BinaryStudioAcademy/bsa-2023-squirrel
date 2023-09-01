@@ -9,10 +9,12 @@ namespace Squirrel.ConsoleApp.Controllers;
 public class SettingController: ControllerBase
 {
     private readonly IConnectionFileService _connectionFileService;
+    private readonly IClientIdFileService _clientIdFileService;
 
-    public SettingController(IConnectionFileService connectionFileService)
+    public SettingController(IConnectionFileService connectionFileService, IClientIdFileService clientIdFileService)
     {
         _connectionFileService = connectionFileService;
+        _clientIdFileService = clientIdFileService;
     }
     
     [HttpPost]
@@ -21,9 +23,7 @@ public class SettingController: ControllerBase
     {
         _connectionFileService.SaveToFile(connectionString);
         
-        //TODO: Connection unique ID
-        //TODO: 55 - As a developer I want to setup SignalR connection from console app to webAPI
-        var randomId = Guid.NewGuid();
-        return Ok(randomId);
+        var clientId = _clientIdFileService.GetClientId();
+        return Ok(clientId);
     }
 }

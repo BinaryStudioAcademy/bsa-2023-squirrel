@@ -5,6 +5,7 @@ import { BaseComponent } from '@core/base/base.component';
 import { AuthService } from '@core/services/auth.service';
 import { NotificationService } from '@core/services/notification.service';
 import { UserService } from '@core/services/user.service';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { ValidationsFn } from '@shared/helpers/validations-fn';
 import { takeUntil } from 'rxjs';
 
@@ -19,6 +20,14 @@ import { UserDto } from 'src/app/models/user/user-dto';
     styleUrls: ['./user-profile.component.sass'],
 })
 export class UserProfileComponent extends BaseComponent implements OnInit, OnDestroy {
+    public curPasswordVisible = true;
+
+    public newPasswordVisible = false;
+
+    public repeatPasswordVisible = false;
+
+    public eyeIcon = faEye;
+
     public user: UserDto;
 
     public userNamesForm: FormGroup = new FormGroup({});

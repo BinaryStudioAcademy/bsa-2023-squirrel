@@ -5,8 +5,8 @@
   margin: 50px auto
   padding: 30px
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1)
-  
-  .section-container 
+
+  .section-container
     max-width: 600px
     margin: 50px auto
 
@@ -23,31 +23,30 @@
       background-color: #f5f5f5
       padding: 10px
       border-radius: 50%
-      
+
   .section
     margin-top: 20px
     background-color: $project-background-color
 
-
-    h2
-      margin-bottom: 20px
-      
-    .form-group
+    section-header
       margin-bottom: 20px
 
-      label
-        display: block
-        margin-bottom: 10px
-        
-      input[type="text"], input[type="password"]
-        width: 100%
-        padding: 10px
-        border: 1px solid #e0e0e0
-        border-radius: 5px
+    // .form-group
+    //   margin-bottom: 20px
+
+    //   label
+    //     display: block
+    //     margin-bottom: 10px
+
+    //   input[type="text"], input[type="password"]
+    //     width: 100%
+    //     padding: 10px
+    //     border: 1px solid #e0e0e0
+    //     border-radius: 5px
 
     button
       padding: 10px 15px
-      background-color: #007BFF
+      background: linear-gradient(to right, $link-color, $primary-color)
       color: white
       border: none
       border-radius: 5px
@@ -55,4 +54,43 @@
       transition: background-color 0.3s
 
       &:hover
-        background-color: darken(#007BFF, 10%)
+        background-color: darken($primary-color, 10%)
+
+.form-group
+    display: flex
+    align-items: center
+    margin-bottom: 20px
+    font-size: 14px
+    font-weight: 600
+
+.form-inputs
+    display: flex
+    align-items: center
+    justify-content: center
+
+.form
+    display: flex
+    flex-direction: column
+    width: 30%
+
+.save-btn
+    align-self: center
+    min-width: 90px
+    font-size: 14px
+    font-weight: 600
+
+.label-input
+    min-width: 180px
+    margin-right: 15px
+
+.input-text
+    flex-grow: 1
+    border: none
+    padding: 10px 15px
+    background-color: $dark-grey
+    border-radius: 10px
+
+.section-header
+    font-weight: 600
+    font-size: 16px
+    padding: 25px 0 0 30px

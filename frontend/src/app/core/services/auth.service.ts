@@ -24,11 +24,12 @@ export class AuthService {
 
     private readonly currentUserKey = 'currentUser';
 
-    // eslint-disable-next-line no-empty-function
-    constructor(private httpService: HttpInternalService,
+    constructor(
+        private httpService: HttpInternalService,
         private router: Router,
         private ngZone: NgZone,
-        private spinner: SpinnerService,) {}
+        private spinner: SpinnerService, // eslint-disable-next-line no-empty-function
+    ) {}
 
     public signOut = () => {
         localStorage.removeItem(this.accessTokenKey);
@@ -42,20 +43,22 @@ export class AuthService {
 
         this.ngZone.run(() => this.spinner.show());
 
-        return this.httpService.postRequest<UserAuthDto>(`${this.authRoutePrefix}/login/google`, credentials).subscribe({
-            next: (data: UserAuthDto) => {
-                this.saveTokens(data.token);
-                this.setCurrentUser(data.user);
-                this.ngZone.run(() => {
-                    this.spinner.hide();
-                    this.router.navigateByUrl('/main');
-                });
-            },
-            error: () => {
-                this.ngZone.run(() => this.spinner.hide());
-                this.signOut();
-            },
-        });
+        return this.httpService
+            .postRequest<UserAuthDto>(`${this.authRoutePrefix}/login/google`, credentials)
+            .subscribe({
+                next: (data: UserAuthDto) => {
+                    this.saveTokens(data.token);
+                    this.setCurrentUser(data.user);
+                    this.ngZone.run(() => {
+                        this.spinner.hide();
+                        this.router.navigateByUrl('/main');
+                    });
+                },
+                error: () => {
+                    this.ngZone.run(() => this.spinner.hide());
+                    this.signOut();
+                },
+            });
     }
 
     public register(userRegisterDto: UserRegisterDto): Observable<UserAuthDto> {

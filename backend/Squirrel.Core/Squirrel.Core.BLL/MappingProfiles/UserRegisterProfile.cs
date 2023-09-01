@@ -16,5 +16,5 @@ public sealed class UserRegisterProfile : Profile
             .ForMember(m => m.Username, s => s.MapFrom(f => ReplaceSpaces(f.Name)));
     }
 
-    private string ReplaceSpaces(string value) => value.Replace(' ', '_');
+    private string ReplaceSpaces(string value) => value.Replace(' ', '-');
 }

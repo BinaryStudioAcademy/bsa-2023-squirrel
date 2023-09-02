@@ -43,6 +43,7 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
         const loggedUserId = this.authService.getCurrentUser()?.id as number;
 
         if (loggedUserId) {
+            this.spinner.show();
             this.userService
                 .getUserById(loggedUserId)
                 .pipe(takeUntil(this.unsubscribe$))
@@ -50,10 +51,11 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
                     (userFromDb) => {
                         this.user = userFromDb;
                         this.initializeForms();
+                        this.spinner.hide();
                     },
                     (error) => {
-                        console.error('Error getting user by ID:', error);
-                        this.notificationService.error('Failed to fetch user by ID');
+                        this.spinner.hide();
+                        this.notificationService.error(`Failed to fetch user by ID: ${error.message}`);
                     },
                 );
         } else {

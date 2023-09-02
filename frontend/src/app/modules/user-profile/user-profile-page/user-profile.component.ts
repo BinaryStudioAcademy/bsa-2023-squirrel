@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BaseComponent } from '@core/base/base.component';
 import { AuthService } from '@core/services/auth.service';
 import { NotificationService } from '@core/services/notification.service';
+import { SpinnerService } from '@core/services/spinner.service';
 import { UserService } from '@core/services/user.service';
 import { ValidationsFn } from '@shared/helpers/validations-fn';
 import { takeUntil } from 'rxjs';
@@ -33,6 +34,7 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
         private userService: UserService,
         private notificationService: NotificationService,
         private authService: AuthService,
+        private spinner: SpinnerService,
     ) {
         super();
     }
@@ -116,6 +118,7 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
 
     public updateUserNames() {
         if (this.userNamesForm.valid) {
+            this.spinner.show();
             const userData: UpdateUserNamesDto = {
                 userName: this.userNamesForm.value.username,
                 firstName: this.userNamesForm.value.firstName,
@@ -129,10 +132,12 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
                 (user) => {
                     this.user = user;
                     this.authService.setCurrentUser(user);
+                    this.spinner.hide();
                     this.notificationService.info('Names successfully updated');
                     this.initUserNamesForm();
                 },
                 (error) => {
+                    this.spinner.hide();
                     this.notificationService.error(error.message);
                 },
             );
@@ -143,6 +148,7 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
 
     public updateUserPassword() {
         if (this.passwordForm.valid && this.passwordForm.value.newPassword === this.passwordForm.value.repeatPassword) {
+            this.spinner.show();
             const userData: UpdateUserPasswordDto = {
                 currentPassword: this.passwordForm.value.currentPassword,
                 newPassword: this.passwordForm.value.newPassword,
@@ -153,10 +159,12 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
 
             userSubscription.pipe(takeUntil(this.unsubscribe$)).subscribe(
                 () => {
+                    this.spinner.hide();
                     this.notificationService.info('Password successfully updated');
                     this.initChangePasswordForm();
                 },
                 (error) => {
+                    this.spinner.hide();
                     this.notificationService.error(error.message);
                 },
             );
@@ -167,6 +175,7 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
 
     public updateUserNotifications() {
         if (this.notificationsForm.valid) {
+            this.spinner.show();
             const userData: UpdateUserNotificationsDto = {
                 squirrelNotification: this.notificationsForm.value.squirrelNotification,
                 emailNotification: this.notificationsForm.value.emailNotification,
@@ -179,10 +188,12 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
                 (user) => {
                     this.user = user;
                     this.authService.setCurrentUser(user);
+                    this.spinner.hide();
                     this.notificationService.info('Notifications successfully updated');
                     this.initNotificationsForm();
                 },
                 (error) => {
+                    this.spinner.hide();
                     this.notificationService.error(error.message);
                 },
             );

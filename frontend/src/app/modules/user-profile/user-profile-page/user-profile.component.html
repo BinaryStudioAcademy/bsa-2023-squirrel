@@ -1,74 +1,118 @@
 <div *ngIf="user" class="profile-container">
-    <h3>User Profile</h3>
-
     <div class="header">
-        <span class="initials">{{ getUserInitials() }}</span>
+        <h3 class="profile-header">User Profile</h3>
         <app-button text="Go Back" (click)="goBack()"></app-button>
     </div>
 
     <section class="section">
-        <h4>Edit Profile</h4>
-        <div class="section-container">
-            <form [formGroup]="userNamesForm" (ngSubmit)="updateUserNames()">
-                <app-input
-                    [formControl]="$any(userNamesForm.controls['username'])"
-                    [label]="'username'"
-                    [type]="'text'"
-                    placeholder="Enter Username">
-                </app-input>
-                <app-input
-                    [formControl]="$any(userNamesForm.controls['firstName'])"
-                    [label]="'first name'"
-                    [type]="'text'"
-                    placeholder="Enter First Name">
-                </app-input>
-                <app-input
-                    [formControl]="$any(userNamesForm.controls['lastName'])"
-                    [label]="'last name'"
-                    [type]="'text'"
-                    placeholder="Enter Last Name">
-                </app-input>
-                <app-button text="Save" type="submit"></app-button>
+        <h4 class="section-header">Edit profile</h4>
+        <div class="form-inputs">
+            <form class="form" [formGroup]="userNamesForm" (ngSubmit)="updateUserNames()">
+                <div class="upload">
+                    <img
+                        class="avatar-img"
+                        [src]="user.avatarUrl ? user.avatarUrl : '../../../assets/account_circle_icon.png'"
+                        alt="avatar-photo" />
+                    <div class="edit-icon">
+                        <input type="file" />
+                        <fa-icon [icon]="penIcon" style="color: white"></fa-icon>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="label-input" for="userName">Username</label>
+                    <input
+                        class="input-text"
+                        type="text"
+                        id="userName"
+                        formControlName="userName"
+                        placeholder="Enter username" />
+                </div>
+                <div class="form-group">
+                    <label class="label-input" for="firstName">First Name</label>
+                    <input
+                        class="input-text"
+                        type="text"
+                        id="firstName"
+                        formControlName="firstName"
+                        placeholder="Enter first name" />
+                </div>
+                <div class="form-group">
+                    <label class="label-input" for="lastName">Last Name</label>
+                    <input
+                        class="input-text"
+                        type="text"
+                        id="lastName"
+                        formControlName="lastName"
+                        placeholder="Enter last name" />
+                </div>
+                <app-button variant="filled" text="Save" type="submit"></app-button>
             </form>
         </div>
     </section>
 
     <section class="section">
-        <h4>Change password</h4>
-        <div class="section-container">
-            <form [formGroup]="passwordForm" (ngSubmit)="updateUserPassword()">
+        <h4 class="section-header">Change password</h4>
+        <div class="form-inputs">
+            <form class="form" [formGroup]="passwordForm" (ngSubmit)="updateUserPassword()">
                 <div class="form-group">
-                    <label for="currentPassword">Current Password:</label>
-                    <input type="password" id="currentPassword" formControlName="currentPassword" />
+                    <label class="label-input" for="currentPassword">Current Password</label>
+                    <input
+                        class="input-text"
+                        [type]="currentPasswordVisible ? 'text' : 'password'"
+                        id="currentPassword"
+                        formControlName="currentPassword"
+                        placeholder="Current password" />
+                    <span (click)="currentPasswordVisible = !currentPasswordVisible">
+                        <fa-icon class="eyeIcon" [icon]="currentPasswordVisible ? openEyeIcon : closeEyeIcon"></fa-icon>
+                    </span>
                 </div>
                 <div class="form-group">
-                    <label for="newPassword">New Password:</label>
-                    <input type="password" id="newPassword" formControlName="newPassword" />
+                    <label class="label-input" for="newPassword">New Password</label>
+                    <input
+                        class="input-text"
+                        [type]="newPasswordVisible ? 'text' : 'password'"
+                        id="newPassword"
+                        formControlName="newPassword"
+                        placeholder="New password" />
+                    <span (click)="newPasswordVisible = !newPasswordVisible">
+                        <fa-icon class="eyeIcon" [icon]="newPasswordVisible ? openEyeIcon : closeEyeIcon"></fa-icon>
+                    </span>
                 </div>
                 <div class="form-group">
-                    <label for="repeatPassword">Repeat New Password:</label>
-                    <input type="password" id="repeatPassword" formControlName="repeatPassword" />
+                    <label class="label-input" for="repeatPassword">Repeat New Password</label>
+                    <input
+                        class="input-text"
+                        [type]="repeatPasswordVisible ? 'text' : 'password'"
+                        id="repeatPassword"
+                        formControlName="repeatPassword"
+                        placeholder="Repeat new password" />
+                    <span (click)="repeatPasswordVisible = !repeatPasswordVisible">
+                        <fa-icon class="eyeIcon" [icon]="repeatPasswordVisible ? openEyeIcon : closeEyeIcon"></fa-icon>
+                    </span>
                 </div>
-                <app-button text="Save" type="submit"></app-button>
+
+                <app-button variant="filled" text="Save" type="submit"></app-button>
             </form>
         </div>
     </section>
 
     <section class="section">
-        <h4>Notifications</h4>
-        <div class="section-container">
-            <p>Notifications for all repositories, teams, or conversations you're watching</p>
-            <form [formGroup]="notificationsForm" (ngSubmit)="updateUserNotifications()">
-                <div class="form-group">
-                    <input type="checkbox" id="squirrelNotification" formControlName="squirrelNotification" />
-                    <label for="notifyOnSquirrel">Notify on Squirrel</label>
+        <h4 class="section-header">Notifications</h4>
+        <div class="notifications-block">
+            <p class="smaller-font">Notifications for all repositories, teams, or conversations you're watching</p>
+            <div class="notify">
+                <span class="notify-label">Notify me:</span>
+                <div class="checkbox-group">
+                    <app-checkbox label="On Squirrel"></app-checkbox>
+                    <app-checkbox label="Email"></app-checkbox>
                 </div>
-                <div class="form-group">
-                    <input type="checkbox" id="emailNotification" formControlName="emailNotification" />
-                    <label for="notifyByEmail">Notify by Email</label>
-                </div>
-                <app-button text="Save" type="submit"></app-button>
-            </form>
+            </div>
+            <app-button
+                variant="filled"
+                text="Save"
+                type="submit"
+                (buttonOnClick)="updateUserNotifications()"></app-button>
         </div>
     </section>
 </div>

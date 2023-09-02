@@ -16,9 +16,10 @@ public sealed class UserConfig : IEntityTypeConfiguration<User>
         builder.Property(x => x.FirstName).IsRequired().HasMaxLength(25);
         builder.Property(x => x.LastName).IsRequired().HasMaxLength(25);
         builder.Property(x => x.Email).IsRequired().HasMaxLength(50);
-        builder.Property(x => x.PasswordHash).IsRequired().HasMaxLength(100);
-        builder.Property(x => x.Salt).IsRequired().HasMaxLength(100);
+        builder.Property(x => x.PasswordHash).HasMaxLength(100);
+        builder.Property(x => x.Salt).HasMaxLength(100);
         builder.Property(x => x.AvatarUrl).HasMaxLength(500);
+        builder.Property(x => x.IsGoogleAuth).IsRequired();
 
         builder.HasMany(x => x.Commits)
                .WithOne(x => x.Author)

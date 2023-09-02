@@ -6,15 +6,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CoreModule } from '@core/core.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AuthenticationModule } from '@modules/authentication/authentication.module';
+import { UserProfileModule } from '@modules/user-profile/user-profile.module';
 import { SharedModule } from '@shared/shared.module';
 
 import { MaterialModule } from './material/material.module';
-import { UserProfileComponent } from './modules/user-profile/user-profile.component';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
-    declarations: [AppComponent, UserProfileComponent],
+    declarations: [AppComponent],
     imports: [
         BrowserModule,
         BrowserAnimationsModule,
@@ -25,7 +25,6 @@ import { AppRoutingModule } from './app-routing.module';
         CoreModule,
         HttpClientModule,
         AuthenticationModule,
-        FontAwesomeModule,
     ],
     providers: [],
     bootstrap: [AppComponent],

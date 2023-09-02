@@ -1,5 +1,5 @@
 {
-    "name": "frontend",
+    "name": "squirrel",
     "version": "0.0.0",
     "scripts": {
         "ng": "ng",
@@ -29,6 +29,7 @@
         "@fortawesome/free-solid-svg-icons": "^6.4.2",
         "@ionic/angular": "^7.3.1",
         "@microsoft/signalr": "^6.0.7",
+        "@types/google-one-tap": "^1.2.2",
         "eslint-plugin-prettier": "^4.2.1",
         "moment": "^2.29.4",
         "ngx-toastr": "^15.2.2",

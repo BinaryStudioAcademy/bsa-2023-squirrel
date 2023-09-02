@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Squirrel.Core.Common.DTO.Projects;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.BLL.Services.Abstract;
-using Squirrel.Core.Common.Exceptions;
+using Squirrel.Core.Common.DTO.Project;
 using Squirrel.Core.DAL.Context;
 using Squirrel.Core.DAL.Entities;
+using Squirrel.Shared.Exceptions;
 
 namespace Squirrel.Core.BLL.Services
 {

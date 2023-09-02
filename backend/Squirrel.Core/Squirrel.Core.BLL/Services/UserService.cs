@@ -1,26 +1,64 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using Squirrel.Core.BLL.Extensions;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.BLL.Services.Abstract;
+using Squirrel.Core.Common.DTO.Auth;
+using Squirrel.Core.Common.Security;
 using Squirrel.Core.DAL.Context;
 using Squirrel.Core.DAL.Entities;
-using Microsoft.EntityFrameworkCore;
 using Squirrel.Core.Common.DTO.Users;
 using Squirrel.Shared.Exceptions;
-using Squirrel.Core.Common.Security;
 
 namespace Squirrel.Core.BLL.Services;
 
 public sealed class UserService : BaseService, IUserService
 {
-    public UserService(SquirrelCoreContext context, IMapper mapper) : base(context, mapper) { }
+    private const int MaxNameLength = 25;
+    private const int MinNameLength = 2;
 
-    public async Task<UserDTO> GetUserByIdAsync(int id)
+    public UserService(SquirrelCoreContext context, IMapper mapper) : base(context, mapper) { }
+    
+    public async Task<UserDto> GetUserByIdAsync(int id)
     {
         var userEntity = await GetUserByIdInternal(id);
-        return _mapper.Map<UserDTO>(userEntity);
+        return _mapper.Map<UserDto>(userEntity);
     }
 
-    public async Task<UserDTO> UpdateUserAsync(UpdateUserNamesDTO updateUserDTO)
+    public async Task<User?> GetUserByEmailAsync(string email)
+    => await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+
+    public async Task<User?> GetUserByUsernameAsync(string username)
+        => await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+
+    public async Task<User> CreateUserAsync(UserRegisterDto userDto, bool isGoogleAuth)
+    {
+        if (await GetUserByUsernameAsync(userDto.Username) is not null)
+        {
+            if (isGoogleAuth)
+            {
+                // Google registration must not fail because of the same username.
+                userDto.Username = GenerateRandomUsername();
+            }
+            else
+            {
+                throw new UsernameAlreadyRegisteredException();
+            }
+        }
+
+        if (await GetUserByEmailAsync(userDto.Email) is not null)
+        {
+            throw new EmailAlreadyRegisteredException();
+        }
+
+        var newUser = PrepareNewUserData(userDto, isGoogleAuth);
+        var createdUser = (await _context.Users.AddAsync(newUser)).Entity;
+        await _context.SaveChangesAsync();
+
+        return createdUser;
+    }
+
+    public async Task<UserDto> UpdateUserAsync(UpdateUserNamesDTO updateUserDTO)
     {
         var userEntity = await GetUserByIdInternal(updateUserDTO.Id);
 
@@ -31,7 +69,7 @@ public sealed class UserService : BaseService, IUserService
         _context.Users.Update(userEntity);
         await _context.SaveChangesAsync();
 
-        return _mapper.Map<UserDTO>(userEntity);
+        return _mapper.Map<UserDto>(userEntity);
     }
 
     public async Task ChangePasswordAsync(UpdateUserPasswordDTO changePasswordDTO)
@@ -53,7 +91,7 @@ public sealed class UserService : BaseService, IUserService
         await _context.SaveChangesAsync();
     }
 
-    public async Task<UserDTO> UpdateNotificationsAsync(UpdateUserNotificationsdDTO updateNotificationsdDTO)
+    public async Task<UserDto> UpdateNotificationsAsync(UpdateUserNotificationsdDTO updateNotificationsdDTO)
     {
         var userEntity = await GetUserByIdInternal(updateNotificationsdDTO.Id);
 
@@ -63,7 +101,7 @@ public sealed class UserService : BaseService, IUserService
         _context.Users.Update(userEntity);
         await _context.SaveChangesAsync();
 
-        return _mapper.Map<UserDTO>(userEntity);
+        return _mapper.Map<UserDto>(userEntity);
     }
 
     private async Task<User> GetUserByIdInternal(int id)
@@ -78,5 +116,36 @@ public sealed class UserService : BaseService, IUserService
         {
             return userEntity;
         }
+    }
+
+    private string GenerateRandomUsername()
+        => ("user" + Guid.NewGuid()).Truncate(MaxNameLength);
+
+    private void AdaptUserNames(UserRegisterDto user)
+    {
+        user.FirstName = user.FirstName.PadRight(MinNameLength, '-').Truncate(MaxNameLength);
+        user.LastName = user.LastName.PadRight(MinNameLength, '-').Truncate(MaxNameLength);
+    }
+
+    private void HashUserPassword(User newUser, string password)
+    {
+        var salt = SecurityUtils.GenerateRandomSalt();
+        newUser.Salt = salt;
+        newUser.PasswordHash = SecurityUtils.HashPassword(password, salt);
+    }
+
+    private User PrepareNewUserData(UserRegisterDto userDto, bool isGoogleAuth)
+    {
+        // User's first name and last name from Google account might be too long or too short,
+        // so we need to adapt it to meet our requirements.
+        AdaptUserNames(userDto);
+        var newUser = _mapper.Map<User>(userDto)!;
+        newUser.IsGoogleAuth = isGoogleAuth;
+        if (!isGoogleAuth)
+        {
+            HashUserPassword(newUser, userDto.Password);
+        }
+
+        return newUser;
     }
 }

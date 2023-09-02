@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Squirrel.Core.Common.DTO.Projects;
 using Squirrel.Core.BLL.Interfaces;
+using Squirrel.Core.Common.DTO.Project;
 
 namespace Squirrel.Core.WebAPI.Controllers
 {

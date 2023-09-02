@@ -1,4 +1,4 @@
-﻿namespace Squirrel.ConsoleApp.Interfaces;
+﻿namespace Squirrel.ConsoleApp.BL.Interfaces;
 
 public interface IDbQueryProvider
 {

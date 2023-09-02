@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.Common.DTO.Users;
 
 namespace Squirrel.Core.WebAPI.Controllers
 {
     [ApiController]
-    //[Authorize]
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
@@ -21,7 +19,7 @@ namespace Squirrel.Core.WebAPI.Controllers
         /// Get user information by ID
         /// </summary>
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserDTO>> GetUserById(int id)
+        public async Task<ActionResult<UserDto>> GetUserById(int id)
         {
             return Ok(await _userService.GetUserByIdAsync(id));
         }
@@ -30,7 +28,7 @@ namespace Squirrel.Core.WebAPI.Controllers
         /// Update user names
         /// </summary>
         [HttpPut("update-names")]
-        public async Task<ActionResult<UserDTO>> UpdateUserNames([FromBody] UpdateUserNamesDTO updateUserDTO)
+        public async Task<ActionResult<UserDto>> UpdateUserNames([FromBody] UpdateUserNamesDTO updateUserDTO)
         {
             return Ok(await _userService.UpdateUserAsync(updateUserDTO));
         }
@@ -49,7 +47,7 @@ namespace Squirrel.Core.WebAPI.Controllers
         /// Update user notifications
         /// </summary>
         [HttpPut("update-notifications")]
-        public async Task<ActionResult<UserDTO>> UpdateUserNotifications([FromBody] UpdateUserNotificationsdDTO updateUserNotificationsdDTO)
+        public async Task<ActionResult<UserDto>> UpdateUserNotifications([FromBody] UpdateUserNotificationsdDTO updateUserNotificationsdDTO)
         {
             return Ok(await _userService.UpdateNotificationsAsync(updateUserNotificationsdDTO));
         }

@@ -1,4 +1,4 @@
-﻿using Squirrel.ConsoleApp.Interfaces;
+﻿using Squirrel.ConsoleApp.BL.Interfaces;
 using static Squirrel.ConsoleApp.Providers.SqlServerScripts.GetTables;
 using static Squirrel.ConsoleApp.Providers.SqlServerScripts.GetObjects;
 using static Squirrel.ConsoleApp.Providers.SqlServerScripts.GetUserDefinedTypes;

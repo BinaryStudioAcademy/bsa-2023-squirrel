@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
+import { CredentialResponse } from 'google-one-tap';
 import { Observable, tap } from 'rxjs';
 
 import { AccessTokenDto } from 'src/app/models/auth/access-token-dto';
@@ -11,6 +12,7 @@ import { UserRegisterDto } from 'src/app/models/user/user-register-dto';
 import { UserLoginDto } from '../../models/user/user-login-dto';
 
 import { HttpInternalService } from './http-internal.service';
+import { SpinnerService } from './spinner.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -22,8 +24,12 @@ export class AuthService {
 
     private readonly currentUserKey = 'currentUser';
 
-    // eslint-disable-next-line no-empty-function
-    constructor(private httpService: HttpInternalService, private router: Router) {}
+    constructor(
+        private httpService: HttpInternalService,
+        private router: Router,
+        private ngZone: NgZone,
+        private spinner: SpinnerService, // eslint-disable-next-line no-empty-function
+    ) {}
 
     public signOut = () => {
         localStorage.removeItem(this.accessTokenKey);
@@ -32,24 +38,32 @@ export class AuthService {
         this.router.navigate(['/login']);
     };
 
-    public validateGoogleAuth(token: string) {
-        const auth: GoogleAuthDto = { idToken: token };
+    public signInViaGoogle(googleCredentialsToken: CredentialResponse) {
+        const credentials: GoogleAuthDto = { idToken: googleCredentialsToken.credential };
 
-        return this.httpService.postRequest<UserAuthDto>(`${this.authRoutePrefix}/login/google`, auth).subscribe({
-            next: (data: UserAuthDto) => {
-                this.saveTokens(data.token);
-                this.setCurrentUser(data.user);
-                this.router.navigate(['/main']);
-            },
-            error: () => {
-                this.signOut();
-            },
-        });
+        this.ngZone.run(() => this.spinner.show());
+
+        return this.httpService
+            .postRequest<UserAuthDto>(`${this.authRoutePrefix}/login/google`, credentials)
+            .subscribe({
+                next: (data: UserAuthDto) => {
+                    this.saveTokens(data.token);
+                    this.setCurrentUser(data.user);
+                    this.ngZone.run(() => {
+                        this.spinner.hide();
+                        this.router.navigateByUrl('/main');
+                    });
+                },
+                error: () => {
+                    this.ngZone.run(() => this.spinner.hide());
+                    this.signOut();
+                },
+            });
     }
 
     public register(userRegisterDto: UserRegisterDto): Observable<UserAuthDto> {
         return this.httpService.postRequest<UserAuthDto>(`${this.authRoutePrefix}/register`, userRegisterDto).pipe(
-            tap((data) => {
+            tap((data: UserAuthDto) => {
                 this.saveTokens(data.token);
                 this.setCurrentUser(data.user);
             }),
@@ -58,7 +72,7 @@ export class AuthService {
 
     public login(userLoginDto: UserLoginDto): Observable<UserAuthDto> {
         return this.httpService.postRequest<UserAuthDto>(`${this.authRoutePrefix}/login`, userLoginDto).pipe(
-            tap((data) => {
+            tap((data: UserAuthDto) => {
                 this.saveTokens(data.token);
                 this.setCurrentUser(data.user);
             }),

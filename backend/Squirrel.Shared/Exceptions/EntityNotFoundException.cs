@@ -1,4 +1,4 @@
-﻿namespace Squirrel.Core.Common.Exceptions;
+﻿namespace Squirrel.Shared.Exceptions;
 
 public sealed class EntityNotFoundException : Exception
 {

@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from '@core/guards/auth.guard';
-import { UserProfileComponent } from '@modules/user-profile/user-profile.component';
 import { NotFoundComponent } from '@shared/components/not-found/not-found.component';
 
 const routes: Routes = [
@@ -25,7 +24,7 @@ const routes: Routes = [
         path: 'profile',
         canActivate: [AuthGuard],
         data: { requiresToken: true },
-        component: UserProfileComponent,
+        loadChildren: () => import('./modules/user-profile/user-profile.module').then((m) => m.UserProfileModule),
     },
     {
         path: '**',

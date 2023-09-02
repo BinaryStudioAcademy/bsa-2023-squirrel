@@ -109,8 +109,8 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
 
     private initNotificationsForm() {
         this.notificationsForm = this.fb.group({
-            notifyOnSquirrel: [this.user.squirrelNotification],
-            notifyByEmail: [this.user.emailNotification],
+            squirrelNotification: [this.user.squirrelNotification],
+            emailNotification: [this.user.emailNotification],
         });
     }
 
@@ -130,6 +130,7 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
                     this.user = user;
                     this.authService.setCurrentUser(user);
                     this.notificationService.info('Names successfully updated');
+                    this.initUserNamesForm();
                 },
                 (error) => {
                     this.notificationService.error(error.message);
@@ -153,6 +154,7 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
             userSubscription.pipe(takeUntil(this.unsubscribe$)).subscribe(
                 () => {
                     this.notificationService.info('Password successfully updated');
+                    this.initChangePasswordForm();
                 },
                 (error) => {
                     this.notificationService.error(error.message);
@@ -177,14 +179,15 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
                 (user) => {
                     this.user = user;
                     this.authService.setCurrentUser(user);
-                    this.notificationService.info('Names successfully updated');
+                    this.notificationService.info('Notifications successfully updated');
+                    this.initNotificationsForm();
                 },
                 (error) => {
                     this.notificationService.error(error.message);
                 },
             );
         } else {
-            this.notificationService.error('Update Names Form is invalid');
+            this.notificationService.error('Update Notifications Form is invalid');
         }
     }
 

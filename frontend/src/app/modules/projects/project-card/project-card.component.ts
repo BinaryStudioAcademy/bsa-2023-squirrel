@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 import { ProjectDto } from '../../../models/projects/project-dto';
 
@@ -7,10 +7,15 @@ import { ProjectDto } from '../../../models/projects/project-dto';
     templateUrl: './project-card.component.html',
     styleUrls: ['./project-card.component.sass'],
 })
-
-export class ProjectCardComponent {
+export class ProjectCardComponent implements OnInit {
     @Input() project: ProjectDto;
 
+    public accentColor: string = '';
+
     // eslint-disable-next-line @typescript-eslint/no-useless-constructor,no-empty-function,@typescript-eslint/no-empty-function
-    constructor() { }
+    constructor() {}
+
+    ngOnInit(): void {
+        this.accentColor = this.project.engine === 'PostgreSQL' ? '#FF6532' : '#e79925';
+    }
 }

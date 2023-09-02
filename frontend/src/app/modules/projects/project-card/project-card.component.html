@@ -1,5 +1,29 @@
-<mat-card>
-    <mat-card-content>
+<div class="project-card">
+    <div class="side-panel" [style.background-color]="accentColor"></div>
+    <div class="engine-logo-container" [style.background-color]="accentColor">
+        <img
+            *ngIf="project.engine === 'PostgreSQL'; else sqlServerLogo"
+            src="../../../../assets/postgresql.svg"
+            alt="Image Description"
+            class="engine-logo" />
+
+        <ng-template #sqlServerLogo>
+            <img src="../../../../assets/sqlserver.png" alt="Image Description" class="engine-logo" />
+        </ng-template>
+    </div>
+    <div class="project-name">
         {{ project.name }}
-    </mat-card-content>
-</mat-card>
+    </div>
+    <div class="engine-tag-container">
+        <div class="engine-tag" [style.border-color]="accentColor" [style.color]="accentColor">
+            {{ project.engine }}
+        </div>
+    </div>
+    <div class="project-description-container">
+        <div class="project-description">
+            540 saved to favorites lorem ipsum are future lorem is the best thk saved to favorites lorem ipsum are
+            future lorem is the best thk the 40 saved to favorites lorem ipsum are future lorem is the best thk the
+        </div>
+    </div>
+    <div class="project-date">12-12-2024</div>
+</div>

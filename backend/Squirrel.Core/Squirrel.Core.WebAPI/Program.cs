@@ -16,6 +16,7 @@ builder.Configuration
 builder.AddSerilog();
 
 builder.Services.AddControllers();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddSquirrelCoreContext(builder.Configuration);
 builder.Services.AddAuthenticationSettings(builder.Configuration);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

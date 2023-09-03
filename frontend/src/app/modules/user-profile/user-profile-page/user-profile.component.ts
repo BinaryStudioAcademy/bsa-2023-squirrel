@@ -215,6 +215,14 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
         );
     }
 
+    public getUserInitials(): string {
+        if (this.user.firstName && this.user.lastName) {
+            return `${this.user.firstName.charAt(0)}${this.user.lastName.charAt(0)}`;
+        }
+
+        return this.user.userName.substr(0, 2);
+    }
+
     public goBack() {
         this.location.back();
     }

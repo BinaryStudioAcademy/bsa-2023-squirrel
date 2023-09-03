@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Security.Claims;
+using AutoMapper;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.BLL.Services.Abstract;
 using Squirrel.Core.Common.DTO.Auth;
@@ -67,6 +68,17 @@ public sealed class AuthService : BaseService, IAuthService
         var createdUser = await _userService.CreateUserAsync(userRegisterDto, isGoogleAuth: false);
         
         return await GenerateNewAccessTokenAsync(createdUser.Id, createdUser.Username, createdUser.Email);
+    }
+
+    public int GetUserIdFromToken(IEnumerable<Claim> claims)
+    {
+        var id = claims.FirstOrDefault(x => x.Type == "id")?.Value;
+        if (id is null)
+        {
+            throw new InvalidAccessTokenException();
+        }
+        
+        return int.Parse(id);
     }
 
     private async Task<RefreshedAccessTokenDto> GenerateNewAccessTokenAsync(int userId, string userName, string email)

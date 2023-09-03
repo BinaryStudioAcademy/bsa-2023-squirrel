@@ -7,4 +7,5 @@ export interface UserDto {
     avatarUrl: string;
     squirrelNotification: boolean;
     emailNotification: boolean;
+    isGoogleAuth: boolean;
 }

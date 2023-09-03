@@ -14,6 +14,6 @@
             [width]="300"
             (selectedValueChanged)="onBranchSelected($event)"></app-dropdown>
         <app-button text="+" height="30px" width="35px" padding="" variant="outline-secondary"></app-button>
-        <app-button text="Load latest changes" variant="outline-primary" class="align-right"></app-button>
+        <app-button (buttonOnClick)="openConfirmationModalOne()" text="Load latest changes" variant="outline-primary" class="align-right"></app-button>
     </div>
 </div>

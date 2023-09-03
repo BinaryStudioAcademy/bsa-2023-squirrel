@@ -14,7 +14,7 @@ import { ProjectDto } from '../../../models/projects/project-dto';
     styleUrls: ['./main-page.component.sass'],
 })
 export class MainComponent extends BaseComponent implements OnInit, OnDestroy {
-    private project: ProjectDto;
+    public project: ProjectDto;
 
     constructor(
         private broadcastHub: BroadcastHubService,

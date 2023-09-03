@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+
+import { ProjectDto } from '../../../../../models/projects/project-dto';
 
 @Component({
     selector: 'app-main-header',
@@ -6,7 +8,7 @@ import { Component } from '@angular/core';
     styleUrls: ['./main-header.component.sass'],
 })
 export class MainHeaderComponent {
-    public projectName: string = 'Project Name';
+    @Input() project: ProjectDto;
 
     public selectedDbName: string;
 

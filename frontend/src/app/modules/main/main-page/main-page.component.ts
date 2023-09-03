@@ -1,21 +1,29 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BaseComponent } from '@core/base/base.component';
 import { BroadcastHubService } from '@core/hubs/broadcast-hub.service';
-import { ConfirmationModalComponent } from '@shared/components/confirmation-modal/confirmation-modal.component';
+import { NotificationService } from '@core/services/notification.service';
+import { ProjectService } from '@core/services/project.service';
+import { takeUntil } from 'rxjs';
 
-import { ConfirmationModalInterface } from 'src/app/models/confirmation-modal/confirmation-modal';
+import { ProjectDto } from '../../../models/projects/project-dto';
 
 @Component({
     selector: 'app-home',
     templateUrl: './main-page.component.html',
     styleUrls: ['./main-page.component.sass'],
 })
-export class MainComponent implements OnInit, OnDestroy {
+export class MainComponent extends BaseComponent implements OnInit, OnDestroy {
+    private project: ProjectDto;
+
     constructor(
         private broadcastHub: BroadcastHubService,
-        public confirmationModal: MatDialog,
+        private route: ActivatedRoute,
+        private router: Router,
+        private projectService: ProjectService,
+        private notificationService: NotificationService,
     ) {
-        // do nothing.
+        super();
     }
 
     async ngOnInit() {
@@ -23,57 +31,36 @@ export class MainComponent implements OnInit, OnDestroy {
         this.broadcastHub.listenMessages((msg) => {
             console.info(`The next broadcast message was received: ${msg}`);
         });
+        this.loadProject();
     }
 
-    ngOnDestroy() {
+    override ngOnDestroy() {
         this.broadcastHub.stop();
+        this.unsubscribe$.next();
+        this.unsubscribe$.complete();
     }
 
-    /**
-     * Example method to demonstrate invoking the first Confirmation Modal
-     */
-    public confirmationModalMessage: string = '';
+    private loadProject() {
+        const projectId = this.route.snapshot.paramMap.get('id');
 
-    openConfirmationModalOne() {
-        const modal: ConfirmationModalInterface = {
-            modalHeader: 'Reusable Confirmation Modal',
-            modalDescription: 'I am first Confirmation Modal to show the example of usage',
-            cancelButtonLabel: 'Cancel',
-            confirmButtonLabel: 'Submit',
-            callbackMethod: () => {
-                this.performConfirmationModalOne();
-            },
-        };
+        console.log(projectId);
 
-        this.confirmationModal.open(ConfirmationModalComponent, {
-            data: modal,
-        });
-    }
+        if (!projectId) {
+            this.notificationService.error('wrong route');
 
-    /**
-     * Example method to demonstrate invoking the second Confirmation Modal
-     */
-    openConfirmationModalTwo() {
-        const modal: ConfirmationModalInterface = {
-            modalHeader: 'Created by reusable Confirmation Modal',
-            modalDescription: 'I am second Confirmation Modal',
-            cancelButtonLabel: 'Cancel',
-            confirmButtonLabel: 'Submit',
-            callbackMethod: () => {
-                this.performConfirmationModalTwo();
-            },
-        };
+            return;
+        }
 
-        this.confirmationModal.open(ConfirmationModalComponent, {
-            data: modal,
-        });
-    }
-
-    performConfirmationModalOne() {
-        this.confirmationModalMessage = 'The text submitted from the Confirmation Modal ONE';
-    }
-
-    performConfirmationModalTwo() {
-        this.confirmationModalMessage = 'The text submitted from the Confirmation Modal TWO';
+        this.projectService.getProject(projectId)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe({
+                next: project => {
+                    this.project = project;
+                },
+                error: err => {
+                    this.notificationService.error(err.message);
+                    this.router.navigateByUrl('projects');
+                },
+            });
     }
 }

@@ -6,6 +6,7 @@ import { AuthService } from '@core/services/auth.service';
 import { NotificationService } from '@core/services/notification.service';
 import { SpinnerService } from '@core/services/spinner.service';
 import { UserService } from '@core/services/user.service';
+import { faEye, faEyeSlash, faPen } from '@fortawesome/free-solid-svg-icons';
 import { ValidationsFn } from '@shared/helpers/validations-fn';
 import { takeUntil } from 'rxjs';
 
@@ -20,6 +21,22 @@ import { UserDto } from 'src/app/models/user/user-dto';
     styleUrls: ['./user-profile.component.sass'],
 })
 export class UserProfileComponent extends BaseComponent implements OnInit, OnDestroy {
+    public currentPasswordVisible = false;
+
+    public newPasswordVisible = false;
+
+    public repeatPasswordVisible = false;
+
+    public squirrelNotification: boolean;
+
+    public emailNotification: boolean;
+
+    public openEyeIcon = faEye;
+
+    public penIcon = faPen;
+
+    public closeEyeIcon = faEyeSlash;
+
     public user: UserDto;
 
     public userNamesForm: FormGroup = new FormGroup({});
@@ -70,12 +87,12 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
     private initializeForms() {
         this.initUserNamesForm();
         this.initChangePasswordForm();
-        this.initNotificationsForm();
+        this.initNotificationsValue();
     }
 
     private initUserNamesForm() {
         this.userNamesForm = this.fb.group({
-            username: [this.user.userName, [Validators.required, Validators.minLength(2), Validators.maxLength(25)]],
+            userName: [this.user.userName, [Validators.required, Validators.minLength(2), Validators.maxLength(25)]],
             firstName: [this.user.firstName, [Validators.required, Validators.minLength(2), Validators.maxLength(25)]],
             lastName: [this.user.lastName, [Validators.required, Validators.minLength(2), Validators.maxLength(25)]],
         });
@@ -111,18 +128,16 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
         });
     }
 
-    private initNotificationsForm() {
-        this.notificationsForm = this.fb.group({
-            squirrelNotification: [this.user.squirrelNotification],
-            emailNotification: [this.user.emailNotification],
-        });
+    private initNotificationsValue() {
+        this.squirrelNotification = this.user.squirrelNotification;
+        this.emailNotification = this.user.emailNotification;
     }
 
     public updateUserNames() {
         if (this.userNamesForm.valid) {
             this.spinner.show();
             const userData: UpdateUserNamesDto = {
-                userName: this.userNamesForm.value.username,
+                userName: this.userNamesForm.value.userName,
                 firstName: this.userNamesForm.value.firstName,
                 lastName: this.userNamesForm.value.lastName,
                 id: this.user.id,
@@ -176,32 +191,28 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
     }
 
     public updateUserNotifications() {
-        if (this.notificationsForm.valid) {
-            this.spinner.show();
-            const userData: UpdateUserNotificationsDto = {
-                squirrelNotification: this.notificationsForm.value.squirrelNotification,
-                emailNotification: this.notificationsForm.value.emailNotification,
-                id: this.user.id,
-            };
+        this.spinner.show();
+        const userData: UpdateUserNotificationsDto = {
+            squirrelNotification: this.squirrelNotification,
+            emailNotification: this.emailNotification,
+            id: this.user.id,
+        };
 
-            const userSubscription = this.userService.updateUserNotifications(userData);
+        const userSubscription = this.userService.updateUserNotifications(userData);
 
-            userSubscription.pipe(takeUntil(this.unsubscribe$)).subscribe(
-                (user) => {
-                    this.user = user;
-                    this.authService.setCurrentUser(user);
-                    this.spinner.hide();
-                    this.notificationService.info('Notifications successfully updated');
-                    this.initNotificationsForm();
-                },
-                (error) => {
-                    this.spinner.hide();
-                    this.notificationService.error(error.message);
-                },
-            );
-        } else {
-            this.notificationService.error('Update Notifications Form is invalid');
-        }
+        userSubscription.pipe(takeUntil(this.unsubscribe$)).subscribe(
+            (user) => {
+                this.user = user;
+                this.authService.setCurrentUser(user);
+                this.spinner.hide();
+                this.notificationService.info('Notifications successfully updated');
+                this.initNotificationsValue();
+            },
+            (error) => {
+                this.spinner.hide();
+                this.notificationService.error(error.message);
+            },
+        );
     }
 
     public getUserInitials(): string {

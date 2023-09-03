@@ -30,7 +30,7 @@ namespace Squirrel.Core.BLL.Services
 
             if (existingProject is null)
             {
-                throw new EntityNotFoundException();
+                throw new EntityNotFoundException(nameof(Project));
             }
             
             _mapper.Map(projectDto, existingProject);
@@ -44,7 +44,7 @@ namespace Squirrel.Core.BLL.Services
             var project = await _context.Projects.FindAsync(projectId);
             if (project is null)
             {
-                throw new EntityNotFoundException();
+                throw new EntityNotFoundException(nameof(Project));
             }
     
             _context.Projects.Remove(project);
@@ -56,7 +56,7 @@ namespace Squirrel.Core.BLL.Services
             var project = await _context.Projects.FindAsync(projectId);
             if (project is null)
             {
-                throw new EntityNotFoundException();
+                throw new EntityNotFoundException(nameof(Project));
             }            
             
             return _mapper.Map<ProjectDto>(project);;

@@ -12,14 +12,17 @@
         <h4 class="section-header">Edit profile</h4>
         <div class="form-inputs">
             <form class="form" [formGroup]="userNamesForm" (ngSubmit)="updateUserNames()">
-                <div class="upload">
-                    <img
-                        class="avatar-img"
-                        [src]="user.avatarUrl ? user.avatarUrl : '/assets/account_circle_icon.png'"
-                        alt="avatar-photo" />
-                    <div class="edit-icon">
-                        <input type="file" />
-                        <fa-icon [icon]="penIcon" style="color: white"></fa-icon>
+                <div class="form-group form-group-avatar">
+                    <label class="label-input" for="userAvatar">Avatar</label>
+                    <div class="upload">
+                        <img
+                            class="avatar-img"
+                            [src]="user.avatarUrl ? user.avatarUrl : '/assets/account_circle_icon.png'"
+                            alt="avatar-photo" />
+                        <div class="edit-icon">
+                            <input type="file" id="userAvatar" />
+                            <fa-icon [icon]="penIcon" style="color: white"></fa-icon>
+                        </div>
                     </div>
                 </div>
 
@@ -50,12 +53,15 @@
                         formControlName="lastName"
                         placeholder="Enter last name" />
                 </div>
-                <app-button variant="filled" text="Save" type="submit"></app-button>
+                <div class="form-group">
+                    <div class="label-input"></div>
+                    <app-button variant="filled" text="Save" type="submit"></app-button>
+                </div>
             </form>
         </div>
     </section>
 
-    <section class="section">
+    <section *ngIf="!user.isGoogleAuth" class="section">
         <h4 class="section-header">Change password</h4>
         <div class="form-inputs">
             <form class="form" [formGroup]="passwordForm" (ngSubmit)="updateUserPassword()">
@@ -95,8 +101,10 @@
                         <fa-icon class="eyeIcon" [icon]="repeatPasswordVisible ? openEyeIcon : closeEyeIcon"></fa-icon>
                     </span>
                 </div>
-
-                <app-button variant="filled" text="Save" type="submit"></app-button>
+                <div class="form-group">
+                    <div class="label-input"></div>
+                    <app-button variant="filled" text="Save" type="submit"></app-button>
+                </div>
             </form>
         </div>
     </section>
@@ -106,23 +114,30 @@
         <div class="notifications-block">
             <p class="smaller-font">Notifications for all repositories, teams, or conversations you're watching</p>
             <div class="notify">
-                <span class="notify-label">Notify me:</span>
-                <div class="checkbox-group">
-                    <app-checkbox
-                        [checked]="squirrelNotification"
-                        (change)="squirrelNotification = !squirrelNotification"
-                        label="On Squirrel"></app-checkbox>
-                    <app-checkbox
-                        [checked]="emailNotification"
-                        (change)="emailNotification = !emailNotification"
-                        label="Email"></app-checkbox>
+                <div class="form-group form-group-left">
+                    <div class="label-input">
+                        <span class="notify-label">Notify me:</span>
+                    </div>
+                    <div class="checkbox-group">
+                        <app-checkbox
+                            [checked]="squirrelNotification"
+                            (change)="squirrelNotification = !squirrelNotification"
+                            label="On Squirrel"></app-checkbox>
+                        <app-checkbox
+                            [checked]="emailNotification"
+                            (change)="emailNotification = !emailNotification"
+                            label="Email"></app-checkbox>
+                    </div>
                 </div>
             </div>
-            <app-button
-                variant="filled"
-                text="Save"
-                type="submit"
-                (buttonOnClick)="updateUserNotifications()"></app-button>
+            <div class="form-group">
+                <div class="label-input"></div>
+                <app-button
+                    variant="filled"
+                    text="Save"
+                    type="submit"
+                    (buttonOnClick)="updateUserNotifications()"></app-button>
+            </div>
         </div>
     </section>
 </div>

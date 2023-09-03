@@ -104,8 +104,14 @@
             <div class="notify">
                 <span class="notify-label">Notify me:</span>
                 <div class="checkbox-group">
-                    <app-checkbox label="On Squirrel"></app-checkbox>
-                    <app-checkbox label="Email"></app-checkbox>
+                    <app-checkbox
+                        [checked]="squirrelNotification"
+                        (change)="squirrelNotification = !squirrelNotification"
+                        label="On Squirrel"></app-checkbox>
+                    <app-checkbox
+                        [checked]="emailNotification"
+                        (change)="emailNotification = !emailNotification"
+                        label="Email"></app-checkbox>
                 </div>
             </div>
             <app-button

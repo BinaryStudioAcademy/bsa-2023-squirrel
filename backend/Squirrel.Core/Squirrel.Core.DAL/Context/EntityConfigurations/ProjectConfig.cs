@@ -10,9 +10,22 @@ public sealed class ProjectConfig : IEntityTypeConfiguration<Project>
     public void Configure(EntityTypeBuilder<Project> builder)
     {
         builder.Property(x => x.Name).IsRequired().HasMaxLength(50);
+        builder.Property(x => x.Description).HasMaxLength(1000);
         builder.Property(x => x.DbEngine).IsRequired();
-        builder.Property(x => x.DefaultBranchId).IsRequired();
-        
+        builder.Property(x => x.CreatedBy).IsRequired();
+        builder.Property(x => x.CreatedAt)
+               .IsRequired()
+               .HasDefaultValueSql("getdate()")
+               .ValueGeneratedOnAdd();
+        builder.Property(x => x.UpdatedAt)
+               .IsRequired()
+               .HasDefaultValueSql("getdate()")
+               .ValueGeneratedOnAddOrUpdate();
+
+        builder.HasOne(x => x.DefaultBranch)
+               .WithOne()
+               .HasForeignKey<Project>(x => x.DefaultBranchId);
+
         builder.HasMany(x => x.Branches)
                .WithOne(x => x.Project)
                .HasForeignKey(x => x.ProjectId)

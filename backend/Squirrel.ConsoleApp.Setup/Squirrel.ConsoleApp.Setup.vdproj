@@ -76,6 +76,16 @@
         {
             "LaunchCondition"
             {
+                "{A06ECF26-33A3-4562-8140-9B0E340D4F24}:_FF5AA2B93B5342FA93C0A48803F73AB7"
+                {
+                "Name" = "8:.NET Core"
+                "Message" = "8:[VSDNETCOREMSG]"
+                "AllowLaterVersions" = "11:FALSE"
+                "InstallUrl" = "8:https://dotnet.microsoft.com/download/dotnet-core/[NetCoreVerMajorDotMinor]"
+                "IsNETCore" = "11:TRUE"
+                "Architecture" = "2:0"
+                "Runtime" = "2:0"
+                }
             }
         }
         "File"
@@ -155,9 +165,9 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:Squirrel.ConsoleApp.Setup"
+        "ProductName" = "8:Squirrel"
         "ProductCode" = "8:{E4A8B011-D55A-4B63-AEE1-EACB547C0360}"
-        "PackageCode" = "8:{363B444D-26A4-4651-AB16-0ED44D35AD09}"
+        "PackageCode" = "8:{6E84FCC1-0072-4CDC-8DEF-69E2163B60DA}"
         "UpgradeCode" = "8:{CF6AE990-026C-45F4-A93A-5E897D5E0495}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -168,7 +178,7 @@
         "Manufacturer" = "8:BinaryStudioAcademy"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
-        "Title" = "8:Squirrel.ConsoleApp.Setup"
+        "Title" = "8:Squirrel"
         "Subject" = "8:"
         "ARPCONTACT" = "8:BinaryStudioAcademy"
         "Keywords" = "8:"

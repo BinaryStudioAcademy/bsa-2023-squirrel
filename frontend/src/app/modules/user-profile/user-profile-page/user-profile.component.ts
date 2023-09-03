@@ -8,7 +8,7 @@ import { SpinnerService } from '@core/services/spinner.service';
 import { UserService } from '@core/services/user.service';
 import { faEye, faEyeSlash, faPen } from '@fortawesome/free-solid-svg-icons';
 import { ValidationsFn } from '@shared/helpers/validations-fn';
-import { takeUntil } from 'rxjs';
+import { finalize, takeUntil } from 'rxjs';
 
 import { UpdateUserNamesDto } from 'src/app/models/user/update-userNames.dto';
 import { UpdateUserNotificationsDto } from 'src/app/models/user/update-userNotifications.dto';
@@ -57,27 +57,35 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
     }
 
     public ngOnInit() {
-        const loggedUserId = this.authService.getCurrentUser()?.id as number;
+        const loggedUserId = this.authService.getCurrentUser()?.id;
 
-        if (loggedUserId) {
-            this.spinner.show();
-            this.userService
-                .getUserById(loggedUserId)
-                .pipe(takeUntil(this.unsubscribe$))
-                .subscribe(
-                    (userFromDb) => {
-                        this.user = userFromDb;
-                        this.initializeForms();
-                        this.spinner.hide();
-                    },
-                    (error) => {
-                        this.spinner.hide();
-                        this.notificationService.error(`Failed to fetch user by ID: ${error.message}`);
-                    },
-                );
-        } else {
+        if (!loggedUserId) {
             this.notificationService.error('Current User is null');
+
+            return;
         }
+
+        this.fetchUserById(loggedUserId);
+    }
+
+    private fetchUserById(userId: number) {
+        this.spinner.show();
+
+        this.userService
+            .getUserById(userId)
+            .pipe(
+                takeUntil(this.unsubscribe$),
+                finalize(() => this.spinner.hide()),
+            )
+            .subscribe(
+                (userFromDb) => {
+                    this.user = userFromDb;
+                    this.initializeForms();
+                },
+                (error) => {
+                    this.notificationService.error(`Failed to fetch user by ID: ${error.message}`);
+                },
+            );
     }
 
     public override ngOnDestroy() {
@@ -134,60 +142,66 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
     }
 
     public updateUserNames() {
-        if (this.userNamesForm.valid) {
-            this.spinner.show();
-            const userData: UpdateUserNamesDto = {
-                userName: this.userNamesForm.value.userName,
-                firstName: this.userNamesForm.value.firstName,
-                lastName: this.userNamesForm.value.lastName,
-                id: this.user.id,
-            };
-
-            const userSubscription = this.userService.updateUserNames(userData);
-
-            userSubscription.pipe(takeUntil(this.unsubscribe$)).subscribe(
-                (user) => {
-                    this.user = user;
-                    this.authService.setCurrentUser(user);
-                    this.spinner.hide();
-                    this.notificationService.info('Names successfully updated');
-                    this.initUserNamesForm();
-                },
-                (error) => {
-                    this.spinner.hide();
-                    this.notificationService.error(error.message);
-                },
-            );
-        } else {
+        if (!this.userNamesForm.valid) {
             this.notificationService.error('Update Names Form is invalid');
+
+            return;
         }
+
+        this.spinner.show();
+        const userData: UpdateUserNamesDto = {
+            userName: this.userNamesForm.value.userName,
+            firstName: this.userNamesForm.value.firstName,
+            lastName: this.userNamesForm.value.lastName,
+            id: this.user.id,
+        };
+
+        const userSubscription = this.userService.updateUserNames(userData);
+
+        userSubscription.pipe(takeUntil(this.unsubscribe$)).subscribe(
+            (user) => {
+                this.user = user;
+                this.authService.setCurrentUser(user);
+                this.spinner.hide();
+                this.notificationService.info('Names successfully updated');
+                this.initUserNamesForm();
+            },
+            (error) => {
+                this.spinner.hide();
+                this.notificationService.error(error.message);
+            },
+        );
     }
 
     public updateUserPassword() {
-        if (this.passwordForm.valid && this.passwordForm.value.newPassword === this.passwordForm.value.repeatPassword) {
-            this.spinner.show();
-            const userData: UpdateUserPasswordDto = {
-                currentPassword: this.passwordForm.value.currentPassword,
-                newPassword: this.passwordForm.value.newPassword,
-                id: this.user.id,
-            };
+        if (
+            !(this.passwordForm.valid && this.passwordForm.value.newPassword === this.passwordForm.value.repeatPassword)
+        ) {
+            this.notificationService.error('Update Names Form is invalid');
 
-            const userSubscription = this.userService.updateUserPassword(userData);
-
-            userSubscription.pipe(takeUntil(this.unsubscribe$)).subscribe(
-                () => {
-                    this.spinner.hide();
-                    this.notificationService.info('Password successfully updated');
-                    this.initChangePasswordForm();
-                },
-                (error) => {
-                    this.spinner.hide();
-                    this.notificationService.error(error.message);
-                },
-            );
-        } else {
-            this.notificationService.error('Update Password Form is invalid');
+            return;
         }
+
+        this.spinner.show();
+        const userData: UpdateUserPasswordDto = {
+            currentPassword: this.passwordForm.value.currentPassword,
+            newPassword: this.passwordForm.value.newPassword,
+            id: this.user.id,
+        };
+
+        const userSubscription = this.userService.updateUserPassword(userData);
+
+        userSubscription.pipe(takeUntil(this.unsubscribe$)).subscribe(
+            () => {
+                this.spinner.hide();
+                this.notificationService.info('Password successfully updated');
+                this.initChangePasswordForm();
+            },
+            (error) => {
+                this.spinner.hide();
+                this.notificationService.error(error.message);
+            },
+        );
     }
 
     public updateUserNotifications() {
@@ -213,14 +227,6 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
                 this.notificationService.error(error.message);
             },
         );
-    }
-
-    public getUserInitials(): string {
-        if (this.user.firstName && this.user.lastName) {
-            return `${this.user.firstName.charAt(0)}${this.user.lastName.charAt(0)}`;
-        }
-
-        return this.user.userName.substr(0, 2);
     }
 
     public goBack() {

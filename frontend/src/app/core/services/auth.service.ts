@@ -16,8 +16,6 @@ import { SpinnerService } from './spinner.service';
 export class AuthService {
     private readonly authRoutePrefix = '/api/auth';
 
-    private readonly tokenRoutePrefix = '/api/token';
-
     private readonly accessTokenKey = 'accessToken';
 
     private readonly refreshTokenKey = 'refreshToken';
@@ -71,10 +69,6 @@ export class AuthService {
                 this.saveTokens(tokens);
             }),
         );
-    }
-
-    public getUserIdFromToken(): Observable<number> {
-        return this.httpService.getRequest<number>(`${this.tokenRoutePrefix}/id`);
     }
 
     public tokenExist() {

@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Observable, switchMap } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { ProjectDto } from 'src/app/models/projects/project-dto';
 
-import { AuthService } from './auth.service';
 import { HttpInternalService } from './http-internal.service';
 
 @Injectable({
@@ -13,7 +12,7 @@ export class ProjectService {
     private readonly projectsApiUrl = '/api/project';
 
     // eslint-disable-next-line no-empty-function
-    constructor(private httpService: HttpInternalService, private authService: AuthService) {}
+    constructor(private httpService: HttpInternalService) {}
 
     public addProject(project: ProjectDto): Observable<ProjectDto> {
         return this.httpService.postRequest<ProjectDto>(this.projectsApiUrl, project);
@@ -38,10 +37,6 @@ export class ProjectService {
     }
 
     public getAllUserProjects(): Observable<ProjectDto[]> {
-        return this.authService
-            .getUserIdFromToken()
-            .pipe(
-                switchMap((id) => this.httpService.getRequest<ProjectDto[]>(`${this.projectsApiUrl}/createdby/${id}`)),
-            );
+        return this.httpService.getRequest<ProjectDto[]>(`${this.projectsApiUrl}/all`);
     }
 }

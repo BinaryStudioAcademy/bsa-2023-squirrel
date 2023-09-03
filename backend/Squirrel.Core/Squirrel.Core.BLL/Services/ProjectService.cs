@@ -11,8 +11,11 @@ namespace Squirrel.Core.BLL.Services
 {
     public sealed class ProjectService : BaseService, IProjectService
     {
-        public ProjectService(SquirrelCoreContext context, IMapper mapper) : base(context, mapper)
+        private readonly ICurrentUserIdService _currentUserIdService;
+        
+        public ProjectService(SquirrelCoreContext context, IMapper mapper, ICurrentUserIdService currentUserIdService) : base(context, mapper)
         {
+            _currentUserIdService = currentUserIdService;
         }
 
         public async Task<ProjectDto> AddProjectAsync(ProjectDto projectDto)
@@ -62,10 +65,11 @@ namespace Squirrel.Core.BLL.Services
             return _mapper.Map<ProjectDto>(project)!;
         }
 
-        public async Task<List<ProjectDto>> GetAllUserProjectsAsync(int userId)
+        public async Task<List<ProjectDto>> GetAllUserProjectsAsync()
         {
+            var currentUserId = _currentUserIdService.CurrentUserId;
             var userProjects = await _context.Projects
-                                             .Where(x => x.CreatedBy == userId)
+                                             .Where(x => x.CreatedBy == currentUserId)
                                              .ToListAsync();
 
             return _mapper.Map<List<ProjectDto>>(userProjects)!;

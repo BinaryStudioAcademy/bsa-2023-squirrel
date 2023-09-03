@@ -70,17 +70,6 @@ public sealed class AuthService : BaseService, IAuthService
         return await GenerateNewAccessTokenAsync(createdUser.Id, createdUser.Username, createdUser.Email);
     }
 
-    public int GetUserIdFromToken(IEnumerable<Claim> claims)
-    {
-        var id = claims.FirstOrDefault(x => x.Type == "id")?.Value;
-        if (id is null)
-        {
-            throw new InvalidAccessTokenException();
-        }
-        
-        return int.Parse(id);
-    }
-
     private async Task<RefreshedAccessTokenDto> GenerateNewAccessTokenAsync(int userId, string userName, string email)
     {
         var refreshToken = _jwtFactory.GenerateRefreshToken();

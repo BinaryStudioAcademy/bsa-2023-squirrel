@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.Common.DTO.Project;
 
@@ -6,6 +7,7 @@ namespace Squirrel.Core.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class ProjectController : ControllerBase
     {
         private readonly IProjectService _projectService;
@@ -40,10 +42,10 @@ namespace Squirrel.Core.WebAPI.Controllers
             return Ok(await _projectService.GetProjectAsync(projectId));
         }
 
-        [HttpGet("createdby/{userId}")]
-        public async Task<ActionResult<List<ProjectDto>>> GetAllUserProjects(int userId)
+        [HttpGet("all")]
+        public async Task<ActionResult<List<ProjectDto>>> GetAllUserProjects()
         {
-            return Ok(await _projectService.GetAllUserProjectsAsync(userId));
+            return Ok(await _projectService.GetAllUserProjectsAsync());
         }
     }
 }

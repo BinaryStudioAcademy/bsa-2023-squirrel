@@ -26,7 +26,7 @@ public sealed class UserService : BaseService, IUserService
     }
 
     public async Task<User?> GetUserByEmailAsync(string email)
-    => await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        => await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
 
     public async Task<User?> GetUserByUsernameAsync(string username)
         => await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
@@ -112,10 +112,8 @@ public sealed class UserService : BaseService, IUserService
         {
             throw new NotFoundException(nameof(User), id);
         }
-        else
-        {
-            return userEntity;
-        }
+
+        return userEntity;
     }
 
     private string GenerateRandomUsername()

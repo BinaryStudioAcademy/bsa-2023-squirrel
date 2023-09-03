@@ -40,8 +40,8 @@ namespace Squirrel.Core.WebAPI.Controllers
             return Ok(await _projectService.GetProjectAsync(projectId));
         }
 
-        [HttpGet("{userId}")]
-        public async Task<ActionResult<List<ProjectDto>>> GetAllProjects(int userId)
+        [HttpGet("createdby/{userId}")]
+        public async Task<ActionResult<List<ProjectDto>>> GetAllUserProjects(int userId)
         {
             return Ok(await _projectService.GetAllUserProjectsAsync(userId));
         }

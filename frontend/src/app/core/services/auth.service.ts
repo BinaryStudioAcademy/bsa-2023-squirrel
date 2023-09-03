@@ -6,9 +6,8 @@ import { Observable, tap } from 'rxjs';
 import { AccessTokenDto } from 'src/app/models/auth/access-token-dto';
 import { GoogleAuthDto } from 'src/app/models/auth/google-auth-dto';
 import { UserAuthDto } from 'src/app/models/auth/user-auth-dto';
+import { UserLoginDto } from 'src/app/models/user/user-login-dto';
 import { UserRegisterDto } from 'src/app/models/user/user-register-dto';
-
-import { UserLoginDto } from '../../models/user/user-login-dto';
 
 import { HttpInternalService } from './http-internal.service';
 import { SpinnerService } from './spinner.service';
@@ -16,6 +15,8 @@ import { SpinnerService } from './spinner.service';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
     private readonly authRoutePrefix = '/api/auth';
+
+    private readonly tokenRoutePrefix = '/api/token';
 
     private readonly accessTokenKey = 'accessToken';
 
@@ -72,12 +73,16 @@ export class AuthService {
         );
     }
 
+    public getUserIdFromToken(): Observable<number> {
+        return this.httpService.getRequest<number>(`${this.tokenRoutePrefix}/id`);
+    }
+
     public tokenExist() {
-        return localStorage.getItem('accessToken') && localStorage.getItem('refreshToken');
+        return localStorage.getItem(this.accessTokenKey) && localStorage.getItem(this.refreshTokenKey);
     }
 
     public get accessToken(): string | null {
-        const localJwt = localStorage.getItem('accessToken');
+        const localJwt = localStorage.getItem(this.accessTokenKey);
 
         if (!localJwt) {
             return null;

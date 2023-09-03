@@ -7,7 +7,7 @@ import { AuthService } from '@core/services/auth.service';
 })
 export class AuthGuard implements CanActivate, CanActivateChild {
     // eslint-disable-next-line no-empty-function
-    constructor(private authService: AuthService, private router: Router) { }
+    constructor(private authService: AuthService, private router: Router) {}
 
     public canActivate(route: ActivatedRouteSnapshot) {
         return this.checkForActivation(route);
@@ -24,7 +24,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         if ((requiresToken && token) || (!requiresToken && !token)) {
             return true;
         }
-        this.router.navigateByUrl(requiresToken ? '/login' : '/main');
+        this.router.navigateByUrl(requiresToken ? '/login' : '/projects');
 
         return false;
     }

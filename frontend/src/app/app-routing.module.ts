@@ -12,6 +12,8 @@ const routes: Routes = [
     },
     {
         path: 'projects',
+        canActivate: [AuthGuard],
+        data: { requiresToken: true },
         loadChildren: () => import('./modules/projects/projects.module').then((m) => m.ProjectsModule),
     },
     {

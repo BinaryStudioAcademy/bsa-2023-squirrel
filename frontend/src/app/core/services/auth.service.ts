@@ -51,7 +51,7 @@ export class AuthService {
                     this.setCurrentUser(data.user);
                     this.ngZone.run(() => {
                         this.spinner.hide();
-                        this.router.navigateByUrl('/main');
+                        this.router.navigateByUrl('/projects');
                     });
                 },
                 error: () => {

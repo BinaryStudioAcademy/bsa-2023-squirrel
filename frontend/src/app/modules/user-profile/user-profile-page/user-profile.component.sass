@@ -1,14 +1,12 @@
 @import "/src/styles/color"
+@import "/src/styles/weights"
 
 .profile-container
   width: 100%
   margin: 50px auto
   padding: 30px
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1)
-  
-  .section-container 
-    max-width: 600px
-    margin: 50px auto
+  font-weight: $semi-bold-weight
 
   .header
     display: flex
@@ -17,42 +15,114 @@
     border-bottom: 1px solid #e0e0e0
     padding-bottom: 20px
 
-    .initials
-      font-size: 24px
-      font-weight: bold
-      background-color: #f5f5f5
-      padding: 10px
-      border-radius: 50%
-      
+    .profile-header
+        font-size: 28px
+        font-weight: 600
+
   .section
     margin-top: 20px
     background-color: $project-background-color
+    padding-bottom: 20px
 
+    .section-header
+      font-weight: 600
+      font-size: 18px
+      padding: 25px 0 0 30px
 
-    h2
-      margin-bottom: 20px
-      
-    .form-group
-      margin-bottom: 20px
+//avatar
+.upload
+    position: relative
+    margin-bottom: 30px
 
-      label
-        display: block
+    .avatar-img
+        width: 200px
+        height: 200px
+        border-radius: 50%
+        background-color: $text-light
+
+    .edit-icon
+        display: flex
+        flex-direction: column
+        align-items: center
+        justify-content: center
+        position: absolute
+        transform: translateX(-50%) translateY(-40%)
+        bottom: 0
+        right: 0
+        width: 36px
+        height: 36px
+        border-radius: 10px
+        overflow: hidden
+        text-align: center
+        background: $link-color
+
+    .edit-icon input[type='file']
+        position: absolute
+        transform: scale(2)
+        opacity: 0
+
+.form-inputs
+    display: flex
+    align-items: center
+    justify-content: center
+
+    .form
+        display: flex
+        flex-direction: column
+        align-items: center
+
+        .form-group
+            position: relative
+            display: flex
+            align-items: center
+            margin-bottom: 20px
+            font-size: 14px
+            font-weight: 600
+
+            .label-input
+                min-width: 170px
+                margin-right: 15px
+
+            .input-text
+                flex-grow: 1
+                width: 400px
+                min-width: 250px
+                font-size: 14px
+                border: none
+                padding: 15px 15px
+                background-color: $dark-grey
+                border-radius: 10px
+
+.save-btn
+    align-self: center
+    min-width: 90px
+    font-size: 14px
+    font-weight: 600
+    margin-bottom: 20px
+
+.eyeIcon
+    position: absolute
+    cursor: pointer
+    top: 15px
+    right: 15px
+    color: $text-light
+
+//notifications block
+
+.notifications-block
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
+    text-align: center
+    height: 100%
+
+    .notify
+        display: flex
+        justify-content: space-evenly
+        align-items: flex-start
         margin-bottom: 10px
-        
-      input[type="text"], input[type="password"]
-        width: 100%
-        padding: 10px
-        border: 1px solid #e0e0e0
-        border-radius: 5px
+        width: 30%
 
-    button
-      padding: 10px 15px
-      background-color: #007BFF
-      color: white
-      border: none
-      border-radius: 5px
-      cursor: pointer
-      transition: background-color 0.3s
-
-      &:hover
-        background-color: darken(#007BFF, 10%)
+.smaller-font
+    font-size: 13px

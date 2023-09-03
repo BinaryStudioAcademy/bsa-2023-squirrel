@@ -14,7 +14,6 @@ import { BarrierComponent } from './components/barrier/barrier.component';
 import { ButtonComponent } from './components/button/button.component';
 import { CheckboxComponent } from './components/checkbox/checkbox.component';
 import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
-import { DropdownComponent } from './components/dropdown/dropdown.component';
 import { DropdownSelectComponent } from './components/dropdown-select/dropdown-select.component';
 import { InputComponent } from './components/input/input.component';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
@@ -46,7 +45,6 @@ import { TreeComponent } from './components/tree/tree.component';
         AvatarComponent,
         DropdownSelectComponent,
         ConfirmationModalComponent,
-        DropdownComponent,
         TreeComponent,
         CheckboxComponent,
     ],
@@ -68,7 +66,6 @@ import { TreeComponent } from './components/tree/tree.component';
         ProfileMenuComponent,
         AvatarComponent,
         ConfirmationModalComponent,
-        DropdownComponent,
         TreeComponent,
         CheckboxComponent,
     ],

@@ -1,4 +1,4 @@
 export enum DbEngine {
     SqlServer = 'SqlServer',
-    PostgreSQL = 'PostgreSQL'
+    PostgreSql = 'PostgreSql',
 }

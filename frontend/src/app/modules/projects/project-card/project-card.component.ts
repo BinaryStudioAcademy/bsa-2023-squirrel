@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
+import { DbEngine } from 'src/app/models/projects/db-engine';
+
 import { ProjectDto } from '../../../models/projects/project-dto';
 
 @Component({
@@ -17,10 +19,15 @@ export class ProjectCardComponent implements OnInit {
 
     public sampleDate: string = '12-12-2024';
 
+    private sqlServerAccentColor: string = '#e79925';
+
+    private postgresSqlAccentColor: string = '#FF6532';
+
     // eslint-disable-next-line @typescript-eslint/no-useless-constructor,no-empty-function,@typescript-eslint/no-empty-function
     constructor() {}
 
     ngOnInit(): void {
-        this.accentColor = this.project.engine === 'PostgreSQL' ? '#FF6532' : '#e79925';
+        this.accentColor =
+            this.project.engine === DbEngine.PostgreSQL ? this.postgresSqlAccentColor : this.sqlServerAccentColor;
     }
 }

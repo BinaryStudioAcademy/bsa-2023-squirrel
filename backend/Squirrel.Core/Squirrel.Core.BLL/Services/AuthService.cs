@@ -49,12 +49,7 @@ public sealed class AuthService : BaseService, IAuthService
     {
         var userEntity = await _userService.GetUserByEmailAsync(userLoginDto.Email);
 
-        if (userEntity == null)
-        {
-            throw new InvalidEmailOrPasswordException();
-        }
-
-        if (!SecurityUtils.ValidatePassword(userLoginDto.Password, userEntity.PasswordHash, userEntity.Salt))
+        if (userEntity is null || !SecurityUtils.ValidatePassword(userLoginDto.Password, userEntity.PasswordHash, userEntity.Salt))
         {
             throw new InvalidEmailOrPasswordException();
         }

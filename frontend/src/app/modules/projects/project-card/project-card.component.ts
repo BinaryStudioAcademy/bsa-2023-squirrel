@@ -36,7 +36,7 @@ export class ProjectCardComponent implements OnInit {
     }
 
     initializeProjectCard(): void {
-        if (this.project.engine === DbEngine.PostgreSQL) {
+        if (this.project.engine === DbEngine.PostgreSql) {
             this.accentColor = this.postgresSqlAccentColor;
             this.engineLogoImage = this.postgresSqlLogo;
         } else {

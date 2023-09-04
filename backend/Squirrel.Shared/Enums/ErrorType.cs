@@ -6,5 +6,6 @@ public enum ErrorType
     InvalidUsername,
     InvalidEmailOrPassword,
     NotFound,
-    Internal
+    Internal,
+    InvalidToken
 }

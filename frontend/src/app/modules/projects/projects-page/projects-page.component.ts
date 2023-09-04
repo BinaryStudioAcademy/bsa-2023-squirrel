@@ -30,17 +30,18 @@ export class ProjectsPageComponent implements OnInit {
         this.loadProjects();
     }
 
-    loadProjects(): void {
-        this.projectService.getAllProjects().pipe(
-            takeUntil(this.unsubscribe$),
-        ).subscribe(
-            (projects: ProjectDto[]) => {
-                this.projects = projects;
-            },
-            () => {
-                this.notificationService.error('Failed to load projects');
-            },
-        );
+    public loadProjects(): void {
+        this.projectService
+            .getAllUserProjects()
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe(
+                (projects: ProjectDto[]) => {
+                    this.projects = projects;
+                },
+                () => {
+                    this.notificationService.error('Failed to load projects');
+                },
+            );
     }
 
     openCreateModal(): void {

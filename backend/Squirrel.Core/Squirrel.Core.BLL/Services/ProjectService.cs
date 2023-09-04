@@ -11,16 +11,22 @@ namespace Squirrel.Core.BLL.Services
 {
     public class ProjectService : BaseService, IProjectService
     {
-        public ProjectService(SquirrelCoreContext context, IMapper mapper): base(context, mapper){ }
+        private readonly IUserIdGetter _userIdGetter;
+
+        public ProjectService(SquirrelCoreContext context, IMapper mapper, IUserIdGetter userIdGetter) : base(context,
+            mapper)
+        {
+            _userIdGetter = userIdGetter;
+        }
 
         public async Task<ProjectDto> AddProjectAsync(ProjectDto projectDto)
         {
             var projectEntity = _mapper.Map<Project>(projectDto);
-            
+
             await _context.Projects.AddAsync(projectEntity);
-            
+
             await _context.SaveChangesAsync();
-            
+
             return _mapper.Map<ProjectDto>(projectEntity);
         }
 
@@ -32,9 +38,9 @@ namespace Squirrel.Core.BLL.Services
             {
                 throw new EntityNotFoundException(nameof(Project));
             }
-            
+
             _mapper.Map(projectDto, existingProject);
-            
+
             await _context.SaveChangesAsync();
             return _mapper.Map<ProjectDto>(existingProject);
         }
@@ -46,7 +52,7 @@ namespace Squirrel.Core.BLL.Services
             {
                 throw new EntityNotFoundException(nameof(Project));
             }
-    
+
             _context.Projects.Remove(project);
             await _context.SaveChangesAsync();
         }
@@ -57,16 +63,20 @@ namespace Squirrel.Core.BLL.Services
             if (project is null)
             {
                 throw new EntityNotFoundException(nameof(Project));
-            }            
-            
-            return _mapper.Map<ProjectDto>(project);;
+            }
+
+            return _mapper.Map<ProjectDto>(project);
+            ;
         }
-
-        public async Task<List<ProjectDto>> GetAllProjectsAsync()
+        
+        public async Task<List<ProjectDto>> GetAllUserProjectsAsync()
         {
-            var projects = await _context.Projects.ToListAsync();
+            var currentUserId = _userIdGetter.GetCurrentUserId();
+            var userProjects = await _context.Projects
+                .Where(x => x.CreatedBy == currentUserId)
+                .ToListAsync();
 
-            return _mapper.Map<List<ProjectDto>>(projects);
+            return _mapper.Map<List<ProjectDto>>(userProjects)!;
         }
     }
 }

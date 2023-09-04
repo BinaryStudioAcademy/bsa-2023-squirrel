@@ -1,26 +1,30 @@
-<div class="user-info">
-    <app-avatar class="avatar" [userName]="'John Doe'" size="36"></app-avatar>
+<div class="user-info" *ngIf="currentUser">
+    <app-avatar
+        class="avatar"
+        [userName]="currentUser.firstName + ' ' + currentUser.lastName"
+        [imgLink]="currentUser.avatarUrl ? currentUser.avatarUrl : ''"
+        size="36"></app-avatar>
     <div class="name-email">
-        <p class="user-name">John Doe</p>
-        <p class="user-email">user@example.com</p>
+        <p class="user-name">{{ currentUser.firstName }} {{ currentUser.lastName }}</p>
+        <p class="user-email">{{ currentUser.email }}</p>
     </div>
 </div>
-<hr class="divider">
+<hr class="divider" />
 <button mat-menu-item class="menu-item">
     <mat-icon class="icon" aria-hidden="true">
-        <img src="assets/profile_icon.svg" alt="Edit Profile Icon">
+        <img src="assets/profile_icon.svg" alt="Edit Profile Icon" />
     </mat-icon>
     Edit Profile
 </button>
 <button mat-menu-item class="menu-item">
     <mat-icon class="icon" aria-hidden="true">
-        <img src="assets/settings_icon.svg" alt="Settings Icon">
+        <img src="assets/settings_icon.svg" alt="Settings Icon" />
     </mat-icon>
     Settings
 </button>
-<button mat-menu-item class="menu-item logout">
-    <mat-icon class="icon logout-icon" aria-hidden="true" style="color: #6f42c1;">
-        <img src="assets/logout_icon.svg" alt="Logout Icon">
+<button mat-menu-item class="menu-item logout" (click)="signOut()">
+    <mat-icon class="icon logout-icon" aria-hidden="true" style="color: #6f42c1">
+        <img src="assets/logout_icon.svg" alt="Logout Icon" />
     </mat-icon>
     Log out
 </button>

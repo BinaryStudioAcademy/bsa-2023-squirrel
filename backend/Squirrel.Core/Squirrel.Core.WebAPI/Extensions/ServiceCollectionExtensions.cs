@@ -26,13 +26,21 @@ public static class ServiceCollectionExtensions
             .AddControllers()
             .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
             .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
-
+        
         services.AddTransient<ISampleService, SampleService>();
         services.AddScoped<JwtIssuerOptions>();
         services.AddScoped<IJwtFactory, JwtFactory>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IProjectService, ProjectService>();
+        services.AddUserIdStorage();
+    }
+
+    public static void AddUserIdStorage(this IServiceCollection services)
+    {
+        services.AddScoped<UserIdStorageService>();
+        services.AddTransient<IUserIdSetter>(s => s.GetRequiredService<UserIdStorageService>());
+        services.AddTransient<IUserIdGetter>(s => s.GetRequiredService<UserIdStorageService>());
     }
 
     public static void AddValidation(this IServiceCollection services)

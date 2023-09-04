@@ -15,29 +15,29 @@ export class ProjectService {
     // eslint-disable-next-line no-empty-function
     constructor(private httpService: HttpInternalService) {}
 
-    addProject(project: NewProjectDto): Observable<ProjectDto> {
+    public addProject(project: NewProjectDto): Observable<ProjectDto> {
         return this.httpService.postRequest<ProjectDto>(this.projectsApiUrl, project);
     }
 
-    updateProject(projectId: string, project: ProjectDto): Observable<ProjectDto> {
+    public updateProject(projectId: string, project: ProjectDto): Observable<ProjectDto> {
         const url = `${this.projectsApiUrl}/${projectId}`;
 
         return this.httpService.putRequest<ProjectDto>(url, project);
     }
 
-    deleteProject(projectId: string): Observable<void> {
+    public deleteProject(projectId: string): Observable<void> {
         const url = `${this.projectsApiUrl}/${projectId}`;
 
         return this.httpService.deleteRequest<void>(url);
     }
 
-    getProject(projectId: string): Observable<ProjectDto> {
+    public getProject(projectId: string): Observable<ProjectDto> {
         const url = `${this.projectsApiUrl}/${projectId}`;
 
         return this.httpService.getRequest<ProjectDto>(url);
     }
 
-    getAllProjects(): Observable<ProjectDto[]> {
+    public getAllUserProjects(): Observable<ProjectDto[]> {
         return this.httpService.getRequest<ProjectDto[]>(this.projectsApiUrl);
     }
 }

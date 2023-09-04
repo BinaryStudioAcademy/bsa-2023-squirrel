@@ -2,6 +2,6 @@
 
 public class InLineDiffResultDto
 {
-    public List<DiffLineResult> DiffLinesResults { get; set; }
+    public List<DiffLineResult> DiffLinesResults { get; set; } = new();
     public bool HasDifferences { get; set; }
 }

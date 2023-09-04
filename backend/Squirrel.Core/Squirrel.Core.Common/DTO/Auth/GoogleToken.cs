@@ -2,5 +2,5 @@
 
 public class GoogleToken
 {
-    public string IdToken { get; set; }
+    public string IdToken { get; set; } = null!;
 }

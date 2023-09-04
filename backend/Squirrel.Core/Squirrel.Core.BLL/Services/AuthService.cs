@@ -54,9 +54,7 @@ public sealed class AuthService : BaseService, IAuthService
             throw new InvalidEmailOrPasswordException();
         }
 
-        var isPasswordValid = SecurityUtils.ValidatePassword(userLoginDto.Password, userEntity.PasswordHash, userEntity.Salt);
-
-        if (!isPasswordValid)
+        if (!SecurityUtils.ValidatePassword(userLoginDto.Password, userEntity.PasswordHash, userEntity.Salt))
         {
             throw new InvalidEmailOrPasswordException();
         }

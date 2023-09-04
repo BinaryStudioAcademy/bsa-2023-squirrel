@@ -86,7 +86,7 @@ export class RegistrationComponent extends BaseComponent implements OnInit {
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe(
                 () => {
-                    this.router.navigateByUrl('/main');
+                    this.router.navigateByUrl('/projects');
                 },
                 (err: ErrorDetailsDto) => {
                     this.spinner.hide();

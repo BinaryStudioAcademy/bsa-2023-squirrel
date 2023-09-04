@@ -6,9 +6,8 @@ import { Observable, tap } from 'rxjs';
 import { AccessTokenDto } from 'src/app/models/auth/access-token-dto';
 import { GoogleAuthDto } from 'src/app/models/auth/google-auth-dto';
 import { UserAuthDto } from 'src/app/models/auth/user-auth-dto';
+import { UserLoginDto } from 'src/app/models/user/user-login-dto';
 import { UserRegisterDto } from 'src/app/models/user/user-register-dto';
-
-import { UserLoginDto } from '../../models/user/user-login-dto';
 
 import { HttpInternalService } from './http-internal.service';
 import { SpinnerService } from './spinner.service';
@@ -46,7 +45,7 @@ export class AuthService {
                     this.saveTokens(response.token);
                     this.ngZone.run(() => {
                         this.spinner.hide();
-                        this.router.navigateByUrl('/main');
+                        this.router.navigateByUrl('/projects');
                     });
                 },
                 error: () => {
@@ -73,11 +72,11 @@ export class AuthService {
     }
 
     public tokenExist() {
-        return localStorage.getItem('accessToken') && localStorage.getItem('refreshToken');
+        return localStorage.getItem(this.accessTokenKey) && localStorage.getItem(this.refreshTokenKey);
     }
 
     public get accessToken(): string | null {
-        const localJwt = localStorage.getItem('accessToken');
+        const localJwt = localStorage.getItem(this.accessTokenKey);
 
         if (!localJwt) {
             return null;

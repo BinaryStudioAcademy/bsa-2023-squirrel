@@ -1,47 +1,48 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { BaseComponent } from '@core/base/base.component';
 import { NotificationService } from '@core/services/notification.service';
 import { ProjectService } from '@core/services/project.service';
 import { CreateProjectModalComponent } from '@modules/projects/create-project-modal/create-project-modal.component';
-import { Subject, takeUntil } from 'rxjs';
+import { takeUntil } from 'rxjs';
 
-import { ProjectDto } from '../../../models/projects/project-dto';
+import { ProjectDto } from 'src/app/models/projects/project-dto';
 
 @Component({
     selector: 'app-projects-page',
     templateUrl: './projects-page.component.html',
     styleUrls: ['./projects-page.component.sass'],
 })
-export class ProjectsPageComponent implements OnInit {
-    projects: ProjectDto[] = [];
-
-    private unsubscribe$ = new Subject<void>();
+export class ProjectsPageComponent extends BaseComponent implements OnInit {
+    public projects: ProjectDto[] = [];
 
     constructor(
         public dialog: MatDialog,
         private projectService: ProjectService,
         private notificationService: NotificationService,
-        // eslint-disable-next-line no-empty-function
-    ) {}
+    ) {
+        super();
+    }
 
     ngOnInit(): void {
         this.loadProjects();
     }
 
-    loadProjects(): void {
-        this.projectService.getAllProjects().pipe(
-            takeUntil(this.unsubscribe$),
-        ).subscribe(
-            (projects: ProjectDto[]) => {
-                this.projects = projects;
-            },
-            () => {
-                this.notificationService.error('Failed to load projects');
-            },
-        );
+    public loadProjects(): void {
+        this.projectService
+            .getAllUserProjects()
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe(
+                (projects: ProjectDto[]) => {
+                    this.projects = projects;
+                },
+                () => {
+                    this.notificationService.error('Failed to load projects');
+                },
+            );
     }
 
-    openCreateModal(): void {
+    public openCreateModal(): void {
         const dialogRef = this.dialog.open(CreateProjectModalComponent, {
             width: '500px',
             height: '45%',

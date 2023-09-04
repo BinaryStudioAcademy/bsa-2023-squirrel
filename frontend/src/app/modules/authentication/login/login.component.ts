@@ -40,7 +40,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
             .login(user)
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe({
-                next: () => this.router.navigateByUrl('/main'),
+                next: () => this.router.navigateByUrl('/projects'),
                 error: (err) => {
                     this.spinner.hide();
                     this.notificationService.error(err.message);

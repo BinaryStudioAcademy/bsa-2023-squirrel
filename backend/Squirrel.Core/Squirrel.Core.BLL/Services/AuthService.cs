@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Security.Claims;
+using AutoMapper;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.BLL.Services.Abstract;
 using Squirrel.Core.Common.DTO.Auth;

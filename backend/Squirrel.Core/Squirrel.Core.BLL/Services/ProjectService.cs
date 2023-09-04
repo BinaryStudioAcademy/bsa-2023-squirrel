@@ -7,72 +7,70 @@ using Squirrel.Core.DAL.Context;
 using Squirrel.Core.DAL.Entities;
 using Squirrel.Shared.Exceptions;
 
-namespace Squirrel.Core.BLL.Services
-{
-    public sealed class ProjectService : BaseService, IProjectService
+namespace Squirrel.Core.BLL.Services;
+
+public sealed class ProjectService : BaseService, IProjectService
+{  
+    private readonly IUserIdGetter _userIdGetter;
+    public ProjectService(SquirrelCoreContext context, IMapper mapper, IUserIdGetter userIdGetter) : base(context, mapper)
     {
-        private readonly ICurrentUserIdService _currentUserIdService;
+        _userIdGetter = userIdGetter;
+    }
+
+    public async Task<ProjectDto> AddProjectAsync(ProjectDto projectDto)
+    {
+        var project = _mapper.Map<Project>(projectDto)!;
+        var createdProject = (await _context.Projects.AddAsync(project)).Entity;
         
-        public ProjectService(SquirrelCoreContext context, IMapper mapper, ICurrentUserIdService currentUserIdService) : base(context, mapper)
+        await _context.SaveChangesAsync();
+        
+        return _mapper.Map<ProjectDto>(createdProject)!;
+    }
+
+    public async Task<ProjectDto> UpdateProjectAsync(int projectId, ProjectDto projectDto)
+    {
+        var existingProject = await _context.Projects.FindAsync(projectId);
+        if (existingProject is null)
         {
-            _currentUserIdService = currentUserIdService;
+            throw new EntityNotFoundException();
+        }
+        
+        _mapper.Map(projectDto, existingProject);
+        await _context.SaveChangesAsync();
+        
+        return _mapper.Map<ProjectDto>(existingProject)!;
+    }
+
+    public async Task DeleteProjectAsync(int projectId)
+    {
+        var project = await _context.Projects.FindAsync(projectId);
+        if (project is null)
+        {
+            throw new EntityNotFoundException();
         }
 
-        public async Task<ProjectDto> AddProjectAsync(ProjectDto projectDto)
-        {
-            var project = _mapper.Map<Project>(projectDto)!;
-            var createdProject = (await _context.Projects.AddAsync(project)).Entity;
-            
-            await _context.SaveChangesAsync();
-            
-            return _mapper.Map<ProjectDto>(createdProject)!;
-        }
+        _context.Projects.Remove(project);
+        await _context.SaveChangesAsync();
+    }
 
-        public async Task<ProjectDto> UpdateProjectAsync(int projectId, ProjectDto projectDto)
+    public async Task<ProjectDto> GetProjectAsync(int projectId)
+    {
+        var project = await _context.Projects.FindAsync(projectId);
+        if (project is null)
         {
-            var existingProject = await _context.Projects.FindAsync(projectId);
-            if (existingProject is null)
-            {
-                throw new EntityNotFoundException();
-            }
-            
-            _mapper.Map(projectDto, existingProject);
-            await _context.SaveChangesAsync();
-            
-            return _mapper.Map<ProjectDto>(existingProject)!;
+            throw new EntityNotFoundException();
         }
+        
+        return _mapper.Map<ProjectDto>(project)!;
+    }
 
-        public async Task DeleteProjectAsync(int projectId)
-        {
-            var project = await _context.Projects.FindAsync(projectId);
-            if (project is null)
-            {
-                throw new EntityNotFoundException();
-            }
-    
-            _context.Projects.Remove(project);
-            await _context.SaveChangesAsync();
-        }
+    public async Task<List<ProjectDto>> GetAllUserProjectsAsync()
+    {
+        var currentUserId = _userIdGetter.GetCurrentUserId();
+        var userProjects = await _context.Projects
+                                         .Where(x => x.CreatedBy == currentUserId)
+                                         .ToListAsync();
 
-        public async Task<ProjectDto> GetProjectAsync(int projectId)
-        {
-            var project = await _context.Projects.FindAsync(projectId);
-            if (project is null)
-            {
-                throw new EntityNotFoundException();
-            }
-            
-            return _mapper.Map<ProjectDto>(project)!;
-        }
-
-        public async Task<List<ProjectDto>> GetAllUserProjectsAsync()
-        {
-            var currentUserId = _currentUserIdService.CurrentUserId;
-            var userProjects = await _context.Projects
-                                             .Where(x => x.CreatedBy == currentUserId)
-                                             .ToListAsync();
-
-            return _mapper.Map<List<ProjectDto>>(userProjects)!;
-        }
+        return _mapper.Map<List<ProjectDto>>(userProjects)!;
     }
 }

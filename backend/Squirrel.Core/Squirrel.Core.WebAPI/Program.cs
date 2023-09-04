@@ -53,11 +53,10 @@ app.UseCors(opt => opt
     .AllowAnyOrigin());
 
 app.UseRouting();
-
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseMiddleware<UserIdSaverMiddleware>();
+app.UseMiddleware<CurrentUserMiddleware>();
 
 app.UseEndpoints(endpoints =>
 {

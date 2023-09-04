@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.BLL.Services.Abstract;
+using Squirrel.Core.Common.DTO.Branch;
 using Squirrel.Core.Common.DTO.Project;
 using Squirrel.Core.DAL.Context;
 using Squirrel.Core.DAL.Entities;
@@ -11,17 +12,32 @@ namespace Squirrel.Core.BLL.Services
 {
     public class ProjectService : BaseService, IProjectService
     {
-        public ProjectService(SquirrelCoreContext context, IMapper mapper): base(context, mapper){ }
+        private readonly IBranchService _branchService;
+        
+        public ProjectService(SquirrelCoreContext context, IMapper mapper, IBranchService branchService) : base(context, mapper)
+        {
+            _branchService = branchService;
+        }
 
         public async Task<ProjectDto> AddProjectAsync(ProjectDto projectDto)
         {
             var projectEntity = _mapper.Map<Project>(projectDto);
-            
-            await _context.Projects.AddAsync(projectEntity);
-            
+            // TODO: get current user id (for now it is mock id).
+            var authorId = 1;
+            projectEntity.CreatedBy = authorId;
+            var createdProject = (await _context.Projects.AddAsync(projectEntity)).Entity;
             await _context.SaveChangesAsync();
             
-            return _mapper.Map<ProjectDto>(projectEntity);
+            var defaultBranch = await _branchService.AddBranchAsync(new BranchDto
+            {
+                Name = projectDto.DefaultBranchName,
+                IsActive = true,
+                ProjectId = createdProject.Id
+            });
+            createdProject.DefaultBranchId = defaultBranch.Id;
+            await _context.SaveChangesAsync();
+            
+            return _mapper.Map<ProjectDto>(createdProject);
         }
 
         public async Task<ProjectDto> UpdateProjectAsync(int projectId, ProjectDto projectDto)

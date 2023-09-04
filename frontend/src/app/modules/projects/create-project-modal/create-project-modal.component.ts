@@ -1,74 +1,74 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import { BaseComponent } from '@core/base/base.component';
 import { NotificationService } from '@core/services/notification.service';
 import { ProjectService } from '@core/services/project.service';
-import { Subject, takeUntil } from 'rxjs';
+import { takeUntil } from 'rxjs';
 
-import { DbEngine } from '../../../models/projects/db-engine';
-import { ProjectDto } from '../../../models/projects/project-dto';
+import { DbEngine } from 'src/app/models/projects/db-engine';
+import { ProjectDto } from 'src/app/models/projects/project-dto';
 
 @Component({
     selector: 'app-create-project-modal',
     templateUrl: './create-project-modal.component.html',
     styleUrls: ['./create-project-modal.component.sass'],
 })
-export class CreateProjectModalComponent implements OnInit {
-    @Output() projectCreated = new EventEmitter<ProjectDto>();
+export class CreateProjectModalComponent extends BaseComponent implements OnInit {
+    @Output() public projectCreated = new EventEmitter<ProjectDto>();
 
-    private unsubscribe$ = new Subject<void>();
+    public selectedEngine: DbEngine;
 
-    selectedEngine: DbEngine = DbEngine.SqlServer;
-
-    projectForm: FormGroup;
+    public projectForm: FormGroup;
 
     constructor(
         public dialogRef: MatDialogRef<CreateProjectModalComponent>,
         private fb: FormBuilder,
         private projectService: ProjectService,
         private notificationService: NotificationService,
-        // eslint-disable-next-line no-empty-function
-    ) {}
+    ) {
+        super();
+    }
 
     ngOnInit() {
         this.createForm();
     }
 
-    createForm() {
+    public createForm() {
         this.projectForm = this.fb.group({
-            projectName: ['', Validators.required],
-            selectedEngine: [DbEngine.SqlServer],
+            projectName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
+            defaultBranchName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(200)]],
+            selectedEngine: ['', Validators.required],
         });
     }
 
-    createProject(): void {
+    public createProject(): void {
         if (!this.projectForm.valid) {
             return;
         }
 
         const newProject: ProjectDto = {
             name: this.projectForm.value.projectName,
-            engine: this.projectForm.value.selectedEngine,
+            defaultBranchName: this.projectForm.value.defaultBranchName,
+            dbEngine: parseInt(this.projectForm.value.selectedEngine, 10) as DbEngine,
         };
 
-        // TODO: make it through the BranchService
-        // created default branch for this project
-
-        this.projectService.addProject(newProject).pipe(
-            takeUntil(this.unsubscribe$),
-        ).subscribe(
-            (createdProject: ProjectDto) => {
-                this.dialogRef.close(createdProject);
-                this.notificationService.info('Project created successfully');
-                this.projectCreated.emit(newProject);
-            },
-            () => {
-                this.notificationService.error('Failed to create project');
-            },
-        );
+        this.projectService
+            .addProject(newProject)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe(
+                (createdProject: ProjectDto) => {
+                    this.dialogRef.close(createdProject);
+                    this.notificationService.info('Project created successfully');
+                    this.projectCreated.emit(newProject);
+                },
+                () => {
+                    this.notificationService.error('Failed to create project');
+                },
+            );
     }
 
-    close(): void {
+    public close(): void {
         this.dialogRef.close();
     }
 }

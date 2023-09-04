@@ -16,7 +16,7 @@ namespace Squirrel.Core.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ProjectDto>> AddProject(ProjectDto projectDto)
+        public async Task<ActionResult<ProjectDto>> AddProject([FromBody] ProjectDto projectDto)
         {
             return Ok(await _projectService.AddProjectAsync(projectDto));
         }

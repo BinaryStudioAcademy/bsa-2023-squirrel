@@ -95,11 +95,11 @@ export class AuthService {
     }
 
     public tokenExist() {
-        return localStorage.getItem('accessToken') && localStorage.getItem('refreshToken');
+        return localStorage.getItem(this.accessTokenKey) && localStorage.getItem(this.refreshTokenKey);
     }
 
     public get accessToken(): string | null {
-        const localJwt = localStorage.getItem('accessToken');
+        const localJwt = localStorage.getItem(this.accessTokenKey);
 
         if (!localJwt) {
             return null;

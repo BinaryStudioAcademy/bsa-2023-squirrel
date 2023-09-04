@@ -3,16 +3,16 @@
     internal class GetObjects
     {
         public static string GetStoredProceduresNamesScript =>
-            @"SELECT routine_name as ProcedureName FROM information_schema.routines WHERE specific_schema='public' AND type_udt_name!='void'";
+            @"SELECT routine_name as ProcedureName FROM information_schema.routines WHERE routine_type = 'PROCEDURE'";
 
         public static string GetStoredProcedureDefinitionScript(string storedProcedureName) =>
-            @$"SELECT * FROM information_schema.routines WHERE routine_name = '{storedProcedureName}' AND type_udt_name != 'void'";
+            @$"SELECT * FROM information_schema.routines WHERE routine_name = '{storedProcedureName}' AND routine_type = 'PROCEDURE'";
 
         public static string GetFunctionsNamesScript =>
-            @"SELECT routine_name as ProcedureName FROM information_schema.routines WHERE specific_schema='public' AND type_udt_name = 'void'";
+            @"SELECT routine_name as ProcedureName FROM information_schema.routines WHERE routine_type = 'FUNCTION'";
 
         public static string GetFunctionDefinitionScript(string functionName) =>
-            @$"SELECT * FROM information_schema.routines WHERE routine_name = '{functionName}' AND type_udt_name = 'void'";
+            @$"SELECT * FROM information_schema.routines WHERE routine_name = '{functionName}' AND routine_type = 'FUNCTION'";
 
         public static string GetViewsNamesScript =>
             @"SELECT table_name AS ViewName FROM information_schema.views";
@@ -22,17 +22,41 @@
 
         public static string GetStoredProceduresScript =>
             @"
-            TBD - All TBD will be updated after scipts will be written
+            select 
+            routine_schema as schema, 
+            routine_name as name,
+            routine_type as routine_type,
+            data_type as returned_type,
+            type_udt_schema,
+            type_udt_name, 
+            routine_definition as definition
+            from information_schema.routines
+            where routine_type = 'PROCEDURE' 
+            order by specific_schema
             ";
 
         public static string GetFunctionsScript =>
             @"
-            TBD
+            select 
+            routine_schema as schema, 
+            routine_name as name,
+            routine_type as routine_type,
+            data_type as returned_type,
+            type_udt_schema,
+            type_udt_name, 
+            routine_definition as definition
+            from information_schema.routines
+            where routine_type = ''FUNCTION'' 
+            order by specific_schema
             ";
 
         public static string GetViewsScript =>
             @"
-            TBD
+            select
+	        table_schema as schema, 
+	        table_name as view,
+	        view_definition as definition
+            from information_schema.views
             ";
     }
 }

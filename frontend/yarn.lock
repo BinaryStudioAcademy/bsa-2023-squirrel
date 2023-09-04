@@ -193,10 +193,8 @@
   dependencies:
     tslib "^2.3.0"
 
-"@angular/cdk@^14.1.1", "@angular/cdk@14.2.7":
-  version "14.2.7"
-  resolved "https://registry.npmjs.org/@angular/cdk/-/cdk-14.2.7.tgz"
-  integrity sha512-/tEsYaUbDSnfEmKVvAMramIptmhI67O+9STjOV0i+74XR2NospeK0fkbywIANu1n3w6AHGMotvRWJrjmbCElFg==
+"@angular/cdk@^14.1.1", "@angular/cdk@14.1.1":
+  version "14.1.1"
   dependencies:
     tslib "^2.3.0"
   optionalDependencies:
@@ -273,9 +271,7 @@
     tslib "^2.3.0"
 
 "@angular/material@^14.1.1":
-  version "14.2.7"
-  resolved "https://registry.npmjs.org/@angular/material/-/material-14.2.7.tgz"
-  integrity sha512-WXHh8pEStpgkXZJmYOg2cI8BSHkV82ET4XTJCNPdveumaCn1UYnaNzsXD13kw5z+zmy8CufhFEzdXTrv/yt7KQ==
+  version "14.1.1"
   dependencies:
     tslib "^2.3.0"
 
@@ -1370,6 +1366,8 @@
 
 "@eslint-community/regexpp@^4.4.0", "@eslint-community/regexpp@^4.6.1":
   version "4.6.2"
+  resolved "https://registry.npmjs.org/@eslint-community/regexpp/-/regexpp-4.6.2.tgz"
+  integrity sha512-pPTNuaAG3QMH+buKyBIGJs3g/S5y0caxw0ygM3YyE6yJFySwiGGSzA+mM3KJ8QQvzeLh3blwgSonkFjgQdxzMw==
 
 "@eslint/eslintrc@^2.1.2":
   version "2.1.2"
@@ -1770,6 +1768,8 @@
 
 "@types/express-serve-static-core@*", "@types/express-serve-static-core@^4.17.33":
   version "4.17.35"
+  resolved "https://registry.npmjs.org/@types/express-serve-static-core/-/express-serve-static-core-4.17.35.tgz"
+  integrity sha512-wALWQwrgiB2AWTT91CB62b6Yt0sNHpznUXeZEcnPU3DRdlDIz74x8Qg1UUYKSVFi+va5vKOLYRBI1bRKiLLKIg==
   dependencies:
     "@types/node" "*"
     "@types/qs" "*"
@@ -1805,6 +1805,8 @@
 
 "@types/jasmine@^3.10.6":
   version "3.10.11"
+  resolved "https://registry.npmjs.org/@types/jasmine/-/jasmine-3.10.11.tgz"
+  integrity sha512-tAiqDJrwRKyjpCgJE07OXFsXsXQWDhoJhyRwzl+yfEToy72s0LhHAfquMi2s4T4Iq3nanKOfZ8/PZFaL/0pQmA==
 
 "@types/json-schema@*", "@types/json-schema@^7.0.5", "@types/json-schema@^7.0.8", "@types/json-schema@^7.0.9":
   version "7.0.12"
@@ -2793,6 +2795,8 @@ camelcase@^5.3.1:
 
 caniuse-lite@^1.0.30001517, caniuse-lite@^1.0.30001520:
   version "1.0.30001521"
+  resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001521.tgz"
+  integrity sha512-fnx1grfpEOvDGH+V17eccmNjucGUnCbP6KL+l5KqBIerp26WK/+RQ7CIDE37KGJjaPyqWXXlFUyKiWmvdNNKmQ==
 
 chalk@^1.1.3:
   version "1.1.3"
@@ -2898,6 +2902,8 @@ cli-cursor@^3.1.0, cli-cursor@3.1.0:
 
 cli-spinners@^2.5.0:
   version "2.9.0"
+  resolved "https://registry.npmjs.org/cli-spinners/-/cli-spinners-2.9.0.tgz"
+  integrity sha512-4/aL9X3Wh0yiMQlE+eeRhWP6vclO3QRtw1JHKIT0FFUs5FjpFmESqtMvYZ0+lbzBw900b95mS0hohy+qn2VK/g==
 
 cli-spinners@2.6.1:
   version "2.6.1"
@@ -2920,6 +2926,8 @@ cliui@^7.0.2:
 
 cliui@^8.0.1:
   version "8.0.1"
+  resolved "https://registry.npmjs.org/cliui/-/cliui-8.0.1.tgz"
+  integrity sha512-BSeNnyus75C4//NQ9gQt1/csTXyo/8Sb+afLAkzAptFuMsod9HFokGNudZpi/oQV73hnVK+sR+5PVRMd+Dr7YQ==
   dependencies:
     string-width "^4.2.0"
     strip-ansi "^6.0.1"
@@ -3098,6 +3106,8 @@ copy-webpack-plugin@11.0.0:
 
 core-js-compat@^3.21.0, core-js-compat@^3.22.1:
   version "3.32.0"
+  resolved "https://registry.npmjs.org/core-js-compat/-/core-js-compat-3.32.0.tgz"
+  integrity sha512-7a9a3D1k4UCVKnLhrgALyFcP7YCsLOQIxPd0dKjf/6GuPcgyiGP70ewWdCGrSK7evyhymi0qO4EqCmSJofDeYw==
   dependencies:
     browserslist "^4.21.9"
 
@@ -3197,6 +3207,8 @@ css-what@^6.0.1:
 
 cssdb@^7.0.0:
   version "7.7.0"
+  resolved "https://registry.npmjs.org/cssdb/-/cssdb-7.7.0.tgz"
+  integrity sha512-1hN+I3r4VqSNQ+OmMXxYexnumbOONkSil0TWMebVXHtzYW4tRRPovUNHPHj2d4nrgOuYJ8Vs3XwvywsuwwXNNA==
 
 cssesc@^3.0.0:
   version "3.0.0"
@@ -3430,6 +3442,8 @@ ejs@^3.1.7:
 
 electron-to-chromium@^1.4.477:
   version "1.4.494"
+  resolved "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.494.tgz"
+  integrity sha512-KF7wtsFFDu4ws1ZsSOt4pdmO1yWVNWCFtijVYZPUeW4SV7/hy/AESjLn/+qIWgq7mHscNOKAwN5AIM1+YAy+Ww==
 
 emoji-regex@^8.0.0:
   version "8.0.0"
@@ -3707,6 +3721,8 @@ eslint-module-utils@^2.8.0:
 
 eslint-plugin-import@^2.25.2, eslint-plugin-import@^2.25.3:
   version "2.28.0"
+  resolved "https://registry.npmjs.org/eslint-plugin-import/-/eslint-plugin-import-2.28.0.tgz"
+  integrity sha512-B8s/n+ZluN7sxj9eUf7/pRFERX0r5bnFA2dCaLHy2ZeaQEAz0k+ZZkFWRFHJAqxfxQDx6KLv9LeIki7cFdwW+Q==
   dependencies:
     array-includes "^3.1.6"
     array.prototype.findlastindex "^1.2.2"
@@ -4190,6 +4206,8 @@ forwarded@0.2.0:
 
 fraction.js@^4.2.0:
   version "4.2.0"
+  resolved "https://registry.npmjs.org/fraction.js/-/fraction.js-4.2.0.tgz"
+  integrity sha512-MhLuK+2gUcnZe8ZHlaaINnQLl0xRIGRfcGk2yl8xoQAfHrSsL3rYu6FCmBdkdbhc9EPlwyGHewaRsvwRMJtAlA==
 
 fresh@0.5.2:
   version "0.5.2"
@@ -4726,6 +4744,8 @@ image-size@~0.5.0:
 
 immutable@^4.0.0:
   version "4.3.2"
+  resolved "https://registry.npmjs.org/immutable/-/immutable-4.3.2.tgz"
+  integrity sha512-oGXzbEDem9OOpDWZu88jGiYCvIsLHMvGw+8OXlpsvTFvIQplQbjg1B1cvKg8f7Hoch6+NGjpPsH1Fr+Mc2D1aA==
 
 import-fresh@^3.2.1:
   version "3.3.0"
@@ -5841,6 +5861,8 @@ node-addon-api@^3.2.1:
 
 node-fetch@^2.6.7:
   version "2.6.12"
+  resolved "https://registry.npmjs.org/node-fetch/-/node-fetch-2.6.12.tgz"
+  integrity sha512-C/fGU2E8ToujUivIO0H+tpQ6HWo4eEmchoPIoXtxCrVghxdKq+QOHqEZW7tuP3KlV3bC8FRMO5nMCC7Zm1VP6g==
   dependencies:
     whatwg-url "^5.0.0"
 
@@ -7905,6 +7927,8 @@ tslib@^1.9.0:
 
 tslib@^2.1.0, tslib@^2.3.0, tslib@^2.3.1, tslib@^2.4.0:
   version "2.6.1"
+  resolved "https://registry.npmjs.org/tslib/-/tslib-2.6.1.tgz"
+  integrity sha512-t0hLfiEKfMUoqhG+U1oid7Pva4bbDPHYfJNiB7BiIjRkj1pyC++4N3huJfqY6aRH6VTB0rvtzQwjM4K6qpfOig==
 
 tslib@2.4.0:
   version "2.4.0"
@@ -8431,6 +8455,8 @@ yargs-parser@^21.0.0, yargs-parser@21.0.1:
 
 yargs-parser@^21.1.1:
   version "21.1.1"
+  resolved "https://registry.npmjs.org/yargs-parser/-/yargs-parser-21.1.1.tgz"
+  integrity sha512-tVpsJW7DdjecAiFpbIB1e3qxIQsE6NoPc5/eTdrbbIC4h0LVsWhnoa3g+m2HclBIujHzsxZ4VJVA+GUuc2/LBw==
 
 yargs@^16.1.1:
   version "16.2.0"
@@ -8447,6 +8473,8 @@ yargs@^16.1.1:
 
 yargs@^17.2.1, yargs@^17.4.0:
   version "17.7.2"
+  resolved "https://registry.npmjs.org/yargs/-/yargs-17.7.2.tgz"
+  integrity sha512-7dSzzRQ++CKnNI/krKnYRV7JKKPUXMEh61soaHKg9mrWEhzFWhFnxPxGl+69cD1Ou63C13NUPCnmIcrvqCuM6w==
   dependencies:
     cliui "^8.0.1"
     escalade "^3.1.1"

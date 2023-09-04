@@ -8,19 +8,17 @@ namespace Squirrel.Core.WebAPI.Controllers;
 [Route("api/[controller]")]
 public class DatabaseItemsController : ControllerBase
 {
-    private readonly IHttpClientService _httpInternalService;
-    private readonly IConfiguration _configuration;
+    private readonly IDatabaseItemsService _databaseItemsService;
 
-    public DatabaseItemsController(IHttpClientService httpInternalService, IConfiguration configuration)
+    public DatabaseItemsController(IDatabaseItemsService databaseItemsService)
     {
-        _httpInternalService = httpInternalService;
-        _configuration = configuration;
+        _databaseItemsService = databaseItemsService;
     }
 
     [HttpGet]
     public async Task<ActionResult<List<DatabaseItem>>> GetAllItems()
     {
-        return Ok(await _httpInternalService.GetAsync<List<DatabaseItem>>($"{_configuration.GetValue<string>("SqlServiceUrl")}/api/DatabaseItems"));
+        return Ok(await _databaseItemsService.GetAllItems());
     }
 }
 

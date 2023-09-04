@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmationModalComponent } from '@shared/components/confirmation-modal/confirmation-modal.component';
-
-import { ConfirmationModalInterface } from '../../../../../models/confirmation-modal/confirmation-modal';
 
 @Component({
     selector: 'app-navbar-header',
@@ -23,35 +20,11 @@ export class NavbarHeaderComponent implements OnInit {
         { displayName: 'Settings', path: './settings' },
     ];
 
-    // eslint-disable-next-line no-empty-function
-    constructor(private confirmationModal: MatDialog) {
-    }
-
     ngOnInit(): void {
         this.branches = ['Branch 1', 'Branch 2', 'Branch 3', 'Branch 4'];
     }
 
     public onBranchSelected(value: string) {
         this.selectedBranch = value;
-    }
-
-    openConfirmationModalOne() {
-        const modal: ConfirmationModalInterface = {
-            modalHeader: 'Reusable Confirmation Modal',
-            modalDescription: 'I am first Confirmation Modal to show the example of usage',
-            cancelButtonLabel: 'Cancel',
-            confirmButtonLabel: 'Submit',
-            callbackMethod: () => {
-                this.performConfirmationModalOne();
-            },
-        };
-
-        this.confirmationModal.open(ConfirmationModalComponent, {
-            data: modal,
-        });
-    }
-
-    performConfirmationModalOne() {
-        console.log('The text submitted from the Confirmation Modal ONE');
     }
 }

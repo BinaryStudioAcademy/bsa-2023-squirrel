@@ -56,7 +56,7 @@ export class RegistrationComponent extends BaseComponent implements OnInit {
                 '',
                 [
                     Validators.required,
-                    Validators.minLength(2),
+                    Validators.minLength(6),
                     Validators.maxLength(25),
                     ValidationsFn.wrongCharacters(),
                     ValidationsFn.lowerExist(),

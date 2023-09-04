@@ -64,9 +64,14 @@ namespace Squirrel.Core.BLL.Services
             {
                 throw new EntityNotFoundException(nameof(Project));
             }
+            
+            var currentUserId = _userIdGetter.GetCurrentUserId();
+            if (project.CreatedBy != currentUserId)
+            {
+                throw new EntityNotFoundException(nameof(Project));
+            }
 
             return _mapper.Map<ProjectDto>(project);
-            ;
         }
         
         public async Task<List<ProjectDto>> GetAllUserProjectsAsync()

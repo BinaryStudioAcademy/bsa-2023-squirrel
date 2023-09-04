@@ -38,6 +38,6 @@ export class ProjectService {
     }
 
     public getAllUserProjects(): Observable<ProjectDto[]> {
-        return this.httpService.getRequest<ProjectDto[]>(this.projectsApiUrl);
+        return this.httpService.getRequest<ProjectDto[]>(`${this.projectsApiUrl}/all`);
     }
 }

@@ -10,21 +10,21 @@ using Squirrel.Shared.Exceptions;
 
 namespace Squirrel.Core.BLL.Services
 {
-    public class ProjectService : BaseService, IProjectService
+    public sealed class ProjectService : BaseService, IProjectService
     {
         private readonly IBranchService _branchService;
+        private readonly ICurrentUserIdService _userIdService;
         
-        public ProjectService(SquirrelCoreContext context, IMapper mapper, IBranchService branchService) : base(context, mapper)
+        public ProjectService(SquirrelCoreContext context, IMapper mapper, IBranchService branchService, ICurrentUserIdService userIdService) : base(context, mapper)
         {
             _branchService = branchService;
+            _userIdService = userIdService;
         }
 
         public async Task<ProjectDto> AddProjectAsync(ProjectDto projectDto)
         {
             var projectEntity = _mapper.Map<Project>(projectDto);
-            // TODO: get current user id (for now it is mock id).
-            var authorId = 1;
-            projectEntity.CreatedBy = authorId;
+            projectEntity.CreatedBy = _userIdService.CurrentUserId;
             var createdProject = (await _context.Projects.AddAsync(projectEntity)).Entity;
             await _context.SaveChangesAsync();
             
@@ -43,16 +43,15 @@ namespace Squirrel.Core.BLL.Services
         public async Task<ProjectDto> UpdateProjectAsync(int projectId, ProjectDto projectDto)
         {
             var existingProject = await _context.Projects.FindAsync(projectId);
-
             if (existingProject is null)
             {
                 throw new EntityNotFoundException();
             }
             
             _mapper.Map(projectDto, existingProject);
-            
             await _context.SaveChangesAsync();
-            return _mapper.Map<ProjectDto>(existingProject);
+            
+            return _mapper.Map<ProjectDto>(existingProject)!;
         }
 
         public async Task DeleteProjectAsync(int projectId)
@@ -73,16 +72,19 @@ namespace Squirrel.Core.BLL.Services
             if (project is null)
             {
                 throw new EntityNotFoundException();
-            }            
+            }
             
-            return _mapper.Map<ProjectDto>(project);;
+            return _mapper.Map<ProjectDto>(project)!;
         }
 
-        public async Task<List<ProjectDto>> GetAllProjectsAsync()
+        public async Task<List<ProjectDto>> GetAllUserProjectsAsync()
         {
-            var projects = await _context.Projects.ToListAsync();
+            var currentUserId = _userIdService.CurrentUserId;
+            var userProjects = await _context.Projects
+                                             .Where(x => x.CreatedBy == currentUserId)
+                                             .ToListAsync();
 
-            return _mapper.Map<List<ProjectDto>>(projects);
+            return _mapper.Map<List<ProjectDto>>(userProjects)!;
         }
     }
 }

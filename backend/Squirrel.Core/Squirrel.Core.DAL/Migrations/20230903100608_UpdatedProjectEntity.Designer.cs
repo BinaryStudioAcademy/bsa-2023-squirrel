@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Squirrel.Core.DAL.Context;
 
@@ -11,9 +12,10 @@ using Squirrel.Core.DAL.Context;
 namespace Squirrel.Core.DAL.Migrations
 {
     [DbContext(typeof(SquirrelCoreContext))]
-    partial class SquirrelCoreContextModelSnapshot : ModelSnapshot
+    [Migration("20230903100608_UpdatedProjectEntity")]
+    partial class UpdatedProjectEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -292,7 +294,7 @@ namespace Squirrel.Core.DAL.Migrations
                     b.Property<int>("DbEngine")
                         .HasColumnType("int");
 
-                    b.Property<int?>("DefaultBranchId")
+                    b.Property<int>("DefaultBranchId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -314,8 +316,7 @@ namespace Squirrel.Core.DAL.Migrations
                     b.HasIndex("CreatedBy");
 
                     b.HasIndex("DefaultBranchId")
-                        .IsUnique()
-                        .HasFilter("[DefaultBranchId] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Projects");
                 });
@@ -736,8 +737,10 @@ namespace Squirrel.Core.DAL.Migrations
                         .IsRequired();
 
                     b.HasOne("Squirrel.Core.DAL.Entities.Branch", "DefaultBranch")
-                        .WithOne()
-                        .HasForeignKey("Squirrel.Core.DAL.Entities.Project", "DefaultBranchId");
+                        .WithOne("ProjectForDefaultBranch")
+                        .HasForeignKey("Squirrel.Core.DAL.Entities.Project", "DefaultBranchId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("Author");
 
@@ -793,6 +796,8 @@ namespace Squirrel.Core.DAL.Migrations
             modelBuilder.Entity("Squirrel.Core.DAL.Entities.Branch", b =>
                 {
                     b.Navigation("BranchCommits");
+
+                    b.Navigation("ProjectForDefaultBranch");
 
                     b.Navigation("PullRequestsFromThisBranch");
 

@@ -22,23 +22,10 @@ export class ValidationsFn {
     }
 
     static emailMatch(): ValidatorFn {
-        return (control: AbstractControl) => {
-            const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
-            const email = control.value as string;
-
-            if (!emailRegex.test(email)) {
-                return { emailMatch: true };
-            }
-
-            const [localPart, domainPart] = email.split('@');
-
-            if (localPart[0] === '.' || localPart[localPart.length - 1] === '.' || localPart.includes('..') ||
-                domainPart[0] === '.' || domainPart[domainPart.length - 1] === '.' || domainPart.includes('..')) {
-                return { emailMatch: true };
-            }
-
-            return null;
-        };
+        return (control: AbstractControl) =>
+            (/^(?!\.)[A-Z0-9._-]+[^.@]@(?!\.)[A-Z0-9.-]+\.[A-Z]+(?<!\.)$/i.test(control.value)
+            && !/[.-_]{2,}/.test(control.value)
+                ? null : { emailMatch: true });
     }
 
     static upperExist(): ValidatorFn {

@@ -42,7 +42,7 @@ export class RegistrationComponent extends BaseComponent implements OnInit {
             ],
             email: [
                 '',
-                [Validators.required, Validators.minLength(3), Validators.maxLength(50), ValidationsFn.emailMatch()],
+                [Validators.required, Validators.minLength(5), Validators.maxLength(50), ValidationsFn.emailMatch()],
             ],
             firstName: [
                 '',

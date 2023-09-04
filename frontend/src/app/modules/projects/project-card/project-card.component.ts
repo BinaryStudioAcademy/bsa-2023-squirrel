@@ -14,6 +14,8 @@ export class ProjectCardComponent implements OnInit {
 
     public accentColor: string = '';
 
+    public engineLogoImage: string = '';
+
     public sampleDescription: string =
         '540 saved to favorites lorem ipsum are future lorem is the best thk best thk the';
 
@@ -23,11 +25,24 @@ export class ProjectCardComponent implements OnInit {
 
     private postgresSqlAccentColor: string = '#FF6532';
 
+    private postgresSqlLogo: string = '/assets/postgresql.svg';
+
+    private sqlServerLogo: string = '/assets/sqlserver.svg';
+
     // eslint-disable-next-line @typescript-eslint/no-useless-constructor,no-empty-function,@typescript-eslint/no-empty-function
     constructor() {}
 
     ngOnInit(): void {
-        this.accentColor =
-            this.project.engine === DbEngine.PostgreSQL ? this.postgresSqlAccentColor : this.sqlServerAccentColor;
+        this.initializeProjectCard();
+    }
+
+    initializeProjectCard(): void {
+        if (this.project.engine === DbEngine.PostgreSQL) {
+            this.accentColor = this.postgresSqlAccentColor;
+            this.engineLogoImage = this.postgresSqlLogo;
+        } else {
+            this.accentColor = this.sqlServerAccentColor;
+            this.engineLogoImage = this.sqlServerLogo;
+        }
     }
 }

@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { DbEngine } from 'src/app/models/projects/db-engine';
-
+import { DbEngine } from '../../../models/projects/db-engine';
 import { ProjectDto } from '../../../models/projects/project-dto';
 
 @Component({

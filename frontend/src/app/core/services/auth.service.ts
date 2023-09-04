@@ -39,13 +39,13 @@ export class AuthService {
         return this.currentUser
             ? of(this.currentUser)
             : this.userService.getUserFromToken().pipe(
-                  map((resp: any) => {
-                      this.currentUser = resp;
-                      this.eventService.userChanged(this.currentUser);
+                map((resp: any) => {
+                    this.currentUser = resp;
+                    this.eventService.userChanged(this.currentUser);
 
-                      return this.currentUser;
-                  }),
-              );
+                    return this.currentUser;
+                }),
+            );
     }
 
     public signOut = () => {

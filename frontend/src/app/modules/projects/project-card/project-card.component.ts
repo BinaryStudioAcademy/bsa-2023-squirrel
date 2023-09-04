@@ -12,6 +12,11 @@ export class ProjectCardComponent implements OnInit {
 
     public accentColor: string = '';
 
+    public sampleDescription: string =
+        '540 saved to favorites lorem ipsum are future lorem is the best thk best thk the';
+
+    public sampleDate: string = '12-12-2024';
+
     // eslint-disable-next-line @typescript-eslint/no-useless-constructor,no-empty-function,@typescript-eslint/no-empty-function
     constructor() {}
 

@@ -83,9 +83,7 @@ public sealed class UserService : BaseService, IUserService
             throw new InvalidEmailOrPasswordException();
         }
 
-        var newPasswordHash = SecurityUtils.HashPassword(changePasswordDTO.NewPassword, userEntity.Salt);
-
-        userEntity.PasswordHash = newPasswordHash;
+        userEntity.PasswordHash = SecurityUtils.HashPassword(changePasswordDTO.NewPassword, userEntity.Salt);
 
         _context.Users.Update(userEntity);
         await _context.SaveChangesAsync();

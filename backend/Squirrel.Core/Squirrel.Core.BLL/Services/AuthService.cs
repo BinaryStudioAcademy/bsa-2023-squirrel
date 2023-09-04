@@ -32,20 +32,16 @@ public sealed class AuthService : BaseService, IAuthService
     }
 
     public async Task<AuthUserDto> AuthorizeWithGoogleAsync(string googleCredentialsToken)
-    {
-        var settings = new ValidationSettings { Audience = new List<string> { _googleClientId } };
-        
-        var googleCredentials = await ValidateAsync(googleCredentialsToken, settings);
+    {       
+        var googleCredentials = await ValidateAsync(googleCredentialsToken, new ValidationSettings { Audience = new List<string> { _googleClientId } });
 
         var user = await _userService.GetUserByEmailAsync(googleCredentials.Email) ?? await _userService.CreateUserAsync(
                        _mapper.Map<UserRegisterDto>(googleCredentials), isGoogleAuth: true);
 
-        var token = await GenerateNewAccessTokenAsync(user.Id, user.Username, user.Email);
-
         return new AuthUserDto
         {
             User = _mapper.Map<UserDto>(user),
-            Token = token
+            Token = await GenerateNewAccessTokenAsync(user.Id, user.Username, user.Email)
         };
     }
 
@@ -65,29 +61,21 @@ public sealed class AuthService : BaseService, IAuthService
             throw new InvalidEmailOrPasswordException();
         }
 
-        var user = _mapper.Map<UserDto>(userEntity);
-
-        var token = await GenerateNewAccessTokenAsync(userEntity.Id, userEntity.Username, userLoginDto.Email);
-
         return new AuthUserDto
         {
-            User = user,
-            Token = token
+            User = _mapper.Map<UserDto>(userEntity),
+            Token = await GenerateNewAccessTokenAsync(userEntity.Id, userEntity.Username, userLoginDto.Email)
         };
     }
 
     public async Task<AuthUserDto> RegisterAsync(UserRegisterDto userRegisterDto)
     {
         var createdUser = await _userService.CreateUserAsync(userRegisterDto, isGoogleAuth: false);
-        
-        var token = await GenerateNewAccessTokenAsync(createdUser.Id, createdUser.Username, createdUser.Email);
-        
-        var user = _mapper.Map<UserDto>(createdUser);
-
+       
         return new AuthUserDto
         {
-            User = user,
-            Token = token
+            User = _mapper.Map<UserDto>(createdUser),
+            Token = await GenerateNewAccessTokenAsync(createdUser.Id, createdUser.Username, createdUser.Email)
         };
     }
 

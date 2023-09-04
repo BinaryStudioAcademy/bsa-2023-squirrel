@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.BLL.Services;
+using Squirrel.Core.Common.DTO.Auth;
 using Squirrel.Core.Common.Interfaces;
 using Squirrel.Core.Common.JWT;
 using System.Reflection;
 using System.Text;
-using Squirrel.Core.Common.DTO.Auth;
 using System.Text.Json.Serialization;
 
 namespace Squirrel.Core.WebAPI.Extensions;
@@ -28,6 +28,10 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IBranchService, BranchService>();
         services.AddScoped<IProjectService, ProjectService>();
+        services.AddScoped<IDatabaseItemsService, DatabaseItemsService>();
+
+        services.AddSingleton<IHttpClientService, HttpClientService>();
+      
         services.AddUserIdStorage();
     }
 

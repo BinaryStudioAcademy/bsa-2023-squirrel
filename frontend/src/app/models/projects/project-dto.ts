@@ -2,5 +2,6 @@ import { DbEngine } from './db-engine';
 
 export interface ProjectDto {
     name: string;
-    engine: DbEngine;
+    defaultBranchName: string;
+    dbEngine: DbEngine;
 }

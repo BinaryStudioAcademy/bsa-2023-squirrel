@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
+import { NewProjectDto } from '../../models/projects/new-project-dto';
 import { ProjectDto } from '../../models/projects/project-dto';
 
 import { HttpInternalService } from './http-internal.service';
-import {NewProjectDto} from "../../models/projects/new-project-dto";
 
 @Injectable({
     providedIn: 'root',

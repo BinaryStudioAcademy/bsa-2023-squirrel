@@ -9,10 +9,12 @@ import { HttpInternalService } from './http-internal.service';
     providedIn: 'root',
 })
 export class DatabaseItemsService {
+    private readonly databaseItemsRoutePrefix = '/api/databaseitems';
+
     // eslint-disable-next-line no-empty-function
     constructor(private httpService: HttpInternalService) {}
 
     getAllItems(): Observable<DatabaseItem[]> {
-        return this.httpService.getRequest<DatabaseItem[]>('/api/databaseitems');
+        return this.httpService.getRequest<DatabaseItem[]>(this.databaseItemsRoutePrefix);
     }
 }

@@ -54,7 +54,7 @@ public sealed class AuthService : BaseService, IAuthService
         var userEntity = await _userService.GetUserByEmailAsync(userLoginDto.Email);
 
         if (userEntity is null ||
-            !SecurityUtils.ValidatePassword(userLoginDto.Password, userEntity.PasswordHash, userEntity.Salt))
+            !SecurityUtils.ValidatePassword(userLoginDto.Password, userEntity.PasswordHash!, userEntity.Salt!))
         {
             throw new InvalidEmailOrPasswordException();
         }

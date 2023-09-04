@@ -15,11 +15,6 @@ export class ProjectCardComponent implements OnInit {
 
     public engineLogoImage: string = '';
 
-    public sampleDescription: string =
-        '540 saved to favorites lorem ipsum are future lorem is the best thk best thk the';
-
-    public sampleDate: string = '12-12-2024';
-
     private sqlServerAccentColor: string = '#e79925';
 
     private postgresSqlAccentColor: string = '#FF6532';

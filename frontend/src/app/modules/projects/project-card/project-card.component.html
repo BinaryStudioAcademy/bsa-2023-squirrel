@@ -3,12 +3,12 @@
     <div class="engine-logo-container" [style.background-color]="accentColor">
         <img
             *ngIf="project.engine === 'PostgreSQL'; else sqlServerLogo"
-            src="../../../../assets/postgresql.svg"
+            src="/assets/postgresql.svg"
             alt="Image Description"
             class="engine-logo" />
 
         <ng-template #sqlServerLogo>
-            <img src="../../../../assets/sqlserver.png" alt="Image Description" class="engine-logo" />
+            <img src="/assets/sqlserver.svg" alt="Image Description" class="engine-logo" />
         </ng-template>
     </div>
     <div class="project-name">

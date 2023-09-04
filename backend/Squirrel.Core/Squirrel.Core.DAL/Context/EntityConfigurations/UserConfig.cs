@@ -20,6 +20,12 @@ public sealed class UserConfig : IEntityTypeConfiguration<User>
         builder.Property(x => x.AvatarUrl).HasMaxLength(500);
         builder.Property(x => x.IsGoogleAuth).IsRequired();
 
+        builder.HasMany(x => x.OwnProjects)
+               .WithOne(x => x.Author)
+               .HasForeignKey(x => x.CreatedBy)
+               .IsRequired()
+               .OnDelete(DeleteBehavior.NoAction);
+
         builder.HasMany(x => x.Commits)
                .WithOne(x => x.Author)
                .HasForeignKey(x => x.CreatedBy)

@@ -1,6 +1,7 @@
 using Squirrel.Core.BLL.Extensions;
 using Squirrel.Core.DAL.Extensions;
 using Squirrel.Core.WebAPI.Extensions;
+using Squirrel.Core.WebAPI.Middlewares;
 using Squirrel.Shared.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -52,9 +53,10 @@ app.UseCors(opt => opt
     .AllowAnyOrigin());
 
 app.UseRouting();
-
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware<CurrentUserMiddleware>();
 
 app.UseEndpoints(endpoints =>
 {

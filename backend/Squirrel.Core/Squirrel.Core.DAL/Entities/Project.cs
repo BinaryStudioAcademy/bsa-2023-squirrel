@@ -1,15 +1,18 @@
-﻿using Squirrel.Core.DAL.Entities.Common;
+﻿using Squirrel.Core.DAL.Entities.Common.AuditEntity;
 using Squirrel.Core.DAL.Entities.JoinEntities;
 using Squirrel.Core.DAL.Enums;
 
 namespace Squirrel.Core.DAL.Entities;
 
-public sealed class Project : Entity<int>
+public sealed class Project : AuditEntity<int>
 {
     public string Name { get; set; } = string.Empty;
+    public string? Description { get; set; }
     public DbEngine DbEngine { get; set; }
+    public DateTime UpdatedAt { get; set; }
 
     public int DefaultBranchId { get; set; }
+    public User Author { get; set; } = null!;
     public Branch DefaultBranch { get; set; } = null!;
     public ICollection<UserProject> UserProjects { get; set; } = new List<UserProject>();
     public ICollection<User> Users { get; set; } = new List<User>();

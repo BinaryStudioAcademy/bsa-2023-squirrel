@@ -4,10 +4,10 @@ using Squirrel.Core.BLL.Extensions;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.BLL.Services.Abstract;
 using Squirrel.Core.Common.DTO.Auth;
+using Squirrel.Core.Common.DTO.Users;
 using Squirrel.Core.Common.Security;
 using Squirrel.Core.DAL.Context;
 using Squirrel.Core.DAL.Entities;
-using Squirrel.Core.Common.DTO.Users;
 using Squirrel.Shared.Exceptions;
 
 namespace Squirrel.Core.BLL.Services;
@@ -25,13 +25,23 @@ public sealed class UserService : BaseService, IUserService
         return _mapper.Map<UserDto>(userEntity);
     }
 
-    public async Task<User?> GetUserByEmailAsync(string email)
-        => await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+    public async Task<UserDto> GetUserByEmailAsync(string email)
+    {
+        var userEntity = await GetUserEntityByEmail(email);
+        if (userEntity == null)
+        {
+            throw new NotFoundException(nameof(User), email);
+        }
+        return _mapper.Map<UserDto>(userEntity);
+    }
 
-    public async Task<User?> GetUserByUsernameAsync(string username)
-        => await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+    public async Task<UserDto> GetUserByUsernameAsync(string username)
+    {
+        var userEntity = await GetUserByUsernameInternal(username);
+        return _mapper.Map<UserDto>(userEntity);
+    }
 
-    public async Task<User> CreateUserAsync(UserRegisterDto userDto, bool isGoogleAuth)
+    public async Task<UserDto> CreateUserAsync(UserRegisterDto userDto, bool isGoogleAuth)
     {
         if (await GetUserByUsernameAsync(userDto.Username) is not null)
         {
@@ -55,7 +65,7 @@ public sealed class UserService : BaseService, IUserService
         var createdUser = (await _context.Users.AddAsync(newUser)).Entity;
         await _context.SaveChangesAsync();
 
-        return createdUser;
+        return _mapper.Map<UserDto>(createdUser); ;
     }
 
     public async Task<UserDto> UpdateUserAsync(UpdateUserNamesDTO updateUserDTO)
@@ -100,6 +110,12 @@ public sealed class UserService : BaseService, IUserService
         return _mapper.Map<UserDto>(userEntity);
     }
 
+    public async Task<User?> GetUserEntityByEmail(string email)
+    {
+        var userEntity = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        return userEntity;
+    }
+
     private async Task<User> GetUserByIdInternal(int id)
     {
         var userEntity = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
@@ -107,6 +123,18 @@ public sealed class UserService : BaseService, IUserService
         if (userEntity == null)
         {
             throw new NotFoundException(nameof(User), id);
+        }
+
+        return userEntity;
+    }
+
+    private async Task<User> GetUserByUsernameInternal(string username)
+    {
+        var userEntity = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+
+        if (userEntity == null)
+        {
+            throw new NotFoundException(nameof(User), username);
         }
 
         return userEntity;

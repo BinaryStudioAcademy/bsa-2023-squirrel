@@ -1,4 +1,4 @@
-<div *ngIf="user" class="profile-container">
+<div *ngIf="currentUser" class="profile-container">
     <div class="header">
         <h3 class="profile-header">User Profile</h3>
     </div>
@@ -16,7 +16,7 @@
                     <div class="upload">
                         <img
                             class="avatar-img"
-                            [src]="user.avatarUrl ? user.avatarUrl : '/assets/account_circle_icon.png'"
+                            [src]="currentUser.avatarUrl ? currentUser.avatarUrl : '/assets/account_circle_icon.png'"
                             alt="avatar-photo" />
                         <div class="edit-icon">
                             <input type="file" id="userAvatar" />
@@ -63,7 +63,7 @@
         </div>
     </section>
 
-    <section *ngIf="!user.isGoogleAuth" class="section">
+    <section *ngIf="!currentUser.isGoogleAuth" class="section">
         <h4 class="section-header">Change password</h4>
         <div class="form-inputs">
             <form class="form" [formGroup]="passwordForm" (ngSubmit)="updateUserPassword()">

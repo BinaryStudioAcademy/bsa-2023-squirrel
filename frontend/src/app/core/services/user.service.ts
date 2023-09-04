@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/internal/Observable';
+import { Observable } from 'rxjs';
 
 import { UpdateUserNamesDto } from 'src/app/models/user/update-userNames.dto';
 import { UpdateUserNotificationsDto } from 'src/app/models/user/update-userNotifications.dto';
@@ -15,10 +15,6 @@ export class UserService {
     // eslint-disable-next-line no-empty-function
     constructor(private httpService: HttpInternalService) {}
 
-    public getUserById(id: number): Observable<UserDto> {
-        return this.httpService.getRequest<UserDto>(`${this.routePrefix}/${id}`);
-    }
-
     public updateUserNames(dto: UpdateUserNamesDto): Observable<UserDto> {
         return this.httpService.putRequest<UserDto>(`${this.routePrefix}/update-names`, dto);
     }
@@ -29,5 +25,9 @@ export class UserService {
 
     public updateUserNotifications(dto: UpdateUserNotificationsDto): Observable<UserDto> {
         return this.httpService.putRequest<UserDto>(`${this.routePrefix}/update-notifications`, dto);
+    }
+
+    public getUserFromToken(): Observable<UserDto> {
+        return this.httpService.getRequest<UserDto>(`${this.routePrefix}/fromToken`);
     }
 }

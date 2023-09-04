@@ -1,8 +1,12 @@
-<div class="user-info">
-    <app-avatar class="avatar" [userName]="'John Doe'" size="36"></app-avatar>
+<div class="user-info" *ngIf="currentUser">
+    <app-avatar
+        class="avatar"
+        [userName]="currentUser.firstName + ' ' + currentUser.lastName"
+        [imgLink]="currentUser.avatarUrl ? currentUser.avatarUrl : ''"
+        size="36"></app-avatar>
     <div class="name-email">
-        <p class="user-name">John Doe</p>
-        <p class="user-email">user@example.com</p>
+        <p class="user-name">{{ currentUser.firstName }} {{ currentUser.lastName }}</p>
+        <p class="user-email">{{ currentUser.email }}</p>
     </div>
 </div>
 <hr class="divider" />

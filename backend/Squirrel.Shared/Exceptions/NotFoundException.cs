@@ -19,4 +19,11 @@ public sealed class NotFoundException : RequestException
         HttpStatusCode.NotFound)
     {
     }
+
+    public NotFoundException(string entityName, string property) : base(
+    $"Entity '{entityName}' with id '{property}' not found",
+    ErrorType.NotFound,
+    HttpStatusCode.NotFound)
+    {
+    }
 }

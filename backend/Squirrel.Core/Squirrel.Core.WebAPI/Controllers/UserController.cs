@@ -1,55 +1,59 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.Common.DTO.Users;
 
-namespace Squirrel.Core.WebAPI.Controllers
+namespace Squirrel.Core.WebAPI.Controllers;
+
+[Authorize]
+[ApiController]
+[Route("api/[controller]")]
+
+public class UserController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class UserController : ControllerBase
+    private readonly IUserIdGetter _userIdGetter;
+    private readonly IUserService _userService;
+
+    public UserController(IUserIdGetter userIdGetter, IUserService userService)
     {
-        private readonly IUserService _userService;
+        _userIdGetter = userIdGetter;
+        _userService = userService;
+    }
 
-        public UserController(IUserService userService)
-        {
-            _userService = userService;
-        }
+    /// <summary>
+    /// Update user names
+    /// </summary>
+    [HttpPut("update-names")]
+    public async Task<ActionResult<UserDto>> UpdateUserNames([FromBody] UpdateUserNamesDTO updateUserDto)
+    {
+        updateUserDto.Id = _userIdGetter.GetCurrentUserId();
+        return Ok(await _userService.UpdateUserAsync(updateUserDto));
+    }
 
-        /// <summary>
-        /// Get user information by ID
-        /// </summary>
-        [HttpGet("{id}")]
-        public async Task<ActionResult<UserDto>> GetUserById(int id)
-        {
-            return Ok(await _userService.GetUserByIdAsync(id));
-        }
+    /// <summary>
+    /// Update user password
+    /// </summary>
+    [HttpPut("update-password")]
+    public async Task<ActionResult> UpdatePassword([FromBody] UpdateUserPasswordDTO changePasswordDto)
+    {
+        changePasswordDto.Id = _userIdGetter.GetCurrentUserId();
+        await _userService.ChangePasswordAsync(changePasswordDto);
+        return NoContent();
+    }
 
-        /// <summary>
-        /// Update user names
-        /// </summary>
-        [HttpPut("update-names")]
-        public async Task<ActionResult<UserDto>> UpdateUserNames([FromBody] UpdateUserNamesDTO updateUserDTO)
-        {
-            return Ok(await _userService.UpdateUserAsync(updateUserDTO));
-        }
+    /// <summary>
+    /// Update user notifications
+    /// </summary>
+    [HttpPut("update-notifications")]
+    public async Task<ActionResult<UserDto>> UpdateUserNotifications([FromBody] UpdateUserNotificationsdDTO updateUserNotificationsdDto)
+    {
+        updateUserNotificationsdDto.Id = _userIdGetter.GetCurrentUserId();
+        return Ok(await _userService.UpdateNotificationsAsync(updateUserNotificationsdDto));
+    }
 
-        /// <summary>
-        /// Update user password
-        /// </summary>
-        [HttpPut("update-password")]
-        public async Task<ActionResult> UpdatePassword([FromBody] UpdateUserPasswordDTO changePassword)
-        {
-            await _userService.ChangePasswordAsync(changePassword);
-            return NoContent();
-        }
-
-        /// <summary>
-        /// Update user notifications
-        /// </summary>
-        [HttpPut("update-notifications")]
-        public async Task<ActionResult<UserDto>> UpdateUserNotifications([FromBody] UpdateUserNotificationsdDTO updateUserNotificationsdDTO)
-        {
-            return Ok(await _userService.UpdateNotificationsAsync(updateUserNotificationsdDTO));
-        }
+    [HttpGet("fromToken")]
+    public async Task<ActionResult<UserDto>> GetUserFromToken()
+    {
+        return Ok(await _userService.GetUserByIdAsync(_userIdGetter.GetCurrentUserId()));
     }
 }

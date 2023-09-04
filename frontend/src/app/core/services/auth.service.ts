@@ -1,7 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { CredentialResponse } from 'google-one-tap';
-import { Observable, tap } from 'rxjs';
+import { map, Observable, of, tap } from 'rxjs';
 
 import { AccessTokenDto } from 'src/app/models/auth/access-token-dto';
 import { GoogleAuthDto } from 'src/app/models/auth/google-auth-dto';
@@ -11,8 +11,10 @@ import { UserRegisterDto } from 'src/app/models/user/user-register-dto';
 
 import { UserLoginDto } from '../../models/user/user-login-dto';
 
+import { EventService } from './event.service';
 import { HttpInternalService } from './http-internal.service';
 import { SpinnerService } from './spinner.service';
+import { UserService } from './user.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -22,19 +24,35 @@ export class AuthService {
 
     private readonly refreshTokenKey = 'refreshToken';
 
-    private readonly currentUserKey = 'currentUser';
-
     constructor(
         private httpService: HttpInternalService,
         private router: Router,
         private ngZone: NgZone,
-        private spinner: SpinnerService, // eslint-disable-next-line no-empty-function
+        private spinner: SpinnerService,
+        private userService: UserService,
+        private eventService: EventService, // eslint-disable-next-line no-empty-function
     ) {}
+
+    private currentUser: UserDto | undefined;
+
+    public getUser() {
+        return this.currentUser
+            ? of(this.currentUser)
+            : this.userService.getUserFromToken().pipe(
+                  map((resp: any) => {
+                      this.currentUser = resp;
+                      this.eventService.userChanged(this.currentUser);
+
+                      return this.currentUser;
+                  }),
+              );
+    }
 
     public signOut = () => {
         localStorage.removeItem(this.accessTokenKey);
         localStorage.removeItem(this.refreshTokenKey);
-        localStorage.removeItem(this.currentUserKey);
+        this.currentUser = undefined;
+        this.eventService.userChanged(undefined);
         this.router.navigate(['/login']);
     };
 
@@ -46,9 +64,8 @@ export class AuthService {
         return this.httpService
             .postRequest<UserAuthDto>(`${this.authRoutePrefix}/login/google`, credentials)
             .subscribe({
-                next: (data: UserAuthDto) => {
-                    this.saveTokens(data.token);
-                    this.setCurrentUser(data.user);
+                next: (response: UserAuthDto) => {
+                    this.handleAuthResponse(response);
                     this.ngZone.run(() => {
                         this.spinner.hide();
                         this.router.navigateByUrl('/projects');
@@ -63,28 +80,26 @@ export class AuthService {
 
     public register(userRegisterDto: UserRegisterDto): Observable<UserAuthDto> {
         return this.httpService.postRequest<UserAuthDto>(`${this.authRoutePrefix}/register`, userRegisterDto).pipe(
-            tap((data: UserAuthDto) => {
-                this.saveTokens(data.token);
-                this.setCurrentUser(data.user);
+            tap((resp) => {
+                this.handleAuthResponse(resp);
             }),
         );
     }
 
     public login(userLoginDto: UserLoginDto): Observable<UserAuthDto> {
         return this.httpService.postRequest<UserAuthDto>(`${this.authRoutePrefix}/login`, userLoginDto).pipe(
-            tap((data: UserAuthDto) => {
-                this.saveTokens(data.token);
-                this.setCurrentUser(data.user);
+            tap((resp) => {
+                this.handleAuthResponse(resp);
             }),
         );
     }
 
     public tokenExist() {
-        return localStorage.getItem('accessToken') && localStorage.getItem('refreshToken');
+        return localStorage.getItem(this.accessTokenKey) && localStorage.getItem(this.refreshTokenKey);
     }
 
     public get accessToken(): string | null {
-        const localJwt = localStorage.getItem('accessToken');
+        const localJwt = localStorage.getItem(this.accessTokenKey);
 
         if (!localJwt) {
             return null;
@@ -100,17 +115,9 @@ export class AuthService {
         }
     }
 
-    public setCurrentUser(user: UserDto) {
-        localStorage.setItem(this.currentUserKey, JSON.stringify(user));
-    }
-
-    public getCurrentUser(): UserDto | null {
-        const currentUser = localStorage.getItem(this.currentUserKey);
-
-        if (!currentUser) {
-            return null;
-        }
-
-        return JSON.parse(currentUser);
+    private handleAuthResponse(response: UserAuthDto) {
+        this.saveTokens(response.token);
+        this.currentUser = response.user;
+        this.eventService.userChanged(this.currentUser);
     }
 }

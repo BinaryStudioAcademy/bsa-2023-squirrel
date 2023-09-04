@@ -21,12 +21,6 @@ import { UserDto } from 'src/app/models/user/user-dto';
     styleUrls: ['./user-profile.component.sass'],
 })
 export class UserProfileComponent extends BaseComponent implements OnInit, OnDestroy {
-    public currentPasswordVisible = false;
-
-    public newPasswordVisible = false;
-
-    public repeatPasswordVisible = false;
-
     public squirrelNotification: boolean;
 
     public emailNotification: boolean;
@@ -100,9 +94,18 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
 
     private initUserNamesForm() {
         this.userNamesForm = this.fb.group({
-            userName: [this.user.userName, [Validators.required, Validators.minLength(2), Validators.maxLength(25)]],
-            firstName: [this.user.firstName, [Validators.required, Validators.minLength(2), Validators.maxLength(25)]],
-            lastName: [this.user.lastName, [Validators.required, Validators.minLength(2), Validators.maxLength(25)]],
+            userName: [
+                this.user.userName,
+                [Validators.required, Validators.minLength(2), Validators.maxLength(25), ValidationsFn.userNameMatch()],
+            ],
+            firstName: [
+                this.user.firstName,
+                [Validators.required, Validators.minLength(2), Validators.maxLength(25), ValidationsFn.nameMatch()],
+            ],
+            lastName: [
+                this.user.lastName,
+                [Validators.required, Validators.minLength(2), Validators.maxLength(25), ValidationsFn.nameMatch()],
+            ],
         });
     }
 
@@ -227,9 +230,5 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
                 this.notificationService.error(error.message);
             },
         );
-    }
-
-    public goBack() {
-        this.location.back();
     }
 }

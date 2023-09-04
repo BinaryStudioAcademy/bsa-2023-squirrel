@@ -1,7 +1,6 @@
 <div *ngIf="user" class="profile-container">
     <div class="header">
         <h3 class="profile-header">User Profile</h3>
-        <app-button text="Go Back" (click)="goBack()"></app-button>
     </div>
 
     <div class="sidebar">
@@ -28,30 +27,33 @@
 
                 <div class="form-group">
                     <label class="label-input" for="userName">Username</label>
-                    <input
+                    <app-input
                         class="input-text"
                         type="text"
                         id="userName"
                         formControlName="userName"
-                        placeholder="Enter username" />
+                        placeholder="Enter username">
+                    </app-input>
                 </div>
                 <div class="form-group">
                     <label class="label-input" for="firstName">First Name</label>
-                    <input
+                    <app-input
                         class="input-text"
                         type="text"
                         id="firstName"
                         formControlName="firstName"
-                        placeholder="Enter first name" />
+                        placeholder="Enter first name">
+                    </app-input>
                 </div>
                 <div class="form-group">
                     <label class="label-input" for="lastName">Last Name</label>
-                    <input
+                    <app-input
                         class="input-text"
                         type="text"
                         id="lastName"
                         formControlName="lastName"
-                        placeholder="Enter last name" />
+                        placeholder="Enter last name">
+                    </app-input>
                 </div>
                 <div class="form-group">
                     <div class="label-input"></div>
@@ -67,39 +69,33 @@
             <form class="form" [formGroup]="passwordForm" (ngSubmit)="updateUserPassword()">
                 <div class="form-group">
                     <label class="label-input" for="currentPassword">Current Password</label>
-                    <input
+                    <app-input
                         class="input-text"
-                        [type]="currentPasswordVisible ? 'text' : 'password'"
+                        type="password"
                         id="currentPassword"
                         formControlName="currentPassword"
-                        placeholder="Current password" />
-                    <span (click)="currentPasswordVisible = !currentPasswordVisible">
-                        <fa-icon class="eyeIcon" [icon]="currentPasswordVisible ? openEyeIcon : closeEyeIcon"></fa-icon>
-                    </span>
+                        placeholder="Current password">
+                    </app-input>
                 </div>
                 <div class="form-group">
                     <label class="label-input" for="newPassword">New Password</label>
-                    <input
+                    <app-input
                         class="input-text"
-                        [type]="newPasswordVisible ? 'text' : 'password'"
+                        type="password"
                         id="newPassword"
                         formControlName="newPassword"
-                        placeholder="New password" />
-                    <span (click)="newPasswordVisible = !newPasswordVisible">
-                        <fa-icon class="eyeIcon" [icon]="newPasswordVisible ? openEyeIcon : closeEyeIcon"></fa-icon>
-                    </span>
+                        placeholder="New password">
+                    </app-input>
                 </div>
                 <div class="form-group">
                     <label class="label-input" for="repeatPassword">Repeat New Password</label>
-                    <input
+                    <app-input
                         class="input-text"
-                        [type]="repeatPasswordVisible ? 'text' : 'password'"
+                        type="password"
                         id="repeatPassword"
                         formControlName="repeatPassword"
-                        placeholder="Repeat new password" />
-                    <span (click)="repeatPasswordVisible = !repeatPasswordVisible">
-                        <fa-icon class="eyeIcon" [icon]="repeatPasswordVisible ? openEyeIcon : closeEyeIcon"></fa-icon>
-                    </span>
+                        placeholder="Repeat new password">
+                    </app-input>
                 </div>
                 <div class="form-group">
                     <div class="label-input"></div>

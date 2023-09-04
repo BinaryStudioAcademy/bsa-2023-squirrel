@@ -10,6 +10,7 @@ import { ProjectCardComponent } from '@modules/projects/project-card/project-car
 import { ProjectsPageComponent } from '@modules/projects/projects-page/projects-page.component';
 import { ProjectsRoutingModule } from '@modules/projects/projects-routing.model';
 import { SharedModule } from '@shared/shared.module';
+
 import { FormatDatePipe } from './format-date.pipe';
 
 @NgModule({
@@ -25,4 +26,4 @@ import { FormatDatePipe } from './format-date.pipe';
         FormsModule,
     ],
 })
-export class ProjectsModule { }
+export class ProjectsModule {}

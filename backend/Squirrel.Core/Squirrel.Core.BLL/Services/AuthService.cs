@@ -49,7 +49,7 @@ public sealed class AuthService : BaseService, IAuthService
         };
     }
 
-    public async Task<RefreshedAccessTokenDto> LoginAsync(UserLoginDto userLoginDto)
+    public async Task<AuthUserDto> LoginAsync(UserLoginDto userLoginDto)
     {
         var userEntity = await _userService.GetUserByEmailAsync(userLoginDto.Email);
 
@@ -59,14 +59,22 @@ public sealed class AuthService : BaseService, IAuthService
             throw new InvalidEmailOrPasswordException();
         }
 
-        return await GenerateNewAccessTokenAsync(userEntity.Id, userEntity.Username, userLoginDto.Email);
+        return new AuthUserDto
+        {
+            User = _mapper.Map<UserDto>(userEntity),
+            Token = await GenerateNewAccessTokenAsync(userEntity.Id, userEntity.Username, userEntity.Email)
+        };
     }
 
-    public async Task<RefreshedAccessTokenDto> RegisterAsync(UserRegisterDto userRegisterDto)
+    public async Task<AuthUserDto> RegisterAsync(UserRegisterDto userRegisterDto)
     {
         var createdUser = await _userService.CreateUserAsync(userRegisterDto, isGoogleAuth: false);
-        
-        return await GenerateNewAccessTokenAsync(createdUser.Id, createdUser.Username, createdUser.Email);
+
+        return new AuthUserDto
+        {
+            User = _mapper.Map<UserDto>(createdUser),
+            Token = await GenerateNewAccessTokenAsync(createdUser.Id, createdUser.Username, createdUser.Email)
+        };
     }
 
     private async Task<RefreshedAccessTokenDto> GenerateNewAccessTokenAsync(int userId, string userName, string email)

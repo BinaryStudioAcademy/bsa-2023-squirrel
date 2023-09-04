@@ -20,6 +20,7 @@ public sealed class User : Entity<int>
     public ICollection<PullRequest> PullRequests { get; set; } = new List<PullRequest>();
     public ICollection<UserProject> UserProjects { get; set; } = new List<UserProject>();
     public ICollection<Project> Projects { get; set; } = new List<Project>();
+    public ICollection<Project> OwnProjects { get; set; } = new List<Project>();
     public ICollection<PullRequest> ReviewedRequests { get; set; } = new List<PullRequest>();
     public ICollection<PullRequestReviewer> PullRequestReviewers { get; set; } = new List<PullRequestReviewer>();
 }

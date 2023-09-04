@@ -21,11 +21,9 @@ export class ConfirmationModalComponent {
 
     handleConfirmationModalSubmit() {
         this.spinnerService.show();
-        setTimeout(() => {
-            this.confirmationModalData.callbackMethod();
-            this.spinnerService.hide();
-            this.confirmationModalRef.close();
-        }, 500);
+        this.confirmationModalData.callbackMethod();
+        this.spinnerService.hide();
+        this.confirmationModalRef.close();
     }
 
     closeConfirmationModal(): void {

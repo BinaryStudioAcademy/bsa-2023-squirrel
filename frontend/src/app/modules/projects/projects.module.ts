@@ -10,9 +10,10 @@ import { ProjectCardComponent } from '@modules/projects/project-card/project-car
 import { ProjectsPageComponent } from '@modules/projects/projects-page/projects-page.component';
 import { ProjectsRoutingModule } from '@modules/projects/projects-routing.model';
 import { SharedModule } from '@shared/shared.module';
+import { FormatDatePipe } from './format-date.pipe';
 
 @NgModule({
-    declarations: [ProjectsPageComponent, CreateProjectModalComponent, ProjectCardComponent],
+    declarations: [ProjectsPageComponent, CreateProjectModalComponent, ProjectCardComponent, FormatDatePipe],
     imports: [
         CommonModule,
         SharedModule,

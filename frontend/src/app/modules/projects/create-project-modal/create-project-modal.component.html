@@ -12,6 +12,11 @@
             </mat-select>
         </mat-form-field>
     </div>
+    <div class="input-container">
+        <app-input
+            [formControl]="$any(projectForm.controls['projectDescription'])"
+            [label]="'Project Description'"></app-input>
+    </div>
 </mat-dialog-content>
 <mat-dialog-actions class="modal-buttons">
     <app-button text="Create" width="100%" variant="outline-secondary" (click)="createProject()"></app-button>

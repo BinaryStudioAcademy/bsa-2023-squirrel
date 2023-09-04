@@ -27,8 +27,9 @@ export class CreateProjectModalComponent implements OnInit {
         private fb: FormBuilder,
         private projectService: ProjectService,
         private notificationService: NotificationService,
-        // eslint-disable-next-line no-empty-function
-    ) {}
+    ) {
+        // intentionaly left empty
+    }
 
     ngOnInit() {
         this.createForm();
@@ -38,6 +39,7 @@ export class CreateProjectModalComponent implements OnInit {
         this.projectForm = this.fb.group({
             projectName: ['', Validators.required],
             selectedEngine: [DbEngine.SqlServer],
+            projectDescription: [''],
         });
     }
 
@@ -49,23 +51,26 @@ export class CreateProjectModalComponent implements OnInit {
         const newProject: ProjectDto = {
             name: this.projectForm.value.projectName,
             engine: this.projectForm.value.selectedEngine,
+            description: this.projectForm.value.projectDescription,
+            date: new Date(),
         };
 
         // TODO: make it through the BranchService
         // created default branch for this project
 
-        this.projectService.addProject(newProject).pipe(
-            takeUntil(this.unsubscribe$),
-        ).subscribe(
-            (createdProject: ProjectDto) => {
-                this.dialogRef.close(createdProject);
-                this.notificationService.info('Project created successfully');
-                this.projectCreated.emit(newProject);
-            },
-            () => {
-                this.notificationService.error('Failed to create project');
-            },
-        );
+        this.projectService
+            .addProject(newProject)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe(
+                (createdProject: ProjectDto) => {
+                    this.dialogRef.close(createdProject);
+                    this.notificationService.info('Project created successfully');
+                    this.projectCreated.emit(newProject);
+                },
+                () => {
+                    this.notificationService.error('Failed to create project');
+                },
+            );
     }
 
     close(): void {

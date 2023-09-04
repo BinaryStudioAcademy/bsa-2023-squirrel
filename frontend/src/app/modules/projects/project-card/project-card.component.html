@@ -1,13 +1,18 @@
-<div class="project-card">
-    <div class="side-panel" [style.background-color]="accentColor"></div>
-    <div class="engine-logo-container" [style.background-color]="accentColor">
+<div
+    class="project-card"
+    [ngClass]="{
+        postgreSql: project.engine === 'PostgreSql',
+        sqlServer: project.engine === 'SqlServer'
+    }">
+    <div class="side-panel"></div>
+    <div class="engine-logo-container">
         <img [src]="engineLogoImage" alt="Engine Logo" class="engine-logo" />
     </div>
     <div class="project-name">
         {{ project.name }}
     </div>
     <div class="project-tag-container">
-        <div class="project-tag" [style.border-color]="accentColor" [style.color]="accentColor">
+        <div class="project-tag">
             {{ project.engine }}
         </div>
     </div>
@@ -16,5 +21,5 @@
             {{ project.description }}
         </div>
     </div>
-    <div class="project-date">{{ project.date }}</div>
+    <div class="project-date">{{ project.date | formatDate }}</div>
 </div>

@@ -11,13 +11,7 @@ import { ProjectDto } from '../../../models/projects/project-dto';
 export class ProjectCardComponent implements OnInit {
     @Input() project: ProjectDto;
 
-    public accentColor: string = '';
-
     public engineLogoImage: string = '';
-
-    private sqlServerAccentColor: string = '#e79925';
-
-    private postgresSqlAccentColor: string = '#FF6532';
 
     private postgresSqlLogo: string = '/assets/postgresql.svg';
 
@@ -31,12 +25,6 @@ export class ProjectCardComponent implements OnInit {
     }
 
     initializeProjectCard(): void {
-        if (this.project.engine === DbEngine.PostgreSql) {
-            this.accentColor = this.postgresSqlAccentColor;
-            this.engineLogoImage = this.postgresSqlLogo;
-        } else {
-            this.accentColor = this.sqlServerAccentColor;
-            this.engineLogoImage = this.sqlServerLogo;
-        }
+        this.engineLogoImage = this.project.engine === DbEngine.PostgreSql ? this.postgresSqlLogo : this.sqlServerLogo;
     }
 }

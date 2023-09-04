@@ -1,7 +1,7 @@
 <div class="user-info" *ngIf="currentUser">
     <app-avatar
         class="avatar"
-        [userName]="currentUser.firstName"
+        [userName]="currentUser.firstName + ' ' + currentUser.lastName"
         [imgLink]="currentUser.avatarUrl ? currentUser.avatarUrl : ''"
         size="36"></app-avatar>
     <div class="name-email">

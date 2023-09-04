@@ -24,7 +24,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         if ((requiresToken && token) || (!requiresToken && !token)) {
             return true;
         }
-        this.router.navigateByUrl(requiresToken ? '/login' : '/main');
+        this.router.navigateByUrl(requiresToken ? '/login' : '/projects');
 
         return false;
     }

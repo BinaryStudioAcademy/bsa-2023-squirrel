@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { ProjectDto } from '../../models/projects/project-dto';
 
 import { HttpInternalService } from './http-internal.service';
+import {NewProjectDto} from "../../models/projects/new-project-dto";
 
 @Injectable({
     providedIn: 'root',
@@ -14,7 +15,7 @@ export class ProjectService {
     // eslint-disable-next-line no-empty-function
     constructor(private httpService: HttpInternalService) {}
 
-    addProject(project: ProjectDto): Observable<ProjectDto> {
+    addProject(project: NewProjectDto): Observable<ProjectDto> {
         return this.httpService.postRequest<ProjectDto>(this.projectsApiUrl, project);
     }
 

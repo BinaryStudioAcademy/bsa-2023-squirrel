@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { NotificationService } from '@core/services/notification.service';
 import { ProjectService } from '@core/services/project.service';
 import { CreateProjectModalComponent } from '@modules/projects/create-project-modal/create-project-modal.component';
@@ -21,6 +22,7 @@ export class ProjectsPageComponent implements OnInit {
         public dialog: MatDialog,
         private projectService: ProjectService,
         private notificationService: NotificationService,
+        private router: Router,
         // eslint-disable-next-line no-empty-function
     ) {}
 
@@ -50,5 +52,9 @@ export class ProjectsPageComponent implements OnInit {
         dialogRef.componentInstance.projectCreated.subscribe((createdProject: ProjectDto) => {
             this.projects.push(createdProject);
         });
+    }
+
+    public chooseProject(projectId: number) {
+        this.router.navigateByUrl(`/main/${projectId}`);
     }
 }

@@ -43,8 +43,6 @@ export class MainComponent extends BaseComponent implements OnInit, OnDestroy {
     private loadProject() {
         const projectId = this.route.snapshot.paramMap.get('id');
 
-        console.log(projectId);
-
         if (!projectId) {
             this.notificationService.error('wrong route');
 

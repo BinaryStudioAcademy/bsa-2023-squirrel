@@ -1,7 +1,6 @@
 import { DbEngine } from './db-engine';
 
-export interface ProjectDto {
-    id: number;
+export interface NewProjectDto {
     name: string;
     engine: DbEngine;
 }

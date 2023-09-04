@@ -6,6 +6,7 @@ import { ProjectService } from '@core/services/project.service';
 import { Subject, takeUntil } from 'rxjs';
 
 import { DbEngine } from '../../../models/projects/db-engine';
+import { NewProjectDto } from '../../../models/projects/new-project-dto';
 import { ProjectDto } from '../../../models/projects/project-dto';
 
 @Component({
@@ -46,7 +47,7 @@ export class CreateProjectModalComponent implements OnInit {
             return;
         }
 
-        const newProject: ProjectDto = {
+        const newProject: NewProjectDto = {
             name: this.projectForm.value.projectName,
             engine: this.projectForm.value.selectedEngine,
         };
@@ -60,7 +61,7 @@ export class CreateProjectModalComponent implements OnInit {
             (createdProject: ProjectDto) => {
                 this.dialogRef.close(createdProject);
                 this.notificationService.info('Project created successfully');
-                this.projectCreated.emit(newProject);
+                this.projectCreated.emit(createdProject);
             },
             () => {
                 this.notificationService.error('Failed to create project');

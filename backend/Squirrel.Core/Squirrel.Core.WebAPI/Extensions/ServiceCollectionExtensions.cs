@@ -28,7 +28,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IProjectService, ProjectService>();
 
-        services.AddScoped<IHttpInternalService, HttpInternalService>();
+        services.AddScoped<IHttpClientService, HttpClientService>();
     }
 
     public static void AddValidation(this IServiceCollection services)

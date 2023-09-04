@@ -1,13 +1,13 @@
-﻿using Squirrel.Core.BLL.Interfaces;
-using System.Net.Http.Json;
+﻿using Squirrel.Core.BLL.Extensions;
+using Squirrel.Core.BLL.Interfaces;
 
 namespace Squirrel.Core.BLL.Services;
 
-public class HttpInternalService : IHttpInternalService
+public class HttpClientService : IHttpClientService
 {
     private readonly HttpClient _httpClient;
 
-    public HttpInternalService()
+    public HttpClientService()
     {
         _httpClient = new HttpClient();
     }
@@ -19,11 +19,8 @@ public class HttpInternalService : IHttpInternalService
 
         if (response.IsSuccessStatusCode)
         {
-            // Read and parse the response content as a list of TResponse objects.
-            TResponse? databaseItems = await response.Content.ReadFromJsonAsync<TResponse>();
-
             // Return the TResponse
-            return databaseItems!;
+            return await response.GetModelAsync<TResponse>();
         }
         else
         {
@@ -31,4 +28,8 @@ public class HttpInternalService : IHttpInternalService
             throw new HttpRequestException($"HTTP Error: {response.StatusCode}");
         }
     }
+
+    public async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request)
+        => await _httpClient.SendAsync(request).ConfigureAwait(false);
+
 }

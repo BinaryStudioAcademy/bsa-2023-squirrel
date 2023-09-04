@@ -8,10 +8,10 @@ namespace Squirrel.Core.WebAPI.Controllers;
 [Route("api/[controller]")]
 public class DatabaseItemsController : ControllerBase
 {
-    private readonly IHttpInternalService _httpInternalService;
+    private readonly IHttpClientService _httpInternalService;
     private readonly IConfiguration _configuration;
 
-    public DatabaseItemsController(IHttpInternalService httpInternalService, IConfiguration configuration)
+    public DatabaseItemsController(IHttpClientService httpInternalService, IConfiguration configuration)
     {
         _httpInternalService = httpInternalService;
         _configuration = configuration;

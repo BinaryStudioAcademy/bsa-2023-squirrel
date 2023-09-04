@@ -17,9 +17,9 @@ public class SettingController: ControllerBase
     
     [HttpPost]
     [Route("connect")]
-    public IActionResult Post(ConnectionString connectionString)
+    public IActionResult Post(DbSettings dbSettings)
     {
-        _connectionFileService.SaveToFile(connectionString);
+        _connectionFileService.SaveToFile(dbSettings);
         
         //TODO: Connection unique ID
         //TODO: 55 - As a developer I want to setup SignalR connection from console app to webAPI

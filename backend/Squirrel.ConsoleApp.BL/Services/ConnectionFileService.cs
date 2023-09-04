@@ -12,11 +12,11 @@ public class ConnectionFileService : IConnectionFileService
         var filePath = ConnectionFilePath;
         if (!File.Exists(filePath))
         {
-            File.WriteAllText(filePath, "{}");
+            File.WriteAllText(filePath, JsonConvert.SerializeObject(new { DbSettings = new DbSettings() }, Formatting.Indented));
         }
     }
 
-    public ConnectionString ReadFromFile()
+    public DbSettings ReadFromFile()
     {
         var filePath = ConnectionFilePath;
         if (!File.Exists(filePath))
@@ -25,13 +25,13 @@ public class ConnectionFileService : IConnectionFileService
         }
 
         var json = File.ReadAllText(filePath);
-        return JsonConvert.DeserializeObject<ConnectionString>(json) ?? throw new JsonReadFailed(filePath);
+        return JsonConvert.DeserializeObject<DbSettings>(json) ?? throw new JsonReadFailed(filePath);
     }
 
-    public void SaveToFile(ConnectionString connectionString)
+    public void SaveToFile(DbSettings dbSettings)
     {
         var filePath = ConnectionFilePath;
-        string json = JsonConvert.SerializeObject(connectionString, Formatting.Indented);
+        string json = JsonConvert.SerializeObject(new { DbSettings = dbSettings }, Formatting.Indented);
         File.WriteAllText(filePath, json);
     }
 
@@ -39,8 +39,7 @@ public class ConnectionFileService : IConnectionFileService
     {
         get
         {
-            string userFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            return Path.Combine(userFolder, "squirrel-connection.json");
+            return HelperService.GetDbSettingsFilePath();
         }
     }
 }

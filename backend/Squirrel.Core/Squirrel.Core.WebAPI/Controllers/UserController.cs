@@ -51,10 +51,5 @@ namespace Squirrel.Core.WebAPI.Controllers
         {
             return Ok(await _userService.UpdateNotificationsAsync(updateUserNotificationsdDTO));
         }
-
-        private int GetUserId()
-        {
-            return int.Parse(HttpContext.User.Claims.First(claim => claim.Type == "Id").Value);
-        }
     }
 }

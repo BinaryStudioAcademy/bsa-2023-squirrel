@@ -18,7 +18,7 @@ public class ClientIdFileService : IClientIdFileService
         var filePath = ClientIdFilePath;
         if (!File.Exists(filePath))
         {
-            return "";
+            return string.Empty;
         }
 
         var guid = File.ReadAllText(filePath);

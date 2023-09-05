@@ -1,6 +1,5 @@
 version: '3.1'
 services:
-
     sql_server:
         image: mcr.microsoft.com/mssql/server:2022-latest
         container_name: sql_server
@@ -39,6 +38,8 @@ services:
         environment:
             - "RABBITMQ_DEFAULT_USER=guest"
             - "RABBITMQ_DEFAULT_PASS=guest"
+volumes:
+    data:
 
 networks:
     back:

@@ -16,15 +16,15 @@ public class ProjectController : ControllerBase
     {
         _projectService = projectService;
     }
-    
+
     [HttpPost]
-    public async Task<ActionResult<ProjectDto>> AddProject([FromBody] NewProjectDto newProjectDto)
+    public async Task<ActionResult<ProjectResponseDto>> AddProject([FromBody] NewProjectDto newProjectDto)
     {
         return Ok(await _projectService.AddProjectAsync(newProjectDto));
     }
 
     [HttpPut("{projectId}")]
-    public async Task<ActionResult<ProjectDto>> UpdateProject(int projectId, ProjectDto projectDto)
+    public async Task<ActionResult<ProjectResponseDto>> UpdateProject(int projectId, ProjectDto projectDto)
     {
         return Ok(await _projectService.UpdateProjectAsync(projectId, projectDto));
     }
@@ -37,13 +37,13 @@ public class ProjectController : ControllerBase
     }
 
     [HttpGet("{projectId}")]
-    public async Task<ActionResult<ProjectDto>> GetProject(int projectId)
+    public async Task<ActionResult<ProjectResponseDto>> GetProject(int projectId)
     {
         return Ok(await _projectService.GetProjectAsync(projectId));
     }
 
     [HttpGet("all")]
-    public async Task<ActionResult<List<ProjectDto>>> GetAllUserProjects()
+    public async Task<ActionResult<List<ProjectResponseDto>>> GetAllUserProjects()
     {
         return Ok(await _projectService.GetAllUserProjectsAsync());
     }

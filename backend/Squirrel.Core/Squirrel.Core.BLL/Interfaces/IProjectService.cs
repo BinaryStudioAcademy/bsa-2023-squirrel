@@ -4,9 +4,9 @@ namespace Squirrel.Core.BLL.Interfaces;
 
 public interface IProjectService
 {
-    Task<ProjectDto> AddProjectAsync(NewProjectDto newProjectDto);
-    Task<ProjectDto> UpdateProjectAsync(int projectId, ProjectDto projectDto);
+    Task<ProjectResponseDto> AddProjectAsync(NewProjectDto newProjectDto);
+    Task<ProjectResponseDto> UpdateProjectAsync(int projectId, ProjectDto projectDto);
     Task DeleteProjectAsync(int projectId);
-    Task<ProjectDto> GetProjectAsync(int projectId);
-    Task<List<ProjectDto>> GetAllUserProjectsAsync();
+    Task<ProjectResponseDto> GetProjectAsync(int projectId);
+    Task<List<ProjectResponseDto>> GetAllUserProjectsAsync();
 }

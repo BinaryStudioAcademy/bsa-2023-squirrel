@@ -6,7 +6,7 @@ import { map, Observable, of, tap } from 'rxjs';
 import { AccessTokenDto } from 'src/app/models/auth/access-token-dto';
 import { GoogleAuthDto } from 'src/app/models/auth/google-auth-dto';
 import { UserAuthDto } from 'src/app/models/auth/user-auth-dto';
-import { User } from 'src/app/models/user/user';
+import { UserDto } from 'src/app/models/user/user-dto';
 import { UserLoginDto } from 'src/app/models/user/user-login-dto';
 import { UserRegisterDto } from 'src/app/models/user/user-register-dto';
 
@@ -32,7 +32,7 @@ export class AuthService {
         private eventService: EventService, // eslint-disable-next-line no-empty-function
     ) {}
 
-    private currentUser: User | undefined;
+    private currentUser: UserDto | undefined;
 
     public getUser() {
         return this.currentUser

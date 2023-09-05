@@ -4,9 +4,11 @@ using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.Common.DTO.Users;
 
 namespace Squirrel.Core.WebAPI.Controllers;
-[Route("api/[controller]")]
-[ApiController]
+
 [Authorize]
+[ApiController]
+[Route("api/[controller]")]
+
 public class UserController : ControllerBase
 {
     private readonly IUserIdGetter _userIdGetter;
@@ -16,6 +18,37 @@ public class UserController : ControllerBase
     {
         _userIdGetter = userIdGetter;
         _userService = userService;
+    }
+
+    /// <summary>
+    /// Update user names
+    /// </summary>
+    [HttpPut("update-names")]
+    public async Task<ActionResult<UserDto>> UpdateUserNames([FromBody] UpdateUserNamesDto updateUserDto)
+    {
+        updateUserDto.Id = _userIdGetter.GetCurrentUserId();
+        return Ok(await _userService.UpdateUserNamesAsync(updateUserDto));
+    }
+
+    /// <summary>
+    /// Update user password
+    /// </summary>
+    [HttpPut("update-password")]
+    public async Task<ActionResult> UpdatePassword([FromBody] UpdateUserPasswordDto changePasswordDto)
+    {
+        changePasswordDto.Id = _userIdGetter.GetCurrentUserId();
+        await _userService.ChangePasswordAsync(changePasswordDto);
+        return NoContent();
+    }
+
+    /// <summary>
+    /// Update user notifications
+    /// </summary>
+    [HttpPut("update-notifications")]
+    public async Task<ActionResult<UserDto>> UpdateUserNotifications([FromBody] UpdateUserNotificationsdDto updateUserNotificationsdDto)
+    {
+        updateUserNotificationsdDto.Id = _userIdGetter.GetCurrentUserId();
+        return Ok(await _userService.UpdateNotificationsAsync(updateUserNotificationsdDto));
     }
 
     [HttpGet("fromToken")]

@@ -8,4 +8,7 @@ public sealed class UserDto
     public string LastName { get; set; } = null!;
     public string UserName { get; set; } = null!;
     public string? AvatarUrl { get; set; }
+    public bool SquirrelNotification { get; set; }
+    public bool EmailNotification { get; set; }
+    public bool IsGoogleAuth { get; set; }
 }

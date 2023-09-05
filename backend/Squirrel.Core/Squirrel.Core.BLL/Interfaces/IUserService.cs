@@ -7,7 +7,12 @@ namespace Squirrel.Core.BLL.Interfaces;
 public interface IUserService
 {
     Task<UserDto> GetUserByIdAsync(int id);
-    Task<User?> GetUserByEmailAsync(string email);
-    Task<User?> GetUserByUsernameAsync(string username);
-    Task<User> CreateUserAsync(UserRegisterDto userDto, bool isGoogleAuth);
+    Task<UserDto> GetUserByEmailAsync(string email);
+    Task<UserDto> GetUserByUsernameAsync(string username);
+    Task<UserDto> CreateUserAsync(UserRegisterDto userDto, bool isGoogleAuth);
+    Task<UserDto> UpdateUserNamesAsync(UpdateUserNamesDto updateUserDTO);
+    Task ChangePasswordAsync(UpdateUserPasswordDto userDto);
+    Task<UserDto> UpdateNotificationsAsync(UpdateUserNotificationsdDto updateNotificationsdDTO);
+    Task<User?> GetUserEntityByEmail(string email);
+    Task<User?> GetUserEntityByUsername(string username);
 }

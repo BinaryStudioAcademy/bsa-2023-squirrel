@@ -8,8 +8,6 @@ public sealed class ProjectProfile : Profile
 {
     public ProjectProfile()
     {
-        CreateMap<Project, ProjectDto>();
-        CreateMap<ProjectDto, Project>()
-            .ForMember(d => d.DefaultBranch, o => o.Ignore());
+        CreateMap<Project, ProjectDto>()!.ReverseMap();
     }
 }

@@ -7,7 +7,17 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
+	<ItemGroup>
+		<None Remove="appsettings.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="appsettings.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</EmbeddedResource>
+	</ItemGroup>
+	
+	<ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.21" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client.Core" Version="6.0.21" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
@@ -22,12 +32,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Squirrel.ConsoleApp.BL\Squirrel.ConsoleApp.BL.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="appsettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>

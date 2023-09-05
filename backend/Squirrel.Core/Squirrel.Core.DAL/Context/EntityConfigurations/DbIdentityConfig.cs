@@ -10,7 +10,6 @@ public sealed class DbIdentityConfig : IEntityTypeConfiguration<DbIdentity>
     {
         builder.Property(x => x.DbName).IsRequired().HasMaxLength(100); // Clarify max length.
         builder.Property(x => x.Guid).IsRequired();
-        builder.Property(x => x.DbEngine).IsRequired();
 
         builder.HasAlternateKey(x => x.Guid);
 

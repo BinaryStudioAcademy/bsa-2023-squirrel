@@ -4,7 +4,8 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { BaseComponent } from '@core/base/base.component';
 import { NotificationService } from '@core/services/notification.service';
 import { ProjectService } from '@core/services/project.service';
-import { takeUntil } from 'rxjs';
+import { SpinnerService } from '@core/services/spinner.service';
+import { takeUntil, tap } from 'rxjs';
 
 import { DbEngine } from 'src/app/models/projects/db-engine';
 import { ProjectDto } from 'src/app/models/projects/project-dto';
@@ -26,6 +27,7 @@ export class CreateProjectModalComponent extends BaseComponent implements OnInit
         private fb: FormBuilder,
         private projectService: ProjectService,
         private notificationService: NotificationService,
+        private spinner: SpinnerService,
     ) {
         super();
     }
@@ -43,9 +45,7 @@ export class CreateProjectModalComponent extends BaseComponent implements OnInit
     }
 
     public createProject(): void {
-        if (!this.projectForm.valid) {
-            return;
-        }
+        this.spinner.show();
 
         const newProject: ProjectDto = {
             name: this.projectForm.value.projectName,
@@ -55,7 +55,10 @@ export class CreateProjectModalComponent extends BaseComponent implements OnInit
 
         this.projectService
             .addProject(newProject)
-            .pipe(takeUntil(this.unsubscribe$))
+            .pipe(
+                takeUntil(this.unsubscribe$),
+                tap(() => this.spinner.hide()),
+            )
             .subscribe(
                 (createdProject: ProjectDto) => {
                     this.dialogRef.close(createdProject);

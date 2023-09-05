@@ -292,7 +292,7 @@ namespace Squirrel.Core.DAL.Migrations
                     b.Property<int>("DbEngine")
                         .HasColumnType("int");
 
-                    b.Property<int>("DefaultBranchId")
+                    b.Property<int?>("DefaultBranchId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -314,7 +314,8 @@ namespace Squirrel.Core.DAL.Migrations
                     b.HasIndex("CreatedBy");
 
                     b.HasIndex("DefaultBranchId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[DefaultBranchId] IS NOT NULL");
 
                     b.ToTable("Projects");
                 });
@@ -735,10 +736,8 @@ namespace Squirrel.Core.DAL.Migrations
                         .IsRequired();
 
                     b.HasOne("Squirrel.Core.DAL.Entities.Branch", "DefaultBranch")
-                        .WithOne("ProjectForDefaultBranch")
-                        .HasForeignKey("Squirrel.Core.DAL.Entities.Project", "DefaultBranchId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .WithOne()
+                        .HasForeignKey("Squirrel.Core.DAL.Entities.Project", "DefaultBranchId");
 
                     b.Navigation("Author");
 
@@ -794,8 +793,6 @@ namespace Squirrel.Core.DAL.Migrations
             modelBuilder.Entity("Squirrel.Core.DAL.Entities.Branch", b =>
                 {
                     b.Navigation("BranchCommits");
-
-                    b.Navigation("ProjectForDefaultBranch");
 
                     b.Navigation("PullRequestsFromThisBranch");
 

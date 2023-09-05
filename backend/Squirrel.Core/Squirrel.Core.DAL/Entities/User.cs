@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using Squirrel.Core.DAL.Entities.Common;
+﻿using Squirrel.Core.DAL.Entities.Common;
 using Squirrel.Core.DAL.Entities.JoinEntities;
 
 namespace Squirrel.Core.DAL.Entities;

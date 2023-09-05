@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using AutoMapper;
+﻿using AutoMapper;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.BLL.Services.Abstract;
 using Squirrel.Core.Common.DTO.Auth;
@@ -55,7 +54,7 @@ public sealed class AuthService : BaseService, IAuthService
         var userEntity = await _userService.GetUserByEmailAsync(userLoginDto.Email);
 
         if (userEntity is null ||
-            !SecurityUtils.ValidatePassword(userLoginDto.Password, userEntity.PasswordHash, userEntity.Salt))
+            !SecurityUtils.ValidatePassword(userLoginDto.Password, userEntity.PasswordHash!, userEntity.Salt!))
         {
             throw new InvalidEmailOrPasswordException();
         }

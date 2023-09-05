@@ -1,9 +1,6 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { CreateProjectModalComponent } from '@modules/projects/create-project-modal/create-project-modal.component';
-
-import { ProjectDto } from '../../../../../models/projects/project-dto';
-import {CreateDbModalComponent} from "@modules/main/create-db-modal/create-db-modal.component";
+import { CreateDbModalComponent } from '@modules/main/create-db-modal/create-db-modal.component';
 
 @Component({
     selector: 'app-main-header',
@@ -17,6 +14,7 @@ export class MainHeaderComponent {
 
     public dbNames: string[] = ['Branch 1', 'Branch 2', 'Branch 3', 'Branch 4'];
 
+    // eslint-disable-next-line no-empty-function
     constructor(public dialog: MatDialog) {
     }
 

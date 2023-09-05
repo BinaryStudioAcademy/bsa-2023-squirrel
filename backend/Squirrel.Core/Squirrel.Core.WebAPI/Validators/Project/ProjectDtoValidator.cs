@@ -10,7 +10,6 @@ public class ProjectDtoValidator : AbstractValidator<ProjectDto>
         RuleFor(x => x.Description)!.MaximumLength(1000);
         RuleFor(x => x.DbEngine)!.NotNull();
         RuleFor(x => x.Name)!
-            .NotNull()!
             .MinimumLength(3)!
             .MaximumLength(50);
     }

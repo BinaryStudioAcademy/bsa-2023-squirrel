@@ -86,7 +86,7 @@ public sealed class UserService : BaseService, IUserService
     {
         var userEntity = await GetUserByIdInternal(changePasswordDTO.Id);
 
-        if (!SecurityUtils.ValidatePassword(changePasswordDTO.CurrentPassword, userEntity.PasswordHash, userEntity.Salt))
+        if (!SecurityUtils.ValidatePassword(changePasswordDTO.CurrentPassword, userEntity.PasswordHash!, userEntity.Salt!))
         {
             throw new InvalidEmailOrPasswordException();
         }

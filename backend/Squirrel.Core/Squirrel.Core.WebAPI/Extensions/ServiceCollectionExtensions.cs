@@ -26,6 +26,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IJwtFactory, JwtFactory>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IBranchService, BranchService>();
         services.AddScoped<IProjectService, ProjectService>();
         services.AddScoped<IDatabaseItemsService, DatabaseItemsService>();
 

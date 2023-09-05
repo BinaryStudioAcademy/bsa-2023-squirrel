@@ -48,8 +48,6 @@ export class ProjectsPageComponent extends BaseComponent implements OnInit {
             height: '45%',
         });
 
-        dialogRef.componentInstance.projectCreated.subscribe((createdProject: ProjectDto) => {
-            this.projects.push(createdProject);
-        });
+        dialogRef.componentInstance.projectCreated.subscribe(() => this.loadProjects());
     }
 }

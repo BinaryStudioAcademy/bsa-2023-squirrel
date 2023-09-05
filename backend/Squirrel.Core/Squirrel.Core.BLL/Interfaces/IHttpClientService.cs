@@ -3,7 +3,6 @@
     public interface IHttpClientService
     {
         Task<TResponse> GetAsync<TResponse>(string requestUrl);
-
         Task<HttpResponseMessage> SendAsync(HttpRequestMessage request);
     }
 }

@@ -14,7 +14,7 @@ export class DatabaseItemsService {
     // eslint-disable-next-line no-empty-function
     constructor(private httpService: HttpInternalService) {}
 
-    getAllItems(): Observable<DatabaseItem[]> {
+    public getAllItems(): Observable<DatabaseItem[]> {
         return this.httpService.getRequest<DatabaseItem[]>(this.databaseItemsRoutePrefix);
     }
 }

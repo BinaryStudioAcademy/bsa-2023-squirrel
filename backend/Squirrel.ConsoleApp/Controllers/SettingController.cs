@@ -9,21 +9,26 @@ namespace Squirrel.ConsoleApp.Controllers;
 public class SettingController: ControllerBase
 {
     private readonly IConnectionFileService _connectionFileService;
+    private readonly IClientIdFileService _clientIdFileService;
 
-    public SettingController(IConnectionFileService connectionFileService)
+    public SettingController(IConnectionFileService connectionFileService, IClientIdFileService clientIdFileService)
     {
         _connectionFileService = connectionFileService;
+        _clientIdFileService = clientIdFileService;
     }
-    
+
     [HttpPost]
     [Route("connect")]
     public IActionResult Post(DbSettings dbSettings)
     {
-        _connectionFileService.SaveToFile(dbSettings);
+        if (!Enum.IsDefined(typeof(DbEngine), dbSettings.DbType))
+        {
+            throw new NotImplementedException($"Database type {dbSettings.DbType} is not supported.");
+        }
         
-        //TODO: Connection unique ID
-        //TODO: 55 - As a developer I want to setup SignalR connection from console app to webAPI
-        var randomId = Guid.NewGuid();
-        return Ok(randomId);
+        _connectionFileService.SaveToFile(dbSettings);
+
+        var clientId = _clientIdFileService.GetClientId();
+        return Ok(clientId);
     }
 }

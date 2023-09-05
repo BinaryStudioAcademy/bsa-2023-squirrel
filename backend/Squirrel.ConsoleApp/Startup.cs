@@ -2,13 +2,14 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Converters;
 using Squirrel.ConsoleApp.BL.Interfaces;
 using Squirrel.ConsoleApp.BL.Services;
 using Squirrel.ConsoleApp.Filters;
 using Squirrel.ConsoleApp.Models;
 using Squirrel.ConsoleApp.Providers;
 using Squirrel.ConsoleApp.Services;
-using System.Text.Json.Serialization;
+using Squirrel.Core.WebAPI.Extensions;
 
 namespace Squirrel.ConsoleApp;
 
@@ -24,9 +25,11 @@ public class Startup
     {
         services.Configure<DbSettings>(Configuration.GetSection(nameof(DbSettings)));
         var serviceProvider = services.BuildServiceProvider();
-        var databaseType = serviceProvider.GetRequiredService<IOptions<DbSettings>>().Value.DbType;
+        var dbSettings = serviceProvider.GetRequiredService<IOptions<DbSettings>>().Value;
 
-        switch (databaseType)
+        Console.WriteLine($"DB Settings:\n - DbType: {dbSettings.DbType}\n - Connection string: {dbSettings.ConnectionString}");
+
+        switch (dbSettings.DbType)
         {
             case DbEngine.SqlServer:
                 services.AddSingleton<IDbQueryProvider, SqlServerQueryProvider>();
@@ -40,13 +43,14 @@ public class Startup
                 // When the app is first launched, we create an empty DbSettings file
                 // We don't have a DbType value, but the User can change the DbSettings file using endpoints
                 // This is why we have to ensure that the application works even if we have the wrong DbType
-                // This type of error is handled in provider services
+                // This type of error is handled in controller
                 services.AddSingleton<IDbQueryProvider, SqlServerQueryProvider>();
                 services.AddSingleton<IDatabaseService, SqlServerService>();
                 break;
         }
 
         services.AddScoped<IConnectionFileService, ConnectionFileService>();
+        services.AddScoped<IClientIdFileService, ClientIdFileService>();
 
         services.AddScoped<IGetActionsService, GetActionsService>();
 
@@ -54,8 +58,11 @@ public class Startup
         {
             options.Filters.Add(typeof(CustomExceptionFilter));
         });
-        services.AddControllers().AddJsonOptions(options =>
-            options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+
+        services.AddControllers().AddNewtonsoftJson(jsonOptions =>
+        {
+            jsonOptions.SerializerSettings.Converters.Add(new StringEnumConverter());
+        });
     }
     
     public void Configure(IApplicationBuilder app)
@@ -66,14 +73,8 @@ public class Startup
         {
             cfg.MapControllers();
         });
-        
-        InitializeFileSettings(app);
-    }
 
-    private static void InitializeFileSettings(IApplicationBuilder app)
-    {
-        using var scope = app.ApplicationServices.GetService<IServiceScopeFactory>()?.CreateScope();
-        var fileService = scope?.ServiceProvider.GetRequiredService<IConnectionFileService>();
-        fileService?.CreateEmptyFile();
+        app.InitializeFileSettings();
+        app.RegisterHubs(Configuration);
     }
 }

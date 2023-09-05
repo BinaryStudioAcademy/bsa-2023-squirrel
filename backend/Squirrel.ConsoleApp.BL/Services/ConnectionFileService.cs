@@ -30,9 +30,12 @@ public class ConnectionFileService : IConnectionFileService
 
     public void SaveToFile(DbSettings dbSettings)
     {
-        var filePath = ConnectionFilePath;
-        string json = JsonConvert.SerializeObject(new { DbSettings = dbSettings }, Formatting.Indented);
-        File.WriteAllText(filePath, json);
+        var jsonSerializerSettings = new JsonSerializerSettings();
+        jsonSerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
+        jsonSerializerSettings.Formatting = Formatting.Indented;
+
+        string json = JsonConvert.SerializeObject(new { DbSettings = dbSettings }, jsonSerializerSettings);
+        File.WriteAllText(ConnectionFilePath, json);
     }
 
     private string ConnectionFilePath

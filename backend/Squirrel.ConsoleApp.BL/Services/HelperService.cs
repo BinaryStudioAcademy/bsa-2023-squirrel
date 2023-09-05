@@ -6,4 +6,9 @@ public static class HelperService
     {
         return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "squirrel-db-settings.json");
     }
+
+    public static string GetClientIdFilePath()
+    {
+        return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "squirrel-client-id.json");
+    }
 }

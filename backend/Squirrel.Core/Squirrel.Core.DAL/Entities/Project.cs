@@ -21,5 +21,5 @@ public sealed class Project : AuditEntity<int>
     public ICollection<PullRequest> PullRequests { get; set; } = new List<PullRequest>();
     public ICollection<Tag> Tags { get; set; } = new List<Tag>();
     public ICollection<ProjectTag> ProjectTags { get; set; } = new List<ProjectTag>();
-    public ICollection<DbIdentity> DbIdentities { get; set; } = new List<DbIdentity>();
+    public ICollection<ProjectDatabase> ProjectDatabases { get; set; } = new List<ProjectDatabase>();
 }

@@ -2,7 +2,7 @@
 
 namespace Squirrel.Core.DAL.Entities;
 
-public sealed class DbIdentity : Entity<int>
+public sealed class ProjectDatabase : Entity<int>
 {
     public string DbName { get; set; } = string.Empty;
     public Guid Guid { get; set; }

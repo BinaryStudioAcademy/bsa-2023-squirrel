@@ -30,7 +30,7 @@ public sealed class UserService : BaseService, IUserService
         var userEntity = await GetUserEntityByEmail(email);
         if (userEntity == null)
         {
-            throw new NotFoundException(nameof(User), email);
+            throw new EntityNotFoundException(nameof(User), email);
         }
         return _mapper.Map<UserDto>(userEntity);
     }
@@ -43,7 +43,7 @@ public sealed class UserService : BaseService, IUserService
 
     public async Task<UserDto> CreateUserAsync(UserRegisterDto userDto, bool isGoogleAuth)
     {
-        if (await GetUserByUsernameAsync(userDto.Username) is not null)
+        if (await GetUserEntityByUsername(userDto.Username) is not null)
         {
             if (isGoogleAuth)
             {
@@ -56,7 +56,7 @@ public sealed class UserService : BaseService, IUserService
             }
         }
 
-        if (await GetUserByEmailAsync(userDto.Email) is not null)
+        if (await GetUserEntityByEmail(userDto.Email) is not null)
         {
             throw new EmailAlreadyRegisteredException();
         }
@@ -73,10 +73,6 @@ public sealed class UserService : BaseService, IUserService
         var userEntity = await GetUserByIdInternal(updateUserDTO.Id);
 
         _mapper.Map(updateUserDTO, userEntity);
-
-        //userEntity.Username = updateUserDTO.Username;
-        //userEntity.FirstName = updateUserDTO.FirstName;
-        //userEntity.LastName = updateUserDTO.LastName;
 
         _context.Users.Update(userEntity);
         await _context.SaveChangesAsync();
@@ -118,13 +114,19 @@ public sealed class UserService : BaseService, IUserService
         return userEntity;
     }
 
+    public async Task<User?> GetUserEntityByUsername(string username)
+    {
+        var userEntity = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+        return userEntity;
+    }
+
     private async Task<User> GetUserByIdInternal(int id)
     {
         var userEntity = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
 
         if (userEntity == null)
         {
-            throw new NotFoundException(nameof(User), id);
+            throw new EntityNotFoundException(nameof(User), id);
         }
 
         return userEntity;
@@ -136,7 +138,7 @@ public sealed class UserService : BaseService, IUserService
 
         if (userEntity == null)
         {
-            throw new NotFoundException(nameof(User), username);
+            throw new EntityNotFoundException(nameof(User), username);
         }
 
         return userEntity;

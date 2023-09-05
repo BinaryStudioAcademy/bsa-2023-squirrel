@@ -8,10 +8,11 @@ public interface IUserService
 {
     Task<UserDto> GetUserByIdAsync(int id);
     Task<UserDto> GetUserByEmailAsync(string email);
-    Task<User?> GetUserEntityByEmail(string email);
     Task<UserDto> GetUserByUsernameAsync(string username);
     Task<UserDto> CreateUserAsync(UserRegisterDto userDto, bool isGoogleAuth);
     Task<UserDto> UpdateUserAsync(UpdateUserNamesDto updateUserDTO);
     Task ChangePasswordAsync(UpdateUserPasswordDto userDto);
     Task<UserDto> UpdateNotificationsAsync(UpdateUserNotificationsdDto updateNotificationsdDTO);
+    Task<User?> GetUserEntityByEmail(string email);
+    Task<User?> GetUserEntityByUsername(string username);
 }

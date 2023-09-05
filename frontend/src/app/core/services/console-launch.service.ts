@@ -5,6 +5,6 @@ import { Injectable } from '@angular/core';
 })
 export class ConsoleLaunchService {
     launchConsole() {
-        window.open(' ', '_self');
+        window.open('squirrel:', '_self');
     }
 }

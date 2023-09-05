@@ -15,7 +15,7 @@ public sealed class CurrentUserMiddleware
     {
         var claimsUserId = context.User.Claims.FirstOrDefault(x => x.Type == "id")?.Value;
 
-        if (claimsUserId != null && int.TryParse(claimsUserId, out var userId))
+        if (claimsUserId is not null && int.TryParse(claimsUserId, out var userId))
         {
             userIdSetter.SetCurrentUserId(userId);
         }

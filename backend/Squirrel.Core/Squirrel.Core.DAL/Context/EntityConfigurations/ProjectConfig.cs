@@ -24,7 +24,8 @@ public sealed class ProjectConfig : IEntityTypeConfiguration<Project>
 
         builder.HasOne(x => x.DefaultBranch)
                .WithOne()
-               .HasForeignKey<Project>(x => x.DefaultBranchId);
+               .HasForeignKey<Project>(x => x.DefaultBranchId)
+               .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasMany(x => x.Branches)
                .WithOne(x => x.Project)

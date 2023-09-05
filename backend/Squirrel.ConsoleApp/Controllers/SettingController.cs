@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Squirrel.ConsoleApp.BL.Interfaces;
 using Squirrel.ConsoleApp.Models;
 
@@ -10,11 +11,13 @@ public class SettingController: ControllerBase
 {
     private readonly IConnectionFileService _connectionFileService;
     private readonly IClientIdFileService _clientIdFileService;
+    private readonly IOptions<DbSettings> _dbSettingsOptions;
 
-    public SettingController(IConnectionFileService connectionFileService, IClientIdFileService clientIdFileService)
+    public SettingController(IConnectionFileService connectionFileService, IClientIdFileService clientIdFileService, IOptions<DbSettings> dbSettingsOptions)
     {
         _connectionFileService = connectionFileService;
         _clientIdFileService = clientIdFileService;
+        _dbSettingsOptions = dbSettingsOptions;
     }
 
     [HttpPost]
@@ -30,5 +33,12 @@ public class SettingController: ControllerBase
 
         var clientId = _clientIdFileService.GetClientId();
         return Ok(clientId);
+    }
+
+    [HttpGet]
+    [Route("check")]
+    public IActionResult Get()
+    {
+        return Ok($"{_dbSettingsOptions.Value.DbType} - {_dbSettingsOptions.Value.ConnectionString}");
     }
 }

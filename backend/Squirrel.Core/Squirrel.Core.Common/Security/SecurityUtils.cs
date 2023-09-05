@@ -10,7 +10,7 @@ public static class SecurityUtils
 
     public static string GenerateRandomSalt()
     {
-        using var randomNumberGenerator = new RNGCryptoServiceProvider();
+        using var randomNumberGenerator = RandomNumberGenerator.Create();
         var salt = new byte[DefaultBytesLength];
         randomNumberGenerator.GetBytes(salt);
 

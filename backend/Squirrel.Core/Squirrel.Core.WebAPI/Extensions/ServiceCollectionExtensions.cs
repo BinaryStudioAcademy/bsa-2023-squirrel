@@ -1,19 +1,13 @@
 ﻿using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Squirrel.Core.BLL.Interfaces;
-using Squirrel.Core.BLL.MappingProfiles;
 using Squirrel.Core.BLL.Services;
+using Squirrel.Core.Common.DTO.Auth;
 using Squirrel.Core.Common.Interfaces;
 using Squirrel.Core.Common.JWT;
-using Squirrel.Core.DAL.Context;
-using Squirrel.Core.DAL.Entities;
-using Squirrel.Core.WebAPI.Validators.Sample;
 using System.Reflection;
 using System.Text;
-using Squirrel.Core.Common.DTO.Auth;
 using System.Text.Json.Serialization;
 
 namespace Squirrel.Core.WebAPI.Extensions;
@@ -26,13 +20,26 @@ public static class ServiceCollectionExtensions
             .AddControllers()
             .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
             .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
-
+        
         services.AddTransient<ISampleService, SampleService>();
         services.AddScoped<JwtIssuerOptions>();
         services.AddScoped<IJwtFactory, JwtFactory>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IBranchService, BranchService>();
         services.AddScoped<IProjectService, ProjectService>();
+        services.AddScoped<IDatabaseItemsService, DatabaseItemsService>();
+
+        services.AddSingleton<IHttpClientService, HttpClientService>();
+      
+        services.AddUserIdStorage();
+    }
+
+    public static void AddUserIdStorage(this IServiceCollection services)
+    {
+        services.AddScoped<UserIdStorageService>();
+        services.AddTransient<IUserIdSetter>(s => s.GetRequiredService<UserIdStorageService>());
+        services.AddTransient<IUserIdGetter>(s => s.GetRequiredService<UserIdStorageService>());
     }
 
     public static void AddValidation(this IServiceCollection services)

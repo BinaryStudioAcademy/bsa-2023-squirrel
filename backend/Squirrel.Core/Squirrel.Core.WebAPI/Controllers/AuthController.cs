@@ -32,7 +32,7 @@ public sealed class AuthController : ControllerBase
     ///
     /// </remarks>
     [HttpPost("login")]
-    public async Task<ActionResult<RefreshedAccessTokenDto>> Login([FromBody] UserLoginDto userLoginData)
+    public async Task<ActionResult<AuthUserDto>> Login([FromBody] UserLoginDto userLoginData)
     {
         return Ok(await _authService.LoginAsync(userLoginData));
     }
@@ -54,7 +54,7 @@ public sealed class AuthController : ControllerBase
     ///
     /// </remarks>
     [HttpPost("register")]
-    public async Task<ActionResult<RefreshedAccessTokenDto>> Post([FromBody] UserRegisterDto userRegisterData)
+    public async Task<ActionResult<AuthUserDto>> Post([FromBody] UserRegisterDto userRegisterData)
     {
         return Ok(await _authService.RegisterAsync(userRegisterData));
     }

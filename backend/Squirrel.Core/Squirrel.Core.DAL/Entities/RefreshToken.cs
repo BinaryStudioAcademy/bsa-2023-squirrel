@@ -8,7 +8,7 @@ public sealed class RefreshToken : AuditEntity<int>
     public DateTime ExpiresAt { get; }
     
     public int UserId { get; set; }
-    public User User { get; set; }
+    public User User { get; set; } = null!;
 
     private readonly TimeSpan _lifetime = TimeSpan.FromDays(1);
 

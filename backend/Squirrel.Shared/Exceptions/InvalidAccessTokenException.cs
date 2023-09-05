@@ -1,8 +1,15 @@
-﻿namespace Squirrel.Shared.Exceptions;
+﻿using System.Net;
+using Squirrel.Shared.Enums;
+using Squirrel.Shared.Exceptions.Abstract;
 
-public sealed class InvalidAccessTokenException : Exception
+namespace Squirrel.Shared.Exceptions;
+
+public sealed class InvalidAccessTokenException : RequestException
 {
-    public InvalidAccessTokenException() : base("Invalid access token.")
+    public InvalidAccessTokenException() : base(
+        "Invalid access token!",
+        ErrorType.InvalidToken,
+        HttpStatusCode.BadRequest)
     {
     }
 }

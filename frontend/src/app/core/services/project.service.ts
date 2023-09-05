@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { ProjectDto } from '../../models/projects/project-dto';
+import { NewProjectDto } from 'src/app/models/projects/new-project-dto';
+import { ProjectDto } from 'src/app/models/projects/project-dto';
 
 import { HttpInternalService } from './http-internal.service';
 
@@ -14,29 +15,29 @@ export class ProjectService {
     // eslint-disable-next-line no-empty-function
     constructor(private httpService: HttpInternalService) {}
 
-    addProject(project: ProjectDto): Observable<ProjectDto> {
-        return this.httpService.postRequest<ProjectDto>(this.projectsApiUrl, project);
+    public addProject(newProject: NewProjectDto): Observable<ProjectDto> {
+        return this.httpService.postRequest<ProjectDto>(this.projectsApiUrl, newProject);
     }
 
-    updateProject(projectId: string, project: ProjectDto): Observable<ProjectDto> {
+    public updateProject(projectId: string, project: ProjectDto): Observable<ProjectDto> {
         const url = `${this.projectsApiUrl}/${projectId}`;
 
         return this.httpService.putRequest<ProjectDto>(url, project);
     }
 
-    deleteProject(projectId: string): Observable<void> {
+    public deleteProject(projectId: string): Observable<void> {
         const url = `${this.projectsApiUrl}/${projectId}`;
 
         return this.httpService.deleteRequest<void>(url);
     }
 
-    getProject(projectId: string): Observable<ProjectDto> {
+    public getProject(projectId: string): Observable<ProjectDto> {
         const url = `${this.projectsApiUrl}/${projectId}`;
 
         return this.httpService.getRequest<ProjectDto>(url);
     }
 
-    getAllProjects(): Observable<ProjectDto[]> {
-        return this.httpService.getRequest<ProjectDto[]>(this.projectsApiUrl);
+    public getAllUserProjects(): Observable<ProjectDto[]> {
+        return this.httpService.getRequest<ProjectDto[]>(`${this.projectsApiUrl}/all`);
     }
 }

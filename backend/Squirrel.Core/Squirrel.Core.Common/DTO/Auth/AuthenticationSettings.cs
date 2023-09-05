@@ -2,5 +2,5 @@
 
 public class AuthenticationSettings
 {
-    public string GoogleClientId { get; set; }
+    public string GoogleClientId { get; set; } = null!;
 }

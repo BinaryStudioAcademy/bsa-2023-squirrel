@@ -68,13 +68,15 @@ public sealed class UserService : BaseService, IUserService
         return _mapper.Map<UserDto>(createdUser); ;
     }
 
-    public async Task<UserDto> UpdateUserAsync(UpdateUserNamesDTO updateUserDTO)
+    public async Task<UserDto> UpdateUserAsync(UpdateUserNamesDto updateUserDTO)
     {
         var userEntity = await GetUserByIdInternal(updateUserDTO.Id);
 
-        userEntity.Username = updateUserDTO.Username;
-        userEntity.FirstName = updateUserDTO.FirstName;
-        userEntity.LastName = updateUserDTO.LastName;
+        _mapper.Map(updateUserDTO, userEntity);
+
+        //userEntity.Username = updateUserDTO.Username;
+        //userEntity.FirstName = updateUserDTO.FirstName;
+        //userEntity.LastName = updateUserDTO.LastName;
 
         _context.Users.Update(userEntity);
         await _context.SaveChangesAsync();
@@ -82,7 +84,7 @@ public sealed class UserService : BaseService, IUserService
         return _mapper.Map<UserDto>(userEntity);
     }
 
-    public async Task ChangePasswordAsync(UpdateUserPasswordDTO changePasswordDTO)
+    public async Task ChangePasswordAsync(UpdateUserPasswordDto changePasswordDTO)
     {
         var userEntity = await GetUserByIdInternal(changePasswordDTO.Id);
 
@@ -97,7 +99,7 @@ public sealed class UserService : BaseService, IUserService
         await _context.SaveChangesAsync();
     }
 
-    public async Task<UserDto> UpdateNotificationsAsync(UpdateUserNotificationsdDTO updateNotificationsdDTO)
+    public async Task<UserDto> UpdateNotificationsAsync(UpdateUserNotificationsdDto updateNotificationsdDTO)
     {
         var userEntity = await GetUserByIdInternal(updateNotificationsdDTO.Id);
 

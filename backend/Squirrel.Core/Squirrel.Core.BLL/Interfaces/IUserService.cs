@@ -11,7 +11,7 @@ public interface IUserService
     Task<User?> GetUserEntityByEmail(string email);
     Task<UserDto> GetUserByUsernameAsync(string username);
     Task<UserDto> CreateUserAsync(UserRegisterDto userDto, bool isGoogleAuth);
-    Task<UserDto> UpdateUserAsync(UpdateUserNamesDTO updateUserDTO);
-    Task ChangePasswordAsync(UpdateUserPasswordDTO userDto);
-    Task<UserDto> UpdateNotificationsAsync(UpdateUserNotificationsdDTO updateNotificationsdDTO);
+    Task<UserDto> UpdateUserAsync(UpdateUserNamesDto updateUserDTO);
+    Task ChangePasswordAsync(UpdateUserPasswordDto userDto);
+    Task<UserDto> UpdateNotificationsAsync(UpdateUserNotificationsdDto updateNotificationsdDTO);
 }

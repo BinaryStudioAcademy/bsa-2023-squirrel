@@ -1,6 +1,6 @@
 ﻿namespace Squirrel.Core.Common.DTO.Users;
 
-public class UpdateUserPasswordDTO
+public class UpdateUserPasswordDto
 {
     public int Id { get; set; }
     public string CurrentPassword { get; set; } = null!;

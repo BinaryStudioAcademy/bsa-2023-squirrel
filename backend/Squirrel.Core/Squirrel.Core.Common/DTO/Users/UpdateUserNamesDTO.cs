@@ -1,6 +1,6 @@
 ﻿namespace Squirrel.Core.Common.DTO.Users;
 
-public class UpdateUserNamesDTO
+public class UpdateUserNamesDto
 {
     public int Id { get; set; }
     public string Username { get; set; } = null!;

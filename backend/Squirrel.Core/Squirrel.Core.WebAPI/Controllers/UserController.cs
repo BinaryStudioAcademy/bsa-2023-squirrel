@@ -24,7 +24,7 @@ public class UserController : ControllerBase
     /// Update user names
     /// </summary>
     [HttpPut("update-names")]
-    public async Task<ActionResult<UserDto>> UpdateUserNames([FromBody] UpdateUserNamesDTO updateUserDto)
+    public async Task<ActionResult<UserDto>> UpdateUserNames([FromBody] UpdateUserNamesDto updateUserDto)
     {
         updateUserDto.Id = _userIdGetter.GetCurrentUserId();
         return Ok(await _userService.UpdateUserAsync(updateUserDto));
@@ -34,7 +34,7 @@ public class UserController : ControllerBase
     /// Update user password
     /// </summary>
     [HttpPut("update-password")]
-    public async Task<ActionResult> UpdatePassword([FromBody] UpdateUserPasswordDTO changePasswordDto)
+    public async Task<ActionResult> UpdatePassword([FromBody] UpdateUserPasswordDto changePasswordDto)
     {
         changePasswordDto.Id = _userIdGetter.GetCurrentUserId();
         await _userService.ChangePasswordAsync(changePasswordDto);
@@ -45,7 +45,7 @@ public class UserController : ControllerBase
     /// Update user notifications
     /// </summary>
     [HttpPut("update-notifications")]
-    public async Task<ActionResult<UserDto>> UpdateUserNotifications([FromBody] UpdateUserNotificationsdDTO updateUserNotificationsdDto)
+    public async Task<ActionResult<UserDto>> UpdateUserNotifications([FromBody] UpdateUserNotificationsdDto updateUserNotificationsdDto)
     {
         updateUserNotificationsdDto.Id = _userIdGetter.GetCurrentUserId();
         return Ok(await _userService.UpdateNotificationsAsync(updateUserNotificationsdDto));

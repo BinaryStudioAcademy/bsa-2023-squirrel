@@ -10,7 +10,7 @@ import { HttpInternalService } from './http-internal.service';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
-    public routePrefix = '/api/user';
+    private routePrefix = '/api/user';
 
     // eslint-disable-next-line no-empty-function
     constructor(private httpService: HttpInternalService) {}

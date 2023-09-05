@@ -25,29 +25,12 @@ public class Startup
     {
         services.Configure<DbSettings>(Configuration.GetSection(nameof(DbSettings)));
         var serviceProvider = services.BuildServiceProvider();
-        var dbSettings = serviceProvider.GetRequiredService<IOptions<DbSettings>>().Value;
+        var dbSettings = serviceProvider.GetRequiredService<IOptionsSnapshot<DbSettings>>().Value;
 
         Console.WriteLine($"DB Settings:\n - DbType: {dbSettings.DbType}\n - Connection string: {dbSettings.ConnectionString}");
-
-        switch (dbSettings.DbType)
-        {
-            case DbEngine.SqlServer:
-                services.AddSingleton<IDbQueryProvider, SqlServerQueryProvider>();
-                services.AddSingleton<IDatabaseService, SqlServerService>();
-                break;
-            case DbEngine.PostgreSql:
-                services.AddSingleton<IDbQueryProvider, PostgreSqlQueryProvider>();
-                services.AddSingleton<IDatabaseService, PostgreSqlService>();
-                break;
-            default:
-                // When the app is first launched, we create an empty DbSettings file
-                // We don't have a DbType value, but the User can change the DbSettings file using endpoints
-                // This is why we have to ensure that the application works even if we have the wrong DbType
-                // This type of error is handled in controller
-                services.AddSingleton<IDbQueryProvider, SqlServerQueryProvider>();
-                services.AddSingleton<IDatabaseService, SqlServerService>();
-                break;
-        }
+       
+        services.AddScoped<IDbQueryProvider>(c => DatabaseFactory.CreateDbQueryProvider(dbSettings.DbType));
+        services.AddScoped<IDatabaseService>(c => DatabaseFactory.CreateDatabaseService(dbSettings.DbType, dbSettings.ConnectionString));
 
         services.AddScoped<IConnectionFileService, ConnectionFileService>();
         services.AddScoped<IClientIdFileService, ClientIdFileService>();

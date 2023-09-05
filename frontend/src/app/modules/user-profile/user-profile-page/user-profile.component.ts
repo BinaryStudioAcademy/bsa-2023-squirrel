@@ -97,7 +97,16 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
 
     private initChangePasswordForm() {
         this.passwordForm = this.fb.group({
-            currentPassword: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25)]],
+            currentPassword: [
+                '',
+                [
+                    Validators.required,
+                    Validators.minLength(2),
+                    Validators.maxLength(25),
+                    ValidationsFn.lowerExist(),
+                    ValidationsFn.upperExist(),
+                ],
+            ],
             newPassword: [
                 '',
                 [
@@ -108,16 +117,7 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
                     ValidationsFn.upperExist(),
                 ],
             ],
-            repeatPassword: [
-                '',
-                [
-                    Validators.required,
-                    Validators.minLength(2),
-                    Validators.maxLength(25),
-                    ValidationsFn.lowerExist(),
-                    ValidationsFn.upperExist(),
-                ],
-            ],
+            repeatPassword: ['', [Validators.required, ValidationsFn.matchValues('newPassword')]],
         });
 
         this.passwordForm.controls['newPassword'].valueChanges.subscribe(() => {

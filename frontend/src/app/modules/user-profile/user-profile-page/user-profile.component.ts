@@ -9,9 +9,9 @@ import { faEye, faEyeSlash, faPen } from '@fortawesome/free-solid-svg-icons';
 import { ValidationsFn } from '@shared/helpers/validations-fn';
 import { finalize, takeUntil } from 'rxjs';
 
-import { UpdateUserNamesDto } from 'src/app/models/user/update-userNames.dto';
-import { UpdateUserNotificationsDto } from 'src/app/models/user/update-userNotifications.dto';
-import { UpdateUserPasswordDto } from 'src/app/models/user/update-userPassword.dto';
+import { UpdateUserNamesDto } from 'src/app/models/user/update-user-names-dto';
+import { UpdateUserNotificationsDto } from 'src/app/models/user/update-user-notifications-dto';
+import { UpdateUserPasswordDto } from 'src/app/models/user/update-user-password-dto';
 import { UserDto } from 'src/app/models/user/user-dto';
 
 @Component({
@@ -144,20 +144,21 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
             lastName: this.userNamesForm.value.lastName,
         };
 
-        const userSubscription = this.userService.updateUserNames(userData);
-
-        userSubscription.pipe(takeUntil(this.unsubscribe$)).subscribe(
-            (user) => {
-                this.currentUser = user;
-                this.spinner.hide();
-                this.notificationService.info('Names successfully updated');
-                this.initUserNamesForm();
-            },
-            (error) => {
-                this.spinner.hide();
-                this.notificationService.error(error.message);
-            },
-        );
+        this.userService
+            .updateUserNames(userData)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe(
+                (user) => {
+                    this.currentUser = user;
+                    this.spinner.hide();
+                    this.notificationService.info('Names successfully updated');
+                    this.initUserNamesForm();
+                },
+                (error) => {
+                    this.spinner.hide();
+                    this.notificationService.error(error.message);
+                },
+            );
     }
 
     public updateUserPassword() {
@@ -175,19 +176,20 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
             newPassword: this.passwordForm.value.newPassword,
         };
 
-        const userSubscription = this.userService.updateUserPassword(userData);
-
-        userSubscription.pipe(takeUntil(this.unsubscribe$)).subscribe(
-            () => {
-                this.spinner.hide();
-                this.notificationService.info('Password successfully updated');
-                this.initChangePasswordForm();
-            },
-            (error) => {
-                this.spinner.hide();
-                this.notificationService.error(error.message);
-            },
-        );
+        this.userService
+            .updateUserPassword(userData)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe(
+                () => {
+                    this.spinner.hide();
+                    this.notificationService.info('Password successfully updated');
+                    this.initChangePasswordForm();
+                },
+                (error) => {
+                    this.spinner.hide();
+                    this.notificationService.error(error.message);
+                },
+            );
     }
 
     public updateUserNotifications() {
@@ -197,19 +199,20 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
             emailNotification: this.emailNotification,
         };
 
-        const userSubscription = this.userService.updateUserNotifications(userData);
-
-        userSubscription.pipe(takeUntil(this.unsubscribe$)).subscribe(
-            (user) => {
-                this.currentUser = user;
-                this.spinner.hide();
-                this.notificationService.info('Notifications successfully updated');
-                this.initNotificationsValue();
-            },
-            (error) => {
-                this.spinner.hide();
-                this.notificationService.error(error.message);
-            },
-        );
+        this.userService
+            .updateUserNotifications(userData)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe(
+                (user) => {
+                    this.currentUser = user;
+                    this.spinner.hide();
+                    this.notificationService.info('Notifications successfully updated');
+                    this.initNotificationsValue();
+                },
+                (error) => {
+                    this.spinner.hide();
+                    this.notificationService.error(error.message);
+                },
+            );
     }
 }

@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { UpdateUserNamesDto } from 'src/app/models/user/update-userNames.dto';
-import { UpdateUserNotificationsDto } from 'src/app/models/user/update-userNotifications.dto';
-import { UpdateUserPasswordDto } from 'src/app/models/user/update-userPassword.dto';
+import { UpdateUserNamesDto } from 'src/app/models/user/update-user-names-dto';
+import { UpdateUserNotificationsDto } from 'src/app/models/user/update-user-notifications-dto';
+import { UpdateUserPasswordDto } from 'src/app/models/user/update-user-password-dto';
 import { UserDto } from 'src/app/models/user/user-dto';
 
 import { HttpInternalService } from './http-internal.service';

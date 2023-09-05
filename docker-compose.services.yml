@@ -12,6 +12,21 @@ services:
             SA_PASSWORD: MySecretPassword!
             ACCEPT_EULA: "Y"
 
+    mongodb:
+        image: mongo
+        container_name: mongodb
+        networks:
+            - back
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: squirrel
+            MONGO_INITDB_ROOT_PASSWORD: secret
+            MONGO_INITDB_DATABASE: squirreldb
+        ports:
+            - "27017:27017"
+        volumes:
+            - data:/data/db
+            - ./mongod.conf:/etc/mongod.conf
+
     rabbitmq:
         image: rabbitmq:3.11.10-management
         container_name: rabbitmq

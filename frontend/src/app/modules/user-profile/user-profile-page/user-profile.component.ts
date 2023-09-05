@@ -5,7 +5,7 @@ import { AuthService } from '@core/services/auth.service';
 import { NotificationService } from '@core/services/notification.service';
 import { SpinnerService } from '@core/services/spinner.service';
 import { UserService } from '@core/services/user.service';
-import { faEye, faEyeSlash, faPen } from '@fortawesome/free-solid-svg-icons';
+import { faPen } from '@fortawesome/free-solid-svg-icons';
 import { ValidationsFn } from '@shared/helpers/validations-fn';
 import { finalize, takeUntil } from 'rxjs';
 
@@ -24,19 +24,13 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
 
     public emailNotification: boolean;
 
-    public openEyeIcon = faEye;
-
     public penIcon = faPen;
-
-    public closeEyeIcon = faEyeSlash;
 
     public currentUser: UserDto;
 
     public userNamesForm: FormGroup = new FormGroup({});
 
     public passwordForm: FormGroup = new FormGroup({});
-
-    public notificationsForm: FormGroup = new FormGroup({});
 
     constructor(
         private fb: FormBuilder,

@@ -72,10 +72,6 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
             );
     }
 
-    public override ngOnDestroy() {
-        super.ngOnDestroy();
-    }
-
     private initializeForms() {
         this.initUserNamesForm();
         this.initChangePasswordForm();

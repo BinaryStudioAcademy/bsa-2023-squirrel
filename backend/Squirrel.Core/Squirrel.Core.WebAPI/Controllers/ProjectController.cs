@@ -16,24 +16,11 @@ public class ProjectController : ControllerBase
     {
         _projectService = projectService;
     }
-        
-    /// <summary>
-    /// Creates a new project with a default branch.
-    /// </summary>
-    /// <remarks>
-    /// Example of a request to create a new project:
-    ///
-    ///     POST /api/project
-    ///     {
-    ///        "name": "projectName",
-    ///        "defaultBranchName": "master",
-    ///        "dbEngine": "2"
-    ///     }
-    /// </remarks>
+    
     [HttpPost]
-    public async Task<ActionResult<ProjectDto>> AddProject([FromBody] ProjectDto projectDto)
+    public async Task<ActionResult<ProjectDto>> AddProject([FromBody] NewProjectDto newProjectDto)
     {
-        return Ok(await _projectService.AddProjectAsync(projectDto));
+        return Ok(await _projectService.AddProjectAsync(newProjectDto));
     }
 
     [HttpPut("{projectId}")]

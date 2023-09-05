@@ -8,6 +8,7 @@ import { SpinnerService } from '@core/services/spinner.service';
 import { takeUntil, tap } from 'rxjs';
 
 import { DbEngine } from 'src/app/models/projects/db-engine';
+import { NewProjectDto } from 'src/app/models/projects/new-project-dto';
 import { ProjectDto } from 'src/app/models/projects/project-dto';
 
 @Component({
@@ -47,10 +48,16 @@ export class CreateProjectModalComponent extends BaseComponent implements OnInit
     public createProject(): void {
         this.spinner.show();
 
-        const newProject: ProjectDto = {
-            name: this.projectForm.value.projectName,
-            defaultBranchName: this.projectForm.value.defaultBranchName,
-            dbEngine: parseInt(this.projectForm.value.selectedEngine, 10) as DbEngine,
+        const newProject: NewProjectDto = {
+            project: {
+                name: this.projectForm.value.projectName,
+                description: null,
+                dbEngine: parseInt(this.projectForm.value.selectedEngine, 10) as DbEngine,
+            },
+            defaultBranch: {
+                name: this.projectForm.value.defaultBranchName,
+                isActive: true,
+            },
         };
 
         this.projectService
@@ -63,7 +70,7 @@ export class CreateProjectModalComponent extends BaseComponent implements OnInit
                 (createdProject: ProjectDto) => {
                     this.dialogRef.close(createdProject);
                     this.notificationService.info('Project created successfully');
-                    this.projectCreated.emit(newProject);
+                    this.projectCreated.emit(createdProject);
                 },
                 () => {
                     this.notificationService.error('Failed to create project');

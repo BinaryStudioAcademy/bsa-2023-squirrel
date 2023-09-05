@@ -23,19 +23,15 @@ public sealed class ProjectService : BaseService, IProjectService
     }
 
   
-    public async Task<ProjectDto> AddProjectAsync(ProjectDto projectDto)
+    public async Task<ProjectDto> AddProjectAsync(NewProjectDto newProjectDto)
     {
-        var projectEntity = _mapper.Map<Project>(projectDto);
+        var projectEntity = _mapper.Map<Project>(newProjectDto.Project);
         projectEntity.CreatedBy = _userIdGetter.GetCurrentUserId();
         var createdProject = (await _context.Projects.AddAsync(projectEntity)).Entity;
         await _context.SaveChangesAsync();
-        
-        var defaultBranch = await _branchService.AddBranchAsync(new BranchDto
-        {
-            Name = projectDto.DefaultBranchName,
-            IsActive = true,
-            ProjectId = createdProject.Id
-        });
+
+        newProjectDto.DefaultBranch.ProjectId = createdProject.Id;
+        var defaultBranch = await _branchService.AddBranchAsync(newProjectDto.DefaultBranch);
         createdProject.DefaultBranchId = defaultBranch.Id;
         await _context.SaveChangesAsync();
         

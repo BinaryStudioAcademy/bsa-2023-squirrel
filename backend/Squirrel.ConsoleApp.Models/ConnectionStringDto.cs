@@ -1,7 +1,8 @@
 ﻿namespace Squirrel.ConsoleApp.Models;
 
-public class ConnectionString
+public class ConnectionStringDto
 {
+    public string DbName { get; set; } = string.Empty;
     public string? ServerName { get; set; }
     public int Port { get; set; }
     public string? Username { get; set; }

@@ -15,7 +15,21 @@ namespace Squirrel.ConsoleApp.Services
             _databaseService = DatabaseFactory.CreateDatabaseService(dbSettingsOptions.Value.DbType, dbSettingsOptions.Value.ConnectionString);
         }
 
-        public async Task<QueryResultTable> GetAllTablesNamesAsync() 
+
+        public async Task<QueryResultTable> TestExecuteQueryAsync(string filterName, int filterRowsCount)
+        {
+            QueryResultTable tmp = new($"{filterName}Column1", $"{filterName}Column2", $"{filterName}Column3", $"{filterName}Column4", $"{filterName}Column5");
+            
+            for (int i = 1; i <= filterRowsCount; i++)
+            {
+                int j = 1;
+                tmp.AddRow($"val{i}{j++}", $"val{i}{j++}", $"val{i}{j++}", $"val{i}{j++}", $"val{i}{j++}");
+            }
+            
+            return tmp;
+        }
+
+        public async Task<QueryResultTable> GetAllTablesNamesAsync()
             => await _databaseService.ExecuteQueryAsync(_queryProvider.GetTablesNamesQuery());
 
         public async Task<QueryResultTable> GetTableDataAsync(string tableName, int rowsCount) 

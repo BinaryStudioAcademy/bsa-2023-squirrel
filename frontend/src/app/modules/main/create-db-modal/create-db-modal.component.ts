@@ -1,6 +1,6 @@
-import {Component, Inject, Input, OnInit} from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ConsoleConnectService } from '@core/services/console-connect.service';
 
 import { DbConnection } from '../../../models/console/db-connection';

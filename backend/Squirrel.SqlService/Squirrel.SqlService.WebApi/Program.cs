@@ -1,5 +1,6 @@
 using Squirrel.AzureBlobStorage.Extensions;
 using Squirrel.Core.DAL.Extensions;
+using Squirrel.Core.WebAPI.Extensions;
 using Squirrel.Shared.Middlewares;
 using Squirrel.SqlService.WebApi.Extensions;
 
@@ -16,6 +17,7 @@ builder.Services.ConfigureCors(builder.Configuration);
 builder.Services.AddMongoDbService(builder.Configuration);
 builder.Services.AddAzureBlobStorage(builder.Configuration);
 builder.Services.RegisterCustomServices();
+builder.Services.AddSignalR();
 
 builder.Services.AddSwaggerGen();
 
@@ -33,6 +35,8 @@ app.UseMiddleware<GenericExceptionHandlerMiddleware>();
 app.UseHttpsRedirection();
 
 app.UseSquirrelCoreContext();
+
+app.UseSquirrelHub();
 
 app.UseCors();
 

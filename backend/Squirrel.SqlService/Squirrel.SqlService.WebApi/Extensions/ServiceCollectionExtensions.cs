@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
+using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.DAL.Entities;
 using Squirrel.SqlService.BLL.Interfaces;
 using Squirrel.SqlService.BLL.Models.Options;
@@ -13,6 +14,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ITextService, TextService>();
         services.AddScoped<IDependencyAnalyzer, DependencyAnalyzer>();
         services.AddScoped<IDbItemsRetrievalService, DbItemsRetrievalService>();
+        services.AddSingleton<ISquirrelHubToReceive, SquirrelHubToReceiveService>();
     }
 
     public static void ConfigureCors(this IServiceCollection services, IConfiguration configuration)

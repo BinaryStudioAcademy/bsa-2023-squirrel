@@ -31,10 +31,12 @@ public class SettingController: ControllerBase
 
         _connectionFileService.SaveToFile(dbSettings);
 
-        var clientId = _clientIdFileService.GetClientId();
-        return Ok(clientId);
+        return Ok(_clientIdFileService.GetClientId());
     }
 
+    /// <summary>
+    /// Just for debugging and demo
+    /// </summary>
     [HttpGet]
     [Route("check")]
     public IActionResult Get()

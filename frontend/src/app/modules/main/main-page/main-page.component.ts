@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { BroadcastHubService } from '@core/hubs/broadcast-hub.service';
-import { ConsoleLaunchService } from '@core/services/console-launch.service';
 import { ConfirmationModalComponent } from '@shared/components/confirmation-modal/confirmation-modal.component';
 
 import { ConfirmationModalInterface } from 'src/app/models/confirmation-modal/confirmation-modal';
@@ -15,7 +14,6 @@ export class MainComponent implements OnInit, OnDestroy {
     constructor(
         private broadcastHub: BroadcastHubService,
         public confirmationModal: MatDialog,
-        private consoleLaunchService: ConsoleLaunchService,
     ) {
         // do nothing.
     }
@@ -77,9 +75,5 @@ export class MainComponent implements OnInit, OnDestroy {
 
     performConfirmationModalTwo() {
         this.confirmationModalMessage = 'The text submitted from the Confirmation Modal TWO';
-    }
-
-    launchConsole() {
-        this.consoleLaunchService.launchConsole();
     }
 }

@@ -20,49 +20,51 @@
             Please enter a {{label | titlecase}}
         </div>
 
-        <div class="invalid-feedback"
-             *ngIf="control.errors?.['minlength']">
-            {{label | titlecase}} must be at least {{control.errors?.['minlength'].requiredLength}} characters
-        </div>
+        <div *ngIf="control.value">
+            <div class="invalid-feedback"
+                 *ngIf="control.errors?.['minlength']">
+                {{label | titlecase}} must be at least {{control.errors?.['minlength'].requiredLength}} characters
+            </div>
 
-        <div class="invalid-feedback"
-             *ngIf="control.errors?.['maxlength']">
-            {{label | titlecase}} must be at most {{control.errors?.['maxlength'].requiredLength}} characters
-        </div>
+            <div class="invalid-feedback"
+                 *ngIf="control.errors?.['maxlength']">
+                {{label | titlecase}} must be at most {{control.errors?.['maxlength'].requiredLength}} characters
+            </div>
 
-        <div class="invalid-feedback"
-             *ngIf="control.errors?.['emailMatch']">
-            Not valid email format
-        </div>
+            <div class="invalid-feedback"
+                 *ngIf="control.errors?.['emailMatch']">
+                Not valid email format
+            </div>
 
-        <div class="invalid-feedback"
-             *ngIf="control.errors?.['notMatching']">
-            {{label | titlecase}} must match
-        </div>
+            <div class="invalid-feedback"
+                 *ngIf="control.errors?.['notMatching']">
+                {{label | titlecase}} must match
+            </div>
 
-        <div class="invalid-feedback"
-             *ngIf="control.errors?.['wrongCharacters']">
-            {{label | titlecase}} can contain only Latin letters, Digits and Special characters
-        </div>
+            <div class="invalid-feedback"
+                 *ngIf="control.errors?.['wrongCharacters']">
+                {{label | titlecase}} can contain only Latin letters, Digits and Special characters
+            </div>
 
-        <div class="invalid-feedback"
-             *ngIf="control.errors?.['userNameMatch']">
-            {{label | titlecase}} must contain only Latin letters, numbers, dashes and underscores
-        </div>
+            <div class="invalid-feedback"
+                 *ngIf="control.errors?.['userNameMatch']">
+                {{label | titlecase}} must contain only Latin letters, numbers, dashes and underscores
+            </div>
 
-        <div class="invalid-feedback"
-             *ngIf="control.errors?.['nameMatch']">
-            {{label | titlecase}} must contain Latin letters/hyphen
-        </div>
+            <div class="invalid-feedback"
+                 *ngIf="control.errors?.['nameMatch']">
+                {{label | titlecase}} must contain Latin letters/hyphen
+            </div>
 
-        <div class="invalid-feedback"
-             *ngIf="control.errors?.['lowerExist']">
-            At least one lowercase letter
-        </div>
+            <div class="invalid-feedback"
+                 *ngIf="control.errors?.['lowerExist']">
+                At least one lowercase letter
+            </div>
 
-        <div class="invalid-feedback"
-             *ngIf="control.errors?.['upperExist']">
-            At least one uppercase letter
+            <div class="invalid-feedback"
+                 *ngIf="control.errors?.['upperExist']">
+                At least one uppercase letter
+            </div>
         </div>
     </div>
 </div>

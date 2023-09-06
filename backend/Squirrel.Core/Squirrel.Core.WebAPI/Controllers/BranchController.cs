@@ -25,8 +25,14 @@ namespace Squirrel.Core.WebAPI.Controllers
             return Ok(await _branchService.GetBranchesByProjectAsync(projectId));
         }
 
+        [HttpPost]
+        public async Task<ActionResult<BranchDto>> AddBranch([FromBody] BranchDto branchDto)
+        {
+            return Ok(await _branchService.AddBranchAsync(branchDto));
+        }
+
         [HttpGet("{branchId}")]
-        public async Task<ActionResult<ProjectDto>> GetBranch(int branchId)
+        public async Task<ActionResult<BranchDto>> GetBranch(int branchId)
         {
             return Ok(await _branchService.GetBranchAsync(branchId));
         }

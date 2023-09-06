@@ -6,7 +6,7 @@ import { NotificationService } from '@core/services/notification.service';
 import { ProjectService } from '@core/services/project.service';
 import { takeUntil } from 'rxjs';
 
-import { ProjectDto } from '../../../models/projects/project-dto';
+import { ProjectResponseDto } from 'src/app/models/projects/project-response-dto';
 
 @Component({
     selector: 'app-home',
@@ -14,7 +14,7 @@ import { ProjectDto } from '../../../models/projects/project-dto';
     styleUrls: ['./main-page.component.sass'],
 })
 export class MainComponent extends BaseComponent implements OnInit, OnDestroy {
-    public project: ProjectDto;
+    public project: ProjectResponseDto;
 
     constructor(
         private broadcastHub: BroadcastHubService,
@@ -36,8 +36,7 @@ export class MainComponent extends BaseComponent implements OnInit, OnDestroy {
 
     override ngOnDestroy() {
         this.broadcastHub.stop();
-        this.unsubscribe$.next();
-        this.unsubscribe$.complete();
+        super.ngOnDestroy();
     }
 
     private loadProject() {
@@ -45,6 +44,7 @@ export class MainComponent extends BaseComponent implements OnInit, OnDestroy {
 
         if (!projectId) {
             this.notificationService.error('wrong route');
+            this.router.navigateByUrl('/projects');
 
             return;
         }

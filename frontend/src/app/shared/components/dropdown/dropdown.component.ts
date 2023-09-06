@@ -1,5 +1,17 @@
+/* eslint-disable no-empty-function */
 import { ComponentType } from '@angular/cdk/portal';
-import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, TemplateRef } from '@angular/core';
+import {
+    Component,
+    ElementRef,
+    EventEmitter,
+    HostListener,
+    Input,
+    OnChanges,
+    OnInit,
+    Output,
+    SimpleChanges,
+    TemplateRef,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { SafeHtml } from '@angular/platform-browser';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
@@ -9,7 +21,7 @@ import { faCheck } from '@fortawesome/free-solid-svg-icons';
     templateUrl: './dropdown.component.html',
     styleUrls: ['./dropdown.component.sass'],
 })
-export class DropdownComponent implements OnInit {
+export class DropdownComponent implements OnInit, OnChanges {
     public searchTerm: string = '';
 
     public isActive = false;
@@ -26,7 +38,7 @@ export class DropdownComponent implements OnInit {
 
     @Output() selectedValueChanged = new EventEmitter<string>();
 
-    public selectedOption: string;
+    @Input() selectedOption: string;
 
     @HostListener('document:click', ['$event'])
     onClick(event: Event): void {
@@ -35,20 +47,33 @@ export class DropdownComponent implements OnInit {
         }
     }
 
-    // eslint-disable-next-line no-empty-function
     constructor(private elementRef: ElementRef, private matDialog: MatDialog) {}
 
     ngOnInit(): void {
-        [this.selectedOption] = this.options;
+        this.updateSelectedOption();
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['options'] && !changes['options'].firstChange) {
+            this.updateSelectedOption();
+        }
+    }
+
+    private updateSelectedOption() {
+        if (this.options.length > 0) {
+            [this.selectedOption] = this.options;
+        }
     }
 
     onOptionSelected(value: string) {
+        if (this.customTemplate && value === this.options.slice(-1)[0]) {
+            this.openModal();
+
+            return;
+        }
+
         this.selectedOption = value;
         this.selectedValueChanged.emit(this.selectedOption);
-
-        if (this.customTemplate && this.options.indexOf(value) === this.options.length - 1) {
-            this.openModal();
-        }
     }
 
     private openModal() {
@@ -56,9 +81,10 @@ export class DropdownComponent implements OnInit {
     }
 
     public filterOptions(): string[] {
-        const filteredOptions = this.options.filter((option) => {
-            return option.toLowerCase().includes(this.searchTerm.toLowerCase());
-        });
+        const filteredOptions = this.options.filter(
+            (option) => option.toLowerCase().includes(this.searchTerm.toLowerCase()),
+            // eslint-disable-next-line function-paren-newline
+        );
 
         return filteredOptions;
     }

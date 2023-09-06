@@ -1,21 +1,29 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+/* eslint-disable no-empty-function */
+import { ComponentType } from '@angular/cdk/portal';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SafeHtml } from '@angular/platform-browser';
+import { BranchService } from '@core/services/branch.service';
+import { NotificationService } from '@core/services/notification.service';
+import { NewBranchAddedEventService } from '@modules/main/main-page/create-branch-modal/newBranchAddedEventService';
+import { ArrayFunctions } from '@shared/helpers/array-functions';
 import { SvgFileContentFetcher } from '@shared/helpers/svgFileContentFetcher';
+import { Subscription } from 'rxjs';
+
+import { BranchDto } from 'src/app/models/branch/branch-dto';
+
+import { CreateBranchModalComponent } from '../../create-branch-modal/create-branch-modal.component';
 
 @Component({
     selector: 'app-navbar-header',
     templateUrl: './navbar-header.component.html',
     styleUrls: ['./navbar-header.component.sass'],
 })
-export class NavbarHeaderComponent implements OnInit {
-    @ViewChild('modalContent') modalContent: TemplateRef<any>;
+export class NavbarHeaderComponent implements OnInit, OnDestroy {
+    createBranchModalComponent: ComponentType<CreateBranchModalComponent> = CreateBranchModalComponent;
 
-    /*  component for passing as a modal
-        import { ComponentType } from '@angular/cdk/portal';
-    */
-    // modalComponent: ComponentType<NotFoundComponent> = NotFoundComponent;
+    public branches: BranchDto[] = [];
 
-    public branches: string[];
+    public branchNames: string[] = [];
 
     public selectedBranch: string;
 
@@ -30,25 +38,57 @@ export class NavbarHeaderComponent implements OnInit {
 
     private branchesIconPath = 'assets/git-branch.svg';
 
-    public branchesIcon: SafeHtml;
+    public branchIcon: SafeHtml;
 
-    // eslint-disable-next-line no-empty-function
-    constructor(private svgFileContentFetcher: SvgFileContentFetcher) {}
+    private newBranchAddedEventSubscription: Subscription;
+
+    constructor(
+        private svgFileContentFetcher: SvgFileContentFetcher,
+        private branchService: BranchService,
+        private notificationService: NotificationService,
+        private newBranchAddedEventService: NewBranchAddedEventService,
+    ) {
+        this.newBranchAddedEventSubscription = this.newBranchAddedEventService.newBranchAddedEventEmitter.subscribe(
+            (branch) => {
+                ArrayFunctions.addElementToArrayAsSecondToLast(this.branches, branch);
+
+                ArrayFunctions.addElementToArrayAsSecondToLast(this.branchNames, branch.name);
+
+                this.selectedBranch = branch.name;
+            },
+        );
+    }
 
     ngOnInit(): void {
+        this.LoadBranches();
         this.getBranchIcon();
-        this.branches = ['Branch 1', 'Branch 2', 'Branch 3', 'Branch 4'];
+    }
+
+    private LoadBranches() {
+        this.branchService.getProjectBranches(1).subscribe(
+            (branches) => {
+                this.branches = branches;
+
+                this.branchNames = branches.map((b) => b.name);
+                this.branchNames.push('Add new branch');
+            },
+            () => {
+                this.notificationService.error('Failed to load branches for selected project');
+            },
+        );
     }
 
     private getBranchIcon() {
         this.svgFileContentFetcher.fetchSvgContent(this.branchesIconPath).subscribe((response) => {
             if (response !== null) {
-                this.branchesIcon = response;
+                this.branchIcon = response;
             }
         });
     }
 
-    public onBranchSelected(value: string) {
-        this.selectedBranch = value;
+    ngOnDestroy() {
+        if (this.newBranchAddedEventSubscription) {
+            this.newBranchAddedEventSubscription.unsubscribe();
+        }
     }
 }

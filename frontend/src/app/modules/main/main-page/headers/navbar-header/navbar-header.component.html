@@ -10,19 +10,12 @@
     </nav>
     <div class="right-container">
         <app-dropdown
-            [customTemplate]="modalContent"
-            [dropdownIcon]="branchesIcon"
-            [options]="branches"
-            [width]="300"
-            (selectedValueChanged)="onBranchSelected($event)"></app-dropdown>
+            [selectedOption]="selectedBranch"
+            [customTemplate]="createBranchModalComponent"
+            [dropdownIcon]="branchIcon"
+            [options]="branchNames"
+            [width]="300"></app-dropdown>
         <app-button text="+" height="30px" width="35px" padding="" variant="outline-secondary"> </app-button>
         <app-button text="Load latest changes" variant="outline-primary" class="align-right"></app-button>
     </div>
 </div>
-
-<ng-template #modalContent>
-    <p>Hello world!</p>
-    <mat-dialog-actions>
-        <button mat-button mat-dialog-close>Cancel</button>
-    </mat-dialog-actions>
-</ng-template>

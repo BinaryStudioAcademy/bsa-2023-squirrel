@@ -12,13 +12,14 @@ public static class ServiceCollectionExtensions
     {
         services.AddScoped<ITextService, TextService>();
         services.AddScoped<IDependencyAnalyzer, DependencyAnalyzer>();
+        services.AddScoped<IDbItemsRetrievalService, DbItemsRetrievalService>();
     }
 
     public static void ConfigureCors(this IServiceCollection services, IConfiguration configuration)
     {
         var allowedOrigin = configuration.GetRequiredSection("CoreWebAPIDomain").Value;
-        services.AddCors(options => 
-            options.AddDefaultPolicy(policy => 
+        services.AddCors(options =>
+            options.AddDefaultPolicy(policy =>
                 policy
                     .AllowAnyHeader()
                     .AllowAnyMethod()

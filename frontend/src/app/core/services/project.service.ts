@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { NewProjectDto } from '../../models/projects/new-project-dto';
-import { ProjectDto } from '../../models/projects/project-dto';
+import { NewProjectDto } from 'src/app/models/projects/new-project-dto';
+import { ProjectDto } from 'src/app/models/projects/project-dto';
+import { ProjectResponseDto } from 'src/app/models/projects/project-response-dto';
 
 import { HttpInternalService } from './http-internal.service';
 
@@ -15,14 +16,14 @@ export class ProjectService {
     // eslint-disable-next-line no-empty-function
     constructor(private httpService: HttpInternalService) {}
 
-    public addProject(project: NewProjectDto): Observable<ProjectDto> {
-        return this.httpService.postRequest<ProjectDto>(this.projectsApiUrl, project);
+    public addProject(newProject: NewProjectDto): Observable<ProjectResponseDto> {
+        return this.httpService.postRequest<ProjectResponseDto>(this.projectsApiUrl, newProject);
     }
 
-    public updateProject(projectId: string, project: ProjectDto): Observable<ProjectDto> {
+    public updateProject(projectId: string, project: ProjectDto): Observable<ProjectResponseDto> {
         const url = `${this.projectsApiUrl}/${projectId}`;
 
-        return this.httpService.putRequest<ProjectDto>(url, project);
+        return this.httpService.putRequest<ProjectResponseDto>(url, project);
     }
 
     public deleteProject(projectId: string): Observable<void> {
@@ -31,13 +32,13 @@ export class ProjectService {
         return this.httpService.deleteRequest<void>(url);
     }
 
-    public getProject(projectId: string): Observable<ProjectDto> {
+    public getProject(projectId: string): Observable<ProjectResponseDto> {
         const url = `${this.projectsApiUrl}/${projectId}`;
 
-        return this.httpService.getRequest<ProjectDto>(url);
+        return this.httpService.getRequest<ProjectResponseDto>(url);
     }
 
-    public getAllUserProjects(): Observable<ProjectDto[]> {
-        return this.httpService.getRequest<ProjectDto[]>(`${this.projectsApiUrl}/all`);
+    public getAllUserProjects(): Observable<ProjectResponseDto[]> {
+        return this.httpService.getRequest<ProjectResponseDto[]>(`${this.projectsApiUrl}/all`);
     }
 }

@@ -27,6 +27,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Squirrel.Shared", "Squirrel
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Squirrel.SqlService.BLL", "Squirrel.SqlService\Squirrel.SqlService.BLL\Squirrel.SqlService.BLL.csproj", "{9C7ACF5F-51DB-4EE1-9FEB-C2E5CEF3CF76}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Squirrel.ConsoleApp.Setup", "Squirrel.ConsoleApp.Setup\Squirrel.ConsoleApp.Setup.vdproj", "{C4E1BCDF-5A8F-4E1B-AD4B-EFB01DC2F339}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,8 @@ Global
 		{9C7ACF5F-51DB-4EE1-9FEB-C2E5CEF3CF76}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C7ACF5F-51DB-4EE1-9FEB-C2E5CEF3CF76}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C7ACF5F-51DB-4EE1-9FEB-C2E5CEF3CF76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4E1BCDF-5A8F-4E1B-AD4B-EFB01DC2F339}.Debug|Any CPU.ActiveCfg = Debug
+		{C4E1BCDF-5A8F-4E1B-AD4B-EFB01DC2F339}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

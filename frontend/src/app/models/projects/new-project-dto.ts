@@ -1,6 +1,8 @@
-import { DbEngine } from './db-engine';
+import { BranchDto } from '../branch/branch-dto';
+
+import { ProjectDto } from './project-dto';
 
 export interface NewProjectDto {
-    name: string;
-    engine: DbEngine;
+    project: ProjectDto;
+    defaultBranch: BranchDto;
 }

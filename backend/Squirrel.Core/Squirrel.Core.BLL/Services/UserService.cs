@@ -78,7 +78,7 @@ public sealed class UserService : BaseService, IUserService
     {
         var userEntity = await GetUserByIdInternal(updateUserDTO.Id);
 
-        if (await GetUserByUsernameInternal(updateUserDTO.Username) is not null)
+        if (await GetUserByUsernameInternal(updateUserDTO.Username) is not null && userEntity.Id != updateUserDTO.Id)
         {
             throw new UsernameAlreadyRegisteredException();
         }

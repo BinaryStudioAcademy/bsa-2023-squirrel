@@ -27,7 +27,6 @@ public class ClientIdFileService : IClientIdFileService
 
     public void SetClientId(string guid)
     {
-        var filePath = ClientIdFilePath;
-        File.WriteAllText(filePath, guid);
+        File.WriteAllText(ClientIdFilePath, guid);
     }
 }

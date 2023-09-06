@@ -20,15 +20,9 @@ public class SettingController: ControllerBase
         _dbSettingsOptions = dbSettingsOptions;
     }
 
-    [HttpPost]
-    [Route("connect")]
+    [HttpPost("connect")]
     public IActionResult Post(DbSettings dbSettings)
     {
-        if (!Enum.IsDefined(typeof(DbEngine), dbSettings.DbType))
-        {
-            throw new NotImplementedException($"Database type {dbSettings.DbType} is not supported.");
-        }
-
         _connectionFileService.SaveToFile(dbSettings);
 
         return Ok(_clientIdFileService.GetClientId());
@@ -37,8 +31,7 @@ public class SettingController: ControllerBase
     /// <summary>
     /// Just for debugging and demo
     /// </summary>
-    [HttpGet]
-    [Route("check")]
+    [HttpGet("check")]
     public IActionResult Get()
     {
         return Ok($"{_dbSettingsOptions.Value.DbType} - {_dbSettingsOptions.Value.ConnectionString}");

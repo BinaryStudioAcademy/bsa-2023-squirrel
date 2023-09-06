@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -7,9 +9,9 @@ using Squirrel.ConsoleApp.BL.Interfaces;
 using Squirrel.ConsoleApp.BL.Services;
 using Squirrel.ConsoleApp.Filters;
 using Squirrel.ConsoleApp.Models;
-using Squirrel.ConsoleApp.Providers;
 using Squirrel.ConsoleApp.Services;
 using Squirrel.Core.WebAPI.Extensions;
+using Squirrel.Core.WebAPI.Validators.Project;
 
 namespace Squirrel.ConsoleApp;
 
@@ -36,6 +38,8 @@ public class Startup
         services.AddScoped<IClientIdFileService, ClientIdFileService>();
 
         services.AddScoped<IGetActionsService, GetActionsService>();
+        
+        services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<DbSettingsValidator>());
 
         services.AddControllers(options =>
         {

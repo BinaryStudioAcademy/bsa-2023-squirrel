@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Squirrel.ConsoleApp.BL.Interfaces;
-using Squirrel.ConsoleApp.Models;
 
 namespace Squirrel.Core.WebAPI.Extensions;
 

@@ -1,6 +1,6 @@
 <h4>Connect to Data Base</h4>
 <app-barrier></app-barrier>
-<form [formGroup]="dbForm" class="db-form">
+<form [formGroup]="dbForm" (ngSubmit)="addDataBase()" class="db-form">
     <div class="input-wrapper">
         <label>Db Name</label>
         <app-input [formControl]="$any(dbForm.controls['dbName'])"

@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateDbModalComponent } from '@modules/main/create-db-modal/create-db-modal.component';
 
+import { DbEngine } from '../../../../../models/projects/db-engine';
+
 @Component({
     selector: 'app-main-header',
     templateUrl: './main-header.component.html',
@@ -25,6 +27,7 @@ export class MainHeaderComponent {
     public openCreateModal(): void {
         this.dialog.open(CreateDbModalComponent, {
             width: '700px',
+            data: { dbEngine: DbEngine.PostgreSql },
         });
     }
 }

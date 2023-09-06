@@ -20,6 +20,8 @@ import { LoadingSpinnerComponent } from './components/loading-spinner/loading-sp
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { ProfileMenuComponent } from './components/profile-menu/profile-menu.component';
 import { TreeComponent } from './components/tree/tree.component';
+import { InfoTooltipComponent } from './components/info-tooltip/info-tooltip.component';
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 @NgModule({
     imports: [
@@ -32,6 +34,7 @@ import { TreeComponent } from './components/tree/tree.component';
             positionClass: 'toast-bottom-right',
         }),
         MatMenuModule,
+        MatTooltipModule,
     ],
     declarations: [
         LoadingSpinnerComponent,
@@ -47,6 +50,7 @@ import { TreeComponent } from './components/tree/tree.component';
         DropdownComponent,
         TreeComponent,
         CheckboxComponent,
+        InfoTooltipComponent,
     ],
     exports: [
         CommonModule,
@@ -69,6 +73,7 @@ import { TreeComponent } from './components/tree/tree.component';
         DropdownComponent,
         TreeComponent,
         CheckboxComponent,
+        InfoTooltipComponent,
     ],
 })
 export class SharedModule {}

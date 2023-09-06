@@ -20,21 +20,23 @@
     </div>
 
     <div class="input-wrapper">
-        <label>Username</label>
+        <label>Port</label>
         <app-input [formControl]="$any(dbForm.controls['port'])"
                    placeholder="Enter port">
         </app-input>
     </div>
 
     <div class="input-wrapper">
-        <label>Password</label>
+
+        <label>Username<app-info-tooltip text="leave empty for Trusted Connection"></app-info-tooltip></label>
         <app-input [formControl]="$any(dbForm.controls['username'])"
                    placeholder="Enter username">
         </app-input>
     </div>
 
     <div class="input-wrapper">
-        <label>Password</label>
+
+        <label>Password<app-info-tooltip text="leave empty for Trusted Connection"></app-info-tooltip></label>
         <app-input [formControl]="$any(dbForm.controls['password'])"
                    type="password"
                    placeholder="Enter db password">

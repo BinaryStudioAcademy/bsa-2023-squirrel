@@ -4,6 +4,7 @@ using Squirrel.Core.BLL.Extensions;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.BLL.Services.Abstract;
 using Squirrel.Core.Common.DTO.Auth;
+using Squirrel.Core.Common.DTO.Users;
 using Squirrel.Core.Common.Security;
 using Squirrel.Core.DAL.Context;
 using Squirrel.Core.DAL.Entities;
@@ -19,6 +20,9 @@ public sealed class UserService : BaseService, IUserService
     public UserService(SquirrelCoreContext context, IMapper mapper) : base(context, mapper)
     {
     }
+
+    public async Task<UserDto> GetUserByIdAsync(int id)
+        => _mapper.Map<UserDto>( await _context.Users.FirstOrDefaultAsync(u => u.Id == id));
 
     public async Task<User?> GetUserByEmailAsync(string email)
         => await _context.Users.FirstOrDefaultAsync(u => u.Email == email);

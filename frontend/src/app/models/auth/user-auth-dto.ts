@@ -1,8 +1,8 @@
-import { UserDto } from '../user/user-dto';
+import { User } from '../user/user';
 
 import { AccessTokenDto } from './access-token-dto';
 
 export interface UserAuthDto {
-    user: UserDto;
+    user: User;
     token: AccessTokenDto;
 }

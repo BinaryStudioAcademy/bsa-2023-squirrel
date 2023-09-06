@@ -11,21 +11,18 @@ import { ConfirmationModalInterface } from 'src/app/models/confirmation-modal/co
 })
 export class ConfirmationModalComponent {
     constructor(
+        @Inject(MAT_DIALOG_DATA) public confirmationModalData: ConfirmationModalInterface,
         public confirmationModalRef: MatDialogRef<ConfirmationModalComponent>,
-        @Inject(MAT_DIALOG_DATA)
-        public confirmationModalData: ConfirmationModalInterface,
         public spinnerService: SpinnerService,
     ) {
-        // do nothing.
+        // do nothing
     }
 
     handleConfirmationModalSubmit() {
         this.spinnerService.show();
-        setTimeout(() => {
-            this.confirmationModalData.callbackMethod();
-            this.spinnerService.hide();
-            this.confirmationModalRef.close();
-        }, 500);
+        this.confirmationModalData.callbackMethod();
+        this.spinnerService.hide();
+        this.confirmationModalRef.close();
     }
 
     closeConfirmationModal(): void {

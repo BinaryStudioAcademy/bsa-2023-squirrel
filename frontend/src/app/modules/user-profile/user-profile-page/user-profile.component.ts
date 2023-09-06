@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BaseComponent } from '@core/base/base.component';
-import { AuthService } from '@core/services/auth.service';
 import { NotificationService } from '@core/services/notification.service';
 import { SpinnerService } from '@core/services/spinner.service';
 import { UserService } from '@core/services/user.service';
@@ -12,7 +11,7 @@ import { finalize, takeUntil } from 'rxjs';
 import { UpdateUserNamesDto } from 'src/app/models/user/update-user-names-dto';
 import { UpdateUserNotificationsDto } from 'src/app/models/user/update-user-notifications-dto';
 import { UpdateUserPasswordDto } from 'src/app/models/user/update-user-password-dto';
-import { UserDto } from 'src/app/models/user/user-dto';
+import { UserProfileDto } from 'src/app/models/user/user-profile-dto';
 
 @Component({
     selector: 'app-user-profile',
@@ -26,7 +25,7 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
 
     public penIcon = faPen;
 
-    public currentUser: UserDto;
+    public currentUser: UserProfileDto;
 
     public userNamesForm: FormGroup = new FormGroup({});
 
@@ -36,7 +35,6 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
         private fb: FormBuilder,
         private userService: UserService,
         private notificationService: NotificationService,
-        private authService: AuthService,
         private spinner: SpinnerService,
     ) {
         super();
@@ -49,15 +47,15 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
     private fetchCurrentUser() {
         this.spinner.show();
 
-        this.authService
-            .getUser()
+        this.userService
+            .getUserProfile()
             .pipe(
                 takeUntil(this.unsubscribe$),
                 finalize(() => this.spinner.hide()),
             )
             .subscribe(
-                (user) => {
-                    this.currentUser = user as UserDto;
+                (userProfile) => {
+                    this.currentUser = userProfile;
                     this.initializeForms();
                 },
                 () => {

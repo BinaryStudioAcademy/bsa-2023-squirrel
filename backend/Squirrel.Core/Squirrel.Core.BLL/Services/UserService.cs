@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Squirrel.Core.BLL.Extensions;
 using Squirrel.Core.BLL.Interfaces;
@@ -23,6 +24,11 @@ public sealed class UserService : BaseService, IUserService
     {
         var userEntity = await GetUserByIdInternal(id);
         return _mapper.Map<UserDto>(userEntity);
+    }
+
+    public async Task<UserProfileDto> GetUserProfileAsync(int id)
+    {
+        return await _context.Users.ProjectTo<UserProfileDto>(_mapper.ConfigurationProvider).FirstAsync(x => x.Id == id);
     }
 
     public async Task<UserDto> GetUserByEmailAsync(string email)
@@ -68,7 +74,7 @@ public sealed class UserService : BaseService, IUserService
         return _mapper.Map<UserDto>(createdUser); ;
     }
 
-    public async Task<UserDto> UpdateUserNamesAsync(UpdateUserNamesDto updateUserDTO)
+    public async Task<UserProfileDto> UpdateUserNamesAsync(UpdateUserNamesDto updateUserDTO)
     {
         var userEntity = await GetUserByIdInternal(updateUserDTO.Id);
 
@@ -82,7 +88,7 @@ public sealed class UserService : BaseService, IUserService
         _context.Users.Update(userEntity);
         await _context.SaveChangesAsync();
 
-        return _mapper.Map<UserDto>(userEntity);
+        return _mapper.Map<UserProfileDto>(userEntity);
     }
 
     public async Task ChangePasswordAsync(UpdateUserPasswordDto changePasswordDTO)
@@ -100,7 +106,7 @@ public sealed class UserService : BaseService, IUserService
         await _context.SaveChangesAsync();
     }
 
-    public async Task<UserDto> UpdateNotificationsAsync(UpdateUserNotificationsdDto updateNotificationsdDTO)
+    public async Task<UserProfileDto> UpdateNotificationsAsync(UpdateUserNotificationsdDto updateNotificationsdDTO)
     {
         var userEntity = await GetUserByIdInternal(updateNotificationsdDTO.Id);
 
@@ -110,7 +116,7 @@ public sealed class UserService : BaseService, IUserService
         _context.Users.Update(userEntity);
         await _context.SaveChangesAsync();
 
-        return _mapper.Map<UserDto>(userEntity);
+        return _mapper.Map<UserProfileDto>(userEntity);
     }
 
     public async Task<User?> GetUserEntityByEmail(string email)

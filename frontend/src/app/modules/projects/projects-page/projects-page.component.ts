@@ -6,7 +6,7 @@ import { ProjectService } from '@core/services/project.service';
 import { CreateProjectModalComponent } from '@modules/projects/create-project-modal/create-project-modal.component';
 import { takeUntil } from 'rxjs';
 
-import { ProjectDto } from 'src/app/models/projects/project-dto';
+import { ProjectResponseDto } from 'src/app/models/projects/project-response-dto';
 
 @Component({
     selector: 'app-projects-page',
@@ -14,7 +14,7 @@ import { ProjectDto } from 'src/app/models/projects/project-dto';
     styleUrls: ['./projects-page.component.sass'],
 })
 export class ProjectsPageComponent extends BaseComponent implements OnInit {
-    public projects: ProjectDto[] = [];
+    public projects: ProjectResponseDto[] = [];
 
     constructor(
         public dialog: MatDialog,
@@ -33,7 +33,7 @@ export class ProjectsPageComponent extends BaseComponent implements OnInit {
             .getAllUserProjects()
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe(
-                (projects: ProjectDto[]) => {
+                (projects: ProjectResponseDto[]) => {
                     this.projects = projects;
                 },
                 () => {

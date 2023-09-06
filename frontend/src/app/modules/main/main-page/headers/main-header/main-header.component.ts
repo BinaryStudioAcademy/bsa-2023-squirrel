@@ -24,8 +24,8 @@ export class MainHeaderComponent {
 
     public openCreateModal(): void {
         this.dialog.open(CreateDbModalComponent, {
-            width: '500px',
-            height: '45%',
+            width: '700px',
+            height: '60%',
         });
     }
 }

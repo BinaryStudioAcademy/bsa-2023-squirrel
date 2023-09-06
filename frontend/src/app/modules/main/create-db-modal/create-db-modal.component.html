@@ -1,1 +1,29 @@
-<p>create-db-modal works!</p>
+<h4>Connect to Data Base</h4>
+<app-barrier></app-barrier>
+<form [formGroup]="dbForm" class="db-form">
+    <div class="input-wrapper">
+        <label>Db Name</label>
+        <app-input [formControl]="$any(dbForm.controls['dbName'])" placeholder="Enter db Name"></app-input>
+    </div>
+
+    <app-barrier></app-barrier>
+
+    <div class="input-wrapper">
+        <label>Server</label>
+        <app-input [formControl]="$any(dbForm.controls['dbName'])" placeholder="Enter Server"></app-input>
+    </div>
+
+    <div class="input-wrapper">
+        <label>Username</label>
+        <app-input [formControl]="$any(dbForm.controls['dbName'])" placeholder="Enter db Username" ></app-input>
+    </div>
+
+    <div class="input-wrapper">
+        <label>Password</label>
+        <app-input [formControl]="$any(dbForm.controls['dbName'])" type="password" placeholder="Enter db password" ></app-input>
+    </div>
+</form>
+
+<mat-dialog-actions>
+    <app-button text="Test connection"></app-button>
+</mat-dialog-actions>

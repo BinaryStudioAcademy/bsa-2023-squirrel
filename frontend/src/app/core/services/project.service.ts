@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { NewProjectDto } from 'src/app/models/projects/new-project-dto';
 import { ProjectDto } from 'src/app/models/projects/project-dto';
 
+import { UpdateProjectDto } from '../../models/projects/update-project-dto';
+
 import { HttpInternalService } from './http-internal.service';
 
 @Injectable({
@@ -19,7 +21,7 @@ export class ProjectService {
         return this.httpService.postRequest<ProjectDto>(this.projectsApiUrl, newProject);
     }
 
-    public updateProject(projectId: string, project: ProjectDto): Observable<ProjectDto> {
+    public updateProject(projectId: string, project: UpdateProjectDto): Observable<ProjectDto> {
         const url = `${this.projectsApiUrl}/${projectId}`;
 
         return this.httpService.putRequest<ProjectDto>(url, project);

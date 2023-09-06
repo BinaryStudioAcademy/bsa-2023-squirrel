@@ -24,9 +24,9 @@ public class ProjectController : ControllerBase
     }
 
     [HttpPut("{projectId}")]
-    public async Task<ActionResult<ProjectDto>> UpdateProject(int projectId, ProjectDto projectDto)
+    public async Task<ActionResult<ProjectDto>> UpdateProject(int projectId, UpdateProjectDto updateProjectDto)
     {
-        return Ok(await _projectService.UpdateProjectAsync(projectId, projectDto));
+        return Ok(await _projectService.UpdateProjectAsync(projectId, updateProjectDto));
     }
 
     [HttpDelete("{projectId}")]

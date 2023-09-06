@@ -9,5 +9,6 @@ public sealed class ProjectProfile : Profile
     public ProjectProfile()
     {
         CreateMap<Project, ProjectDto>()!.ReverseMap();
+        CreateMap<Project, UpdateProjectDto>()!.ReverseMap();
     }
 }

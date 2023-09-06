@@ -38,7 +38,7 @@ public sealed class ProjectService : BaseService, IProjectService
         return _mapper.Map<ProjectDto>(createdProject);
     }
 
-    public async Task<ProjectDto> UpdateProjectAsync(int projectId, ProjectDto projectDto)
+    public async Task<ProjectDto> UpdateProjectAsync(int projectId, UpdateProjectDto updateProjectDto)
     {
         var existingProject = await _context.Projects.FindAsync(projectId);
         if (existingProject is null)
@@ -46,7 +46,7 @@ public sealed class ProjectService : BaseService, IProjectService
             throw new EntityNotFoundException();
         }
         
-        _mapper.Map(projectDto, existingProject);
+        _mapper.Map(updateProjectDto, existingProject);
         await _context.SaveChangesAsync();
         
         return _mapper.Map<ProjectDto>(existingProject)!;

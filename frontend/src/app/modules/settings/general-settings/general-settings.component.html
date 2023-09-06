@@ -1,1 +1,15 @@
-<p>general-settings works!</p>
+<div class="general-settings-form">
+    <div class="input-container">
+        <app-input [formControl]="$any(projectForm.controls['projectName'])" [label]="'Project name'"></app-input>
+    </div>
+    <div class="text-area-container">
+        <label class="description-label">Description</label>
+        <textarea [formControl]="$any(projectForm.controls['description'])"
+            placeholder="Write description" class="description-msg-input" rows="4"></textarea>
+    </div>
+    <div class="button-container">
+        <app-button text="Save" width="100%" variant="outline-secondary" [isDisabled]="projectForm.invalid"
+                    (click)="onSaveClick()">
+        </app-button>
+    </div>
+</div>

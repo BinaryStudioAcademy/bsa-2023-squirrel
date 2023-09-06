@@ -26,7 +26,6 @@ public class UserController : ControllerBase
     [HttpPut("update-names")]
     public async Task<ActionResult<UserProfileDto>> UpdateUserNames([FromBody] UpdateUserNamesDto updateUserDto)
     {
-        updateUserDto.Id = _userIdGetter.GetCurrentUserId();
         return Ok(await _userService.UpdateUserNamesAsync(updateUserDto));
     }
 
@@ -36,7 +35,6 @@ public class UserController : ControllerBase
     [HttpPut("update-password")]
     public async Task<ActionResult> UpdatePassword([FromBody] UpdateUserPasswordDto changePasswordDto)
     {
-        changePasswordDto.Id = _userIdGetter.GetCurrentUserId();
         await _userService.ChangePasswordAsync(changePasswordDto);
         return NoContent();
     }
@@ -47,7 +45,6 @@ public class UserController : ControllerBase
     [HttpPut("update-notifications")]
     public async Task<ActionResult<UserProfileDto>> UpdateUserNotifications([FromBody] UpdateUserNotificationsdDto updateUserNotificationsdDto)
     {
-        updateUserNotificationsdDto.Id = _userIdGetter.GetCurrentUserId();
         return Ok(await _userService.UpdateNotificationsAsync(updateUserNotificationsdDto));
     }
 
@@ -60,6 +57,6 @@ public class UserController : ControllerBase
     [HttpGet("user-profile")]
     public async Task<ActionResult<UserProfileDto>> GetUserProfile()
     {
-        return Ok(await _userService.GetUserProfileAsync(_userIdGetter.GetCurrentUserId()));
+        return Ok(await _userService.GetUserProfileAsync());
     }
 }

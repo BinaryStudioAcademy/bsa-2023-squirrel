@@ -13,7 +13,7 @@ public interface IUserService
     Task<User?> GetUserEntityByEmail(string email);
     Task<User?> GetUserEntityByUsername(string username);
 
-    Task<UserProfileDto> GetUserProfileAsync(int id);
+    Task<UserProfileDto> GetUserProfileAsync();
     Task<UserProfileDto> UpdateUserNamesAsync(UpdateUserNamesDto updateUserDTO);
     Task ChangePasswordAsync(UpdateUserPasswordDto userDto);
     Task<UserProfileDto> UpdateNotificationsAsync(UpdateUserNotificationsdDto updateNotificationsdDTO);

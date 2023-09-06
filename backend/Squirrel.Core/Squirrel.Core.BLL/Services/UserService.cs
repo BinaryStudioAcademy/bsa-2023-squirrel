@@ -17,17 +17,21 @@ public sealed class UserService : BaseService, IUserService
 {
     private const int MaxNameLength = 25;
     private const int MinNameLength = 2;
+    private readonly IUserIdGetter _userIdGetter;
 
-    public UserService(SquirrelCoreContext context, IMapper mapper) : base(context, mapper) { }
+    public UserService(SquirrelCoreContext context, IMapper mapper, IUserIdGetter userIdGetter) : base(context, mapper)
+    {
+        _userIdGetter = userIdGetter;
+    }
     
     public async Task<UserDto> GetUserByIdAsync(int id)
     {
         return _mapper.Map<UserDto>(await GetUserByIdInternal(id));
     }
 
-    public async Task<UserProfileDto> GetUserProfileAsync(int id)
+    public async Task<UserProfileDto> GetUserProfileAsync()
     {
-        return await _context.Users.ProjectTo<UserProfileDto>(_mapper.ConfigurationProvider).FirstAsync(x => x.Id == id);
+        return await _context.Users.ProjectTo<UserProfileDto>(_mapper.ConfigurationProvider).FirstAsync(x => x.Id == _userIdGetter.GetCurrentUserId());
     }
 
     public async Task<UserDto> GetUserByEmailAsync(string email)
@@ -79,11 +83,11 @@ public sealed class UserService : BaseService, IUserService
 
     public async Task<UserProfileDto> UpdateUserNamesAsync(UpdateUserNamesDto updateUserDTO)
     {
-        var userEntity = await GetUserByIdInternal(updateUserDTO.Id);
+        var userEntity = await GetUserByIdInternal(_userIdGetter.GetCurrentUserId());
 
         var existingUserWithSameUsername = await GetUserEntityByUsername(updateUserDTO.Username);
 
-        if (existingUserWithSameUsername != null && existingUserWithSameUsername.Id != updateUserDTO.Id)
+        if (existingUserWithSameUsername != null && existingUserWithSameUsername.Id != _userIdGetter.GetCurrentUserId())
         {
             throw new UsernameAlreadyRegisteredException();
         }
@@ -98,7 +102,7 @@ public sealed class UserService : BaseService, IUserService
 
     public async Task ChangePasswordAsync(UpdateUserPasswordDto changePasswordDTO)
     {
-        var userEntity = await GetUserByIdInternal(changePasswordDTO.Id);
+        var userEntity = await GetUserByIdInternal(_userIdGetter.GetCurrentUserId());
 
         if (!SecurityUtils.ValidatePassword(changePasswordDTO.CurrentPassword, userEntity.PasswordHash!, userEntity.Salt!))
         {
@@ -113,7 +117,7 @@ public sealed class UserService : BaseService, IUserService
 
     public async Task<UserProfileDto> UpdateNotificationsAsync(UpdateUserNotificationsdDto updateNotificationsdDTO)
     {
-        var userEntity = await GetUserByIdInternal(updateNotificationsdDTO.Id);
+        var userEntity = await GetUserByIdInternal(_userIdGetter.GetCurrentUserId());
 
         userEntity.SquirrelNotification = updateNotificationsdDTO.SquirrelNotification;
         userEntity.EmailNotification = updateNotificationsdDTO.EmailNotification;

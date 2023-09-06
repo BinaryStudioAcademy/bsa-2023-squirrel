@@ -2,7 +2,6 @@
 
 public class UpdateUserNotificationsdDto
 {
-    public int Id { get; set; }
     public bool SquirrelNotification { get; set; }
     public bool EmailNotification { get; set; }
 }

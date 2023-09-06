@@ -292,7 +292,7 @@ namespace Squirrel.Core.DAL.Migrations
                     b.Property<int>("DbEngine")
                         .HasColumnType("int");
 
-                    b.Property<int>("DefaultBranchId")
+                    b.Property<int?>("DefaultBranchId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -314,9 +314,38 @@ namespace Squirrel.Core.DAL.Migrations
                     b.HasIndex("CreatedBy");
 
                     b.HasIndex("DefaultBranchId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[DefaultBranchId] IS NOT NULL");
 
                     b.ToTable("Projects");
+                });
+
+            modelBuilder.Entity("Squirrel.Core.DAL.Entities.ProjectDatabase", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("DbName")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<Guid>("Guid")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Guid");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("ProjectDatabases");
                 });
 
             modelBuilder.Entity("Squirrel.Core.DAL.Entities.PullRequest", b =>
@@ -735,14 +764,24 @@ namespace Squirrel.Core.DAL.Migrations
                         .IsRequired();
 
                     b.HasOne("Squirrel.Core.DAL.Entities.Branch", "DefaultBranch")
-                        .WithOne("ProjectForDefaultBranch")
+                        .WithOne()
                         .HasForeignKey("Squirrel.Core.DAL.Entities.Project", "DefaultBranchId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Author");
 
                     b.Navigation("DefaultBranch");
+                });
+
+            modelBuilder.Entity("Squirrel.Core.DAL.Entities.ProjectDatabase", b =>
+                {
+                    b.HasOne("Squirrel.Core.DAL.Entities.Project", "Project")
+                        .WithMany("ProjectDatabases")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("Squirrel.Core.DAL.Entities.PullRequest", b =>
@@ -795,8 +834,6 @@ namespace Squirrel.Core.DAL.Migrations
                 {
                     b.Navigation("BranchCommits");
 
-                    b.Navigation("ProjectForDefaultBranch");
-
                     b.Navigation("PullRequestsFromThisBranch");
 
                     b.Navigation("PullRequestsIntoThisBranch");
@@ -816,6 +853,8 @@ namespace Squirrel.Core.DAL.Migrations
             modelBuilder.Entity("Squirrel.Core.DAL.Entities.Project", b =>
                 {
                     b.Navigation("Branches");
+
+                    b.Navigation("ProjectDatabases");
 
                     b.Navigation("ProjectTags");
 

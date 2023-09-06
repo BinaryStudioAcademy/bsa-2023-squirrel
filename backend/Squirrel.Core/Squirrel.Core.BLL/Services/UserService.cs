@@ -21,7 +21,7 @@ public sealed class UserService : BaseService, IUserService
     {
     }
 
-    public async Task<UserDto> GetUserByIdAsync(int id) 
+    public async Task<UserDto> GetUserByIdAsync(int id)
         => _mapper.Map<UserDto>( await _context.Users.FirstOrDefaultAsync(u => u.Id == id));
 
     public async Task<User?> GetUserByEmailAsync(string email)

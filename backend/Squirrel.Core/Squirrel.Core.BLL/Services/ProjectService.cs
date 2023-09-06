@@ -84,11 +84,7 @@ public sealed class ProjectService : BaseService, IProjectService
 
     private void ValidateProject(Project? entity)
     {
-        if (entity is null)
-        {
-            throw new EntityNotFoundException(nameof(Project));
-        }
-        if (entity.CreatedBy != _userIdGetter.GetCurrentUserId())
+        if (entity is null || entity.CreatedBy != _userIdGetter.GetCurrentUserId())
         {
             throw new EntityNotFoundException(nameof(Project));
         }

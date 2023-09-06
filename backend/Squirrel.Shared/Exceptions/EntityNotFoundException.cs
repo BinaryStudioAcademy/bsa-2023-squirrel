@@ -28,7 +28,7 @@ public sealed class EntityNotFoundException : RequestException
     }
 
     public EntityNotFoundException(string entityName, string property) : base(
-        $"Entity '{entityName}' with id '{property}' not found",
+        $"Entity '{entityName}' not found by '{property}' ",
         ErrorType.NotFound,
         HttpStatusCode.NotFound)
     {

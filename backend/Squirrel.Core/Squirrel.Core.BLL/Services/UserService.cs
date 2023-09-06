@@ -22,8 +22,7 @@ public sealed class UserService : BaseService, IUserService
     
     public async Task<UserDto> GetUserByIdAsync(int id)
     {
-        var userEntity = await GetUserByIdInternal(id);
-        return _mapper.Map<UserDto>(userEntity);
+        return _mapper.Map<UserDto>(await GetUserByIdInternal(id));
     }
 
     public async Task<UserProfileDto> GetUserProfileAsync(int id)
@@ -43,7 +42,11 @@ public sealed class UserService : BaseService, IUserService
 
     public async Task<UserDto> GetUserByUsernameAsync(string username)
     {
-        var userEntity = await GetUserByUsernameInternal(username);
+        var userEntity = await GetUserEntityByUsername(username);
+        if (userEntity == null)
+        {
+            throw new EntityNotFoundException(nameof(User), username);
+        }
         return _mapper.Map<UserDto>(userEntity);
     }
 
@@ -78,7 +81,7 @@ public sealed class UserService : BaseService, IUserService
     {
         var userEntity = await GetUserByIdInternal(updateUserDTO.Id);
 
-        if (await GetUserByUsernameInternal(updateUserDTO.Username) is not null && userEntity.Id != updateUserDTO.Id)
+        if (await GetUserEntityByUsername(updateUserDTO.Username) is not null && userEntity.Id != updateUserDTO.Id)
         {
             throw new UsernameAlreadyRegisteredException();
         }
@@ -121,14 +124,12 @@ public sealed class UserService : BaseService, IUserService
 
     public async Task<User?> GetUserEntityByEmail(string email)
     {
-        var userEntity = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
-        return userEntity;
+        return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
     }
 
     public async Task<User?> GetUserEntityByUsername(string username)
     {
-        var userEntity = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
-        return userEntity;
+        return await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
     }
 
     private async Task<User> GetUserByIdInternal(int id)
@@ -140,12 +141,6 @@ public sealed class UserService : BaseService, IUserService
             throw new EntityNotFoundException(nameof(User), id);
         }
 
-        return userEntity;
-    }
-
-    private async Task<User?> GetUserByUsernameInternal(string username)
-    {
-        var userEntity = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
         return userEntity;
     }
 

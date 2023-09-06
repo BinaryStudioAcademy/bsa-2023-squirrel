@@ -93,7 +93,7 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
                 '',
                 [
                     Validators.required,
-                    Validators.minLength(2),
+                    Validators.minLength(6),
                     Validators.maxLength(25),
                     ValidationsFn.lowerExist(),
                     ValidationsFn.upperExist(),
@@ -103,7 +103,7 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
                 '',
                 [
                     Validators.required,
-                    Validators.minLength(2),
+                    Validators.minLength(6),
                     Validators.maxLength(25),
                     ValidationsFn.lowerExist(),
                     ValidationsFn.upperExist(),

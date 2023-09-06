@@ -1,71 +1,59 @@
 <div class="container">
-    <label *ngIf="label">{{label | titlecase}}</label>
+    <label *ngIf="label">{{ label | titlecase }}</label>
     <div class="input-wrapper">
-        <input [formControl]="control"
-               type="{{type === 'text' ? 'text' : show ? 'text' : 'password'}}"
-               placeholder="{{placeholder}}"
-               [ngStyle]="{
-               width: width,
-               height: height,
-               'padding-right': type === 'password' ? '40px' : '15px'
-               }">
+        <input
+            [formControl]="control"
+            type="{{ type === 'text' ? 'text' : show ? 'text' : 'password' }}"
+            placeholder="{{ placeholder }}"
+            [ngStyle]="{
+                width: width,
+                height: height,
+                'padding-right': type === 'password' ? '40px' : '15px'
+            }" />
         <span *ngIf="type === 'password'" class="hide" (click)="show = !show">
-            <img src="assets/{{ show ? 'hide-1.svg' : 'hide-2.svg' }}" alt="show/hide">
+            <img src="assets/{{ show ? 'hide-1.svg' : 'hide-2.svg' }}" alt="show/hide" />
         </span>
     </div>
 
     <div *ngIf="control.touched">
-        <div class="invalid-feedback"
-             *ngIf="control.errors?.['required']">
-            Please enter a {{label | titlecase}}
+        <div class="invalid-feedback" *ngIf="control.errors?.['required']">
+            Please enter a {{ label === '' ? name : (label | titlecase) }}
         </div>
 
         <div *ngIf="control.value">
-            <div class="invalid-feedback"
-                 *ngIf="control.errors?.['minlength']">
-                {{label | titlecase}} must be at least {{control.errors?.['minlength'].requiredLength}} characters
+            <div class="invalid-feedback" *ngIf="control.errors?.['minlength']">
+                {{ label === '' ? name : (label | titlecase) }} must be at least
+                {{control.errors?.['minlength'].requiredLength}} characters
             </div>
 
-            <div class="invalid-feedback"
-                 *ngIf="control.errors?.['maxlength']">
-                {{label | titlecase}} must be at most {{control.errors?.['maxlength'].requiredLength}} characters
+            <div class="invalid-feedback" *ngIf="control.errors?.['maxlength']">
+                {{ label === '' ? name : (label | titlecase) }} must be at most
+                {{control.errors?.['maxlength'].requiredLength}} characters
             </div>
 
-            <div class="invalid-feedback"
-                 *ngIf="control.errors?.['emailMatch']">
-                Not valid email format
+            <div class="invalid-feedback" *ngIf="control.errors?.['emailMatch']">Not valid email format</div>
+
+            <div class="invalid-feedback" *ngIf="control.errors?.['notMatching']">
+                {{ label === '' ? name : (label | titlecase) }} must match
             </div>
 
-            <div class="invalid-feedback"
-                 *ngIf="control.errors?.['notMatching']">
-                {{label | titlecase}} must match
+            <div class="invalid-feedback" *ngIf="control.errors?.['wrongCharacters']">
+                {{ label === '' ? name : (label | titlecase) }} can contain only Latin letters, Digits and Special
+                characters
             </div>
 
-            <div class="invalid-feedback"
-                 *ngIf="control.errors?.['wrongCharacters']">
-                {{label | titlecase}} can contain only Latin letters, Digits and Special characters
+            <div class="invalid-feedback" *ngIf="control.errors?.['userNameMatch']">
+                {{ label === '' ? name : (label | titlecase) }} must contain only Latin letters, numbers, dashes and
+                underscores
             </div>
 
-            <div class="invalid-feedback"
-                 *ngIf="control.errors?.['userNameMatch']">
-                {{label | titlecase}} must contain only Latin letters, numbers, dashes and underscores
+            <div class="invalid-feedback" *ngIf="control.errors?.['nameMatch']">
+                {{ label === '' ? name : (label | titlecase) }} must contain Latin letters/hyphen
             </div>
 
-            <div class="invalid-feedback"
-                 *ngIf="control.errors?.['nameMatch']">
-                {{label | titlecase}} must contain Latin letters/hyphen
-            </div>
+            <div class="invalid-feedback" *ngIf="control.errors?.['lowerExist']">At least one lowercase letter</div>
 
-            <div class="invalid-feedback"
-                 *ngIf="control.errors?.['lowerExist']">
-                At least one lowercase letter
-            </div>
-
-            <div class="invalid-feedback"
-                 *ngIf="control.errors?.['upperExist']">
-                At least one uppercase letter
-            </div>
+            <div class="invalid-feedback" *ngIf="control.errors?.['upperExist']">At least one uppercase letter</div>
         </div>
     </div>
 </div>
-

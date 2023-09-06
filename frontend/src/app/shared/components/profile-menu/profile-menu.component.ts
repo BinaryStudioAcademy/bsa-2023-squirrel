@@ -4,7 +4,7 @@ import { AuthService } from '@core/services/auth.service';
 import { EventService } from '@core/services/event.service';
 import { takeUntil } from 'rxjs';
 
-import { User } from 'src/app/models/user/user';
+import { UserDto } from 'src/app/models/user/user-dto';
 
 @Component({
     selector: 'app-profile-menu',
@@ -12,7 +12,7 @@ import { User } from 'src/app/models/user/user';
     styleUrls: ['./profile-menu.component.sass'],
 })
 export class ProfileMenuComponent extends BaseComponent implements OnInit, OnDestroy {
-    public currentUser: User | undefined;
+    public currentUser: UserDto | undefined;
 
     constructor(private authService: AuthService, private eventService: EventService) {
         super();

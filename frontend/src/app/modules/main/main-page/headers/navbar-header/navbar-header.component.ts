@@ -1,7 +1,7 @@
-/* eslint-disable no-empty-function */
 import { ComponentType } from '@angular/cdk/portal';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SafeHtml } from '@angular/platform-browser';
+import { ActivatedRoute } from '@angular/router';
 import { BranchService } from '@core/services/branch.service';
 import { NotificationService } from '@core/services/notification.service';
 import { NewBranchAddedEventService } from '@modules/main/main-page/create-branch-modal/newBranchAddedEventService';
@@ -47,25 +47,26 @@ export class NavbarHeaderComponent implements OnInit, OnDestroy {
         private branchService: BranchService,
         private notificationService: NotificationService,
         private newBranchAddedEventService: NewBranchAddedEventService,
+        private route: ActivatedRoute,
     ) {
         this.newBranchAddedEventSubscription = this.newBranchAddedEventService.newBranchAddedEventEmitter.subscribe(
-            (branch) => {
-                ArrayFunctions.addElementToArrayAsSecondToLast(this.branches, branch);
-
-                ArrayFunctions.addElementToArrayAsSecondToLast(this.branchNames, branch.name);
-
-                this.selectedBranch = branch.name;
-            },
+            this.onNewBranch,
         );
     }
 
     ngOnInit(): void {
-        this.LoadBranches();
         this.getBranchIcon();
+        this.LoadBranches();
     }
 
     private LoadBranches() {
-        this.branchService.getProjectBranches(1).subscribe(
+        const currentProjectId = this.getCurrentProjectIdFromRoute();
+
+        if (!currentProjectId) {
+            return;
+        }
+
+        this.branchService.getProjectBranches(currentProjectId).subscribe(
             (branches) => {
                 this.branches = branches;
 
@@ -73,7 +74,7 @@ export class NavbarHeaderComponent implements OnInit, OnDestroy {
                 this.branchNames.push('Add new branch');
             },
             () => {
-                this.notificationService.error('Failed to load branches for selected project');
+                this.notificationService.error('Failed to load branches for current project');
             },
         );
     }
@@ -84,6 +85,20 @@ export class NavbarHeaderComponent implements OnInit, OnDestroy {
                 this.branchIcon = response;
             }
         });
+    }
+
+    private getCurrentProjectIdFromRoute() {
+        const currentProjectId = this.route.snapshot.paramMap.get('id');
+
+        return currentProjectId ? parseInt(currentProjectId, 10) : null;
+    }
+
+    private onNewBranch(branch: BranchDto) {
+        this.branches.push(branch);
+
+        ArrayFunctions.addElementToArrayAsSecondToLast(this.branchNames, branch.name);
+
+        this.selectedBranch = branch.name;
     }
 
     ngOnDestroy() {

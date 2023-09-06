@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
 import { BaseComponent } from '@core/base/base.component';
 import { BranchService } from '@core/services/branch.service';
 import { NotificationService } from '@core/services/notification.service';
@@ -28,6 +29,7 @@ export class CreateBranchModalComponent extends BaseComponent implements OnInit 
         private branchService: BranchService,
         private notificationService: NotificationService,
         private fb: FormBuilder,
+        private route: ActivatedRoute,
         public dialogRef: MatDialogRef<CreateBranchModalComponent>,
         private newBranchAddedEventService: NewBranchAddedEventService,
     ) {
@@ -67,7 +69,7 @@ export class CreateBranchModalComponent extends BaseComponent implements OnInit 
             );
     }
 
-    validateBranchNameInput(event: Event) {
+    public validateBranchNameInput(event: Event) {
         const inputElement = event.target as HTMLInputElement;
 
         const inputValue = inputElement.value;
@@ -75,34 +77,40 @@ export class CreateBranchModalComponent extends BaseComponent implements OnInit 
         this.isBranchNameDistinct = !this.branchNames.includes(inputValue);
     }
 
-    createBranch() {
+    public createBranch() {
+        const projectId = this.getCurrentProjectIdFromRoute();
+
+        if (!projectId) {
+            return;
+        }
+
         const newBranch: BranchDto = {
             id: 0,
             isActive: true,
-            projectId: this.getCurrentProjectIdFromRoute(),
+            projectId,
             name: this.branchForm.value.branchName,
         };
 
-        this.newBranchAddedEventService.emitNewBranchAddedEvent(newBranch);
+        this.branchService
+            .addBranch(newBranch)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe(
+                (createdBranch: BranchDto) => {
+                    this.notificationService.info('Branch created successfully');
 
-        // this.branchService
-        //     .addBranch(newBranch)
-        //     .pipe(takeUntil(this.unsubscribe$))
-        //     .subscribe(
-        //         (createdBranch: BranchDto) => {
-        //             this.notificationService.info('Branch created successfully');
-
-        //             this.newBranchAddedEventService.emitNewBranchAddedEvent(createdBranch);
-        //         },
-        //         () => {
-        //             this.notificationService.error('Failed to create branch');
-        //         },
-        //     );
+                    this.newBranchAddedEventService.emitNewBranchAddedEvent(createdBranch);
+                },
+                () => {
+                    this.notificationService.error('Failed to create branch');
+                },
+            );
 
         this.dialogRef.close();
     }
 
-    getCurrentProjectIdFromRoute() {
-        return 1;
+    private getCurrentProjectIdFromRoute() {
+        const currentProjectId = this.route.snapshot.paramMap.get('id');
+
+        return currentProjectId ? parseInt(currentProjectId, 10) : null;
     }
 }

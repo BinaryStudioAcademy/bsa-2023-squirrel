@@ -42,7 +42,7 @@ public class ConnectionFileService : IConnectionFileService
     {
         get
         {
-            return HelperService.GetDbSettingsFilePath();
+            return FilePathHelperService.GetDbSettingsFilePath();
         }
     }
 }

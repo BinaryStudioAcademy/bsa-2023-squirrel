@@ -1,6 +1,6 @@
 ﻿namespace Squirrel.ConsoleApp.BL.Services;
 
-public static class HelperService
+public static class FilePathHelperService
 {
     public static string GetDbSettingsFilePath()
     {

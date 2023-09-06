@@ -18,7 +18,7 @@ public class Startup
     public static IConfiguration Configuration { get; } = new ConfigurationBuilder()
         .SetBasePath(AppContext.BaseDirectory)
         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-        .AddJsonFile(HelperService.GetDbSettingsFilePath(), optional: true, reloadOnChange: true)
+        .AddJsonFile(FilePathHelperService.GetDbSettingsFilePath(), optional: true, reloadOnChange: true)
         .Build();
 
     public void ConfigureServices(IServiceCollection services)

@@ -8,7 +8,7 @@ public class ClientIdFileService : IClientIdFileService
     {
         get
         {
-            return HelperService.GetClientIdFilePath();
+            return FilePathHelperService.GetClientIdFilePath();
         }
     }
 

@@ -17,17 +17,19 @@
     <div *ngIf="control.touched">
         <div class="invalid-feedback"
              *ngIf="control.errors?.['required']">
-            Please enter a {{label | titlecase}}
+            Please enter a {{label === '' ? name : label | titlecase}}
         </div>
 
         <div class="invalid-feedback"
              *ngIf="control.errors?.['minlength']">
-            {{label | titlecase}} must be at least {{control.errors?.['minlength'].requiredLength}} characters
+            {{label === '' ? name : label | titlecase}} must be at
+            least {{control.errors?.['minlength'].requiredLength}} characters
         </div>
 
         <div class="invalid-feedback"
              *ngIf="control.errors?.['maxlength']">
-            {{label | titlecase}} must be at most {{control.errors?.['maxlength'].requiredLength}} characters
+            {{label === '' ? name : label | titlecase}} must be at most {{control.errors?.['maxlength'].requiredLength}}
+            characters
         </div>
 
         <div class="invalid-feedback"
@@ -37,22 +39,22 @@
 
         <div class="invalid-feedback"
              *ngIf="control.errors?.['notMatching']">
-            {{label | titlecase}} must match
+            {{label === '' ? name : label | titlecase}} must match
         </div>
 
         <div class="invalid-feedback"
              *ngIf="control.errors?.['wrongCharacters']">
-            {{label | titlecase}} can contain only Latin letters, Digits and Special characters
+            {{label === '' ? name : label | titlecase}} can contain only Latin letters, Digits and Special characters
         </div>
 
         <div class="invalid-feedback"
              *ngIf="control.errors?.['userNameMatch']">
-            {{label | titlecase}} must contain only Latin letters, numbers, dashes and underscores
+            {{label === '' ? name : label | titlecase}} must contain only Latin letters, numbers, dashes and underscores
         </div>
 
         <div class="invalid-feedback"
              *ngIf="control.errors?.['nameMatch']">
-            {{label | titlecase}} must contain Latin letters/hyphen
+            {{label === '' ? name : label | titlecase}} must contain Latin letters/hyphen
         </div>
 
         <div class="invalid-feedback"

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
@@ -19,7 +19,11 @@ export class CreateDbModalComponent implements OnInit {
 
     private initializeForm() {
         this.dbForm = this.fb.group({
-            dbName: [''],
+            dbName: ['', Validators.required],
+            serverName: ['', Validators.required],
+            port: [''],
+            username: [''],
+            password: [''],
         });
     }
 }

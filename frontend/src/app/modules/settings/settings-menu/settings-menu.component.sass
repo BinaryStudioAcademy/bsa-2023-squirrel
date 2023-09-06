@@ -1,0 +1,42 @@
+@import "/src/styles/color"
+@import "/src/styles/reusable"
+
+
+
+.settings-menu
+    display: flex
+    flex-direction: row
+    height: 100%
+    margin-top: 20px
+    margin-left: 40px
+
+.vertical-separator
+    border-right: 1px solid $light-gray
+    margin-left: 130px
+
+.menu-title
+    font-size: 18px
+    @extend .title
+
+.menu-items
+    display: flex
+    flex-direction: column
+    margin-top: 25px
+    gap: 10px
+    list-style-type: none
+    padding: 0
+
+.menu-item
+    cursor: pointer
+    display: flex
+    align-items: center
+    font-size: 14px
+    margin-right: 10px
+
+    img
+        width: 16px
+        height: 16px
+        margin-right: 12px
+
+.active
+    color: $primary-color

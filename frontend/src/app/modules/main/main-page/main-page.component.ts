@@ -4,7 +4,8 @@ import { BaseComponent } from '@core/base/base.component';
 import { BroadcastHubService } from '@core/hubs/broadcast-hub.service';
 import { NotificationService } from '@core/services/notification.service';
 import { ProjectService } from '@core/services/project.service';
-import { takeUntil } from 'rxjs';
+import { SpinnerService } from '@core/services/spinner.service';
+import { finalize, takeUntil } from 'rxjs';
 
 import { ProjectResponseDto } from 'src/app/models/projects/project-response-dto';
 
@@ -22,6 +23,7 @@ export class MainComponent extends BaseComponent implements OnInit, OnDestroy {
         private router: Router,
         private projectService: ProjectService,
         private notificationService: NotificationService,
+        private spinner: SpinnerService,
     ) {
         super();
     }
@@ -40,6 +42,7 @@ export class MainComponent extends BaseComponent implements OnInit, OnDestroy {
     }
 
     private loadProject() {
+        this.spinner.show();
         const projectId = this.route.snapshot.paramMap.get('id');
 
         if (!projectId) {
@@ -50,7 +53,10 @@ export class MainComponent extends BaseComponent implements OnInit, OnDestroy {
         }
 
         this.projectService.getProject(projectId)
-            .pipe(takeUntil(this.unsubscribe$))
+            .pipe(
+                takeUntil(this.unsubscribe$),
+                finalize(() => this.spinner.hide()),
+            )
             .subscribe({
                 next: project => {
                     this.project = project;

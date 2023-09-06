@@ -1,0 +1,32 @@
+<mat-dialog-content class="container">
+    <h4 class="mat-h4">Add Branch</h4>
+    <app-input
+        (input)="validateBranchNameInput($event)"
+        name="branchName"
+        placeholder="Enter the name of your branch"
+        [formControl]="$any(branchForm.controls['branchName'])"
+        label="Branch name">
+    </app-input>
+    <div class="invalid-feedback" *ngIf="!isBranchNameDistinct">
+        This branch name must be distinct from the existing ones.
+    </div>
+    <div class="drop-down-container">
+        <label for="sourceBranch" class="label">Source branch</label>
+        <div>
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-select id="sourceBranch" [formControl]="$any(branchForm.controls['sourceBranch'])">
+                    <mat-option *ngFor="let branch of branchNames" [value]="branch">{{ branch }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+    <mat-dialog-actions class="modal-buttons">
+        <app-button text="Close" width="100%" variant="outline-primary" mat-dialog-close></app-button>
+        <app-button
+            [isDisabled]="!branchForm.valid || !isBranchNameDistinct"
+            text="Create"
+            width="100%"
+            variant="filled"
+            (buttonOnClick)="createBranch()"></app-button>
+    </mat-dialog-actions>
+</mat-dialog-content>

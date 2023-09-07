@@ -39,7 +39,7 @@ public class Startup
         }
 
         services.AddScoped<IConnectionFileService, ConnectionFileService>();
-
+        services.AddScoped<IConnectionStringService, ConnectionStringService>();
         services.AddScoped<IGetActionsService, GetActionsService>();
 
         services.AddControllers(options => { options.Filters.Add(typeof(CustomExceptionFilter)); });

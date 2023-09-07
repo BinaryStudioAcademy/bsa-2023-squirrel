@@ -1,10 +1,12 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import { ConsoleConnectService } from '@core/services/console-connect.service';
+import { DatabaseService } from '@core/services/database.service';
+import { NotificationService } from '@core/services/notification.service';
 
 import { DbConnection } from '../../../models/console/db-connection';
-import { DbEngine } from '../../../models/projects/db-engine';
+import { NewDatabaseDto } from '../../../models/database/new-database-dto';
 
 @Component({
     selector: 'app-create-db-modal',
@@ -12,19 +14,21 @@ import { DbEngine } from '../../../models/projects/db-engine';
     styleUrls: ['./create-db-modal.component.sass'],
 })
 export class CreateDbModalComponent implements OnInit {
-    public dbEngine: DbEngine;
+    @Output() public dbName = new EventEmitter<string>();
 
     public dbForm: FormGroup = new FormGroup({});
 
+    public localhost: boolean = false;
+
     constructor(
         @Inject(MAT_DIALOG_DATA) private data: any,
-        public dialogRef: MatDialogRef<CreateDbModalComponent>,
         private fb: FormBuilder,
         private consoleConnectService: ConsoleConnectService,
+        private databaseService: DatabaseService,
+        private notificationService: NotificationService,
+        public dialogRef: MatDialogRef<CreateDbModalComponent>,
         // eslint-disable-next-line no-empty-function
-    ) {
-        this.dbEngine = data.dbEngine;
-    }
+    ) {}
 
     public ngOnInit() {
         this.initializeForm();
@@ -33,7 +37,7 @@ export class CreateDbModalComponent implements OnInit {
     private initializeForm() {
         this.dbForm = this.fb.group({
             dbName: ['', Validators.required],
-            serverName: ['', Validators.required],
+            serverName: ['', this.getServerNameValidators()],
             port: [''],
             username: [''],
             password: [''],
@@ -49,13 +53,54 @@ export class CreateDbModalComponent implements OnInit {
             port: this.dbForm.value.port,
             username: this.dbForm.value.username,
             password: this.dbForm.value.password,
-            dbEngine: this.dbEngine,
+            dbEngine: this.data.dbEngine,
+            isLocalhost: this.localhost,
         };
 
         this.consoleConnectService.connect(connect).subscribe({
             next: guid => {
-                console.log(guid);
+                this.saveDb(guid);
+            },
+            error: () => {
+                this.notificationService.error('Failed to connect to database');
             },
         });
+    }
+
+    public changeLocalHost() {
+        this.localhost = !this.localhost;
+
+        this.dbForm.get('serverName')?.setValidators(this.getServerNameValidators());
+        this.dbForm.get('serverName')?.updateValueAndValidity();
+    }
+
+    private getServerNameValidators() {
+        if (this.localhost) {
+            return null;
+        }
+
+        return Validators.required;
+    }
+
+    private saveDb(guid: string) {
+        const database: NewDatabaseDto = {
+            projectId: this.dbForm.value.id,
+            dbName: this.dbForm.value.dbName,
+            guid,
+        };
+
+        this.databaseService.addDatabase(database).subscribe({
+            next: () => {
+                this.notificationService.info('database was successfully added');
+                this.dbName.emit(database.dbName);
+            },
+            error: err => {
+                this.notificationService.error(err.message);
+            },
+        });
+    }
+
+    public close() {
+        this.dialogRef.close();
     }
 }

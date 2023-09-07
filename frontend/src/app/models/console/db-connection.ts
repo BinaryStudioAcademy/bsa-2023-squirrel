@@ -7,4 +7,5 @@ export interface DbConnection {
     username: string
     password: string
     dbEngine: DbEngine
+    isLocalhost: boolean
 }

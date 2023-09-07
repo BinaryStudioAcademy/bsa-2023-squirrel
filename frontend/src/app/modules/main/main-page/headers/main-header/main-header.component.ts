@@ -5,8 +5,6 @@ import { CreateDbModalComponent } from '@modules/main/create-db-modal/create-db-
 
 import { ProjectResponseDto } from 'src/app/models/projects/project-response-dto';
 
-import { DbEngine } from '../../../../../models/projects/db-engine';
-
 @Component({
     selector: 'app-main-header',
     templateUrl: './main-header.component.html',
@@ -32,9 +30,19 @@ export class MainHeaderComponent implements OnInit {
     }
 
     public openCreateModal(): void {
-        this.dialog.open(CreateDbModalComponent, {
+        const dialogRef = this.dialog.open(CreateDbModalComponent, {
             width: '700px',
-            data: { dbEngine: DbEngine.PostgreSQL },
+            data: {
+                dbEngine: this.project.dbEngine,
+                projectId: this.project.id,
+            },
+            autoFocus: false,
+        });
+
+        dialogRef.componentInstance.dbName.subscribe({
+            next: (dbName: string) => {
+                this.dbNames.push(dbName);
+            },
         });
     }
 
@@ -48,4 +56,3 @@ export class MainHeaderComponent implements OnInit {
         });
     }
 }
-

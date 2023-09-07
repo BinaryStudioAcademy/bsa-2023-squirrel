@@ -12,6 +12,8 @@ export class DropdownComponent implements OnInit {
 
     @Input() width: number;
 
+    @Input() selectedByDefault: number = 0;
+
     @Output() selectedValueChanged = new EventEmitter<string>();
 
     public selectedOption: string;
@@ -27,7 +29,7 @@ export class DropdownComponent implements OnInit {
     constructor(private elementRef: ElementRef) {}
 
     ngOnInit(): void {
-        [this.selectedOption] = this.options;
+        this.selectedOption = this.options[this.selectedByDefault];
     }
 
     public onOptionSelected(value: string) {

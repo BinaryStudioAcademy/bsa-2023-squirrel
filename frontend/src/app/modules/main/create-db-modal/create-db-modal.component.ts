@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import { ConsoleConnectService } from '@core/services/console-connect.service';
 import { DatabaseService } from '@core/services/database.service';
 import { NotificationService } from '@core/services/notification.service';
@@ -26,6 +26,7 @@ export class CreateDbModalComponent implements OnInit {
         private consoleConnectService: ConsoleConnectService,
         private databaseService: DatabaseService,
         private notificationService: NotificationService,
+        public dialogRef: MatDialogRef<CreateDbModalComponent>,
         // eslint-disable-next-line no-empty-function
     ) {}
 
@@ -97,5 +98,9 @@ export class CreateDbModalComponent implements OnInit {
                 this.notificationService.error(err.message);
             },
         });
+    }
+
+    public close() {
+        this.dialogRef.close();
     }
 }

@@ -36,6 +36,7 @@ export class MainHeaderComponent implements OnInit {
                 dbEngine: this.project.dbEngine,
                 projectId: this.project.id,
             },
+            autoFocus: false,
         });
 
         dialogRef.componentInstance.dbName.subscribe({

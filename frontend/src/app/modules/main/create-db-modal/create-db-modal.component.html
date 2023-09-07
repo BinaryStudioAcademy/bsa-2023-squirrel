@@ -1,6 +1,10 @@
-<h4>Connect to Data Base</h4>
+<div class="modal-header">
+    <h4>Connect to Data Base</h4>
+    <div class="close" (click)="close()"></div>
+</div>
+
 <app-barrier></app-barrier>
-<form [formGroup]="dbForm" (ngSubmit)="addDataBase()" class="db-form">
+<form id="dbForm" [formGroup]="dbForm" (ngSubmit)="addDataBase()" class="db-form">
     <div class="input-wrapper">
         <label>Db Name</label>
         <app-input [formControl]="$any(dbForm.controls['dbName'])"
@@ -45,7 +49,9 @@
 
     <div class="modal-footer">
         <app-checkbox label="Connect to local db" (change)="changeLocalHost()"></app-checkbox>
-        <app-button [isDisabled]="dbForm.invalid" text="Save"></app-button>
+        <div class="btn-group">
+            <app-button [isDisabled]="dbForm.invalid" text="Save"></app-button>
+        </div>
     </div>
 </form>
 

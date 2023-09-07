@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.BLL.Services.Abstract;
 using Squirrel.Core.Common.DTO.Branch;
 using Squirrel.Core.DAL.Context;
 using Squirrel.Core.DAL.Entities;
+using Squirrel.Shared.Exceptions;
+using System.Runtime.CompilerServices;
 
 namespace Squirrel.Core.BLL.Services;
 
@@ -13,19 +16,16 @@ public sealed class BranchService : BaseService, IBranchService
     {
     }
 
-    public async Task<BranchDto> AddBranchInternalAsync(BranchDto branchDto)
+    public async Task<BranchDto> AddBranchAsync(int projectId, BranchCreateDto branchDto)
     {
         var branch = _mapper.Map<Branch>(branchDto);
-        var createdBranch = (await _context.Branches.AddAsync(branch)).Entity;
-        await _context.SaveChangesAsync();
+        branch.ProjectId = projectId;
 
-        return _mapper.Map<BranchDto>(createdBranch);
-    }
-
-    public async Task<BranchDto> AddBranchAsync(BranchCreateDto branchDto)
-    {
-        var branch = _mapper.Map<Branch>(branchDto);
         var createdBranch = (await _context.Branches.AddAsync(branch)).Entity;
+        if (branchDto.ParentId != null)
+        {
+            await InheritBranchAsyncInternal(createdBranch, branchDto.ParentId ?? 0);
+        }        
         await _context.SaveChangesAsync();
 
         return _mapper.Map<BranchDto>(createdBranch);
@@ -36,5 +36,12 @@ public sealed class BranchService : BaseService, IBranchService
         var branches = _context.Branches.Where(x => x.ProjectId == projectId);
 
         return _mapper.Map<BranchDto[]>(branches);
+    }
+
+    private async Task InheritBranchAsyncInternal(Branch branch, int parentId) 
+    {
+        var parent = (await _context.Branches.FirstOrDefaultAsync(x => x.Id == parentId)) ?? throw new EntityNotFoundException();
+
+        branch.BranchCommits = parent.BranchCommits;
     }
 }

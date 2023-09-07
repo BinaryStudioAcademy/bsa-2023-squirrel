@@ -28,7 +28,7 @@
     transform: rotate(-225deg)
     top: 22px
 
-.dropdown input
+.dropdown-selected-option
     font-weight: $semi-bold-weight
     position: absolute
     top: 0
@@ -43,24 +43,63 @@
     border-radius: 10px
     box-shadow: 0 5px 20px $shadow
 
-.dropdown .option
+.dropdown .options
     z-index: 20
     position: absolute
     width: 100%
     top: 70px
     background-color: $white
-    box-shadow: 0 5px 20px $shadow
+    box-shadow: $shadow
     border-radius: 10px
     overflow: hidden
     display: none
+    overflow-y: auto
+    max-height: 300px
 
-.dropdown .option div
+.option
     padding: 12px 20px
     cursor: pointer
+    display: flex
+    align-items: center
 
-.dropdown .option div:hover
+.option:hover
     color: $white
     background-color: $primary-color
 
-.dropdown.active .option
+.dropdown.active .options
     display: block
+
+.search-input
+    padding: 8px
+    margin: 10px 15px
+    width: 90%
+    border-radius: 5px
+    color: $text-light
+    border: 1px solid $text-light
+
+.search-input:focus
+    border: 1px solid $primary-color
+    outline: none
+    box-shadow: $shadow
+
+.option-text
+    margin-left: 24px
+
+.selection-icon
+    width: 14px
+
+.selection-icon + .option-text
+    margin-left: 10px
+
+.dropdown-icon
+    z-index: 3000
+    margin-left: 10px
+    margin-top: 4px
+
+.dropdown-selected-option-with-icon
+    padding-left: 40px
+
+
+
+
+

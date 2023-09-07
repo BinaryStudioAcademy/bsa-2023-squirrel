@@ -1,5 +1,6 @@
-import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
 import { BaseComponent } from '@core/base/base.component';
 import { BranchService } from '@core/services/branch.service';
 import { takeUntil } from 'rxjs';
@@ -14,13 +15,13 @@ import { CreateBranchModalComponent } from '../../create-branch-modal/create-bra
     styleUrls: ['./navbar-header.component.sass'],
 })
 export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDestroy {
-    public branches: BranchDto[];
+    public branches: BranchDto[] = [];
 
     @ViewChild('modalContent') modalContent: TemplateRef<any>;
 
     public currentProjectId: number;
 
-    public selectedBranch: string;
+    public selectedBranch: BranchDto;
 
     public navLinks: { path: string; displayName: string }[] = [
         { displayName: 'Changes', path: './changes' },
@@ -32,20 +33,24 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
     ];
 
     // eslint-disable-next-line no-empty-function
-    constructor(private branchService: BranchService, public dialog: MatDialog) {
+    constructor(
+        private branchService: BranchService,
+        public dialog: MatDialog,
+        private route: ActivatedRoute,
+    ) {
         super();
     }
 
     ngOnInit(): void {
-        this.currentProjectId = 1;
+        this.route.params.subscribe((params) => { this.currentProjectId = params['id']; });
         this.branchService.getAllBranches(this.currentProjectId)
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((branches) => { this.branches = branches; });
     }
 
-    public onBranchSelected(value: string) {
+    public onBranchSelected(value: any) {
         this.selectedBranch = value;
-        this.branchService.selectBranch(this.currentProjectId, value);
+        this.branchService.selectBranch(this.currentProjectId, value.id);
     }
 
     public openBranchModal() {
@@ -55,17 +60,18 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
 
         dialogRef.componentInstance.branchCreated.subscribe((branch) => {
             this.branches.concat(branch);
-            this.onBranchSelected(branch.name);
+            this.onBranchSelected(branch);
         });
     }
 
-    public getBranchNames() {
-        return this.branches.map(x => x.name);
+    public getCurrentBranch() {
+        const currentBranchId = this.branchService.getCurrentBranch(this.currentProjectId);
+        const currentBranch = this.branches.find(x => x.id === currentBranchId);
+
+        return currentBranch ? this.branches.indexOf(currentBranch) : 0;
     }
 
-    public getCurrentBranch() {
-        const currentBranch = this.branchService.getCurrentBranch(this.currentProjectId);
-
-        return currentBranch ? this.getBranchNames().indexOf(currentBranch) : 0;
+    filterBranch(item: BranchDto, value: string) {
+        return item.name.includes(value);
     }
 }

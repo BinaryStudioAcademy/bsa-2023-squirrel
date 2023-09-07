@@ -1,6 +1,7 @@
-﻿using Squirrel.Shared.Enums;
-using Squirrel.Shared.Exceptions.Abstract;
 using System.Net;
+using Squirrel.Shared.Enums;
+using Squirrel.Shared.Exceptions.Abstract;
+
 
 namespace Squirrel.Shared.Exceptions;
 

@@ -1,0 +1,24 @@
+<mat-dialog-content>
+    <h4 class="mat-h4">Create Project</h4>
+    <div class="input-container">
+        <app-input [placeholder]="'Enter the name of your branch'"
+            [formControl]="$any(branchForm.controls['branchName'])" [label]="'Branch name'">
+        </app-input>
+    </div>
+    <div class="drop-down-container">
+        <mat-form-field appearance="outline" class="custom-select full-width">
+            <mat-label for="engineSelect">Parent:</mat-label>
+            <mat-select id="engineSelect" [formControl]="$any(branchForm.controls['selectedParent'])">
+                <mat-option *ngFor="let branch of branches">{{branch}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions class="modal-buttons">
+    <app-button text="Create" width="100%" variant="outline-secondary" [isDisabled]="branchForm.invalid"
+        (click)="createBranch()">
+    </app-button>
+
+    <app-button text="Close" width="100%" variant="outline-secondary" (click)="close()">
+    </app-button>
+</mat-dialog-actions>

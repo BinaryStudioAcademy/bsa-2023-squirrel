@@ -7,9 +7,10 @@ import { MainHeaderComponent } from './main-page/headers/main-header/main-header
 import { NavbarHeaderComponent } from './main-page/headers/navbar-header/navbar-header.component';
 import { MainComponent } from './main-page/main-page.component';
 import { MainRoutingModule } from './main-routing.module';
+import { CreateBranchModalComponent } from './main-page/create-branch-modal/create-branch-modal.component';
 
 @NgModule({
-    declarations: [MainComponent, MainHeaderComponent, NavbarHeaderComponent],
+    declarations: [MainComponent, MainHeaderComponent, NavbarHeaderComponent, CreateBranchModalComponent],
     imports: [SharedModule, MainRoutingModule, MatSelectModule, MatButtonModule],
 })
 export class MainModule {}

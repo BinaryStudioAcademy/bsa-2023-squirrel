@@ -7,5 +7,6 @@ public enum ErrorType
     InvalidEmailOrPassword,
     Internal,
     InvalidToken,
-    NotFound
+    NotFound,
+    SqlSyntax
 }

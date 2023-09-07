@@ -27,6 +27,7 @@ export class GeneralSettingsComponent extends BaseComponent implements OnInit {
         private spinner: SpinnerService,
         private projectService: ProjectService,
         private notificationService: NotificationService,
+        private router: Router,
         private route: ActivatedRoute,
     ) {
         super();
@@ -36,28 +37,34 @@ export class GeneralSettingsComponent extends BaseComponent implements OnInit {
         this.createForm();
         const projectId = this.route.snapshot.paramMap.get('id');
 
-        if (projectId != null) {
-            this.projectId = projectId;
-            this.projectService.getProject(projectId)
-                .pipe(
-                    takeUntil(this.unsubscribe$),
-                    finalize(() => this.spinner.hide()),
-                )
-                .subscribe({
-                    next: project => {
-                        this.project = project;
-                    },
-                    error: err => {
-                        this.notificationService.error(err.message);
-                    },
-                });
+        if (!projectId) {
+            this.notificationService.error('wrong route');
+
+            /*this.router.navigateByUrl('/projects');*/
+
+            return;
         }
+
+        /*this.projectId = projectId;
+        this.projectService.getProject(projectId)
+            .pipe(
+                takeUntil(this.unsubscribe$),
+                finalize(() => this.spinner.hide()),
+            )
+            .subscribe({
+                next: project => {
+                    this.project = project;
+                },
+                error: err => {
+                    this.notificationService.error(err.message);
+                },
+            });*/
     }
 
     public createForm() {
         this.projectForm = this.fb.group({
-            projectName: [this.project.name, [Validators.required, Validators.maxLength(50)]],
-            description: [this.project.description],
+            projectName: ['', [Validators.required, Validators.maxLength(50)]],
+            description: [''],
         });
     }
 

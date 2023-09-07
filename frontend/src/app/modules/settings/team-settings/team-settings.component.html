@@ -1,1 +1,13 @@
-<p>team-settings works!</p>
+<div class="user-list">
+    <ul *ngFor="let user of users">
+            <app-avatar
+                class="avatar"
+                [imgLink]="user.avatarUrl ? user.avatarUrl : ''"
+                size="50"
+            ></app-avatar>
+            <div class="name-email">
+                <p class="user-name">{{ user }} {{ user.lastName }}</p>
+                <p class="user-email">{{ user.email }}</p>
+            </div>
+    </ul>
+</div>

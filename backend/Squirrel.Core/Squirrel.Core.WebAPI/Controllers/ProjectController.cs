@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.Common.DTO.Project;
+using Squirrel.Core.Common.DTO.Users;
 
 namespace Squirrel.Core.WebAPI.Controllers;
 
@@ -40,6 +41,12 @@ public class ProjectController : ControllerBase
     public async Task<ActionResult<ProjectDto>> GetProject(int projectId)
     {
         return Ok(await _projectService.GetProjectAsync(projectId));
+    }
+    
+    [HttpGet("team/{projectId}")]
+    public async Task<ActionResult<List<UserDto>>> GetProjectUsers(int projectId)
+    {
+        return Ok(await _projectService.GetProjectUsersAsync(projectId));
     }
 
     [HttpGet("all")]

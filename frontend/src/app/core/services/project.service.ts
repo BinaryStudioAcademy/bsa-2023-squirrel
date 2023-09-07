@@ -5,6 +5,7 @@ import { NewProjectDto } from 'src/app/models/projects/new-project-dto';
 import { ProjectDto } from 'src/app/models/projects/project-dto';
 
 import { UpdateProjectDto } from '../../models/projects/update-project-dto';
+import { UserDto } from '../../models/user/user-dto';
 
 import { HttpInternalService } from './http-internal.service';
 
@@ -41,5 +42,9 @@ export class ProjectService {
 
     public getAllUserProjects(): Observable<ProjectDto[]> {
         return this.httpService.getRequest<ProjectDto[]>(`${this.projectsApiUrl}/all`);
+    }
+
+    public getProjectUsers(projectId: string): Observable<UserDto[]> {
+        return this.httpService.getRequest<UserDto[]>(`${this.projectsApiUrl}/team/${projectId}`);
     }
 }

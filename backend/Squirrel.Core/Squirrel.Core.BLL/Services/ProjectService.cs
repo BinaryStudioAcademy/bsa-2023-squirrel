@@ -2,8 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.BLL.Services.Abstract;
-using Squirrel.Core.Common.DTO.Branch;
 using Squirrel.Core.Common.DTO.Project;
+using Squirrel.Core.Common.DTO.Users;
 using Squirrel.Core.DAL.Context;
 using Squirrel.Core.DAL.Entities;
 using Squirrel.Shared.Exceptions;
@@ -73,6 +73,22 @@ public sealed class ProjectService : BaseService, IProjectService
         }
         
         return _mapper.Map<ProjectDto>(project)!;
+    }
+    
+    public async Task<List<UserDto>> GetProjectUsersAsync(int projectId)
+    {
+        var project = await _context.Projects
+            .Include(p => p.Users)
+            .FirstOrDefaultAsync(p => p.Id == projectId);
+
+        if (project is null)
+        {
+            throw new EntityNotFoundException();
+        }
+        
+        var projectUsers = project.Users.ToList();
+
+        return _mapper.Map<List<UserDto>>(projectUsers);
     }
 
     public async Task<List<ProjectDto>> GetAllUserProjectsAsync()

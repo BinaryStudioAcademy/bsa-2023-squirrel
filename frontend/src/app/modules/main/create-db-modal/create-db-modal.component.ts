@@ -44,6 +44,7 @@ export class CreateDbModalComponent implements OnInit {
         console.log(this.dbForm.value);
 
         const connect: DbConnection = {
+            dbName: this.dbForm.value.dbName,
             serverName: this.dbForm.value.serverName,
             port: this.dbForm.value.port,
             username: this.dbForm.value.username,

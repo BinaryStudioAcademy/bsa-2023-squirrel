@@ -52,9 +52,9 @@ export class LoginComponent extends BaseComponent implements OnInit {
         this.loginForm = this.fb.group({
             email: [
                 '',
-                [Validators.required, Validators.minLength(3), Validators.maxLength(50), ValidationsFn.emailMatch()],
+                [Validators.required, Validators.minLength(5), Validators.maxLength(50), ValidationsFn.emailMatch()],
             ],
-            password: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(25)]],
+            password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(25)]],
         });
     }
 }

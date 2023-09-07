@@ -553,6 +553,9 @@ namespace Squirrel.Core.DAL.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<bool>("EmailNotification")
+                        .HasColumnType("bit");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(25)
@@ -574,6 +577,9 @@ namespace Squirrel.Core.DAL.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<bool>("SquirrelNotification")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(25)
@@ -583,7 +589,11 @@ namespace Squirrel.Core.DAL.Migrations
 
                     b.HasAlternateKey("Email");
 
-                    b.HasAlternateKey("Username");
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("Username")
+                        .IsUnique();
 
                     b.ToTable("Users");
                 });
@@ -737,7 +747,8 @@ namespace Squirrel.Core.DAL.Migrations
 
                     b.HasOne("Squirrel.Core.DAL.Entities.Branch", "DefaultBranch")
                         .WithOne()
-                        .HasForeignKey("Squirrel.Core.DAL.Entities.Project", "DefaultBranchId");
+                        .HasForeignKey("Squirrel.Core.DAL.Entities.Project", "DefaultBranchId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Author");
 

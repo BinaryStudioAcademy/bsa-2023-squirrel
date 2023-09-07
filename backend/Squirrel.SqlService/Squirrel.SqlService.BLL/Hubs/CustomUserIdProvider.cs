@@ -6,8 +6,16 @@ public class CustomUserIdProvider : IUserIdProvider
 {
     public virtual string GetUserId(HubConnectionContext connection)
     {
-        // TODO: find a way to set UserIdentifier with value from ConsoleApp
-        // or Delete IUserIdProvider implementation if current way is ok
-        return Guid.NewGuid().ToString();
+        var claim = connection.User?.FindFirst("ClientId");
+
+        if (claim is null)
+        {
+            return connection.ConnectionId;
+        }
+
+        // If received ClientId from connection is empty -
+        // it means that it's first Client's connection
+        // and CustomUserIdProvider must generate new uniq guid for it
+        return claim.Value.Equals(string.Empty) ? Guid.NewGuid().ToString() : claim.Value;
     }
 }

@@ -1,8 +1,11 @@
+using Microsoft.AspNetCore.SignalR;
 using Squirrel.AzureBlobStorage.Extensions;
+using Squirrel.Core.BLL.Hubs;
 using Squirrel.Core.DAL.Extensions;
 using Squirrel.Core.WebAPI.Extensions;
 using Squirrel.Shared.Middlewares;
 using Squirrel.SqlService.WebApi.Extensions;
+using Squirrel.SqlService.WebApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +21,7 @@ builder.Services.AddMongoDbService(builder.Configuration);
 builder.Services.AddAzureBlobStorage(builder.Configuration);
 builder.Services.RegisterCustomServices();
 builder.Services.AddSignalR();
+builder.Services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 
 builder.Services.AddSwaggerGen();
 
@@ -31,6 +35,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<GenericExceptionHandlerMiddleware>();
+app.UseMiddleware<SignalRMiddleware>();
 
 app.UseHttpsRedirection();
 

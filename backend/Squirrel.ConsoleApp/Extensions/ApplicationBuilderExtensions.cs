@@ -17,27 +17,28 @@ public static class ApplicationBuilderExtensions
     public static void RegisterHubs(this IApplicationBuilder app, IConfiguration config)
     {
         var fileService = app.ApplicationServices.GetRequiredService<IClientIdFileService>();
-        var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
 
         var _clientId = fileService?.GetClientId() ?? string.Empty;
 
         var _hubConnection = new HubConnectionBuilder()
-            .WithUrl(config.GetSection("SignalRSettings")["HubConnectionUrl"])
+            .WithUrl(Path.Combine(config.GetSection("SignalRSettings")["HubConnectionUrl"], $"?ClientId={_clientId}"))
             .WithAutomaticReconnect()
             .Build();
 
         // Use once at OnConnectedAsync hub event
         _hubConnection.On<string>("SetClientId", (guid) =>
         {
+            var _clientId = fileService?.GetClientId() ?? string.Empty;
+            
             if (!string.IsNullOrEmpty(_clientId))
             {
                 return;
             }
+
             fileService?.SetClientId(guid);
-            _clientId = guid;
         });
 
-        _hubConnection.RegisterActions(_clientId, app);
+        _hubConnection.RegisterActions(app);
 
         _hubConnection.StartAsync();
     }

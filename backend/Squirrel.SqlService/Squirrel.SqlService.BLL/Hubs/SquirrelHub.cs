@@ -15,12 +15,8 @@ public sealed class SquirrelHub : Hub<ISquirrelHubToSend>, ISquirrelHubToReceive
 
     public override async Task OnConnectedAsync()
     {
-        var clientId = Guid.NewGuid().ToString();
-        await Clients.Caller.SetClientId(clientId);
+        await Clients.Caller.SetClientId(Context.UserIdentifier);
     }
-
-    public async Task TestReceiveExecutedQueryAsync(string clientId, QueryResultTableDTO queryResultTableDTO)
-        => await _hubToReceiveService.TestReceiveExecutedQueryAsync(clientId, queryResultTableDTO);
 
     public async Task ReceiveAllFunctionsNamesAsync(string clientId, QueryResultTableDTO queryResultTableDTO)
         => await _hubToReceiveService.ReceiveAllFunctionsNamesAsync(clientId, queryResultTableDTO);

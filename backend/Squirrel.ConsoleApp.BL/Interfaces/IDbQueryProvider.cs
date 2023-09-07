@@ -15,7 +15,7 @@ public interface IDbQueryProvider
     string GetViewDefinitionQuery(string viewName);
 
     string GetTableStructureQuery(string schema, string table);
-    string GetTablesCheckAndUniqueConstraintsQuery();
+    string GetTableChecksAndUniqueConstraintsQuery(string schema, string name);
 
     string GetStoredProceduresWithDetailsQuery();
     string GetFunctionsWithDetailsQuery();

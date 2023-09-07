@@ -5,12 +5,14 @@ namespace Squirrel.ConsoleApp.BL.Extensions
 {
     public static class MappingExtensions
     {
-        public static Row MapToRow(IList<string> columnNames, IList<string> rowValues)
+        public static StructureRow MapToStructureRow(IList<string> columnNames, IList<string> rowValues)
         {
-            var row = new Row();
-            foreach (var propertyName in GetColumnNames())
+            var row = new StructureRow();
+            var columns = typeof(StructureRow).GetProperties(BindingFlags.Public | BindingFlags.Instance).Select(p => p.Name).ToList();
+
+            foreach (var propertyName in columns)
             {
-                var property = typeof(Row).GetProperty(propertyName);
+                var property = typeof(StructureRow).GetProperty(propertyName);
                 if (property != null && columnNames.Contains(propertyName))
                 {
                     var value = rowValues[columnNames.ToList().IndexOf(propertyName)];
@@ -25,10 +27,21 @@ namespace Squirrel.ConsoleApp.BL.Extensions
             return row;
         }
 
-        public static List<string> GetColumnNames()
+        public static CheckRow MapToChecksRow(IList<string> columnNames, IList<string> rowValues)
         {
-            return typeof(Row).GetProperties(BindingFlags.Public | BindingFlags.Instance).Select(p => p.Name).ToList();
-        }
+            var row = new CheckRow();
+            var columns = typeof(CheckRow).GetProperties(BindingFlags.Public | BindingFlags.Instance).Select(p => p.Name).ToList();
 
+            foreach (var propertyName in columns)
+            {
+                var property = typeof(CheckRow).GetProperty(propertyName);
+                if (property != null && columnNames.Contains(propertyName))
+                {
+                    var value = rowValues[columnNames.ToList().IndexOf(propertyName)];
+                    property.SetValue(row, value);
+                }
+            }
+            return row;
+        }
     }
 }

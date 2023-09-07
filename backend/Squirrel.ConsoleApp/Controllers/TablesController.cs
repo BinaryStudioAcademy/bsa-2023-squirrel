@@ -31,10 +31,20 @@ public class TablesController: ControllerBase
     // http://localhost:44567/tables/get-structure/dbo/categories
     [HttpGet]
     [Route("get-structure/{schema}/{name}")]
-    public async Task<ActionResult<List<string>>> GetTableStructure([FromRoute] string schema, string name)
+    public async Task<ActionResult<TableStructureDto>> GetTableStructure([FromRoute] string schema, string name)
     {
-        var structure = await _getActionsService.GetDbTableStructureAsync(schema, name);
+        var structure = await _getActionsService.GetTableStructureAsync(schema, name);
 
         return Ok(_mapper.Map<TableStructureDto>(structure));
+    }
+
+    // http://localhost:44567/tables/get-checks/dbo/employees
+    [HttpGet]
+    [Route("get-checks/{schema}/{name}")]
+    public async Task<ActionResult<TableChecksDto>> GetTableChecks([FromRoute] string schema, string name)
+    {
+        var checks = await _getActionsService.GetTableChecksAndUniqueConstraintsAsync(schema, name);
+
+        return Ok(_mapper.Map<TableChecksDto>(checks));
     }
 }

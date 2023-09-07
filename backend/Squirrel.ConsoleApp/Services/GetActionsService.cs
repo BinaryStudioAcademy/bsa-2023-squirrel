@@ -39,11 +39,11 @@ namespace Squirrel.ConsoleApp.Services
         public async Task<QueryResultTable> GetViewDefinitionAsync(string viewName) 
             => await _databaseService.ExecuteQueryAsync(_queryProvider.GetViewDefinitionQuery(viewName));
 
-        public async Task<QueryResultTable> GetDbTableStructureAsync(string schema, string name) 
+        public async Task<QueryResultTable> GetTableStructureAsync(string schema, string name) 
             => await _databaseService.ExecuteQueryAsync(_queryProvider.GetTableStructureQuery(schema, name));
 
-        public async Task<QueryResultTable> GetDbTablesCheckAndUniqueConstraintsAsync() 
-            => await _databaseService.ExecuteQueryAsync(_queryProvider.GetTablesCheckAndUniqueConstraintsQuery());
+        public async Task<QueryResultTable> GetTableChecksAndUniqueConstraintsAsync(string schema, string name) 
+            => await _databaseService.ExecuteQueryAsync(_queryProvider.GetTableChecksAndUniqueConstraintsQuery(schema, name));
 
         public async Task<QueryResultTable> GetStoredProceduresWithDetailAsync() 
             => await _databaseService.ExecuteQueryAsync(_queryProvider.GetStoredProceduresWithDetailsQuery());

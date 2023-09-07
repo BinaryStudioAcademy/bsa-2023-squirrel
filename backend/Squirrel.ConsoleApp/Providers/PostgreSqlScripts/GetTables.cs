@@ -96,8 +96,8 @@
 			order by col.table_schema, col.table_name, col.ordinal_position;
             ";
 
-        public static string GetDbTablesCheckAndUniqueConstraintsScript =>
-            @"
+        public static string GetTableChecksAndUniqueConstraintsScript(string schema, string name) =>
+            @$"
             select 
 			    tc.table_schema as schema,
 				   tc.table_name as table,
@@ -125,7 +125,7 @@
 				 on tc.table_schema = cc.constraint_schema
 				 and tc.constraint_name = cc.constraint_name
 			
-			where tc.constraint_schema not in ('information_schema', 'pg_catalog') -- or choose specific table_scheme
+			where tc.constraint_schema not in ('information_schema', 'pg_catalog') AND table_schema = '{schema}' AND table_name = '{name}'
 			
 			group by tc.table_schema,
 					 tc.table_name,

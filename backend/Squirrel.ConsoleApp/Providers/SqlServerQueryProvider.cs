@@ -25,7 +25,7 @@ public class SqlServerQueryProvider : IDbQueryProvider
 
     public string GetTableStructureQuery(string schema, string name) => GetTableStructureScript(schema, name);
 
-    public string GetTablesCheckAndUniqueConstraintsQuery() => GetDbTablesCheckAndUniqueConstraintsScript;
+    public string GetTableChecksAndUniqueConstraintsQuery(string schema, string name) => GetTableChecksAndUniqueConstraintsScript(schema, name);
 
     public string GetStoredProceduresWithDetailsQuery() => GetStoredProceduresScript;
 

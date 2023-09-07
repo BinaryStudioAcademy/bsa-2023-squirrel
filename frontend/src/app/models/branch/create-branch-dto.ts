@@ -1,4 +1,4 @@
 export interface CreateBranchDto {
     name: string;
-    parentName: string;
+    parentId: number;
 }

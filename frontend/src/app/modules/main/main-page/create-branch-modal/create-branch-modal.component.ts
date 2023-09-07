@@ -50,7 +50,7 @@ export class CreateBranchModalComponent extends BaseComponent implements OnInit 
 
         const branch: CreateBranchDto = {
             name: this.branchForm.value.branchName,
-            parentName: this.branchForm.value.selectedParent,
+            parentId: this.branchForm.value.selectedParent,
         };
 
         this.branchService

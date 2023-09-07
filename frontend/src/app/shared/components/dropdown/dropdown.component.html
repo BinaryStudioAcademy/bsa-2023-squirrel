@@ -1,8 +1,24 @@
 <div class="dropdown" [ngClass]="{ active: isActive }" (click)="toggleActiveClass()" [style.width.px]="width">
-    <input type="text" readonly [(ngModel)]="selectedOption" />
-    <div class="option">
-        <div (click)="onOptionSelected(option)" *ngFor="let option of options">
-            {{ option }}
+    <div *ngIf="dropdownIcon" class="dropdown-icon"><img src="{{ dropdownIcon }}"></div>
+    <input
+        type="text"
+        readonly
+        [(ngModel)]="selectedOption"
+        [ngClass]="['dropdown-selected-option', dropdownIcon ? 'dropdown-selected-option-with-icon' : '']" />
+    <div class="options">
+        <input
+            class="search-input"
+            type="text"
+            [(ngModel)]="searchTerm"
+            placeholder="Search..."
+            (click)="$event.stopPropagation()" />
+        <div class="option" (click)="onOptionSelected(option)" *ngFor="let option of filterOptions()">
+            <img class="selection-icon" *ngIf="selectedOption === option" src="assets/check-solid.svg"/>
+            <span *ngIf="!template" class="option-text">{{ option }}</span>
+            <ng-template *ngTemplateOutlet="template; context: { $implicit: option }"></ng-template>
+        </div>
+        <div class="option" (click)="openModal()" *ngIf="modalTemplate">
+            <span class="option-text">{{ modalOption }}</span>
         </div>
     </div>
 </div>

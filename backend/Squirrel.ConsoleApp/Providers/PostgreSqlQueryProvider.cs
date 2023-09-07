@@ -9,13 +9,7 @@ public class PostgreSqlQueryProvider : IDbQueryProvider
 {
     public string GetTablesNamesQuery() => GetTablesNamesScript;
 
-    public string GetTableDataQuery(string tableName, int rowsCount)
-    {
-        string[] parts = tableName.Split('.');
-        string schema = parts.Length > 1 ? parts[0] : "public";
-        string table = parts.Length > 1 ? parts[1] : tableName;
-        return GetTableDataQueryScript(rowsCount, schema, table);
-    }
+    public string GetTableDataQuery(string schema, string name, int rowsCount) => GetTableDataQueryScript(schema, name, rowsCount);
 
     public string GetStoredProceduresNamesQuery() => GetStoredProceduresNamesScript;
 
@@ -29,7 +23,7 @@ public class PostgreSqlQueryProvider : IDbQueryProvider
 
     public string GetViewDefinitionQuery(string viewName) => GetViewDefinitionScript(viewName);
 
-    public string GetTablesStructureQuery() => GetTablesStructureScript;
+    public string GetTableStructureQuery(string schema, string name) => GetTableStructureScript(schema, name);
 
     public string GetTablesCheckAndUniqueConstraintsQuery() => GetDbTablesCheckAndUniqueConstraintsScript;
 

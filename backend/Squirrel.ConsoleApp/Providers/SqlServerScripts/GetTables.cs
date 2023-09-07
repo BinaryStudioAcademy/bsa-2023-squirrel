@@ -3,16 +3,19 @@
     internal static class GetTables
     {
         public static string GetTablesNamesScript =>
-            @"SELECT TABLE_SCHEMA + '.' + TABLE_NAME AS FULL_TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE';";
+            @"SELECT TABLE_SCHEMA AS SCHEMA, TABLE_NAME AS NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE';";
 
-        public static string GetTableDataQueryScript(int rowsCount, string schema, string table) =>
-            @$"SELECT TOP {rowsCount} * FROM [{schema}].[{table}]";
+        public static string GetTableDataQueryScript(string schema, string name, int rowsCount) =>
+            @$"SELECT TOP {rowsCount} * FROM [{schema}].[{name}]";
 
-        public static string GetTablesStructureScript =>
-            @"
+        public static string GetTableStructureScript(string schema, string table) =>
+            @$"
+              DECLARE @TableSchema NVARCHAR(100) = '{schema}';
+              DECLARE @TableName NVARCHAR(100) = '{table}'; 
+
              SELECT	OBJECT_SCHEMA_NAME(syso.id) [TableSchema],
-            		syso.name [Table],
-            		sysc.name [Column],
+            		syso.name [TableName],
+            		sysc.name [ColumnName],
             		sysc.colorder [ColumnOrder],   
             		syst.name [DataType],
             		syscmnts.text [Default],
@@ -35,9 +38,9 @@
             		LEFT JOIN [sys].[objects] AS obj ON fkc.referenced_object_id = obj.[object_id]  
             		LEFT JOIN [sys].[extended_properties] AS ep ON syso.id = ep.major_id AND sysc.colid = ep.minor_id AND ep.name = 'MS_Description' 
 
-            WHERE	syso.type = 'U' AND syso.name != 'sysdiagrams'
+            WHERE	syso.type = 'U' AND syso.name != 'sysdiagrams' AND syso.name = @TableName AND OBJECT_SCHEMA_NAME(syso.id) = @TableSchema
 
-            ORDER BY	[Table], [ColumnOrder], [Column]; 
+            ORDER BY [ColumnOrder]; 
             ";
 
         public static string GetDbTablesCheckAndUniqueConstraintsScript =>

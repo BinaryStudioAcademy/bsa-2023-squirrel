@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Squirrel.ConsoleApp.BL.Extensions;
 using Squirrel.ConsoleApp.BL.Interfaces;
 using Squirrel.ConsoleApp.BL.Services;
 using Squirrel.ConsoleApp.Filters;
@@ -46,6 +47,8 @@ public class Startup
         {
             options.Filters.Add(typeof(CustomExceptionFilter));
         });
+
+        services.AddAutoMapper();
     }
     
     public void Configure(IApplicationBuilder app)

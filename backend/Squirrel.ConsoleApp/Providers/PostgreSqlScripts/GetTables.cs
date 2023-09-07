@@ -3,13 +3,13 @@
     internal static class GetTables
     {
         public static string GetTablesNamesScript =>
-            @"SELECT schemaname || '.' || tablename AS full_table_name FROM pg_catalog.pg_tables WHERE schemaname != 'pg_catalog' AND schemaname != 'information_schema';";
+            @"SELECT schemaname AS ""schema"", tablename AS ""name"" FROM pg_catalog.pg_tables WHERE schemaname NOT IN ('pg_catalog', 'information_schema')";
 
-        public static string GetTableDataQueryScript(int rowsCount, string schema, string table) =>
-            $"SELECT * FROM \"{schema}\".\"{table}\" LIMIT {rowsCount}";
+        public static string GetTableDataQueryScript(string schema, string name, int rowsCount) =>
+            $"SELECT * FROM \"{schema}\".\"{name}\" LIMIT {rowsCount}";
 
-        public static string GetTablesStructureScript =>
-            @"
+        public static string GetTableStructureScript(string schema, string name) =>
+            @$"
             with column_description_table as (
 				select
 					cols.table_schema,
@@ -91,7 +91,7 @@
 				 and pk_tc.table_name = ccu.table_name
 				 and refc.unique_constraint_name = ccu.constraint_name
 			
-			where col.table_schema not in ('information_schema', 'pg_catalog') -- or choose specific table_scheme
+			where col.table_schema not in ('information_schema', 'pg_catalog') AND table_schema = '{schema}' AND table_name = '{name}'
 			
 			order by col.table_schema, col.table_name, col.ordinal_position;
             ";

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { BaseComponent } from '@core/base/base.component';
 import { NotificationService } from '@core/services/notification.service';
 import { ProjectService } from '@core/services/project.service';
+import { SharedProjectService } from '@core/services/shared-project.service';
 import { CreateProjectModalComponent } from '@modules/projects/create-project-modal/create-project-modal.component';
 import { takeUntil } from 'rxjs';
 
@@ -22,6 +23,7 @@ export class ProjectsPageComponent extends BaseComponent implements OnInit {
         private projectService: ProjectService,
         private notificationService: NotificationService,
         private router: Router,
+        private sharedProject: SharedProjectService,
     ) {
         super();
     }
@@ -53,7 +55,8 @@ export class ProjectsPageComponent extends BaseComponent implements OnInit {
         dialogRef.componentInstance.projectCreated.subscribe(() => this.loadProjects());
     }
 
-    chooseProject(projectId: number) {
-        this.router.navigateByUrl(`main/${projectId}`);
+    chooseProject(project: ProjectResponseDto) {
+        this.sharedProject.setProject(project);
+        this.router.navigateByUrl(`main/${project.id}`);
     }
 }

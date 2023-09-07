@@ -15,7 +15,7 @@
             </app-button>
         </div>
         <div class="card-container">
-            <app-project-card (click)="chooseProject(project.id)"
+            <app-project-card (click)="chooseProject(project)"
                               *ngFor="let project of projects"
                               [project]="project">
             </app-project-card>

@@ -4,6 +4,7 @@ import { BaseComponent } from '@core/base/base.component';
 import { BroadcastHubService } from '@core/hubs/broadcast-hub.service';
 import { NotificationService } from '@core/services/notification.service';
 import { ProjectService } from '@core/services/project.service';
+import { SharedProjectService } from '@core/services/shared-project.service';
 import { SpinnerService } from '@core/services/spinner.service';
 import { finalize, takeUntil } from 'rxjs';
 
@@ -24,20 +25,22 @@ export class MainComponent extends BaseComponent implements OnInit, OnDestroy {
         private projectService: ProjectService,
         private notificationService: NotificationService,
         private spinner: SpinnerService,
+        private sharedProject: SharedProjectService,
     ) {
         super();
     }
 
     async ngOnInit() {
+        this.loadProject();
         await this.broadcastHub.start();
         this.broadcastHub.listenMessages((msg) => {
             console.info(`The next broadcast message was received: ${msg}`);
         });
-        this.loadProject();
     }
 
     override ngOnDestroy() {
         this.broadcastHub.stop();
+        this.sharedProject.setProject(null);
         super.ngOnDestroy();
     }
 
@@ -60,6 +63,7 @@ export class MainComponent extends BaseComponent implements OnInit, OnDestroy {
             .subscribe({
                 next: project => {
                     this.project = project;
+                    this.sharedProject.setProject(project);
                 },
                 error: err => {
                     this.notificationService.error(err.message);

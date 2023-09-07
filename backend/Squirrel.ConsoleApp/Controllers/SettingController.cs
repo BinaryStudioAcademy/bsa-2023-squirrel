@@ -34,7 +34,7 @@ public class SettingController: ControllerBase
     [Route("get-tables-names")]
     public async Task<ActionResult<List<string>>> GetTablesNames()
     {
-        ///var names = await _getActionsService.GetAllTablesNamesAsync();
+        var names = await _getActionsService.GetAllTablesNamesAsync();
 
         return Ok("TESTSTEST");
     }

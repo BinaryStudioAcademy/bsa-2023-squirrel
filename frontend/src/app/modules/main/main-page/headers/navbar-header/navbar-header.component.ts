@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { BaseComponent } from '@core/base/base.component';
 import { BranchService } from '@core/services/branch.service';
@@ -15,6 +15,8 @@ import { CreateBranchModalComponent } from '../../create-branch-modal/create-bra
 })
 export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDestroy {
     public branches: BranchDto[];
+
+    @ViewChild('modalContent') modalContent: TemplateRef<any>;
 
     public currentProjectId: number;
 

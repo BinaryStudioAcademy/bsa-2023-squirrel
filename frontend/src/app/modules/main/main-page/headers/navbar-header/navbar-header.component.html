@@ -15,6 +15,19 @@
             [width]="300"
             (selectedValueChanged)="onBranchSelected($event)"></app-dropdown>
         <app-button (buttonOnClick)="openBranchModal()" text="+" height="30px" width="35px" padding="" variant="outline-secondary"></app-button>
+            [modalTemplate]="modalContent"
+            [dropdownIcon]="'assets/git-branch.svg'"
+            [options]="branches"
+            [width]="300"
+            (selectedValueChanged)="onBranchSelected($event)"></app-dropdown>
+        <app-button text="+" height="30px" width="35px" padding="" variant="outline-secondary"> </app-button>
         <app-button text="Load latest changes" variant="outline-primary" class="align-right"></app-button>
     </div>
 </div>
+
+<ng-template #modalContent>
+    <p>Hello world!</p>
+    <mat-dialog-actions>
+        <button mat-button mat-dialog-close>Cancel</button>
+    </mat-dialog-actions>
+</ng-template>

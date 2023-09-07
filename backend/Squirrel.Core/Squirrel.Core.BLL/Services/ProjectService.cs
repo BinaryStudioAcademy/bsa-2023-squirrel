@@ -14,7 +14,8 @@ public sealed class ProjectService : BaseService, IProjectService
     private readonly IUserIdGetter _userIdGetter;
     private readonly IBranchService _branchService;
 
-    public ProjectService(SquirrelCoreContext context, IMapper mapper, IUserIdGetter userIdGetter, IBranchService branchService)
+    public ProjectService(SquirrelCoreContext context, IMapper mapper, IUserIdGetter userIdGetter,
+        IBranchService branchService)
         : base(context, mapper)
     {
         _userIdGetter = userIdGetter;
@@ -40,27 +41,13 @@ public sealed class ProjectService : BaseService, IProjectService
     public async Task<ProjectResponseDto> UpdateProjectAsync(int projectId, ProjectDto projectDto)
     {
         var existingProject = await _context.Projects.FindAsync(projectId);
-        if (existingProject is null)
-        {
-            throw new EntityNotFoundException();
-        }
+        
+        ValidateProject(existingProject);
 
         _mapper.Map(projectDto, existingProject);
         await _context.SaveChangesAsync();
 
         return _mapper.Map<ProjectResponseDto>(existingProject)!;
-    }
-
-    public async Task DeleteProjectAsync(int projectId)
-    {
-        var project = await _context.Projects.FindAsync(projectId);
-        if (project is null)
-        {
-            throw new EntityNotFoundException();
-        }
-
-        _context.Projects.Remove(project);
-        await _context.SaveChangesAsync();
     }
 
     public async Task<ProjectResponseDto> GetProjectAsync(int projectId)
@@ -69,12 +56,19 @@ public sealed class ProjectService : BaseService, IProjectService
             .Include(project => project.Tags)
             .FirstOrDefaultAsync(project => project.Id == projectId);
 
-        if (project is null)
-        {
-            throw new EntityNotFoundException();
-        }
+        ValidateProject(project);
 
-        return _mapper.Map<ProjectResponseDto>(project)!;
+        return _mapper.Map<ProjectResponseDto>(project);
+    }
+
+    public async Task DeleteProjectAsync(int projectId)
+    {
+        var project = await _context.Projects.FindAsync(projectId);
+        
+        ValidateProject(project);
+
+        _context.Projects.Remove(project!);
+        await _context.SaveChangesAsync();
     }
 
     public async Task<List<ProjectResponseDto>> GetAllUserProjectsAsync()
@@ -86,5 +80,13 @@ public sealed class ProjectService : BaseService, IProjectService
             .ToListAsync();
 
         return _mapper.Map<List<ProjectResponseDto>>(userProjects)!;
+    }
+
+    private void ValidateProject(Project? entity)
+    {
+        if (entity is null || entity.CreatedBy != _userIdGetter.GetCurrentUserId())
+        {
+            throw new EntityNotFoundException(nameof(Project));
+        }
     }
 }

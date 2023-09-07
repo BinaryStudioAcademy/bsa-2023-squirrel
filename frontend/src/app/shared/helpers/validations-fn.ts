@@ -23,7 +23,7 @@ export class ValidationsFn {
 
     static emailMatch(): ValidatorFn {
         return (control: AbstractControl) =>
-            (/^(?!\.)[A-Z0-9._-]+[^.@]@(?!\.)[A-Z0-9.-]+\.[A-Z]+(?<!\.)$/i.test(control.value)
+            (/^(?!\.)[A-Z0-9._-]+@(?!\.)[A-Z0-9.-]+\.[A-Z]+(?<!\.)$/i.test(control.value)
             && !/[._-]{2,}/.test(control.value)
                 ? null : { emailMatch: true });
     }

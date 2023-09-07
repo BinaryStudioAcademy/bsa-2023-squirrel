@@ -1,4 +1,6 @@
-import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
+import { ComponentType } from '@angular/cdk/portal';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, TemplateRef } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: 'app-dropdown',
@@ -6,9 +8,11 @@ import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Outpu
     styleUrls: ['./dropdown.component.sass'],
 })
 export class DropdownComponent implements OnInit {
+    public searchTerm: string = '';
+
     public isActive = false;
 
-    @Input() options: string[] = [];
+    @Input() options: any[] = [];
 
     @Input() width: number;
 
@@ -16,7 +20,17 @@ export class DropdownComponent implements OnInit {
 
     @Output() selectedValueChanged = new EventEmitter<string>();
 
-    public selectedOption: string;
+    @Input() modalTemplate: TemplateRef<any> | ComponentType<any>;
+
+    @Input() dropdownIcon: string;
+
+    @Input() template: TemplateRef<any>;
+
+    @Input() modalOption: string = '+ Add New';
+
+    @Input() filterPredicate?: (item: any, value: string) => boolean = this.filterByName;
+
+    public selectedOption: any;
 
     @HostListener('document:click', ['$event'])
     onClick(event: Event): void {
@@ -25,16 +39,31 @@ export class DropdownComponent implements OnInit {
         }
     }
 
-    // eslint-disable-next-line no-empty-function
-    constructor(private elementRef: ElementRef) {}
+    constructor(
+        private elementRef: ElementRef,
+        private matDialog: MatDialog,
+        // eslint-disable-next-line no-empty-function
+    ) {}
 
     ngOnInit(): void {
         this.selectedOption = this.options[this.selectedByDefault];
     }
 
-    public onOptionSelected(value: string) {
+    onOptionSelected(value: string) {
         this.selectedOption = value;
         this.selectedValueChanged.emit(this.selectedOption);
+    }
+
+    public openModal() {
+        this.matDialog.open(this.modalTemplate);
+    }
+
+    public filterOptions(): string[] {
+        return this.options.filter((option) => this.filterPredicate?.call(this, option, this.searchTerm));
+    }
+
+    public filterByName(option: string, value: string) {
+        return option.toLowerCase().includes(value);
     }
 
     public toggleActiveClass() {

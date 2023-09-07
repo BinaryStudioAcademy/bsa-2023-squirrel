@@ -34,10 +34,10 @@ public class Startup
         services.AddScoped<IDbQueryProvider>(c => DatabaseFactory.CreateDbQueryProvider(dbSettings.DbType));
         services.AddScoped<IDatabaseService>(c => DatabaseFactory.CreateDatabaseService(dbSettings.DbType, dbSettings.ConnectionString));
 
-        services.AddScoped<IConnectionFileService, ConnectionFileService>();
-        services.AddScoped<IClientIdFileService, ClientIdFileService>();
+        services.AddSingleton<IConnectionFileService, ConnectionFileService>();
+        services.AddSingleton<IClientIdFileService, ClientIdFileService>();
 
-        services.AddScoped<IGetActionsService, GetActionsService>();
+        services.AddTransient<IGetActionsService, GetActionsService>();
         
         services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<DbSettingsValidator>());
 

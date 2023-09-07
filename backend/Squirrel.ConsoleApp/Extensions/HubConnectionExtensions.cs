@@ -24,14 +24,15 @@ public static class HubConnectionExtensions
 
     public static void RegisterActions(this HubConnection hubConnection, string currentClientId, IApplicationBuilder app)
     {
-        var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
-
+        
         hubConnection.On("TestExecuteQueryAsync", (string clientId, string filterName, int filterRowsCount) =>
         {
             if (!CurrentClientIsTarget(currentClientId, clientId))
             {
                 return;
             }
+
+            var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
 
             hubConnection.InvokeAsync("TestReceiveExecutedQueryAsync", clientId, getActionsService.TestExecuteQueryAsync(filterName, filterRowsCount).Result);
         });
@@ -42,6 +43,8 @@ public static class HubConnectionExtensions
             {
                 return;
             }
+            
+            var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
 
             hubConnection.InvokeAsync("ReceiveAllTablesNamesAsync", clientId, getActionsService.GetAllTablesNamesAsync().Result);
         });
@@ -53,6 +56,8 @@ public static class HubConnectionExtensions
                 return;
             }
 
+            var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
+
             hubConnection.InvokeAsync("ReceiveTableDataAsync", clientId, getActionsService.GetTableDataAsync(tableName, rowsCount).Result);
         });
 
@@ -62,6 +67,8 @@ public static class HubConnectionExtensions
             {
                 return;
             }
+
+            var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
 
             hubConnection.InvokeAsync("ReceiveAllStoredProceduresNamesAsync", clientId, getActionsService.GetAllStoredProceduresNamesAsync().Result);
         });
@@ -73,6 +80,8 @@ public static class HubConnectionExtensions
                 return;
             }
 
+            var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
+
             hubConnection.InvokeAsync("ReceiveStoredProcedureDefinitionAsync", clientId, getActionsService.GetStoredProcedureDefinitionAsync(storedProcedureName).Result);
         });
 
@@ -82,6 +91,8 @@ public static class HubConnectionExtensions
             {
                 return;
             }
+
+            var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
 
             hubConnection.InvokeAsync("ReceiveAllFunctionsNamesAsync", clientId, getActionsService.GetAllFunctionsNamesAsync().Result);
         });
@@ -93,6 +104,8 @@ public static class HubConnectionExtensions
                 return;
             }
 
+            var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
+
             hubConnection.InvokeAsync("ReceiveFunctionDefinitionAsync", clientId, getActionsService.GetFunctionDefinitionAsync(functionName).Result);
         });
 
@@ -102,6 +115,8 @@ public static class HubConnectionExtensions
             {
                 return;
             }
+
+            var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
 
             hubConnection.InvokeAsync("ReceiveAllViewsNamesAsync", clientId, getActionsService.GetAllViewsNamesAsync().Result);
         });
@@ -113,6 +128,8 @@ public static class HubConnectionExtensions
                 return;
             }
 
+            var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
+
             hubConnection.InvokeAsync("ReceiveViewDefinitionAsync", clientId, getActionsService.GetViewDefinitionAsync(viewName).Result);
         });
 
@@ -122,6 +139,8 @@ public static class HubConnectionExtensions
             {
                 return;
             }
+
+            var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
 
             hubConnection.InvokeAsync("ReceiveDbTablesStructureAsync", clientId, getActionsService.GetDbTablesStructureAsync().Result);
         });
@@ -133,6 +152,8 @@ public static class HubConnectionExtensions
                 return;
             }
 
+            var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
+
             hubConnection.InvokeAsync("ReceiveDbTablesCheckAndUniqueConstraintsAsync", clientId, getActionsService.GetDbTablesCheckAndUniqueConstraintsAsync().Result);
         });
 
@@ -142,6 +163,8 @@ public static class HubConnectionExtensions
             {
                 return;
             }
+
+            var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
 
             hubConnection.InvokeAsync("ReceiveStoredProceduresWithDetailAsync", clientId, getActionsService.GetStoredProceduresWithDetailAsync().Result);
         });
@@ -153,6 +176,8 @@ public static class HubConnectionExtensions
                 return;
             }
 
+            var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
+
             hubConnection.InvokeAsync("ReceiveFunctionsWithDetailAsync", clientId, getActionsService.GetFunctionsWithDetailAsync().Result);
         });
 
@@ -162,6 +187,8 @@ public static class HubConnectionExtensions
              {
                  return;
              }
+
+             var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
 
              hubConnection.InvokeAsync("ReceiveViewsWithDetailAsync", clientId, getActionsService.GetViewsWithDetailAsync().Result);
         });
@@ -173,6 +200,8 @@ public static class HubConnectionExtensions
                 return;
             }
 
+            var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
+
             hubConnection.InvokeAsync("ReceiveUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync", clientId, getActionsService.GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync().Result);
         });
 
@@ -182,6 +211,8 @@ public static class HubConnectionExtensions
             {
                 return;
             }
+
+            var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
 
             hubConnection.InvokeAsync("ReceiveUserDefinedTableTypesAsync", clientId, getActionsService.GetUserDefinedTableTypesAsync().Result);
         });

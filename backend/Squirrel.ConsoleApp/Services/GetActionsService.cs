@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Options;
-using Squirrel.ConsoleApp.BL.Interfaces;
+﻿using Squirrel.ConsoleApp.BL.Interfaces;
 using Squirrel.ConsoleApp.Models;
 
 namespace Squirrel.ConsoleApp.Services
@@ -9,10 +8,12 @@ namespace Squirrel.ConsoleApp.Services
         private readonly IDbQueryProvider _queryProvider;
         private readonly IDatabaseService _databaseService;
 
-        public GetActionsService(IDbQueryProvider queryProvider, IOptionsSnapshot<DbSettings> dbSettingsOptions)
+        public GetActionsService(IConnectionFileService _connectionFileService)
         {
-            _queryProvider = queryProvider;
-            _databaseService = DatabaseFactory.CreateDatabaseService(dbSettingsOptions.Value.DbType, dbSettingsOptions.Value.ConnectionString);
+            var dbSettings = _connectionFileService.ReadFromFile();
+
+            _queryProvider = DatabaseFactory.CreateDbQueryProvider(dbSettings.DbType);
+            _databaseService = DatabaseFactory.CreateDatabaseService(dbSettings.DbType, dbSettings.ConnectionString);
         }
 
 

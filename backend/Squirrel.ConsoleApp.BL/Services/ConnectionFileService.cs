@@ -12,7 +12,7 @@ public class ConnectionFileService : IConnectionFileService
         var filePath = ConnectionFilePath;
         if (!File.Exists(filePath))
         {
-            File.WriteAllText(filePath, JsonConvert.SerializeObject(new { DbSettings = new DbSettings() }, Formatting.Indented));
+            File.WriteAllText(filePath, JsonConvert.SerializeObject(new DbSettingsContainer(new DbSettings()), Formatting.Indented));
         }
     }
 
@@ -25,7 +25,7 @@ public class ConnectionFileService : IConnectionFileService
         }
 
         var json = File.ReadAllText(filePath);
-        return JsonConvert.DeserializeObject<DbSettings>(json) ?? throw new JsonReadFailed(filePath);
+        return JsonConvert.DeserializeObject<DbSettingsContainer>(json).DbSettings ?? throw new JsonReadFailed(filePath);
     }
 
     public void SaveToFile(DbSettings dbSettings)
@@ -34,7 +34,7 @@ public class ConnectionFileService : IConnectionFileService
         jsonSerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
         jsonSerializerSettings.Formatting = Formatting.Indented;
 
-        string json = JsonConvert.SerializeObject(new { DbSettings = dbSettings }, jsonSerializerSettings);
+        string json = JsonConvert.SerializeObject(new DbSettingsContainer(dbSettings), jsonSerializerSettings);
         File.WriteAllText(ConnectionFilePath, json);
     }
 
@@ -46,3 +46,5 @@ public class ConnectionFileService : IConnectionFileService
         }
     }
 }
+
+public record DbSettingsContainer(DbSettings DbSettings);

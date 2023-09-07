@@ -36,6 +36,7 @@ public class Startup
 
         services.AddSingleton<IConnectionFileService, ConnectionFileService>();
         services.AddSingleton<IClientIdFileService, ClientIdFileService>();
+        services.AddSingleton<IJsonSerializerSettingsService, JsonSerializerSettingsService>();
 
         services.AddTransient<IGetActionsService, GetActionsService>();
         

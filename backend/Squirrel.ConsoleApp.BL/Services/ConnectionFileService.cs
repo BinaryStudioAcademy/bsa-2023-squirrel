@@ -7,6 +7,14 @@ namespace Squirrel.ConsoleApp.BL.Services;
 
 public class ConnectionFileService : IConnectionFileService
 {
+    private IJsonSerializerSettingsService _jsonSettingsService;
+
+    public ConnectionFileService(IJsonSerializerSettingsService jsonSettingsService)
+    {
+        _jsonSettingsService = jsonSettingsService;
+    }
+
+
     public void CreateEmptyFile()
     {
         var filePath = ConnectionFilePath;
@@ -25,16 +33,12 @@ public class ConnectionFileService : IConnectionFileService
         }
 
         var json = File.ReadAllText(filePath);
-        return JsonConvert.DeserializeObject<DbSettingsContainer>(json).DbSettings ?? throw new JsonReadFailed(filePath);
+        return JsonConvert.DeserializeObject<DbSettingsContainer>(json, _jsonSettingsService.GetSettings())?.DbSettings ?? throw new JsonReadFailed(filePath);
     }
 
     public void SaveToFile(DbSettings dbSettings)
     {
-        var jsonSerializerSettings = new JsonSerializerSettings();
-        jsonSerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
-        jsonSerializerSettings.Formatting = Formatting.Indented;
-
-        string json = JsonConvert.SerializeObject(new DbSettingsContainer(dbSettings), jsonSerializerSettings);
+        string json = JsonConvert.SerializeObject(new DbSettingsContainer(dbSettings), _jsonSettingsService.GetSettings());
         File.WriteAllText(ConnectionFilePath, json);
     }
 

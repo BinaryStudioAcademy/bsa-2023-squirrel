@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.BLL.Services.Abstract;
@@ -15,10 +16,14 @@ public sealed class ProjectDatabaseService : BaseService, IProjectDatabaseServic
     {
     }
 
-    public async Task<List<string>> GetAllProjectDbNamesAsync()
-        => await _context.ProjectDatabases.Select(x => x.DbName).ToListAsync();
+    public async Task<List<ProjectInfoDto>> GetAllProjectDbNamesAsync()
+    {
+        return await _context.ProjectDatabases.Select(x => x.DbName)
+            .ProjectTo<ProjectInfoDto>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+    }
 
-    public async Task<string> AddNewProjectDatabaseAsync(ProjectDatabaseDto dto)
+    public async Task<ProjectInfoDto> AddNewProjectDatabaseAsync(ProjectDatabaseDto dto)
     {
         var projectDb = _mapper.Map<ProjectDatabase>(dto);
 
@@ -30,6 +35,6 @@ public sealed class ProjectDatabaseService : BaseService, IProjectDatabaseServic
         var addedProjectDb = (await _context.ProjectDatabases.AddAsync(projectDb)).Entity;
         await _context.SaveChangesAsync();
 
-        return addedProjectDb.DbName;
+        return _mapper.Map<ProjectInfoDto>(addedProjectDb);
     }
 }

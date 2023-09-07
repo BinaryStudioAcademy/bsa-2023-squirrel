@@ -27,7 +27,7 @@ public class SettingController : ControllerBase
         var connectionString = _connectionStringService.BuildConnectionString(connectionStringDto);
         _databaseService = DatabaseServiceFactory.CreateDatabaseService(connectionStringDto.DbEngine, connectionString);
         // Test connection;
-        var testQueryResult = _databaseService.ExecuteQuery("SELECT * from Users");
+        var testQueryResult = _databaseService.ExecuteQuery("SELECT * from Samples");
         Console.WriteLine(testQueryResult);
         
         //TODO: Connection unique ID

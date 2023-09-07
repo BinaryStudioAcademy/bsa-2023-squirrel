@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpInternalService } from '@core/services/http-internal.service';
+import { tap } from 'rxjs';
 
 import { NewDatabaseDto } from '../../models/database/new-database-dto';
+import { Record } from '../../models/database/record';
 
 @Injectable({
     providedIn: 'root',
@@ -13,7 +15,8 @@ export class DatabaseService {
     constructor(private httpService: HttpInternalService) { }
 
     public addDatabase(newDatabase: NewDatabaseDto) {
-        return this.httpService.postRequest(this.databaseApiUrl, newDatabase);
+        return this.httpService.postRequest<Record>(this.databaseApiUrl, newDatabase)
+            .pipe(tap((value) => console.log(value)));
     }
 
     public getAllDatabases() {

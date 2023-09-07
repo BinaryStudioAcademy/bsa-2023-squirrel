@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ConsoleConnectService } from '@core/services/console-connect.service';
 import { DatabaseService } from '@core/services/database.service';
 import { NotificationService } from '@core/services/notification.service';
@@ -50,10 +50,10 @@ export class CreateDbModalComponent implements OnInit {
         const connect: DbConnection = {
             dbName: this.dbForm.value.dbName,
             serverName: this.dbForm.value.serverName,
-            port: this.dbForm.value.port,
+            port: +this.dbForm.value.port,
             username: this.dbForm.value.username,
             password: this.dbForm.value.password,
-            dbEngine: this.data.dbEngine,
+            dbEngine: this.data.dbEngine - 1,
             isLocalhost: this.localhost,
         };
 
@@ -84,20 +84,21 @@ export class CreateDbModalComponent implements OnInit {
 
     private saveDb(guid: string) {
         const database: NewDatabaseDto = {
-            projectId: this.dbForm.value.id,
+            projectId: this.data.projectId,
             dbName: this.dbForm.value.dbName,
             guid,
         };
 
-        this.databaseService.addDatabase(database).subscribe({
-            next: () => {
-                this.notificationService.info('database was successfully added');
-                this.dbName.emit(database.dbName);
-            },
-            error: err => {
-                this.notificationService.error(err.message);
-            },
-        });
+        this.databaseService.addDatabase(database)
+            .subscribe({
+                next: dbName => {
+                    this.notificationService.info('database was successfully added');
+                    this.dbName.emit(dbName.dbName);
+                },
+                error: () => {
+                    this.notificationService.error('Fail to save db to db');
+                },
+            });
     }
 
     public close() {

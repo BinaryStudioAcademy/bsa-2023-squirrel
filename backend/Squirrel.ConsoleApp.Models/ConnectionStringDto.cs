@@ -9,6 +9,8 @@ public class ConnectionStringDto
     public string? Password { get; set; }
     public DbEngine DbEngine { get; set; }
 
+    public bool IsLocalhost { get; set; }
+
     public override string ToString()
     {
         return

@@ -30,6 +30,16 @@ export class CreateScriptModalComponent extends BaseComponent implements OnInit 
         });
     }
 
+    public createScript(): void {
+        this.scriptCreated.emit({
+            id: 0,
+            title: this.newScriptForm.value.scriptName,
+            content: '',
+            fileName: this.newScriptForm.value.fileName,
+        });
+        this.close();
+    }
+
     public close(): void {
         this.dialogRef.close();
     }

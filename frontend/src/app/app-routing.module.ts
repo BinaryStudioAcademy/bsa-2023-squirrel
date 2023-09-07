@@ -23,6 +23,12 @@ const routes: Routes = [
         loadChildren: () => import('./modules/main/main.module').then((m) => m.MainModule),
     },
     {
+        path: 'profile',
+        canActivate: [AuthGuard],
+        data: { requiresToken: true },
+        loadChildren: () => import('./modules/user-profile/user-profile.module').then((m) => m.UserProfileModule),
+    },
+    {
         path: '**',
         component: NotFoundComponent,
     },

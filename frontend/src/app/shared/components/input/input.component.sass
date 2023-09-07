@@ -25,9 +25,13 @@ input:focus
     outline: none
 
 .invalid-feedback
+    display: none
     color: $text-danger
     font-size: 12px
     margin-top: 5px
+
+    &:first-child
+        display: block
 
 .input-wrapper
     position: relative

@@ -13,9 +13,7 @@
             placeholder="Search..."
             (click)="$event.stopPropagation()" />
         <div class="option" (click)="onOptionSelected(option)" *ngFor="let option of filterOptions()">
-            <span class="selection-icon" *ngIf="selectedOption === option">
-                <i class="fa-solid fa-check"></i>
-            </span>
+            <img class="selection-icon" *ngIf="selectedOption === option" src="assets/check-solid.svg"/>
             <span *ngIf="!template" class="option-text">{{ option }}</span>
             <ng-template *ngTemplateOutlet="template; context: { $implicit: option }"></ng-template>
         </div>

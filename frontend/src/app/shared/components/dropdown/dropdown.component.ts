@@ -1,7 +1,6 @@
 import { ComponentType } from '@angular/cdk/portal';
 import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, TemplateRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
     selector: 'app-dropdown',
@@ -12,8 +11,6 @@ export class DropdownComponent implements OnInit {
     public searchTerm: string = '';
 
     public isActive = false;
-
-    public faCheckIcon = faCheck;
 
     @Input() options: any[] = [];
 

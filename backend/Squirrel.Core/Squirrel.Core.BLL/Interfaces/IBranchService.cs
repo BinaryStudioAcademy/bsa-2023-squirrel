@@ -4,5 +4,7 @@ namespace Squirrel.Core.BLL.Interfaces;
 
 public interface IBranchService
 {
-    Task<BranchDto> AddBranchAsync(BranchDto branchDto);
+    Task<BranchDto> AddBranchInternalAsync(BranchDto branchDto);
+    Task<BranchDto> AddBranchAsync(BranchCreateDto branchDto);
+    BranchDto[] GetAllBranches(int projectId);
 }

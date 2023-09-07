@@ -30,7 +30,7 @@ public sealed class ProjectService : BaseService, IProjectService
         await _context.SaveChangesAsync();
 
         newProjectDto.DefaultBranch.ProjectId = createdProject.Id;
-        var defaultBranch = await _branchService.AddBranchAsync(newProjectDto.DefaultBranch);
+        var defaultBranch = await _branchService.AddBranchInternalAsync(newProjectDto.DefaultBranch);
         createdProject.DefaultBranchId = defaultBranch.Id;
         await _context.SaveChangesAsync();
 

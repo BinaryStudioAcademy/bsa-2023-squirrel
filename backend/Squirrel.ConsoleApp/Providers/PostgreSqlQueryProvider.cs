@@ -1,4 +1,4 @@
-﻿using Squirrel.ConsoleApp.Interfaces;
+﻿using Squirrel.ConsoleApp.BL.Interfaces;
 using static Squirrel.ConsoleApp.Providers.PostgreSqlScripts.GetTables;
 using static Squirrel.ConsoleApp.Providers.PostgreSqlScripts.GetObjects;
 using static Squirrel.ConsoleApp.Providers.PostgreSqlScripts.GetUserDefinedTypes;

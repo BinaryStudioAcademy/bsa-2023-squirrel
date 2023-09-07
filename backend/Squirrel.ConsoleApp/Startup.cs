@@ -5,7 +5,6 @@ using Microsoft.Extensions.Options;
 using Squirrel.ConsoleApp.BL.Interfaces;
 using Squirrel.ConsoleApp.BL.Services;
 using Squirrel.ConsoleApp.Filters;
-using Squirrel.ConsoleApp.Interfaces;
 using Squirrel.ConsoleApp.Models;
 using Squirrel.ConsoleApp.Providers;
 using Squirrel.ConsoleApp.Services;
@@ -15,7 +14,7 @@ namespace Squirrel.ConsoleApp;
 public class Startup
 {
     public static IConfiguration Configuration { get; } = new ConfigurationBuilder()
-        .SetBasePath(Directory.GetCurrentDirectory())
+        .SetBasePath(AppContext.BaseDirectory)
         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
         .Build();
 
@@ -31,7 +30,7 @@ public class Startup
                 services.AddSingleton<IDbQueryProvider, SqlServerQueryProvider>();
                 services.AddSingleton<IDatabaseService, SqlServerService>();
                 break;
-            case DbEngine.PostgreSQL:
+            case DbEngine.PostgreSql:
                 services.AddSingleton<IDbQueryProvider, PostgreSqlQueryProvider>();
                 services.AddSingleton<IDatabaseService, PostgreSqlService>();
                 break;

@@ -1,0 +1,25 @@
+<div
+    class="project-card"
+    [ngClass]="{
+        postgreSql: project.dbEngine === DBE.PostgreSQL,
+        sqlServer: project.dbEngine === DBE.SqlServer
+    }">
+    <div class="side-panel"></div>
+    <div class="engine-logo-container">
+        <img [src]="engineLogoImage" alt="Engine Logo" class="engine-logo" />
+    </div>
+    <div class="project-name">
+        {{ project.name }}
+    </div>
+    <div class="project-tag-container">
+        <div class="project-tag" *ngFor="let tag of project.tags">
+            {{ tag.name }}
+        </div>
+    </div>
+    <div class="project-description-container">
+        <div class="project-description">
+            {{ project.description }}
+        </div>
+    </div>
+    <div class="project-date">{{ project.createdAt | date : 'dd-MM-yyyy' }}</div>
+</div>

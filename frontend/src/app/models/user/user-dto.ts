@@ -1,6 +1,8 @@
 export interface UserDto {
     id: number;
-    email: string;
     userName: string;
-    avatarLink: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    avatarUrl: string;
 }

@@ -1,21 +1,14 @@
 ﻿using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Squirrel.Core.BLL.Interfaces;
-using Squirrel.Core.BLL.MappingProfiles;
 using Squirrel.Core.BLL.Services;
+using Squirrel.Core.Common.DTO.Auth;
 using Squirrel.Core.Common.Interfaces;
 using Squirrel.Core.Common.JWT;
-using Squirrel.Core.Common.Models;
-using Squirrel.Core.DAL.Context;
-using Squirrel.Core.DAL.Entities;
-using Squirrel.Core.WebAPI.Validators.Sample;
-using System.Reflection;
 using System.Text;
-using Squirrel.Core.Common.DTO.Auth;
 using System.Text.Json.Serialization;
+using System.Reflection;
 
 namespace Squirrel.Core.WebAPI.Extensions;
 
@@ -27,37 +20,32 @@ public static class ServiceCollectionExtensions
             .AddControllers()
             .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
             .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
-
+        
         services.AddTransient<ISampleService, SampleService>();
         services.AddScoped<JwtIssuerOptions>();
         services.AddScoped<IJwtFactory, JwtFactory>();
+        services.AddScoped<IUserService, UserService>();
         services.AddScoped<IAuthService, AuthService>();
-        services.AddScoped<ITextService, TextService>();
-        services.AddTransient<IDependencyAnalyzer, DependencyAnalyzer>();
+        services.AddScoped<IBranchService, BranchService>();
+        services.AddScoped<IProjectService, ProjectService>();
+        services.AddScoped<IDatabaseItemsService, DatabaseItemsService>();
+
+        services.AddSingleton<IHttpClientService, HttpClientService>();
+      
+        services.AddUserIdStorage();
     }
 
-    public static void AddMongoDbService(this IServiceCollection services, IConfiguration configuration)
+    public static void AddUserIdStorage(this IServiceCollection services)
     {
-        services.Configure<MongoDatabaseConnectionSettings>(configuration.GetSection("MongoDatabase"));
-
-        services.AddTransient<IMongoService<Sample>>(s =>
-            new MongoService<Sample>(s.GetRequiredService<IOptions<MongoDatabaseConnectionSettings>>(), "SampleCollection"));
+        services.AddScoped<UserIdStorageService>();
+        services.AddTransient<IUserIdSetter>(s => s.GetRequiredService<UserIdStorageService>());
+        services.AddTransient<IUserIdGetter>(s => s.GetRequiredService<UserIdStorageService>());
     }
 
     public static void AddValidation(this IServiceCollection services)
     {
-        services
-            .AddControllers()
-            .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<NewSampleDtoValidator>());
-    }
-
-    public static void AddSquirrelCoreContext(this IServiceCollection services, IConfiguration configuration)
-    {
-        var connectionsString = configuration.GetConnectionString("SquirrelCoreDBConnection");
-        services.AddDbContext<SquirrelCoreContext>(options =>
-            options.UseSqlServer(
-                connectionsString,
-                opt => opt.MigrationsAssembly(typeof(SquirrelCoreContext).Assembly.GetName().Name)));
+        services.AddControllers()
+            .AddFluentValidation(fv => fv.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly()));
     }
 
     public static void ConfigureJwtAuth(this IServiceCollection services, IConfiguration configuration)

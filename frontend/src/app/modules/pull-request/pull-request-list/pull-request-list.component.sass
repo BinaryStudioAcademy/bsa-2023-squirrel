@@ -1,4 +1,6 @@
 @import "/src/styles/color"
+@import "/src/styles/reusable"
+@import "/src/styles/weights"
 
 .rounded-container
     border-radius: 10px
@@ -9,10 +11,11 @@
         padding: 15px 15px 10px 15px
         font-size: 18px
         font-style: normal
-        font-weight: 600
+        font-weight: $semi-bold-weight
         color: $text-main
         h5
-            margin: 0px
+            font-size: 18px
+            @extend .title
 
 .header
     display: flex
@@ -23,10 +26,10 @@
     @extend .actions
     align-items: flex-end
     flex-wrap: nowrap
-    margin-left: 0px 
+    margin-left: 0
     > *
         min-width: 100px
-        margin-bottom: 5px 
+        margin-bottom: 5px
 
 .actions
     margin-left: 11px
@@ -40,15 +43,15 @@
 
 .table
     margin-left: 32px
-    margin-right: 32px  
+    margin-right: 32px
 
 .pull-request-container
     display: flex
     flex-direction: column
     .line
         border: 1px solid $line-color
-        padding: 0px
-        margin: 0px
+        padding: 0
+        margin: 0
     &:first-child
         .line
             border: 1px solid $line-dark-color
@@ -59,7 +62,7 @@
     color: $text-gray
     font-size: 14px
     font-style: normal
-    font-weight: 600
+    font-weight: $semi-bold-weight
     >.first
         flex: 50
     >.second
@@ -67,7 +70,7 @@
         text-align: center
     >.third
         flex: 15
-        text-align: center      
+        text-align: center
 
 .table-content
     display: flex
@@ -89,7 +92,7 @@
 .user-container
     display: flex
     align-items: center
-    
+
     img
         padding: 5px
         min-height: 36px
@@ -98,3 +101,6 @@
         height: 36px
         border-radius: 50%
         overflow: hidden
+
+p
+    margin-bottom: 0

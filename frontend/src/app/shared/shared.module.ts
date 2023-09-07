@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatMenuModule } from '@angular/material/menu';
 import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SidebarComponent } from '@shared/components/sidebar/sidebar.component';
@@ -11,11 +12,15 @@ import { MaterialModule } from '../material/material.module';
 import { AvatarComponent } from './components/avatar/avatar.component';
 import { BarrierComponent } from './components/barrier/barrier.component';
 import { ButtonComponent } from './components/button/button.component';
+import { CheckboxComponent } from './components/checkbox/checkbox.component';
+import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
 import { DropdownComponent } from './components/dropdown/dropdown.component';
 import { DropdownSelectComponent } from './components/dropdown-select/dropdown-select.component';
 import { InputComponent } from './components/input/input.component';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { ProfileMenuComponent } from './components/profile-menu/profile-menu.component';
+import { TreeComponent } from './components/tree/tree.component';
 
 @NgModule({
     imports: [
@@ -28,6 +33,7 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
         ToastrModule.forRoot({
             positionClass: 'toast-bottom-right',
         }),
+        MatMenuModule,
     ],
     declarations: [
         LoadingSpinnerComponent,
@@ -36,9 +42,13 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
         SidebarComponent,
         InputComponent,
         BarrierComponent,
+        ProfileMenuComponent,
         AvatarComponent,
         DropdownSelectComponent,
+        ConfirmationModalComponent,
         DropdownComponent,
+        TreeComponent,
+        CheckboxComponent,
     ],
     exports: [
         CommonModule,
@@ -55,8 +65,12 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
         ToastrModule,
         InputComponent,
         BarrierComponent,
+        ProfileMenuComponent,
         AvatarComponent,
+        ConfirmationModalComponent,
         DropdownComponent,
+        TreeComponent,
+        CheckboxComponent,
     ],
 })
 export class SharedModule {}

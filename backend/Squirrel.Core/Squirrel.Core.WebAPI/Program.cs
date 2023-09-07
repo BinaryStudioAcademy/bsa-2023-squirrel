@@ -1,5 +1,7 @@
 using Squirrel.Core.BLL.Extensions;
+using Squirrel.Core.DAL.Extensions;
 using Squirrel.Core.WebAPI.Extensions;
+using Squirrel.Core.WebAPI.Middlewares;
 using Squirrel.Shared.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,7 +18,6 @@ builder.AddSerilog();
 
 builder.Services.AddControllers();
 builder.Services.AddSquirrelCoreContext(builder.Configuration);
-builder.Services.AddMongoDbService(builder.Configuration);
 builder.Services.AddAuthenticationSettings(builder.Configuration);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -37,10 +38,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
-
-    app.UseSwagger();
-    app.UseSwaggerUI();
 }
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseMiddleware<GenericExceptionHandlerMiddleware>();
 
@@ -52,9 +53,10 @@ app.UseCors(opt => opt
     .AllowAnyOrigin());
 
 app.UseRouting();
-
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware<CurrentUserMiddleware>();
 
 app.UseEndpoints(endpoints =>
 {

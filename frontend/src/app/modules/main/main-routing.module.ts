@@ -11,11 +11,11 @@ const routes: Routes = [
         children: [
             {
                 path: 'changes',
-                component: NotFoundComponent,
+                loadChildren: () => import('../changes/changes.module').then((m) => m.ChangesModule),
             },
             {
                 path: 'pull-requests',
-                component: NotFoundComponent,
+                loadChildren: () => import('../pull-request/pull-request.module').then((m) => m.PullRequestModule),
             },
             {
                 path: 'branches',

@@ -13,15 +13,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Squirrel.Core.Common", "Squ
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Squirrel.Core.BLL", "Squirrel.Core\Squirrel.Core.BLL\Squirrel.Core.BLL.csproj", "{0BF81DD6-4BFA-4047-AD37-3C9CAE8E1040}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Squirrel.AzureBlobStorage", "Squirrel.AzureBlobStorage\Squirrel.AzureBlobStorage.csproj", "{AAB88BA5-131C-42E6-9004-254FBAACA7A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Squirrel.AzureBlobStorage", "Squirrel.AzureBlobStorage\Squirrel.AzureBlobStorage.csproj", "{AAB88BA5-131C-42E6-9004-254FBAACA7A9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Squirrel.ConsoleApp", "Squirrel.ConsoleApp\Squirrel.ConsoleApp.csproj", "{A77813D7-094A-4AAE-96F9-4408A7A353E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Squirrel.ConsoleApp.Models", "Squirrel.ConsoleApp.Models\Squirrel.ConsoleApp.Models.csproj", "{204BFB8A-D2F5-47A1-9CD1-1675CA9B756D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Squirrel.SqlService.WebApi", "Squirrel.SqlService\Squirrel.SqlService.WebApi\Squirrel.SqlService.WebApi.csproj", "{1DC4EA42-8133-4A5D-AD83-51C5D9233563}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Squirrel.ConsoleApp.BL", "Squirrel.ConsoleApp.BL\Squirrel.ConsoleApp.BL.csproj", "{414FC4D4-D013-45FB-A435-61C0CAE22389}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Squirrel.ConsoleApp.Models", "Squirrel.ConsoleApp.Models\Squirrel.ConsoleApp.Models.csproj", "{204BFB8A-D2F5-47A1-9CD1-1675CA9B756D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Squirrel.Shared", "Squirrel.Shared\Squirrel.Shared.csproj", "{48092366-1949-48AA-969F-C3CC7382B98F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Squirrel.ConsoleApp.BL", "Squirrel.ConsoleApp.BL\Squirrel.ConsoleApp.BL.csproj", "{414FC4D4-D013-45FB-A435-61C0CAE22389}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Squirrel.Shared", "Squirrel.Shared\Squirrel.Shared.csproj", "{48092366-1949-48AA-969F-C3CC7382B98F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Squirrel.SqlService.BLL", "Squirrel.SqlService\Squirrel.SqlService.BLL\Squirrel.SqlService.BLL.csproj", "{9C7ACF5F-51DB-4EE1-9FEB-C2E5CEF3CF76}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Squirrel.ConsoleApp.Setup", "Squirrel.ConsoleApp.Setup\Squirrel.ConsoleApp.Setup.vdproj", "{C4E1BCDF-5A8F-4E1B-AD4B-EFB01DC2F339}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +63,10 @@ Global
 		{A77813D7-094A-4AAE-96F9-4408A7A353E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A77813D7-094A-4AAE-96F9-4408A7A353E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A77813D7-094A-4AAE-96F9-4408A7A353E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DC4EA42-8133-4A5D-AD83-51C5D9233563}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DC4EA42-8133-4A5D-AD83-51C5D9233563}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DC4EA42-8133-4A5D-AD83-51C5D9233563}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DC4EA42-8133-4A5D-AD83-51C5D9233563}.Release|Any CPU.Build.0 = Release|Any CPU
 		{204BFB8A-D2F5-47A1-9CD1-1675CA9B756D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{204BFB8A-D2F5-47A1-9CD1-1675CA9B756D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{204BFB8A-D2F5-47A1-9CD1-1675CA9B756D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -69,6 +79,12 @@ Global
 		{48092366-1949-48AA-969F-C3CC7382B98F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48092366-1949-48AA-969F-C3CC7382B98F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48092366-1949-48AA-969F-C3CC7382B98F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C7ACF5F-51DB-4EE1-9FEB-C2E5CEF3CF76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C7ACF5F-51DB-4EE1-9FEB-C2E5CEF3CF76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C7ACF5F-51DB-4EE1-9FEB-C2E5CEF3CF76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C7ACF5F-51DB-4EE1-9FEB-C2E5CEF3CF76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4E1BCDF-5A8F-4E1B-AD4B-EFB01DC2F339}.Debug|Any CPU.ActiveCfg = Debug
+		{C4E1BCDF-5A8F-4E1B-AD4B-EFB01DC2F339}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

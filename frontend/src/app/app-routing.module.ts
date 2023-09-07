@@ -10,12 +10,23 @@ const routes: Routes = [
         data: { requiresToken: false },
         loadChildren: () => import('@modules/authentication/authentication.module').then((m) => m.AuthenticationModule),
     },
-
+    {
+        path: 'projects',
+        canActivate: [AuthGuard],
+        data: { requiresToken: true },
+        loadChildren: () => import('./modules/projects/projects.module').then((m) => m.ProjectsModule),
+    },
     {
         path: 'main',
         canActivate: [AuthGuard],
         data: { requiresToken: true },
         loadChildren: () => import('./modules/main/main.module').then((m) => m.MainModule),
+    },
+    {
+        path: 'profile',
+        canActivate: [AuthGuard],
+        data: { requiresToken: true },
+        loadChildren: () => import('./modules/user-profile/user-profile.module').then((m) => m.UserProfileModule),
     },
     {
         path: '**',

@@ -6,6 +6,6 @@ public static class ApplicationBuilderExtensions
 {
     public static void UseSquirrelHub(this WebApplication app)
     {
-        app.MapHub<SquirrelHub>("SquirrelHub");
+        app.MapHub<ConsoleAppHub>("SquirrelHub");
     }
 }

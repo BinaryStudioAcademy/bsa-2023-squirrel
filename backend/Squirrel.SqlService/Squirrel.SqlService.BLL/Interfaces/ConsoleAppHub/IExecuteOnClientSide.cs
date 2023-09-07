@@ -1,9 +1,9 @@
-﻿namespace Squirrel.Core.BLL.Interfaces;
+﻿namespace Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
 
-public interface ISquirrelHubToSend
+public interface IExecuteOnClientSide
 {
     Task SetClientId(string guid);
-    
+
 
     // Actions
     Task GetAllTablesNamesAsync(string clientId);

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Squirrel.Core.BLL.Hubs;
-using Squirrel.Core.BLL.Interfaces;
+using Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
 using Squirrel.SqlService.BLL.Models.SquirrelHub;
 
 namespace Squirrel.SqlService.WebApi.Controllers;
@@ -10,9 +10,9 @@ namespace Squirrel.SqlService.WebApi.Controllers;
 [ApiController]
 public class HubController : ControllerBase
 {
-    private readonly IHubContext<SquirrelHub, ISquirrelHubToSend> _hubContext;
+    private readonly IHubContext<ConsoleAppHub, IExecuteOnClientSide> _hubContext;
 
-    public HubController(IHubContext<SquirrelHub, ISquirrelHubToSend> hubContext)
+    public HubController(IHubContext<ConsoleAppHub, IExecuteOnClientSide> hubContext)
     {
         _hubContext = hubContext;
     }

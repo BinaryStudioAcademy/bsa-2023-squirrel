@@ -16,91 +16,91 @@ public static class HubConnectionExtensions
         hubConnection.On("GetAllTablesNamesAsync", (string clientId) =>
         {
             var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
-            hubConnection.InvokeAsync("ReceiveAllTablesNamesAsync", clientId, getActionsService.GetAllTablesNamesAsync().Result);
+            hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", clientId, "GetAllTablesNamesAsync", getActionsService.GetAllTablesNamesAsync().Result);
         });
 
         hubConnection.On("GetTableDataAsync", (string clientId, string tableName, int rowsCount) =>
         {
             var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
-            hubConnection.InvokeAsync("ReceiveTableDataAsync", clientId, getActionsService.GetTableDataAsync(tableName, rowsCount).Result);
+            hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", clientId, "GetTableDataAsync", getActionsService.GetTableDataAsync(tableName, rowsCount).Result);
         });
 
         hubConnection.On("GetAllStoredProceduresNamesAsync", (string clientId) =>
         {
             var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
-            hubConnection.InvokeAsync("ReceiveAllStoredProceduresNamesAsync", clientId, getActionsService.GetAllStoredProceduresNamesAsync().Result);
+            hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", clientId, "GetAllStoredProceduresNamesAsync", getActionsService.GetAllStoredProceduresNamesAsync().Result);
         });
 
         hubConnection.On("GetStoredProcedureDefinitionAsync", (string clientId, string storedProcedureName) =>
         {
             var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
-            hubConnection.InvokeAsync("ReceiveStoredProcedureDefinitionAsync", clientId, getActionsService.GetStoredProcedureDefinitionAsync(storedProcedureName).Result);
+            hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", clientId, "GetStoredProcedureDefinitionAsync", getActionsService.GetStoredProcedureDefinitionAsync(storedProcedureName).Result);
         });
 
         hubConnection.On("GetAllFunctionsNamesAsync", (string clientId) =>
         {
             var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
-            hubConnection.InvokeAsync("ReceiveAllFunctionsNamesAsync", clientId, getActionsService.GetAllFunctionsNamesAsync().Result);
+            hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", clientId, "GetAllFunctionsNamesAsync", getActionsService.GetAllFunctionsNamesAsync().Result);
         });
 
         hubConnection.On("GetFunctionDefinitionAsync", (string clientId, string functionName) =>
         {
             var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
-            hubConnection.InvokeAsync("ReceiveFunctionDefinitionAsync", clientId, getActionsService.GetFunctionDefinitionAsync(functionName).Result);
+            hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", clientId, "GetFunctionDefinitionAsync", getActionsService.GetFunctionDefinitionAsync(functionName).Result);
         });
 
         hubConnection.On("GetAllViewsNamesAsync", (string clientId) =>
         {
             var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
-            hubConnection.InvokeAsync("ReceiveAllViewsNamesAsync", clientId, getActionsService.GetAllViewsNamesAsync().Result);
+            hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", clientId, "GetAllViewsNamesAsync", getActionsService.GetAllViewsNamesAsync().Result);
         });
 
         hubConnection.On("GetViewDefinitionAsync", (string clientId, string viewName) =>
         {
             var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
-            hubConnection.InvokeAsync("ReceiveViewDefinitionAsync", clientId, getActionsService.GetViewDefinitionAsync(viewName).Result);
+            hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", clientId, "GetViewDefinitionAsync", getActionsService.GetViewDefinitionAsync(viewName).Result);
         });
 
         hubConnection.On("GetDbTablesStructureAsync", (string clientId) =>
         {
             var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
-            hubConnection.InvokeAsync("ReceiveDbTablesStructureAsync", clientId, getActionsService.GetDbTablesStructureAsync().Result);
+            hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", clientId, "GetDbTablesStructureAsync", getActionsService.GetDbTablesStructureAsync().Result);
         });
 
         hubConnection.On("GetDbTablesCheckAndUniqueConstraintsAsync", (string clientId) =>
         {
             var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
-            hubConnection.InvokeAsync("ReceiveDbTablesCheckAndUniqueConstraintsAsync", clientId, getActionsService.GetDbTablesCheckAndUniqueConstraintsAsync().Result);
+            hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", clientId, "GetDbTablesCheckAndUniqueConstraintsAsync", getActionsService.GetDbTablesCheckAndUniqueConstraintsAsync().Result);
         });
 
         hubConnection.On("GetStoredProceduresWithDetailAsync", (string clientId) =>
         {
             var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
-            hubConnection.InvokeAsync("ReceiveStoredProceduresWithDetailAsync", clientId, getActionsService.GetStoredProceduresWithDetailAsync().Result);
+            hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", clientId, "GetStoredProceduresWithDetailAsync", getActionsService.GetStoredProceduresWithDetailAsync().Result);
         });
 
         hubConnection.On("GetFunctionsWithDetailAsync", (string clientId) =>
         {
             var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
-            hubConnection.InvokeAsync("ReceiveFunctionsWithDetailAsync", clientId, getActionsService.GetFunctionsWithDetailAsync().Result);
+            hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", clientId, "GetFunctionsWithDetailAsync", getActionsService.GetFunctionsWithDetailAsync().Result);
         });
 
         hubConnection.On("GetViewsWithDetailAsync", (string clientId) =>
          {
              var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
-             hubConnection.InvokeAsync("ReceiveViewsWithDetailAsync", clientId, getActionsService.GetViewsWithDetailAsync().Result);
+             hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", clientId, "GetViewsWithDetailAsync", getActionsService.GetViewsWithDetailAsync().Result);
         });
 
         hubConnection.On("GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync", (string clientId) =>
         {
             var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
-            hubConnection.InvokeAsync("ReceiveUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync", clientId, getActionsService.GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync().Result);
+            hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", clientId, "GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync", getActionsService.GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync().Result);
         });
 
         hubConnection.On("GetUserDefinedTableTypesAsync", (string clientId) =>
         {
             var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
-            hubConnection.InvokeAsync("ReceiveUserDefinedTableTypesAsync", clientId, getActionsService.GetUserDefinedTableTypesAsync().Result);
+            hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", clientId, "GetUserDefinedTableTypesAsync", getActionsService.GetUserDefinedTableTypesAsync().Result);
         });
     }
 }

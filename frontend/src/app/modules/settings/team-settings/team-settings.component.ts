@@ -3,9 +3,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { BaseComponent } from '@core/base/base.component';
 import { NotificationService } from '@core/services/notification.service';
 import { ProjectService } from '@core/services/project.service';
+import { SharedProjectService } from '@core/services/shared-project.service';
 import { SpinnerService } from '@core/services/spinner.service';
 import { AddUserModalComponent } from '@modules/settings/add-user-modal/add-user-modal.component';
+import { finalize, takeUntil } from 'rxjs';
 
+import { ProjectResponseDto } from '../../../models/projects/project-response-dto';
 import { UserDto } from '../../../models/user/user-dto';
 
 @Component({
@@ -16,8 +19,11 @@ import { UserDto } from '../../../models/user/user-dto';
 export class TeamSettingsComponent extends BaseComponent implements OnInit {
     public users: UserDto[];
 
+    public project: ProjectResponseDto;
+
     constructor(
         public dialog: MatDialog,
+        private sharedProjectService: SharedProjectService,
         private spinner: SpinnerService,
         private projectService: ProjectService,
         private notificationService: NotificationService,
@@ -26,21 +32,29 @@ export class TeamSettingsComponent extends BaseComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.users = this.getUsers();
+        this.sharedProjectService.project$.subscribe({
+            next: project => {
+                if (project) {
+                    this.project = project;
+                    this.getUsers();
+                }
+            },
+        });
     }
 
     public OpenAddUserModal(): void {
         const dialogRef = this.dialog.open(AddUserModalComponent, {
             width: '400px',
             height: '400px',
+            data: { users: this.users },
         });
 
-        /*dialogRef.componentInstance.projectCreated.subscribe(() => this.loadProjects());*/
+        dialogRef.componentInstance.userAdded.subscribe(() => this.getUsers());
     }
 
     getUsers() {
-        /*this.spinner.show();
-        this.projectService.getProjectUsers('1')
+        this.spinner.show();
+        this.projectService.getProjectUsers(this.project.id)
             .pipe(
                 takeUntil(this.unsubscribe$),
                 finalize(() => this.spinner.hide()),
@@ -52,32 +66,6 @@ export class TeamSettingsComponent extends BaseComponent implements OnInit {
                 next: projectUsers => {
                     this.users = projectUsers;
                 },
-            });*/
-        const user = {
-            id: 1,
-            avatarUrl: 'https://picsum.photos/200',
-            email: 'test@test.test',
-            firstName: 'John',
-            lastName: 'Smith',
-            userName: 'Johnny',
-        } as UserDto;
-        const user2 = {
-            id: 2,
-            avatarUrl: 'https://picsum.photos/200',
-            email: 'test@test.test',
-            firstName: 'Test',
-            lastName: 'Smith',
-            userName: '',
-        } as UserDto;
-        const user3 = {
-            id: 3,
-            avatarUrl: 'https://picsum.photos/200',
-            email: 'test@test.test',
-            firstName: 'Test',
-            lastName: 'Smith',
-            userName: 'Johnny',
-        } as UserDto;
-
-        return [user, user2, user3];
+            });
     }
 }

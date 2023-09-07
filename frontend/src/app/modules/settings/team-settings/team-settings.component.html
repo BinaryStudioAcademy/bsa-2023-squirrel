@@ -1,13 +1,12 @@
 <div class="user-list">
-    <app-user-card *ngFor="let user of users" [user]="user"></app-user-card>
     <app-button
         class="add-button"
-        text="+"
-        height="30px"
-        width="35px"
+        text="Add user"
+        width="100px"
         padding=""
-        variant="outline-secondary"
+        variant="outline-primary"
         (click)="OpenAddUserModal()"
     >
     </app-button>
+    <app-user-card *ngFor="let user of users" [user]="user"></app-user-card>
 </div>

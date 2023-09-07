@@ -9,6 +9,7 @@ public interface IProjectService
     Task<ProjectResponseDto> UpdateProjectAsync(int projectId, UpdateProjectDto updateProjectDto);
     Task DeleteProjectAsync(int projectId);
     Task<ProjectResponseDto> GetProjectAsync(int projectId);
+    Task<ProjectResponseDto> AddUsersToProjectAsync(int projectId, List<UserDto> usersDtos);
     Task<List<UserDto>> GetProjectUsersAsync(int projectId);
     Task<List<ProjectResponseDto>> GetAllUserProjectsAsync();
 }

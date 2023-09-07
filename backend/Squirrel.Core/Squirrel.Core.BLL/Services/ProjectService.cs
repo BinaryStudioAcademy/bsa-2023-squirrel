@@ -38,6 +38,23 @@ public sealed class ProjectService : BaseService, IProjectService
 
         return _mapper.Map<ProjectResponseDto>(createdProject);
     }
+    
+    public async Task<ProjectResponseDto> AddUsersToProjectAsync(int projectId, List<UserDto> usersDtos)
+    {
+        var users = _mapper.Map<List<User>>(usersDtos);
+        
+        var existingProject = await _context.Projects.FindAsync(projectId);
+        
+        ValidateProject(existingProject);
+
+        foreach (var user in users)
+        {
+            existingProject.Users.Add(user);
+        }
+
+        await _context.SaveChangesAsync();
+        return _mapper.Map<ProjectResponseDto>(existingProject);
+    }
 
     public async Task<ProjectResponseDto> UpdateProjectAsync(int projectId, UpdateProjectDto updateProjectDto)
     {
@@ -79,10 +96,7 @@ public sealed class ProjectService : BaseService, IProjectService
             .Include(p => p.Users)
             .FirstOrDefaultAsync(p => p.Id == projectId);
 
-        if (project is null)
-        {
-            throw new EntityNotFoundException();
-        }
+        ValidateProject(project);
         
         var projectUsers = project.Users.ToList();
 

@@ -22,7 +22,11 @@ export class ProjectService {
         return this.httpService.postRequest<ProjectResponseDto>(this.projectsApiUrl, newProject);
     }
 
-    public updateProject(projectId: string, project: UpdateProjectDto): Observable<ProjectResponseDto> {
+    public addUsersToProject(projectId: number, users: UserDto[]): Observable<ProjectResponseDto> {
+        return this.httpService.putRequest<ProjectResponseDto>(`${this.projectsApiUrl}/add-users/${projectId}`, users);
+    }
+
+    public updateProject(projectId: number, project: UpdateProjectDto): Observable<ProjectResponseDto> {
         const url = `${this.projectsApiUrl}/${projectId}`;
 
         return this.httpService.putRequest<ProjectResponseDto>(url, project);
@@ -44,7 +48,7 @@ export class ProjectService {
         return this.httpService.getRequest<ProjectResponseDto[]>(`${this.projectsApiUrl}/all`);
     }
 
-    public getProjectUsers(projectId: string): Observable<UserDto[]> {
+    public getProjectUsers(projectId: number): Observable<UserDto[]> {
         return this.httpService.getRequest<UserDto[]>(`${this.projectsApiUrl}/team/${projectId}`);
     }
 }

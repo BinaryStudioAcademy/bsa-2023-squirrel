@@ -1,28 +1,36 @@
-<div class="dropdown-users">
-    <app-dropdown-select
-        [width]="'100%'"
-        [placeholder]="'User'"
-        [options]="dropdownUsers"
-        [template]="usertemplate"
-        [chipTemplate]="chiptemplate"
-        [filterPredicate]="filter"
-        (valueChange)="onAuthorSelectionChange($event)">
-    </app-dropdown-select>
-</div>
-<div class="action-buttons">
-    <app-button text="Add" width="100%" variant="outline-secondary"
-                (buttonOnClick)="addUser()">
-    </app-button>
+<div class="container">
+    <div class="content">
+        <div class="dropdown-users" *ngIf="dropdownUsers">
+            <app-dropdown-select
+                [width]="'100%'"
+                [placeholder]="'Email'"
+                [options]="dropdownUsers"
+                [template]="usertemplate"
+                [chipTemplate]="chiptemplate"
+                [(ngModel)]="selectedUsers"
+                [filterPredicate]="filter"
+                (valueChange)="onDropdownValueChange($event)"
+            >
+            </app-dropdown-select>
+            <ng-template #usertemplate let-item>
+                <div class="user-container">
+                    <img src="{{ item.avatarUrl }}" />
+                    <p>{{ getFullName(item) }}</p>
+                </div>
+            </ng-template>
+            <ng-template #chiptemplate let-item>
+                <p>{{ item.email }}</p>
+            </ng-template>
+        </div>
+        <div class="action-buttons">
+            <app-button text="Add" width="100%" variant="outline-secondary"
+                        (buttonOnClick)="addUser()"
+                        [isDisabled]="selectedUsers.length === 0"
+            >
+            </app-button>
 
-    <app-button text="Close" width="100%" variant="outline-secondary" (mousedown)="close()">
-    </app-button>
-</div>
-<ng-template #usertemplate let-item>
-    <div class="user-container">
-        <img src="{{ item.avatarUrl }}" />
-        <p>{{ getFullName(item) }}</p>
+            <app-button text="Close" width="100%" variant="outline-secondary" (mousedown)="close()">
+            </app-button>
+        </div>
     </div>
-</ng-template>
-<ng-template #chiptemplate let-item>
-    <p>{{ item.email }}</p>
-</ng-template>
+</div>

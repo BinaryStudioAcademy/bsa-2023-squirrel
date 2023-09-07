@@ -4,10 +4,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BaseComponent } from '@core/base/base.component';
 import { NotificationService } from '@core/services/notification.service';
 import { ProjectService } from '@core/services/project.service';
+import { SharedProjectService } from '@core/services/shared-project.service';
 import { SpinnerService } from '@core/services/spinner.service';
-import { finalize, takeUntil, tap } from 'rxjs';
+import { takeUntil, tap } from 'rxjs';
 
-import { ProjectDto } from '../../../models/projects/project-dto';
+import { ProjectResponseDto } from '../../../models/projects/project-response-dto';
 import { UpdateProjectDto } from '../../../models/projects/update-project-dto';
 
 @Component({
@@ -18,11 +19,10 @@ import { UpdateProjectDto } from '../../../models/projects/update-project-dto';
 export class GeneralSettingsComponent extends BaseComponent implements OnInit {
     public projectForm: FormGroup;
 
-    public projectId: string;
-
-    public project: ProjectDto;
+    public project: ProjectResponseDto;
 
     constructor(
+        private sharedProjectService: SharedProjectService,
         private fb: FormBuilder,
         private spinner: SpinnerService,
         private projectService: ProjectService,
@@ -34,42 +34,30 @@ export class GeneralSettingsComponent extends BaseComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.createForm();
-        const projectId = this.route.snapshot.paramMap.get('id');
-
-        if (!projectId) {
-            this.notificationService.error('wrong route');
-
-            /*this.router.navigateByUrl('/projects');*/
-
-            return;
-        }
-
-        /*this.projectId = projectId;
-        this.projectService.getProject(projectId)
-            .pipe(
-                takeUntil(this.unsubscribe$),
-                finalize(() => this.spinner.hide()),
-            )
-            .subscribe({
-                next: project => {
+        this.sharedProjectService.project$.subscribe({
+            next: project => {
+                if (project) {
                     this.project = project;
-                },
-                error: err => {
-                    this.notificationService.error(err.message);
-                },
-            });*/
+                    this.createForm();
+                }
+            },
+        });
     }
 
     public createForm() {
         this.projectForm = this.fb.group({
-            projectName: ['', [Validators.required, Validators.maxLength(50)]],
-            description: [''],
+            projectName: [this.project.name, [Validators.required, Validators.maxLength(50)]],
+            description: [this.project.description],
         });
     }
 
     onSaveClick(): void {
         this.spinner.show();
+
+        this.project.name = this.projectForm.value.projectName;
+        this.project.description = this.projectForm.value.description;
+
+        this.sharedProjectService.setProject(this.project);
 
         const updatedProject: UpdateProjectDto = {
             name: this.projectForm.value.projectName,
@@ -77,7 +65,7 @@ export class GeneralSettingsComponent extends BaseComponent implements OnInit {
         };
 
         this.projectService
-            .updateProject(this.projectId, updatedProject)
+            .updateProject(this.project.id, updatedProject)
             .pipe(
                 takeUntil(this.unsubscribe$),
                 tap(() => this.spinner.hide()),
@@ -90,5 +78,7 @@ export class GeneralSettingsComponent extends BaseComponent implements OnInit {
                     this.notificationService.error('Failed to update project');
                 },
             );
+
+        this.spinner.hide();
     }
 }

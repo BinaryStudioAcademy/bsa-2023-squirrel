@@ -8,7 +8,7 @@ import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Outpu
 export class DropdownComponent implements OnInit {
     public isActive = false;
 
-    @Input() options: string[] = [];
+    @Input() options: any[] = [];
 
     @Input() width: number;
 

@@ -1,5 +1,14 @@
 import { ComponentType } from '@angular/cdk/portal';
-import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, TemplateRef } from '@angular/core';
+import {
+    Component,
+    ElementRef,
+    EventEmitter,
+    HostListener,
+    Input,
+    OnChanges,
+    Output,
+    SimpleChanges,
+    TemplateRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
@@ -7,7 +16,7 @@ import { MatDialog } from '@angular/material/dialog';
     templateUrl: './dropdown.component.html',
     styleUrls: ['./dropdown.component.sass'],
 })
-export class DropdownComponent implements OnInit {
+export class DropdownComponent implements OnChanges {
     public searchTerm: string = '';
 
     public isActive = false;
@@ -45,8 +54,10 @@ export class DropdownComponent implements OnInit {
         // eslint-disable-next-line no-empty-function
     ) {}
 
-    ngOnInit(): void {
-        this.selectedOption = this.options[this.selectedByDefault];
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['options']) {
+            this.selectedOption = this.options[this.selectedByDefault];
+        }
     }
 
     onOptionSelected(value: string) {

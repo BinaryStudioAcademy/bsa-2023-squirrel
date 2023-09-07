@@ -15,7 +15,7 @@ public class ConnectionFileService : IConnectionFileService
     }
 
 
-    public void CreateEmptyFile()
+    public void CreateInitFile()
     {
         var filePath = ConnectionFilePath;
         if (!File.Exists(filePath))

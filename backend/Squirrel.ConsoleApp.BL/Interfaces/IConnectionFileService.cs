@@ -4,7 +4,7 @@ namespace Squirrel.ConsoleApp.BL.Interfaces;
 
 public interface IConnectionFileService
 {
-    void CreateEmptyFile();
+    void CreateInitFile();
     DbSettings ReadFromFile();
     void SaveToFile(DbSettings dbSettings);
 }

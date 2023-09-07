@@ -11,7 +11,7 @@ public static class ApplicationBuilderExtensions
     public static void InitializeFileSettings(this IApplicationBuilder app)
     {
         var fileService = app.ApplicationServices.GetRequiredService<IConnectionFileService>();
-        fileService?.CreateEmptyFile();
+        fileService?.CreateInitFile();
     }
 
     public static void RegisterHubs(this IApplicationBuilder app, IConfiguration config)

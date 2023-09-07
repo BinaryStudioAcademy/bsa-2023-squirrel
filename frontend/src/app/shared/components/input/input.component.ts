@@ -9,6 +9,8 @@ import { ControlValueAccessor, FormControl, NgControl } from '@angular/forms';
 export class InputComponent implements ControlValueAccessor {
     @Input() label = '';
 
+    @Input() name = '';
+
     @Input() placeholder = 'Write something';
 
     @Input() type = 'text';
@@ -23,14 +25,11 @@ export class InputComponent implements ControlValueAccessor {
         this.ngControl.valueAccessor = this;
     }
 
-    public registerOnChange(): void {
-    }
+    public registerOnChange(): void {}
 
-    public registerOnTouched(): void {
-    }
+    public registerOnTouched(): void {}
 
-    public writeValue(): void {
-    }
+    public writeValue(): void {}
 
     get control(): FormControl {
         return this.ngControl.control as FormControl;

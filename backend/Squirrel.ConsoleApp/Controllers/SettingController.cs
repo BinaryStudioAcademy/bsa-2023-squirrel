@@ -30,21 +30,23 @@ public class SettingController: ControllerBase
         return Ok(randomId);
     }
 
+    // http://localhost:44567/setting/get-tables-names
     [HttpGet]
     [Route("get-tables-names")]
     public async Task<ActionResult<List<string>>> GetTablesNames()
     {
         var names = await _getActionsService.GetAllTablesNamesAsync();
 
-        return Ok("TESTSTEST");
+        return Ok(names);
     }
 
+    // http://localhost:44567/setting/get-table-structure
     [HttpGet]
-    [Route("get-table-structure/{tableName}")]
-    public async Task<ActionResult<List<string>>> GetTablesStructure(string tableName)
+    [Route("get-table-structure")]
+    public async Task<ActionResult<List<string>>> GetTablesStructure()
     {
-        var names = await _getActionsService.GetDbTablesStructureAsync();
+        var structure = await _getActionsService.GetDbTablesStructureAsync();
 
-        return Ok(names);
+        return Ok(structure);
     }
 }

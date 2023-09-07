@@ -1,18 +1,17 @@
 <div class="container">
     <div class="main-content">
+        <!-- TODO: create custom ListBoxComponent -->
         <div class="scripts-sector">
-            <app-script></app-script>
-            <app-script></app-script>
-            <app-script></app-script>
-            <app-script></app-script>
-            <app-script></app-script>
-            <app-script></app-script>
-            <app-script></app-script>
-            <app-script></app-script>
-            <app-script></app-script>
+            <ul cdkListbox [cdkListboxValue]="scripts" (cdkListboxValueChange)="onScriptSelected($event)"
+                class="listbox bordered">
+                <li *ngFor="let script of scripts" [cdkOption]="script" class="option">
+                    <app-script [script]="script"></app-script>
+                </li>
+            </ul>
         </div>
         <div class="editor-sector">
-            <textarea class="editor">asdf</textarea>
+            <!-- TODO: create custom TextEditorComponent -->
+            <textarea class="editor bordered">{{selectedScript?.content}}</textarea>
         </div>
     </div>
     <div class="buttons-sector">

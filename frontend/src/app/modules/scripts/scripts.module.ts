@@ -1,3 +1,4 @@
+import { CdkListboxModule } from '@angular/cdk/listbox';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/shared.module';
@@ -9,6 +10,6 @@ import { ScriptsRoutingModule } from './scripts-routing.module';
 
 @NgModule({
     declarations: [ScriptComponent, ScriptsPageComponent, CreateScriptModalComponent],
-    imports: [CommonModule, ScriptsRoutingModule, SharedModule],
+    imports: [CommonModule, ScriptsRoutingModule, SharedModule, CdkListboxModule],
 })
 export class ScriptsModule {}

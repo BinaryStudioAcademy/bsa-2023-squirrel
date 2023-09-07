@@ -1,5 +1,11 @@
+@import "/src/styles/color"
+
 .container
     margin: 10px
+
+.bordered
+    border: 1px solid $black
+    border-radius: 5px
 
 .main-content
     display: flex
@@ -8,11 +14,20 @@
 .scripts-sector
     display: flex
     flex-direction: column
-    gap: 10px
-    padding: 10px
-    overflow-y: scroll
+    overflow-y: auto
     width: 25%
     height: 60vh
+
+.listbox
+    list-style: none
+    padding: 0
+    margin: 0
+
+.option
+    position: relative
+
+.selected-option
+    background: $dark-shadow
 
 .editor-sector
     display: flex

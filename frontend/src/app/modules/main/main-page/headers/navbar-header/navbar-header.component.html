@@ -10,8 +10,8 @@
     </nav>
     <div class="right-container">
         <app-dropdown
-            [customTemplate]="modalContent"
-            [dropdownIcon]="branchesIcon"
+            [modalTemplate]="modalContent"
+            [dropdownIcon]="'assets/git-branch.svg'"
             [options]="branches"
             [width]="300"
             (selectedValueChanged)="onBranchSelected($event)"></app-dropdown>

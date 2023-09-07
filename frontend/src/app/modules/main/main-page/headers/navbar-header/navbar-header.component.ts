@@ -1,6 +1,4 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { SafeHtml } from '@angular/platform-browser';
-import { SvgFileContentFetcher } from '@shared/helpers/svgFileContentFetcher';
 
 @Component({
     selector: 'app-navbar-header',
@@ -28,24 +26,8 @@ export class NavbarHeaderComponent implements OnInit {
         { displayName: 'Settings', path: './settings' },
     ];
 
-    private branchesIconPath = 'assets/git-branch.svg';
-
-    public branchesIcon: SafeHtml;
-
-    // eslint-disable-next-line no-empty-function
-    constructor(private svgFileContentFetcher: SvgFileContentFetcher) {}
-
     ngOnInit(): void {
-        this.getBranchIcon();
         this.branches = ['Branch 1', 'Branch 2', 'Branch 3', 'Branch 4'];
-    }
-
-    private getBranchIcon() {
-        this.svgFileContentFetcher.fetchSvgContent(this.branchesIconPath).subscribe((response) => {
-            if (response !== null) {
-                this.branchesIcon = response;
-            }
-        });
     }
 
     public onBranchSelected(value: string) {

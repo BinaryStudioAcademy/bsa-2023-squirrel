@@ -4,6 +4,6 @@ namespace Squirrel.Core.BLL.Interfaces;
 
 public interface IProjectDatabaseService
 {
-    Task<List<ProjectInfoDto>> GetAllProjectDbNamesAsync();
-    Task<ProjectInfoDto> AddNewProjectDatabaseAsync(ProjectDatabaseDto dto);
+    Task<List<DatabaseInfoDto>> GetAllProjectDbNamesAsync(int projectId);
+    Task<DatabaseInfoDto> AddNewProjectDatabaseAsync(ProjectDatabaseDto dto);
 }

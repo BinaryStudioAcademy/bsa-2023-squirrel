@@ -16,14 +16,15 @@ public sealed class ProjectDatabaseService : BaseService, IProjectDatabaseServic
     {
     }
 
-    public async Task<List<ProjectInfoDto>> GetAllProjectDbNamesAsync()
+    public async Task<List<DatabaseInfoDto>> GetAllProjectDbNamesAsync(int projectId)
     {
-        return await _context.ProjectDatabases.Select(x => x.DbName)
-            .ProjectTo<ProjectInfoDto>(_mapper.ConfigurationProvider)
+        return await _context.ProjectDatabases
+            .Where(p => p.ProjectId == projectId)
+            .ProjectTo<DatabaseInfoDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
     }
 
-    public async Task<ProjectInfoDto> AddNewProjectDatabaseAsync(ProjectDatabaseDto dto)
+    public async Task<DatabaseInfoDto> AddNewProjectDatabaseAsync(ProjectDatabaseDto dto)
     {
         var projectDb = _mapper.Map<ProjectDatabase>(dto);
 
@@ -35,6 +36,6 @@ public sealed class ProjectDatabaseService : BaseService, IProjectDatabaseServic
         var addedProjectDb = (await _context.ProjectDatabases.AddAsync(projectDb)).Entity;
         await _context.SaveChangesAsync();
 
-        return _mapper.Map<ProjectInfoDto>(addedProjectDb);
+        return _mapper.Map<DatabaseInfoDto>(addedProjectDb);
     }
 }

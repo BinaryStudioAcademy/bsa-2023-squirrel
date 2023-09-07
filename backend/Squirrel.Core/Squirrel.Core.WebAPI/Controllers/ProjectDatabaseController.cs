@@ -18,14 +18,14 @@ public sealed class ProjectDatabaseController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<ProjectInfoDto>> AddNewProjectDatabase([FromBody] ProjectDatabaseDto databaseDto)
+    public async Task<ActionResult<DatabaseInfoDto>> AddNewProjectDatabase([FromBody] ProjectDatabaseDto databaseDto)
     {
         return Ok(await _projectDatabaseService.AddNewProjectDatabaseAsync(databaseDto));
     }
 
-    [HttpGet("all")]
-    public async Task<ActionResult<List<ProjectInfoDto>>> GetAllProjectDatabases()
+    [HttpGet("all/{projectId}")]
+    public async Task<ActionResult<List<DatabaseInfoDto>>> GetAllProjectDatabases(int projectId)
     {
-        return Ok(await _projectDatabaseService.GetAllProjectDbNamesAsync());
+        return Ok(await _projectDatabaseService.GetAllProjectDbNamesAsync(projectId));
     }
 }

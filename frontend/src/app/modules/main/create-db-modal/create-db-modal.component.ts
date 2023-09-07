@@ -45,8 +45,6 @@ export class CreateDbModalComponent implements OnInit {
     }
 
     public addDataBase() {
-        console.log(this.dbForm.value);
-
         const connect: DbConnection = {
             dbName: this.dbForm.value.dbName,
             serverName: this.dbForm.value.serverName,
@@ -94,6 +92,7 @@ export class CreateDbModalComponent implements OnInit {
                 next: dbName => {
                     this.notificationService.info('database was successfully added');
                     this.dbName.emit(dbName.dbName);
+                    this.close();
                 },
                 error: () => {
                     this.notificationService.error('Fail to save db to db');

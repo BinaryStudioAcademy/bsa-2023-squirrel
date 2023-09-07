@@ -1,4 +1,8 @@
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { CreateDbModalComponent } from '@modules/main/create-db-modal/create-db-modal.component';
+
+import { DbEngine } from '../../../../../models/projects/db-engine';
 
 @Component({
     selector: 'app-main-header',
@@ -12,7 +16,18 @@ export class MainHeaderComponent {
 
     public dbNames: string[] = ['Branch 1', 'Branch 2', 'Branch 3', 'Branch 4'];
 
+    // eslint-disable-next-line no-empty-function
+    constructor(public dialog: MatDialog) {
+    }
+
     public onDatabaseSelected(value: string) {
         this.selectedDbName = value;
+    }
+
+    public openCreateModal(): void {
+        this.dialog.open(CreateDbModalComponent, {
+            width: '700px',
+            data: { dbEngine: DbEngine.PostgreSql },
+        });
     }
 }

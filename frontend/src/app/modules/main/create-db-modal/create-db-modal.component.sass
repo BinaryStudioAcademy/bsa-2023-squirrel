@@ -1,0 +1,33 @@
+@import "/src/styles/color"
+@import "/src/styles/reusable"
+@import "/src/styles/weights"
+
+h4
+    font-size: 24px
+    @extend .title
+
+.input-wrapper
+    width: 100%
+    display: flex
+    align-items: center
+    margin-top: 10px
+
+    app-input
+        width: 80%
+
+label
+    display: flex
+    justify-content: space-between
+    align-items: center
+    width: 20%
+    margin-right: 30px
+    font-weight: $semi-bold-weight
+
+    app-info-tooltip
+        margin-right: 15px
+
+.modal-footer
+    margin-top: 15px
+    display: flex
+    justify-content: space-between
+    align-items: center

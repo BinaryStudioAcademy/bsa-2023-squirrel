@@ -1,0 +1,52 @@
+<h4>Connect to Data Base</h4>
+<app-barrier></app-barrier>
+<form [formGroup]="dbForm" (ngSubmit)="addDataBase()" class="db-form">
+    <div class="input-wrapper">
+        <label>Db Name</label>
+        <app-input [formControl]="$any(dbForm.controls['dbName'])"
+                   name="dbName"
+                   placeholder="Enter db Name">
+        </app-input>
+    </div>
+
+    <app-barrier></app-barrier>
+
+    <div class="input-wrapper">
+        <label>Server Name</label>
+        <app-input [formControl]="$any(dbForm.controls['serverName'])"
+                   name="server name"
+                   placeholder="Enter Server name">
+        </app-input>
+    </div>
+
+    <div class="input-wrapper">
+        <label>Port</label>
+        <app-input [formControl]="$any(dbForm.controls['port'])"
+                   placeholder="Enter port">
+        </app-input>
+    </div>
+
+    <div class="input-wrapper">
+
+        <label>Username<app-info-tooltip text="leave empty for Trusted Connection"></app-info-tooltip></label>
+        <app-input [formControl]="$any(dbForm.controls['username'])"
+                   placeholder="Enter username">
+        </app-input>
+    </div>
+
+    <div class="input-wrapper">
+
+        <label>Password<app-info-tooltip text="leave empty for Trusted Connection"></app-info-tooltip></label>
+        <app-input [formControl]="$any(dbForm.controls['password'])"
+                   type="password"
+                   placeholder="Enter db password">
+        </app-input>
+    </div>
+
+    <div class="modal-footer">
+        <app-checkbox label="Connect to local db"></app-checkbox>
+        <app-button text="Save"></app-button>
+    </div>
+</form>
+
+

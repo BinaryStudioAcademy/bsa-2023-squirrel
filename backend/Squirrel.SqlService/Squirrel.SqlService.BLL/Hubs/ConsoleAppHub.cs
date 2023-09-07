@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
-using Squirrel.SqlService.BLL.Models.SquirrelHub;
+using Squirrel.SqlService.BLL.Models.ConsoleAppHub;
 
 namespace Squirrel.Core.BLL.Hubs;
 

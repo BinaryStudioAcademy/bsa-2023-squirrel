@@ -41,7 +41,7 @@ app.UseHttpsRedirection();
 
 app.UseSquirrelCoreContext();
 
-app.UseSquirrelHub();
+app.UseConsoleAppHub();
 
 app.UseCors();
 

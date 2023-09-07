@@ -4,8 +4,8 @@ namespace Squirrel.Core.WebAPI.Extensions;
 
 public static class ApplicationBuilderExtensions
 {
-    public static void UseSquirrelHub(this WebApplication app)
+    public static void UseConsoleAppHub(this WebApplication app)
     {
-        app.MapHub<ConsoleAppHub>("SquirrelHub");
+        app.MapHub<ConsoleAppHub>("ConsoleAppHub");
     }
 }

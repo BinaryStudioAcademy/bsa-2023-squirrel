@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Squirrel.SqlService.BLL.Models.SquirrelHub;
+namespace Squirrel.SqlService.BLL.Models.ConsoleAppHub;
 
 public class QueryResultTableDTO
 {

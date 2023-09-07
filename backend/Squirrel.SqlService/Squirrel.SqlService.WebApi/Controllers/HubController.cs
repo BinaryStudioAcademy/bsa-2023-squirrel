@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.SignalR;
 using Squirrel.Core.BLL.Hubs;
 using Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
-using Squirrel.SqlService.BLL.Models.SquirrelHub;
+using Squirrel.SqlService.BLL.Models.ConsoleAppHub;
 
 namespace Squirrel.SqlService.WebApi.Controllers;
 

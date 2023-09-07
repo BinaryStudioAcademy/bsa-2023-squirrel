@@ -5,8 +5,6 @@ namespace Squirrel.Core.BLL.Interfaces;
 public interface ISquirrelHubToReceive
 {
     // Actions
-    Task TestReceiveExecutedQueryAsync(string clientId, QueryResultTableDTO queryResultTableDTO);
-
     Task ReceiveAllTablesNamesAsync(string clientId, QueryResultTableDTO queryResultTableDTO);
     Task ReceiveTableDataAsync(string clientId, QueryResultTableDTO queryResultTableDTO);
 

@@ -27,13 +27,4 @@ public class SettingController: ControllerBase
 
         return Ok(_clientIdFileService.GetClientId());
     }
-
-    /// <summary>
-    /// Just for debugging and demo
-    /// </summary>
-    [HttpGet("check")]
-    public IActionResult Get()
-    {
-        return Ok($"{_dbSettingsOptions.Value.DbType} - {_dbSettingsOptions.Value.ConnectionString}");
-    }
 }

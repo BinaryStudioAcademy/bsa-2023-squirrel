@@ -10,7 +10,7 @@ public class SquirrelHubToReceiveService : ISquirrelHubToReceive
     /// <summary>
     /// Just for debugging and demo
     /// </summary>
-    public async Task TestReceiveExecutedQueryAsync(string clientId, QueryResultTableDTO queryResultTableDTO)
+    private async Task ReceiveExecutedQueryShowResultAsync(string clientId, QueryResultTableDTO queryResultTableDTO)
     {
         Console.WriteLine($"------------------------------------------------------------------");
         Console.WriteLine($"Successfully recived data from user '{clientId}'");
@@ -21,76 +21,76 @@ public class SquirrelHubToReceiveService : ISquirrelHubToReceive
 
     public async Task ReceiveAllFunctionsNamesAsync(string clientId, QueryResultTableDTO queryResultTableDTO)
     {
-        await TestReceiveExecutedQueryAsync(clientId, queryResultTableDTO);
+        await ReceiveExecutedQueryShowResultAsync(clientId, queryResultTableDTO);
     }
 
     public async Task ReceiveAllStoredProceduresNamesAsync(string clientId, QueryResultTableDTO queryResultTableDTO)
     {
-        await TestReceiveExecutedQueryAsync(clientId, queryResultTableDTO);
+        await ReceiveExecutedQueryShowResultAsync(clientId, queryResultTableDTO);
     }
 
     public async Task ReceiveAllTablesNamesAsync(string clientId, QueryResultTableDTO queryResultTableDTO)
     {
-        await TestReceiveExecutedQueryAsync(clientId, queryResultTableDTO);
+        await ReceiveExecutedQueryShowResultAsync(clientId, queryResultTableDTO);
     }
 
     public async Task ReceiveAllViewsNamesAsync(string clientId, QueryResultTableDTO queryResultTableDTO)
     {
-        await TestReceiveExecutedQueryAsync(clientId, queryResultTableDTO);
+        await ReceiveExecutedQueryShowResultAsync(clientId, queryResultTableDTO);
     }
 
     public async Task ReceiveDbTablesCheckAndUniqueConstraintsAsync(string clientId, QueryResultTableDTO queryResultTableDTO)
     {
-        await TestReceiveExecutedQueryAsync(clientId, queryResultTableDTO);
+        await ReceiveExecutedQueryShowResultAsync(clientId, queryResultTableDTO);
     }
 
     public async Task ReceiveDbTablesStructureAsync(string clientId, QueryResultTableDTO queryResultTableDTO)
     {
-        await TestReceiveExecutedQueryAsync(clientId, queryResultTableDTO);
+        await ReceiveExecutedQueryShowResultAsync(clientId, queryResultTableDTO);
     }
 
     public async Task ReceiveFunctionDefinitionAsync(string clientId, QueryResultTableDTO queryResultTableDTO)
     {
-        await TestReceiveExecutedQueryAsync(clientId, queryResultTableDTO);
+        await ReceiveExecutedQueryShowResultAsync(clientId, queryResultTableDTO);
     }
 
     public async Task ReceiveFunctionsWithDetailAsync(string clientId, QueryResultTableDTO queryResultTableDTO)
     {
-        await TestReceiveExecutedQueryAsync(clientId, queryResultTableDTO);
+        await ReceiveExecutedQueryShowResultAsync(clientId, queryResultTableDTO);
     }
 
     public async Task ReceiveStoredProcedureDefinitionAsync(string clientId, QueryResultTableDTO queryResultTableDTO)
     {
-        await TestReceiveExecutedQueryAsync(clientId, queryResultTableDTO);
+        await ReceiveExecutedQueryShowResultAsync(clientId, queryResultTableDTO);
     }
 
     public async Task ReceiveStoredProceduresWithDetailAsync(string clientId, QueryResultTableDTO queryResultTableDTO)
     {
-        await TestReceiveExecutedQueryAsync(clientId, queryResultTableDTO);
+        await ReceiveExecutedQueryShowResultAsync(clientId, queryResultTableDTO);
     }
 
     public async Task ReceiveTableDataAsync(string clientId, QueryResultTableDTO queryResultTableDTO)
     {
-        await TestReceiveExecutedQueryAsync(clientId, queryResultTableDTO);
+        await ReceiveExecutedQueryShowResultAsync(clientId, queryResultTableDTO);
     }
 
     public async Task ReceiveUserDefinedTableTypesAsync(string clientId, QueryResultTableDTO queryResultTableDTO)
     {
-        await TestReceiveExecutedQueryAsync(clientId, queryResultTableDTO);
+        await ReceiveExecutedQueryShowResultAsync(clientId, queryResultTableDTO);
     }
 
     public async Task ReceiveUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync(string clientId, QueryResultTableDTO queryResultTableDTO)
     {
-        await TestReceiveExecutedQueryAsync(clientId, queryResultTableDTO);
+        await ReceiveExecutedQueryShowResultAsync(clientId, queryResultTableDTO);
     }
 
     public async Task ReceiveViewDefinitionAsync(string clientId, QueryResultTableDTO queryResultTableDTO)
     {
-        await TestReceiveExecutedQueryAsync(clientId, queryResultTableDTO);
+        await ReceiveExecutedQueryShowResultAsync(clientId, queryResultTableDTO);
     }
 
     public async Task ReceiveViewsWithDetailAsync(string clientId, QueryResultTableDTO queryResultTableDTO)
     {
-        await TestReceiveExecutedQueryAsync(clientId, queryResultTableDTO);
+        await ReceiveExecutedQueryShowResultAsync(clientId, queryResultTableDTO);
     }
 }

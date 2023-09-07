@@ -4,8 +4,6 @@ namespace Squirrel.ConsoleApp.BL.Interfaces;
 
 public interface IGetActionsService
 {
-    Task<QueryResultTable> TestExecuteQueryAsync(string filterName, int filterRowsCount);
-
     Task<QueryResultTable> GetAllTablesNamesAsync();
     Task<QueryResultTable> GetTableDataAsync(string tableName, int rowsCount);
 

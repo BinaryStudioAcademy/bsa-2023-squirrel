@@ -6,8 +6,6 @@ public interface ISquirrelHubToSend
     
 
     // Actions
-    Task TestExecuteQueryAsync(string clientId, string filterName, int filterRowsCount);
-
     Task GetAllTablesNamesAsync(string clientId);
     Task GetTableDataAsync(string clientId, string tableName, int rowsCount);
 

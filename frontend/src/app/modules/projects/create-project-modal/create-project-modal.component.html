@@ -20,9 +20,9 @@
 </mat-dialog-content>
 <mat-dialog-actions class="modal-buttons">
     <app-button text="Create" width="100%" variant="outline-secondary" [isDisabled]="projectForm.invalid"
-        (click)="createProject()">
+        (buttonOnClick)="createProject()">
     </app-button>
 
-    <app-button text="Close" width="100%" variant="outline-secondary" (click)="close()">
+    <app-button text="Close" width="100%" variant="outline-secondary" (mousedown)="close()">
     </app-button>
 </mat-dialog-actions>

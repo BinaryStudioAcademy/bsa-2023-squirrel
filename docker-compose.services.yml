@@ -1,6 +1,5 @@
 version: '3.1'
 services:
-
     sql_server:
         image: mcr.microsoft.com/mssql/server:2022-latest
         container_name: sql_server
@@ -11,6 +10,21 @@ services:
         environment:
             SA_PASSWORD: MySecretPassword!
             ACCEPT_EULA: "Y"
+
+    mongodb:
+        image: mongo
+        container_name: mongodb
+        networks:
+            - back
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: squirrel
+            MONGO_INITDB_ROOT_PASSWORD: secret
+            MONGO_INITDB_DATABASE: squirreldb
+        ports:
+            - "27017:27017"
+        volumes:
+            - data:/data/db
+            - ./mongod.conf:/etc/mongod.conf
 
     rabbitmq:
         image: rabbitmq:3.11.10-management
@@ -24,6 +38,8 @@ services:
         environment:
             - "RABBITMQ_DEFAULT_USER=guest"
             - "RABBITMQ_DEFAULT_PASS=guest"
+volumes:
+    data:
 
 networks:
     back:

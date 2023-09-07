@@ -22,11 +22,11 @@ export class BranchService {
         return this.httpService.postRequest<BranchDto>(`${this.routePrefix}/${projectId}`, dto);
     }
 
-    public selectBranch(projectId: number, branchName: string) {
-        localStorage.setItem(`currentBranch_${projectId}`, branchName);
+    public selectBranch(projectId: number, branchId: number) {
+        localStorage.setItem(`currentBranch_${projectId}`, branchId.toString());
     }
 
     public getCurrentBranch(projectId: number) {
-        return localStorage.getItem(`currentBranch_${projectId}`);
+        return Number(localStorage.getItem(`currentBranch_${projectId}`));
     }
 }

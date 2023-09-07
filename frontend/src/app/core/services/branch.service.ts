@@ -9,7 +9,7 @@ import { HttpInternalService } from './http-internal.service';
     providedIn: 'root',
 })
 export class BranchService {
-    private routePrefix = 'api/branch';
+    private routePrefix = '/api/branch';
 
     // eslint-disable-next-line no-empty-function
     constructor(private httpService: HttpInternalService) { }

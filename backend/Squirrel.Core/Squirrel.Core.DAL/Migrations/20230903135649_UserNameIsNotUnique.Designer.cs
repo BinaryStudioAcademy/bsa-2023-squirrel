@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Squirrel.Core.DAL.Context;
 
@@ -11,9 +12,10 @@ using Squirrel.Core.DAL.Context;
 namespace Squirrel.Core.DAL.Migrations
 {
     [DbContext(typeof(SquirrelCoreContext))]
-    partial class SquirrelCoreContextModelSnapshot : ModelSnapshot
+    [Migration("20230903135649_UserNameIsNotUnique")]
+    partial class UserNameIsNotUnique
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -280,42 +282,21 @@ namespace Squirrel.Core.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getdate()");
-
-                    b.Property<int?>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("int");
-
                     b.Property<int>("DbEngine")
                         .HasColumnType("int");
 
-                    b.Property<int?>("DefaultBranchId")
+                    b.Property<int>("DefaultBranchId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getdate()");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedBy");
-
                     b.HasIndex("DefaultBranchId")
-                        .IsUnique()
-                        .HasFilter("[DefaultBranchId] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Projects");
                 });
@@ -592,9 +573,6 @@ namespace Squirrel.Core.DAL.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.HasIndex("Username")
-                        .IsUnique();
-
                     b.ToTable("Users");
                 });
 
@@ -739,18 +717,11 @@ namespace Squirrel.Core.DAL.Migrations
 
             modelBuilder.Entity("Squirrel.Core.DAL.Entities.Project", b =>
                 {
-                    b.HasOne("Squirrel.Core.DAL.Entities.User", "Author")
-                        .WithMany("OwnProjects")
-                        .HasForeignKey("CreatedBy")
+                    b.HasOne("Squirrel.Core.DAL.Entities.Branch", "DefaultBranch")
+                        .WithOne("ProjectForDefaultBranch")
+                        .HasForeignKey("Squirrel.Core.DAL.Entities.Project", "DefaultBranchId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
-
-                    b.HasOne("Squirrel.Core.DAL.Entities.Branch", "DefaultBranch")
-                        .WithOne()
-                        .HasForeignKey("Squirrel.Core.DAL.Entities.Project", "DefaultBranchId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("Author");
 
                     b.Navigation("DefaultBranch");
                 });
@@ -805,6 +776,8 @@ namespace Squirrel.Core.DAL.Migrations
                 {
                     b.Navigation("BranchCommits");
 
+                    b.Navigation("ProjectForDefaultBranch");
+
                     b.Navigation("PullRequestsFromThisBranch");
 
                     b.Navigation("PullRequestsIntoThisBranch");
@@ -847,8 +820,6 @@ namespace Squirrel.Core.DAL.Migrations
                     b.Navigation("Comments");
 
                     b.Navigation("Commits");
-
-                    b.Navigation("OwnProjects");
 
                     b.Navigation("PullRequestReviewers");
 

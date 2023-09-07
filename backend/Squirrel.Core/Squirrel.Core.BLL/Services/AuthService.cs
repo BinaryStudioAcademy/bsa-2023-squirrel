@@ -5,7 +5,7 @@ using Squirrel.Core.Common.DTO.Auth;
 using Squirrel.Core.Common.Interfaces;
 using Squirrel.Core.DAL.Context;
 using Squirrel.Core.DAL.Entities;
-using Google.Apis.Auth;
+using static Google.Apis.Auth.GoogleJsonWebSignature;
 using Microsoft.Extensions.Options;
 using Squirrel.Core.Common.DTO.Users;
 using Squirrel.Core.Common.Security;
@@ -32,26 +32,22 @@ public sealed class AuthService : BaseService, IAuthService
     }
 
     public async Task<AuthUserDto> AuthorizeWithGoogleAsync(string googleCredentialsToken)
-    {
-        var googleCredentials = await GoogleJsonWebSignature.ValidateAsync(googleCredentialsToken,
-            new GoogleJsonWebSignature.ValidationSettings
-            {
-                Audience = new List<string> { _googleClientId }
-            });
+    {       
+        var googleCredentials = await ValidateAsync(googleCredentialsToken, new ValidationSettings { Audience = new List<string> { _googleClientId } });
 
         var user = await _userService.GetUserByEmailAsync(googleCredentials.Email) ?? await _userService.CreateUserAsync(
                        _mapper.Map<UserRegisterDto>(googleCredentials), isGoogleAuth: true);
-        
+
         return new AuthUserDto
         {
             User = _mapper.Map<UserDto>(user),
-            Token = await GenerateNewAccessTokenAsync(user.Id, user.Username, user.Email)
+            Token = await GenerateNewAccessTokenAsync(user.Id, user.UserName, user.Email)
         };
     }
 
     public async Task<AuthUserDto> LoginAsync(UserLoginDto userLoginDto)
     {
-        var userEntity = await _userService.GetUserByEmailAsync(userLoginDto.Email);
+        var userEntity = await _userService.GetUserEntityByEmail(userLoginDto.Email);
 
         if (userEntity is null ||
             !SecurityUtils.ValidatePassword(userLoginDto.Password, userEntity.PasswordHash!, userEntity.Salt!))
@@ -73,7 +69,7 @@ public sealed class AuthService : BaseService, IAuthService
         return new AuthUserDto
         {
             User = _mapper.Map<UserDto>(createdUser),
-            Token = await GenerateNewAccessTokenAsync(createdUser.Id, createdUser.Username, createdUser.Email)
+            Token = await GenerateNewAccessTokenAsync(createdUser.Id, createdUser.UserName, createdUser.Email)
         };
     }
 

@@ -30,9 +30,18 @@ export class MainHeaderComponent implements OnInit {
     }
 
     public openCreateModal(): void {
-        this.dialog.open(CreateDbModalComponent, {
+        const dialogRef = this.dialog.open(CreateDbModalComponent, {
             width: '700px',
-            data: { dbEngine: this.project.dbEngine },
+            data: {
+                dbEngine: this.project.dbEngine,
+                projectId: this.project.id,
+            },
+        });
+
+        dialogRef.componentInstance.dbName.subscribe({
+            next: (dbName: string) => {
+                this.dbNames.push(dbName);
+            },
         });
     }
 

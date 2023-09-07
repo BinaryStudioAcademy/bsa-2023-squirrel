@@ -28,7 +28,7 @@ public class TablesController: ControllerBase
         return Ok(_mapper.Map<TableNamesDto>(names));
     }
 
-    // http://localhost:44567/tables/get-structure
+    // http://localhost:44567/tables/get-structure/dbo/categories
     [HttpGet]
     [Route("get-structure/{schema}/{name}")]
     public async Task<ActionResult<List<string>>> GetTableStructure([FromRoute] string schema, string name)

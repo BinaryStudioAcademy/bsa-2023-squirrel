@@ -27,9 +27,7 @@ namespace Squirrel.ConsoleApp.BL.Extensions
 
         public static List<string> GetColumnNames()
         {
-            var columnPropertyNames = typeof(Row).GetProperties(BindingFlags.Public | BindingFlags.Instance).Select(p => p.Name).ToList();
-
-            return columnPropertyNames;
+            return typeof(Row).GetProperties(BindingFlags.Public | BindingFlags.Instance).Select(p => p.Name).ToList();
         }
 
     }

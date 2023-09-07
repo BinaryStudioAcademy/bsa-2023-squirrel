@@ -12,8 +12,8 @@ namespace Squirrel.ConsoleApp.BL.MappingProfiles
             CreateMap<QueryResultTable, TableNamesDto>()
                 .ForMember(dest => dest.Tables, opt => opt.MapFrom(src => src.Rows.Select(row => new Table
                 {
-                    Name = row[0].Split(new[] { '.' }).Last(),
-                    Schema = row[0].Split(new[] { '.' }).First()
+                    Schema = row[0],
+                    Name = row[1]
                 })));
 
             CreateMap<QueryResultTable, TableStructureDto>()

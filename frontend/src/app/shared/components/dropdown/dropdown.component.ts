@@ -40,8 +40,11 @@ export class DropdownComponent implements OnInit {
         }
     }
 
-    // eslint-disable-next-line no-empty-function
-    constructor(private elementRef: ElementRef, private matDialog: MatDialog) {}
+    constructor(
+        private elementRef: ElementRef,
+        private matDialog: MatDialog,
+        // eslint-disable-next-line no-empty-function
+    ) {}
 
     ngOnInit(): void {
         [this.selectedOption] = this.options;
@@ -57,9 +60,7 @@ export class DropdownComponent implements OnInit {
     }
 
     public filterOptions(): string[] {
-        const filteredOptions = this.options.filter((option) => this.filterPredicate?.call(this, option, this.searchTerm));
-
-        return filteredOptions;
+        return this.options.filter((option) => this.filterPredicate?.call(this, option, this.searchTerm));
     }
 
     public filterByName(option: string, value: string) {

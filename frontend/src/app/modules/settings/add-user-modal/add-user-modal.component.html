@@ -1,0 +1,28 @@
+<div class="dropdown-users">
+    <app-dropdown-select
+        [width]="'100%'"
+        [placeholder]="'User'"
+        [options]="dropdownUsers"
+        [template]="usertemplate"
+        [chipTemplate]="chiptemplate"
+        [filterPredicate]="filter"
+        (valueChange)="onAuthorSelectionChange($event)">
+    </app-dropdown-select>
+</div>
+<div class="action-buttons">
+    <app-button text="Add" width="100%" variant="outline-secondary"
+                (buttonOnClick)="addUser()">
+    </app-button>
+
+    <app-button text="Close" width="100%" variant="outline-secondary" (mousedown)="close()">
+    </app-button>
+</div>
+<ng-template #usertemplate let-item>
+    <div class="user-container">
+        <img src="{{ item.avatarUrl }}" />
+        <p>{{ getFullName(item) }}</p>
+    </div>
+</ng-template>
+<ng-template #chiptemplate let-item>
+    <p>{{ item.email }}</p>
+</ng-template>

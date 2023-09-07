@@ -1,13 +1,13 @@
 <div class="user-list">
-    <ul *ngFor="let user of users">
-            <app-avatar
-                class="avatar"
-                [imgLink]="user.avatarUrl ? user.avatarUrl : ''"
-                size="50"
-            ></app-avatar>
-            <div class="name-email">
-                <p class="user-name">{{ user }} {{ user.lastName }}</p>
-                <p class="user-email">{{ user.email }}</p>
-            </div>
-    </ul>
+    <app-user-card *ngFor="let user of users" [user]="user"></app-user-card>
+    <app-button
+        class="add-button"
+        text="+"
+        height="30px"
+        width="35px"
+        padding=""
+        variant="outline-secondary"
+        (click)="OpenAddUserModal()"
+    >
+    </app-button>
 </div>

@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { BaseComponent } from '@core/base/base.component';
 import { NotificationService } from '@core/services/notification.service';
 import { ProjectService } from '@core/services/project.service';
 import { SpinnerService } from '@core/services/spinner.service';
+import { AddUserModalComponent } from '@modules/settings/add-user-modal/add-user-modal.component';
 
 import { UserDto } from '../../../models/user/user-dto';
 
@@ -15,6 +17,7 @@ export class TeamSettingsComponent extends BaseComponent implements OnInit {
     public users: UserDto[];
 
     constructor(
+        public dialog: MatDialog,
         private spinner: SpinnerService,
         private projectService: ProjectService,
         private notificationService: NotificationService,
@@ -24,6 +27,15 @@ export class TeamSettingsComponent extends BaseComponent implements OnInit {
 
     ngOnInit(): void {
         this.users = this.getUsers();
+    }
+
+    public OpenAddUserModal(): void {
+        const dialogRef = this.dialog.open(AddUserModalComponent, {
+            width: '400px',
+            height: '400px',
+        });
+
+        /*dialogRef.componentInstance.projectCreated.subscribe(() => this.loadProjects());*/
     }
 
     getUsers() {

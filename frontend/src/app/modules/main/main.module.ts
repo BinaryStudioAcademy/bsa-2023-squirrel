@@ -11,6 +11,7 @@ import { NavbarHeaderComponent } from './main-page/headers/navbar-header/navbar-
 import { MainComponent } from './main-page/main-page.component';
 import { MainRoutingModule } from './main-routing.module';
 
+@NgModule({
     declarations: [MainComponent, MainHeaderComponent, NavbarHeaderComponent, CreateDbModalComponent],
     imports: [SharedModule, MainRoutingModule, MatSelectModule, MatButtonModule, MatDialogModule],
     providers: [ModalController, AngularDelegate],

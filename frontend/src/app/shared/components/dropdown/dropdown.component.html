@@ -1,5 +1,5 @@
 <div class="dropdown" [ngClass]="{ active: isActive }" (click)="toggleActiveClass()" [style.width.px]="width">
-    <div *ngIf="dropdownIcon" class="dropdown-icon" [innerHTML]="dropdownIcon"></div>
+    <div *ngIf="dropdownIcon" class="dropdown-icon"><img src="{{ dropdownIcon }}"></div>
     <input
         type="text"
         readonly
@@ -13,10 +13,14 @@
             placeholder="Search..."
             (click)="$event.stopPropagation()" />
         <div class="option" (click)="onOptionSelected(option)" *ngFor="let option of filterOptions()">
-            <span class="selection-icon" *ngIf="selectedOption === option"
-                ><fa-icon [icon]="faCheckIcon"></fa-icon
-            ></span>
-            <span class="option-text">{{ option }}</span>
+            <span class="selection-icon" *ngIf="selectedOption === option">
+                <fa-icon [icon]="faCheckIcon"></fa-icon>
+            </span>
+            <span *ngIf="!template" class="option-text">{{ option }}</span>
+            <ng-template *ngTemplateOutlet="template; context: { $implicit: option }"></ng-template>
+        </div>
+        <div class="option" (click)="openModal()" *ngIf="modalTemplate">
+            <span class="option-text">{{ modalOption }}</span>
         </div>
     </div>
 </div>

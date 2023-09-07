@@ -44,8 +44,8 @@
     </div>
 
     <div class="modal-footer">
-        <app-checkbox label="Connect to local db"></app-checkbox>
-        <app-button text="Save"></app-button>
+        <app-checkbox label="Connect to local db" (change)="changeLocalHost()"></app-checkbox>
+        <app-button [isDisabled]="dbForm.invalid" text="Save"></app-button>
     </div>
 </form>
 

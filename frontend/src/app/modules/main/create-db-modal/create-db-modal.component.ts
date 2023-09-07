@@ -16,6 +16,8 @@ export class CreateDbModalComponent implements OnInit {
 
     public dbForm: FormGroup = new FormGroup({});
 
+    public localhost: boolean = false;
+
     constructor(
         @Inject(MAT_DIALOG_DATA) private data: any,
         public dialogRef: MatDialogRef<CreateDbModalComponent>,
@@ -33,7 +35,7 @@ export class CreateDbModalComponent implements OnInit {
     private initializeForm() {
         this.dbForm = this.fb.group({
             dbName: ['', Validators.required],
-            serverName: ['', Validators.required],
+            serverName: ['', this.getServerNameValidators()],
             port: [''],
             username: [''],
             password: [''],
@@ -50,6 +52,7 @@ export class CreateDbModalComponent implements OnInit {
             username: this.dbForm.value.username,
             password: this.dbForm.value.password,
             dbEngine: this.dbEngine,
+            isLocalhost: this.localhost,
         };
 
         this.consoleConnectService.connect(connect).subscribe({
@@ -57,5 +60,20 @@ export class CreateDbModalComponent implements OnInit {
                 console.log(guid);
             },
         });
+    }
+
+    changeLocalHost() {
+        this.localhost = !this.localhost;
+
+        this.dbForm.get('serverName')?.setValidators(this.getServerNameValidators());
+        this.dbForm.get('serverName')?.updateValueAndValidity();
+    }
+
+    private getServerNameValidators() {
+        if (this.localhost) {
+            return null;
+        }
+
+        return Validators.required;
     }
 }

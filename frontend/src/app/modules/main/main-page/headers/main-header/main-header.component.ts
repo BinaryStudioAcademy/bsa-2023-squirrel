@@ -5,8 +5,6 @@ import { CreateDbModalComponent } from '@modules/main/create-db-modal/create-db-
 
 import { ProjectResponseDto } from 'src/app/models/projects/project-response-dto';
 
-import { DbEngine } from '../../../../../models/projects/db-engine';
-
 @Component({
     selector: 'app-main-header',
     templateUrl: './main-header.component.html',
@@ -34,7 +32,7 @@ export class MainHeaderComponent implements OnInit {
     public openCreateModal(): void {
         this.dialog.open(CreateDbModalComponent, {
             width: '700px',
-            data: { dbEngine: DbEngine.PostgreSQL },
+            data: { dbEngine: this.project.dbEngine },
         });
     }
 
@@ -48,4 +46,3 @@ export class MainHeaderComponent implements OnInit {
         });
     }
 }
-

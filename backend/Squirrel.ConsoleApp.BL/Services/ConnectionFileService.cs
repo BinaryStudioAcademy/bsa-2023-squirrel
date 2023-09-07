@@ -50,5 +50,3 @@ public class ConnectionFileService : IConnectionFileService
         }
     }
 }
-
-public record DbSettingsContainer(DbSettings DbSettings);

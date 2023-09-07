@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { BaseComponent } from '@core/base/base.component';
 
 import { ScriptDto } from 'src/app/models/scripts/script-dto';
+
+import { CreateScriptModalComponent } from '../create-script-modal/create-script-modal.component';
 
 @Component({
     selector: 'app-scripts-page',
@@ -17,8 +20,7 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
 
     private readonly selectedOptionClass = 'selected-option';
 
-    // eslint-disable-next-line @typescript-eslint/no-useless-constructor
-    constructor() {
+    constructor(public dialog: MatDialog) {
         super();
     }
 
@@ -35,6 +37,21 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
         option.classList.add(this.selectedOptionClass);
         this.selectedOptionElement = option;
         [this.selectedScript] = $event.value as ScriptDto[];
+    }
+
+    public openCreateModal(): void {
+        const dialogRef = this.dialog.open(CreateScriptModalComponent, {
+            width: '500px',
+            height: '45%',
+        });
+
+        dialogRef.componentInstance.scriptCreated.subscribe((newScript: ScriptDto) => {
+            // TODO: add newScript to db via service.
+
+            this.loadScripts();
+
+            this.selectedScript = this.scripts.find((s) => s.id === newScript.id);
+        });
     }
 
     private loadScripts(): void {

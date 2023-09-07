@@ -8,5 +8,4 @@ public enum ErrorType
     NotFound,
     Internal,
     InvalidToken,
-    NotFound
 }

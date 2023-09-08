@@ -9,12 +9,10 @@ namespace Squirrel.ConsoleApp.Controllers;
 public class SettingController: ControllerBase
 {
     private readonly IConnectionFileService _connectionFileService;
-    private readonly IGetActionsService _getActionsService;
 
-    public SettingController(IConnectionFileService connectionFileService, IGetActionsService getActionsService)
+    public SettingController(IConnectionFileService connectionFileService)
     {
         _connectionFileService = connectionFileService;
-        _getActionsService = getActionsService;
     }
     
     [HttpPost]

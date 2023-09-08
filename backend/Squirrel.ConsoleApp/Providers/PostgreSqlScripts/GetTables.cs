@@ -6,7 +6,7 @@
             @"SELECT schemaname AS ""schema"", tablename AS ""name"" FROM pg_catalog.pg_tables WHERE schemaname NOT IN ('pg_catalog', 'information_schema')";
 
         public static string GetTableDataQueryScript(string schema, string name, int rowsCount) =>
-            $"SELECT * FROM \"{schema}\".\"{name}\" LIMIT {rowsCount}";
+            $"SELECT '{schema}' AS schema, '{name}' AS name, (SELECT COUNT(*) FROM \"{schema}\".\"{name}\") AS TotalRows, t.* FROM \"{schema}\".\"{name}\" t LIMIT {rowsCount}";
 
         public static string GetTableStructureScript(string schema, string name) =>
             @$"
@@ -91,7 +91,7 @@
 				 and pk_tc.table_name = ccu.table_name
 				 and refc.unique_constraint_name = ccu.constraint_name
 			
-			where col.table_schema not in ('information_schema', 'pg_catalog') AND table_schema = '{schema}' AND table_name = '{name}'
+			where col.table_schema not in ('information_schema', 'pg_catalog') AND col.table_schema = '{schema}' AND col.table_name = '{name}'
 			
 			order by col.table_schema, col.table_name, col.ordinal_position;
             ";
@@ -125,7 +125,7 @@
 				 on tc.table_schema = cc.constraint_schema
 				 and tc.constraint_name = cc.constraint_name
 			
-			where tc.constraint_schema not in ('information_schema', 'pg_catalog') AND table_schema = '{schema}' AND table_name = '{name}'
+			where tc.constraint_schema not in ('information_schema', 'pg_catalog') AND tc.constraint_schema = '{schema}' AND tc.table_name = '{name}'
 			
 			group by tc.table_schema,
 					 tc.table_name,

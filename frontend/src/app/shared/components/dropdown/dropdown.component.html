@@ -17,7 +17,7 @@
             <span *ngIf="!template" class="option-text">{{ option }}</span>
             <span *ngIf="template" class="option-text"><ng-template *ngTemplateOutlet="template; context: { $implicit: option }"></ng-template></span>
         </div>
-        <div class="option" (click)="openModal()" *ngIf="modalTemplate">
+        <div class="option" (click)="onButtonClick()" *ngIf="includeButton">
             <span class="option-text">{{ modalOption }}</span>
         </div>
     </div>

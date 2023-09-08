@@ -1,4 +1,3 @@
-import { ComponentType } from '@angular/cdk/portal';
 import {
     Component,
     ElementRef,
@@ -9,7 +8,6 @@ import {
     Output,
     SimpleChanges,
     TemplateRef } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: 'app-dropdown',
@@ -27,9 +25,11 @@ export class DropdownComponent implements OnChanges {
 
     @Input() selectedByDefault: number = 0;
 
+    @Input() includeButton: boolean = false;
+
     @Output() selectedValueChanged = new EventEmitter<string>();
 
-    @Input() modalTemplate: TemplateRef<any> | ComponentType<any>;
+    @Output() buttonClicked = new EventEmitter();
 
     @Input() dropdownIcon: string;
 
@@ -50,12 +50,11 @@ export class DropdownComponent implements OnChanges {
 
     constructor(
         private elementRef: ElementRef,
-        private matDialog: MatDialog,
         // eslint-disable-next-line no-empty-function
     ) {}
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes['options']) {
+        if (changes['options'] || changes['selectedByDefault']) {
             this.selectedOption = this.options[this.selectedByDefault];
         }
     }
@@ -65,8 +64,8 @@ export class DropdownComponent implements OnChanges {
         this.selectedValueChanged.emit(this.selectedOption);
     }
 
-    public openModal() {
-        this.matDialog.open(this.modalTemplate);
+    public onButtonClick() {
+        this.buttonClicked.emit();
     }
 
     public filterOptions(): string[] {

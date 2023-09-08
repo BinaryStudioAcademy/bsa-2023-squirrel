@@ -55,12 +55,13 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
 
     public openBranchModal() {
         const dialogRef = this.dialog.open(CreateBranchModalComponent, {
-            height: '45%',
+            width: '50%',
+            data: { projectId: this.currentProjectId, branches: this.branches },
         });
 
         dialogRef.componentInstance.branchCreated.subscribe((branch) => {
-            this.branches.concat(branch);
             this.onBranchSelected(branch);
+            this.branches.push(branch);
         });
     }
 

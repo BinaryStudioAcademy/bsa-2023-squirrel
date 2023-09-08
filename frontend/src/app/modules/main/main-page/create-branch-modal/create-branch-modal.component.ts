@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { BaseComponent } from '@core/base/base.component';
 import { BranchService } from '@core/services/branch.service';
 import { NotificationService } from '@core/services/notification.service';
@@ -18,7 +18,7 @@ import { CreateBranchDto } from 'src/app/models/branch/create-branch-dto';
 export class CreateBranchModalComponent extends BaseComponent implements OnInit {
     @Input() public projectId: number;
 
-    @Input() public branches: string[];
+    @Input() public branches: BranchDto[];
 
     @Output() public branchCreated = new EventEmitter<BranchDto>();
 
@@ -30,8 +30,11 @@ export class CreateBranchModalComponent extends BaseComponent implements OnInit 
         private branchService: BranchService,
         private notificationService: NotificationService,
         private spinner: SpinnerService,
+        @Inject(MAT_DIALOG_DATA) public data: { projectId: number, branches: BranchDto[] },
     ) {
         super();
+        this.branches = data.branches;
+        this.projectId = data.projectId;
     }
 
     ngOnInit() {
@@ -46,6 +49,9 @@ export class CreateBranchModalComponent extends BaseComponent implements OnInit 
     }
 
     public createBranch(): void {
+        if (!this.branchForm.valid) {
+            return;
+        }
         this.spinner.show();
 
         const branch: CreateBranchDto = {

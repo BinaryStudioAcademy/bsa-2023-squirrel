@@ -7,9 +7,9 @@
     </div>
     <div class="drop-down-container">
         <mat-form-field appearance="outline" class="custom-select full-width">
-            <mat-label for="engineSelect">Parent:</mat-label>
-            <mat-select id="engineSelect" [formControl]="$any(branchForm.controls['selectedParent'])">
-                <mat-option *ngFor="let branch of branches">{{branch}}</mat-option>
+            <mat-label for="parentSelect">Parent:</mat-label>
+            <mat-select id="parentSelect" [formControl]="$any(branchForm.controls['selectedParent'])">
+                <mat-option *ngFor="let branch of branches" [value]="branch.id">{{branch.name}}</mat-option>
             </mat-select>
         </mat-form-field>
     </div>

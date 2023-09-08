@@ -12,11 +12,13 @@
         <app-dropdown
             [selectedByDefault]="getCurrentBranch()"
             [width]="300"
-            (selectedValueChanged)="onBranchSelected($event)"      
+            (selectedValueChanged)="onBranchSelected($event)"
+            (buttonClicked)="openBranchModal()"    
             [dropdownIcon]="'assets/git-branch.svg'"
             [template]="branchtemplate"
             [filterPredicate]="filterBranch"
-            [options]="branches"></app-dropdown>
+            [options]="branches"
+            [includeButton]="true"></app-dropdown>
         <ng-template #branchtemplate let-item>
            {{ item.name }}
         </ng-template>

@@ -49,7 +49,7 @@ public sealed class ProjectService : BaseService, IProjectService
 
         foreach (var user in users)
         {
-            existingProject.Users.Add(user);
+            existingProject!.Users.Add(user);
         }
 
         await _context.SaveChangesAsync();
@@ -98,7 +98,7 @@ public sealed class ProjectService : BaseService, IProjectService
 
         ValidateProject(project);
         
-        var projectUsers = project.Users.ToList();
+        var projectUsers = project!.Users.ToList();
 
         return _mapper.Map<List<UserDto>>(projectUsers);
     }

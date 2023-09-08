@@ -79,7 +79,6 @@ export class AddUserModalComponent extends BaseComponent implements OnInit {
             .subscribe(
                 (users: UserDto[]) => {
                     this.dropdownUsers = users.filter(user => !this.data.users.some(u => u.id === user.id));
-                    console.log(this.dropdownUsers);
                 },
                 () => {
                     this.notificationService.error('Failed to load users');

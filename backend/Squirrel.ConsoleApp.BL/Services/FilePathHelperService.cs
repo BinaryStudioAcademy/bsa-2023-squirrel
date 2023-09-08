@@ -2,13 +2,18 @@
 
 public static class FilePathHelperService
 {
+    private static string GetUserLocalDirectory()
+    {
+        return Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+    }
+    
     public static string GetDbSettingsFilePath()
     {
-        return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "squirrel-db-settings.json");
+        return Path.Combine(GetUserLocalDirectory(), "squirrel-db-settings.json");
     }
 
     public static string GetClientIdFilePath()
     {
-        return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "squirrel-client-id.json");
+        return Path.Combine(GetUserLocalDirectory(), "squirrel-client-id.json");
     }
 }

@@ -49,7 +49,8 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
             // TODO: add newScript to db via service.
 
             this.loadScripts();
-
+            // temporarily
+            this.scripts.push(newScript);
             this.selectedScript = this.scripts.find((s) => s.id === newScript.id);
         });
     }
@@ -61,26 +62,31 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
                 id: 1,
                 title: 'first',
                 content: 'firstcontent',
+                fileName: '',
             },
             {
                 id: 2,
                 title: 'second',
                 content: 'secondcontent',
+                fileName: '',
             },
             {
                 id: 3,
                 title: 'third',
                 content: 'thirdcontent',
+                fileName: '',
             },
             {
                 id: 4,
                 title: 'fourth',
                 content: 'fourthcontent',
+                fileName: '',
             },
             {
                 id: 5,
                 title: 'fifth234',
                 content: 'fifthcontent',
+                fileName: '',
             },
         ];
     }

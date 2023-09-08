@@ -21,6 +21,12 @@ namespace Squirrel.ConsoleApp.BL.MappingProfiles
                 .ForMember(dest => dest.Schema, opt => opt.MapFrom(src => src.Rows[0][0]))
                 .ForMember(dest => dest.TableName, opt => opt.MapFrom(src => src.Rows[0][1]))
                 .ForMember(dest => dest.Constraints, opt => opt.MapFrom(src => src.Rows.Select(row => MapToChecksRow(src.ColumnNames, row))));
+
+            CreateMap<QueryResultTable, TableDataDto>()
+                .ForMember(dest => dest.Schema, opt => opt.MapFrom(src => src.Rows[0][0]))
+                .ForMember(dest => dest.TableName, opt => opt.MapFrom(src => src.Rows[0][1]))
+                .ForMember(dest => dest.TotalRows, opt => opt.MapFrom(src => int.Parse(src.Rows[0][2])))
+                .ForMember(dest => dest.Rows, opt => opt.MapFrom(src => src.Rows.Select(row => MapToDataRow(src.ColumnNames, row))));
         }
     }
 }

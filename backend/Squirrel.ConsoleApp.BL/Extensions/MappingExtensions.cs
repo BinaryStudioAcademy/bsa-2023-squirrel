@@ -43,5 +43,19 @@ namespace Squirrel.ConsoleApp.BL.Extensions
             }
             return row;
         }
+
+        public static Dictionary<string, string> MapToDataRow(IList<string> columnNames, IList<string> rowValues)
+        {
+            var rowDict = new Dictionary<string, string>();
+
+            // Start from 3 to skip the first three columns (Schema, name, TotalRows)
+            for (int i = 3; i < columnNames.Count; i++)
+            {
+                var columnName = columnNames[i];
+                var cellValue = rowValues[i];
+                rowDict[columnName] = cellValue;
+            }
+            return rowDict;
+        }
     }
 }

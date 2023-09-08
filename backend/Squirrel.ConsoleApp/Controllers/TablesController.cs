@@ -51,10 +51,10 @@ public class TablesController: ControllerBase
     // http://localhost:44567/tables/get-checks/dbo/employees/100
     [HttpGet]
     [Route("get-data/{schema}/{name}/{rowsCount}")]
-    public async Task<ActionResult<TableStructureDto>> GetTableData([FromRoute] string schema, string name, int rowsCount)
+    public async Task<ActionResult<TableDataDto>> GetTableData([FromRoute] string schema, string name, int rowsCount)
     {
         var data = await _getActionsService.GetTableDataAsync(schema, name, rowsCount);
 
-        return Ok(_mapper.Map<TableStructureDto>(data));
+        return Ok(_mapper.Map<TableDataDto>(data));
     }
 }

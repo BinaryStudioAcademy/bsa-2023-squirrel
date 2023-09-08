@@ -9,7 +9,7 @@ public class SqlServerQueryProvider : IDbQueryProvider
 {
     public string GetTablesNamesQuery() => GetTablesNamesScript;
 
-    public string GetTableDataQuery(string schema, string name, int rowsCount) => GetTableDataQueryScript(name, schema, rowsCount);
+    public string GetTableDataQuery(string schema, string name, int rowsCount) => GetTableDataQueryScript(schema, name, rowsCount);
 
     public string GetStoredProceduresNamesQuery() => GetStoredProceduresNamesScript;
 

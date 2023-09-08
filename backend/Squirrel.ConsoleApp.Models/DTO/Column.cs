@@ -1,6 +1,6 @@
 ﻿namespace Squirrel.ConsoleApp.Models.DTO
 {
-    public class StructureRow
+    public class Column
     {
         public string ColumnName { get; set; } = null!;
         public int? ColumnOrder { get; set; }

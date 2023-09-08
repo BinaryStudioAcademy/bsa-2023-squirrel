@@ -5,14 +5,14 @@ namespace Squirrel.ConsoleApp.BL.Extensions
 {
     public static class MappingExtensions
     {
-        public static StructureRow MapToStructureRow(IList<string> columnNames, IList<string> rowValues)
+        public static Column MapToStructureRow(IList<string> columnNames, IList<string> rowValues)
         {
-            var row = new StructureRow();
-            var columns = typeof(StructureRow).GetProperties(BindingFlags.Public | BindingFlags.Instance).Select(p => p.Name).ToList();
+            var row = new Column();
+            var columns = typeof(Column).GetProperties(BindingFlags.Public | BindingFlags.Instance).Select(p => p.Name).ToList();
 
             foreach (var propertyName in columns)
             {
-                var property = typeof(StructureRow).GetProperty(propertyName);
+                var property = typeof(Column).GetProperty(propertyName);
                 if (property != null && columnNames.Contains(propertyName))
                 {
                     var value = rowValues[columnNames.ToList().IndexOf(propertyName)];
@@ -27,14 +27,14 @@ namespace Squirrel.ConsoleApp.BL.Extensions
             return row;
         }
 
-        public static CheckRow MapToChecksRow(IList<string> columnNames, IList<string> rowValues)
+        public static Constraint MapToChecksRow(IList<string> columnNames, IList<string> rowValues)
         {
-            var row = new CheckRow();
-            var columns = typeof(CheckRow).GetProperties(BindingFlags.Public | BindingFlags.Instance).Select(p => p.Name).ToList();
+            var row = new Constraint();
+            var columns = typeof(Constraint).GetProperties(BindingFlags.Public | BindingFlags.Instance).Select(p => p.Name).ToList();
 
             foreach (var propertyName in columns)
             {
-                var property = typeof(CheckRow).GetProperty(propertyName);
+                var property = typeof(Constraint).GetProperty(propertyName);
                 if (property != null && columnNames.Contains(propertyName))
                 {
                     var value = rowValues[columnNames.ToList().IndexOf(propertyName)];

@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterModule } from '@angular/router';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SidebarComponent } from '@shared/components/sidebar/sidebar.component';
 import { ToastrModule } from 'ngx-toastr';
 
@@ -28,6 +29,7 @@ import { TreeComponent } from './components/tree/tree.component';
         ReactiveFormsModule,
         RouterModule,
         MaterialModule,
+        FontAwesomeModule,
         ToastrModule.forRoot({
             positionClass: 'toast-bottom-right',
         }),

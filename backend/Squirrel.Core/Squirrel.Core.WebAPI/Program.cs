@@ -50,7 +50,8 @@ app.UseSquirrelCoreContext();
 app.UseCors(opt => opt
     .AllowAnyHeader()
     .AllowAnyMethod()
-    .AllowAnyOrigin());
+    .AllowAnyOrigin()
+    .WithExposedHeaders("Token-Expired"));
 
 app.UseRouting();
 app.UseAuthentication();

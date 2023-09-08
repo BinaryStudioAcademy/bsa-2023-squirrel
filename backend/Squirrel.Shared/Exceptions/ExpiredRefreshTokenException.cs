@@ -9,7 +9,7 @@ public sealed class ExpiredRefreshTokenException : RequestException
     public ExpiredRefreshTokenException() : base(
         "Refresh token expired.",
         ErrorType.RefreshTokenExpired,
-        HttpStatusCode.BadRequest)
+        HttpStatusCode.Unauthorized)
     {
     }
 }

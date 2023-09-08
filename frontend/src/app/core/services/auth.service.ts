@@ -1,7 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { CredentialResponse } from 'google-one-tap';
-import { map, Observable, of, tap } from 'rxjs';
+import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
 
 import { AccessTokenDto } from 'src/app/models/auth/access-token-dto';
 import { GoogleAuthDto } from 'src/app/models/auth/google-auth-dto';
@@ -40,13 +40,13 @@ export class AuthService {
         return this.currentUser
             ? of(this.currentUser)
             : this.userService.getUserFromToken().pipe(
-                map((resp: any) => {
-                    this.currentUser = resp;
-                    this.eventService.userChanged(this.currentUser);
+                  map((resp: any) => {
+                      this.currentUser = resp;
+                      this.eventService.userChanged(this.currentUser);
 
-                    return this.currentUser;
-                }),
-            );
+                      return this.currentUser;
+                  }),
+              );
     }
 
     public signOut = () => {
@@ -99,15 +99,27 @@ export class AuthService {
         return this.getAccessToken() && this.getRefreshToken();
     }
 
-    public refreshTokens() {
+    public refreshTokens(): Observable<AccessTokenDto> {
+        console.log('trying to send refresh request from authService...');
+
         const tokensDto: AccessTokenDto = {
             accessToken: this.getAccessToken() as string,
             refreshToken: this.getRefreshToken() as string,
         };
 
         return this.httpService.postRequest<AccessTokenDto>(`${this.tokenRoutePrefix}/refresh`, tokensDto).pipe(
-            tap((tokens: AccessTokenDto) => {
+            catchError((e) => {
+                this.signOut();
+                console.log(e.error);
+
+                return throwError(e);
+            }),
+            map((tokens: AccessTokenDto) => {
+                console.log('got refreshed tokens');
+                console.log(tokens);
                 this.saveTokens(tokens);
+
+                return tokens;
             }),
         );
     }

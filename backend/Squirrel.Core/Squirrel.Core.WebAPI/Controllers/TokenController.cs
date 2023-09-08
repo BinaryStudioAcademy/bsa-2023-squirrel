@@ -7,6 +7,7 @@ namespace Squirrel.Core.WebAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[AllowAnonymous]
 public sealed class TokenController : ControllerBase
 {
     private readonly IAuthService _authService;
@@ -17,7 +18,6 @@ public sealed class TokenController : ControllerBase
     }
 
     [HttpPost("refresh")]
-    [AllowAnonymous]
     public async Task<ActionResult<RefreshedAccessTokenDto>> RefreshTokens(RefreshedAccessTokenDto tokens)
     {
         return Ok(await _authService.RefreshTokens(tokens));

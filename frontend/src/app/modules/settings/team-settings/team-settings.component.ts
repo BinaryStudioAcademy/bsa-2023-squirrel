@@ -44,8 +44,8 @@ export class TeamSettingsComponent extends BaseComponent implements OnInit {
 
     public OpenAddUserModal(): void {
         const dialogRef = this.dialog.open(AddUserModalComponent, {
-            width: '400px',
-            height: '400px',
+            width: '500px',
+            height: '50%',
             data: { users: this.users },
         });
 

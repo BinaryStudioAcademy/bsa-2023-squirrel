@@ -8,14 +8,15 @@ namespace Squirrel.ConsoleApp.BL.Extensions
         public static Column MapToStructureRow(IList<string> columnNames, IList<string> rowValues)
         {
             var row = new Column();
+            columnNames = columnNames.Select(x => x.ToLower()).ToList();
             var columns = typeof(Column).GetProperties(BindingFlags.Public | BindingFlags.Instance).Select(p => p.Name).ToList();
 
             foreach (var propertyName in columns)
             {
                 var property = typeof(Column).GetProperty(propertyName);
-                if (property != null && columnNames.Contains(propertyName))
+                if (property != null && columnNames.Contains(propertyName.ToLower()))
                 {
-                    var value = rowValues[columnNames.ToList().IndexOf(propertyName)];
+                    var value = rowValues[columnNames.IndexOf(propertyName.ToLower())];
                     if (property.PropertyType == typeof(string))
                         property.SetValue(row, value);
                     else if (property.PropertyType == typeof(int?))
@@ -30,14 +31,15 @@ namespace Squirrel.ConsoleApp.BL.Extensions
         public static Constraint MapToChecksRow(IList<string> columnNames, IList<string> rowValues)
         {
             var row = new Constraint();
+            columnNames = columnNames.Select(x => x.ToLower()).ToList();
             var columns = typeof(Constraint).GetProperties(BindingFlags.Public | BindingFlags.Instance).Select(p => p.Name).ToList();
 
             foreach (var propertyName in columns)
             {
                 var property = typeof(Constraint).GetProperty(propertyName);
-                if (property != null && columnNames.Contains(propertyName))
+                if (property != null && columnNames.Contains(propertyName.ToLower()))
                 {
-                    var value = rowValues[columnNames.ToList().IndexOf(propertyName)];
+                    var value = rowValues[columnNames.ToList().IndexOf(propertyName.ToLower())];
                     property.SetValue(row, value);
                 }
             }

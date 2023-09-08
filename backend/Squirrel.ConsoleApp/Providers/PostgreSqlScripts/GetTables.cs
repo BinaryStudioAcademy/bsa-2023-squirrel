@@ -43,23 +43,24 @@
 			)
 			
 			select distinct
-				col.table_schema as schema,
-			    col.table_name as table,
-			    col.column_name as column,
-				col.ordinal_position as ordinal_position,
-			    col.data_type as data_type,
+				col.table_schema as TableSchema,
+			    col.table_name as TableName,
+			    col.column_name as ColumnName,
+				col.ordinal_position as ColumnOrder,
+			    col.data_type as DataType,
 			    col.character_maximum_length as max_length,
-				col.numeric_precision as numeric_precision,
-				col.numeric_scale as numeric_scale,
-			    case when col.is_nullable = 'YES' then 'True' else 'False' end as allow_null,
-				case when col.is_identity = 'YES' then 'True' else 'False' end as is_identity,
-				case when 'PRIMARY KEY' = any(kct.constraints_type) then 'True' else 'False' end as is_primary_key,
-				case when 'FOREIGN KEY' = any(kct.constraints_type) then 'True' else 'False' end as is_foreign_key,
-				ccu.column_name as related_column,
-				pk_tc.table_name as related_table,
-				pk_tc.table_schema as related_table_schema,
-			    col.column_default as default,
-				cdt.col_description as description
+				-- MaxLength (do we need it?)
+				col.numeric_precision as Precision,
+				col.numeric_scale as Scale,
+			    case when col.is_nullable = 'YES' then 'True' else 'False' end as AllowNulls,
+				case when col.is_identity = 'YES' then 'True' else 'False' end as Identity,
+				case when 'PRIMARY KEY' = any(kct.constraints_type) then 'True' else 'False' end as PrimaryKey,
+				case when 'FOREIGN KEY' = any(kct.constraints_type) then 'True' else 'False' end as ForeignKey,
+				ccu.column_name as RelatedTableColumn,
+				pk_tc.table_name as RelatedTable,
+				pk_tc.table_schema as RelatedTableSchema,
+			    col.column_default as Default,
+				cdt.col_description as Description
 				
 			from information_schema.columns as col
 			
@@ -99,14 +100,14 @@
         public static string GetTableChecksAndUniqueConstraintsScript(string schema, string name) =>
             @$"
             select 
-			    tc.table_schema as schema,
-				   tc.table_name as table,
-				   tc.constraint_name as constraint_name,
-				   string_agg(col.column_name, ', ') as columns,
+			    tc.table_schema as TableSchema,
+				   tc.table_name as TableName,
+				   tc.constraint_name as ConstraintName,
+				   string_agg(col.column_name, ', ') as Columns,
 				   case when pgc.contype = 'c' then 'CHECK'
 				   		when pgc.contype = 'u' then 'UNIQUE'
 				   end as constraint_type,
-				   cc.check_clause
+				   cc.check_clause as CheckClause
 			
 			from information_schema.table_constraints as tc
 			

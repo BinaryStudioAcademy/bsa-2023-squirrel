@@ -19,6 +19,7 @@
             		sysc.colorder [ColumnOrder],   
             		syst.name [DataType],
             		syscmnts.text [Default],
+                    -- MaxLength (do we need it?)
             		sysc.prec [Precision],   
             		sysc.scale [Scale],   
             		CASE WHEN sysc.isnullable = 1 THEN 'True' ELSE 'False' END [AllowNulls],   

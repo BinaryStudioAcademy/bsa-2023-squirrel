@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.BLL.Services.Abstract;
 using Squirrel.Core.Common.DTO.Auth;
@@ -45,6 +46,18 @@ public sealed class AuthService : BaseService, IAuthService
         };
     }
 
+    public async Task<RefreshedAccessTokenDto> RefreshTokens(RefreshedAccessTokenDto tokens)
+    {
+        var userId = _jwtFactory.GetUserIdFromToken(tokens.AccessToken);
+        var user = await _userService.GetUserByIdAsync(userId);
+        
+        return new RefreshedAccessTokenDto
+        (
+            refreshToken: await ExchangeRefreshToken(tokens.RefreshToken, userId),
+            accessToken: await _jwtFactory.GenerateAccessTokenAsync(user.Id, user.UserName, user.Email)
+        );
+    }
+
     public async Task<AuthUserDto> LoginAsync(UserLoginDto userLoginDto)
     {
         var userEntity = await _userService.GetUserEntityByEmail(userLoginDto.Email);
@@ -71,6 +84,33 @@ public sealed class AuthService : BaseService, IAuthService
             User = _mapper.Map<UserDto>(createdUser),
             Token = await GenerateNewAccessTokenAsync(createdUser.Id, createdUser.UserName, createdUser.Email)
         };
+    }
+
+    private async Task<string> ExchangeRefreshToken(string oldRefreshToken, int userId)
+    {
+        var refreshToken = await _context.RefreshTokens.FirstOrDefaultAsync(
+            t => t.Token == oldRefreshToken && t.UserId == userId);
+
+        if (refreshToken is null)
+        {
+            throw new InvalidRefreshTokenException();
+        }
+
+        if (!refreshToken.IsActive())
+        {
+            throw new ExpiredRefreshTokenException();
+        }
+
+        _context.RefreshTokens.Remove(refreshToken);
+        var newRefreshToken = _jwtFactory.GenerateRefreshToken();
+        _context.RefreshTokens.Add(new RefreshToken
+        {
+            Token = newRefreshToken,
+            UserId = userId
+        });
+        await _context.SaveChangesAsync();
+
+        return newRefreshToken;
     }
 
     private async Task<RefreshedAccessTokenDto> GenerateNewAccessTokenAsync(int userId, string userName, string email)

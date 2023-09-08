@@ -1,79 +1,74 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BaseComponent } from '@core/base/base.component';
 import { BroadcastHubService } from '@core/hubs/broadcast-hub.service';
-import { ConfirmationModalComponent } from '@shared/components/confirmation-modal/confirmation-modal.component';
+import { NotificationService } from '@core/services/notification.service';
+import { ProjectService } from '@core/services/project.service';
+import { SharedProjectService } from '@core/services/shared-project.service';
+import { SpinnerService } from '@core/services/spinner.service';
+import { finalize, takeUntil } from 'rxjs';
 
-import { ConfirmationModalInterface } from 'src/app/models/confirmation-modal/confirmation-modal';
+import { ProjectResponseDto } from 'src/app/models/projects/project-response-dto';
 
 @Component({
     selector: 'app-home',
     templateUrl: './main-page.component.html',
     styleUrls: ['./main-page.component.sass'],
 })
-export class MainComponent implements OnInit, OnDestroy {
+export class MainComponent extends BaseComponent implements OnInit, OnDestroy {
+    public project: ProjectResponseDto;
+
     constructor(
         private broadcastHub: BroadcastHubService,
-        public confirmationModal: MatDialog,
+        private route: ActivatedRoute,
+        private router: Router,
+        private projectService: ProjectService,
+        private notificationService: NotificationService,
+        private spinner: SpinnerService,
+        private sharedProject: SharedProjectService,
     ) {
-        // do nothing.
+        super();
     }
 
     async ngOnInit() {
+        this.loadProject();
         await this.broadcastHub.start();
         this.broadcastHub.listenMessages((msg) => {
             console.info(`The next broadcast message was received: ${msg}`);
         });
     }
 
-    ngOnDestroy() {
+    override ngOnDestroy() {
         this.broadcastHub.stop();
+        this.sharedProject.setProject(null);
+        super.ngOnDestroy();
     }
 
-    /**
-     * Example method to demonstrate invoking the first Confirmation Modal
-     */
-    public confirmationModalMessage: string = '';
+    private loadProject() {
+        this.spinner.show();
+        const projectId = this.route.snapshot.paramMap.get('id');
 
-    openConfirmationModalOne() {
-        const modal: ConfirmationModalInterface = {
-            modalHeader: 'Reusable Confirmation Modal',
-            modalDescription: 'I am first Confirmation Modal to show the example of usage',
-            cancelButtonLabel: 'Cancel',
-            confirmButtonLabel: 'Submit',
-            callbackMethod: () => {
-                this.performConfirmationModalOne();
-            },
-        };
+        if (!projectId) {
+            this.notificationService.error('wrong route');
+            this.router.navigateByUrl('/projects');
 
-        this.confirmationModal.open(ConfirmationModalComponent, {
-            data: modal,
-        });
-    }
+            return;
+        }
 
-    /**
-     * Example method to demonstrate invoking the second Confirmation Modal
-     */
-    openConfirmationModalTwo() {
-        const modal: ConfirmationModalInterface = {
-            modalHeader: 'Created by reusable Confirmation Modal',
-            modalDescription: 'I am second Confirmation Modal',
-            cancelButtonLabel: 'Cancel',
-            confirmButtonLabel: 'Submit',
-            callbackMethod: () => {
-                this.performConfirmationModalTwo();
-            },
-        };
-
-        this.confirmationModal.open(ConfirmationModalComponent, {
-            data: modal,
-        });
-    }
-
-    performConfirmationModalOne() {
-        this.confirmationModalMessage = 'The text submitted from the Confirmation Modal ONE';
-    }
-
-    performConfirmationModalTwo() {
-        this.confirmationModalMessage = 'The text submitted from the Confirmation Modal TWO';
+        this.projectService.getProject(projectId)
+            .pipe(
+                takeUntil(this.unsubscribe$),
+                finalize(() => this.spinner.hide()),
+            )
+            .subscribe({
+                next: project => {
+                    this.project = project;
+                    this.sharedProject.setProject(project);
+                },
+                error: err => {
+                    this.notificationService.error(err.message);
+                    this.router.navigateByUrl('projects');
+                },
+            });
     }
 }

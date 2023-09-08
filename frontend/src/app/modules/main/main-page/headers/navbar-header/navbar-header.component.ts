@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 
 @Component({
     selector: 'app-navbar-header',
@@ -6,6 +6,13 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./navbar-header.component.sass'],
 })
 export class NavbarHeaderComponent implements OnInit {
+    @ViewChild('modalContent') modalContent: TemplateRef<any>;
+
+    /*  component for passing as a modal
+        import { ComponentType } from '@angular/cdk/portal';
+    */
+    // modalComponent: ComponentType<NotFoundComponent> = NotFoundComponent;
+
     public branches: string[];
 
     public selectedBranch: string;

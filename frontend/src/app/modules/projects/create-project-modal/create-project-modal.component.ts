@@ -5,6 +5,7 @@ import { BaseComponent } from '@core/base/base.component';
 import { NotificationService } from '@core/services/notification.service';
 import { ProjectService } from '@core/services/project.service';
 import { SpinnerService } from '@core/services/spinner.service';
+import { BranchNameFormatter } from '@shared/helpers/branch-name-formatter';
 import { takeUntil, tap } from 'rxjs';
 
 import { DbEngine } from 'src/app/models/projects/db-engine';
@@ -40,7 +41,11 @@ export class CreateProjectModalComponent extends BaseComponent implements OnInit
     public createForm() {
         this.projectForm = this.fb.group({
             projectName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
-            defaultBranchName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(200)]],
+            defaultBranchName: ['', [
+                Validators.required,
+                Validators.minLength(3),
+                Validators.maxLength(200),
+                Validators.pattern(/^[A-Za-z0-9- _@]*$/)]],
             selectedEngine: ['', Validators.required],
         });
     }
@@ -55,7 +60,7 @@ export class CreateProjectModalComponent extends BaseComponent implements OnInit
                 dbEngine: parseInt(this.projectForm.value.selectedEngine, 10) as DbEngine,
             },
             defaultBranch: {
-                name: this.projectForm.value.defaultBranchName,
+                name: BranchNameFormatter.formatBranchName(this.projectForm.value.defaultBranchName),
             },
         };
 

@@ -20,14 +20,8 @@ public sealed class BranchService : BaseService, IBranchService
     {
         var branch = _mapper.Map<Branch>(branchDto);
         branch.ProjectId = projectId;
-        if(await _context.Branches
-            .AsNoTracking()
-            .AnyAsync(b => 
-                b.ProjectId == projectId && 
-                string.Equals(branch.Name, b.Name))) 
-        {
-            throw new BranchAlreadyExistException();
-        }
+
+        await EnsureUniquenessAsync(branch.Name, projectId);
 
         var createdBranch = (await _context.Branches.AddAsync(branch)).Entity;
         if (branchDto.ParentId != null)
@@ -46,10 +40,50 @@ public sealed class BranchService : BaseService, IBranchService
         return _mapper.Map<BranchDto[]>(branches);
     }
 
+    public async Task DeleteBranch(int branchId)
+    {
+        var entity = await _context.Branches.FirstOrDefaultAsync(x => x.Id == branchId);
+        if (entity == null)
+        {
+            throw new EntityNotFoundException();
+        }
+        _context.Branches.Remove(entity);
+
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<BranchDto> UpdateBranch(int branchId, BranchUpdateDto branchUpdateDto)
+    {
+        var entity = await _context.Branches.FirstOrDefaultAsync(x => x.Id == branchId);
+        if (entity == null)
+        {
+            throw new EntityNotFoundException();
+        }
+        await EnsureUniquenessAsync(branchUpdateDto.Name, entity.ProjectId);
+        
+        entity.Name = branchUpdateDto.Name;
+        var updatedEntity = _context.Branches.Update(entity).Entity;
+
+        await _context.SaveChangesAsync();
+        return _mapper.Map<BranchDto>(updatedEntity);
+    }
+
     private async Task InheritBranchAsyncInternal(Branch branch, int parentId) 
     {
         var parent = (await _context.Branches.FirstOrDefaultAsync(x => x.Id == parentId)) ?? throw new EntityNotFoundException();
 
         branch.BranchCommits = parent.BranchCommits;
+    }
+
+    private async Task EnsureUniquenessAsync(string branchName, int projectId)
+    {
+        if(await _context.Branches
+            .AsNoTracking()
+            .AnyAsync(branch =>
+                branch.ProjectId == projectId && 
+                string.Equals(branchName, branch.Name))) 
+        {
+            throw new BranchAlreadyExistException();
+        }
     }
 }

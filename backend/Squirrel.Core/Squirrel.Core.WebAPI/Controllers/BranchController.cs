@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.Common.DTO.Branch;
 
@@ -25,7 +24,18 @@ public class BranchController : ControllerBase
     public async Task<ActionResult<BranchDto>> AddBranch(int projectId, [FromBody] BranchCreateDto dto) 
     { 
         return Ok(await _branchService.AddBranchAsync(projectId, dto));
-    } 
+    }
 
+    [HttpPut("{branchId}")]
+    public async Task<ActionResult<BranchDto>> UpdateBranch(int branchId, [FromBody] BranchUpdateDto dto)
+    {
+        return Ok(await _branchService.UpdateBranch(branchId, dto));
+    }
 
+    [HttpDelete("{branchId}")]
+    public async Task<ActionResult> DeleteBranch(int branchId)
+    {
+        await _branchService.DeleteBranch(branchId);
+        return NotFound();
+    }
 }

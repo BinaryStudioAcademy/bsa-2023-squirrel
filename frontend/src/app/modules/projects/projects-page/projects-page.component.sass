@@ -1,10 +1,13 @@
+@import "/src/styles/color"
+@import "/src/styles/weights"
+
 .projects-sector
     display: flex
     flex-direction: column
     margin-left: 79px
     gap: 16px
     margin-right: 2%
-    margin-top: 1%
+    margin-top: 2%
 
     .upper-panel-container
         display: flex
@@ -12,15 +15,23 @@
         align-items: center
 
 
+    .horizontal-separator
+        border-bottom: 1px solid $light-gray
+        width: 100%
+
     .mat-h3
-        font-family: 'Montserrat Medium', sans-serif
-        font-size: 36px
-        margin-left: 1%
+        padding-left: 20px
+        font-size: 28px
+        font-weight: $bold-weight
 
     .card-container
+        margin-top: 30px
+        margin-left: 100px
         display: flex
-        flex-direction: column
-        gap: 10px
+        flex-direction: row
+        flex-wrap: wrap
+        column-gap: 100px
+        row-gap: 50px
 
         .mat-card
             .mat-card-content

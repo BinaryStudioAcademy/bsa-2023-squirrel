@@ -50,7 +50,7 @@ namespace Squirrel.ConsoleApp.BL.Extensions
         {
             var rowDict = new Dictionary<string, string>();
 
-            // Start from 3 to skip the first three columns (Schema, name, TotalRows)
+            // Start from 3 to skip the first three columns (Schema, Name, TotalRows)
             for (int i = 3; i < columnNames.Count; i++)
             {
                 var columnName = columnNames[i];

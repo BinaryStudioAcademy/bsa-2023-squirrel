@@ -81,18 +81,18 @@ public sealed class UserService : BaseService, IUserService
         return _mapper.Map<UserDto>(createdUser); ;
     }
 
-    public async Task<UserProfileDto> UpdateUserNamesAsync(UpdateUserNamesDto updateUserDTO)
+    public async Task<UserProfileDto> UpdateUserNamesAsync(UpdateUserNamesDto updateUserDto)
     {
         var userEntity = await GetUserByIdInternal(_userIdGetter.GetCurrentUserId());
 
-        var existingUserWithSameUsername = await GetUserEntityByUsername(updateUserDTO.Username);
+        var existingUserWithSameUsername = await GetUserEntityByUsername(updateUserDto.Username);
 
         if (existingUserWithSameUsername != null && existingUserWithSameUsername.Id != _userIdGetter.GetCurrentUserId())
         {
             throw new UsernameAlreadyRegisteredException();
         }
 
-        _mapper.Map(updateUserDTO, userEntity);
+        _mapper.Map(updateUserDto, userEntity);
 
         _context.Users.Update(userEntity);
         await _context.SaveChangesAsync();
@@ -100,27 +100,27 @@ public sealed class UserService : BaseService, IUserService
         return _mapper.Map<UserProfileDto>(userEntity);
     }
 
-    public async Task ChangePasswordAsync(UpdateUserPasswordDto changePasswordDTO)
+    public async Task ChangePasswordAsync(UpdateUserPasswordDto changePasswordDto)
     {
         var userEntity = await GetUserByIdInternal(_userIdGetter.GetCurrentUserId());
 
-        if (!SecurityUtils.ValidatePassword(changePasswordDTO.CurrentPassword, userEntity.PasswordHash!, userEntity.Salt!))
+        if (!SecurityUtils.ValidatePassword(changePasswordDto.CurrentPassword, userEntity.PasswordHash!, userEntity.Salt!))
         {
-            throw new InvalidEmailOrPasswordException();
+            throw new InvalidPasswordException();
         }
 
-        userEntity.PasswordHash = SecurityUtils.HashPassword(changePasswordDTO.NewPassword, userEntity.Salt!);
+        userEntity.PasswordHash = SecurityUtils.HashPassword(changePasswordDto.NewPassword, userEntity.Salt!);
 
         _context.Users.Update(userEntity);
         await _context.SaveChangesAsync();
     }
 
-    public async Task<UserProfileDto> UpdateNotificationsAsync(UpdateUserNotificationsdDto updateNotificationsdDTO)
+    public async Task<UserProfileDto> UpdateNotificationsAsync(UpdateUserNotificationsDto updateNotificationsDto)
     {
         var userEntity = await GetUserByIdInternal(_userIdGetter.GetCurrentUserId());
 
-        userEntity.SquirrelNotification = updateNotificationsdDTO.SquirrelNotification;
-        userEntity.EmailNotification = updateNotificationsdDTO.EmailNotification;
+        userEntity.SquirrelNotification = updateNotificationsDto.SquirrelNotification;
+        userEntity.EmailNotification = updateNotificationsDto.EmailNotification;
 
         _context.Users.Update(userEntity);
         await _context.SaveChangesAsync();

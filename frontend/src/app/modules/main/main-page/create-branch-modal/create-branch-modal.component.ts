@@ -5,7 +5,7 @@ import { BaseComponent } from '@core/base/base.component';
 import { BranchService } from '@core/services/branch.service';
 import { NotificationService } from '@core/services/notification.service';
 import { SpinnerService } from '@core/services/spinner.service';
-import { takeUntil, tap } from 'rxjs';
+import { catchError, Observable, of, takeUntil, tap } from 'rxjs';
 
 import { BranchDto } from 'src/app/models/branch/branch-dto';
 import { CreateBranchDto } from 'src/app/models/branch/create-branch-dto';
@@ -43,7 +43,11 @@ export class CreateBranchModalComponent extends BaseComponent implements OnInit 
 
     public createForm() {
         this.branchForm = this.fb.group({
-            branchName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
+            branchName: ['', [
+                Validators.required,
+                Validators.minLength(3),
+                Validators.maxLength(200),
+                Validators.pattern(/^[A-Za-z0-9- _@]*$/g)]],
             selectedParent: ['', Validators.required],
         });
     }
@@ -55,29 +59,42 @@ export class CreateBranchModalComponent extends BaseComponent implements OnInit 
         this.spinner.show();
 
         const branch: CreateBranchDto = {
-            name: this.branchForm.value.branchName,
+            name: this.formatBranchName(this.branchForm.value.branchName),
             parentId: this.branchForm.value.selectedParent,
         };
 
         this.branchService
             .addBranch(this.projectId, branch)
             .pipe(
+                catchError((error: any): Observable<BranchDto | null> => {
+                    if (error.errorType === 7) {
+                        this.notificationService.error(error.message);
+                    } else {
+                        this.notificationService.error('Failed to create branch');
+                    }
+
+                    return of(null);
+                }),
                 takeUntil(this.unsubscribe$),
                 tap(() => this.spinner.hide()),
+
             )
             .subscribe(
-                (createdBranch: BranchDto) => {
-                    this.dialogRef.close(createdBranch);
-                    this.notificationService.info('Branch created successfully');
-                    this.branchCreated.emit(createdBranch);
-                },
-                () => {
-                    this.notificationService.error('Failed to create branch');
+                (createdBranch: BranchDto | null) => {
+                    if (createdBranch) {
+                        this.dialogRef.close(createdBranch);
+                        this.notificationService.info('Branch created successfully');
+                        this.branchCreated.emit(createdBranch);
+                    }
                 },
             );
     }
 
     public close(): void {
         this.dialogRef.close();
+    }
+
+    private formatBranchName(name: string) {
+        return name.trim().replace(/ /g, '-');
     }
 }

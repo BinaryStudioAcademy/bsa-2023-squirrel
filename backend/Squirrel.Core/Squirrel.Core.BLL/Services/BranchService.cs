@@ -20,6 +20,14 @@ public sealed class BranchService : BaseService, IBranchService
     {
         var branch = _mapper.Map<Branch>(branchDto);
         branch.ProjectId = projectId;
+        if(await _context.Branches
+            .AsNoTracking()
+            .AnyAsync(b => 
+                b.ProjectId == projectId && 
+                string.Equals(branch.Name, b.Name))) 
+        {
+            throw new BranchAlreadyExistException();
+        }
 
         var createdBranch = (await _context.Branches.AddAsync(branch)).Entity;
         if (branchDto.ParentId != null)

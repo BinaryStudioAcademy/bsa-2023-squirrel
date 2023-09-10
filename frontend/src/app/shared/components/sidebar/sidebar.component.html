@@ -1,14 +1,17 @@
 <div class="sidebar">
     <div class="tab" routerLink="/main">
-        <img class="logo" src="../../../../assets/logo.svg" alt="Logo Icon">
+        <img class="logo" src="../../../../assets/logo.svg" alt="Logo Icon" />
     </div>
     <div class="nav-container">
         <div class="main-nav">
             <div class="tab nav" routerLink="/projects" routerLinkActive="active">
-                <img class="folder-icon" src="../../../../assets/open_folder_icon.png" alt="Folder Icon">
+                <img class="folder-icon" src="../../../../assets/open_folder_icon.png" alt="Folder Icon" />
             </div>
             <div class="tab nav" routerLink="/main" routerLinkActive="active">
-                <img class="bell-icon" src="../../../../assets/notification_icon.png" alt="Bell Icon">
+                <img class="bell-icon" src="../../../../assets/notification_icon.png" alt="Bell Icon" />
+            </div>
+            <div class="tab nav" (click)="downloadApp()">
+                <img class="download-icon" src="../../../../assets/download_icon.png" alt="Download Icon" />
             </div>
         </div>
         <div class="settings">
@@ -16,7 +19,11 @@
                 <app-profile-menu></app-profile-menu>
             </mat-menu>
             <div class="tab">
-                <img [matMenuTriggerFor]="userMenu" class="account-icon" src="../../../../assets/account_circle_icon.png" alt="Account Icon">
+                <img
+                    [matMenuTriggerFor]="userMenu"
+                    class="account-icon"
+                    src="../../../../assets/account_circle_icon.png"
+                    alt="Account Icon" />
             </div>
         </div>
     </div>

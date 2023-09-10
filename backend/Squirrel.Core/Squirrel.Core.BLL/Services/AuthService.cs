@@ -33,11 +33,20 @@ public sealed class AuthService : BaseService, IAuthService
     }
 
     public async Task<AuthUserDto> AuthorizeWithGoogleAsync(string googleCredentialsToken)
-    {       
+    {
         var googleCredentials = await ValidateAsync(googleCredentialsToken, new ValidationSettings { Audience = new List<string> { _googleClientId } });
 
-        var user = await _userService.GetUserByEmailAsync(googleCredentials.Email) ?? await _userService.CreateUserAsync(
-                       _mapper.Map<UserRegisterDto>(googleCredentials), isGoogleAuth: true);
+        UserDto user;
+        try
+        {
+            user = await _userService.GetUserByEmailAsync(googleCredentials.Email);
+            await RemoveUserRefreshTokens(user.Id);
+        }
+        catch
+        {
+            user = await _userService.CreateUserAsync(
+                _mapper.Map<UserRegisterDto>(googleCredentials), isGoogleAuth: true);
+        }
 
         return new AuthUserDto
         {
@@ -67,7 +76,9 @@ public sealed class AuthService : BaseService, IAuthService
         {
             throw new InvalidEmailOrPasswordException();
         }
-
+        
+        await RemoveUserRefreshTokens(userEntity.Id);
+        
         return new AuthUserDto
         {
             User = _mapper.Map<UserDto>(userEntity),
@@ -101,7 +112,7 @@ public sealed class AuthService : BaseService, IAuthService
             throw new ExpiredRefreshTokenException();
         }
 
-        _context.RefreshTokens.Remove(refreshToken);
+        await RemoveUserRefreshTokens(userId);
         var newRefreshToken = _jwtFactory.GenerateRefreshToken();
         _context.RefreshTokens.Add(new RefreshToken
         {
@@ -113,16 +124,21 @@ public sealed class AuthService : BaseService, IAuthService
         return newRefreshToken;
     }
 
+    private async Task RemoveUserRefreshTokens(int userId)
+    {
+        _context.RefreshTokens.RemoveRange(_context.RefreshTokens.Where(x => x.UserId == userId));
+        await _context.SaveChangesAsync();
+    }
+
     private async Task<RefreshedAccessTokenDto> GenerateNewAccessTokenAsync(int userId, string userName, string email)
     {
         var refreshToken = _jwtFactory.GenerateRefreshToken();
 
-        _context.RefreshTokens.Add(new RefreshToken
+        await _context.RefreshTokens.AddAsync(new RefreshToken
         {
             Token = refreshToken,
             UserId = userId
         });
-
         await _context.SaveChangesAsync();
 
         var accessToken = await _jwtFactory.GenerateAccessTokenAsync(userId, userName, email);

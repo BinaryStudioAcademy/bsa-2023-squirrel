@@ -23,13 +23,12 @@ public class StaticFilesService : IStaticFilesService
             throw new FileNotFoundException();
         }
 
-        var memory = new MemoryStream();
-        await using (var stream = new FileStream(filePath, FileMode.Open))
+        await using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read))
         {
-            await stream.CopyToAsync(memory);
+            var memory = new MemoryStream();
+            await fileStream.CopyToAsync(memory);
+            memory.Position = 0;
+            return memory;
         }
-        memory.Position = 0;
-
-        return memory;
     }
 }

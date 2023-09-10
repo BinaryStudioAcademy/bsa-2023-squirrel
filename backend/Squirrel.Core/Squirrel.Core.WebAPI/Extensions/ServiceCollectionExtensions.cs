@@ -6,9 +6,9 @@ using Squirrel.Core.BLL.Services;
 using Squirrel.Core.Common.DTO.Auth;
 using Squirrel.Core.Common.Interfaces;
 using Squirrel.Core.Common.JWT;
+using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
-using System.Reflection;
 
 namespace Squirrel.Core.WebAPI.Extensions;
 
@@ -20,7 +20,7 @@ public static class ServiceCollectionExtensions
             .AddControllers()
             .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
             .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
-        
+
         services.AddTransient<ISampleService, SampleService>();
         services.AddScoped<JwtIssuerOptions>();
         services.AddScoped<IJwtFactory, JwtFactory>();
@@ -31,8 +31,10 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IDatabaseItemsService, DatabaseItemsService>();
 
         services.AddSingleton<IHttpClientService, HttpClientService>();
-      
+
         services.AddUserIdStorage();
+
+        services.AddScoped<IStaticFilesService, StaticFilesService>();
     }
 
     public static void AddUserIdStorage(this IServiceCollection services)

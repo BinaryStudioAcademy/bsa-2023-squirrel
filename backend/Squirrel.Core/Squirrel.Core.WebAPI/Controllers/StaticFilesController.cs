@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Squirrel.Core.BLL.Interfaces;
 
 namespace Squirrel.Core.WebAPI.Controllers;
 
@@ -7,18 +6,26 @@ namespace Squirrel.Core.WebAPI.Controllers;
 [Route("api/[controller]")]
 public class StaticFilesController : Controller
 {
-    private readonly IStaticFilesService _staticFilesService;
+    private readonly IConfiguration _configuration;
 
-    public StaticFilesController(IStaticFilesService staticFilesService)
+    public StaticFilesController(IConfiguration configuration)
     {
-        _staticFilesService = staticFilesService;
+        _configuration = configuration;
     }
 
     [HttpGet("squirrel-installer"), DisableRequestSizeLimit]
     public async Task<IActionResult> DownloadSquirrelInstaller()
     {
-        var memory = await _staticFilesService.GetSquirrelInstallerAsync();
+        var filePath = _configuration["ConsoleSetupFilePath"];
 
-        return File(memory, "application/octet-stream", "SquirrelSetup.msi");
+        if (!System.IO.File.Exists(filePath))
+        {
+            return NotFound();
+        }
+
+        return File(
+            await System.IO.File.ReadAllBytesAsync(filePath),
+            "application/octet-stream",
+            "SquirrelSetup.msi");
     }
 }

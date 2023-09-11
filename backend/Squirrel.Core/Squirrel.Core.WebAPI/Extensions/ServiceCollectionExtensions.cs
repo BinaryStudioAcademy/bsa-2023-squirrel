@@ -32,8 +32,6 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IHttpClientService, HttpClientService>();
 
         services.AddUserIdStorage();
-
-        services.AddScoped<IStaticFilesService, StaticFilesService>();
     }
 
     public static void AddUserIdStorage(this IServiceCollection services)

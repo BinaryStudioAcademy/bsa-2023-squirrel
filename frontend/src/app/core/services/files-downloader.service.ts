@@ -14,7 +14,7 @@ export class FilesDownloaderService {
     constructor(private httpClient: HttpInternalService, private notificationService: NotificationService) {}
 
     public downloadSquirrelInstaller() {
-        this.httpClient.getFullBlobRequest(`${this.staticFilesRoutePrefix}/downloadSquirrelInstaller`)
+        this.httpClient.getFullBlobRequest(`${this.staticFilesRoutePrefix}/squirrel-installer`)
             .subscribe({
                 next: (event: HttpResponse<Blob>) => {
                     if (event.type === HttpEventType.Response) {

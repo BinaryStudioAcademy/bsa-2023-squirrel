@@ -14,7 +14,7 @@ public class StaticFilesController : Controller
         _staticFilesService = staticFilesService;
     }
 
-    [HttpGet("downloadSquirrelInstaller"), DisableRequestSizeLimit]
+    [HttpGet("squirrel-installer"), DisableRequestSizeLimit]
     public async Task<IActionResult> DownloadSquirrelInstaller()
     {
         var memory = await _staticFilesService.GetSquirrelInstallerAsync();

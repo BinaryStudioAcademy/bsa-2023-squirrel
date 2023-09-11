@@ -231,7 +231,7 @@ public sealed class UserService : BaseService, IUserService
         await _blobStorageService
             .DeleteAsync("user-avatars", userEntity.Id.ToString());
 
-        userEntity.AvatarUrl = String.Empty;
+        userEntity.AvatarUrl = null;
         await _context.SaveChangesAsync();
     }
 

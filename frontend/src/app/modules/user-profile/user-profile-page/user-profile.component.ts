@@ -221,6 +221,10 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
         }
         const file = inputElement.files[0];
 
+        if (file.size > 5 * 1024 * 1024) {
+            this.notificationService.error('The file size should not exceed 5MB');
+        }
+
         this.userService
             .uploadAvatar(file)
             .pipe(takeUntil(this.unsubscribe$))

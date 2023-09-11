@@ -4,8 +4,8 @@ namespace Squirrel.SqlService.BLL.Models.ConsoleAppHub;
 
 public class QueryResultTableDTO
 {
-    public string[] ColumnNames { get; set; }
-    public List<string[]> Rows { get; set; }
+    public string[] ColumnNames { get; set; } = null!;
+    public List<string[]> Rows { get; set; } = null!;
     public int RowCount { get; set; }
     public int ColumnCount { get; set; }
 

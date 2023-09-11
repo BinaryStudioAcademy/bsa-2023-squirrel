@@ -52,7 +52,7 @@ public sealed class UserService : BaseService, IUserService
 
         return _mapper.Map<UserDto>(userEntity);
     }
-    
+
     public async Task<List<UserDto>> GetAllUsersAsync()
     {
         var userEntities = await _context.Users.ToListAsync();
@@ -61,7 +61,7 @@ public sealed class UserService : BaseService, IUserService
         {
             return new List<UserDto>();
         }
-        
+
         return _mapper.Map<List<UserDto>>(userEntities);
     }
 
@@ -206,8 +206,12 @@ public sealed class UserService : BaseService, IUserService
 
     public async Task AddAvatar(IFormFile avatar)
     {
-        var userEntity = await GetUserByIdInternal(_userIdGetter.GetCurrentUserId());
+        if (avatar.Length > 5 * 1024 * 1024)
+        {
+            throw new LargeFileException("5 MB");
+        }
 
+        var userEntity = await GetUserByIdInternal(_userIdGetter.GetCurrentUserId());
         var content = await CropAvatar(avatar);
 
         var blob = new Blob
@@ -217,8 +221,7 @@ public sealed class UserService : BaseService, IUserService
             Content = content
         };
 
-        var url = await _blobStorageService.UploadWithUrlAsync("user-avatars", blob);
-        userEntity.AvatarUrl = url;
+        userEntity.AvatarUrl = await _blobStorageService.UploadWithUrlAsync("user-avatars", blob);
         await _context.SaveChangesAsync();
     }
 
@@ -238,7 +241,7 @@ public sealed class UserService : BaseService, IUserService
 
         var smallerDimension = Math.Min(image.Width, image.Height);
         image.Mutate(x => x.Crop(smallerDimension, smallerDimension));
-        
+
         using var ms = new MemoryStream();
         await image.SaveAsync(ms, new JpegEncoder());
         return ms.ToArray();

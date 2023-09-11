@@ -209,4 +209,31 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
                 },
             );
     }
+
+    public onFileChange(event: Event) {
+        this.spinner.show();
+        const inputElement = event.target as HTMLInputElement;
+
+        if (!inputElement?.files?.length) {
+            return;
+        }
+        const file = inputElement.files[0];
+
+        console.log(file);
+
+        this.userService
+            .uploadAvatar(file)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe({
+                next: user => {
+                    this.currentUser = user;
+                    this.spinner.hide();
+                    this.notificationService.info('Photo successfully updated');
+                },
+                error: (error) => {
+                    this.spinner.hide();
+                    this.notificationService.error(error.message);
+                },
+            });
+    }
 }

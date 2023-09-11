@@ -19,7 +19,7 @@
                                     [size]="200">
                         </app-avatar>
                         <div class="edit-icon">
-                            <input type="file" id="userAvatar"/>
+                            <input type="file" id="userAvatar" (change)="onFileChange($event)"/>
                             <fa-icon [icon]="penIcon" style="color: white"></fa-icon>
                         </div>
                     </div>

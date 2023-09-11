@@ -34,11 +34,6 @@ public class AzureBlobStorageService : IBlobStorageService
     {
         var blobClient = await GetBlobClientInternalAsync(containerName, blob.Id);
 
-        if (await blobClient.ExistsAsync())
-        {
-            throw new InvalidOperationException($"Blob with id:{blob.Id} already exists.");
-        }
-
         var blobHttpHeader = new BlobHttpHeaders { ContentType = blob.ContentType };
         await blobClient.UploadAsync(new BinaryData(blob.Content ?? new byte[] { }),
             new BlobUploadOptions { HttpHeaders = blobHttpHeader });

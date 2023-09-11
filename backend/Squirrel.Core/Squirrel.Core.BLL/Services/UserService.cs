@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using SixLabors.ImageSharp.Formats.Jpeg;
 using Squirrel.AzureBlobStorage.Interfaces;
 using Squirrel.AzureBlobStorage.Models;
 using Squirrel.Core.BLL.Extensions;
@@ -195,14 +196,13 @@ public sealed class UserService : BaseService, IUserService
     {
         var userEntity = await GetUserByIdInternal(_userIdGetter.GetCurrentUserId());
 
-        using var ms = new MemoryStream();
-        await avatar.CopyToAsync(ms);
+        var content = await CropAvatar(avatar);
 
         var blob = new Blob
         {
             Id = userEntity.Id.ToString(),
             ContentType = avatar.ContentType,
-            Content = ms.ToArray()
+            Content = content
         };
 
         var url = await _blobStorageService.UploadWithUrlAsync("user-avatars", blob);
@@ -215,8 +215,21 @@ public sealed class UserService : BaseService, IUserService
         var userEntity = await GetUserByIdInternal(_userIdGetter.GetCurrentUserId());
         await _blobStorageService
             .DeleteAsync("user-avatars", userEntity.Id.ToString());
-        
+
         userEntity.AvatarUrl = String.Empty;
         await _context.SaveChangesAsync();
+    }
+
+    private async Task<byte[]> CropAvatar(IFormFile avatar)
+    {
+        using var image = await Image.LoadAsync(avatar.OpenReadStream());
+
+        var smallerDimension = Math.Min(image.Width, image.Height);
+        image.Mutate(x => x.Crop(smallerDimension, smallerDimension));
+
+
+        using var ms = new MemoryStream();
+        await image.SaveAsync(ms, new JpegEncoder());
+        return ms.ToArray();
     }
 }

@@ -14,10 +14,10 @@ public class StaticFilesController : Controller
         _staticFilesService = staticFilesService;
     }
 
-    [HttpGet("downloadConsole"), DisableRequestSizeLimit]
-    public async Task<IActionResult> DownloadConsole()
+    [HttpGet("downloadSquirrelInstaller"), DisableRequestSizeLimit]
+    public async Task<IActionResult> DownloadSquirrelInstaller()
     {
-        var memory = await _staticFilesService.GetConsoleSetupAsync();
+        var memory = await _staticFilesService.GetSquirrelInstallerAsync();
 
         return File(memory, "application/octet-stream", "SquirrelSetup.msi");
     }

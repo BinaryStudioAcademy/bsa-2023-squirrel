@@ -12,7 +12,7 @@ public class StaticFilesService : IStaticFilesService
         _configuration = configuration;
     }
 
-    public async Task<MemoryStream> GetConsoleSetupAsync()
+    public async Task<Stream> GetSquirrelInstallerAsync()
     {
         var consoleSetupFilePath = _configuration["ConsoleSetupFilePath"];
 
@@ -23,12 +23,15 @@ public class StaticFilesService : IStaticFilesService
             throw new FileNotFoundException();
         }
 
-        await using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read))
-        {
-            var memory = new MemoryStream();
-            await fileStream.CopyToAsync(memory);
-            memory.Position = 0;
-            return memory;
-        }
+        return await CopyFileToMemoryStreamAsync(filePath);
+    }
+
+    private static async Task<Stream> CopyFileToMemoryStreamAsync(string filePath)
+    {
+        using var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+        var memory = new MemoryStream();
+        await fileStream.CopyToAsync(memory);
+        memory.Position = 0;
+        return memory;
     }
 }

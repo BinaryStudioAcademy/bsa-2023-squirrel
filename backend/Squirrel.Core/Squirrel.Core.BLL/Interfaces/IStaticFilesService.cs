@@ -2,5 +2,5 @@
 
 public interface IStaticFilesService
 {
-    Task<MemoryStream> GetConsoleSetupAsync();
+    Task<Stream> GetSquirrelInstallerAsync();
 }

@@ -24,7 +24,7 @@ public class ProjectController : ControllerBase
         return Ok(await _projectService.AddProjectAsync(newProjectDto));
     }
     
-    [HttpPut("add-users/{projectId}")]
+    [HttpPut("{projectId}/members")]
     public async Task<ActionResult<ProjectResponseDto>> AddUsersToProject(int projectId, [FromBody] List<UserDto> usersDtos)
     {
         return Ok(await _projectService.AddUsersToProjectAsync(projectId, usersDtos));

@@ -23,7 +23,7 @@ export class ProjectService {
     }
 
     public addUsersToProject(projectId: number, users: UserDto[]): Observable<ProjectResponseDto> {
-        return this.httpService.putRequest<ProjectResponseDto>(`${this.projectsApiUrl}/add-users/${projectId}`, users);
+        return this.httpService.putRequest<ProjectResponseDto>(`${this.projectsApiUrl}/${projectId}/members`, users);
     }
 
     public updateProject(projectId: number, project: UpdateProjectDto): Observable<ProjectResponseDto> {

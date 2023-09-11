@@ -17,7 +17,7 @@ namespace Squirrel.ConsoleApp.BL.MappingProfiles
                 .ForMember(dest => dest.Schema, opt => opt.MapFrom(src => src.Rows.Any() ? src.Rows[0][0] : null))
                 .ForMember(dest => dest.TableName, opt => opt.MapFrom(src => src.Rows.Any() ? src.Rows[0][1] : null))
                 .ForMember(dest => dest.Columns, opt => opt.MapFrom(src 
-                    => src.Rows.Select(row => MapToObject<Column>(src.ColumnNames.Select(e => e.ToLower()).ToList(), row))));
+                    => src.Rows.Select(row => MapToObject<TableColumnInfo>(src.ColumnNames.Select(e => e.ToLower()).ToList(), row))));
 
             CreateMap<QueryResultTable, TableConstraintsDto>()
                 .ForMember(dest => dest.Schema, opt => opt.MapFrom(src => src.Rows.Any() ? src.Rows[0][0] : null))

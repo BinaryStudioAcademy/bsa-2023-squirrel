@@ -4,6 +4,6 @@
     {
         public string Schema { get; set; } = null!;
         public string TableName { get; set; } = null!;
-        public List<Column> Columns { get; set; } = new();
+        public List<TableColumnInfo> Columns { get; set; } = new();
     }
 }

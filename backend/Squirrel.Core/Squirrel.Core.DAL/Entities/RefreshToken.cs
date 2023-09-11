@@ -10,7 +10,7 @@ public sealed class RefreshToken : AuditEntity<int>
     public int UserId { get; set; }
     public User User { get; set; } = null!;
 
-    private readonly TimeSpan _lifetime = TimeSpan.FromSeconds(30);
+    private readonly TimeSpan _lifetime = TimeSpan.FromDays(1);
 
     public RefreshToken()
     {

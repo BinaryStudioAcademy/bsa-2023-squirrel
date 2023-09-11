@@ -43,7 +43,7 @@ public sealed class JwtIssuerOptions
     /// <summary>
     /// Set the timespan the token will be valid for (default is 1 hour)
     /// </summary>
-    public TimeSpan Lifetime { get; set; } = TimeSpan.FromSeconds(15);
+    public TimeSpan Lifetime { get; set; } = TimeSpan.FromHours(1);
 
     /// <summary>
     /// "jti" (JWT ID) Claim (default ID is a GUID)

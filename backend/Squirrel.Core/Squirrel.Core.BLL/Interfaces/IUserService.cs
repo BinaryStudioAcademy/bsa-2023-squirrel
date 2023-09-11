@@ -1,4 +1,5 @@
-﻿using Squirrel.Core.Common.DTO.Auth;
+﻿using Microsoft.AspNetCore.Http;
+using Squirrel.Core.Common.DTO.Auth;
 using Squirrel.Core.Common.DTO.Users;
 using Squirrel.Core.DAL.Entities;
 
@@ -17,4 +18,5 @@ public interface IUserService
     Task<UserProfileDto> UpdateUserNamesAsync(UpdateUserNamesDto updateUserDto);
     Task ChangePasswordAsync(UpdateUserPasswordDto userDto);
     Task<UserProfileDto> UpdateNotificationsAsync(UpdateUserNotificationsDto updateNotificationsDto);
+    Task<string> AddAvatar(IFormFile avatar);
 }

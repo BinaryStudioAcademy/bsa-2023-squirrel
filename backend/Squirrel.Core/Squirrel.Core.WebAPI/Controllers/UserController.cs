@@ -59,4 +59,10 @@ public class UserController : ControllerBase
     {
         return Ok(await _userService.GetUserProfileAsync());
     }
+
+    [HttpPost("add-avatar")]
+    public async Task<ActionResult<string>> AddUserAvatar(IFormFile avatar)
+    {
+        return Ok();
+    }
 }

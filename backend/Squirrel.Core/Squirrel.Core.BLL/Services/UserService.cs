@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Squirrel.Core.BLL.Extensions;
 using Squirrel.Core.BLL.Interfaces;
@@ -23,7 +24,7 @@ public sealed class UserService : BaseService, IUserService
     {
         _userIdGetter = userIdGetter;
     }
-    
+
     public async Task<UserDto> GetUserByIdAsync(int id)
     {
         return _mapper.Map<UserDto>(await GetUserByIdInternal(id));
@@ -31,7 +32,8 @@ public sealed class UserService : BaseService, IUserService
 
     public async Task<UserProfileDto> GetUserProfileAsync()
     {
-        return await _context.Users.ProjectTo<UserProfileDto>(_mapper.ConfigurationProvider).FirstAsync(x => x.Id == _userIdGetter.GetCurrentUserId());
+        return await _context.Users.ProjectTo<UserProfileDto>(_mapper.ConfigurationProvider)
+            .FirstAsync(x => x.Id == _userIdGetter.GetCurrentUserId());
     }
 
     public async Task<UserDto> GetUserByEmailAsync(string email)
@@ -41,6 +43,7 @@ public sealed class UserService : BaseService, IUserService
         {
             throw new EntityNotFoundException(nameof(User), email);
         }
+
         return _mapper.Map<UserDto>(userEntity);
     }
 
@@ -51,6 +54,7 @@ public sealed class UserService : BaseService, IUserService
         {
             throw new EntityNotFoundException(nameof(User), username);
         }
+
         return _mapper.Map<UserDto>(userEntity);
     }
 
@@ -78,7 +82,7 @@ public sealed class UserService : BaseService, IUserService
         var createdUser = (await _context.Users.AddAsync(newUser)).Entity;
         await _context.SaveChangesAsync();
 
-        return _mapper.Map<UserDto>(createdUser); ;
+        return _mapper.Map<UserDto>(createdUser);
     }
 
     public async Task<UserProfileDto> UpdateUserNamesAsync(UpdateUserNamesDto updateUserDto)
@@ -104,7 +108,8 @@ public sealed class UserService : BaseService, IUserService
     {
         var userEntity = await GetUserByIdInternal(_userIdGetter.GetCurrentUserId());
 
-        if (!SecurityUtils.ValidatePassword(changePasswordDto.CurrentPassword, userEntity.PasswordHash!, userEntity.Salt!))
+        if (!SecurityUtils.ValidatePassword(changePasswordDto.CurrentPassword, userEntity.PasswordHash!,
+                userEntity.Salt!))
         {
             throw new InvalidPasswordException();
         }
@@ -179,5 +184,14 @@ public sealed class UserService : BaseService, IUserService
         }
 
         return newUser;
+    }
+
+    public async Task<string> AddAvatar(IFormFile avatar)
+    {
+        using var ms = new MemoryStream();
+        await avatar.CopyToAsync(ms);
+        var bytes = ms.ToArray();
+        
+        return String.Empty;
     }
 }

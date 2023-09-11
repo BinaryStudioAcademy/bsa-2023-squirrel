@@ -30,7 +30,7 @@ public static class ServiceCollectionExtensions
     {
         services.Configure<MongoDatabaseConnectionSettings>(configuration.GetSection("MongoDatabase"));
 
-        services.AddTransient<IMongoService<Sample>>(s =>
-            new MongoService<Sample>(s.GetRequiredService<IOptions<MongoDatabaseConnectionSettings>>(), "SampleCollection"));
+        services.AddTransient<IMongoService<User>>(s =>
+            new MongoService<User>(s.GetRequiredService<IOptions<MongoDatabaseConnectionSettings>>(), "UserCollection"));
     }
 }

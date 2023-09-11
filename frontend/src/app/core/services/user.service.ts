@@ -35,4 +35,8 @@ export class UserService {
     public getUserProfile(): Observable<UserProfileDto> {
         return this.httpService.getRequest<UserProfileDto>(`${this.routePrefix}/user-profile`);
     }
+
+    public getAllUsers(): Observable<UserDto[]> {
+        return this.httpService.getRequest<UserDto[]>(`${this.routePrefix}/all`);
+    }
 }

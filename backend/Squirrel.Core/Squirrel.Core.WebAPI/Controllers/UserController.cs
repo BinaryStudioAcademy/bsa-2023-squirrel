@@ -73,4 +73,10 @@ public class UserController : ControllerBase
         await _userService.DeleteAvatar();
         return NoContent();
     }
+    
+    [HttpGet("all")]
+    public async Task<ActionResult<List<UserDto>>> GetAllUsers()
+    {
+        return Ok(await _userService.GetAllUsersAsync());
+    }
 }

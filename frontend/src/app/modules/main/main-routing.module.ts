@@ -31,7 +31,7 @@ const routes: Routes = [
             },
             {
                 path: 'settings',
-                component: NotFoundComponent,
+                loadChildren: () => import('../settings/settings.module').then((m) => m.SettingsModule),
             },
             {
                 path: '**',

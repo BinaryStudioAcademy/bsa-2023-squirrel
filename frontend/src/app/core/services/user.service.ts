@@ -47,4 +47,8 @@ export class UserService {
     public deleteAvatar() {
         return this.httpService.deleteRequest(`${this.routePrefix}/delete-avatar`);
     }
+  
+    public getAllUsers(): Observable<UserDto[]> {
+        return this.httpService.getRequest<UserDto[]>(`${this.routePrefix}/all`);
+    }
 }

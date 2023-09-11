@@ -29,6 +29,22 @@ public class AzureBlobStorageService : IBlobStorageService
 
         return blob;
     }
+    
+    public async Task<string> UploadWithUrlAsync(string containerName, Blob blob)
+    {
+        var blobClient = await GetBlobClientInternalAsync(containerName, blob.Id);
+
+        if (await blobClient.ExistsAsync())
+        {
+            throw new InvalidOperationException($"Blob with id:{blob.Id} already exists.");
+        }
+
+        var blobHttpHeader = new BlobHttpHeaders { ContentType = blob.ContentType };
+        await blobClient.UploadAsync(new BinaryData(blob.Content ?? new byte[] { }),
+            new BlobUploadOptions { HttpHeaders = blobHttpHeader });
+        // TODO: add to private method, DRY
+        return blobClient.Uri.AbsoluteUri;
+    }
 
     public async Task<Blob> UpdateAsync(string containerName, Blob blob)
     {

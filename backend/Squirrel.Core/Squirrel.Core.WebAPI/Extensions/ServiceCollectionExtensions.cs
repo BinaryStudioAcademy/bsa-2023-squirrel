@@ -9,6 +9,8 @@ using Squirrel.Core.Common.JWT;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Reflection;
+using Squirrel.AzureBlobStorage.Interfaces;
+using Squirrel.AzureBlobStorage.Services;
 
 namespace Squirrel.Core.WebAPI.Extensions;
 
@@ -28,6 +30,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IBranchService, BranchService>();
         services.AddScoped<IProjectService, ProjectService>();
         services.AddScoped<IDatabaseItemsService, DatabaseItemsService>();
+        services.AddScoped<IBlobStorageService, AzureBlobStorageService>();
 
         services.AddSingleton<IHttpClientService, HttpClientService>();
       

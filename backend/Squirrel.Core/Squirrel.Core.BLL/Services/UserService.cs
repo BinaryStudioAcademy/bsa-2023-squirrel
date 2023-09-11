@@ -2,6 +2,8 @@
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Squirrel.AzureBlobStorage.Interfaces;
+using Squirrel.AzureBlobStorage.Models;
 using Squirrel.Core.BLL.Extensions;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.BLL.Services.Abstract;
@@ -19,10 +21,13 @@ public sealed class UserService : BaseService, IUserService
     private const int MaxNameLength = 25;
     private const int MinNameLength = 2;
     private readonly IUserIdGetter _userIdGetter;
+    private readonly IBlobStorageService _blobStorageService;
 
-    public UserService(SquirrelCoreContext context, IMapper mapper, IUserIdGetter userIdGetter) : base(context, mapper)
+    public UserService(SquirrelCoreContext context, IMapper mapper, IUserIdGetter userIdGetter,
+        IBlobStorageService blobStorageService) : base(context, mapper)
     {
         _userIdGetter = userIdGetter;
+        _blobStorageService = blobStorageService;
     }
 
     public async Task<UserDto> GetUserByIdAsync(int id)
@@ -190,8 +195,16 @@ public sealed class UserService : BaseService, IUserService
     {
         using var ms = new MemoryStream();
         await avatar.CopyToAsync(ms);
-        var bytes = ms.ToArray();
-        
-        return String.Empty;
+
+        var blob = new Blob
+        {
+            Id = _userIdGetter.GetCurrentUserId().ToString(),
+            ContentType = avatar.ContentType,
+            Content = ms.ToArray()
+        };
+
+        var url = await _blobStorageService.UploadWithUrlAsync("avatar", blob);
+
+        return url;
     }
 }

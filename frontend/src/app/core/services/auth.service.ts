@@ -1,7 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 import { CredentialResponse } from 'google-one-tap';
-import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
+import { map, Observable, of, tap } from 'rxjs';
 
 import { AccessTokenDto } from 'src/app/models/auth/access-token-dto';
 import { GoogleAuthDto } from 'src/app/models/auth/google-auth-dto';
@@ -19,7 +19,7 @@ import { UserService } from './user.service';
 export class AuthService {
     private readonly authRoutePrefix = '/api/auth';
 
-    private readonly tokenRoutePrefix = 'api/token';
+    private readonly tokenRoutePrefix = '/api/token';
 
     private readonly accessTokenKey = 'accessToken';
 
@@ -40,13 +40,13 @@ export class AuthService {
         return this.currentUser
             ? of(this.currentUser)
             : this.userService.getUserFromToken().pipe(
-                  map((resp: any) => {
-                      this.currentUser = resp;
-                      this.eventService.userChanged(this.currentUser);
+                map((resp: any) => {
+                    this.currentUser = resp;
+                    this.eventService.userChanged(this.currentUser);
 
-                      return this.currentUser;
-                  }),
-              );
+                    return this.currentUser;
+                }),
+            );
     }
 
     public signOut = () => {
@@ -100,28 +100,14 @@ export class AuthService {
     }
 
     public refreshTokens(): Observable<AccessTokenDto> {
-        console.log('trying to send refresh request from authService...');
-
         const tokensDto: AccessTokenDto = {
             accessToken: this.getAccessToken() as string,
             refreshToken: this.getRefreshToken() as string,
         };
 
-        return this.httpService.postRequest<AccessTokenDto>(`${this.tokenRoutePrefix}/refresh`, tokensDto).pipe(
-            catchError((e) => {
-                this.signOut();
-                console.log(e.error);
-
-                return throwError(e);
-            }),
-            map((tokens: AccessTokenDto) => {
-                console.log('got refreshed tokens');
-                console.log(tokens);
-                this.saveTokens(tokens);
-
-                return tokens;
-            }),
-        );
+        return this.httpService
+            .postRequest<AccessTokenDto>(`${this.tokenRoutePrefix}/refresh`, tokensDto)
+            .pipe(tap((tokens: AccessTokenDto) => this.saveTokens(tokens)));
     }
 
     public getAccessToken(): string | null {

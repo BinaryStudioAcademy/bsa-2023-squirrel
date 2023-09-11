@@ -18,7 +18,7 @@ public class TablesController: ControllerBase
         _mapper = mapper;
     }
 
-    // http://localhost:44567/tables/get-names
+    // http://localhost:44567/tables/names
     [HttpGet]
     [Route("names")]
     public async Task<ActionResult<TableNamesDto>> GetTablesNames()
@@ -28,7 +28,7 @@ public class TablesController: ControllerBase
         return Ok(_mapper.Map<TableNamesDto>(names));
     }
 
-    // http://localhost:44567/tables/get-structure/dbo/categories
+    // http://localhost:44567/tables/structure/dbo/categories
     [HttpGet]
     [Route("structure/{schema}/{name}")]
     public async Task<ActionResult<TableStructureDto>> GetTableStructure([FromRoute] string schema, string name)
@@ -38,7 +38,7 @@ public class TablesController: ControllerBase
         return Ok(_mapper.Map<TableStructureDto>(structure));
     }
 
-    // http://localhost:44567/tables/get-constraints/dbo/employees
+    // http://localhost:44567/tables/constraints/dbo/employees
     [HttpGet]
     [Route("constraints/{schema}/{name}")]
     public async Task<ActionResult<TableConstraintsDto>> GetTableChecks([FromRoute] string schema, string name)
@@ -48,7 +48,7 @@ public class TablesController: ControllerBase
         return Ok(_mapper.Map<TableConstraintsDto>(checks));
     }
 
-    // http://localhost:44567/tables/get-checks/dbo/employees/100
+    // http://localhost:44567/tables/data/dbo/employees/100
     [HttpGet]
     [Route("data/{schema}/{name}/{rowsCount}")]
     public async Task<ActionResult<TableDataDto>> GetTableData([FromRoute] string schema, string name, int rowsCount)

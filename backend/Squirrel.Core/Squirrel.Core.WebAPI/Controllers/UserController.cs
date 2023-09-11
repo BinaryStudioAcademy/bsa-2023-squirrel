@@ -65,4 +65,11 @@ public class UserController : ControllerBase
     {
         return Ok(await _userService.AddAvatar(avatar));
     }
+    
+    [HttpDelete("delete-avatar")]
+    public async Task<ActionResult> DeleteUserAvatar()
+    {
+        await _userService.DeleteAvatar();
+        return NoContent();
+    }
 }

@@ -4,7 +4,7 @@ import { BaseComponent } from '@core/base/base.component';
 import { NotificationService } from '@core/services/notification.service';
 import { SpinnerService } from '@core/services/spinner.service';
 import { UserService } from '@core/services/user.service';
-import { faPen } from '@fortawesome/free-solid-svg-icons';
+import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { ValidationsFn } from '@shared/helpers/validations-fn';
 import { finalize, takeUntil } from 'rxjs';
 
@@ -24,6 +24,8 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
     public emailNotification: boolean;
 
     public penIcon = faPen;
+
+    public trashIcon = faTrash;
 
     public currentUser: UserProfileDto;
 
@@ -219,8 +221,6 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
         }
         const file = inputElement.files[0];
 
-        console.log(file);
-
         this.userService
             .uploadAvatar(file)
             .pipe(takeUntil(this.unsubscribe$))
@@ -236,4 +236,24 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
                 },
             });
     }
+
+    deleteAvatar() {
+        this.spinner.show();
+
+        this.userService.deleteAvatar()
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe({
+                next: () => {
+                    this.currentUser.avatarUrl = '';
+                    this.spinner.hide();
+                    this.notificationService.info('Photo successfully deleted');
+                },
+                error: (error) => {
+                    this.spinner.hide();
+                    this.notificationService.error(error.message);
+                },
+            });
+    }
+
+    protected readonly Date = Date;
 }

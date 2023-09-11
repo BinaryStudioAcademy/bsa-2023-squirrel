@@ -19,4 +19,5 @@ public interface IUserService
     Task ChangePasswordAsync(UpdateUserPasswordDto userDto);
     Task<UserProfileDto> UpdateNotificationsAsync(UpdateUserNotificationsDto updateNotificationsDto);
     Task<UserProfileDto> AddAvatar(IFormFile avatar);
+    Task DeleteAvatar();
 }

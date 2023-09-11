@@ -1,63 +1,40 @@
-﻿using Squirrel.ConsoleApp.Models.DTO;
-using System.Reflection;
+﻿using System.Reflection;
 
-namespace Squirrel.ConsoleApp.BL.Extensions
+namespace Squirrel.ConsoleApp.BL.Extensions;
+
+public static class MappingExtensions
 {
-    public static class MappingExtensions
+    public static T MapToObject<T>(IList<string> rowNames, IList<string> rowValues) where T : new()
     {
-        public static Column MapToStructureRow(IList<string> columnNames, IList<string> rowValues)
+        var obj = new T();
+        var propertyNames = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance).Select(p => p.Name).ToList();
+
+        foreach (var propertyName in propertyNames)
         {
-            var row = new Column();
-            columnNames = columnNames.Select(x => x.ToLower()).ToList();
-            var columns = typeof(Column).GetProperties(BindingFlags.Public | BindingFlags.Instance).Select(p => p.Name).ToList();
-
-            foreach (var propertyName in columns)
-            {
-                var property = typeof(Column).GetProperty(propertyName);
-                if (property != null && columnNames.Contains(propertyName.ToLower()))
-                {
-                    var value = rowValues[columnNames.IndexOf(propertyName.ToLower())];
-                    if (property.PropertyType == typeof(string))
-                        property.SetValue(row, value);
-                    else if (property.PropertyType == typeof(int?))
-                        property.SetValue(row, Parsing.ParseNullableInt(value));
-                    else if (property.PropertyType == typeof(bool?))
-                        property.SetValue(row, Parsing.ParseNullableBool(value));
-                }
-            }
-            return row;
+            var property = typeof(T).GetProperty(propertyName);
+            if (property == null || !rowNames.Contains(propertyName.ToLower())) continue;
+            var value = rowValues[rowNames.IndexOf(propertyName.ToLower())];
+            if (property.PropertyType == typeof(string))
+                property.SetValue(obj, value);
+            else if (property.PropertyType == typeof(int?))
+                property.SetValue(obj, value.ParseNullableInt());
+            else if (property.PropertyType == typeof(bool?))
+                property.SetValue(obj, value.ParseNullableBool());
         }
+        return obj;
+    }
 
-        public static Constraint MapToChecksRow(IList<string> columnNames, IList<string> rowValues)
+    public static Dictionary<string, string> MapToDataRow(IList<string> rowNames, IList<string> rowValues)
+    {
+        var rowDict = new Dictionary<string, string>();
+
+        // Start from 3 to skip the first three columns (Schema, Name, TotalRows)
+        for (var i = 3; i < rowNames.Count; i++)
         {
-            var row = new Constraint();
-            columnNames = columnNames.Select(x => x.ToLower()).ToList();
-            var columns = typeof(Constraint).GetProperties(BindingFlags.Public | BindingFlags.Instance).Select(p => p.Name).ToList();
-
-            foreach (var propertyName in columns)
-            {
-                var property = typeof(Constraint).GetProperty(propertyName);
-                if (property != null && columnNames.Contains(propertyName.ToLower()))
-                {
-                    var value = rowValues[columnNames.ToList().IndexOf(propertyName.ToLower())];
-                    property.SetValue(row, value);
-                }
-            }
-            return row;
+            var columnName = rowNames[i];
+            var cellValue = rowValues[i];
+            rowDict[columnName] = cellValue;
         }
-
-        public static Dictionary<string, string> MapToDataRow(IList<string> columnNames, IList<string> rowValues)
-        {
-            var rowDict = new Dictionary<string, string>();
-
-            // Start from 3 to skip the first three columns (Schema, Name, TotalRows)
-            for (int i = 3; i < columnNames.Count; i++)
-            {
-                var columnName = columnNames[i];
-                var cellValue = rowValues[i];
-                rowDict[columnName] = cellValue;
-            }
-            return rowDict;
-        }
+        return rowDict;
     }
 }

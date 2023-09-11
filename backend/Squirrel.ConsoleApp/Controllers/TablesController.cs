@@ -20,7 +20,7 @@ public class TablesController: ControllerBase
 
     // http://localhost:44567/tables/get-names
     [HttpGet]
-    [Route("get-names")]
+    [Route("names")]
     public async Task<ActionResult<TableNamesDto>> GetTablesNames()
     {
         var names = await _getActionsService.GetAllTablesNamesAsync();
@@ -30,7 +30,7 @@ public class TablesController: ControllerBase
 
     // http://localhost:44567/tables/get-structure/dbo/categories
     [HttpGet]
-    [Route("get-structure/{schema}/{name}")]
+    [Route("structure/{schema}/{name}")]
     public async Task<ActionResult<TableStructureDto>> GetTableStructure([FromRoute] string schema, string name)
     {
         var structure = await _getActionsService.GetTableStructureAsync(schema, name);
@@ -40,7 +40,7 @@ public class TablesController: ControllerBase
 
     // http://localhost:44567/tables/get-constraints/dbo/employees
     [HttpGet]
-    [Route("get-constraints/{schema}/{name}")]
+    [Route("constraints/{schema}/{name}")]
     public async Task<ActionResult<TableConstraintsDto>> GetTableChecks([FromRoute] string schema, string name)
     {
         var checks = await _getActionsService.GetTableChecksAndUniqueConstraintsAsync(schema, name);
@@ -50,7 +50,7 @@ public class TablesController: ControllerBase
 
     // http://localhost:44567/tables/get-checks/dbo/employees/100
     [HttpGet]
-    [Route("get-data/{schema}/{name}/{rowsCount}")]
+    [Route("data/{schema}/{name}/{rowsCount}")]
     public async Task<ActionResult<TableDataDto>> GetTableData([FromRoute] string schema, string name, int rowsCount)
     {
         var data = await _getActionsService.GetTableDataAsync(schema, name, rowsCount);

@@ -5,7 +5,6 @@ using gudusoft.gsqlparser.pp.stmtformatter;
 using Squirrel.Core.DAL.Enums;
 using Squirrel.Shared.Exceptions;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
-using System.Collections.Generic;
 
 namespace Squirrel.SqlService.BLL.Services;
 
@@ -15,28 +14,32 @@ public class SqlFormatterService : ISqlFormatterService
     private TGSqlParser? _parser;
 
     //Using old dll
-    public string GetFormattedSql(string inputSQL, DbEngine dbEngine)
+    public string GetFormattedSql(string inputSql, DbEngine dbEngine)
     {
-        if (HasSyntaxError(inputSQL, dbEngine, out string error))
+        if (HasSyntaxError(inputSql, dbEngine, out var error))
         {
             throw new SqlSyntaxException(error);
         };
-        GFmtOpt option = GFmtOptFactory.newInstance();
+        var option = GFmtOptFactory.newInstance();
         return FormatterFactory.pp(_parser, option);
     }
 
     //Using old dll
-    public bool HasSyntaxError(string inputSQL, DbEngine dbEngine, out string errorMessage)
+    public bool HasSyntaxError(string inputSql, DbEngine dbEngine, out string errorMessage)
     {
         errorMessage = string.Empty;
         MapDbVendor(dbEngine);
-        _parser = new TGSqlParser(_dbVendor);
-        _parser.sqltext = inputSQL;
-        int result = _parser.parse();
+        _parser = new TGSqlParser(_dbVendor)
+        {
+            sqltext = inputSql
+        };
+
+        var result = _parser.parse();
         if (result == 0)
         {
             return false;
         }
+
         errorMessage = _parser.Errormessage;
         return true;
     }
@@ -53,47 +56,44 @@ public class SqlFormatterService : ISqlFormatterService
     }
 
     //Using Microsoft.SqlServer.TransactSql.ScriptDom
-    public string Format(string inputSQL)
+    public string Format(string inputSql)
     {
-        Sql160ScriptGenerator scriptGenerator = new Sql160ScriptGenerator(GetFormattingOptions());
-        TSql160Parser parser = new TSql160Parser(true);
-        TSqlFragment fragment;
-        IList<ParseError> errors = new List<ParseError>();
-        try
+        var scriptGenerator = new Sql160ScriptGenerator(GetFormattingOptions());
+
+        var fragment = new TSql160Parser(true).Parse(new StringReader(inputSql), out IList<ParseError> errors);
+        if (errors.Count > 0)
         {
-            fragment = parser.Parse(new StringReader(inputSQL), out errors);
-            if (errors.Count > 0)
-            {
-                throw new SqlSyntaxException(string.Join("\n", errors.Select(
-                    e => $"Syntax error [{e.Number}]: {e.Message}. Position({e.Line}, {e.Column})")));
-            }
-            scriptGenerator.GenerateScript(fragment, out string result);
-            return result;
+            throw new SqlSyntaxException(CreateErrorMessage(errors));
         }
-        catch (Exception)
-        {
-            throw new SqlSyntaxException(string.Join("\n", errors.Select(
-                e => $"Syntax error [{e.Number}]: {e.Message}. Position({e.Line}, {e.Column})")));
-        }
+
+        scriptGenerator.GenerateScript(fragment, out var result);
+        return result;
     }
     private SqlScriptGeneratorOptions GetFormattingOptions()
     {
-        var options = new SqlScriptGeneratorOptions();
-        options.SqlEngineType = SqlEngineType.All;
-        options.IncludeSemicolons = true;
-        options.AlignClauseBodies = true;
-        options.AlignColumnDefinitionFields = true;
-        options.AlignSetClauseItem = true;
-        options.AsKeywordOnOwnLine = true;
-        options.IndentationSize = 10;
-        options.IndentSetClause = true;
-        options.IndentViewBody = true;
-        options.KeywordCasing = KeywordCasing.Uppercase;
-        options.MultilineInsertSourcesList = true;
-        options.MultilineInsertTargetsList = true;
-        options.MultilineSelectElementsList = true;
-        options.MultilineViewColumnsList = true;
-        options.MultilineWherePredicatesList = true;
-        return options;
+        return new SqlScriptGeneratorOptions
+        {
+            SqlEngineType = SqlEngineType.All,
+            IncludeSemicolons = true,
+            AlignClauseBodies = true,
+            AlignColumnDefinitionFields = true,
+            AlignSetClauseItem = true,
+            AsKeywordOnOwnLine = true,
+            IndentationSize = 10,
+            IndentSetClause = true,
+            IndentViewBody = true,
+            KeywordCasing = KeywordCasing.Uppercase,
+            MultilineInsertSourcesList = true,
+            MultilineInsertTargetsList = true,
+            MultilineSelectElementsList = true,
+            MultilineViewColumnsList = true,
+            MultilineWherePredicatesList = true
+        };
+    }
+
+    private string CreateErrorMessage(IList<ParseError> errors)
+    {
+        return string.Join("\n", errors.Where(e => !e.Message.Contains("An internal parser error occurred"))
+            .Select(e => $"Syntax error [{e.Number}]: {e.Message}. Position({e.Line}, {e.Column})"));
     }
 }

@@ -95,6 +95,7 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
                     Validators.required,
                     Validators.minLength(6),
                     Validators.maxLength(25),
+                    ValidationsFn.wrongCharacters(),
                     ValidationsFn.lowerExist(),
                     ValidationsFn.upperExist(),
                 ],
@@ -105,6 +106,7 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
                     Validators.required,
                     Validators.minLength(6),
                     Validators.maxLength(25),
+                    ValidationsFn.wrongCharacters(),
                     ValidationsFn.lowerExist(),
                     ValidationsFn.upperExist(),
                 ],
@@ -157,7 +159,7 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
         if (
             !(this.passwordForm.valid && this.passwordForm.value.newPassword === this.passwordForm.value.repeatPassword)
         ) {
-            this.notificationService.error('Update Names Form is invalid');
+            this.notificationService.error('Update Password Form is invalid');
 
             return;
         }

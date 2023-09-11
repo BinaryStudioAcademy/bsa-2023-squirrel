@@ -226,8 +226,7 @@ public sealed class UserService : BaseService, IUserService
 
         var smallerDimension = Math.Min(image.Width, image.Height);
         image.Mutate(x => x.Crop(smallerDimension, smallerDimension));
-
-
+        
         using var ms = new MemoryStream();
         await image.SaveAsync(ms, new JpegEncoder());
         return ms.ToArray();

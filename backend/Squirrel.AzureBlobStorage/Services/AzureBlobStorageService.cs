@@ -37,7 +37,7 @@ public class AzureBlobStorageService : IBlobStorageService
         var blobHttpHeader = new BlobHttpHeaders { ContentType = blob.ContentType };
         await blobClient.UploadAsync(new BinaryData(blob.Content ?? new byte[] { }),
             new BlobUploadOptions { HttpHeaders = blobHttpHeader });
-        // TODO: add to private method, DRY
+        
         return blobClient.Uri.AbsoluteUri;
     }
 

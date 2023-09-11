@@ -1,5 +1,7 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { saveAs } from 'file-saver';
+import { Subject, takeUntil } from 'rxjs';
 
 import { HttpInternalService } from './http-internal.service';
 import { NotificationService } from './notification.service';
@@ -8,6 +10,8 @@ import { NotificationService } from './notification.service';
     providedIn: 'root',
 })
 export class FilesDownloaderService {
+    protected unsubscribe$ = new Subject<void>();
+
     private readonly staticFilesRoutePrefix = '/api/staticfiles';
 
     // eslint-disable-next-line no-empty-function
@@ -15,6 +19,7 @@ export class FilesDownloaderService {
 
     public downloadSquirrelInstaller() {
         this.httpClient.getFullBlobRequest(`${this.staticFilesRoutePrefix}/squirrel-installer`)
+            .pipe(takeUntil(this.unsubscribe$))
             .subscribe({
                 next: (event: HttpResponse<Blob>) => {
                     if (event.type === HttpEventType.Response) {
@@ -36,14 +41,7 @@ export class FilesDownloaderService {
             : 'downloaded-file.bin'; // Default filename if not provided
 
         const downloadedFile = new Blob([response.body!], { type: response.body!.type });
-        const a = document.createElement('a');
 
-        a.setAttribute('style', 'display:none;');
-        document.body.appendChild(a);
-        a.download = fileName;
-        a.href = URL.createObjectURL(downloadedFile);
-        a.target = '_blank';
-        a.click();
-        document.body.removeChild(a);
+        saveAs(downloadedFile, fileName);
     }
 }

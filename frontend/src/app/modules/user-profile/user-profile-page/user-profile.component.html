@@ -1,0 +1,144 @@
+<div *ngIf="currentUser" class="profile-container">
+    <div class="header">
+        <h3 class="profile-header">User Profile</h3>
+    </div>
+
+    <div class="sidebar">
+        <app-sidebar></app-sidebar>
+    </div>
+
+    <section class="section">
+        <h4 class="section-header">Edit profile</h4>
+        <div class="form-inputs">
+            <form class="form" [formGroup]="userNamesForm" (ngSubmit)="updateUserNames()">
+                <div class="form-group form-group-avatar">
+                    <label class="label-input">Avatar</label>
+                    <div class="upload">
+                        <app-avatar [imgLink]="currentUser.avatarUrl"
+                                    [userName]="currentUser.firstName + ' ' + currentUser.lastName"
+                                    [size]="200">
+                        </app-avatar>
+                        <div class="edit-icon">
+                            <input type="file" id="userAvatar"/>
+                            <fa-icon [icon]="penIcon" style="color: white"></fa-icon>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="label-input" for="userName">Username</label>
+                    <app-input
+                        class="input-text"
+                        type="text"
+                        id="userName"
+                        name="Username"
+                        formControlName="userName"
+                        placeholder="Enter username">
+                    </app-input>
+                </div>
+                <div class="form-group">
+                    <label class="label-input" for="firstName">First Name</label>
+                    <app-input
+                        class="input-text"
+                        type="text"
+                        id="firstName"
+                        name="First name"
+                        formControlName="firstName"
+                        placeholder="Enter first name">
+                    </app-input>
+                </div>
+                <div class="form-group">
+                    <label class="label-input" for="lastName">Last Name</label>
+                    <app-input
+                        class="input-text"
+                        type="text"
+                        id="lastName"
+                        name="Last name"
+                        formControlName="lastName"
+                        placeholder="Enter last name">
+                    </app-input>
+                </div>
+                <div class="form-group">
+                    <div class="label-input"></div>
+                    <app-button variant="filled" text="Save"></app-button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <section *ngIf="!currentUser.isGoogleAuth" class="section">
+        <h4 class="section-header">Change password</h4>
+        <div class="form-inputs">
+            <form class="form" [formGroup]="passwordForm" (ngSubmit)="updateUserPassword()">
+                <div class="form-group">
+                    <label class="label-input" for="currentPassword">Current Password</label>
+                    <app-input
+                        class="input-text"
+                        type="password"
+                        id="currentPassword"
+                        name="Current password"
+                        formControlName="currentPassword"
+                        placeholder="Current password">
+                    </app-input>
+                </div>
+                <div class="form-group">
+                    <label class="label-input" for="newPassword">New Password</label>
+                    <app-input
+                        class="input-text"
+                        type="password"
+                        id="newPassword"
+                        name="New password"
+                        formControlName="newPassword"
+                        placeholder="New password">
+                    </app-input>
+                </div>
+                <div class="form-group">
+                    <label class="label-input" for="repeatPassword">Repeat New Password</label>
+                    <app-input
+                        class="input-text"
+                        type="password"
+                        id="repeatPassword"
+                        name="Repeat password"
+                        formControlName="repeatPassword"
+                        placeholder="Repeat new password">
+                    </app-input>
+                </div>
+                <div class="form-group">
+                    <div class="label-input"></div>
+                    <app-button variant="filled" text="Save"></app-button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <section class="section">
+        <h4 class="section-header">Notifications</h4>
+        <div class="notifications-block">
+            <p class="smaller-font">Notifications for all repositories, teams, or conversations you're watching</p>
+            <div class="notify">
+                <div class="form-group form-group-left">
+                    <div class="label-input">
+                        <span class="notify-label">Notify me:</span>
+                    </div>
+                    <div class="checkbox-group">
+                        <app-checkbox
+                            [checked]="squirrelNotification"
+                            (change)="squirrelNotification = !squirrelNotification"
+                            label="On Squirrel"></app-checkbox>
+                        <app-checkbox
+                            [checked]="emailNotification"
+                            (change)="emailNotification = !emailNotification"
+                            label="Email"></app-checkbox>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label-input"></div>
+                <app-button
+                    variant="filled"
+                    text="Save"
+                    (buttonOnClick)="updateUserNotifications()"></app-button>
+            </div>
+        </div>
+    </section>
+</div>

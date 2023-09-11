@@ -6,7 +6,7 @@ namespace Squirrel.SqlService.WebApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class DatabaseItemsController : ControllerBase
+public sealed class DatabaseItemsController : ControllerBase
 {
     private readonly IDbItemsRetrievalService _dbItemsRetrieval;
 

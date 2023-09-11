@@ -1,12 +1,11 @@
 ﻿using Newtonsoft.Json;
 
-namespace Squirrel.Core.BLL.Extensions
+namespace Squirrel.Core.BLL.Extensions;
+
+public static class HttpResponseExtensions
 {
-    public static class HttpResponseExtensions
+    public static async Task<T> GetModelAsync<T>(this HttpResponseMessage response)
     {
-        public static async Task<T> GetModelAsync<T>(this HttpResponseMessage response)
-        {
-            return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync())!;
-        }
+        return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync())!;
     }
 }

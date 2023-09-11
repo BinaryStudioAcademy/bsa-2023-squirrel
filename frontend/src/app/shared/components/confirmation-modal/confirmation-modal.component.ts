@@ -11,12 +11,11 @@ import { ConfirmationModalInterface } from 'src/app/models/confirmation-modal/co
 })
 export class ConfirmationModalComponent {
     constructor(
+        @Inject(MAT_DIALOG_DATA) public confirmationModalData: ConfirmationModalInterface,
         public confirmationModalRef: MatDialogRef<ConfirmationModalComponent>,
-        @Inject(MAT_DIALOG_DATA)
-        public confirmationModalData: ConfirmationModalInterface,
         public spinnerService: SpinnerService,
     ) {
-        // do nothing.
+        // do nothing
     }
 
     handleConfirmationModalSubmit() {

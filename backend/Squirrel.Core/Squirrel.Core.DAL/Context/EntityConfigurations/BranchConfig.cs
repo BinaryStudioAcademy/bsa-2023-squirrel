@@ -12,11 +12,6 @@ public sealed class BranchConfig : IEntityTypeConfiguration<Branch>
         builder.Property(x => x.Name).IsRequired().HasMaxLength(200);
         builder.Property(x => x.IsActive).IsRequired();
         builder.Property(x => x.ProjectId).IsRequired();
-        
-        builder.HasOne(x => x.ProjectForDefaultBranch)
-               .WithOne(x => x.DefaultBranch)
-               .HasForeignKey<Project>(x => x.DefaultBranchId)
-               .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasMany(x => x.PullRequestsFromThisBranch)
                .WithOne(x => x.SourceBranch)

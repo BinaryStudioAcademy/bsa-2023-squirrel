@@ -12,7 +12,6 @@ public sealed class ProjectConfig : IEntityTypeConfiguration<Project>
         builder.Property(x => x.Name).IsRequired().HasMaxLength(50);
         builder.Property(x => x.Description).HasMaxLength(1000);
         builder.Property(x => x.DbEngine).IsRequired();
-        builder.Property(x => x.DefaultBranchId).IsRequired();
         builder.Property(x => x.CreatedBy).IsRequired();
         builder.Property(x => x.CreatedAt)
                .IsRequired()
@@ -22,6 +21,11 @@ public sealed class ProjectConfig : IEntityTypeConfiguration<Project>
                .IsRequired()
                .HasDefaultValueSql("getdate()")
                .ValueGeneratedOnAddOrUpdate();
+
+        builder.HasOne(x => x.DefaultBranch)
+               .WithOne()
+               .HasForeignKey<Project>(x => x.DefaultBranchId)
+               .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasMany(x => x.Branches)
                .WithOne(x => x.Project)

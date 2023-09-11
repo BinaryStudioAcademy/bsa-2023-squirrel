@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using Squirrel.Core.DAL.Entities.Common;
+﻿using Squirrel.Core.DAL.Entities.Common;
 using Squirrel.Core.DAL.Entities.JoinEntities;
 
 namespace Squirrel.Core.DAL.Entities;
@@ -13,6 +12,8 @@ public sealed class User : Entity<int>
     public string? PasswordHash { get; set; }
     public string? Salt { get; set; }
     public string? AvatarUrl { get; set; }
+    public bool SquirrelNotification { get; set; }
+    public bool EmailNotification { get; set; }
     public bool IsGoogleAuth { get; set; }
 
     public ICollection<Commit> Commits { get; set; } = new List<Commit>();

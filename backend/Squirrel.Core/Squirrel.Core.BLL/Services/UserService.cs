@@ -203,7 +203,7 @@ public sealed class UserService : BaseService, IUserService
             Content = ms.ToArray()
         };
 
-        var url = await _blobStorageService.UploadWithUrlAsync("avatar", blob);
+        var url = await _blobStorageService.UploadWithUrlAsync("user-avatars", blob);
 
         return url;
     }

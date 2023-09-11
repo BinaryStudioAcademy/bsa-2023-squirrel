@@ -48,6 +48,7 @@ app.UseSwaggerUI();
 app.UseMiddleware<GenericExceptionHandlerMiddleware>();
 
 app.UseSquirrelCoreContext();
+app.UseAvatarContainer();
 
 app.UseCors(opt => opt
     .AllowAnyHeader()

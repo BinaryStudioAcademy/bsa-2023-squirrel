@@ -6,7 +6,6 @@ namespace Squirrel.Core.DAL.Context;
 
 public class SquirrelCoreContext : DbContext
 {
-    public DbSet<Sample> Samples => Set<Sample>();
     public DbSet<User> Users => Set<User>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
     public DbSet<Branch> Branches => Set<Branch>();
@@ -29,6 +28,5 @@ public class SquirrelCoreContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Configure();
-        modelBuilder.Seed();
     }
 }

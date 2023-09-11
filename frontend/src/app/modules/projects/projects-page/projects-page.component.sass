@@ -27,11 +27,10 @@
     .card-container
         margin-top: 30px
         margin-left: 100px
-        display: flex
-        flex-direction: row
-        flex-wrap: wrap
-        column-gap: 100px
-        row-gap: 50px
+        display: grid
+        grid-template-columns: repeat(3, minmax(200px, 1fr))
+        gap: 100px 50px
+        margin-bottom: 30px
 
         .mat-card
             .mat-card-content

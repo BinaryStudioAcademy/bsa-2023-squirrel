@@ -14,7 +14,6 @@ public sealed class RefreshToken : AuditEntity<int>
 
     public RefreshToken()
     {
-        // TODO: change getting datetime in the db to utc.
         ExpiresAt = DateTime.UtcNow.Add(_lifetime);
     }
 

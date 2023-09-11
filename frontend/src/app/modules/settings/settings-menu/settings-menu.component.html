@@ -1,0 +1,14 @@
+<div class="settings-menu">
+    <div>
+        <h5 class="menu-title">Settings</h5>
+        <ul class="menu-items">
+            <a class="menu-item" (click)="setActiveTab('general')" [ngClass]="{'active': activeTab === 'general'}">
+                <img src="assets/general_setting_icon.svg" alt="General Icon"> General
+            </a>
+            <a class="menu-item" (click)="setActiveTab('team')" [ngClass]="{'active': activeTab === 'team'}">
+                <img src="assets/teams_icon.svg" alt="Team Icon"> Team
+            </a>
+        </ul>
+    </div>
+    <div class="vertical-separator"></div>
+</div>

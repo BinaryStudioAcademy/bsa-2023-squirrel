@@ -14,7 +14,7 @@ public interface IUserService
     Task<User?> GetUserEntityByUsername(string username);
 
     Task<UserProfileDto> GetUserProfileAsync();
-    Task<UserProfileDto> UpdateUserNamesAsync(UpdateUserNamesDto updateUserDTO);
+    Task<UserProfileDto> UpdateUserNamesAsync(UpdateUserNamesDto updateUserDto);
     Task ChangePasswordAsync(UpdateUserPasswordDto userDto);
-    Task<UserProfileDto> UpdateNotificationsAsync(UpdateUserNotificationsdDto updateNotificationsdDTO);
+    Task<UserProfileDto> UpdateNotificationsAsync(UpdateUserNotificationsDto updateNotificationsDto);
 }

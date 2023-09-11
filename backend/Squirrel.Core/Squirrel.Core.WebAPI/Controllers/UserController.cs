@@ -43,7 +43,7 @@ public class UserController : ControllerBase
     /// Update user notifications
     /// </summary>
     [HttpPut("update-notifications")]
-    public async Task<ActionResult<UserProfileDto>> UpdateUserNotifications([FromBody] UpdateUserNotificationsdDto updateUserNotificationsdDto)
+    public async Task<ActionResult<UserProfileDto>> UpdateUserNotifications([FromBody] UpdateUserNotificationsDto updateUserNotificationsdDto)
     {
         return Ok(await _userService.UpdateNotificationsAsync(updateUserNotificationsdDto));
     }

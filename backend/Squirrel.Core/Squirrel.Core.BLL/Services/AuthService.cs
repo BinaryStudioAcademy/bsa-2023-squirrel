@@ -40,7 +40,7 @@ public sealed class AuthService : BaseService, IAuthService
         try
         {
             user = await _userService.GetUserByEmailAsync(googleCredentials.Email);
-            await RemoveUserRefreshTokens(user.Id);
+            await RemoveExpiredRefreshTokensAsync(user.Id);
         }
         catch
         {
@@ -55,7 +55,7 @@ public sealed class AuthService : BaseService, IAuthService
         };
     }
 
-    public async Task<RefreshedAccessTokenDto> RefreshTokens(RefreshedAccessTokenDto tokens)
+    public async Task<RefreshedAccessTokenDto> RefreshTokensAsync(RefreshedAccessTokenDto tokens)
     {
         var userId = _jwtFactory.GetUserIdFromToken(tokens.AccessToken);
         var user = await _userService.GetUserByIdAsync(userId);
@@ -77,7 +77,7 @@ public sealed class AuthService : BaseService, IAuthService
             throw new InvalidEmailOrPasswordException();
         }
         
-        await RemoveUserRefreshTokens(userEntity.Id);
+        await RemoveExpiredRefreshTokensAsync(userEntity.Id);
         
         return new AuthUserDto
         {
@@ -112,7 +112,7 @@ public sealed class AuthService : BaseService, IAuthService
             throw new ExpiredRefreshTokenException();
         }
 
-        await RemoveUserRefreshTokens(userId);
+        _context.RefreshTokens.Remove(refreshToken);
         var newRefreshToken = _jwtFactory.GenerateRefreshToken();
         _context.RefreshTokens.Add(new RefreshToken
         {
@@ -124,9 +124,10 @@ public sealed class AuthService : BaseService, IAuthService
         return newRefreshToken;
     }
 
-    private async Task RemoveUserRefreshTokens(int userId)
+    private async Task RemoveExpiredRefreshTokensAsync(int userId)
     {
-        _context.RefreshTokens.RemoveRange(_context.RefreshTokens.Where(x => x.UserId == userId));
+        var userTokens = await _context.RefreshTokens.Where(x => x.UserId == userId).ToListAsync();
+        _context.RefreshTokens.RemoveRange(userTokens.Where(x => !x.IsActive()));
         await _context.SaveChangesAsync();
     }
 

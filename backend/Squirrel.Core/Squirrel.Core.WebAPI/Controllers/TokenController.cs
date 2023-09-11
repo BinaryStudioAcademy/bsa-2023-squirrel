@@ -20,6 +20,6 @@ public sealed class TokenController : ControllerBase
     [HttpPost("refresh")]
     public async Task<ActionResult<RefreshedAccessTokenDto>> RefreshTokens(RefreshedAccessTokenDto tokens)
     {
-        return Ok(await _authService.RefreshTokens(tokens));
+        return Ok(await _authService.RefreshTokensAsync(tokens));
     }
 }

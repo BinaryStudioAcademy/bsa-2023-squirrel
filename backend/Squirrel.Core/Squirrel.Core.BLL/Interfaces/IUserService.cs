@@ -12,7 +12,7 @@ public interface IUserService
     Task<UserDto> CreateUserAsync(UserRegisterDto userDto, bool isGoogleAuth);
     Task<User?> GetUserEntityByEmail(string email);
     Task<User?> GetUserEntityByUsername(string username);
-
+    Task<List<UserDto>> GetAllUsersAsync();
     Task<UserProfileDto> GetUserProfileAsync();
     Task<UserProfileDto> UpdateUserNamesAsync(UpdateUserNamesDto updateUserDto);
     Task ChangePasswordAsync(UpdateUserPasswordDto userDto);

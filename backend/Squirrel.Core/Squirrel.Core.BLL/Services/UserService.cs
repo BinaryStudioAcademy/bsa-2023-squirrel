@@ -50,7 +50,7 @@ public sealed class UserService : BaseService, IUserService
 
         if (userEntities == null)
         {
-            throw new EntityNotFoundException(nameof(User));
+            return new List<UserDto>();
         }
         
         return _mapper.Map<List<UserDto>>(userEntities);

@@ -61,9 +61,10 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("add-avatar")]
-    public async Task<ActionResult<UserProfileDto>> AddUserAvatar(IFormFile avatar)
+    public async Task<ActionResult> AddUserAvatar(IFormFile avatar)
     {
-        return Ok(await _userService.AddAvatar(avatar));
+        await _userService.AddAvatar(avatar);
+        return NoContent();
     }
     
     [HttpDelete("delete-avatar")]

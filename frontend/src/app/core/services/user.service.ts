@@ -41,7 +41,7 @@ export class UserService {
 
         formData.append('avatar', avatar);
 
-        return this.httpService.postRequest<UserProfileDto>(`${this.routePrefix}/add-avatar`, formData);
+        return this.httpService.postRequest(`${this.routePrefix}/add-avatar`, formData);
     }
 
     public deleteAvatar() {

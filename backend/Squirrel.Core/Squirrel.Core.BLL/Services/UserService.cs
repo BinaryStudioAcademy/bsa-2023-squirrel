@@ -191,7 +191,7 @@ public sealed class UserService : BaseService, IUserService
         return newUser;
     }
 
-    public async Task<UserProfileDto> AddAvatar(IFormFile avatar)
+    public async Task AddAvatar(IFormFile avatar)
     {
         var userEntity = await GetUserByIdInternal(_userIdGetter.GetCurrentUserId());
 
@@ -208,8 +208,6 @@ public sealed class UserService : BaseService, IUserService
         var url = await _blobStorageService.UploadWithUrlAsync("user-avatars", blob);
         userEntity.AvatarUrl = url;
         await _context.SaveChangesAsync();
-
-        return _mapper.Map<UserProfileDto>(userEntity);
     }
 
     public async Task DeleteAvatar()

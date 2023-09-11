@@ -225,10 +225,8 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
             .uploadAvatar(file)
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe({
-                next: user => {
-                    this.currentUser = user;
-                    this.spinner.hide();
-                    this.notificationService.info('Photo successfully updated');
+                next: () => {
+                    window.location.reload();
                 },
                 error: (error) => {
                     this.spinner.hide();
@@ -244,9 +242,7 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe({
                 next: () => {
-                    this.currentUser.avatarUrl = '';
-                    this.spinner.hide();
-                    this.notificationService.info('Photo successfully deleted');
+                    window.location.reload();
                 },
                 error: (error) => {
                     this.spinner.hide();

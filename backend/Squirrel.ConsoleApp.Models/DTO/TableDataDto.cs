@@ -1,10 +1,9 @@
-﻿namespace Squirrel.ConsoleApp.Models.DTO
+﻿namespace Squirrel.ConsoleApp.Models.DTO;
+
+public class TableDataDto
 {
-    public class TableDataDto
-    {
-        public string Schema { get; set; } = null!;
-        public string TableName { get; set; } = null!;
-        public int TotalRows { get; set; }
-        public List<Dictionary<string, string>> Rows { get; set; } = new();
-    }
+    public string Schema { get; set; } = null!;
+    public string TableName { get; set; } = null!;
+    public int TotalRows { get; set; }
+    public List<Dictionary<string, string>> Rows { get; set; } = new();
 }

@@ -1,26 +1,21 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { BaseComponent } from '@core/base/base.component';
 import { AuthService } from '@core/services/auth.service';
 import { EventService } from '@core/services/event.service';
-import { Subject, takeUntil } from 'rxjs';
+import { takeUntil } from 'rxjs';
 
-import { User } from 'src/app/models/user/user';
+import { UserDto } from 'src/app/models/user/user-dto';
 
 @Component({
     selector: 'app-profile-menu',
     templateUrl: './profile-menu.component.html',
     styleUrls: ['./profile-menu.component.sass'],
 })
-export class ProfileMenuComponent implements OnInit, OnDestroy {
-    private unsubscribe$ = new Subject<void>();
+export class ProfileMenuComponent extends BaseComponent implements OnInit, OnDestroy {
+    public currentUser: UserDto | undefined;
 
-    public currentUser: User | undefined;
-
-    // eslint-disable-next-line no-empty-function
-    constructor(private authService: AuthService, private eventService: EventService) {}
-
-    ngOnDestroy(): void {
-        this.unsubscribe$.next();
-        this.unsubscribe$.complete();
+    constructor(private authService: AuthService, private eventService: EventService) {
+        super();
     }
 
     signOut() {

@@ -5,7 +5,7 @@ import { UserPredicates } from '@shared/helpers/user-predicates';
 import { Branch } from 'src/app/models/branch/branch';
 import { Comment } from 'src/app/models/comment/comment';
 import { PullRequest } from 'src/app/models/pull-request/pull-request';
-import { User } from 'src/app/models/user/user';
+import { UserDto } from 'src/app/models/user/user-dto';
 
 @Component({
     selector: 'app-pull-request-list',
@@ -15,7 +15,7 @@ import { User } from 'src/app/models/user/user';
 export class PullRequestListComponent {
     public dropdownItems: string[];
 
-    public dropdownAuthors: User[];
+    public dropdownAuthors: UserDto[];
 
     public pullRequests: PullRequest[];
 
@@ -45,7 +45,7 @@ export class PullRequestListComponent {
             firstName: 'John',
             lastName: 'Smith',
             userName: 'Johnny',
-        } as User;
+        } as UserDto;
         const user2 = {
             id: 2,
             avatarUrl: 'https://picsum.photos/200',
@@ -53,7 +53,7 @@ export class PullRequestListComponent {
             firstName: 'Test',
             lastName: 'Smith',
             userName: '',
-        } as User;
+        } as UserDto;
         const user3 = {
             id: 3,
             avatarUrl: 'https://picsum.photos/200',
@@ -61,12 +61,12 @@ export class PullRequestListComponent {
             firstName: 'Test',
             lastName: 'Smith',
             userName: 'Johnny',
-        } as User;
+        } as UserDto;
 
         return [user, user2, user3];
     }
 
-    getFullName(item: User) {
+    getFullName(item: UserDto) {
         return `${item.firstName} ${item.lastName} ${item.userName ? `(${item.userName})` : ''}`;
     }
 
@@ -79,7 +79,7 @@ export class PullRequestListComponent {
             firstName: 'John',
             lastName: 'Smith',
             userName: 'Johnny',
-        } as User;
+        } as UserDto;
         const branch = {
             id: 1,
             name: 'DEV',

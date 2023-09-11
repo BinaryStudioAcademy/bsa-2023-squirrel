@@ -2,7 +2,7 @@
 
 using DiffPlex.DiffBuilder.Model;
 
-public class DiffLineResult
+public sealed class DiffLineResult
 {
     public ChangeType Type { get; set; }
 

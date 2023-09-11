@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { BaseComponent } from '@core/base/base.component';
 import { NotificationService } from '@core/services/notification.service';
 import { ProjectService } from '@core/services/project.service';
+import { SharedProjectService } from '@core/services/shared-project.service';
 import { CreateProjectModalComponent } from '@modules/projects/create-project-modal/create-project-modal.component';
 import { takeUntil } from 'rxjs';
 
-import { ProjectDto } from 'src/app/models/projects/project-dto';
+import { ProjectResponseDto } from 'src/app/models/projects/project-response-dto';
 
 @Component({
     selector: 'app-projects-page',
@@ -14,12 +16,14 @@ import { ProjectDto } from 'src/app/models/projects/project-dto';
     styleUrls: ['./projects-page.component.sass'],
 })
 export class ProjectsPageComponent extends BaseComponent implements OnInit {
-    public projects: ProjectDto[] = [];
+    public projects: ProjectResponseDto[] = [];
 
     constructor(
         public dialog: MatDialog,
         private projectService: ProjectService,
         private notificationService: NotificationService,
+        private router: Router,
+        private sharedProject: SharedProjectService,
     ) {
         super();
     }
@@ -33,7 +37,7 @@ export class ProjectsPageComponent extends BaseComponent implements OnInit {
             .getAllUserProjects()
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe(
-                (projects: ProjectDto[]) => {
+                (projects: ProjectResponseDto[]) => {
                     this.projects = projects;
                 },
                 () => {
@@ -48,8 +52,11 @@ export class ProjectsPageComponent extends BaseComponent implements OnInit {
             height: '45%',
         });
 
-        dialogRef.componentInstance.projectCreated.subscribe((createdProject: ProjectDto) => {
-            this.projects.push(createdProject);
-        });
+        dialogRef.componentInstance.projectCreated.subscribe(() => this.loadProjects());
+    }
+
+    chooseProject(project: ProjectResponseDto) {
+        this.sharedProject.setProject(project);
+        this.router.navigateByUrl(`main/${project.id}`);
     }
 }

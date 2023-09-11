@@ -4,32 +4,32 @@ using Squirrel.SqlService.BLL.Interfaces;
 
 namespace Squirrel.SqlService.BLL.Services;
 
-public class DbItemsRetrievalService : IDbItemsRetrievalService
+public sealed class DbItemsRetrievalService : IDbItemsRetrievalService
 {
     public ICollection<DatabaseItem> GetAllItems()
     {
         var mockedItems = new List<DatabaseItem>
             {
-                new DatabaseItem("Employee", DatabaseItemType.Table),
-                new DatabaseItem("GetEmployeeByID", DatabaseItemType.StoredProcedure),
-                new DatabaseItem("CalculateSalary", DatabaseItemType.Function),
-                new DatabaseItem("SalesView", DatabaseItemType.View),
-                new DatabaseItem("Customer", DatabaseItemType.Table),
-                new DatabaseItem("InsertOrder", DatabaseItemType.StoredProcedure),
-                new DatabaseItem("GetTotalRevenue", DatabaseItemType.Function),
-                new DatabaseItem("ProductView", DatabaseItemType.View),
-                new DatabaseItem("Order", DatabaseItemType.Table),
-                new DatabaseItem("DeleteCustomer", DatabaseItemType.StoredProcedure),
-                new DatabaseItem("GetProductCount", DatabaseItemType.Function),
-                new DatabaseItem("OrderDetailsView", DatabaseItemType.View),
-                new DatabaseItem("Supplier", DatabaseItemType.Table),
-                new DatabaseItem("UpdateOrderStatus", DatabaseItemType.StoredProcedure),
-                new DatabaseItem("GetSupplierByID", DatabaseItemType.Function),
-                new DatabaseItem("SupplierProductsView", DatabaseItemType.View),
-                new DatabaseItem("Category", DatabaseItemType.Table),
-                new DatabaseItem("CreateCategory", DatabaseItemType.StoredProcedure),
-                new DatabaseItem("GetCategoryByName", DatabaseItemType.Function),
-                new DatabaseItem("CategoryProductsView", DatabaseItemType.View)
+                new("Employee", DatabaseItemType.Table),
+                new("GetEmployeeByID", DatabaseItemType.StoredProcedure),
+                new("CalculateSalary", DatabaseItemType.Function),
+                new("SalesView", DatabaseItemType.View),
+                new("Customer", DatabaseItemType.Table),
+                new("InsertOrder", DatabaseItemType.StoredProcedure),
+                new("GetTotalRevenue", DatabaseItemType.Function),
+                new("ProductView", DatabaseItemType.View),
+                new("Order", DatabaseItemType.Table),
+                new("DeleteCustomer", DatabaseItemType.StoredProcedure),
+                new("GetProductCount", DatabaseItemType.Function),
+                new("OrderDetailsView", DatabaseItemType.View),
+                new("Supplier", DatabaseItemType.Table),
+                new("UpdateOrderStatus", DatabaseItemType.StoredProcedure),
+                new("GetSupplierByID", DatabaseItemType.Function),
+                new("SupplierProductsView", DatabaseItemType.View),
+                new("Category", DatabaseItemType.Table),
+                new("CreateCategory", DatabaseItemType.StoredProcedure),
+                new("GetCategoryByName", DatabaseItemType.Function),
+                new("CategoryProductsView", DatabaseItemType.View)
                 // Add more items as needed.
             };
 

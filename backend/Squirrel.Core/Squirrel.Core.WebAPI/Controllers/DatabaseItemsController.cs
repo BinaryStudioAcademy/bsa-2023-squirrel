@@ -6,7 +6,7 @@ namespace Squirrel.Core.WebAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class DatabaseItemsController : ControllerBase
+public sealed class DatabaseItemsController : ControllerBase
 {
     private readonly IDatabaseItemsService _databaseItemsService;
 

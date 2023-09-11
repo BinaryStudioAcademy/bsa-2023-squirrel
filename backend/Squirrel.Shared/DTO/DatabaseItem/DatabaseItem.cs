@@ -2,7 +2,7 @@
 
 namespace Squirrel.Shared.DTO.DatabaseItem;
 
-public class DatabaseItem
+public sealed class DatabaseItem
 {
     public string Name { get; set; }
     public DatabaseItemType Type { get; set; }

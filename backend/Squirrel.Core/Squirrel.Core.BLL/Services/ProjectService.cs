@@ -10,67 +10,83 @@ using Squirrel.Shared.Exceptions;
 namespace Squirrel.Core.BLL.Services;
 
 public sealed class ProjectService : BaseService, IProjectService
-{  
+{
     private readonly IUserIdGetter _userIdGetter;
-    public ProjectService(SquirrelCoreContext context, IMapper mapper, IUserIdGetter userIdGetter) : base(context, mapper)
+    private readonly IBranchService _branchService;
+
+    public ProjectService(SquirrelCoreContext context, IMapper mapper, IUserIdGetter userIdGetter,
+        IBranchService branchService)
+        : base(context, mapper)
     {
         _userIdGetter = userIdGetter;
+        _branchService = branchService;
     }
 
-    public async Task<ProjectDto> AddProjectAsync(ProjectDto projectDto)
+
+    public async Task<ProjectResponseDto> AddProjectAsync(NewProjectDto newProjectDto)
     {
-        var project = _mapper.Map<Project>(projectDto)!;
-        var createdProject = (await _context.Projects.AddAsync(project)).Entity;
-        
+        var projectEntity = _mapper.Map<Project>(newProjectDto.Project);
+        projectEntity.CreatedBy = _userIdGetter.GetCurrentUserId();
+        var createdProject = (await _context.Projects.AddAsync(projectEntity)).Entity;
         await _context.SaveChangesAsync();
-        
-        return _mapper.Map<ProjectDto>(createdProject)!;
+
+        newProjectDto.DefaultBranch.ProjectId = createdProject.Id;
+        var defaultBranch = await _branchService.AddBranchAsync(newProjectDto.DefaultBranch);
+        createdProject.DefaultBranchId = defaultBranch.Id;
+        await _context.SaveChangesAsync();
+
+        return _mapper.Map<ProjectResponseDto>(createdProject);
     }
 
-    public async Task<ProjectDto> UpdateProjectAsync(int projectId, ProjectDto projectDto)
+    public async Task<ProjectResponseDto> UpdateProjectAsync(int projectId, ProjectDto projectDto)
     {
         var existingProject = await _context.Projects.FindAsync(projectId);
-        if (existingProject is null)
-        {
-            throw new EntityNotFoundException();
-        }
         
+        ValidateProject(existingProject);
+
         _mapper.Map(projectDto, existingProject);
         await _context.SaveChangesAsync();
-        
-        return _mapper.Map<ProjectDto>(existingProject)!;
+
+        return _mapper.Map<ProjectResponseDto>(existingProject)!;
+    }
+
+    public async Task<ProjectResponseDto> GetProjectAsync(int projectId)
+    {
+        var project = await _context.Projects
+            .Include(project => project.Tags)
+            .FirstOrDefaultAsync(project => project.Id == projectId);
+
+        ValidateProject(project);
+
+        return _mapper.Map<ProjectResponseDto>(project);
     }
 
     public async Task DeleteProjectAsync(int projectId)
     {
         var project = await _context.Projects.FindAsync(projectId);
-        if (project is null)
-        {
-            throw new EntityNotFoundException();
-        }
+        
+        ValidateProject(project);
 
-        _context.Projects.Remove(project);
+        _context.Projects.Remove(project!);
         await _context.SaveChangesAsync();
     }
 
-    public async Task<ProjectDto> GetProjectAsync(int projectId)
-    {
-        var project = await _context.Projects.FindAsync(projectId);
-        if (project is null)
-        {
-            throw new EntityNotFoundException();
-        }
-        
-        return _mapper.Map<ProjectDto>(project)!;
-    }
-
-    public async Task<List<ProjectDto>> GetAllUserProjectsAsync()
+    public async Task<List<ProjectResponseDto>> GetAllUserProjectsAsync()
     {
         var currentUserId = _userIdGetter.GetCurrentUserId();
         var userProjects = await _context.Projects
-                                         .Where(x => x.CreatedBy == currentUserId)
-                                         .ToListAsync();
+            .Include(project => project.Tags)
+            .Where(x => x.CreatedBy == currentUserId)
+            .ToListAsync();
 
-        return _mapper.Map<List<ProjectDto>>(userProjects)!;
+        return _mapper.Map<List<ProjectResponseDto>>(userProjects)!;
+    }
+
+    private void ValidateProject(Project? entity)
+    {
+        if (entity is null || entity.CreatedBy != _userIdGetter.GetCurrentUserId())
+        {
+            throw new EntityNotFoundException(nameof(Project));
+        }
     }
 }

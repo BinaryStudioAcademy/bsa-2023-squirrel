@@ -10,13 +10,13 @@ public sealed class RefreshToken : AuditEntity<int>
     public int UserId { get; set; }
     public User User { get; set; } = null!;
 
-    private readonly TimeSpan _lifetime = TimeSpan.FromMinutes(3);
+    private readonly TimeSpan _lifetime = TimeSpan.FromSeconds(30);
 
     public RefreshToken()
     {
         // TODO: change getting datetime in the db to utc.
-        ExpiresAt = DateTime.Now.Add(_lifetime);
+        ExpiresAt = DateTime.UtcNow.Add(_lifetime);
     }
 
-    public bool IsActive() => DateTime.Now <= ExpiresAt;
+    public bool IsActive() => DateTime.UtcNow <= ExpiresAt;
 }

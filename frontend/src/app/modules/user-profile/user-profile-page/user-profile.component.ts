@@ -213,7 +213,6 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
     }
 
     public onFileChange(event: Event) {
-        this.spinner.show();
         const inputElement = event.target as HTMLInputElement;
 
         if (!inputElement?.files?.length) {
@@ -221,10 +220,11 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
         }
         const file = inputElement.files[0];
 
-        if (file.size > 5 * 1024 * 1024) {
-            this.notificationService.error('The file size should not exceed 5MB');
+        if (!this.fileValidate(file)) {
+            return;
         }
 
+        this.spinner.show();
         this.userService
             .uploadAvatar(file)
             .pipe(takeUntil(this.unsubscribe$))
@@ -239,7 +239,23 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
             });
     }
 
-    deleteAvatar() {
+    public fileValidate(file: File) {
+        if (file.size > 5 * 1024 * 1024) {
+            this.notificationService.error('The file size should not exceed 5MB');
+
+            return false;
+        }
+
+        if (file.type !== 'image/png' && file.type !== 'image/jpeg') {
+            this.notificationService.error('Invalid file type, need .png, .jpeg');
+
+            return false;
+        }
+
+        return true;
+    }
+
+    public deleteAvatar() {
         this.spinner.show();
 
         this.userService.deleteAvatar()
@@ -254,6 +270,4 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
                 },
             });
     }
-
-    protected readonly Date = Date;
 }

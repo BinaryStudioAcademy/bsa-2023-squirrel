@@ -206,6 +206,10 @@ public sealed class UserService : BaseService, IUserService
 
     public async Task AddAvatar(IFormFile avatar)
     {
+        if (avatar.ContentType != "image/png" && avatar.ContentType != "image/jpeg" )
+        {
+            throw new InvalidFileFormatException(".png, .jpeg");
+        }
         if (avatar.Length > 5 * 1024 * 1024)
         {
             throw new LargeFileException("5 MB");

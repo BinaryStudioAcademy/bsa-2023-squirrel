@@ -9,5 +9,6 @@ public enum ErrorType
     NotFound,
     Internal,
     InvalidToken,
-    LargeFile
+    LargeFile,
+    InvalidFileFormat
 }

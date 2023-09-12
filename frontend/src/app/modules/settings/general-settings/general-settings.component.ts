@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { BaseComponent } from '@core/base/base.component';
 import { NotificationService } from '@core/services/notification.service';
 import { ProjectService } from '@core/services/project.service';
@@ -27,8 +26,6 @@ export class GeneralSettingsComponent extends BaseComponent implements OnInit {
         private spinner: SpinnerService,
         private projectService: ProjectService,
         private notificationService: NotificationService,
-        private router: Router,
-        private route: ActivatedRoute,
     ) {
         super();
     }
@@ -52,6 +49,10 @@ export class GeneralSettingsComponent extends BaseComponent implements OnInit {
     }
 
     onSaveClick(): void {
+        if (!this.projectForm.valid) {
+            return;
+        }
+
         this.spinner.show();
 
         this.project.name = this.projectForm.value.projectName;

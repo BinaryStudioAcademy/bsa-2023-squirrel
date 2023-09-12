@@ -14,7 +14,6 @@ public class ConnectionFileService : IConnectionFileService
         _jsonSettingsService = jsonSettingsService;
     }
 
-
     public void CreateInitFile()
     {
         var filePath = ConnectionFilePath;

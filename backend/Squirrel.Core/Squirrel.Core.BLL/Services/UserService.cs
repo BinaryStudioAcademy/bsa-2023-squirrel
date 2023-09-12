@@ -21,6 +21,7 @@ public sealed class UserService : BaseService, IUserService
 {
     private const int MaxNameLength = 25;
     private const int MinNameLength = 2;
+    private const int MaxFileLenght = 5 * 1024 * 1024;
     private readonly IUserIdGetter _userIdGetter;
     private readonly IBlobStorageService _blobStorageService;
 
@@ -210,7 +211,7 @@ public sealed class UserService : BaseService, IUserService
         {
             throw new InvalidFileFormatException(".png, .jpeg");
         }
-        if (avatar.Length > 5 * 1024 * 1024)
+        if (avatar.Length > MaxFileLenght)
         {
             throw new LargeFileException("5 MB");
         }

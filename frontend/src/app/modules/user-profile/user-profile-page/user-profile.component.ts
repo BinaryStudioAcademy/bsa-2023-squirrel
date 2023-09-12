@@ -33,6 +33,8 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
 
     public passwordForm: FormGroup = new FormGroup({});
 
+    private readonly maxFileLength = 5 * 1024 * 1024;
+
     constructor(
         private fb: FormBuilder,
         private userService: UserService,
@@ -240,7 +242,7 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
     }
 
     public fileValidate(file: File) {
-        if (file.size > 5 * 1024 * 1024) {
+        if (file.size > this.maxFileLength) {
             this.notificationService.error('The file size should not exceed 5MB');
 
             return false;

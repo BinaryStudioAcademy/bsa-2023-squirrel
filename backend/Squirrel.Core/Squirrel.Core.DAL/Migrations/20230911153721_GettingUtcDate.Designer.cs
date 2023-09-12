@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Squirrel.Core.DAL.Context;
 
@@ -11,9 +12,10 @@ using Squirrel.Core.DAL.Context;
 namespace Squirrel.Core.DAL.Migrations
 {
     [DbContext(typeof(SquirrelCoreContext))]
-    partial class SquirrelCoreContextModelSnapshot : ModelSnapshot
+    [Migration("20230911153721_GettingUtcDate")]
+    partial class GettingUtcDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -318,34 +320,6 @@ namespace Squirrel.Core.DAL.Migrations
                         .HasFilter("[DefaultBranchId] IS NOT NULL");
 
                     b.ToTable("Projects");
-                });
-
-            modelBuilder.Entity("Squirrel.Core.DAL.Entities.ProjectDatabase", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("DbName")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<Guid>("Guid")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasAlternateKey("Guid");
-
-                    b.HasIndex("ProjectId");
-
-                    b.ToTable("ProjectDatabases");
                 });
 
             modelBuilder.Entity("Squirrel.Core.DAL.Entities.PullRequest", b =>
@@ -674,17 +648,6 @@ namespace Squirrel.Core.DAL.Migrations
                     b.Navigation("DefaultBranch");
                 });
 
-            modelBuilder.Entity("Squirrel.Core.DAL.Entities.ProjectDatabase", b =>
-                {
-                    b.HasOne("Squirrel.Core.DAL.Entities.Project", "Project")
-                        .WithMany("ProjectDatabases")
-                        .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Project");
-                });
-
             modelBuilder.Entity("Squirrel.Core.DAL.Entities.PullRequest", b =>
                 {
                     b.HasOne("Squirrel.Core.DAL.Entities.User", "Author")
@@ -754,8 +717,6 @@ namespace Squirrel.Core.DAL.Migrations
             modelBuilder.Entity("Squirrel.Core.DAL.Entities.Project", b =>
                 {
                     b.Navigation("Branches");
-
-                    b.Navigation("ProjectDatabases");
 
                     b.Navigation("ProjectTags");
 

@@ -6,9 +6,9 @@ using Squirrel.Core.BLL.Services;
 using Squirrel.Core.Common.DTO.Auth;
 using Squirrel.Core.Common.Interfaces;
 using Squirrel.Core.Common.JWT;
+using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
-using System.Reflection;
 
 namespace Squirrel.Core.WebAPI.Extensions;
 
@@ -20,7 +20,7 @@ public static class ServiceCollectionExtensions
             .AddControllers()
             .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
             .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
-        
+
         services.AddScoped<JwtIssuerOptions>();
         services.AddScoped<IJwtFactory, JwtFactory>();
         services.AddScoped<IUserService, UserService>();
@@ -32,7 +32,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IScriptService, ScriptService>();
 
         services.AddSingleton<IHttpClientService, HttpClientService>();
-      
+
         services.AddUserIdStorage();
     }
 
@@ -60,6 +60,7 @@ public static class ServiceCollectionExtensions
         {
             options.Issuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)]!;
             options.Audience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)]!;
+            options.SecretJwtKey = secretKey;
             options.SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
         });
 

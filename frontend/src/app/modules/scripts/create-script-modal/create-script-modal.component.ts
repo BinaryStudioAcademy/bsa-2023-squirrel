@@ -44,7 +44,7 @@ export class CreateScriptModalComponent extends BaseComponent implements OnInit 
     public createScript(): void {
         this.spinner.show();
 
-        this.sharedProject.project$.subscribe((project) => {
+        this.sharedProject.project$.pipe(takeUntil(this.unsubscribe$)).subscribe((project) => {
             if (project) {
                 const newScriptDto: CreateScriptDto = {
                     title: this.newScriptForm.value.scriptName,

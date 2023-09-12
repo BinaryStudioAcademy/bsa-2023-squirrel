@@ -29,6 +29,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IProjectService, ProjectService>();
         services.AddScoped<IDatabaseItemsService, DatabaseItemsService>();
         services.AddScoped<IProjectDatabaseService, ProjectDatabaseService>();
+        services.AddScoped<IScriptService, ScriptService>();
 
         services.AddSingleton<IHttpClientService, HttpClientService>();
       

@@ -18,9 +18,8 @@
             <mat-menu #userMenu="matMenu" [overlapTrigger]="false" xPosition="after">
                 <app-profile-menu></app-profile-menu>
             </mat-menu>
-            <div class="tab">
+            <div class="tab" [matMenuTriggerFor]="userMenu">
                 <img
-                    [matMenuTriggerFor]="userMenu"
                     class="account-icon"
                     src="/assets/account_circle_icon.png"
                     alt="Account Icon" />

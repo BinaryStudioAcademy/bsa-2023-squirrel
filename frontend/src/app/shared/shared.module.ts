@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { SidebarComponent } from '@shared/components/sidebar/sidebar.component';
@@ -16,6 +17,7 @@ import { CheckboxComponent } from './components/checkbox/checkbox.component';
 import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
 import { DropdownComponent } from './components/dropdown/dropdown.component';
 import { DropdownSelectComponent } from './components/dropdown-select/dropdown-select.component';
+import { InfoTooltipComponent } from './components/info-tooltip/info-tooltip.component';
 import { InputComponent } from './components/input/input.component';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
@@ -34,6 +36,7 @@ import { TreeComponent } from './components/tree/tree.component';
             positionClass: 'toast-bottom-right',
         }),
         MatMenuModule,
+        MatTooltipModule,
     ],
     declarations: [
         LoadingSpinnerComponent,
@@ -49,6 +52,7 @@ import { TreeComponent } from './components/tree/tree.component';
         DropdownComponent,
         TreeComponent,
         CheckboxComponent,
+        InfoTooltipComponent,
     ],
     exports: [
         CommonModule,
@@ -71,6 +75,7 @@ import { TreeComponent } from './components/tree/tree.component';
         DropdownComponent,
         TreeComponent,
         CheckboxComponent,
+        InfoTooltipComponent,
     ],
 })
 export class SharedModule {}

@@ -21,6 +21,7 @@ public class SquirrelCoreContext : DbContext
     public DbSet<PullRequestReviewer> PullRequestReviewers => Set<PullRequestReviewer>();
     public DbSet<UserProject> UserProjects => Set<UserProject>();
     public DbSet<Script> Scripts => Set<Script>();
+    public DbSet<ProjectDatabase> ProjectDatabases => Set<ProjectDatabase>();
 
     public SquirrelCoreContext(DbContextOptions<SquirrelCoreContext> options) : base(options)
     {

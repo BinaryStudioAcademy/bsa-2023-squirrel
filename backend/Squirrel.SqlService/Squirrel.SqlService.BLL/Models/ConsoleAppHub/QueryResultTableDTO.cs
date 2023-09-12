@@ -9,7 +9,6 @@ public class QueryResultTableDTO
     public int RowCount { get; set; }
     public int ColumnCount { get; set; }
 
-
     // Just for debugging and demo
     public override string ToString()
     {

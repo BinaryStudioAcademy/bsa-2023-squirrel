@@ -12,7 +12,6 @@ public class ClientIdFileService : IClientIdFileService
         }
     }
 
-
     public string GetClientId()
     {
         var filePath = ClientIdFilePath;

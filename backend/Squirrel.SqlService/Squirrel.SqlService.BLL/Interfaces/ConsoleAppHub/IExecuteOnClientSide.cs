@@ -4,7 +4,6 @@ public interface IExecuteOnClientSide
 {
     Task SetClientId(string guid);
 
-
     // Actions
     Task GetAllTablesNamesAsync(string clientId);
     Task GetTableDataAsync(string clientId, string tableName, int rowsCount);

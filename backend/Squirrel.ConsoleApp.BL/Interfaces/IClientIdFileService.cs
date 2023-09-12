@@ -1,5 +1,4 @@
-﻿
-namespace Squirrel.ConsoleApp.BL.Interfaces;
+﻿namespace Squirrel.ConsoleApp.BL.Interfaces;
 
 public interface IClientIdFileService
 {

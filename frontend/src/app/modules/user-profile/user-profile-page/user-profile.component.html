@@ -22,7 +22,7 @@
                             <input type="file" id="userAvatar" accept="image/png, image/jpeg" (change)="onFileChange($event)"/>
                             <fa-icon [icon]="penIcon" style="color: white"></fa-icon>
                         </div>
-                        <div *ngIf="currentUser.avatarUrl !== ''" class="delete-icon" (click)="deleteAvatar()">
+                        <div *ngIf="currentUser.avatarUrl" class="delete-icon" (click)="deleteAvatar()">
                             <fa-icon [icon]="trashIcon" style="color: white"></fa-icon>
                         </div>
                     </div>

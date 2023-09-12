@@ -119,6 +119,7 @@
 		            sysc.name [Column],
 		            sysc.colorder [ColumnOrder],
 		            syst.name [DataType],
+                    CASE WHEN syst.status = 1 THEN 'True' ELSE 'False' END [IsUserDefined]
 		            syscmnts.text [Default],
 		            sysc.prec [Precision],   
 		            sysc.scale [Scale],

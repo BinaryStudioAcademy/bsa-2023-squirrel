@@ -34,7 +34,7 @@
               FROM	[sys].[sysobjects] AS syso  
             		JOIN [sys].[syscolumns] AS sysc on syso.id = sysc.id  
             		LEFT JOIN [sys].[syscomments] AS syscmnts on sysc.cdefault = syscmnts.id
-            		LEFT JOIN [sys].[systypes] AS syst ON sysc.xtype = syst.xtype AND syst.name != 'sysname'
+            		LEFT JOIN [sys].[systypes] AS syst ON sysc.xusertype = syst.xusertype AND syst.name != 'sysname'
             		LEFT JOIN [sys].[foreign_key_columns] AS fkc on syso.id = fkc.parent_object_id AND sysc.colid = fkc.parent_column_id      
             		LEFT JOIN [sys].[objects] AS obj ON fkc.referenced_object_id = obj.[object_id]  
             		LEFT JOIN [sys].[extended_properties] AS ep ON syso.id = ep.major_id AND sysc.colid = ep.minor_id AND ep.name = 'MS_Description' 

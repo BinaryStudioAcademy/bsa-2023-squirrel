@@ -19,10 +19,10 @@ public static class HubConnectionExtensions
             hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", clientId, "GetAllTablesNamesAsync", getActionsService.GetAllTablesNamesAsync().Result);
         });
 
-        hubConnection.On("GetTableDataAsync", (string clientId, string tableName, int rowsCount) =>
+        hubConnection.On("GetTableDataAsync", (string clientId, string schema, string tableName, int rowsCount) =>
         {
             var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
-            hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", clientId, "GetTableDataAsync", getActionsService.GetTableDataAsync(tableName, rowsCount).Result);
+            hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", clientId, "GetTableDataAsync", getActionsService.GetTableDataAsync(schema, tableName, rowsCount).Result);
         });
 
         hubConnection.On("GetAllStoredProceduresNamesAsync", (string clientId) =>
@@ -61,16 +61,16 @@ public static class HubConnectionExtensions
             hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", clientId, "GetViewDefinitionAsync", getActionsService.GetViewDefinitionAsync(viewName).Result);
         });
 
-        hubConnection.On("GetDbTablesStructureAsync", (string clientId) =>
+        hubConnection.On("GetTableStructureAsync", (string clientId, string schema, string tableName) =>
         {
             var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
-            hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", clientId, "GetDbTablesStructureAsync", getActionsService.GetDbTablesStructureAsync().Result);
+            hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", clientId, "GetTableStructureAsync", getActionsService.GetTableStructureAsync(schema, tableName).Result);
         });
 
-        hubConnection.On("GetDbTablesCheckAndUniqueConstraintsAsync", (string clientId) =>
+        hubConnection.On("GetTableChecksAndUniqueConstraintsAsync", (string clientId, string schema, string tableName) =>
         {
             var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
-            hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", clientId, "GetDbTablesCheckAndUniqueConstraintsAsync", getActionsService.GetDbTablesCheckAndUniqueConstraintsAsync().Result);
+            hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", clientId, "GetTableChecksAndUniqueConstraintsAsync", getActionsService.GetTableChecksAndUniqueConstraintsAsync(schema, tableName).Result);
         });
 
         hubConnection.On("GetStoredProceduresWithDetailAsync", (string clientId) =>

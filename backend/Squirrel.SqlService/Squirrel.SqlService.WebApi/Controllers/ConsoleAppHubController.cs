@@ -8,16 +8,17 @@ namespace Squirrel.SqlService.WebApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class HubController : ControllerBase
+public class ConsoleAppHubController : ControllerBase
 {
     private readonly IHubContext<ConsoleAppHub, IExecuteOnClientSide> _hubContext;
 
-    public HubController(IHubContext<ConsoleAppHub, IExecuteOnClientSide> hubContext)
+    public ConsoleAppHubController(IHubContext<ConsoleAppHub, IExecuteOnClientSide> hubContext)
     {
         _hubContext = hubContext;
     }
 
 
+    // https://localhost:7244/api/ConsoleAppHub/getAllTablesNames
     [HttpPost("getAllTablesNames")]
     public async Task<ActionResult> GetAllTablesNamesAsync([FromBody] QueryParameters queryParameters)
     {
@@ -25,13 +26,15 @@ public class HubController : ControllerBase
         return NoContent();
     }
 
+    // https://localhost:7244/api/ConsoleAppHub/getTableData
     [HttpPost("getTableData")]
     public async Task<ActionResult> GetTableDataAsync([FromBody] QueryParameters queryParameters)
     {
-        await _hubContext.Clients.User(queryParameters.ClientId).GetTableDataAsync(queryParameters.ClientId, queryParameters.FilterName, queryParameters.FilterRowsCount);
+        await _hubContext.Clients.User(queryParameters.ClientId).GetTableDataAsync(queryParameters.ClientId, queryParameters.FilterSchema, queryParameters.FilterName, queryParameters.FilterRowsCount);
         return NoContent();
     }
 
+    // https://localhost:7244/api/ConsoleAppHub/getAllStoredProceduresNames
     [HttpPost("getAllStoredProceduresNames")]
     public async Task<ActionResult> GetAllStoredProceduresNamesAsync([FromBody] QueryParameters queryParameters)
     {
@@ -39,6 +42,7 @@ public class HubController : ControllerBase
         return NoContent();
     }
 
+    // https://localhost:7244/api/ConsoleAppHub/getStoredProcedureDefinition
     [HttpPost("getStoredProcedureDefinition")]
     public async Task<ActionResult> GetStoredProcedureDefinitionAsync([FromBody] QueryParameters queryParameters)
     {
@@ -46,6 +50,7 @@ public class HubController : ControllerBase
         return NoContent();
     }
 
+    // https://localhost:7244/api/ConsoleAppHub/getAllFunctionsNames
     [HttpPost("getAllFunctionsNames")]
     public async Task<ActionResult> GetAllFunctionsNamesAsync([FromBody] QueryParameters queryParameters)
     {
@@ -53,6 +58,7 @@ public class HubController : ControllerBase
         return NoContent();
     }
 
+    // https://localhost:7244/api/ConsoleAppHub/getFunctionDefinition
     [HttpPost("getFunctionDefinition")]
     public async Task<ActionResult> GetFunctionDefinitionAsync([FromBody] QueryParameters queryParameters)
     {
@@ -60,6 +66,7 @@ public class HubController : ControllerBase
         return NoContent();
     }
 
+    // https://localhost:7244/api/ConsoleAppHub/getAllViewsNames
     [HttpPost("getAllViewsNames")]
     public async Task<ActionResult> GetAllViewsNamesAsync([FromBody] QueryParameters queryParameters)
     {
@@ -67,6 +74,7 @@ public class HubController : ControllerBase
         return NoContent();
     }
 
+    // https://localhost:7244/api/ConsoleAppHub/getViewDefinition
     [HttpPost("getViewDefinition")]
     public async Task<ActionResult> GetViewDefinitionAsync([FromBody] QueryParameters queryParameters)
     {
@@ -74,20 +82,23 @@ public class HubController : ControllerBase
         return NoContent();
     }
 
-    [HttpPost("getDbTablesStructure")]
-    public async Task<ActionResult> GetDbTablesStructureAsync([FromBody] QueryParameters queryParameters)
+    // https://localhost:7244/api/ConsoleAppHub/getTableStructure
+    [HttpPost("getTableStructure")]
+    public async Task<ActionResult> GetTableStructureAsync([FromBody] QueryParameters queryParameters)
     {
-        await _hubContext.Clients.User(queryParameters.ClientId).GetDbTablesStructureAsync(queryParameters.ClientId);
+        await _hubContext.Clients.User(queryParameters.ClientId).GetTableStructureAsync(queryParameters.ClientId, queryParameters.FilterSchema, queryParameters.FilterName);
         return NoContent();
     }
 
-    [HttpPost("getDbTablesCheckAndUniqueConstraints")]
-    public async Task<ActionResult> GetDbTablesCheckAndUniqueConstraintsAsync([FromBody] QueryParameters queryParameters)
+    // https://localhost:7244/api/ConsoleAppHub/getTableChecksAndUniqueConstraints
+    [HttpPost("getTableChecksAndUniqueConstraints")]
+    public async Task<ActionResult> GetTableChecksAndUniqueConstraintsAsync([FromBody] QueryParameters queryParameters)
     {
-        await _hubContext.Clients.User(queryParameters.ClientId).GetDbTablesCheckAndUniqueConstraintsAsync(queryParameters.ClientId);
+        await _hubContext.Clients.User(queryParameters.ClientId).GetTableChecksAndUniqueConstraintsAsync(queryParameters.ClientId, queryParameters.FilterSchema, queryParameters.FilterName);
         return NoContent();
     }
 
+    // https://localhost:7244/api/ConsoleAppHub/getStoredProceduresWithDetail
     [HttpPost("getStoredProceduresWithDetail")]
     public async Task<ActionResult> GetStoredProceduresWithDetailAsync([FromBody] QueryParameters queryParameters)
     {
@@ -95,6 +106,7 @@ public class HubController : ControllerBase
         return NoContent();
     }
 
+    // https://localhost:7244/api/ConsoleAppHub/getFunctionsWithDetail
     [HttpPost("getFunctionsWithDetail")]
     public async Task<ActionResult> GetFunctionsWithDetailAsync([FromBody] QueryParameters queryParameters)
     {
@@ -102,6 +114,7 @@ public class HubController : ControllerBase
         return NoContent();
     }
 
+    // https://localhost:7244/api/ConsoleAppHub/getViewsWithDetail
     [HttpPost("getViewsWithDetail")]
     public async Task<ActionResult> GetViewsWithDetailAsync([FromBody] QueryParameters queryParameters)
     {
@@ -109,6 +122,7 @@ public class HubController : ControllerBase
         return NoContent();
     }
 
+    // https://localhost:7244/api/ConsoleAppHub/getUserDefinedTypesWithDefaultsAndRulesAndDefinition
     [HttpPost("getUserDefinedTypesWithDefaultsAndRulesAndDefinition")]
     public async Task<ActionResult> GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync([FromBody] QueryParameters queryParameters)
     {
@@ -116,6 +130,7 @@ public class HubController : ControllerBase
         return NoContent();
     }
 
+    // https://localhost:7244/api/ConsoleAppHub/getUserDefinedTableTypes
     [HttpPost("getUserDefinedTableTypes")]
     public async Task<ActionResult> GetUserDefinedTableTypesAsync([FromBody] QueryParameters queryParameters)
     {

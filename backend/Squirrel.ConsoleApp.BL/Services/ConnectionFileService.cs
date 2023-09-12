@@ -19,7 +19,7 @@ public class ConnectionFileService : IConnectionFileService
         var filePath = ConnectionFilePath;
         if (!File.Exists(filePath))
         {
-            File.WriteAllText(filePath, JsonConvert.SerializeObject(new DbSettingsContainer(new DbSettings()), Formatting.Indented));
+            File.WriteAllText(filePath, JsonConvert.SerializeObject(new ConnectionStringDto(), _jsonSettingsService.GetSettings()));
         }
     }
 
@@ -32,14 +32,13 @@ public class ConnectionFileService : IConnectionFileService
         }
 
         var json = File.ReadAllText(filePath);
-        return JsonConvert.DeserializeObject<ConnectionStringDto>(json) ?? throw new JsonReadFailed(filePath);
+        return JsonConvert.DeserializeObject<ConnectionStringDto>(json, _jsonSettingsService.GetSettings()) ?? throw new JsonReadFailed(filePath);
     }
 
     public void SaveToFile(ConnectionStringDto connectionStringDto)
     {
-        var filePath = ConnectionFilePath;
-        string json = JsonConvert.SerializeObject(connectionStringDto, Formatting.Indented);
-        File.WriteAllText(filePath, json);
+        string json = JsonConvert.SerializeObject(connectionStringDto, _jsonSettingsService.GetSettings());
+        File.WriteAllText(ConnectionFilePath, json);
     }
 
     private string ConnectionFilePath

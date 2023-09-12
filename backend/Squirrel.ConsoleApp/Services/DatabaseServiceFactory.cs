@@ -26,14 +26,4 @@ public class DatabaseServiceFactory
             _ => new SqlServerQueryProvider()
         };
     }
-
-    public static IDbQueryProvider CreateDbQueryProvider(DbEngine dbType)
-    {
-        return dbType switch
-        {
-            DbEngine.SqlServer => new SqlServerQueryProvider(),
-            DbEngine.PostgreSql => new PostgreSqlQueryProvider(),
-            _ => new SqlServerQueryProvider()
-        };
-    }
 }

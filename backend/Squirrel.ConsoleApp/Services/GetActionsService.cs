@@ -8,12 +8,12 @@ namespace Squirrel.ConsoleApp.Services
         private readonly IDbQueryProvider _queryProvider;
         private readonly IDatabaseService _databaseService;
 
-        public GetActionsService(IConnectionFileService _connectionFileService)
+        public GetActionsService(IConnectionFileService _connectionFileService, IConnectionStringService connectionStringService)
         {
-            var dbSettings = _connectionFileService.ReadFromFile();
+            var connectionString = _connectionFileService.ReadFromFile();
 
-            _queryProvider = DatabaseFactory.CreateDbQueryProvider(dbSettings.DbType);
-            _databaseService = DatabaseFactory.CreateDatabaseService(dbSettings.DbType, dbSettings.ConnectionString);
+            _queryProvider = DatabaseServiceFactory.CreateDbQueryProvider(connectionString.DbEngine);
+            _databaseService = DatabaseServiceFactory.CreateDatabaseService(connectionString.DbEngine, connectionStringService.BuildConnectionString(connectionString));
         }
 
 

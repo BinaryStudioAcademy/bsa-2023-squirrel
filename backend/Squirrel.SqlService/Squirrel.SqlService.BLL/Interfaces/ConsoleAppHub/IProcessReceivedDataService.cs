@@ -17,8 +17,8 @@ public interface IProcessReceivedDataService
     Task AllViewsNamesProcessReceivedDataAsync(string clientId, QueryResultTableDTO queryResultTableDTO);
     Task ViewDefinitionProcessReceivedDataAsync(string clientId, QueryResultTableDTO queryResultTableDTO);
 
-    Task DbTablesStructureProcessReceivedDataAsync(string clientId, QueryResultTableDTO queryResultTableDTO);
-    Task DbTablesCheckAndUniqueConstraintsProcessReceivedDataAsync(string clientId, QueryResultTableDTO queryResultTableDTO);
+    Task TableStructureProcessReceivedDataAsync(string clientId, QueryResultTableDTO queryResultTableDTO);
+    Task TableChecksAndUniqueConstraintsProcessReceivedDataAsync(string clientId, QueryResultTableDTO queryResultTableDTO);
 
     Task StoredProceduresWithDetailProcessReceivedDataAsync(string clientId, QueryResultTableDTO queryResultTableDTO);
     Task FunctionsWithDetailProcessReceivedDataAsync(string clientId, QueryResultTableDTO queryResultTableDTO);

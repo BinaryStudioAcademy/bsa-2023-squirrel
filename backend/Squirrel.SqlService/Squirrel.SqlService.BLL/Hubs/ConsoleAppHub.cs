@@ -41,8 +41,8 @@ public sealed class ConsoleAppHub : Hub<IExecuteOnClientSide>
         requestActionToProcessReceivedData.Add("GetFunctionDefinitionAsync", _processReceivedDataService.FunctionDefinitionProcessReceivedDataAsync);
         requestActionToProcessReceivedData.Add("GetAllViewsNamesAsync", _processReceivedDataService.AllViewsNamesProcessReceivedDataAsync);
         requestActionToProcessReceivedData.Add("GetViewDefinitionAsync", _processReceivedDataService.ViewDefinitionProcessReceivedDataAsync);
-        requestActionToProcessReceivedData.Add("GetDbTablesStructureAsync", _processReceivedDataService.DbTablesStructureProcessReceivedDataAsync);
-        requestActionToProcessReceivedData.Add("GetDbTablesCheckAndUniqueConstraintsAsync", _processReceivedDataService.DbTablesCheckAndUniqueConstraintsProcessReceivedDataAsync);
+        requestActionToProcessReceivedData.Add("GetTableStructureAsync", _processReceivedDataService.TableStructureProcessReceivedDataAsync);
+        requestActionToProcessReceivedData.Add("GetTableChecksAndUniqueConstraintsAsync", _processReceivedDataService.TableChecksAndUniqueConstraintsProcessReceivedDataAsync);
         requestActionToProcessReceivedData.Add("GetStoredProceduresWithDetailAsync", _processReceivedDataService.StoredProceduresWithDetailProcessReceivedDataAsync);
         requestActionToProcessReceivedData.Add("GetFunctionsWithDetailAsync", _processReceivedDataService.FunctionsWithDetailProcessReceivedDataAsync);
         requestActionToProcessReceivedData.Add("GetViewsWithDetailAsync", _processReceivedDataService.ViewsWithDetailProcessReceivedDataAsync);

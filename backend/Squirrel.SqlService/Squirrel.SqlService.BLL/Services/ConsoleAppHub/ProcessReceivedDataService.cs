@@ -60,12 +60,12 @@ public class ProcessReceivedDataService : IProcessReceivedDataService
         await ShowResult(clientId, queryResultTableDTO);
     }
 
-    public async Task DbTablesStructureProcessReceivedDataAsync(string clientId, QueryResultTableDTO queryResultTableDTO)
+    public async Task TableStructureProcessReceivedDataAsync(string clientId, QueryResultTableDTO queryResultTableDTO)
     {
         await ShowResult(clientId, queryResultTableDTO);
     }
 
-    public async Task DbTablesCheckAndUniqueConstraintsProcessReceivedDataAsync(string clientId, QueryResultTableDTO queryResultTableDTO)
+    public async Task TableChecksAndUniqueConstraintsProcessReceivedDataAsync(string clientId, QueryResultTableDTO queryResultTableDTO)
     {
         await ShowResult(clientId, queryResultTableDTO);
     }

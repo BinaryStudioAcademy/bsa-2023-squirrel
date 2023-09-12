@@ -6,7 +6,7 @@ public interface IExecuteOnClientSide
 
     // Actions
     Task GetAllTablesNamesAsync(string clientId);
-    Task GetTableDataAsync(string clientId, string tableName, int rowsCount);
+    Task GetTableDataAsync(string clientId, string schema, string tableName, int rowsCount);
 
     Task GetAllStoredProceduresNamesAsync(string clientId);
     Task GetStoredProcedureDefinitionAsync(string clientId, string storedProcedureName);
@@ -17,8 +17,8 @@ public interface IExecuteOnClientSide
     Task GetAllViewsNamesAsync(string clientId);
     Task GetViewDefinitionAsync(string clientId, string viewName);
 
-    Task GetDbTablesStructureAsync(string clientId);
-    Task GetDbTablesCheckAndUniqueConstraintsAsync(string clientId);
+    Task GetTableStructureAsync(string clientId, string schema, string tableName);
+    Task GetTableChecksAndUniqueConstraintsAsync(string clientId, string schema, string tableName);
 
     Task GetStoredProceduresWithDetailAsync(string clientId);
     Task GetFunctionsWithDetailAsync(string clientId);

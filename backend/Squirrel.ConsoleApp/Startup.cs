@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Squirrel.ConsoleApp.BL.Extensions;
 using Newtonsoft.Json.Converters;
 using Squirrel.ConsoleApp.BL.Interfaces;
 using Squirrel.ConsoleApp.BL.Services;
@@ -34,13 +35,12 @@ public class Startup
         services.AddScoped<IDbQueryProvider>(c => DatabaseFactory.CreateDbQueryProvider(dbSettings.DbType));
         services.AddScoped<IDatabaseService>(c => DatabaseFactory.CreateDatabaseService(dbSettings.DbType, dbSettings.ConnectionString));
 
-        services.AddSingleton<IConnectionFileService, ConnectionFileService>();
-        services.AddSingleton<IClientIdFileService, ClientIdFileService>();
-        services.AddSingleton<IJsonSerializerSettingsService, JsonSerializerSettingsService>();
 
-        services.AddTransient<IGetActionsService, GetActionsService>();
-        
-        services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<DbSettingsValidator>());
+        services.AddScoped<IConnectionFileService, ConnectionFileService>();
+        services.AddScoped<IClientIdFileService, ClientIdFileService>();
+        services.AddScoped<IConnectionStringService, ConnectionStringService>();
+        services.AddScoped<IGetActionsService, GetActionsService>();
+        services.AddScoped<IJsonSerializerSettingsService, JsonSerializerSettingsService>();
 
         services.AddControllers(options =>
         {
@@ -52,9 +52,14 @@ public class Startup
             jsonOptions.SerializerSettings.Converters.Add(new StringEnumConverter());
         });
     }
-    
+
     public void Configure(IApplicationBuilder app)
     {
+        app.UseCors(builder => builder
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowAnyOrigin());
+
         app.UseRouting();
         app.UseHttpsRedirection();
         app.UseEndpoints(cfg =>

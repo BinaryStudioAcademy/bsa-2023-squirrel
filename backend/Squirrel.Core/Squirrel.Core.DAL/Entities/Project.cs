@@ -1,4 +1,5 @@
-﻿using Squirrel.Core.DAL.Entities.Common.AuditEntity;
+﻿using System.Collections;
+using Squirrel.Core.DAL.Entities.Common.AuditEntity;
 using Squirrel.Core.DAL.Entities.JoinEntities;
 using Squirrel.Core.DAL.Enums;
 
@@ -20,4 +21,5 @@ public sealed class Project : AuditEntity<int>
     public ICollection<PullRequest> PullRequests { get; set; } = new List<PullRequest>();
     public ICollection<Tag> Tags { get; set; } = new List<Tag>();
     public ICollection<ProjectTag> ProjectTags { get; set; } = new List<ProjectTag>();
+    public ICollection<ProjectDatabase> ProjectDatabases { get; set; } = new List<ProjectDatabase>();
 }

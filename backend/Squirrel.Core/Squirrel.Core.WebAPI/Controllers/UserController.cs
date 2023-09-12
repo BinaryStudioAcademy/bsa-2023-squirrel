@@ -59,4 +59,10 @@ public class UserController : ControllerBase
     {
         return Ok(await _userService.GetUserProfileAsync());
     }
+    
+    [HttpGet("all")]
+    public async Task<ActionResult<List<UserDto>>> GetAllUsers()
+    {
+        return Ok(await _userService.GetAllUsersAsync());
+    }
 }

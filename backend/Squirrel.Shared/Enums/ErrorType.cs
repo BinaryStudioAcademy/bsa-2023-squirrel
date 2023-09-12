@@ -9,5 +9,6 @@ public enum ErrorType
     NotFound,
     Internal,
     InvalidToken,
+    InvalidProject,
     RefreshTokenExpired,
 }

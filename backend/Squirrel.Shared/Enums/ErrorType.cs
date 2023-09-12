@@ -10,4 +10,5 @@ public enum ErrorType
     Internal,
     InvalidToken,
     InvalidProject,
+    RefreshTokenExpired,
 }

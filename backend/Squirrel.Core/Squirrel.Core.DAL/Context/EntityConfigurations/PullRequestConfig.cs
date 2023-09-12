@@ -16,11 +16,11 @@ public sealed class PullRequestConfig : IEntityTypeConfiguration<PullRequest>
         builder.Property(x => x.IsReviewed).IsRequired();
         builder.Property(x => x.UpdatedAt)
                .IsRequired()
-               .HasDefaultValueSql("getdate()")
+               .HasDefaultValueSql("getutcdate()")
                .ValueGeneratedOnAddOrUpdate();
         builder.Property(x => x.CreatedAt)
                .IsRequired()
-               .HasDefaultValueSql("getdate()")
+               .HasDefaultValueSql("getutcdate()")
                .ValueGeneratedOnAdd();
     }
 }

@@ -1,17 +1,29 @@
 import { HttpErrorResponse, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { AuthService } from '@core/services/auth.service';
 import { throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, switchMap } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root',
 })
 export class ErrorInterceptor implements HttpInterceptor {
-    handleError(error: HttpErrorResponse) {
-        return throwError(() => error.error);
-    }
+    // eslint-disable-next-line no-empty-function
+    constructor(private authService: AuthService) {}
 
-    intercept(req: HttpRequest<unknown>, next: HttpHandler) {
-        return next.handle(req).pipe(catchError(this.handleError));
+    intercept(request: HttpRequest<unknown>, next: HttpHandler) {
+        return next.handle(request).pipe(
+            catchError((error: HttpErrorResponse) => {
+                if (error.status === 401 && error.headers.has('Token-Expired')) {
+                    return this.authService.refreshTokens().pipe(switchMap(() => next.handle(request)));
+                }
+
+                if (error.status === 403) {
+                    this.authService.signOut();
+                }
+
+                return throwError(() => error.error);
+            }),
+        );
     }
 }

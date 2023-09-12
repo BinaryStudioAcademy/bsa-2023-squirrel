@@ -14,11 +14,11 @@ public sealed class CommentConfig : IEntityTypeConfiguration<Comment>
         builder.Property(x => x.CreatedBy).IsRequired();
         builder.Property(x => x.UpdatedAt)
                .IsRequired()
-               .HasDefaultValueSql("getdate()")
+               .HasDefaultValueSql("getutcdate()")
                .ValueGeneratedOnAddOrUpdate();
         builder.Property(x => x.CreatedAt)
                .IsRequired()
-               .HasDefaultValueSql("getdate()")
+               .HasDefaultValueSql("getutcdate()")
                .ValueGeneratedOnAdd();
     }
 }

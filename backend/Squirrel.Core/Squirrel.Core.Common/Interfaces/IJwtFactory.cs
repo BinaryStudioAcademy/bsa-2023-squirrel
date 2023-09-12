@@ -4,5 +4,5 @@ public interface IJwtFactory
 {
     Task<string> GenerateAccessTokenAsync(int id, string userName, string email);
     string GenerateRefreshToken();
-    int GetUserIdFromToken(string accessToken, string signingKey);
+    int GetUserIdFromToken(string accessToken);
 }

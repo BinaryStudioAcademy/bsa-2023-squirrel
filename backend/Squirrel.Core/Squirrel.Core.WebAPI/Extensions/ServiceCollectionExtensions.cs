@@ -59,6 +59,7 @@ public static class ServiceCollectionExtensions
         {
             options.Issuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)]!;
             options.Audience = jwtAppSettingOptions[nameof(JwtIssuerOptions.Audience)]!;
+            options.SecretJwtKey = secretKey;
             options.SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
         });
 

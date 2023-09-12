@@ -39,24 +39,26 @@ public class Startup
         }
 
         services.AddScoped<IConnectionFileService, ConnectionFileService>();
-
+        services.AddScoped<IConnectionStringService, ConnectionStringService>();
         services.AddScoped<IGetActionsService, GetActionsService>();
 
-        services.AddControllers(options =>
-        {
-            options.Filters.Add(typeof(CustomExceptionFilter));
-        });
+        services.AddControllers(options => { options.Filters.Add(typeof(CustomExceptionFilter)); });
     }
-    
+
     public void Configure(IApplicationBuilder app)
     {
+        app.UseCors(builder => builder
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowAnyOrigin());
+
         app.UseRouting();
         app.UseHttpsRedirection();
         app.UseEndpoints(cfg =>
         {
             cfg.MapControllers();
         });
-        
+
         InitializeFileSettings(app);
     }
 

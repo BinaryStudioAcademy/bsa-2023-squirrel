@@ -12,7 +12,7 @@ namespace Squirrel.ConsoleApp.Services
         public GetActionsService(IDbQueryProvider queryProvider, IOptions<DbSettings> dbSettingsOptions)
         {
             _queryProvider = queryProvider;
-            _databaseService = DatabaseFactory.CreateDatabaseService(dbSettingsOptions.Value.DbType, dbSettingsOptions.Value.ConnectionString);
+            _databaseService = DatabaseServiceFactory.CreateDatabaseService(dbSettingsOptions.Value.DbType, dbSettingsOptions.Value.ConnectionString);
         }
 
         public async Task<QueryResultTable> GetAllTablesNamesAsync() 

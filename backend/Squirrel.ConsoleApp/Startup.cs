@@ -24,30 +24,30 @@ public class Startup
         var serviceProvider = services.BuildServiceProvider();
         var dbSettings = serviceProvider.GetRequiredService<IOptionsSnapshot<DbSettings>>().Value;
 
-        services.AddScoped<IDbQueryProvider>(c => DatabaseFactory.CreateDbQueryProvider(dbSettings.DbType));
-        services.AddScoped<IDatabaseService>(c => DatabaseFactory.CreateDatabaseService(dbSettings.DbType, dbSettings.ConnectionString));
+        services.AddScoped<IDbQueryProvider>(c => DatabaseServiceFactory.CreateDbQueryProvider(dbSettings.DbType));
+        services.AddScoped<IDatabaseService>(c => DatabaseServiceFactory.CreateDatabaseService(dbSettings.DbType, dbSettings.ConnectionString));
 
         services.AddScoped<IConnectionFileService, ConnectionFileService>();
-
+        services.AddScoped<IConnectionStringService, ConnectionStringService>();
         services.AddScoped<IGetActionsService, GetActionsService>();
 
-        services.AddControllers(options =>
-        {
-            options.Filters.Add(typeof(CustomExceptionFilter));
-        });
-
-        services.AddAutoMapper();
+        services.AddControllers(options => { options.Filters.Add(typeof(CustomExceptionFilter)); });
     }
-    
+
     public void Configure(IApplicationBuilder app)
     {
+        app.UseCors(builder => builder
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowAnyOrigin());
+
         app.UseRouting();
         app.UseHttpsRedirection();
         app.UseEndpoints(cfg =>
         {
             cfg.MapControllers();
         });
-        
+
         InitializeFileSettings(app);
     }
 

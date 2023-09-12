@@ -5,7 +5,7 @@ using Squirrel.ConsoleApp.Providers;
 
 namespace Squirrel.ConsoleApp.Services;
 
-public class DatabaseFactory
+public class DatabaseServiceFactory
 {
     public static IDatabaseService CreateDatabaseService(DbEngine dbType, string connection)
     {

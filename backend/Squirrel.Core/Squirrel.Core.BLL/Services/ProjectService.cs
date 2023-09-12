@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.BLL.Services.Abstract;
 using Squirrel.Core.Common.DTO.Project;
+using Squirrel.Core.Common.DTO.Users;
 using Squirrel.Core.DAL.Context;
 using Squirrel.Core.DAL.Entities;
 using Squirrel.Shared.Exceptions;
@@ -36,14 +37,32 @@ public sealed class ProjectService : BaseService, IProjectService
 
         return _mapper.Map<ProjectResponseDto>(createdProject);
     }
+    
+    public async Task<ProjectResponseDto> AddUsersToProjectAsync(int projectId, List<UserDto> usersDtos)
+    {
+        var users = _mapper.Map<List<User>>(usersDtos);
+        
+        var existingProject = await _context.Projects.FindAsync(projectId);
+        
+        ValidateProject(existingProject);
 
-    public async Task<ProjectResponseDto> UpdateProjectAsync(int projectId, ProjectDto projectDto)
+        foreach (var user in users)
+        {
+            existingProject!.Users.Add(user);
+        }
+
+        await _context.SaveChangesAsync();
+        return _mapper.Map<ProjectResponseDto>(existingProject);
+    }
+
+    public async Task<ProjectResponseDto> UpdateProjectAsync(int projectId, UpdateProjectDto updateProjectDto)
     {
         var existingProject = await _context.Projects.FindAsync(projectId);
         
         ValidateProject(existingProject);
 
-        _mapper.Map(projectDto, existingProject);
+        _mapper.Map(updateProjectDto, existingProject);
+
         await _context.SaveChangesAsync();
 
         return _mapper.Map<ProjectResponseDto>(existingProject)!;
@@ -68,6 +87,19 @@ public sealed class ProjectService : BaseService, IProjectService
 
         _context.Projects.Remove(project!);
         await _context.SaveChangesAsync();
+    }
+    
+    public async Task<List<UserDto>> GetProjectUsersAsync(int projectId)
+    {
+        var project = await _context.Projects
+            .Include(p => p.Users)
+            .FirstOrDefaultAsync(p => p.Id == projectId);
+
+        ValidateProject(project);
+        
+        var projectUsers = project!.Users.ToList();
+
+        return _mapper.Map<List<UserDto>>(projectUsers);
     }
 
     public async Task<List<ProjectResponseDto>> GetAllUserProjectsAsync()

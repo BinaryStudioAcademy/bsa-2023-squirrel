@@ -1,0 +1,7 @@
+<div class="container">
+    <app-settings-menu></app-settings-menu>
+    <div class="main-section">
+        <app-general-settings-menu *ngIf="activeTab === 'general'"></app-general-settings-menu>
+        <app-team-settings-menu *ngIf="activeTab === 'team'"></app-team-settings-menu>
+    </div>
+</div>

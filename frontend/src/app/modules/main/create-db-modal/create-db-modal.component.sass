@@ -1,0 +1,68 @@
+@import "/src/styles/color"
+@import "/src/styles/reusable"
+@import "/src/styles/weights"
+
+.modal-header
+    display: flex
+    justify-content: space-between
+    align-items: center
+
+    h4
+        margin: 0
+.close
+    cursor: pointer
+    width: 45px
+    height: 45px
+    border-radius: 25px
+    position: relative
+
+    &:hover
+        background-color: $light-gray
+
+    &:after, &:before
+        content: ''
+        height: 4px
+        width: 30px
+        border-radius: 2px
+        background-color: $arrow-color
+        position: absolute
+        top: 50%
+        left: 50%
+        transform: translate(-50%, 0%)
+
+    &:after
+        transform: translate(-50%, -25%) rotate(45deg)
+
+    &:before
+        transform: translate(-50%, -25%) rotate(-45deg)
+
+
+h4
+    font-size: 24px
+    @extend .title
+
+.input-wrapper
+    width: 100%
+    display: flex
+    align-items: center
+    margin-top: 10px
+
+    app-input
+        width: 80%
+
+label
+    display: flex
+    justify-content: space-between
+    align-items: center
+    width: 20%
+    margin-right: 30px
+    font-weight: $semi-bold-weight
+
+    app-info-tooltip
+        margin-right: 15px
+
+.modal-footer
+    margin-top: 15px
+    display: flex
+    justify-content: space-between
+    align-items: center

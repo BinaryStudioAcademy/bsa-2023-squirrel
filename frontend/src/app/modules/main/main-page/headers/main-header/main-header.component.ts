@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { DatabaseService } from '@core/services/database.service';
 import { SharedProjectService } from '@core/services/shared-project.service';
+import { CreateDbModalComponent } from '@modules/main/create-db-modal/create-db-modal.component';
 
 import { ProjectResponseDto } from 'src/app/models/projects/project-response-dto';
 
@@ -13,10 +16,14 @@ export class MainHeaderComponent implements OnInit {
 
     public selectedDbName: string;
 
-    public dbNames: string[] = ['Dev DB', 'DB 2', 'Db 3', 'Db 4'];
+    public dbNames: string[] = [];
 
-    // eslint-disable-next-line no-empty-function
-    constructor(private sharedProject: SharedProjectService) {
+    constructor(
+        private sharedProject: SharedProjectService,
+        public dialog: MatDialog,
+        private databaseService: DatabaseService,
+        // eslint-disable-next-line no-empty-function
+    ) {
     }
 
     ngOnInit() {
@@ -27,12 +34,38 @@ export class MainHeaderComponent implements OnInit {
         this.selectedDbName = value;
     }
 
+    public openCreateModal(): void {
+        const dialogRef = this.dialog.open(CreateDbModalComponent, {
+            width: '700px',
+            data: {
+                dbEngine: this.project.dbEngine,
+                projectId: this.project.id,
+            },
+            autoFocus: false,
+        });
+
+        dialogRef.componentInstance.dbName.subscribe({
+            next: (dbName: string) => {
+                this.dbNames.push(dbName);
+            },
+        });
+    }
+
     private loadProject() {
         this.sharedProject.project$.subscribe({
             next: project => {
                 if (project) {
                     this.project = project;
+                    this.loadDatabases();
                 }
+            },
+        });
+    }
+
+    private loadDatabases() {
+        this.databaseService.getAllDatabases(this.project.id).subscribe({
+            next: databases => {
+                this.dbNames = databases.map(database => database.dbName);
             },
         });
     }

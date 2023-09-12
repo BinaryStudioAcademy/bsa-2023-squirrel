@@ -1,3 +1,4 @@
+using Microsoft.Extensions.FileProviders;
 using Squirrel.Core.BLL.Extensions;
 using Squirrel.Core.DAL.Extensions;
 using Squirrel.Core.WebAPI.Extensions;
@@ -49,8 +50,15 @@ app.UseSquirrelCoreContext();
 
 app.UseCors(opt => opt
     .AllowAnyHeader()
+    .WithExposedHeaders("Content-Disposition")
     .AllowAnyMethod()
     .AllowAnyOrigin());
+
+app.UseStaticFiles(new StaticFileOptions()
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources")),
+    RequestPath = new PathString("/Resources")
+});
 
 app.UseRouting();
 app.UseAuthentication();

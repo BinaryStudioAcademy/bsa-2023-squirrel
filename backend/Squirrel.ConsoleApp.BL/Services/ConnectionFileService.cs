@@ -16,7 +16,7 @@ public class ConnectionFileService : IConnectionFileService
         }
     }
 
-    public ConnectionString ReadFromFile()
+    public ConnectionStringDto ReadFromFile()
     {
         var filePath = ConnectionFilePath;
         if (!File.Exists(filePath))
@@ -25,13 +25,13 @@ public class ConnectionFileService : IConnectionFileService
         }
 
         var json = File.ReadAllText(filePath);
-        return JsonConvert.DeserializeObject<ConnectionString>(json) ?? throw new JsonReadFailed(filePath);
+        return JsonConvert.DeserializeObject<ConnectionStringDto>(json) ?? throw new JsonReadFailed(filePath);
     }
 
-    public void SaveToFile(ConnectionString connectionString)
+    public void SaveToFile(ConnectionStringDto connectionStringDto)
     {
         var filePath = ConnectionFilePath;
-        string json = JsonConvert.SerializeObject(connectionString, Formatting.Indented);
+        string json = JsonConvert.SerializeObject(connectionStringDto, Formatting.Indented);
         File.WriteAllText(filePath, json);
     }
 

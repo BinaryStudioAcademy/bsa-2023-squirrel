@@ -2,7 +2,11 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { BaseComponent } from '@core/base/base.component';
+import { ScriptService } from '@core/services/script.service';
+import { SharedProjectService } from '@core/services/shared-project.service';
+import { SpinnerService } from '@core/services/spinner.service';
 
+import { CreateScriptDto } from 'src/app/models/scripts/create-script-dto';
 import { ScriptDto } from 'src/app/models/scripts/script-dto';
 
 @Component({
@@ -15,7 +19,13 @@ export class CreateScriptModalComponent extends BaseComponent implements OnInit 
 
     public newScriptForm: FormGroup;
 
-    constructor(public dialogRef: MatDialogRef<CreateScriptModalComponent>, private formBuilder: FormBuilder) {
+    constructor(
+        public dialogRef: MatDialogRef<CreateScriptModalComponent>,
+        private formBuilder: FormBuilder,
+        private spinner: SpinnerService,
+        private scriptService: ScriptService,
+        private sharedProject: SharedProjectService,
+    ) {
         super();
     }
 
@@ -31,13 +41,23 @@ export class CreateScriptModalComponent extends BaseComponent implements OnInit 
     }
 
     public createScript(): void {
-        this.scriptCreated.emit({
-            id: 0,
-            title: this.newScriptForm.value.scriptName,
-            content: '',
-            fileName: this.newScriptForm.value.fileName,
+        this.spinner.show();
+
+        this.sharedProject.project$.subscribe((project) => {
+            if (project) {
+                const newScriptDto: CreateScriptDto = {
+                    title: this.newScriptForm.value.scriptName,
+                    fileName: this.newScriptForm.value.fileName,
+                    projectId: project.id as number,
+                };
+
+                this.scriptService.createScript(newScriptDto).subscribe((createdScript: ScriptDto) => {
+                    this.scriptCreated.emit(createdScript);
+                    this.close();
+                });
+            }
+            this.spinner.hide();
         });
-        this.close();
     }
 
     public close(): void {

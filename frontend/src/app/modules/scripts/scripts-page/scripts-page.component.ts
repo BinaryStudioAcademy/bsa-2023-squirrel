@@ -63,30 +63,35 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
                 title: 'first',
                 content: 'firstcontent',
                 fileName: '',
+                projectId: 1,
             },
             {
                 id: 2,
                 title: 'second',
                 content: 'secondcontent',
                 fileName: '',
+                projectId: 1,
             },
             {
                 id: 3,
                 title: 'third',
                 content: 'thirdcontent',
                 fileName: '',
+                projectId: 1,
             },
             {
                 id: 4,
                 title: 'fourth',
                 content: 'fourthcontent',
                 fileName: '',
+                projectId: 1,
             },
             {
                 id: 5,
                 title: 'fifth234',
                 content: 'fifthcontent',
                 fileName: '',
+                projectId: 1,
             },
         ];
     }

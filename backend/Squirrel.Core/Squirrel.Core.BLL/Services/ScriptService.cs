@@ -25,7 +25,7 @@ public sealed class ScriptService : BaseService, IScriptService
         return _mapper.Map<ScriptDto>(createdScript);
     }
 
-    public async Task<ScriptDto> UpdateScriptAsync(ScriptDto dto)
+    public async Task<ScriptDto> UpdateScriptAsync(ScriptDto dto, int editorId)
     {
         var script = await _context.Scripts.FindAsync(dto.Id);
         if (script is null)
@@ -34,6 +34,7 @@ public sealed class ScriptService : BaseService, IScriptService
         }
 
         _mapper.Map(dto, script);
+        script.LastUpdatedByUserId = editorId;
         var updatedScript = _context.Scripts.Update(script).Entity;
         await _context.SaveChangesAsync();
 

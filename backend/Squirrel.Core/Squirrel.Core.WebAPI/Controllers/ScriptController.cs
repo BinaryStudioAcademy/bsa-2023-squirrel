@@ -34,6 +34,6 @@ public sealed class ScriptController : ControllerBase
     [HttpPut]
     public async Task<ActionResult<ScriptDto>> UpdateScript(ScriptDto dto)
     {
-        return Ok(await _scriptService.UpdateScriptAsync(dto));
+        return Ok(await _scriptService.UpdateScriptAsync(dto, _userIdGetter.GetCurrentUserId()));
     }
 }

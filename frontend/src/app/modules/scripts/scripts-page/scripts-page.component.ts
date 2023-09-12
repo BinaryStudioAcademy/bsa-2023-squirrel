@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { BaseComponent } from '@core/base/base.component';
+import { ScriptService } from '@core/services/script.service';
+import { SharedProjectService } from '@core/services/shared-project.service';
+import { SpinnerService } from '@core/services/spinner.service';
+import { Observable, of, switchMap, takeUntil } from 'rxjs';
 
 import { ScriptDto } from 'src/app/models/scripts/script-dto';
 
@@ -20,7 +24,12 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
 
     private readonly selectedOptionClass = 'selected-option';
 
-    constructor(public dialog: MatDialog) {
+    constructor(
+        public dialog: MatDialog,
+        private scriptService: ScriptService,
+        private spinner: SpinnerService,
+        private sharedProject: SharedProjectService,
+    ) {
         super();
     }
 
@@ -41,58 +50,36 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
 
     public openCreateModal(): void {
         const dialogRef = this.dialog.open(CreateScriptModalComponent, {
-            width: '500px',
-            height: '45%',
+            width: '40%',
+            height: '55%',
         });
 
         dialogRef.componentInstance.scriptCreated.subscribe((newScript: ScriptDto) => {
-            // TODO: add newScript to db via service.
-
-            this.loadScripts();
-            // temporarily
-            this.scripts.push(newScript);
-            this.selectedScript = this.scripts.find((s) => s.id === newScript.id);
+            this.loadScripts(newScript.id);
         });
     }
 
-    private loadScripts(): void {
-        // TODO: load all scripts for current project from web api.
-        this.scripts = [
-            {
-                id: 1,
-                title: 'first',
-                content: 'firstcontent',
-                fileName: '',
-                projectId: 1,
-            },
-            {
-                id: 2,
-                title: 'second',
-                content: 'secondcontent',
-                fileName: '',
-                projectId: 1,
-            },
-            {
-                id: 3,
-                title: 'third',
-                content: 'thirdcontent',
-                fileName: '',
-                projectId: 1,
-            },
-            {
-                id: 4,
-                title: 'fourth',
-                content: 'fourthcontent',
-                fileName: '',
-                projectId: 1,
-            },
-            {
-                id: 5,
-                title: 'fifth234',
-                content: 'fifthcontent',
-                fileName: '',
-                projectId: 1,
-            },
-        ];
+    private fetchScripts(): Observable<ScriptDto[]> {
+        return this.sharedProject.project$.pipe(
+            takeUntil(this.unsubscribe$),
+            switchMap((project) => {
+                if (project) {
+                    return this.scriptService.getAllScripts(project.id).pipe(takeUntil(this.unsubscribe$));
+                }
+
+                return of([]);
+            }),
+        );
+    }
+
+    private loadScripts(selectedScriptId: number | undefined = undefined): void {
+        this.spinner.show();
+        this.fetchScripts().subscribe((scripts) => {
+            this.scripts = scripts.sort((a, b) => b.id - a.id);
+            if (selectedScriptId) {
+                this.selectedScript = this.scripts.find((s) => s.id === selectedScriptId);
+            }
+            this.spinner.hide();
+        });
     }
 }

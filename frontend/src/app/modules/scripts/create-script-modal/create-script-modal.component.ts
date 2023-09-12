@@ -5,6 +5,7 @@ import { BaseComponent } from '@core/base/base.component';
 import { ScriptService } from '@core/services/script.service';
 import { SharedProjectService } from '@core/services/shared-project.service';
 import { SpinnerService } from '@core/services/spinner.service';
+import { takeUntil } from 'rxjs';
 
 import { CreateScriptDto } from 'src/app/models/scripts/create-script-dto';
 import { ScriptDto } from 'src/app/models/scripts/script-dto';
@@ -51,10 +52,13 @@ export class CreateScriptModalComponent extends BaseComponent implements OnInit 
                     projectId: project.id as number,
                 };
 
-                this.scriptService.createScript(newScriptDto).subscribe((createdScript: ScriptDto) => {
-                    this.scriptCreated.emit(createdScript);
-                    this.close();
-                });
+                this.scriptService
+                    .createScript(newScriptDto)
+                    .pipe(takeUntil(this.unsubscribe$))
+                    .subscribe((createdScript: ScriptDto) => {
+                        this.scriptCreated.emit(createdScript);
+                        this.close();
+                    });
             }
             this.spinner.hide();
         });

@@ -390,6 +390,7 @@ FodyWeavers.xsd
 # Windows Installer files from build outputs
 *.cab
 *.msi
+!backend/Squirrel.Core/Squirrel.Core.WebAPI/Resources/*.msi
 *.msix
 *.msm
 *.msp

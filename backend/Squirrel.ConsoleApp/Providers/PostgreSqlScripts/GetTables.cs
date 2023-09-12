@@ -3,13 +3,13 @@
     internal static class GetTables
     {
         public static string GetTablesNamesScript =>
-            @"SELECT schemaname || '.' || tablename AS full_table_name FROM pg_catalog.pg_tables WHERE schemaname != 'pg_catalog' AND schemaname != 'information_schema';";
+            @"SELECT schemaname AS ""schema"", tablename AS ""name"" FROM pg_catalog.pg_tables WHERE schemaname NOT IN ('pg_catalog', 'information_schema')";
 
-        public static string GetTableDataQueryScript(int rowsCount, string schema, string table) =>
-            $"SELECT * FROM \"{schema}\".\"{table}\" LIMIT {rowsCount}";
+        public static string GetTableDataQueryScript(string schema, string name, int rowsCount) =>
+            $"SELECT '{schema}' AS schema, '{name}' AS name, (SELECT COUNT(*) FROM \"{schema}\".\"{name}\") AS TotalRows, t.* FROM \"{schema}\".\"{name}\" t LIMIT {rowsCount}";
 
-        public static string GetTablesStructureScript =>
-            @"
+        public static string GetTableStructureScript(string schema, string name) =>
+            @$"
             with column_description_table as (
 				select
 					cols.table_schema,
@@ -43,23 +43,24 @@
 			)
 			
 			select distinct
-				col.table_schema as schema,
-			    col.table_name as table,
-			    col.column_name as column,
-				col.ordinal_position as ordinal_position,
-			    col.data_type as data_type,
+				col.table_schema as TableSchema,
+			    col.table_name as TableName,
+			    col.column_name as ColumnName,
+				col.ordinal_position as ColumnOrder,
+			    col.data_type as DataType,
 			    col.character_maximum_length as max_length,
-				col.numeric_precision as numeric_precision,
-				col.numeric_scale as numeric_scale,
-			    case when col.is_nullable = 'YES' then 'True' else 'False' end as allow_null,
-				case when col.is_identity = 'YES' then 'True' else 'False' end as is_identity,
-				case when 'PRIMARY KEY' = any(kct.constraints_type) then 'True' else 'False' end as is_primary_key,
-				case when 'FOREIGN KEY' = any(kct.constraints_type) then 'True' else 'False' end as is_foreign_key,
-				ccu.column_name as related_column,
-				pk_tc.table_name as related_table,
-				pk_tc.table_schema as related_table_schema,
-			    col.column_default as default,
-				cdt.col_description as description
+				-- MaxLength (do we need it?)
+				col.numeric_precision as Precision,
+				col.numeric_scale as Scale,
+			    case when col.is_nullable = 'YES' then 'True' else 'False' end as AllowNulls,
+				case when col.is_identity = 'YES' then 'True' else 'False' end as Identity,
+				case when 'PRIMARY KEY' = any(kct.constraints_type) then 'True' else 'False' end as PrimaryKey,
+				case when 'FOREIGN KEY' = any(kct.constraints_type) then 'True' else 'False' end as ForeignKey,
+				ccu.column_name as RelatedTableColumn,
+				pk_tc.table_name as RelatedTable,
+				pk_tc.table_schema as RelatedTableSchema,
+			    col.column_default as Default,
+				cdt.col_description as Description
 				
 			from information_schema.columns as col
 			
@@ -91,22 +92,22 @@
 				 and pk_tc.table_name = ccu.table_name
 				 and refc.unique_constraint_name = ccu.constraint_name
 			
-			where col.table_schema not in ('information_schema', 'pg_catalog') -- or choose specific table_scheme
+			where col.table_schema not in ('information_schema', 'pg_catalog') AND col.table_schema = '{schema}' AND col.table_name = '{name}'
 			
 			order by col.table_schema, col.table_name, col.ordinal_position;
             ";
 
-        public static string GetDbTablesCheckAndUniqueConstraintsScript =>
-            @"
+        public static string GetTableChecksAndUniqueConstraintsScript(string schema, string name) =>
+            @$"
             select 
-			    tc.table_schema as schema,
-				   tc.table_name as table,
-				   tc.constraint_name as constraint_name,
-				   string_agg(col.column_name, ', ') as columns,
+			    tc.table_schema as TableSchema,
+				   tc.table_name as TableName,
+				   tc.constraint_name as ConstraintName,
+				   string_agg(col.column_name, ', ') as Columns,
 				   case when pgc.contype = 'c' then 'CHECK'
 				   		when pgc.contype = 'u' then 'UNIQUE'
 				   end as constraint_type,
-				   cc.check_clause
+				   cc.check_clause as CheckClause
 			
 			from information_schema.table_constraints as tc
 			
@@ -125,7 +126,7 @@
 				 on tc.table_schema = cc.constraint_schema
 				 and tc.constraint_name = cc.constraint_name
 			
-			where tc.constraint_schema not in ('information_schema', 'pg_catalog') -- or choose specific table_scheme
+			where tc.constraint_schema not in ('information_schema', 'pg_catalog') AND tc.constraint_schema = '{schema}' AND tc.table_name = '{name}'
 			
 			group by tc.table_schema,
 					 tc.table_name,

@@ -3,4 +3,5 @@ export interface ScriptDto {
     title: string;
     fileName: string;
     content: string;
+    projectId: number;
 }

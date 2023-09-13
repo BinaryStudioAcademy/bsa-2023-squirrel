@@ -70,7 +70,7 @@ namespace Squirrel.Core.DAL.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getdate()");
+                        .HasDefaultValueSql("getutcdate()");
 
                     b.Property<int?>("CreatedBy")
                         .IsRequired()
@@ -79,7 +79,7 @@ namespace Squirrel.Core.DAL.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getdate()");
+                        .HasDefaultValueSql("getutcdate()");
 
                     b.HasKey("Id");
 
@@ -99,7 +99,7 @@ namespace Squirrel.Core.DAL.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getdate()");
+                        .HasDefaultValueSql("getutcdate()");
 
                     b.Property<int?>("CreatedBy")
                         .IsRequired()
@@ -283,7 +283,7 @@ namespace Squirrel.Core.DAL.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getdate()");
+                        .HasDefaultValueSql("getutcdate()");
 
                     b.Property<int?>("CreatedBy")
                         .IsRequired()
@@ -307,7 +307,7 @@ namespace Squirrel.Core.DAL.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getdate()");
+                        .HasDefaultValueSql("getutcdate()");
 
                     b.HasKey("Id");
 
@@ -359,7 +359,7 @@ namespace Squirrel.Core.DAL.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getdate()");
+                        .HasDefaultValueSql("getutcdate()");
 
                     b.Property<int?>("CreatedBy")
                         .IsRequired()
@@ -388,7 +388,7 @@ namespace Squirrel.Core.DAL.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getdate()");
+                        .HasDefaultValueSql("getutcdate()");
 
                     b.HasKey("Id");
 
@@ -414,7 +414,7 @@ namespace Squirrel.Core.DAL.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getdate()");
+                        .HasDefaultValueSql("getutcdate()");
 
                     b.Property<int?>("CreatedBy")
                         .HasColumnType("int");

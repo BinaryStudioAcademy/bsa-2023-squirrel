@@ -12,4 +12,5 @@ public enum ErrorType
     InvalidProject,
     LargeFile,
     InvalidFileFormat
+    RefreshTokenExpired,
 }

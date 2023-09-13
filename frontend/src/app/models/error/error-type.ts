@@ -1,6 +1,9 @@
 export enum ErrorType {
     InvalidEmail = 1,
     InvalidUsername,
-    InvalidPassword,
+    InvalidEmailOrPassword,
+    NotFound,
     Internal,
+    InvalidToken,
+    RefreshTokenExpired,
 }

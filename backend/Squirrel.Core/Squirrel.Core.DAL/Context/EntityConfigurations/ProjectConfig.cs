@@ -15,11 +15,11 @@ public sealed class ProjectConfig : IEntityTypeConfiguration<Project>
         builder.Property(x => x.CreatedBy).IsRequired();
         builder.Property(x => x.CreatedAt)
                .IsRequired()
-               .HasDefaultValueSql("getdate()")
+               .HasDefaultValueSql("getutcdate()")
                .ValueGeneratedOnAdd();
         builder.Property(x => x.UpdatedAt)
                .IsRequired()
-               .HasDefaultValueSql("getdate()")
+               .HasDefaultValueSql("getutcdate()")
                .ValueGeneratedOnAddOrUpdate();
 
         builder.HasOne(x => x.DefaultBranch)

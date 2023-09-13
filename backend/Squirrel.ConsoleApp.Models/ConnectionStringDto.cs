@@ -10,6 +10,7 @@ public class ConnectionStringDto
     public DbEngine DbEngine { get; set; }
 
     public bool IsLocalhost { get; set; }
+    public bool IntegratedSecurity { get; set; }
 
     public override string ToString()
     {

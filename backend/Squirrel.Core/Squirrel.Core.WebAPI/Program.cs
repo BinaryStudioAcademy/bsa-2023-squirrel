@@ -56,7 +56,8 @@ app.UseCors(opt => opt
     .AllowAnyHeader()
     .WithExposedHeaders("Content-Disposition")
     .AllowAnyMethod()
-    .AllowAnyOrigin());
+    .AllowAnyOrigin()
+    .WithExposedHeaders("Token-Expired"));
 
 app.UseStaticFiles(new StaticFileOptions()
 {

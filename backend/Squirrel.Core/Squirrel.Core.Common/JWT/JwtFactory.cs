@@ -49,8 +49,9 @@ public sealed class JwtFactory : IJwtFactory
 
     public string GenerateRefreshToken() => SecurityUtils.GenerateRandomSalt();
     
-    public int GetUserIdFromToken(string accessToken, string signingKey)
+    public int GetUserIdFromToken(string accessToken)
     {
+        var signingKey = _jwtOptions.SecretJwtKey;
         var claimsPrincipal = GetPrincipalFromToken(accessToken, signingKey);
 
         if (claimsPrincipal is null)

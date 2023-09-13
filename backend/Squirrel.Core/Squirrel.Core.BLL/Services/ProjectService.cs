@@ -29,7 +29,7 @@ public sealed class ProjectService : BaseService, IProjectService
 
         var projectEntity = _mapper.Map<Project>(newProjectDto.Project);
         var currentUser = await _context.Users.FirstAsync(p => p.Id == currentUserId);
-        projectEntity.Users.Add(currentUser);
+        projectEntity.Author = currentUser;
         projectEntity.CreatedBy = currentUserId;
         var createdProject = (await _context.Projects.AddAsync(projectEntity)).Entity;
         await _context.SaveChangesAsync();
@@ -103,11 +103,13 @@ public sealed class ProjectService : BaseService, IProjectService
     {
         var project = await _context.Projects
             .Include(p => p.Users)
+            .Include(p => p.Author)
             .FirstAsync(p => p.Id == projectId);
 
         ValidateProject(project);
-        
+
         var projectUsers = project!.Users.ToList();
+        projectUsers.Add(project.Author);
 
         return _mapper.Map<List<UserDto>>(projectUsers);
     }

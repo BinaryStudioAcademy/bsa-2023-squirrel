@@ -47,7 +47,8 @@ public sealed class BranchService : BaseService, IBranchService
         {
             throw new EntityNotFoundException();
         }
-        _context.Branches.Remove(entity);
+        entity.IsActive = false;
+        _context.Branches.Update(entity);
 
         await _context.SaveChangesAsync();
     }

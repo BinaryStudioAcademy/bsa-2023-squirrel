@@ -47,12 +47,17 @@
 			    col.table_name as TableName,
 			    col.column_name as ColumnName,
 				col.ordinal_position as ColumnOrder,
-			    col.data_type as DataType,
-			    col.character_maximum_length as max_length,
+				
+				case when col.domain_name is not NULL then col.domain_name
+					 when col.data_type = 'USER-DEFINED' then col.udt_name 
+					 else col.data_type end as DataType,
+				
+				case when col.data_type = 'USER-DEFINED' or col.domain_name is not NULL then 'True' else 'False' end as IsUserDefined,		 
+				
+			    col.character_maximum_length as MaxLength,
 				-- MaxLength (do we need it?)
 				col.numeric_precision as Precision,
 				col.numeric_scale as Scale,
-                case when col.data_type = 'USER-DEFINED' 'True' true else 'False' end as UserDefined,
 			    case when col.is_nullable = 'YES' then 'True' else 'False' end as AllowNulls,
 				case when col.is_identity = 'YES' then 'True' else 'False' end as Identity,
 				case when 'PRIMARY KEY' = any(kct.constraints_type) then 'True' else 'False' end as PrimaryKey,
@@ -93,7 +98,8 @@
 				 and pk_tc.table_name = ccu.table_name
 				 and refc.unique_constraint_name = ccu.constraint_name
 			
-			where col.table_schema not in ('information_schema', 'pg_catalog') AND col.table_schema = '{schema}' AND col.table_name = '{name}'
+			where col.table_schema not in ('information_schema', 'pg_catalog') 
+				  AND col.table_schema = '{schema}' AND col.table_name = '{name}'
 			
 			order by col.table_schema, col.table_name, col.ordinal_position;
             ";

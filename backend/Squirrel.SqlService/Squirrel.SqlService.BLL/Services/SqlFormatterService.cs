@@ -3,7 +3,6 @@ using Squirrel.Shared.Exceptions;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
 using System.Diagnostics;
 using Squirrel.Core.DAL.Enums;
-using System.Reflection;
 
 namespace Squirrel.SqlService.BLL.Services;
 
@@ -69,6 +68,15 @@ public class SqlFormatterService : ISqlFormatterService
                 using (StreamReader reader = process.StandardOutput)
                 {
                     string errors = process.StandardError.ReadToEnd();
+                    if (errors.Any())
+                    {
+                        throw new Exception(errors);
+                    }
+                    var hasErrors = reader.ReadLine();
+                    if (hasErrors == "True")
+                    {
+                        throw new SqlSyntaxException(reader.ReadToEnd());
+                    };
                     result = reader.ReadToEnd();
                     process.WaitForExit();
                 }

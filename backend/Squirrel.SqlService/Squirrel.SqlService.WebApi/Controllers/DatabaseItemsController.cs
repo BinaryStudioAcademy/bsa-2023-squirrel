@@ -28,7 +28,7 @@ public sealed class DatabaseItemsController : ControllerBase
     {
         string sql = @"
      SELECT inventory_id
-     FROM inventory
+     FRM inventory
      WHERE film_id = $1
      AND store_id = $2
      AND inventory_in_stock(inventory_id);

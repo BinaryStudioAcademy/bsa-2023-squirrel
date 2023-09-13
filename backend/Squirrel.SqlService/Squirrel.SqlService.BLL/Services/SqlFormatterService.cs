@@ -99,7 +99,7 @@ public class SqlFormatterService : ISqlFormatterService
             AlignColumnDefinitionFields = true,
             AlignSetClauseItem = true,
             AsKeywordOnOwnLine = true,
-            IndentationSize = 10,
+            IndentationSize = 4,
             IndentSetClause = true,
             IndentViewBody = true,
             KeywordCasing = KeywordCasing.Uppercase,

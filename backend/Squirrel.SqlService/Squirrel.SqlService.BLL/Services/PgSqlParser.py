@@ -18,7 +18,8 @@ def has_syntax_error(inputSql):
         return False
     except sqlglot.errors.ParseError as e:
         global syntax_errors
-        syntax_errors = e.errors
+        syntax_errors = '\n'.join(
+            f"Syntax error: {d['description']} NEAR {d['highlight']}. Position({d['line']}, {d['col']})" for d in e.errors)
         return True
 
 print(has_syntax_error(sql))

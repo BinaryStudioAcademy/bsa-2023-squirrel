@@ -10,6 +10,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Reflection;
 using Squirrel.AzureBlobStorage.Models;
+using Squirrel.Core.BLL.MappingProfiles;
 
 namespace Squirrel.Core.WebAPI.Extensions;
 
@@ -33,7 +34,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IImageService, ImageService>();
 
         services.AddSingleton<IHttpClientService, HttpClientService>();
-      
+
         services.AddUserIdStorage();
     }
 

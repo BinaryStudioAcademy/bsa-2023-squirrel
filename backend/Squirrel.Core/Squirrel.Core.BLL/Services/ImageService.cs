@@ -36,18 +36,19 @@ public class ImageService : IImageService
         var userEntity = await GetUserByIdInternal(_userIdGetter.GetCurrentUserId());
 
         var content = await CropAvatar(avatar);
+        var guid = userEntity.AvatarUrl ?? Guid.NewGuid().ToString();
         var blob = new Blob
         {
-            Id = userEntity.AvatarUrl ?? Guid.NewGuid().ToString(),
+            Id = guid,
             ContentType = avatar.ContentType,
             Content = content
         };
 
-        var blobResponse = userEntity.AvatarUrl == null
-            ? await _blobStorageService.UploadAsync(_blobStorageOptions.ImagesContainer, blob)
-            : await _blobStorageService.UpdateAsync(_blobStorageOptions.ImagesContainer, blob);
+        await (userEntity.AvatarUrl == null
+            ? _blobStorageService.UploadAsync(_blobStorageOptions.ImagesContainer, blob)
+            : _blobStorageService.UpdateAsync(_blobStorageOptions.ImagesContainer, blob));
 
-        userEntity.AvatarUrl = blobResponse.Id;
+        userEntity.AvatarUrl = guid;
         await _context.SaveChangesAsync();
     }
 

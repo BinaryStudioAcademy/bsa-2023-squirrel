@@ -14,7 +14,7 @@ public class AzureBlobStorageService : IBlobStorageService
         _blobServiceClient = blobServiceClient;
     }
 
-    public async Task<Blob> UploadAsync(string containerName, Blob blob)
+    public async Task UploadAsync(string containerName, Blob blob)
     {
         var blobClient = await GetBlobClientInternalAsync(containerName, blob.Id);
 
@@ -26,11 +26,9 @@ public class AzureBlobStorageService : IBlobStorageService
         var blobHttpHeader = new BlobHttpHeaders { ContentType = blob.ContentType };
         await blobClient.UploadAsync(new BinaryData(blob.Content ?? new byte[] { }),
             new BlobUploadOptions { HttpHeaders = blobHttpHeader });
-
-        return blob;
     }
 
-    public async Task<Blob> UpdateAsync(string containerName, Blob blob)
+    public async Task UpdateAsync(string containerName, Blob blob)
     {
         var blobClient = await GetBlobClientInternalAsync(containerName, blob.Id);
 
@@ -42,8 +40,6 @@ public class AzureBlobStorageService : IBlobStorageService
         var blobHttpHeader = new BlobHttpHeaders { ContentType = blob.ContentType };
         await blobClient.UploadAsync(new BinaryData(blob.Content ?? new byte[] { }),
             new BlobUploadOptions { HttpHeaders = blobHttpHeader });
-
-        return blob;
     }
 
     public async Task<Blob> DownloadAsync(string containerName, string blobId)

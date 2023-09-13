@@ -35,8 +35,7 @@ public sealed class UserService : BaseService, IUserService
 
     public async Task<UserProfileDto> GetUserProfileAsync()
     {
-        return await _context.Users.ProjectTo<UserProfileDto>(_mapper.ConfigurationProvider)
-            .FirstAsync(x => x.Id == _userIdGetter.GetCurrentUserId());
+        return _mapper.Map<UserProfileDto>(await GetUserByIdInternal(_userIdGetter.GetCurrentUserId()));
     }
 
     public async Task<UserDto> GetUserByEmailAsync(string email)

@@ -13,6 +13,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ITextService, TextService>();
         services.AddScoped<IDependencyAnalyzer, DependencyAnalyzer>();
         services.AddScoped<IDbItemsRetrievalService, DbItemsRetrievalService>();
+        services.AddScoped<IChangesLoaderService, ChangesLoaderService>();
     }
 
     public static void ConfigureCors(this IServiceCollection services, IConfiguration configuration)

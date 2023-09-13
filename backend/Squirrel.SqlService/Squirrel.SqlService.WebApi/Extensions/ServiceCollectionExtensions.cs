@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.Options;
 using Squirrel.Core.DAL.Entities;
 using Squirrel.SqlService.BLL.Interfaces;
+using Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
 using Squirrel.SqlService.BLL.Models.Options;
 using Squirrel.SqlService.BLL.Services;
+using Squirrel.SqlService.BLL.Services.ConsoleAppHub;
 
 namespace Squirrel.SqlService.WebApi.Extensions;
 
@@ -14,6 +16,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IDependencyAnalyzer, DependencyAnalyzer>();
         services.AddScoped<IDbItemsRetrievalService, DbItemsRetrievalService>();
         services.AddScoped<IChangesLoaderService, ChangesLoaderService>();
+
+        services.AddSingleton<IProcessReceivedDataService, ProcessReceivedDataService>();
     }
 
     public static void ConfigureCors(this IServiceCollection services, IConfiguration configuration)

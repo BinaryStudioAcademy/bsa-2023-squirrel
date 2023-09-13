@@ -21,7 +21,6 @@ public sealed class UserService : BaseService, IUserService
 {
     private const int MaxNameLength = 25;
     private const int MinNameLength = 2;
-    private const int MaxFileLenght = 5 * 1024 * 1024;
     private readonly IUserIdGetter _userIdGetter;
     private readonly IBlobStorageService _blobStorageService;
 
@@ -203,52 +202,5 @@ public sealed class UserService : BaseService, IUserService
         }
 
         return newUser;
-    }
-
-    public async Task AddAvatar(IFormFile avatar)
-    {
-        if (avatar.ContentType != "image/png" && avatar.ContentType != "image/jpeg" )
-        {
-            throw new InvalidFileFormatException(".png, .jpeg");
-        }
-        if (avatar.Length > MaxFileLenght)
-        {
-            throw new LargeFileException("5 MB");
-        }
-
-        var userEntity = await GetUserByIdInternal(_userIdGetter.GetCurrentUserId());
-        var content = await CropAvatar(avatar);
-
-        var blob = new Blob
-        {
-            Id = userEntity.Id.ToString(),
-            ContentType = avatar.ContentType,
-            Content = content
-        };
-
-        userEntity.AvatarUrl = await _blobStorageService.UploadWithUrlAsync("user-avatars", blob);
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task DeleteAvatar()
-    {
-        var userEntity = await GetUserByIdInternal(_userIdGetter.GetCurrentUserId());
-        await _blobStorageService
-            .DeleteAsync("user-avatars", userEntity.Id.ToString());
-
-        userEntity.AvatarUrl = null;
-        await _context.SaveChangesAsync();
-    }
-
-    private async Task<byte[]> CropAvatar(IFormFile avatar)
-    {
-        using var image = await Image.LoadAsync(avatar.OpenReadStream());
-
-        var smallerDimension = Math.Min(image.Width, image.Height);
-        image.Mutate(x => x.Crop(smallerDimension, smallerDimension));
-
-        using var ms = new MemoryStream();
-        await image.SaveAsync(ms, new JpegEncoder());
-        return ms.ToArray();
     }
 }

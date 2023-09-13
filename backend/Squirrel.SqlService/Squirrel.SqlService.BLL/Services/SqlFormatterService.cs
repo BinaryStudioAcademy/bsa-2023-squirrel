@@ -1,62 +1,29 @@
 ﻿using Squirrel.SqlService.BLL.Interfaces;
-using gudusoft.gsqlparser;
-using gudusoft.gsqlparser.pp.para;
-using gudusoft.gsqlparser.pp.stmtformatter;
-using Squirrel.Core.DAL.Enums;
 using Squirrel.Shared.Exceptions;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
+using System.Diagnostics;
+using Squirrel.Core.DAL.Enums;
+using System.Reflection;
 
 namespace Squirrel.SqlService.BLL.Services;
 
 public class SqlFormatterService : ISqlFormatterService
 {
-    private EDbVendor _dbVendor;
-    private TGSqlParser? _parser;
-
-    //Using old dll
+    private readonly string _pythonExePath;
+    public SqlFormatterService(string pythonExePath)
+    {
+        _pythonExePath = pythonExePath;
+    }
     public string GetFormattedSql(string inputSql, DbEngine dbEngine)
     {
-        if (HasSyntaxError(inputSql, dbEngine, out var error))
+        return dbEngine switch
         {
-            throw new SqlSyntaxException(error);
-        };
-        var option = GFmtOptFactory.newInstance();
-        return FormatterFactory.pp(_parser, option);
-    }
-
-    //Using old dll
-    public bool HasSyntaxError(string inputSql, DbEngine dbEngine, out string errorMessage)
-    {
-        errorMessage = string.Empty;
-        MapDbVendor(dbEngine);
-        _parser = new TGSqlParser(_dbVendor)
-        {
-            sqltext = inputSql
-        };
-
-        var result = _parser.parse();
-        if (result == 0)
-        {
-            return false;
-        }
-
-        errorMessage = _parser.Errormessage;
-        return true;
-    }
-
-    //Using old dll
-    private void MapDbVendor(DbEngine dbEngine)
-    {
-        _dbVendor = dbEngine switch
-        {
-            DbEngine.MsSqlServer => EDbVendor.dbvmssql,
-            DbEngine.PostgreSql => EDbVendor.dbvpostgresql,
+            DbEngine.MsSqlServer => FormatMsSqlServer(inputSql),
+            DbEngine.PostgreSql => FormatPostgreSql(inputSql),
             _ => throw new NotImplementedException($"Database type {dbEngine} is not supported."),
         };
     }
-
-    //Using Microsoft.SqlServer.TransactSql.ScriptDom
-    public string Format(string inputSql)
+    public string FormatMsSqlServer(string inputSql)
     {
         var scriptGenerator = new Sql160ScriptGenerator(GetFormattingOptions());
 
@@ -69,6 +36,51 @@ public class SqlFormatterService : ISqlFormatterService
         scriptGenerator.GenerateScript(fragment, out var result);
         return result;
     }
+
+    public string FormatPostgreSql(string inputSql)
+    {
+        var assemblyPath = typeof(SqlFormatterService).Assembly.Location.Split('\\').SkipLast(1);
+        var filePath = string.Join("\\", assemblyPath) + "\\Services\\PgSqlParser.py";
+
+        string argsFile = string.Format("{0}\\{1}.txt", Path.GetDirectoryName(filePath.ToString()), Guid.NewGuid());
+
+        ProcessStartInfo startInfo = new ProcessStartInfo
+        {
+            FileName = _pythonExePath,
+            UseShellExecute = false,
+            RedirectStandardOutput = true,
+            CreateNoWindow = false,
+            RedirectStandardError = true
+        };
+
+        string result = string.Empty;
+
+        try
+        {
+            using (StreamWriter sw = new StreamWriter(argsFile))
+            {
+                sw.WriteLine(inputSql);
+                startInfo.Arguments = string.Format(
+                    "{0} {1}", string.Format(@"""{0}""", filePath), string.Format(@"""{0}""", argsFile));
+            }
+
+            using (Process process = Process.Start(startInfo))
+            {
+                using (StreamReader reader = process.StandardOutput)
+                {
+                    string errors = process.StandardError.ReadToEnd();
+                    result = reader.ReadToEnd();
+                    process.WaitForExit();
+                }
+            }
+        }
+        finally
+        {
+            File.Delete(argsFile);
+        }
+        return result;
+    }
+
     private SqlScriptGeneratorOptions GetFormattingOptions()
     {
         return new SqlScriptGeneratorOptions

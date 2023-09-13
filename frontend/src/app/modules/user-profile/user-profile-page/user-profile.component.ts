@@ -35,6 +35,8 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
 
     private readonly maxFileLength = 5 * 1024 * 1024;
 
+    private readonly allowedTypes = ['image/png', 'image/jpeg'];
+
     constructor(
         private fb: FormBuilder,
         private userService: UserService,
@@ -243,13 +245,13 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
 
     public fileValidate(file: File) {
         if (file.size > this.maxFileLength) {
-            this.notificationService.error('The file size should not exceed 5MB');
+            this.notificationService.error(`The file size should not exceed ${this.maxFileLength / (1024 * 1024)}MB`);
 
             return false;
         }
 
-        if (file.type !== 'image/png' && file.type !== 'image/jpeg') {
-            this.notificationService.error('Invalid file type, need .png, .jpeg');
+        if (!this.allowedTypes.includes(file.type)) {
+            this.notificationService.error(`Invalid file type, need ${this.allowedTypes.join(', ')}`);
 
             return false;
         }

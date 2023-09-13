@@ -19,6 +19,7 @@
             		sysc.colorder [ColumnOrder],   
             		syst.name [DataType],
             		syscmnts.text [Default],
+					CASE WHEN syst.status = 1 THEN 'True' ELSE 'False' END [IsUserDefined],
                     -- MaxLength (do we need it?)
             		sysc.prec [Precision],   
             		sysc.scale [Scale],   

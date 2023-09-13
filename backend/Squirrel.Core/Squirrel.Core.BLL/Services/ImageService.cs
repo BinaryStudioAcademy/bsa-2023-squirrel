@@ -69,7 +69,8 @@ public class ImageService : IImageService
 
     private async Task<byte[]> CropAvatar(IFormFile avatar)
     {
-        using var image = await Image.LoadAsync(avatar.OpenReadStream());
+        await using var imageStream = avatar.OpenReadStream();
+        using var image = await Image.LoadAsync(imageStream);
 
         var smallerDimension = Math.Min(image.Width, image.Height);
         image.Mutate(x => x.Crop(smallerDimension, smallerDimension));

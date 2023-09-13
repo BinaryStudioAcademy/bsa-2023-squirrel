@@ -28,16 +28,10 @@ public sealed class ProjectService : BaseService, IProjectService
         var currentUserId = _userIdGetter.GetCurrentUserId();
 
         var projectEntity = _mapper.Map<Project>(newProjectDto.Project);
+        var currentUser = await _context.Users.FirstAsync(p => p.Id == currentUserId);
+        projectEntity.Users.Add(currentUser);
         projectEntity.CreatedBy = currentUserId;
         var createdProject = (await _context.Projects.AddAsync(projectEntity)).Entity;
-        await _context.SaveChangesAsync();
-        
-        var userEntity = await _context.Users.FirstOrDefaultAsync(u => u.Id == currentUserId);
-        if (userEntity == null)
-        {
-            throw new EntityNotFoundException(nameof(User), currentUserId);
-        }
-        userEntity.Projects.Add(createdProject);
         await _context.SaveChangesAsync();
 
         newProjectDto.DefaultBranch.ProjectId = createdProject.Id;
@@ -54,7 +48,7 @@ public sealed class ProjectService : BaseService, IProjectService
         
         var existingProject = await _context.Projects
             .Include(project => project.Users)
-            .FirstOrDefaultAsync(project => project.Id == projectId);
+            .FirstAsync(project => project.Id == projectId);
         
         ValidateProject(existingProject);
 
@@ -71,7 +65,7 @@ public sealed class ProjectService : BaseService, IProjectService
     {
         var existingProject = await _context.Projects
             .Include(project => project.Users)
-            .FirstOrDefaultAsync(project => project.Id == projectId);
+            .FirstAsync(project => project.Id == projectId);
 
         
         ValidateProject(existingProject);
@@ -88,7 +82,7 @@ public sealed class ProjectService : BaseService, IProjectService
         var project = await _context.Projects
             .Include(project => project.Tags)
             .Include(project => project.Users)
-            .FirstOrDefaultAsync(project => project.Id == projectId);
+            .FirstAsync(project => project.Id == projectId);
 
         ValidateProject(project);
 
@@ -109,7 +103,7 @@ public sealed class ProjectService : BaseService, IProjectService
     {
         var project = await _context.Projects
             .Include(p => p.Users)
-            .FirstOrDefaultAsync(p => p.Id == projectId);
+            .FirstAsync(p => p.Id == projectId);
 
         ValidateProject(project);
         
@@ -121,19 +115,18 @@ public sealed class ProjectService : BaseService, IProjectService
     public async Task<List<ProjectResponseDto>> GetAllUserProjectsAsync()
     {
         var currentUserId = _userIdGetter.GetCurrentUserId();
-        var userProjects = await _context.Users
-            .Where(user => user.Id == currentUserId)
-            .SelectMany(user => user.Projects)
-            .Include(project => project.Tags)
+        var userProjects = await _context.Projects
+            .Include(p => p.Tags)
+            .Where(p => p.CreatedBy == currentUserId ||
+                        p.Users.Any(u => u.Id == currentUserId))
             .ToListAsync();
-
 
         return _mapper.Map<List<ProjectResponseDto>>(userProjects)!;
     }
 
     private void ValidateProject(Project? entity)
     {
-        if (entity is null || entity.Users.All(user => user.Id != _userIdGetter.GetCurrentUserId()))
+        if (entity is null || (entity.Users.All(user => user.Id != _userIdGetter.GetCurrentUserId()) && entity.CreatedBy != _userIdGetter.GetCurrentUserId()))
         {
             throw new EntityNotFoundException(nameof(Project));
         }

@@ -56,6 +56,8 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
             .subscribe(
                 (userProfile) => {
                     this.currentUser = userProfile;
+                    // eslint-disable-next-line no-console
+                    console.log(this.currentUser);
                     this.initializeForms();
                 },
                 () => {
@@ -89,17 +91,7 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
 
     private initChangePasswordForm() {
         this.passwordForm = this.fb.group({
-            currentPassword: [
-                '',
-                [
-                    Validators.required,
-                    Validators.minLength(6),
-                    Validators.maxLength(25),
-                    ValidationsFn.wrongCharacters(),
-                    ValidationsFn.lowerExist(),
-                    ValidationsFn.upperExist(),
-                ],
-            ],
+            currentPassword: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(25)]],
             newPassword: [
                 '',
                 [

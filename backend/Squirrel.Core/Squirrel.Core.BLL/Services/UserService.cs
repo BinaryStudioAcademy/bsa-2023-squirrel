@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using SixLabors.ImageSharp.Formats.Jpeg;
 using Squirrel.AzureBlobStorage.Interfaces;
-using Squirrel.AzureBlobStorage.Models;
 using Squirrel.Core.BLL.Extensions;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.BLL.Services.Abstract;

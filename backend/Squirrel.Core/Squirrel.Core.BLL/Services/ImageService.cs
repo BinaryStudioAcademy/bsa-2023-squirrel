@@ -31,35 +31,36 @@ public class ImageService : IImageService
 
     public async Task AddAvatarAsync(IFormFile avatar)
     {
-        if (!_fileTypes.Contains(avatar.ContentType))
-        {
-            throw new InvalidFileFormatException(string.Join(", ", _fileTypes));
-        }
-
-        if (avatar.Length > MaxFileLenght)
-        {
-            throw new LargeFileException($"{MaxFileLenght / (1024 * 1024)} MB");
-        }
+        ValidateImage(avatar);
 
         var userEntity = await GetUserByIdInternal(_userIdGetter.GetCurrentUserId());
-        var content = await CropAvatar(avatar);
 
+        var content = await CropAvatar(avatar);
         var blob = new Blob
         {
-            Id = userEntity.Id.ToString(),
+            Id = userEntity.AvatarUrl ?? Guid.NewGuid().ToString(),
             ContentType = avatar.ContentType,
             Content = content
         };
 
-        userEntity.AvatarUrl = await _blobStorageService.UploadWithUrlAsync(_blobStorageOptions.ImagesContainer, blob);
+        var blobResponse = userEntity.AvatarUrl == null
+            ? await _blobStorageService.UploadAsync(_blobStorageOptions.ImagesContainer, blob)
+            : await _blobStorageService.UpdateAsync(_blobStorageOptions.ImagesContainer, blob);
+
+        userEntity.AvatarUrl = blobResponse.Id;
         await _context.SaveChangesAsync();
     }
 
     public async Task DeleteAvatarAsync()
     {
         var userEntity = await GetUserByIdInternal(_userIdGetter.GetCurrentUserId());
+        if (userEntity.AvatarUrl == null)
+        {
+            throw new EntityNotFoundException(nameof(User.AvatarUrl));
+        }
+
         await _blobStorageService
-            .DeleteAsync(_blobStorageOptions.ImagesContainer, userEntity.Id.ToString());
+            .DeleteAsync(_blobStorageOptions.ImagesContainer, userEntity.AvatarUrl);
 
         userEntity.AvatarUrl = null;
         await _context.SaveChangesAsync();
@@ -75,6 +76,19 @@ public class ImageService : IImageService
         using var ms = new MemoryStream();
         await image.SaveAsync(ms, new JpegEncoder());
         return ms.ToArray();
+    }
+
+    private void ValidateImage(IFormFile image)
+    {
+        if (!_fileTypes.Contains(image.ContentType))
+        {
+            throw new InvalidFileFormatException(string.Join(", ", _fileTypes));
+        }
+
+        if (image.Length > MaxFileLenght)
+        {
+            throw new LargeFileException($"{MaxFileLenght / (1024 * 1024)} MB");
+        }
     }
 
     private async Task<User> GetUserByIdInternal(int id)

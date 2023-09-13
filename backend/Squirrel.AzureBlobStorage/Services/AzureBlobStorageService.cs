@@ -29,17 +29,6 @@ public class AzureBlobStorageService : IBlobStorageService
 
         return blob;
     }
-    
-    public async Task<string> UploadWithUrlAsync(string containerName, Blob blob)
-    {
-        var blobClient = await GetBlobClientInternalAsync(containerName, blob.Id);
-
-        var blobHttpHeader = new BlobHttpHeaders { ContentType = blob.ContentType };
-        await blobClient.UploadAsync(new BinaryData(blob.Content ?? new byte[] { }),
-            new BlobUploadOptions { HttpHeaders = blobHttpHeader });
-        
-        return blobClient.Uri.AbsoluteUri;
-    }
 
     public async Task<Blob> UpdateAsync(string containerName, Blob blob)
     {

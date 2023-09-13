@@ -17,7 +17,7 @@ public class SqlFormatterService : ISqlFormatterService
     {
         return dbEngine switch
         {
-            DbEngine.MsSqlServer => FormatMsSqlServer(inputSql),
+            DbEngine.SqlServer => FormatMsSqlServer(inputSql),
             DbEngine.PostgreSql => FormatPostgreSql(inputSql),
             _ => throw new NotImplementedException($"Database type {dbEngine} is not supported."),
         };

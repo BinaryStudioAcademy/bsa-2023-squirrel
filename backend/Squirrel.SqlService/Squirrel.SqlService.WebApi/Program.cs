@@ -19,7 +19,6 @@ builder.Services.AddSquirrelCoreContext(builder.Configuration);
 builder.Services.ConfigureCors(builder.Configuration);
 builder.Services.AddMongoDbService(builder.Configuration);
 builder.Services.AddAzureBlobStorage(builder.Configuration);
-builder.Services.RegisterCustomServices();
 builder.Services.AddSignalR();
 builder.Services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 builder.Services.RegisterCustomServices(builder.Configuration);

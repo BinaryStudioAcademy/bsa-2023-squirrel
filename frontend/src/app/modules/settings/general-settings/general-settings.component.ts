@@ -43,8 +43,12 @@ export class GeneralSettingsComponent extends BaseComponent implements OnInit {
 
     public createForm() {
         this.projectForm = this.fb.group({
-            projectName: [this.project.name, [Validators.required, Validators.maxLength(50)]],
-            description: [this.project.description],
+            projectName: [this.project.name, [
+                Validators.required,
+                Validators.minLength(3),
+                Validators.maxLength(50),
+                Validators.pattern(/^(?![\u0410-\u044F\u0400-\u04FF]).*$/)]],
+            description: [this.project.description, [Validators.maxLength(1000)]],
         });
     }
 

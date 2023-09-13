@@ -39,7 +39,11 @@ export class CreateProjectModalComponent extends BaseComponent implements OnInit
 
     public createForm() {
         this.projectForm = this.fb.group({
-            projectName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
+            projectName: ['', [
+                Validators.required,
+                Validators.minLength(3),
+                Validators.maxLength(50),
+                Validators.pattern(/^(?![\u0410-\u044F\u0400-\u04FF]).*$/)]],
             defaultBranchName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(200)]],
             selectedEngine: ['', Validators.required],
         });

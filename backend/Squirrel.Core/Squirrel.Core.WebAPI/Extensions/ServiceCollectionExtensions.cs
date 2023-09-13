@@ -29,6 +29,9 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IProjectService, ProjectService>();
         services.AddScoped<IDatabaseItemsService, DatabaseItemsService>();
         services.AddScoped<IProjectDatabaseService, ProjectDatabaseService>();
+        services.AddScoped<IChangeRecordService, ChangeRecordService>();
+        services.AddTransient<IDBStructureSaverService, DBStructureSaverService>();
+
 
         services.AddSingleton<IHttpClientService, HttpClientService>();
 

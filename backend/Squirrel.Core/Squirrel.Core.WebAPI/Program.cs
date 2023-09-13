@@ -1,4 +1,5 @@
 using Microsoft.Extensions.FileProviders;
+using Squirrel.AzureBlobStorage.Extensions;
 using Squirrel.Core.BLL.Extensions;
 using Squirrel.Core.DAL.Extensions;
 using Squirrel.Core.WebAPI.Extensions;
@@ -27,6 +28,7 @@ builder.Services.AddAutoMapper();
 builder.Services.AddSwaggerGen();
 builder.Services.AddValidation();
 builder.Services.ConfigureJwtAuth(builder.Configuration);
+builder.Services.AddAzureBlobStorage(builder.Configuration);
 
 builder.Services.AddCors();
 builder.Services.AddHealthChecks();

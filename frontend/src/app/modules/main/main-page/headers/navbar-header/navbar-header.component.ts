@@ -1,4 +1,5 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { LoadChangesService } from '@core/services/load-changes.service';
 
 @Component({
     selector: 'app-navbar-header',
@@ -26,11 +27,18 @@ export class NavbarHeaderComponent implements OnInit {
         { displayName: 'Settings', path: './settings' },
     ];
 
+    // eslint-disable-next-line no-empty-function
+    constructor(private changesService: LoadChangesService) {}
+
     ngOnInit(): void {
         this.branches = ['Branch 1', 'Branch 2', 'Branch 3', 'Branch 4'];
     }
 
     public onBranchSelected(value: string) {
         this.selectedBranch = value;
+    }
+
+    public loadChanges() {
+        this.changesService.loadChangesRequest();
     }
 }

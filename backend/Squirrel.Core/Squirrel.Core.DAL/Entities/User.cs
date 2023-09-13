@@ -24,4 +24,5 @@ public sealed class User : Entity<int>
     public ICollection<Project> OwnProjects { get; set; } = new List<Project>();
     public ICollection<PullRequest> ReviewedRequests { get; set; } = new List<PullRequest>();
     public ICollection<PullRequestReviewer> PullRequestReviewers { get; set; } = new List<PullRequestReviewer>();
+    public ICollection<ChangeRecord> ChangeRecords { get; set; } = new List<ChangeRecord>();
 }

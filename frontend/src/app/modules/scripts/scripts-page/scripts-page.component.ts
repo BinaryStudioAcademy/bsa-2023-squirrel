@@ -60,8 +60,8 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
 
     public openCreateModal(): void {
         const dialogRef = this.dialog.open(CreateScriptModalComponent, {
-            width: '40%',
-            height: '55%',
+            width: '450px',
+            height: '400px',
         });
 
         dialogRef.componentInstance.scriptCreated.subscribe((newScript: ScriptDto) => {

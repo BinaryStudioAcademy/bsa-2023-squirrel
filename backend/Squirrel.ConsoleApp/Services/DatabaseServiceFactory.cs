@@ -13,7 +13,7 @@ public class DatabaseServiceFactory
         {
             DbEngine.SqlServer => new SqlServerService(connection),
             DbEngine.PostgreSql => new PostgreSqlService(connection),
-            _ => throw new NotImplementedException($"Database type {dbType} is not supported."),
+            _ => new SqlServerService(connection)
         };
     }
 

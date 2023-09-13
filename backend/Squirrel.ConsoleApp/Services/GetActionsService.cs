@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Options;
-using Squirrel.ConsoleApp.BL.Interfaces;
+﻿using Squirrel.ConsoleApp.BL.Interfaces;
 using Squirrel.ConsoleApp.Models;
 
 namespace Squirrel.ConsoleApp.Services
@@ -9,13 +8,16 @@ namespace Squirrel.ConsoleApp.Services
         private readonly IDbQueryProvider _queryProvider;
         private readonly IDatabaseService _databaseService;
 
-        public GetActionsService(IDbQueryProvider queryProvider, IOptions<DbSettings> dbSettingsOptions)
+        public GetActionsService(IConnectionFileService _connectionFileService, IConnectionStringService connectionStringService)
         {
-            _queryProvider = queryProvider;
-            _databaseService = DatabaseServiceFactory.CreateDatabaseService(dbSettingsOptions.Value.DbType, dbSettingsOptions.Value.ConnectionString);
+            var connectionString = _connectionFileService.ReadFromFile();
+
+            _queryProvider = DatabaseServiceFactory.CreateDbQueryProvider(connectionString.DbEngine);
+            _databaseService = DatabaseServiceFactory.CreateDatabaseService(connectionString.DbEngine, connectionStringService.BuildConnectionString(connectionString));
         }
 
-        public async Task<QueryResultTable> GetAllTablesNamesAsync() 
+
+        public async Task<QueryResultTable> GetAllTablesNamesAsync()
             => await _databaseService.ExecuteQueryAsync(_queryProvider.GetTablesNamesQuery());
 
         public async Task<QueryResultTable> GetTableDataAsync(string schema, string name, int rowsCount) 

@@ -52,20 +52,14 @@ public sealed class ProjectService : BaseService, IProjectService
     {
         var users = _mapper.Map<List<User>>(usersDtos);
         
-        var existingProject = await _context.Projects.FindAsync(projectId);
+        var existingProject = await _context.Projects
+            .Include(project => project.Users)
+            .FirstOrDefaultAsync(project => project.Id == projectId);
         
         ValidateProject(existingProject);
 
         foreach (var user in users)
         {
-            /*var userEntity = await _context.Users.FirstOrDefaultAsync(u => u.Id == user.Id);
-
-            if (userEntity == null)
-            {
-                throw new EntityNotFoundException(nameof(User), user.Id);
-            }
-            
-            userEntity.Projects.Add(existingProject!);*/
             existingProject!.Users.Add(user);
         }
 
@@ -75,7 +69,10 @@ public sealed class ProjectService : BaseService, IProjectService
 
     public async Task<ProjectResponseDto> UpdateProjectAsync(int projectId, UpdateProjectDto updateProjectDto)
     {
-        var existingProject = await _context.Projects.FindAsync(projectId);
+        var existingProject = await _context.Projects
+            .Include(project => project.Users)
+            .FirstOrDefaultAsync(project => project.Id == projectId);
+
         
         ValidateProject(existingProject);
 
@@ -90,6 +87,7 @@ public sealed class ProjectService : BaseService, IProjectService
     {
         var project = await _context.Projects
             .Include(project => project.Tags)
+            .Include(project => project.Users)
             .FirstOrDefaultAsync(project => project.Id == projectId);
 
         ValidateProject(project);
@@ -135,7 +133,7 @@ public sealed class ProjectService : BaseService, IProjectService
 
     private void ValidateProject(Project? entity)
     {
-        if (entity is null)
+        if (entity is null || entity.Users.All(user => user.Id != _userIdGetter.GetCurrentUserId()))
         {
             throw new EntityNotFoundException(nameof(Project));
         }

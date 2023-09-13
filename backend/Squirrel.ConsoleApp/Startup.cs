@@ -1,13 +1,14 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Converters;
 using Squirrel.ConsoleApp.BL.Interfaces;
 using Squirrel.ConsoleApp.BL.Services;
 using Squirrel.ConsoleApp.Filters;
-using Squirrel.ConsoleApp.Models;
-using Squirrel.ConsoleApp.Providers;
 using Squirrel.ConsoleApp.Services;
+using Squirrel.Core.WebAPI.Extensions;
+using Squirrel.Core.WebAPI.Validators.Project;
 
 namespace Squirrel.ConsoleApp;
 
@@ -20,50 +21,51 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.Configure<DbSettings>(Configuration.GetSection(nameof(DbSettings)));
-        var serviceProvider = services.BuildServiceProvider();
-        var databaseType = serviceProvider.GetRequiredService<IOptions<DbSettings>>().Value.DbType;
-
-        switch (databaseType)
-        {
-            case DbEngine.SqlServer:
-                services.AddSingleton<IDbQueryProvider, SqlServerQueryProvider>();
-                services.AddSingleton<IDatabaseService, SqlServerService>();
-                break;
-            case DbEngine.PostgreSql:
-                services.AddSingleton<IDbQueryProvider, PostgreSqlQueryProvider>();
-                services.AddSingleton<IDatabaseService, PostgreSqlService>();
-                break;
-            default:
-                throw new NotImplementedException($"Database type {databaseType} is not supported.");
-        }
-
         services.AddScoped<IConnectionFileService, ConnectionFileService>();
+        services.AddScoped<IClientIdFileService, ClientIdFileService>();
+        services.AddScoped<IConnectionStringService, ConnectionStringService>();
+        services.AddTransient<IGetActionsService, GetActionsService>();
+        services.AddScoped<IJsonSerializerSettingsService, JsonSerializerSettingsService>();
 
-        services.AddScoped<IGetActionsService, GetActionsService>();
+        var serviceProvider = services.BuildServiceProvider();
+        var connectionStringService = serviceProvider.GetRequiredService<IConnectionStringService>();
+        var connectionFileService = serviceProvider.GetRequiredService<IConnectionFileService>();
+       
+        connectionFileService.CreateInitFile();
+        var connectionString = connectionFileService.ReadFromFile();
 
+        Console.WriteLine($"DB Settings:\n - DbType: {connectionString.DbEngine}\n - Connection string: {connectionStringService.BuildConnectionString(connectionString)}");
+       
+        services.AddScoped<IDbQueryProvider>(c => DatabaseServiceFactory.CreateDbQueryProvider(connectionString.DbEngine));
+        services.AddScoped<IDatabaseService>(c => DatabaseServiceFactory.CreateDatabaseService(connectionString.DbEngine, connectionStringService.BuildConnectionString(connectionString)));
+
+        services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<ConnectionStringDtoValidator>());
+        
         services.AddControllers(options =>
         {
             options.Filters.Add(typeof(CustomExceptionFilter));
         });
+
+        services.AddControllers().AddNewtonsoftJson(jsonOptions =>
+        {
+            jsonOptions.SerializerSettings.Converters.Add(new StringEnumConverter());
+        });
     }
-    
+
     public void Configure(IApplicationBuilder app)
     {
+        app.UseCors(builder => builder
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowAnyOrigin());
+
         app.UseRouting();
         app.UseHttpsRedirection();
         app.UseEndpoints(cfg =>
         {
             cfg.MapControllers();
         });
-        
-        InitializeFileSettings(app);
-    }
 
-    private static void InitializeFileSettings(IApplicationBuilder app)
-    {
-        using var scope = app.ApplicationServices.GetService<IServiceScopeFactory>()?.CreateScope();
-        var fileService = scope?.ServiceProvider.GetRequiredService<IConnectionFileService>();
-        fileService?.CreateEmptyFile();
+        app.RegisterHubs(Configuration);
     }
 }

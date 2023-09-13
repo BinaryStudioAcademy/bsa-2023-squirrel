@@ -2,7 +2,7 @@
 
 namespace Squirrel.SqlService.BLL.Interfaces;
 
-public interface IMongoService<T> where T : Entity<long>
+public interface IMongoService<T> where T : Entity<int>
 {
     Task<ICollection<T>> GetAllAsync();
 

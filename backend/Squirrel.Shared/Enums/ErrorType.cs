@@ -4,9 +4,12 @@ public enum ErrorType
 {
     InvalidEmail = 1,
     InvalidUsername,
+    InvalidPassword,
     InvalidEmailOrPassword,
     NotFound,
     Internal,
     InvalidToken,
+    InvalidProject,
+    RefreshTokenExpired,
     SqlSyntax
 }

@@ -5,7 +5,7 @@ namespace Squirrel.ConsoleApp.BL.Interfaces;
 public interface IGetActionsService
 {
     Task<QueryResultTable> GetAllTablesNamesAsync();
-    Task<QueryResultTable> GetTableDataAsync(string tableName, int rowsCount);
+    Task<QueryResultTable> GetTableDataAsync(string schema, string name, int rowsCount);
 
     Task<QueryResultTable> GetAllStoredProceduresNamesAsync();
     Task<QueryResultTable> GetStoredProcedureDefinitionAsync(string storedProcedureName);
@@ -16,8 +16,8 @@ public interface IGetActionsService
     Task<QueryResultTable> GetAllViewsNamesAsync();
     Task<QueryResultTable> GetViewDefinitionAsync(string viewName);
 
-    Task<QueryResultTable> GetDbTablesStructureAsync();
-    Task<QueryResultTable> GetDbTablesCheckAndUniqueConstraintsAsync();
+    Task<QueryResultTable> GetTableStructureAsync(string schema, string name);
+    Task<QueryResultTable> GetTableChecksAndUniqueConstraintsAsync(string schema, string name);
 
     Task<QueryResultTable> GetStoredProceduresWithDetailAsync();
     Task<QueryResultTable> GetFunctionsWithDetailAsync();

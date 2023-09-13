@@ -43,7 +43,7 @@ public class UserController : ControllerBase
     /// Update user notifications
     /// </summary>
     [HttpPut("update-notifications")]
-    public async Task<ActionResult<UserProfileDto>> UpdateUserNotifications([FromBody] UpdateUserNotificationsdDto updateUserNotificationsdDto)
+    public async Task<ActionResult<UserProfileDto>> UpdateUserNotifications([FromBody] UpdateUserNotificationsDto updateUserNotificationsdDto)
     {
         return Ok(await _userService.UpdateNotificationsAsync(updateUserNotificationsdDto));
     }
@@ -58,5 +58,11 @@ public class UserController : ControllerBase
     public async Task<ActionResult<UserProfileDto>> GetUserProfile()
     {
         return Ok(await _userService.GetUserProfileAsync());
+    }
+    
+    [HttpGet("all")]
+    public async Task<ActionResult<List<UserDto>>> GetAllUsers()
+    {
+        return Ok(await _userService.GetAllUsersAsync());
     }
 }

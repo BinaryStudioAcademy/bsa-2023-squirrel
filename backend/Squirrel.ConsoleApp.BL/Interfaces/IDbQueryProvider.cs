@@ -3,7 +3,7 @@
 public interface IDbQueryProvider
 {
     string GetTablesNamesQuery();
-    string GetTableDataQuery(string tableName, int rowsCount);
+    string GetTableDataQuery(string schema, string tableName, int rowsCount);
 
     string GetStoredProceduresNamesQuery();
     string GetStoredProcedureDefinitionQuery(string storedProcedureName);
@@ -14,8 +14,8 @@ public interface IDbQueryProvider
     string GetViewsNamesQuery();
     string GetViewDefinitionQuery(string viewName);
 
-    string GetTablesStructureQuery();
-    string GetTablesCheckAndUniqueConstraintsQuery();
+    string GetTableStructureQuery(string schema, string table);
+    string GetTableChecksAndUniqueConstraintsQuery(string schema, string name);
 
     string GetStoredProceduresWithDetailsQuery();
     string GetFunctionsWithDetailsQuery();

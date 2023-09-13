@@ -1,0 +1,11 @@
+<div class="user-card">
+    <app-avatar
+        class="avatar"
+        [imgLink]="user.avatarUrl ? user.avatarUrl : ''"
+        size="36"
+    ></app-avatar>
+    <div class="name-email">
+        <p class="user-name">{{ user.firstName }} {{ user.lastName }}</p>
+        <p class="user-email">{{ user.email }}</p>
+    </div>
+</div>

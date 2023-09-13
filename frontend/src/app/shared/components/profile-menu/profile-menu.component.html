@@ -6,7 +6,7 @@
         size="36"></app-avatar>
     <div class="name-email">
         <p class="user-name">{{ currentUser.firstName }} {{ currentUser.lastName }}</p>
-        <p class="user-email">{{ currentUser.email }}</p>
+        <p class="user-email" [appEmailOverflow]="8">{{ currentUser.email }}</p>
     </div>
 </div>
 <hr class="divider" />

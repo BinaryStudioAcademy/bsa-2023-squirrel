@@ -19,6 +19,8 @@ import { UserService } from './user.service';
 export class AuthService {
     private readonly authRoutePrefix = '/api/auth';
 
+    private readonly tokenRoutePrefix = '/api/token';
+
     private readonly accessTokenKey = 'accessToken';
 
     private readonly refreshTokenKey = 'refreshToken';
@@ -94,17 +96,36 @@ export class AuthService {
     }
 
     public tokenExist() {
-        return localStorage.getItem(this.accessTokenKey) && localStorage.getItem(this.refreshTokenKey);
+        return this.getAccessToken() && this.getRefreshToken();
     }
 
-    public get accessToken(): string | null {
-        const localJwt = localStorage.getItem(this.accessTokenKey);
+    public refreshTokens(): Observable<AccessTokenDto> {
+        const tokensDto: AccessTokenDto = {
+            accessToken: this.getAccessToken() as string,
+            refreshToken: this.getRefreshToken() as string,
+        };
 
-        if (!localJwt) {
+        return this.httpService
+            .postRequest<AccessTokenDto>(`${this.tokenRoutePrefix}/refresh`, tokensDto)
+            .pipe(tap((tokens: AccessTokenDto) => this.saveTokens(tokens)));
+    }
+
+    public getAccessToken(): string | null {
+        return this.parseToken(this.accessTokenKey);
+    }
+
+    public getRefreshToken(): string | null {
+        return this.parseToken(this.refreshTokenKey);
+    }
+
+    private parseToken(tokenKey: string): string | null {
+        const token = localStorage.getItem(tokenKey);
+
+        if (!token) {
             return null;
         }
 
-        return JSON.parse(localJwt);
+        return JSON.parse(token);
     }
 
     private saveTokens(tokens: AccessTokenDto) {

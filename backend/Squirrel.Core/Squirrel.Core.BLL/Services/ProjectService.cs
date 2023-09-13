@@ -14,7 +14,6 @@ public sealed class ProjectService : BaseService, IProjectService
 {
     private readonly IUserIdGetter _userIdGetter;
     private readonly IBranchService _branchService;
-
     public ProjectService(SquirrelCoreContext context, IMapper mapper, IUserIdGetter userIdGetter,
         IBranchService branchService)
         : base(context, mapper)
@@ -26,9 +25,19 @@ public sealed class ProjectService : BaseService, IProjectService
 
     public async Task<ProjectResponseDto> AddProjectAsync(NewProjectDto newProjectDto)
     {
+        var currentUserId = _userIdGetter.GetCurrentUserId();
+
         var projectEntity = _mapper.Map<Project>(newProjectDto.Project);
-        projectEntity.CreatedBy = _userIdGetter.GetCurrentUserId();
+        projectEntity.CreatedBy = currentUserId;
         var createdProject = (await _context.Projects.AddAsync(projectEntity)).Entity;
+        await _context.SaveChangesAsync();
+        
+        var userEntity = await _context.Users.FirstOrDefaultAsync(u => u.Id == currentUserId);
+        if (userEntity == null)
+        {
+            throw new EntityNotFoundException(nameof(User), currentUserId);
+        }
+        userEntity.Projects.Add(createdProject);
         await _context.SaveChangesAsync();
 
         newProjectDto.DefaultBranch.ProjectId = createdProject.Id;
@@ -49,6 +58,14 @@ public sealed class ProjectService : BaseService, IProjectService
 
         foreach (var user in users)
         {
+            /*var userEntity = await _context.Users.FirstOrDefaultAsync(u => u.Id == user.Id);
+
+            if (userEntity == null)
+            {
+                throw new EntityNotFoundException(nameof(User), user.Id);
+            }
+            
+            userEntity.Projects.Add(existingProject!);*/
             existingProject!.Users.Add(user);
         }
 
@@ -106,17 +123,19 @@ public sealed class ProjectService : BaseService, IProjectService
     public async Task<List<ProjectResponseDto>> GetAllUserProjectsAsync()
     {
         var currentUserId = _userIdGetter.GetCurrentUserId();
-        var userProjects = await _context.Projects
+        var userProjects = await _context.Users
+            .Where(user => user.Id == currentUserId)
+            .SelectMany(user => user.Projects)
             .Include(project => project.Tags)
-            .Where(x => x.CreatedBy == currentUserId)
             .ToListAsync();
+
 
         return _mapper.Map<List<ProjectResponseDto>>(userProjects)!;
     }
 
     private void ValidateProject(Project? entity)
     {
-        if (entity is null || entity.CreatedBy != _userIdGetter.GetCurrentUserId())
+        if (entity is null)
         {
             throw new EntityNotFoundException(nameof(Project));
         }

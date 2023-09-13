@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using Squirrel.AzureBlobStorage.Interfaces;
 using Squirrel.AzureBlobStorage.Models;
 using Squirrel.Core.DAL.Entities;
 using Squirrel.Shared.DTO.DatabaseItem;
@@ -12,13 +11,11 @@ public class DBStructureSaverService : IDBStructureSaverService
 {
     private readonly IHttpClientService _httpClientService;
     private readonly IConfiguration _configuration;
-    private readonly IBlobStorageService _blobStorageService;
 
-    public DBStructureSaverService(IHttpClientService httpClientService, IConfiguration configuration, IBlobStorageService blobStorageService)
+    public DBStructureSaverService(IHttpClientService httpClientService, IConfiguration configuration)
     {
         _httpClientService = httpClientService;
         _configuration = configuration;
-        _blobStorageService = blobStorageService;
     }
 
     public async Task SaveDBStructureToAzureBlob(ChangeRecord changeRecord)
@@ -42,6 +39,7 @@ public class DBStructureSaverService : IDBStructureSaverService
 
         var containerName = _configuration["UserDbChangesBlobContainerName"];
 
-        await _blobStorageService.UploadAsync(containerName, blob);
+        await _httpClientService.PostAsync<Blob, Blob>
+            ($"{_configuration["SqlServiceUrl"]}/api/blob/{containerName}", blob);
     }
 }

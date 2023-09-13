@@ -38,7 +38,7 @@ public class ImageService : IImageService
 
         if (avatar.Length > MaxFileLenght)
         {
-            throw new LargeFileException("5 MB");
+            throw new LargeFileException($"{MaxFileLenght / (1024 * 1024)} MB");
         }
 
         var userEntity = await GetUserByIdInternal(_userIdGetter.GetCurrentUserId());

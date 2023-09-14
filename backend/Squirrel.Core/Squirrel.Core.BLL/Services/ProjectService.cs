@@ -48,7 +48,7 @@ public sealed class ProjectService : BaseService, IProjectService
         
         var existingProject = await _context.Projects
             .Include(project => project.Users)
-            .FirstAsync(project => project.Id == projectId);
+            .FirstOrDefaultAsync(project => project.Id == projectId);
         
         ValidateProject(existingProject);
 
@@ -65,7 +65,7 @@ public sealed class ProjectService : BaseService, IProjectService
     {
         var existingProject = await _context.Projects
             .Include(project => project.Users)
-            .FirstAsync(project => project.Id == projectId);
+            .FirstOrDefaultAsync(project => project.Id == projectId);
 
         
         ValidateProject(existingProject);
@@ -82,7 +82,7 @@ public sealed class ProjectService : BaseService, IProjectService
         var project = await _context.Projects
             .Include(project => project.Tags)
             .Include(project => project.Users)
-            .FirstAsync(project => project.Id == projectId);
+            .FirstOrDefaultAsync(project => project.Id == projectId);
 
         ValidateProject(project);
 
@@ -104,7 +104,7 @@ public sealed class ProjectService : BaseService, IProjectService
         var project = await _context.Projects
             .Include(p => p.Users)
             .Include(p => p.Author)
-            .FirstAsync(p => p.Id == projectId);
+            .FirstOrDefaultAsync(p => p.Id == projectId);
 
         ValidateProject(project);
 

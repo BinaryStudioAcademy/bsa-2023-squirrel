@@ -29,5 +29,4 @@ public sealed class HttpClientService : IHttpClientService
 
     public async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request)
         => await _httpClient.SendAsync(request).ConfigureAwait(false);
-
 }

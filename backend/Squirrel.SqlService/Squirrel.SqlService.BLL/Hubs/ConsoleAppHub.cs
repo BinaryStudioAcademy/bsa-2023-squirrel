@@ -27,8 +27,7 @@ public sealed class ConsoleAppHub : Hub<IExecuteOnClientSide>
             return;
         }
 
-        await (requestActionToProcessReceivedData.GetValueOrDefault(requestActionName)
-            ?.Invoke(clientId, queryResultTableDTO) ?? throw new NullReferenceException());
+        await (requestActionToProcessReceivedData.GetValueOrDefault(requestActionName)?.Invoke(clientId, queryResultTableDTO) ?? throw new NullReferenceException());
     }
 
     private void InitRequestActionDict()

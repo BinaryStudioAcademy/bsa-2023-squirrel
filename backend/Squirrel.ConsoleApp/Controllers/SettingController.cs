@@ -25,7 +25,7 @@ public class SettingController : ControllerBase
     [HttpPost("connect")]
     public IActionResult Post(ConnectionStringDto connectionStringDto)
     {
-        _connectionFileService.SaveToFile(connectionStringDto);
+        connectionStringDto.IntegratedSecurity = true;
         var connectionString = _connectionStringService.BuildConnectionString(connectionStringDto);
         var databaseService = DatabaseServiceFactory.CreateDatabaseService(connectionStringDto.DbEngine, connectionString);
         var databaseProvider = DatabaseServiceFactory.CreateDbQueryProvider(connectionStringDto.DbEngine);
@@ -40,7 +40,11 @@ public class SettingController : ControllerBase
         {
             throw new DbConnectionFailed(connectionString, ex.Message);
         }
-        
-        return Ok(_clientIdFileService.GetClientId());
+
+        _connectionFileService.SaveToFile(connectionStringDto);
+
+        var clientId = _clientIdFileService.GetClientId();
+
+        return Ok(clientId);
     }
 }

@@ -17,7 +17,6 @@ public class ConsoleAppHubController : ControllerBase
         _hubContext = hubContext;
     }
 
-
     // https://localhost:7244/api/ConsoleAppHub/getAllTablesNames
     [HttpPost("getAllTablesNames")]
     public async Task<ActionResult> GetAllTablesNamesAsync([FromBody] QueryParameters queryParameters)

@@ -11,4 +11,5 @@ public enum ErrorType
     InvalidToken,
     InvalidProject,
     RefreshTokenExpired,
+    SqlSyntax
 }

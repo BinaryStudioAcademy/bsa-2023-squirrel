@@ -16,6 +16,7 @@ public static class HubConnectionExtensions
         hubConnection.On("GetAllTablesNamesAsync", (string clientId) =>
         {
             var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
+            var test = getActionsService.GetAllTablesNamesAsync().Result;
             hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", clientId, "GetAllTablesNamesAsync", getActionsService.GetAllTablesNamesAsync().Result);
         });
 

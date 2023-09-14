@@ -13,6 +13,8 @@ export class CodeComponent implements OnChanges {
 
     @Input() height: string = '100%';
 
+    @Input() header: string = 'Solution';
+
     private insertColor: string = 'rgba(63,185,80,0.5)';
 
     private deleteColor: string = 'rgba(248,81,73,0.3)';

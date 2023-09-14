@@ -2,6 +2,6 @@
 
 public enum DbEngine
 {
-    MsSqlServer = 1,
+    SqlServer = 1,
     PostgreSql
 }

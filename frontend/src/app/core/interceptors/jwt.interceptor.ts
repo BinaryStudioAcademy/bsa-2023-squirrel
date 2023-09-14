@@ -1,8 +1,4 @@
-import {
-    HttpEvent,
-    HttpHandler,
-    HttpInterceptor,
-    HttpRequest } from '@angular/common/http';
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthService } from '@core/services/auth.service';
 import { Observable } from 'rxjs';
@@ -13,7 +9,7 @@ export class JwtInterceptor implements HttpInterceptor {
     constructor(private authService: AuthService) {}
 
     intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-        const { accessToken } = this.authService;
+        const accessToken = this.authService.getAccessToken();
 
         if (accessToken) {
             // eslint-disable-next-line no-param-reassign

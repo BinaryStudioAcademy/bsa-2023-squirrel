@@ -12,7 +12,7 @@ public sealed class RefreshTokenConfig : IEntityTypeConfiguration<RefreshToken>
         builder.Property(x => x.ExpiresAt).IsRequired();
         builder.Property(x => x.CreatedAt)
                .IsRequired()
-               .HasDefaultValueSql("getdate()")
+               .HasDefaultValueSql("getutcdate()")
                .ValueGeneratedOnAdd();
         
         builder.HasOne(x => x.User);

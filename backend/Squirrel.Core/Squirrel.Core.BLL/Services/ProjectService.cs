@@ -14,7 +14,6 @@ public sealed class ProjectService : BaseService, IProjectService
 {
     private readonly IUserIdGetter _userIdGetter;
     private readonly IBranchService _branchService;
-
     public ProjectService(SquirrelCoreContext context, IMapper mapper, IUserIdGetter userIdGetter,
         IBranchService branchService)
         : base(context, mapper)
@@ -26,8 +25,12 @@ public sealed class ProjectService : BaseService, IProjectService
 
     public async Task<ProjectResponseDto> AddProjectAsync(NewProjectDto newProjectDto)
     {
+        var currentUserId = _userIdGetter.GetCurrentUserId();
+
         var projectEntity = _mapper.Map<Project>(newProjectDto.Project);
-        projectEntity.CreatedBy = _userIdGetter.GetCurrentUserId();
+        var currentUser = await _context.Users.FirstAsync(p => p.Id == currentUserId);
+        projectEntity.Author = currentUser;
+        projectEntity.CreatedBy = currentUserId;
         var createdProject = (await _context.Projects.AddAsync(projectEntity)).Entity;
         await _context.SaveChangesAsync();
 
@@ -42,7 +45,9 @@ public sealed class ProjectService : BaseService, IProjectService
     {
         var users = _mapper.Map<List<User>>(usersDtos);
         
-        var existingProject = await _context.Projects.FindAsync(projectId);
+        var existingProject = await _context.Projects
+            .Include(project => project.Users)
+            .FirstOrDefaultAsync(project => project.Id == projectId);
         
         ValidateProject(existingProject);
 
@@ -57,7 +62,10 @@ public sealed class ProjectService : BaseService, IProjectService
 
     public async Task<ProjectResponseDto> UpdateProjectAsync(int projectId, UpdateProjectDto updateProjectDto)
     {
-        var existingProject = await _context.Projects.FindAsync(projectId);
+        var existingProject = await _context.Projects
+            .Include(project => project.Users)
+            .FirstOrDefaultAsync(project => project.Id == projectId);
+
         
         ValidateProject(existingProject);
 
@@ -72,6 +80,7 @@ public sealed class ProjectService : BaseService, IProjectService
     {
         var project = await _context.Projects
             .Include(project => project.Tags)
+            .Include(project => project.Users)
             .FirstOrDefaultAsync(project => project.Id == projectId);
 
         ValidateProject(project);
@@ -93,11 +102,13 @@ public sealed class ProjectService : BaseService, IProjectService
     {
         var project = await _context.Projects
             .Include(p => p.Users)
+            .Include(p => p.Author)
             .FirstOrDefaultAsync(p => p.Id == projectId);
 
         ValidateProject(project);
-        
+
         var projectUsers = project!.Users.ToList();
+        projectUsers.Add(project.Author);
 
         return _mapper.Map<List<UserDto>>(projectUsers);
     }
@@ -106,8 +117,9 @@ public sealed class ProjectService : BaseService, IProjectService
     {
         var currentUserId = _userIdGetter.GetCurrentUserId();
         var userProjects = await _context.Projects
-            .Include(project => project.Tags)
-            .Where(x => x.CreatedBy == currentUserId)
+            .Include(p => p.Tags)
+            .Where(p => p.CreatedBy == currentUserId ||
+                        p.Users.Any(u => u.Id == currentUserId))
             .ToListAsync();
 
         return _mapper.Map<List<ProjectResponseDto>>(userProjects)!;
@@ -115,7 +127,7 @@ public sealed class ProjectService : BaseService, IProjectService
 
     private void ValidateProject(Project? entity)
     {
-        if (entity is null || entity.CreatedBy != _userIdGetter.GetCurrentUserId())
+        if (entity is null || (entity.Users.All(user => user.Id != _userIdGetter.GetCurrentUserId()) && entity.CreatedBy != _userIdGetter.GetCurrentUserId()))
         {
             throw new EntityNotFoundException(nameof(Project));
         }

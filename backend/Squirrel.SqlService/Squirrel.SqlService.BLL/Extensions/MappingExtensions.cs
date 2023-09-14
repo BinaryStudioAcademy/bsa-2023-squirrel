@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Squirrel.ConsoleApp.BL.Extensions;
+namespace Squirrel.SqlService.BLL.Extensions;
 
 public static class MappingExtensions
 {

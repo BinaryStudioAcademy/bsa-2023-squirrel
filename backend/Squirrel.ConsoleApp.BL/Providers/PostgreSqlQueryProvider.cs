@@ -1,11 +1,11 @@
 ﻿using Squirrel.ConsoleApp.BL.Interfaces;
-using static Squirrel.ConsoleApp.Providers.SqlServerScripts.GetTables;
-using static Squirrel.ConsoleApp.Providers.SqlServerScripts.GetObjects;
-using static Squirrel.ConsoleApp.Providers.SqlServerScripts.GetUserDefinedTypes;
+using static Squirrel.ConsoleApp.BL.Providers.PostgreSqlScripts.GetTables;
+using static Squirrel.ConsoleApp.BL.Providers.PostgreSqlScripts.GetObjects;
+using static Squirrel.ConsoleApp.BL.Providers.PostgreSqlScripts.GetUserDefinedTypes;
 
-namespace Squirrel.ConsoleApp.Providers;
+namespace Squirrel.ConsoleApp.BL.Providers;
 
-public class SqlServerQueryProvider : IDbQueryProvider
+public class PostgreSqlQueryProvider : IDbQueryProvider
 {
     public string GetTablesNamesQuery() => GetTablesNamesScript;
 

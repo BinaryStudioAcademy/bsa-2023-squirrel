@@ -1,7 +1,6 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Squirrel.ConsoleApp.BL.Interfaces;
-using Squirrel.ConsoleApp.Models.DTO;
+using Squirrel.ConsoleApp.Models;
 
 namespace Squirrel.ConsoleApp.Controllers;
 
@@ -9,52 +8,50 @@ namespace Squirrel.ConsoleApp.Controllers;
 [Route("[controller]")]
 public class TablesController: ControllerBase
 {
-    private readonly IMapper _mapper;
     private readonly IGetActionsService _getActionsService;
 
-    public TablesController(IGetActionsService getActionsService, IMapper mapper)
+    public TablesController(IGetActionsService getActionsService)
     {
         _getActionsService = getActionsService;
-        _mapper = mapper;
     }
 
     // http://localhost:44567/tables/names
     [HttpGet]
     [Route("names")]
-    public async Task<ActionResult<TableNamesDto>> GetTablesNames()
+    public async Task<ActionResult<QueryResultTable>> GetTablesNames()
     {
         var names = await _getActionsService.GetAllTablesNamesAsync();
 
-        return Ok(_mapper.Map<TableNamesDto>(names));
+        return Ok(names);
     }
 
     // http://localhost:44567/tables/structure/dbo/categories
     [HttpGet]
     [Route("structure/{schema}/{name}")]
-    public async Task<ActionResult<TableStructureDto>> GetTableStructure([FromRoute] string schema, string name)
+    public async Task<ActionResult<QueryResultTable>> GetTableStructure([FromRoute] string schema, string name)
     {
         var structure = await _getActionsService.GetTableStructureAsync(schema, name);
 
-        return Ok(_mapper.Map<TableStructureDto>(structure));
+        return Ok(structure);
     }
 
     // http://localhost:44567/tables/constraints/dbo/employees
     [HttpGet]
     [Route("constraints/{schema}/{name}")]
-    public async Task<ActionResult<TableConstraintsDto>> GetTableChecks([FromRoute] string schema, string name)
+    public async Task<ActionResult<QueryResultTable>> GetTableChecks([FromRoute] string schema, string name)
     {
         var checks = await _getActionsService.GetTableChecksAndUniqueConstraintsAsync(schema, name);
 
-        return Ok(_mapper.Map<TableConstraintsDto>(checks));
+        return Ok(checks);
     }
 
     // http://localhost:44567/tables/data/dbo/employees/100
     [HttpGet]
     [Route("data/{schema}/{name}/{rowsCount}")]
-    public async Task<ActionResult<TableDataDto>> GetTableData([FromRoute] string schema, string name, int rowsCount)
+    public async Task<ActionResult<QueryResultTable>> GetTableData([FromRoute] string schema, string name, int rowsCount)
     {
         var data = await _getActionsService.GetTableDataAsync(schema, name, rowsCount);
 
-        return Ok(_mapper.Map<TableDataDto>(data));
+        return Ok(data);
     }
 }

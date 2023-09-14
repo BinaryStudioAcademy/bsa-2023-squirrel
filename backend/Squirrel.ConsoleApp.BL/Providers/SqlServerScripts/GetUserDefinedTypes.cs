@@ -1,8 +1,8 @@
-﻿namespace Squirrel.ConsoleApp.Providers.SqlServerScripts
+﻿namespace Squirrel.ConsoleApp.BL.Providers.SqlServerScripts;
+
+internal static class GetUserDefinedTypes
 {
-    internal static class GetUserDefinedTypes
-    {
-        public static string GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionScript =>
+    public static string GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionScript =>
 @"
 SELECT	SCHEMA_NAME(userDefinedTypes.schema_id) [UserTypeSchema],
 		userDefinedTypes.name [UserTypeName],
@@ -114,7 +114,7 @@ SELECT	SCHEMA_NAME(userDefinedTypes.schema_id) [UserTypeSchema],
 WHERE userDefinedTypes.is_user_defined = 1  
 ";
 
-        public static string GetUserDefinedTableTypesStructureScript =>
+    public static string GetUserDefinedTableTypesStructureScript =>
 @"
 SELECT	systt.name [UserTableTypeName],
 		sysc.name [Column],
@@ -134,5 +134,4 @@ JOIN sys.table_types as systt ON systt.type_table_object_id = sysc.id
 LEFT JOIN [sys].[syscomments] AS syscmnts on sysc.cdefault = syscmnts.id
 LEFT JOIN [sys].[systypes] AS syst ON sysc.xusertype = syst.xusertype AND syst.name != 'sysname'
 ";
-    }
 }

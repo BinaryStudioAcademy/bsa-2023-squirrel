@@ -1,7 +1,8 @@
 ﻿using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
+using Squirrel.SqlService.BLL.Extensions;
 
-namespace Squirrel.ConsoleApp.BL.Extensions;
+namespace Squirrel.SqlService.BLL.Extensions;
 
 public static class ServiceCollectionExtensions
 {

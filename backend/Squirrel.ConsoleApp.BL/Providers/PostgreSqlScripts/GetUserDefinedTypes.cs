@@ -1,9 +1,9 @@
-﻿namespace Squirrel.ConsoleApp.Providers.PostgreSqlScripts
+﻿namespace Squirrel.ConsoleApp.BL.Providers.PostgreSqlScripts;
+
+internal static class GetUserDefinedTypes
 {
-    internal static class GetUserDefinedTypes
-    {
-        public static string GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionScript =>
-            @"
+    public static string GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionScript =>
+        @"
             select
 			    t.typnamespace::regnamespace::text as schema,
 				 t.typname as name,
@@ -37,8 +37,8 @@
 			order by schema, name
             ";
 
-        public static string GetUserDefinedTableTypesStructureScript =>
-            @"
+    public static string GetUserDefinedTableTypesStructureScript =>
+        @"
             with types as (
             select n.nspname,
         			t.oid::regtype::text as obj_name,
@@ -111,5 +111,4 @@
                      cols.obj_name,
                      cols.ordinal_position;
             ";
-    }
 }

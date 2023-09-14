@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Squirrel.ConsoleApp.BL.Exceptions;
 using Squirrel.ConsoleApp.BL.Interfaces;
+using Squirrel.ConsoleApp.BL.Services;
 using Squirrel.ConsoleApp.Models;
-using Squirrel.ConsoleApp.Services;
 
 namespace Squirrel.ConsoleApp.Controllers;
 

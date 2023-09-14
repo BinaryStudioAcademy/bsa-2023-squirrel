@@ -1,15 +1,15 @@
-﻿namespace Squirrel.ConsoleApp.Providers.SqlServerScripts
+﻿namespace Squirrel.ConsoleApp.BL.Providers.SqlServerScripts;
+
+internal static class GetTables
 {
-    internal static class GetTables
-    {
-        public static string GetTablesNamesScript =>
-            @"SELECT TABLE_SCHEMA AS 'SCHEMA', TABLE_NAME AS 'NAME' FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' ORDER BY 'SCHEMA', 'NAME'";
+    public static string GetTablesNamesScript =>
+        @"SELECT TABLE_SCHEMA AS 'SCHEMA', TABLE_NAME AS 'NAME' FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' ORDER BY 'SCHEMA', 'NAME'";
 
-        public static string GetTableDataQueryScript(string schema, string name, int rowsCount) =>
-            @$"SELECT TOP ({rowsCount}) '{schema}' AS [SCHEMA], '{name}' AS [NAME], (SELECT COUNT(*) FROM [{schema}].[{name}]) AS TotalRows, * FROM [{schema}].[{name}]";
+    public static string GetTableDataQueryScript(string schema, string name, int rowsCount) =>
+        @$"SELECT TOP ({rowsCount}) '{schema}' AS [SCHEMA], '{name}' AS [NAME], (SELECT COUNT(*) FROM [{schema}].[{name}]) AS TotalRows, * FROM [{schema}].[{name}]";
 
-        public static string GetTableStructureScript(string schema, string table) =>
-            @$"
+    public static string GetTableStructureScript(string schema, string table) =>
+        @$"
               DECLARE @TableSchema NVARCHAR(100) = '{schema}';
               DECLARE @TableName NVARCHAR(100) = '{table}'; 
 
@@ -46,8 +46,8 @@
               ORDER BY [ColumnOrder]; 
             ";
 
-        public static string GetTableChecksAndUniqueConstraintsScript(string schema, string name) =>
-            @$"
+    public static string GetTableChecksAndUniqueConstraintsScript(string schema, string name) =>
+        @$"
                 DECLARE @TableSchema NVARCHAR(100) = '{schema}';
                 DECLARE @TableName NVARCHAR(100) = '{name}'; 
                 
@@ -67,5 +67,4 @@
                 GROUP BY	TC.TABLE_SCHEMA, TC.TABLE_NAME, TC.Constraint_Name, TC.CONSTRAINT_TYPE
                 ORDER BY	TC.TABLE_NAME
             ";
-    }
 }

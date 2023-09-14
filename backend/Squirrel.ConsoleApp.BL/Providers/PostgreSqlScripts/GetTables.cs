@@ -1,15 +1,15 @@
-﻿namespace Squirrel.ConsoleApp.Providers.PostgreSqlScripts
+﻿namespace Squirrel.ConsoleApp.BL.Providers.PostgreSqlScripts;
+
+internal static class GetTables
 {
-    internal static class GetTables
-    {
-        public static string GetTablesNamesScript =>
-            @"SELECT schemaname AS ""schema"", tablename AS ""name"" FROM pg_catalog.pg_tables WHERE schemaname NOT IN ('pg_catalog', 'information_schema')";
+    public static string GetTablesNamesScript =>
+        @"SELECT schemaname AS ""schema"", tablename AS ""name"" FROM pg_catalog.pg_tables WHERE schemaname NOT IN ('pg_catalog', 'information_schema')";
 
-        public static string GetTableDataQueryScript(string schema, string name, int rowsCount) =>
-            $"SELECT '{schema}' AS schema, '{name}' AS name, (SELECT COUNT(*) FROM \"{schema}\".\"{name}\") AS TotalRows, t.* FROM \"{schema}\".\"{name}\" t LIMIT {rowsCount}";
+    public static string GetTableDataQueryScript(string schema, string name, int rowsCount) =>
+        $"SELECT '{schema}' AS schema, '{name}' AS name, (SELECT COUNT(*) FROM \"{schema}\".\"{name}\") AS TotalRows, t.* FROM \"{schema}\".\"{name}\" t LIMIT {rowsCount}";
 
-        public static string GetTableStructureScript(string schema, string name) =>
-            @$"
+    public static string GetTableStructureScript(string schema, string name) =>
+        @$"
             with column_description_table as (
 				select
 					cols.table_schema,
@@ -104,8 +104,8 @@
 			order by col.table_schema, col.table_name, col.ordinal_position;
             ";
 
-        public static string GetTableChecksAndUniqueConstraintsScript(string schema, string name) =>
-            @$"
+    public static string GetTableChecksAndUniqueConstraintsScript(string schema, string name) =>
+        @$"
             select 
 			    tc.table_schema as TableSchema,
 				   tc.table_name as TableName,
@@ -143,5 +143,4 @@
 			order by tc.table_schema,
 			tc.table_name
             ";
-    }
 }

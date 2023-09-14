@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Squirrel.ConsoleApp.Models;
-using Squirrel.ConsoleApp.Models.DTO;
-using static Squirrel.ConsoleApp.BL.Extensions.MappingExtensions;
+using Squirrel.SqlService.BLL.Models.DTO;
+using static Squirrel.SqlService.BLL.Extensions.MappingExtensions;
 
 namespace Squirrel.ConsoleApp.BL.MappingProfiles;
 

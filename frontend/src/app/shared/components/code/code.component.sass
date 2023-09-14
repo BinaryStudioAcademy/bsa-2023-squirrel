@@ -16,29 +16,17 @@ table, th, td
 
 .container
     margin-right: 10px
-    border-radius: 5px
     width: 100%
-    background-color: $line-color
-    overflow: auto
 
 .header
     height: 38px
     padding: 0 5px
-    display: flex
-    justify-content: space-between
-    align-items: center
-
-    img
-        cursor: pointer
 
 .name
     @extend .title
     font-weight: $semi-bold-weight
     font-size: 18px
     margin: 0
-
-.code-section
-    display: flex
 
 .code
     width: calc(100% - 40px)
@@ -59,3 +47,9 @@ table, th, td
 .line-content
     text-align: left
     width: 100%
+
+.code-section
+    background-color: $line-color
+    border-radius: 5px
+    overflow: auto
+    height: 90%

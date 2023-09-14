@@ -13,15 +13,15 @@ public class PostgreSqlQueryProvider : IDbQueryProvider
 
     public string GetStoredProceduresNamesQuery() => GetStoredProceduresNamesScript;
 
-    public string GetStoredProcedureDefinitionQuery(string storedProcedureName) => GetStoredProcedureDefinitionScript(storedProcedureName);
+    public string GetStoredProcedureDefinitionQuery(string storedProcedureSchema, string storedProcedureName) => GetStoredProcedureDefinitionScript(storedProcedureSchema, storedProcedureName);
 
     public string GetFunctionsNamesQuery() => GetFunctionsNamesScript;
 
-    public string GetFunctionDefinitionQuery(string functionName) => GetFunctionDefinitionScript(functionName);
+    public string GetFunctionDefinitionQuery(string functionSchema, string functionName) => GetFunctionDefinitionScript(functionSchema, functionName);
 
     public string GetViewsNamesQuery() => GetViewsNamesScript;
 
-    public string GetViewDefinitionQuery(string viewName) => GetViewDefinitionScript(viewName);
+    public string GetViewDefinitionQuery(string viewSchema, string viewName) => GetViewDefinitionScript(viewSchema, viewName);
 
     public string GetTableStructureQuery(string schema, string name) => GetTableStructureScript(schema, name);
 

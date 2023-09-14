@@ -5,7 +5,7 @@
         public static string GetStoredProceduresNamesScript =>
             @"SELECT NAME as ProcedureName FROM SYS.OBJECTS WHERE TYPE_DESC = 'SQL_STORED_PROCEDURE'";
 
-        public static string GetStoredProcedureDefinitionScript(string storedProcedureName) =>
+        public static string GetStoredProcedureDefinitionScript(string storedProcedureSchema, string storedProcedureName) =>
             @$"
                 SELECT M.definition [ROUTINE_DEFINITION] 
 
@@ -17,7 +17,7 @@
         public static string GetFunctionsNamesScript =>
             @"SELECT NAME as FunctionName FROM SYS.OBJECTS WHERE TYPE_DESC = 'SQL_SCALAR_FUNCTION' OR TYPE_DESC = 'SQL_TABLE_VALUED_FUNCTION' OR TYPE_DESC = 'SQL_INLINE_TABLE_VALUED_FUNCTION'";
 
-        public static string GetFunctionDefinitionScript(string functionName) =>
+        public static string GetFunctionDefinitionScript(string functionSchema, string functionName) =>
             @$"
                 SELECT M.definition [ROUTINE_DEFINITION] 
 
@@ -29,7 +29,7 @@
         public static string GetViewsNamesScript =>
             @$"SELECT NAME as ViewName FROM SYS.OBJECTS WHERE TYPE_DESC = 'VIEW'";
 
-        public static string GetViewDefinitionScript(string viewName) =>
+        public static string GetViewDefinitionScript(string viewSchema, string viewName) =>
             @$"
                 SELECT M.definition [VIEW_DEFINITION] 
 

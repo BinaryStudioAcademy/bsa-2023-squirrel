@@ -13,8 +13,8 @@
 				d.numeric_scale as numeric_scale,
 				t.typnotnull as allow_null,
 				d.domain_default as default,
-				dc.constraint_name as constraint_name,
-				cc.check_clause as check_clause
+				dc.constraint_name as ""ConstraintName"",
+				cc.check_clause as ""ConstraintDefinition""
 			
 			from
 				pg_type as t

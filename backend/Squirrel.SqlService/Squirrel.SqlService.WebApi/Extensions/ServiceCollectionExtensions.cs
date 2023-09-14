@@ -6,6 +6,7 @@ using Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
 using Squirrel.SqlService.BLL.Models.Options;
 using Squirrel.SqlService.BLL.Services;
 using Squirrel.SqlService.BLL.Services.ConsoleAppHub;
+using Squirrel.SqlService.BLL.Services.SqlFormatter;
 
 namespace Squirrel.SqlService.WebApi.Extensions;
 

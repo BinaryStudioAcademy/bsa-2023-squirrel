@@ -4,7 +4,7 @@ using Microsoft.SqlServer.TransactSql.ScriptDom;
 using System.Diagnostics;
 using Squirrel.Core.DAL.Enums;
 
-namespace Squirrel.SqlService.BLL.Services;
+namespace Squirrel.SqlService.BLL.Services.SqlFormatter;
 
 public class SqlFormatterService : ISqlFormatterService
 {
@@ -39,7 +39,7 @@ public class SqlFormatterService : ISqlFormatterService
     public string FormatPostgreSql(string inputSql)
     {
         var assemblyPath = typeof(SqlFormatterService).Assembly.Location.Split('\\').SkipLast(1);
-        var filePath = string.Join("\\", assemblyPath) + "\\Services\\PgSqlParser.py";
+        var filePath = string.Join("\\", assemblyPath) + "\\Services\\SqlFormatter\\PgSqlParser.py";
 
         string argsFile = string.Format("{0}\\{1}.txt", Path.GetDirectoryName(filePath.ToString()), Guid.NewGuid());
 
@@ -62,25 +62,7 @@ public class SqlFormatterService : ISqlFormatterService
                 startInfo.Arguments = string.Format(
                     "{0} {1}", string.Format(@"""{0}""", filePath), string.Format(@"""{0}""", argsFile));
             }
-
-            using (Process process = Process.Start(startInfo))
-            {
-                using (StreamReader reader = process.StandardOutput)
-                {
-                    string errors = process.StandardError.ReadToEnd();
-                    if (errors.Any())
-                    {
-                        throw new Exception(errors);
-                    }
-                    var hasErrors = reader.ReadLine();
-                    if (hasErrors == "True")
-                    {
-                        throw new SqlSyntaxException(reader.ReadToEnd());
-                    };
-                    result = reader.ReadToEnd();
-                    process.WaitForExit();
-                }
-            }
+            PythonScriptExecutor.ExecuteScript(startInfo, out result);
         }
         finally
         {

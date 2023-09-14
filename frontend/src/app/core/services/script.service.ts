@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
+import { environment } from '@env/environment';
 import { Observable } from 'rxjs';
 
 import { CreateScriptDto } from 'src/app/models/scripts/create-script-dto';
+import { ScriptContentDto } from 'src/app/models/scripts/script-content-dto';
 import { ScriptDto } from 'src/app/models/scripts/script-dto';
 
 import { HttpInternalService } from './http-internal.service';
-import { ScriptContentDto } from 'src/app/models/scripts/script-content-dto';
-import { environment } from '@env/environment';
 
 @Injectable({
     providedIn: 'root',

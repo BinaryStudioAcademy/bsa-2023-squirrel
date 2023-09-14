@@ -116,20 +116,20 @@
         public static string GetUserDefinedTableTypesStructureScript =>
             @"
             SELECT	systt.name [UserTableTypeName],
-		            sysc.name [Column],
-		            sysc.colorder [ColumnOrder],
-		            syst.name [DataType],
+                    sysc.name [Column],
+                    sysc.colorder [ColumnOrder],
+                    syst.name [DataType],
                     CASE WHEN syst.status = 1 THEN 'True' ELSE 'False' END [IsUserDefined],
-		            syscmnts.text [Default],
-		            sysc.prec [Precision],   
-		            sysc.scale [Scale],
-		            CASE WHEN sysc.isnullable = 1 THEN 'True' ELSE 'False' END [AllowNulls],
-		            CASE WHEN sysc.[status] = 128 THEN 'True' ELSE 'False' END [Identity],
-		            CASE WHEN sysc.colstat = 1 THEN 'True' ELSE 'False' END [PrimaryKey]
+                    syscmnts.text [Default],
+                    sysc.prec [Precision],   
+                    sysc.scale [Scale],
+                    CASE WHEN sysc.isnullable = 1 THEN 'True' ELSE 'False' END [AllowNulls],
+                    CASE WHEN sysc.[status] = 128 THEN 'True' ELSE 'False' END [Identity],
+                    CASE WHEN sysc.colstat = 1 THEN 'True' ELSE 'False' END [PrimaryKey]
             FROM [sys].[syscolumns] as sysc
                     JOIN sys.table_types as systt ON systt.type_table_object_id = sysc.id
                     LEFT JOIN [sys].[syscomments] AS syscmnts on sysc.cdefault = syscmnts.id
-                    LEFT JOIN [sys].[systypes] AS syst ON sysc.xtype = syst.xtype AND syst.name != 'sysname'
+                    LEFT JOIN [sys].[systypes] AS syst ON sysc.xusertype = syst.xusertype AND syst.name != 'sysname'
             ";
     }
 }

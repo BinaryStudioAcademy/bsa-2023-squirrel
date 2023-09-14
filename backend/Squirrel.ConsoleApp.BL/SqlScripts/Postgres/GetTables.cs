@@ -1,4 +1,4 @@
-﻿namespace Squirrel.ConsoleApp.BL.Providers.PostgreSqlScripts;
+﻿namespace Squirrel.ConsoleApp.BL.SqlScripts.Postgres;
 
 internal static class GetTables
 {

@@ -1,4 +1,4 @@
-﻿namespace Squirrel.ConsoleApp.BL.Providers.SqlServerScripts;
+﻿namespace Squirrel.ConsoleApp.BL.SqlScripts.SqlServer;
 
 internal class GetObjects
 {

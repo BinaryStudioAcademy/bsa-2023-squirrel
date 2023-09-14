@@ -1,7 +1,7 @@
 ﻿using Squirrel.ConsoleApp.BL.Interfaces;
-using static Squirrel.ConsoleApp.BL.Providers.PostgreSqlScripts.GetTables;
-using static Squirrel.ConsoleApp.BL.Providers.PostgreSqlScripts.GetObjects;
-using static Squirrel.ConsoleApp.BL.Providers.PostgreSqlScripts.GetUserDefinedTypes;
+using static Squirrel.ConsoleApp.BL.SqlScripts.Postgres.GetTables;
+using static Squirrel.ConsoleApp.BL.SqlScripts.Postgres.GetObjects;
+using static Squirrel.ConsoleApp.BL.SqlScripts.Postgres.GetUserDefinedTypes;
 
 namespace Squirrel.ConsoleApp.BL.Providers;
 

@@ -1,7 +1,7 @@
 ﻿using Squirrel.ConsoleApp.BL.Interfaces;
-using static Squirrel.ConsoleApp.BL.Providers.SqlServerScripts.GetTables;
-using static Squirrel.ConsoleApp.BL.Providers.SqlServerScripts.GetObjects;
-using static Squirrel.ConsoleApp.BL.Providers.SqlServerScripts.GetUserDefinedTypes;
+using static Squirrel.ConsoleApp.BL.SqlScripts.SqlServer.GetTables;
+using static Squirrel.ConsoleApp.BL.SqlScripts.SqlServer.GetObjects;
+using static Squirrel.ConsoleApp.BL.SqlScripts.SqlServer.GetUserDefinedTypes;
 
 namespace Squirrel.ConsoleApp.BL.Providers;
 

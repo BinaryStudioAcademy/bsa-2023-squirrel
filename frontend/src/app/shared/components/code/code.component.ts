@@ -11,6 +11,8 @@ import { TextPairDifferenceDto } from 'src/app/models/text-pair/text-pair-differ
 export class CodeComponent implements OnChanges {
     @Input() textPair: TextPairDifferenceDto;
 
+    @Input() height: string = '100%';
+
     private insertColor: string = 'rgba(63,185,80,0.5)';
 
     private deleteColor: string = 'rgba(248,81,73,0.3)';
@@ -25,56 +27,63 @@ export class CodeComponent implements OnChanges {
                 const newText = this.textPair.newTextLines[i];
 
                 if (newText.type === ChangeTypeEnum.unchanged) {
-                    this.createLine(newText.text);
-                    this.createLineNumber(newText.position);
+                    const line = this.createLine(newText.position);
+
+                    this.createCodeLine(line, newText.text);
                 }
                 if ((newText.type === ChangeTypeEnum.inserted || newText.type === ChangeTypeEnum.modified)
                 && newText.position !== -1) {
-                    this.createLine(newText.text, this.insertColor);
-                    this.createLineNumber(newText.position, '+');
+                    const line = this.createLine(newText.position, '+');
+
+                    this.createCodeLine(line, newText.text, this.insertColor);
                 }
                 if (oldText.type === ChangeTypeEnum.deleted || newText.type === ChangeTypeEnum.modified) {
-                    this.createLine(oldText.text, this.deleteColor);
-                    this.createLineNumber(oldText.position, '-');
+                    const line = this.createLine(oldText.position, '-');
+
+                    this.createCodeLine(line, oldText.text, this.deleteColor);
                 }
             }
         }
     }
 
-    private createLine(text: string, backgroundColor: string = 'transparent') {
-        const element = this.renderer.createElement('li');
+    private createCodeLine(parent: any, text: string, backgroundColor: string = 'transparent') {
+        const td = this.renderer.createElement('td');
 
-        this.renderer.setStyle(element, 'background-color', backgroundColor);
+        this.renderer.addClass(td, 'line-content');
+
+        this.renderer.setStyle(parent, 'background-color', backgroundColor);
 
         const elText = this.renderer.createText(text);
 
-        this.renderer.appendChild(element, elText);
+        this.renderer.appendChild(td, elText);
 
-        const container = this.el.nativeElement.querySelector('#code');
-
-        this.renderer.appendChild(container, element);
+        this.renderer.appendChild(parent, td);
     }
 
-    private createLineNumber(number: number, symbol: string = '') {
-        const li = this.renderer.createElement('li');
-        const numberSpan = this.renderer.createElement('span');
-        const symbolSpan = this.renderer.createElement('span');
+    private createLine(number: number, symbol: string = '') {
+        const tr = this.renderer.createElement('tr');
 
-        this.renderer.addClass(numberSpan, 'number');
-        this.renderer.addClass(symbolSpan, 'symbol');
-        this.renderer.addClass(li, 'number-container');
+        this.renderer.addClass(tr, 'line');
+
+        const numberTd = this.renderer.createElement('td');
+        const symbolTd = this.renderer.createElement('td');
+
+        this.renderer.addClass(numberTd, 'line-number');
+        this.renderer.addClass(symbolTd, 'line-symbol');
 
         const numberEl = this.renderer.createText(number.toString());
         const symbolEl = this.renderer.createText(symbol);
 
-        this.renderer.appendChild(numberSpan, numberEl);
-        this.renderer.appendChild(symbolSpan, symbolEl);
+        this.renderer.appendChild(numberTd, numberEl);
+        this.renderer.appendChild(symbolTd, symbolEl);
 
-        this.renderer.appendChild(li, numberSpan);
-        this.renderer.appendChild(li, symbolSpan);
+        this.renderer.appendChild(tr, numberTd);
+        this.renderer.appendChild(tr, symbolTd);
 
-        const container = this.el.nativeElement.querySelector('#lines');
+        const container = this.el.nativeElement.querySelector('#code-table');
 
-        this.renderer.appendChild(container, li);
+        this.renderer.appendChild(container, tr);
+
+        return tr;
     }
 }

@@ -2,11 +2,24 @@
 @import "/src/styles/reusable"
 @import "/src/styles/weights"
 
+
+table
+    width: 100%
+    td
+        padding: 4px
+        
+
+table, th, td
+    border: none
+    border-spacing: 0px
+    height: 0px
+
 .container
-    height: 100%
     margin-right: 10px
     border-radius: 5px
+    width: 100%
     background-color: $line-color
+    overflow: auto
 
 .header
     height: 38px
@@ -26,33 +39,23 @@
 
 .code-section
     display: flex
-    height: calc(100% - 38px)
-
-.line-numbers
-    height: 100%
-    padding: 4px 0px
-    @extend .flex-column
-    align-items: flex-start
-
-    color: $text-main
-    li
-        opacity: 0.5
-    .number
-        text-align: left
-        padding-right: 4px
-    .symbol
-        text-align: right
-        padding-right: 4px
-
-.number-container
-    display: flex
-    justify-content: space-between
-    padding-left: 4px
 
 .code
     width: calc(100% - 40px)
     background-color: $white
     padding: 4px 8px
 
-ul
-    list-style-type: none
+.line-number
+    @extend .line-descriptor
+
+.line-symbol
+    @extend .line-descriptor
+
+.line-descriptor
+    text-align: center
+    padding: 0
+    margin: 0
+
+.line-content
+    text-align: left
+    width: 100%

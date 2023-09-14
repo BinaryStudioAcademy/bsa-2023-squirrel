@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '@env/environment';
 
+import { ConsoleIdDto } from '../../models/console/console-id-dto';
 import { DbConnection } from '../../models/console/db-connection';
 
 @Injectable({
@@ -14,6 +15,6 @@ export class ConsoleConnectService {
     constructor(private http: HttpClient) { }
 
     public connect(dbConnection: DbConnection) {
-        return this.http.post<string>(`${this.baseUrl}/setting/connect`, dbConnection);
+        return this.http.post<ConsoleIdDto>(`${this.baseUrl}/setting/connect`, dbConnection);
     }
 }

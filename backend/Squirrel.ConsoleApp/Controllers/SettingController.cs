@@ -2,6 +2,7 @@
 using Squirrel.ConsoleApp.BL.Exceptions;
 using Squirrel.ConsoleApp.BL.Interfaces;
 using Squirrel.ConsoleApp.Models;
+using Squirrel.ConsoleApp.Models.DTO;
 using Squirrel.ConsoleApp.Services;
 
 namespace Squirrel.ConsoleApp.Controllers;
@@ -41,6 +42,9 @@ public class SettingController : ControllerBase
             throw new DbConnectionFailed(connectionString, ex.Message);
         }
         
-        return Ok(_clientIdFileService.GetClientId());
+        return Ok(new ConsoleIdDto
+        {
+            Guid = _clientIdFileService.GetClientId()
+        });
     }
 }

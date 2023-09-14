@@ -51,13 +51,13 @@ export class CreateDbModalComponent implements OnInit {
             port: +this.dbForm.value.port,
             username: this.dbForm.value.username,
             password: this.dbForm.value.password,
-            dbEngine: this.data.dbEngine - 1,
+            dbEngine: this.data.dbEngine,
             isLocalhost: this.localhost,
         };
 
         this.consoleConnectService.connect(connect).subscribe({
-            next: guid => {
-                this.saveDb(guid);
+            next: condoleId => {
+                this.saveDb(condoleId.guid);
             },
             error: () => {
                 this.notificationService.error('Failed to connect to database');

@@ -40,41 +40,34 @@
 
         public static string GetStoredProceduresScript =>
             @"
-             SELECT ROUTINE_CATALOG [RoutineCatalog],
-		            ROUTINE_SCHEMA [RoutineSchema],
-		            ROUTINE_NAME [RoutineName],
-		            M.definition [RoutineDefinition]
+                SELECT ROUTINE_SCHEMA [Schema],
+		               ROUTINE_NAME [Name],
+		               M.definition [Definition]
 
-            FROM	INFORMATION_SCHEMA.ROUTINES R INNER JOIN sys.sql_modules M ON M.object_id = OBJECT_ID(R.ROUTINE_NAME)
+                FROM INFORMATION_SCHEMA.ROUTINES R INNER JOIN sys.sql_modules M ON M.object_id = OBJECT_ID(R.ROUTINE_NAME)
 
-            WHERE	ROUTINE_TYPE = 'PROCEDURE'
+                WHERE ROUTINE_TYPE = 'PROCEDURE'
             ";
 
         public static string GetFunctionsScript =>
             @"
-            SELECT ROUTINE_CATALOG [RoutineCatalog],
-		            ROUTINE_SCHEMA [RoutineSchema],
-		            ROUTINE_NAME [RoutineName],
-		            DATA_TYPE [ReturnDataType],
-		            CHARACTER_MAXIMUM_LENGTH [ReturnCharacterMaxLength],
-		            NUMERIC_PRECISION [ReturnNumericPrecision],
-		            NUMERIC_SCALE [ReturnNumericScale],
-		            M.definition [RoutineDefinition]
-
-            FROM	INFORMATION_SCHEMA.ROUTINES R INNER JOIN sys.sql_modules M ON M.object_id = OBJECT_ID(R.ROUTINE_NAME)
-
-            WHERE	ROUTINE_TYPE = 'FUNCTION'
+                SELECT ROUTINE_SCHEMA [Schema],
+		               ROUTINE_NAME [Name],
+		               DATA_TYPE [ReturnedType],
+		               CASE WHEN DATA_TYPE = 'TABLE' THEN 'True' ELSE 'False' END [IsUserDefined],
+		               M.definition [Definition]
+                FROM INFORMATION_SCHEMA.ROUTINES R
+		        INNER JOIN sys.sql_modules M ON M.object_id = OBJECT_ID(R.ROUTINE_NAME)
+                WHERE ROUTINE_TYPE = 'FUNCTION'
             ";
 
         public static string GetViewsScript =>
             @"
-            SELECT TABLE_SCHEMA [ViewSchema],
-		            TABLE_NAME [ViewName],
-		            M.definition [ViewDefinition]
-
-            FROM	INFORMATION_SCHEMA.VIEWS V
-
-		    INNER JOIN sys.sql_modules M ON M.object_id = OBJECT_ID(V.TABLE_NAME)
+                SELECT TABLE_SCHEMA [Schema],
+		               TABLE_NAME [View],
+		               M.definition [Definition]
+                FROM INFORMATION_SCHEMA.VIEWS V
+		        INNER JOIN sys.sql_modules M ON M.object_id = OBJECT_ID(V.TABLE_NAME)
             ";
     }
 }

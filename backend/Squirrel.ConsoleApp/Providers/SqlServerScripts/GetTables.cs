@@ -13,32 +13,33 @@
               DECLARE @TableSchema NVARCHAR(100) = '{schema}';
               DECLARE @TableName NVARCHAR(100) = '{table}'; 
 
-              SELECT	OBJECT_SCHEMA_NAME(syso.id) [TableSchema],
-            		syso.name [TableName],
-            		sysc.name [ColumnName],
-            		sysc.colorder [ColumnOrder],   
-            		syst.name [DataType],
-            		syscmnts.text [Default],
-					CASE WHEN syst.status = 1 THEN 'True' ELSE 'False' END [IsUserDefined],
-                    -- MaxLength (do we need it?)
-            		sysc.prec [Precision],   
-            		sysc.scale [Scale],   
-            		CASE WHEN sysc.isnullable = 1 THEN 'True' ELSE 'False' END [AllowNulls],   
-            		CASE WHEN sysc.[status] = 128 THEN 'True' ELSE 'False' END [Identity],
-            		CASE WHEN sysc.colstat = 1 THEN 'True' ELSE 'False' END [PrimaryKey],  
-            		CASE WHEN fkc.parent_object_id IS NULL THEN 'False' ELSE 'True' END [ForeignKey],   
-            		CASE WHEN fkc.parent_object_id IS NULL THEN NULL ELSE obj.name END [RelatedTable],
-            		COL_NAME(fkc.parent_object_id, fkc.parent_column_id) [RelatedTableColumn],
-            		OBJECT_SCHEMA_NAME(fkc.referenced_object_id) [RelatedTableSchema],
-            		CASE WHEN ep.value is NULL THEN NULL ELSE CAST(ep.value as NVARCHAR(500)) END [Description]
+              SELECT	OBJECT_SCHEMA_NAME(syso.id) [Schema],
+		                syso.name [Table],
+		                sysc.name [Column],
+		                sysc.colorder [ColumnOrder],   
+		                syst.name [DataType],
+		                CASE WHEN syst.status = 1 THEN 'True' ELSE 'False' END [IsUserDefined],
+		                CASE WHEN syst.name IN ('binary','varbinary','char','nchar','varchar','nvarchar') OR syst.status = 1 
+			                THEN sysc.prec ELSE NULL END [MaxLength],
+		                syscmnts.text [Default],
+		                sysc.prec [Precision],   
+		                sysc.scale [Scale],   
+		                CASE WHEN sysc.isnullable = 1 THEN 'True' ELSE 'False' END [AllowNulls],   
+		                CASE WHEN sysc.[status] = 128 THEN 'True' ELSE 'False' END [Identity],
+		                CASE WHEN sysc.colstat = 1 THEN 'True' ELSE 'False' END [PrimaryKey],  
+		                CASE WHEN fkc.parent_object_id IS NULL THEN 'False' ELSE 'True' END [ForeignKey],   
+		                CASE WHEN fkc.parent_object_id IS NULL THEN NULL ELSE obj.name END [RelatedTable],
+		                COL_NAME(fkc.parent_object_id, fkc.parent_column_id) [RelatedTableColumn],
+		                OBJECT_SCHEMA_NAME(fkc.referenced_object_id) [RelatedTableSchema],
+		                CASE WHEN ep.value is NULL THEN NULL ELSE CAST(ep.value as NVARCHAR(500)) END [Description]
 
               FROM	[sys].[sysobjects] AS syso  
-            		JOIN [sys].[syscolumns] AS sysc on syso.id = sysc.id  
-            		LEFT JOIN [sys].[syscomments] AS syscmnts on sysc.cdefault = syscmnts.id
-            		LEFT JOIN [sys].[systypes] AS syst ON sysc.xusertype = syst.xusertype AND syst.name != 'sysname'
-            		LEFT JOIN [sys].[foreign_key_columns] AS fkc on syso.id = fkc.parent_object_id AND sysc.colid = fkc.parent_column_id      
-            		LEFT JOIN [sys].[objects] AS obj ON fkc.referenced_object_id = obj.[object_id]  
-            		LEFT JOIN [sys].[extended_properties] AS ep ON syso.id = ep.major_id AND sysc.colid = ep.minor_id AND ep.name = 'MS_Description' 
+		            JOIN [sys].[syscolumns] AS sysc on syso.id = sysc.id  
+		            LEFT JOIN [sys].[syscomments] AS syscmnts on sysc.cdefault = syscmnts.id
+		            LEFT JOIN [sys].[systypes] AS syst ON sysc.xusertype = syst.xusertype AND syst.name != 'sysname'
+		            LEFT JOIN [sys].[foreign_key_columns] AS fkc on syso.id = fkc.parent_object_id AND sysc.colid = fkc.parent_column_id      
+		            LEFT JOIN [sys].[objects] AS obj ON fkc.referenced_object_id = obj.[object_id]  
+		            LEFT JOIN [sys].[extended_properties] AS ep ON syso.id = ep.major_id AND sysc.colid = ep.minor_id AND ep.name = 'MS_Description'
 
               WHERE	syso.type = 'U' AND syso.name != 'sysdiagrams' AND syso.name = @TableName AND OBJECT_SCHEMA_NAME(syso.id) = @TableSchema
 
@@ -50,7 +51,7 @@
                 DECLARE @TableSchema NVARCHAR(100) = '{schema}';
                 DECLARE @TableName NVARCHAR(100) = '{name}'; 
                 
-                SELECT TC.TABLE_SCHEMA [TableSchema],	
+                SELECT TC.TABLE_SCHEMA [Schema],	
                       TC.TABLE_NAME [Table],
                       TC.Constraint_Name [ConstraintName],
                       STRING_AGG(CC.Column_Name, ', ') [Columns],

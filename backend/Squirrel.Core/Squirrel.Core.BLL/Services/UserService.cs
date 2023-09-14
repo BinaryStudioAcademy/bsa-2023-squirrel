@@ -90,7 +90,7 @@ public sealed class UserService : BaseService, IUserService
         var createdUser = (await _context.Users.AddAsync(newUser)).Entity;
         await _context.SaveChangesAsync();
 
-        return _mapper.Map<UserDto>(createdUser); ;
+        return _mapper.Map<UserDto>(createdUser);
     }
 
     public async Task<UserProfileDto> UpdateUserNamesAsync(UpdateUserNamesDto updateUserDto)

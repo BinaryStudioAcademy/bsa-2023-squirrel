@@ -61,12 +61,19 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
     public openCreateModal(): void {
         const dialogRef = this.dialog.open(CreateScriptModalComponent, {
             width: '450px',
-            height: '400px',
+            height: '320px',
         });
 
         dialogRef.componentInstance.scriptCreated.subscribe((newScript: ScriptDto) => {
             this.loadScripts(newScript.id);
         });
+    }
+
+    public executeScript() {
+        this.scriptService.executeScript({ content: this.form.value.scriptContent }).subscribe(
+            () => this.notification.info('Script successfully executed'),
+            (err) => this.notification.error(`An error occurred ${err}`),
+        );
     }
 
     public saveScript(): void {

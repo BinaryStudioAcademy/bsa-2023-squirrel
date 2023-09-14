@@ -27,8 +27,8 @@ export class CreateDbModalComponent implements OnInit {
         private databaseService: DatabaseService,
         private notificationService: NotificationService,
         public dialogRef: MatDialogRef<CreateDbModalComponent>,
-        // eslint-disable-next-line no-empty-function
-    ) {}
+    ) // eslint-disable-next-line no-empty-function, brace-style, @typescript-eslint/brace-style
+    {}
 
     public ngOnInit() {
         this.initializeForm();
@@ -51,12 +51,12 @@ export class CreateDbModalComponent implements OnInit {
             port: +this.dbForm.value.port,
             username: this.dbForm.value.username,
             password: this.dbForm.value.password,
-            dbEngine: this.data.dbEngine - 1,
+            dbEngine: this.data.dbEngine,
             isLocalhost: this.localhost,
         };
 
         this.consoleConnectService.connect(connect).subscribe({
-            next: guid => {
+            next: (guid) => {
                 this.saveDb(guid);
             },
             error: () => {
@@ -87,17 +87,16 @@ export class CreateDbModalComponent implements OnInit {
             guid,
         };
 
-        this.databaseService.addDatabase(database)
-            .subscribe({
-                next: dbName => {
-                    this.notificationService.info('database was successfully added');
-                    this.dbName.emit(dbName.dbName);
-                    this.close();
-                },
-                error: () => {
-                    this.notificationService.error('Fail to save db to db');
-                },
-            });
+        this.databaseService.addDatabase(database).subscribe({
+            next: (dbName) => {
+                this.notificationService.info('database was successfully added');
+                this.dbName.emit(dbName.dbName);
+                this.close();
+            },
+            error: () => {
+                this.notificationService.error('Fail to save db to db');
+            },
+        });
     }
 
     public close() {

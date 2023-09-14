@@ -5,6 +5,8 @@ import { CreateScriptDto } from 'src/app/models/scripts/create-script-dto';
 import { ScriptDto } from 'src/app/models/scripts/script-dto';
 
 import { HttpInternalService } from './http-internal.service';
+import { ScriptContentDto } from 'src/app/models/scripts/script-content-dto';
+import { environment } from '@env/environment';
 
 @Injectable({
     providedIn: 'root',
@@ -25,5 +27,9 @@ export class ScriptService {
 
     public updateScript(dto: ScriptDto): Observable<ScriptDto> {
         return this.httpService.putRequest(this.scriptRoutePrefix, dto);
+    }
+
+    public executeScript(script: ScriptContentDto) {
+        return this.httpService.postRequest(`${environment.consoleUrl}/script/execute`, script);
     }
 }

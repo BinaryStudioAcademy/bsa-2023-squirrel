@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
 using Squirrel.ConsoleApp.BL.Interfaces;
 
-namespace Squirrel.Core.WebAPI.Extensions;
+namespace Squirrel.ConsoleApp.Extensions;
 
 public static class HubConnectionExtensions
 {

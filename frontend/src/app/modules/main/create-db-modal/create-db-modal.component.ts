@@ -6,6 +6,7 @@ import { DatabaseService } from '@core/services/database.service';
 import { NotificationService } from '@core/services/notification.service';
 
 import { DbConnection } from '../../../models/console/db-connection';
+import { DatabaseInfoDto } from '../../../models/database/database-info-dto';
 import { NewDatabaseDto } from '../../../models/database/new-database-dto';
 
 @Component({
@@ -14,7 +15,7 @@ import { NewDatabaseDto } from '../../../models/database/new-database-dto';
     styleUrls: ['./create-db-modal.component.sass'],
 })
 export class CreateDbModalComponent implements OnInit {
-    @Output() public dbName = new EventEmitter<string>();
+    @Output() public dbName = new EventEmitter<DatabaseInfoDto>();
 
     public dbForm: FormGroup = new FormGroup({});
 
@@ -89,9 +90,9 @@ export class CreateDbModalComponent implements OnInit {
 
         this.databaseService.addDatabase(database)
             .subscribe({
-                next: dbName => {
+                next: dbInfo => {
                     this.notificationService.info('database was successfully added');
-                    this.dbName.emit(dbName.dbName);
+                    this.dbName.emit(dbInfo);
                     this.close();
                 },
                 error: () => {

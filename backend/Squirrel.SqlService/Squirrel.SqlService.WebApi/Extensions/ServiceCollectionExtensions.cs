@@ -1,21 +1,25 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Squirrel.Core.DAL.Entities;
 using Squirrel.SqlService.BLL.Interfaces;
 using Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
 using Squirrel.SqlService.BLL.Models.Options;
 using Squirrel.SqlService.BLL.Services;
 using Squirrel.SqlService.BLL.Services.ConsoleAppHub;
+using Squirrel.SqlService.BLL.Services.SqlFormatter;
 
 namespace Squirrel.SqlService.WebApi.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static void RegisterCustomServices(this IServiceCollection services)
+    public static void RegisterCustomServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<ITextService, TextService>();
         services.AddScoped<IDependencyAnalyzer, DependencyAnalyzer>();
         services.AddScoped<IDbItemsRetrievalService, DbItemsRetrievalService>();
         services.AddSingleton<IProcessReceivedDataService, ProcessReceivedDataService>();
+        services.AddScoped<ISqlFormatterService, SqlFormatterService>(provider => 
+        new SqlFormatterService(configuration.GetSection("PythonExePath").Value));
     }
 
     public static void ConfigureCors(this IServiceCollection services, IConfiguration configuration)

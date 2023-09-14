@@ -1,10 +1,18 @@
-﻿using Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
+﻿using AutoMapper;
+using Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
 using Squirrel.SqlService.BLL.Models.ConsoleAppHub;
+using Squirrel.SqlService.BLL.Models.DTO;
 
 namespace Squirrel.SqlService.BLL.Services.ConsoleAppHub;
 
 public class ProcessReceivedDataService : IProcessReceivedDataService
 {
+    private readonly IMapper _mapper;
+    public ProcessReceivedDataService(IMapper mapper)
+    {
+        _mapper = mapper;
+    }
+
     // TODO: Implement all functions to process data received from ConsoleApp 
 
     /// <summary>
@@ -20,9 +28,10 @@ public class ProcessReceivedDataService : IProcessReceivedDataService
         return Task.CompletedTask;
     }
 
-    public async Task AllTablesNamesProcessReceivedDataAsync(string clientId, QueryResultTableDTO queryResultTableDTO)
+    public async Task<TableNamesDto> AllTablesNamesProcessReceivedDataAsync(string clientId, QueryResultTableDTO queryResultTableDTO)
     {
         await ShowResult(clientId, queryResultTableDTO);
+        return _mapper.Map<TableNamesDto>(queryResultTableDTO);
     }
 
     public async Task TableDataProcessReceivedDataAsync(string clientId, QueryResultTableDTO queryResultTableDTO)

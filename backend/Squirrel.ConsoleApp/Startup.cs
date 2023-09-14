@@ -53,6 +53,8 @@ public class Startup
 
     public void Configure(IApplicationBuilder app)
     {
+        app.RegisterHubs(Configuration);
+
         app.UseCors(builder => builder
             .AllowAnyMethod()
             .AllowAnyHeader()
@@ -64,7 +66,5 @@ public class Startup
         {
             cfg.MapControllers();
         });
-
-        app.RegisterHubs(Configuration);
     }
 }

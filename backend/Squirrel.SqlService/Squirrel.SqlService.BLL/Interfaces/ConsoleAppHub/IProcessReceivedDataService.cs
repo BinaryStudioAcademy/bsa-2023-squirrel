@@ -1,11 +1,12 @@
 ﻿using Squirrel.SqlService.BLL.Models.ConsoleAppHub;
+using Squirrel.SqlService.BLL.Models.DTO;
 
 namespace Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
 
 public interface IProcessReceivedDataService
 {
     // Actions
-    Task AllTablesNamesProcessReceivedDataAsync(string clientId, QueryResultTableDTO queryResultTableDTO);
+    Task<TableNamesDto> AllTablesNamesProcessReceivedDataAsync(string clientId, QueryResultTableDTO queryResultTableDTO);
     Task TableDataProcessReceivedDataAsync(string clientId, QueryResultTableDTO queryResultTableDTO);
 
     Task AllStoredProceduresNamesProcessReceivedDataAsync(string clientId, QueryResultTableDTO queryResultTableDTO);

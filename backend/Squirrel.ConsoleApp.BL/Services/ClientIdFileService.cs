@@ -12,16 +12,16 @@ public class ClientIdFileService : IClientIdFileService
         }
     }
 
-    public string GetClientId()
+    public Guid? GetClientId()
     {
         var filePath = ClientIdFilePath;
         if (!File.Exists(filePath))
         {
-            return string.Empty;
+            return null!;
         }
 
         var guid = File.ReadAllText(filePath);
-        return guid;
+        return Guid.Parse(guid);
     }
 
     public void SetClientId(string guid)

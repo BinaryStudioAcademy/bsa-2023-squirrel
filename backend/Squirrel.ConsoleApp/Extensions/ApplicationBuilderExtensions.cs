@@ -18,7 +18,7 @@ public static class ApplicationBuilderExtensions
     {
         var fileService = app.ApplicationServices.GetRequiredService<IClientIdFileService>();
 
-        var _clientId = fileService?.GetClientId() ?? string.Empty;
+        var _clientId = fileService.GetClientId()?.ToString() ?? string.Empty;
 
         var _hubConnection = new HubConnectionBuilder()
             .WithUrl(Path.Combine(config.GetSection("SignalRSettings")["HubConnectionUrl"], $"?ClientId={_clientId}"))
@@ -28,7 +28,7 @@ public static class ApplicationBuilderExtensions
         // Use once at OnConnectedAsync hub event
         _hubConnection.On<string>("SetClientId", (guid) =>
         {
-            var _clientId = fileService?.GetClientId() ?? string.Empty;
+            var _clientId = fileService.GetClientId()?.ToString() ?? string.Empty;
             
             if (!string.IsNullOrEmpty(_clientId))
             {

@@ -2,6 +2,6 @@
 
 public interface IClientIdFileService
 {
-    string GetClientId();
+    Guid? GetClientId();
     void SetClientId(string guid);
 }

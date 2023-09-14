@@ -43,6 +43,8 @@ public class SettingController : ControllerBase
 
         _connectionFileService.SaveToFile(connectionStringDto);
 
-        return Ok(_clientIdFileService.GetClientId());
+        var clientId = _clientIdFileService.GetClientId();
+
+        return Ok(clientId);
     }
 }

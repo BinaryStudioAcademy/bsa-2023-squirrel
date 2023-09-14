@@ -157,7 +157,7 @@ public sealed class UserService : BaseService, IUserService
         return await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
     }
 
-    private async Task<User> GetUserByIdInternal(int id)
+    public async Task<User> GetUserByIdInternal(int id)
     {
         var userEntity = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
 

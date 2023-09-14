@@ -35,7 +35,7 @@ public class ImageService : IImageService
     {
         ValidateImage(avatar);
 
-        var userEntity = await _userService.GetUserByIdAsync(_userIdGetter.GetCurrentUserId());
+        var userEntity = await _userService.GetUserByIdInternal(_userIdGetter.GetCurrentUserId());
 
         var content = await CropAvatar(avatar);
         var guid = userEntity.AvatarUrl ?? Guid.NewGuid().ToString();
@@ -64,7 +64,7 @@ public class ImageService : IImageService
 
         await _blobStorageService
             .DeleteAsync(_blobStorageOptions.ImagesContainer, userEntity.AvatarUrl);
-
+        
         userEntity.AvatarUrl = null;
         await _context.SaveChangesAsync();
     }

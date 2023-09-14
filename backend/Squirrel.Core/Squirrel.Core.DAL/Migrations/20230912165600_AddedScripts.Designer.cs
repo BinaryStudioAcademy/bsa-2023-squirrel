@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Squirrel.Core.DAL.Context;
 
@@ -11,9 +12,10 @@ using Squirrel.Core.DAL.Context;
 namespace Squirrel.Core.DAL.Migrations
 {
     [DbContext(typeof(SquirrelCoreContext))]
-    partial class SquirrelCoreContextModelSnapshot : ModelSnapshot
+    [Migration("20230912165600_AddedScripts")]
+    partial class AddedScripts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,33 +48,6 @@ namespace Squirrel.Core.DAL.Migrations
                     b.HasIndex("ProjectId");
 
                     b.ToTable("Branches");
-                });
-
-            modelBuilder.Entity("Squirrel.Core.DAL.Entities.ChangeRecord", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getutcdate()");
-
-                    b.Property<int?>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("UniqueChangeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedBy");
-
-                    b.ToTable("ChangeRecords");
                 });
 
             modelBuilder.Entity("Squirrel.Core.DAL.Entities.Comment", b =>
@@ -608,17 +583,6 @@ namespace Squirrel.Core.DAL.Migrations
                     b.Navigation("Project");
                 });
 
-            modelBuilder.Entity("Squirrel.Core.DAL.Entities.ChangeRecord", b =>
-                {
-                    b.HasOne("Squirrel.Core.DAL.Entities.User", "User")
-                        .WithMany("ChangeRecords")
-                        .HasForeignKey("CreatedBy")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Squirrel.Core.DAL.Entities.Comment", b =>
                 {
                     b.HasOne("Squirrel.Core.DAL.Entities.User", "Author")
@@ -896,8 +860,6 @@ namespace Squirrel.Core.DAL.Migrations
 
             modelBuilder.Entity("Squirrel.Core.DAL.Entities.User", b =>
                 {
-                    b.Navigation("ChangeRecords");
-
                     b.Navigation("Comments");
 
                     b.Navigation("Commits");

@@ -1,0 +1,19 @@
+<mat-dialog-content>
+    <h4 class="header">Create new script</h4>
+    <div class="input-container">
+        <app-input placeholder="Enter the name of your script"
+            [formControl]="$any(newScriptForm.controls['scriptName'])" label="Script name">
+        </app-input>
+        <app-input placeholder="Enter the file name" [formControl]="$any(newScriptForm.controls['fileName'])"
+            label="File name">
+        </app-input>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions class="modal-buttons">
+    <app-button text="Create" width="100%" variant="outline-secondary" [isDisabled]="newScriptForm.invalid"
+        (buttonOnClick)="createScript()">
+    </app-button>
+    <app-button text="Close" width="100%" variant="outline-secondary" (mousedown)="close()">
+    </app-button>
+</mat-dialog-actions>

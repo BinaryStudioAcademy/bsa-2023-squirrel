@@ -13,4 +13,5 @@ public enum ErrorType
     LargeFile,
     InvalidFileFormat,
     RefreshTokenExpired,
+    SqlSyntax
 }

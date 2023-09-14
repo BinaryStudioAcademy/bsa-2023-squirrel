@@ -8,7 +8,6 @@ namespace Squirrel.Core.WebAPI.Controllers;
 [Authorize]
 [ApiController]
 [Route("api/[controller]")]
-
 public class UserController : ControllerBase
 {
     private readonly IUserIdGetter _userIdGetter;

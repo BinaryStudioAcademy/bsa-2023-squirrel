@@ -56,7 +56,7 @@ public class ImageService : IImageService
 
     public async Task DeleteAvatarAsync()
     {
-        var userEntity = await _userService.GetUserByIdAsync(_userIdGetter.GetCurrentUserId());
+        var userEntity = await _userService.GetUserByIdInternal(_userIdGetter.GetCurrentUserId());
         if (userEntity.AvatarUrl == null)
         {
             throw new EntityNotFoundException(nameof(User.AvatarUrl));

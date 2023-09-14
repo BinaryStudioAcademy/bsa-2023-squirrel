@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Squirrel.Core.DAL.Migrations
 {
-    public partial class AddedChangeRecord : Migration
+    public partial class AddedChangeRecords : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

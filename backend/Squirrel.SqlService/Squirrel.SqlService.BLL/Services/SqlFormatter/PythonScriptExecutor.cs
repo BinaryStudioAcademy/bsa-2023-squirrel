@@ -7,7 +7,7 @@ namespace Squirrel.SqlService.BLL.Services.SqlFormatter
     {
         public static void ExecuteScript(ProcessStartInfo startInfo, out string result)
         {
-            using (Process process = Process.Start(startInfo))
+            using (Process process = Process.Start(startInfo)!)
             {
                 using (StreamReader reader = process.StandardOutput)
                 {

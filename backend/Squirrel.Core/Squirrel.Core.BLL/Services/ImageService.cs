@@ -18,14 +18,16 @@ public class ImageService : IImageService
     private readonly SquirrelCoreContext _context;
     private readonly IBlobStorageService _blobStorageService;
     private readonly IUserIdGetter _userIdGetter;
+    private readonly IUserService _userService;
     private readonly BlobStorageOptions _blobStorageOptions;
 
     public ImageService(SquirrelCoreContext context, IBlobStorageService blobStorageService, IUserIdGetter userIdGetter,
-        IOptions<BlobStorageOptions> blobStorageOptions)
+        IOptions<BlobStorageOptions> blobStorageOptions, IUserService userService)
     {
         _context = context;
         _blobStorageService = blobStorageService;
         _userIdGetter = userIdGetter;
+        _userService = userService;
         _blobStorageOptions = blobStorageOptions.Value;
     }
 
@@ -33,7 +35,7 @@ public class ImageService : IImageService
     {
         ValidateImage(avatar);
 
-        var userEntity = await GetUserByIdInternal(_userIdGetter.GetCurrentUserId());
+        var userEntity = await _userService.GetUserByIdAsync(_userIdGetter.GetCurrentUserId());
 
         var content = await CropAvatar(avatar);
         var guid = userEntity.AvatarUrl ?? Guid.NewGuid().ToString();
@@ -54,7 +56,7 @@ public class ImageService : IImageService
 
     public async Task DeleteAvatarAsync()
     {
-        var userEntity = await GetUserByIdInternal(_userIdGetter.GetCurrentUserId());
+        var userEntity = await _userService.GetUserByIdAsync(_userIdGetter.GetCurrentUserId());
         if (userEntity.AvatarUrl == null)
         {
             throw new EntityNotFoundException(nameof(User.AvatarUrl));
@@ -91,17 +93,5 @@ public class ImageService : IImageService
         {
             throw new LargeFileException($"{MaxFileLenght / (1024 * 1024)} MB");
         }
-    }
-
-    private async Task<User> GetUserByIdInternal(int id)
-    {
-        var userEntity = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
-
-        if (userEntity == null)
-        {
-            throw new EntityNotFoundException(nameof(User), id);
-        }
-
-        return userEntity;
     }
 }

@@ -2,7 +2,8 @@
     <nav>
         <ul class="navbar-list">
             <li *ngFor="let navLink of navLinks" class="navbar-item">
-                <a routerLink="{{ navLink.path }}" routerLinkActive="active" class="navbar-link">
+                <a routerLink="{{ navLink.path }}" routerLinkActive="active" class="navbar-link"
+                   *ngIf="navLink.path !== './settings' || (navLink.path === './settings' && isSettingsEnabled)">
                     {{ navLink.displayName }}
                 </a>
             </li>
@@ -13,7 +14,7 @@
             [selectedByDefault]="getCurrentBranch()"
             [width]="300"
             (selectedValueChanged)="onBranchSelected($event)"
-            (buttonClicked)="openBranchModal()"    
+            (buttonClicked)="openBranchModal()"
             [dropdownIcon]="'assets/git-branch.svg'"
             [template]="branchtemplate"
             [filterPredicate]="filterBranch"

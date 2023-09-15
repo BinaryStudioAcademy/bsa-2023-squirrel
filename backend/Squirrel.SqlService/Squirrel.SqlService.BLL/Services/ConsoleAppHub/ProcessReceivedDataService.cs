@@ -34,9 +34,22 @@ public class ProcessReceivedDataService : IProcessReceivedDataService
         return _mapper.Map<TableNamesDto>(queryResultTable);
     }
 
-    public async Task TableDataProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable)
+    public async Task<TableDataDto> TableDataProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable)
     {
         await ShowResult(clientId, queryResultTable);
+        return _mapper.Map<TableDataDto>(queryResultTable);
+    }
+
+    public async Task<TableStructureDto> TableStructureProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable)
+    {
+        await ShowResult(clientId, queryResultTable);
+        return _mapper.Map<TableStructureDto>(queryResultTable);
+    }
+
+    public async Task<TableConstraintsDto> TableChecksAndUniqueConstraintsProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable)
+    {
+        await ShowResult(clientId, queryResultTable);
+        return _mapper.Map<TableConstraintsDto>(queryResultTable);
     }
 
     public async Task AllStoredProceduresNamesProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable)
@@ -65,16 +78,6 @@ public class ProcessReceivedDataService : IProcessReceivedDataService
     }
 
     public async Task ViewDefinitionProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable)
-    {
-        await ShowResult(clientId, queryResultTable);
-    }
-
-    public async Task TableStructureProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable)
-    {
-        await ShowResult(clientId, queryResultTable);
-    }
-
-    public async Task TableChecksAndUniqueConstraintsProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable)
     {
         await ShowResult(clientId, queryResultTable);
     }

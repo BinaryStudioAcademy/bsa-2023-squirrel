@@ -7,7 +7,9 @@ public interface IProcessReceivedDataService
 {
     // Actions
     Task<TableNamesDto> AllTablesNamesProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable);
-    Task TableDataProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable);
+    Task<TableDataDto> TableDataProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable);
+    Task<TableStructureDto> TableStructureProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable);
+    Task<TableConstraintsDto> TableChecksAndUniqueConstraintsProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable);
 
     Task AllStoredProceduresNamesProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable);
     Task StoredProcedureDefinitionProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable);
@@ -18,9 +20,6 @@ public interface IProcessReceivedDataService
     Task AllViewsNamesProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable);
     Task ViewDefinitionProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable);
 
-    Task TableStructureProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable);
-    Task TableChecksAndUniqueConstraintsProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable);
-
     Task StoredProceduresWithDetailProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable);
     Task FunctionsWithDetailProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable);
     Task ViewsWithDetailProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable);
@@ -28,4 +27,3 @@ public interface IProcessReceivedDataService
     Task UserDefinedTypesWithDefaultsAndRulesAndDefinitionProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable);
     Task UserDefinedTableTypesProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable);
 }
-

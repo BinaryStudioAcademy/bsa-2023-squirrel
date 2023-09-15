@@ -9,6 +9,7 @@ using Squirrel.Core.Common.JWT;
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
+using Squirrel.AzureBlobStorage.Models;
 
 namespace Squirrel.Core.WebAPI.Extensions;
 
@@ -29,6 +30,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IProjectService, ProjectService>();
         services.AddScoped<IDatabaseItemsService, DatabaseItemsService>();
         services.AddScoped<IProjectDatabaseService, ProjectDatabaseService>();
+        services.AddScoped<IImageService, ImageService>();
         services.AddScoped<IScriptService, ScriptService>();
 
         services.AddSingleton<IHttpClientService, HttpClientService>();
@@ -110,6 +112,12 @@ public static class ServiceCollectionExtensions
     {
         services.Configure<AuthenticationSettings>(configuration.GetSection<AuthenticationSettings>());
     }
+    
+    public static void ConfigureAzureBlobStorage(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<BlobStorageOptions>(configuration.GetSection<BlobStorageOptions>());
+    }
+
 
     private static IConfigurationSection GetSection<T>(this IConfiguration configuration)
     {

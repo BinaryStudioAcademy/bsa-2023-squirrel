@@ -40,7 +40,7 @@ public sealed class ProjectService : BaseService, IProjectService
 
         return _mapper.Map<ProjectResponseDto>(createdProject);
     }
-    
+
     public async Task<ProjectResponseDto> AddUsersToProjectAsync(int projectId, List<UserDto> usersDtos)
     {
         var users = _mapper.Map<List<User>>(usersDtos);
@@ -66,7 +66,6 @@ public sealed class ProjectService : BaseService, IProjectService
             .Include(project => project.Users)
             .FirstOrDefaultAsync(project => project.Id == projectId);
 
-        
         ValidateProject(existingProject);
 
         _mapper.Map(updateProjectDto, existingProject);
@@ -91,13 +90,13 @@ public sealed class ProjectService : BaseService, IProjectService
     public async Task DeleteProjectAsync(int projectId)
     {
         var project = await _context.Projects.FindAsync(projectId);
-        
+
         ValidateProject(project);
 
         _context.Projects.Remove(project!);
         await _context.SaveChangesAsync();
     }
-    
+
     public async Task<List<UserDto>> GetProjectUsersAsync(int projectId)
     {
         var project = await _context.Projects

@@ -15,7 +15,12 @@
         </div>
             <ng-template #usertemplate let-item>
                 <div class="user-container">
-                    <img src="{{ item.avatarUrl }}" />
+                    <app-avatar
+                        class="avatar"
+                        [userName]="item.firstName + ' ' + item.lastName"
+                        [imgLink]="item.avatarUrl"
+                        size="30"
+                    ></app-avatar>
                     <p>{{ getFullName(item) }}</p>
                 </div>
             </ng-template>

@@ -4,7 +4,7 @@ internal class GetObjects
 {
     public static string GetStoredProceduresNamesScript =>
         @"SELECT routine_schema as ""Schema"", routine_name as ""ProcedureName"" FROM information_schema.routines 
-            WHERE specific_schema not in ('information_schema', 'pg_catalog') an routine_type = 'PROCEDURE'";
+            WHERE specific_schema not in ('information_schema', 'pg_catalog') and routine_type = 'PROCEDURE'";
 
     public static string GetStoredProcedureDefinitionScript(string storedProcedureSchema, string storedProcedureName) =>
         @$"SELECT routine_definition as ""RoutineDefinition"" FROM information_schema.routines 

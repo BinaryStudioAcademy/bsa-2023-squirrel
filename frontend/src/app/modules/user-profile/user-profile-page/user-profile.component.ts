@@ -4,7 +4,7 @@ import { BaseComponent } from '@core/base/base.component';
 import { NotificationService } from '@core/services/notification.service';
 import { SpinnerService } from '@core/services/spinner.service';
 import { UserService } from '@core/services/user.service';
-import { faPen } from '@fortawesome/free-solid-svg-icons';
+import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { ValidationsFn } from '@shared/helpers/validations-fn';
 import { finalize, takeUntil } from 'rxjs';
 
@@ -25,11 +25,17 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
 
     public penIcon = faPen;
 
+    public trashIcon = faTrash;
+
     public currentUser: UserProfileDto;
 
     public userNamesForm: FormGroup = new FormGroup({});
 
     public passwordForm: FormGroup = new FormGroup({});
+
+    private readonly maxFileLength = 5 * 1024 * 1024;
+
+    private readonly allowedTypes = ['image/png', 'image/jpeg'];
 
     constructor(
         private fb: FormBuilder,
@@ -198,5 +204,64 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
                     this.notificationService.error(error.message);
                 },
             );
+    }
+
+    public onFileChange(event: Event) {
+        const inputElement = event.target as HTMLInputElement;
+
+        if (!inputElement?.files?.length) {
+            return;
+        }
+        const file = inputElement.files[0];
+
+        if (!this.fileValidate(file)) {
+            return;
+        }
+
+        this.spinner.show();
+        this.userService
+            .uploadAvatar(file)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe({
+                next: () => {
+                    window.location.reload();
+                },
+                error: (error) => {
+                    this.spinner.hide();
+                    this.notificationService.error(error.message);
+                },
+            });
+    }
+
+    public fileValidate(file: File) {
+        if (file.size > this.maxFileLength) {
+            this.notificationService.error(`The file size should not exceed ${this.maxFileLength / (1024 * 1024)}MB`);
+
+            return false;
+        }
+
+        if (!this.allowedTypes.includes(file.type)) {
+            this.notificationService.error(`Invalid file type, need ${this.allowedTypes.join(', ')}`);
+
+            return false;
+        }
+
+        return true;
+    }
+
+    public deleteAvatar() {
+        this.spinner.show();
+
+        this.userService.deleteAvatar()
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe({
+                next: () => {
+                    window.location.reload();
+                },
+                error: (error) => {
+                    this.spinner.hide();
+                    this.notificationService.error(error.message);
+                },
+            });
     }
 }

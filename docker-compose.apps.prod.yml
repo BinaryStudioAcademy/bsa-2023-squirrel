@@ -30,6 +30,19 @@ services:
         env_file:
             - /etc/environment
 
+    squirrel_sql:
+        image: alinasielina/squirrel_sql:latest
+        container_name: 'squirrel_sql'
+        restart: on-failure
+        networks:
+            - back
+        ports:
+            - "7244:7244"
+        environment:
+            ASPNETCORE_ENVIRONMENT: 'Production'
+        env_file:
+            - /etc/environment
+
     squirrel_frontend:
         depends_on:
             - squirrel_core

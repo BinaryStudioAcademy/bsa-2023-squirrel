@@ -11,6 +11,8 @@ import { TreeNode } from './models/TreeNode.model';
 export class TreeComponent implements OnInit {
     @Input() asCheckList: boolean = false;
 
+    @Input() height: string = '100%';
+
     @Output() selectionChange = new EventEmitter<{ selectedNodes: TreeNode[]; originalStructure: TreeNode[] }>();
 
     @Input() treeData: TreeNode[] = [

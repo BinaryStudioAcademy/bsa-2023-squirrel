@@ -11,5 +11,8 @@ public enum ErrorType
     InvalidToken,
     InvalidBranchName,
     InvalidProject,
+    LargeFile,
+    InvalidFileFormat,
     RefreshTokenExpired,
+    SqlSyntax
 }

@@ -12,11 +12,13 @@ public class UserController : ControllerBase
 {
     private readonly IUserIdGetter _userIdGetter;
     private readonly IUserService _userService;
+    private readonly IImageService _imageService;
 
-    public UserController(IUserIdGetter userIdGetter, IUserService userService)
+    public UserController(IUserIdGetter userIdGetter, IUserService userService, IImageService imageService)
     {
         _userIdGetter = userIdGetter;
         _userService = userService;
+        _imageService = imageService;
     }
 
     /// <summary>
@@ -57,6 +59,20 @@ public class UserController : ControllerBase
     public async Task<ActionResult<UserProfileDto>> GetUserProfile()
     {
         return Ok(await _userService.GetUserProfileAsync());
+    }
+
+    [HttpPost("add-avatar")]
+    public async Task<ActionResult> AddUserAvatar(IFormFile avatar)
+    {
+        await _imageService.AddAvatarAsync(avatar);
+        return NoContent();
+    }
+    
+    [HttpDelete("delete-avatar")]
+    public async Task<ActionResult> DeleteUserAvatar()
+    {
+        await _imageService.DeleteAvatarAsync();
+        return NoContent();
     }
     
     [HttpGet("all")]

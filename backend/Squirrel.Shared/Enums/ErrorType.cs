@@ -10,6 +10,8 @@ public enum ErrorType
     Internal,
     InvalidToken,
     InvalidProject,
+    LargeFile,
+    InvalidFileFormat,
     RefreshTokenExpired,
     SqlSyntax
 }

@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using Squirrel.ConsoleApp.Models;
 using Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
-using Squirrel.SqlService.BLL.Models.ConsoleAppHub;
 
 namespace Squirrel.Core.BLL.Hubs;
 
 public sealed class ConsoleAppHub : Hub<IExecuteOnClientSide>
 {
     private readonly IProcessReceivedDataService _processReceivedDataService;
-    private readonly Dictionary<string, Func<string, QueryResultTableDTO, Task>> requestActionToProcessReceivedData = new();
+    private readonly Dictionary<string, Func<string, QueryResultTable, Task>> requestActionToProcessReceivedData = new();
 
     public ConsoleAppHub(IProcessReceivedDataService processReceivedDataService)
     {
@@ -20,14 +20,14 @@ public sealed class ConsoleAppHub : Hub<IExecuteOnClientSide>
         await Clients.Caller.SetClientId(Context.UserIdentifier);
     }
 
-    public async Task ProcessReceivedDataFromClientSide(string clientId, string requestActionName, QueryResultTableDTO queryResultTableDTO)
+    public async Task ProcessReceivedDataFromClientSide(string clientId, string requestActionName, QueryResultTable QueryResultTable)
     {
         if (!requestActionToProcessReceivedData.ContainsKey(requestActionName))
         {
             return;
         }
 
-        await (requestActionToProcessReceivedData.GetValueOrDefault(requestActionName)?.Invoke(clientId, queryResultTableDTO) ?? throw new NullReferenceException());
+        await (requestActionToProcessReceivedData.GetValueOrDefault(requestActionName)?.Invoke(clientId, QueryResultTable) ?? throw new NullReferenceException());
     }
 
     private void InitRequestActionDict()

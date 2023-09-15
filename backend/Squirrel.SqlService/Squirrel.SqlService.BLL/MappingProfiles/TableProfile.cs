@@ -10,23 +10,23 @@ public sealed class TableProfile : Profile
 {
     public TableProfile()
     {
-        CreateMap<QueryResultTableDTO, TableNamesDto>()
+        CreateMap<QueryResultTable, TableNamesDto>()
             .ForMember(dest => dest.Tables, opt => opt.MapFrom(src => src.Rows.Any() 
                 ? src.Rows.Select(row => new Table { Schema = row[0], Name = row[1] }): Enumerable.Empty<Table>()));
 
-        CreateMap<QueryResultTableDTO, TableStructureDto>()
+        CreateMap<QueryResultTable, TableStructureDto>()
             .ForMember(dest => dest.Schema, opt => opt.MapFrom(src => src.Rows.Any() ? src.Rows[0][0] : null))
             .ForMember(dest => dest.TableName, opt => opt.MapFrom(src => src.Rows.Any() ? src.Rows[0][1] : null))
             .ForMember(dest => dest.Columns, opt => opt.MapFrom(src 
                 => src.Rows.Select(row => MapToObject<TableColumnInfo>(src.ColumnNames.Select(e => e.ToLower()).ToList(), row))));
 
-        CreateMap<QueryResultTableDTO, TableConstraintsDto>()
+        CreateMap<QueryResultTable, TableConstraintsDto>()
             .ForMember(dest => dest.Schema, opt => opt.MapFrom(src => src.Rows.Any() ? src.Rows[0][0] : null))
             .ForMember(dest => dest.TableName, opt => opt.MapFrom(src => src.Rows.Any() ? src.Rows[0][1] : null))
             .ForMember(dest => dest.Constraints, opt => opt.MapFrom(src 
                 => src.Rows.Select(row => MapToObject<Constraint>(src.ColumnNames.Select(e => e.ToLower()).ToList(), row))));
 
-        CreateMap<QueryResultTableDTO, TableDataDto>()
+        CreateMap<QueryResultTable, TableDataDto>()
             .ForMember(dest => dest.Schema, opt => opt.MapFrom(src => src.Rows.Any() ? src.Rows[0][0] : null))
             .ForMember(dest => dest.TableName, opt => opt.MapFrom(src => src.Rows.Any() ? src.Rows[0][1] : null))
             .ForMember(dest => dest.TotalRows, opt => opt.MapFrom(src => src.Rows.Any() ? int.Parse(src.Rows[0][2]) : 0))

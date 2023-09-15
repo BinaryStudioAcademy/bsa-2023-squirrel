@@ -10,12 +10,19 @@
     </nav>
     <div class="right-container">
         <app-dropdown
-            [modalTemplate]="modalContent"
-            [dropdownIcon]="'assets/git-branch.svg'"
-            [options]="branches"
+            [selectedByDefault]="getCurrentBranch()"
             [width]="300"
-            (selectedValueChanged)="onBranchSelected($event)"></app-dropdown>
-        <app-button text="+" height="30px" width="35px" padding="" variant="outline-secondary"> </app-button>
+            (selectedValueChanged)="onBranchSelected($event)"
+            (buttonClicked)="openBranchModal()"    
+            [dropdownIcon]="'assets/git-branch.svg'"
+            [template]="branchtemplate"
+            [filterPredicate]="filterBranch"
+            [options]="branches"
+            [includeButton]="true"></app-dropdown>
+        <ng-template #branchtemplate let-item>
+           {{ item.name }}
+        </ng-template>
+        <app-button (buttonOnClick)="openBranchModal()" text="+" height="30px" width="35px" padding="" variant="outline-secondary"></app-button>
         <app-button text="Load latest changes" variant="outline-primary" class="align-right" (buttonOnClick)="loadChanges()"></app-button>
     </div>
 </div>

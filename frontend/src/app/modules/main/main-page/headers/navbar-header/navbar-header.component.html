@@ -24,7 +24,7 @@
            {{ item.name }}
         </ng-template>
         <app-button (buttonOnClick)="openBranchModal()" text="+" height="30px" width="35px" padding="" variant="outline-secondary"></app-button>
-        <app-button text="Load latest changes" variant="outline-primary" class="align-right"></app-button>
+        <app-button text="Load latest changes" variant="outline-primary" class="align-right" (buttonOnClick)="loadChanges()"></app-button>
     </div>
 </div>
 

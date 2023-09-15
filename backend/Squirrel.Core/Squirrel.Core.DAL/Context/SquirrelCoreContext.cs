@@ -1,5 +1,5 @@
-﻿using Squirrel.Core.DAL.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Squirrel.Core.DAL.Entities;
 using Squirrel.Core.DAL.Entities.JoinEntities;
 
 namespace Squirrel.Core.DAL.Context;
@@ -22,6 +22,7 @@ public class SquirrelCoreContext : DbContext
     public DbSet<UserProject> UserProjects => Set<UserProject>();
     public DbSet<Script> Scripts => Set<Script>();
     public DbSet<ProjectDatabase> ProjectDatabases => Set<ProjectDatabase>();
+    public DbSet<ChangeRecord> ChangeRecords => Set<ChangeRecord>();
 
     public SquirrelCoreContext(DbContextOptions<SquirrelCoreContext> options) : base(options)
     {

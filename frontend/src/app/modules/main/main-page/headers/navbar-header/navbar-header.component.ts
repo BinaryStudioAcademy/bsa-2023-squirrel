@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { BaseComponent } from '@core/base/base.component';
 import { BranchService } from '@core/services/branch.service';
+import { LoadChangesService } from '@core/services/load-changes.service';
 import { SharedProjectService } from '@core/services/shared-project.service';
 import { takeUntil } from 'rxjs';
 
@@ -41,6 +42,7 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
         public dialog: MatDialog,
         private route: ActivatedRoute,
         private sharedProject: SharedProjectService,
+        private changesService: LoadChangesService,
     ) {
         super();
     }
@@ -84,5 +86,9 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
 
     filterBranch(item: BranchDto, value: string) {
         return item.name.includes(value);
+    }
+
+    public loadChanges() {
+        this.changesService.loadChangesRequest();
     }
 }

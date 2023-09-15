@@ -28,6 +28,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddValidation();
 builder.Services.ConfigureJwtAuth(builder.Configuration);
 builder.Services.AddAzureBlobStorage(builder.Configuration);
+
 builder.Services.ConfigureAzureBlobStorage(builder.Configuration);
 builder.Services.AddAutoMapper();
 

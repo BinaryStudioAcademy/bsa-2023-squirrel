@@ -38,10 +38,12 @@ export class CreateDbModalComponent implements OnInit {
     private initializeForm() {
         this.dbForm = this.fb.group({
             dbName: ['', Validators.required],
-            serverName: ['', this.getServerNameValidators()],
+            serverName: ['', Validators.required],
             port: [''],
             username: [''],
             password: [''],
+            localhost: [false],
+            guid: ['', this.getValidators()],
         });
     }
 
@@ -53,7 +55,7 @@ export class CreateDbModalComponent implements OnInit {
             username: this.dbForm.value.username,
             password: this.dbForm.value.password,
             dbEngine: this.data.dbEngine,
-            isLocalhost: this.localhost,
+            isLocalhost: this.dbForm.value.localhost,
         };
 
         this.consoleConnectService.connect(connect).subscribe({
@@ -67,14 +69,12 @@ export class CreateDbModalComponent implements OnInit {
     }
 
     public changeLocalHost() {
-        this.localhost = !this.localhost;
-
-        this.dbForm.get('serverName')?.setValidators(this.getServerNameValidators());
-        this.dbForm.get('serverName')?.updateValueAndValidity();
+        this.dbForm.get('guid')?.setValidators(this.getValidators());
+        this.dbForm.get('guid')?.updateValueAndValidity();
     }
 
-    private getServerNameValidators() {
-        if (this.localhost) {
+    private getValidators() {
+        if (!this.dbForm.value.localhost) {
             return null;
         }
 

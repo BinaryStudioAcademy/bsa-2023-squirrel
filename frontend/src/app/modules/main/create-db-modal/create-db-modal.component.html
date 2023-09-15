@@ -32,7 +32,9 @@
 
     <div class="input-wrapper">
 
-        <label>Username<app-info-tooltip text="leave empty for Trusted Connection"></app-info-tooltip></label>
+        <label>Username
+            <app-info-tooltip text="leave empty for Trusted Connection"></app-info-tooltip>
+        </label>
         <app-input [formControl]="$any(dbForm.controls['username'])"
                    placeholder="Enter username">
         </app-input>
@@ -40,15 +42,34 @@
 
     <div class="input-wrapper">
 
-        <label>Password<app-info-tooltip text="leave empty for Trusted Connection"></app-info-tooltip></label>
+        <label>Password
+            <app-info-tooltip text="leave empty for Trusted Connection"></app-info-tooltip>
+        </label>
         <app-input [formControl]="$any(dbForm.controls['password'])"
                    type="password"
                    placeholder="Enter db password">
         </app-input>
     </div>
 
+    <ng-container *ngIf="dbForm.value['localhost']">
+        <app-barrier></app-barrier>
+        <div class="input-wrapper">
+            <label>Key
+                <app-info-tooltip text="check key in console app"></app-info-tooltip>
+            </label>
+            <app-input [formControl]="$any(dbForm.controls['guid'])"
+                       name="key"
+                       placeholder="Enter key">
+            </app-input>
+        </div>
+    </ng-container>
+
     <div class="modal-footer">
-        <app-checkbox label="Connect to local db" (change)="changeLocalHost()"></app-checkbox>
+        <div class="toggle">
+            <mat-slide-toggle formControlName="localhost" (change)="changeLocalHost()"></mat-slide-toggle>
+            <p>{{dbForm.value['localhost'] === true ? 'local db' : 'remote db'}}</p>
+        </div>
+
         <div class="btn-group">
             <app-button [isDisabled]="dbForm.invalid" text="Save"></app-button>
         </div>

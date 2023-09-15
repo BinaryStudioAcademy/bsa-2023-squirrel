@@ -58,6 +58,7 @@ label
     margin-right: 30px
     font-weight: $semi-bold-weight
 
+
     app-info-tooltip
         margin-right: 15px
 
@@ -66,3 +67,23 @@ label
     display: flex
     justify-content: space-between
     align-items: center
+
+.toggle
+    display: flex
+    justify-content: center
+    align-items: center
+    text-align: center
+
+    mat-slide-toggle
+        margin-right: 10px
+
+    p
+        font-weight: $semi-bold-weight
+        font-size: 14px
+        margin: 0
+
+::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-bar
+    background-color: lighten($add-button-color, 30%)
+
+::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb
+    background-color: $add-button-color

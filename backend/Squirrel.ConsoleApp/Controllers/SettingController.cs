@@ -25,7 +25,10 @@ public class SettingController : ControllerBase
     [HttpPost("connect")]
     public IActionResult Post(ConnectionStringDto connectionStringDto)
     {
+        // we need IntegratedSecurity = true to connect
+        // to MSSQL local DB (it will be changed as SettingController updates)
         connectionStringDto.IntegratedSecurity = true;
+
         var connectionString = _connectionStringService.BuildConnectionString(connectionStringDto);
         var databaseService = DatabaseServiceFactory.CreateDatabaseService(connectionStringDto.DbEngine, connectionString);
         var databaseProvider = DatabaseServiceFactory.CreateDbQueryProvider(connectionStringDto.DbEngine);
@@ -43,8 +46,6 @@ public class SettingController : ControllerBase
 
         _connectionFileService.SaveToFile(connectionStringDto);
 
-        var clientId = _clientIdFileService.GetClientId();
-
-        return Ok(clientId);
+        return Ok(_clientIdFileService.GetClientId());
     }
 }

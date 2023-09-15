@@ -21,7 +21,7 @@ public class ChangesLoaderService : IChangesLoaderService
         _configuration = configuration;
     }
 
-    public async Task<Blob> LoadChangesToBlobAsync(Guid changeId)
+    public async Task LoadChangesToBlobAsync(Guid changeId)
     {
         // TODO get actual db structure
         var dbStructure = _dbItemsRetrievalService.GetAllItems();
@@ -41,6 +41,6 @@ public class ChangesLoaderService : IChangesLoaderService
 
         var containerName = _configuration["UserDbChangesBlobContainerName"];
 
-        return await _blobStorageService.UploadAsync(containerName, blob);
+        await _blobStorageService.UploadAsync(containerName, blob);
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Squirrel.AzureBlobStorage.Models;
 using Squirrel.SqlService.BLL.Interfaces;
 
 namespace Squirrel.SqlService.WebApi.Controllers;
@@ -16,8 +15,9 @@ public sealed class ChangesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Blob>> SaveChangesToBlob([FromBody] Guid changeId)
+    public async Task<ActionResult> SaveChangesToBlob([FromBody] Guid changeId)
     {
-        return Ok(await _changesLoaderService.LoadChangesToBlobAsync(changeId));
+        await _changesLoaderService.LoadChangesToBlobAsync(changeId);
+        return Ok();
     }
 }

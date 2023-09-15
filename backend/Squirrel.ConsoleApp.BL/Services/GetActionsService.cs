@@ -25,20 +25,20 @@ public class GetActionsService : IGetActionsService
     public async Task<QueryResultTable> GetAllStoredProceduresNamesAsync()
         => await _databaseService.ExecuteQueryAsync(_queryProvider.GetStoredProceduresNamesQuery());
 
-    public async Task<QueryResultTable> GetStoredProcedureDefinitionAsync(string storedProcedureName)
-        => await _databaseService.ExecuteQueryAsync(_queryProvider.GetStoredProcedureDefinitionQuery(storedProcedureName));
+    public async Task<QueryResultTable> GetStoredProcedureDefinitionAsync(string storedProcedureSchema, string storedProcedureName)
+        => await _databaseService.ExecuteQueryAsync(_queryProvider.GetStoredProcedureDefinitionQuery(storedProcedureSchema,storedProcedureName));
 
     public async Task<QueryResultTable> GetAllFunctionsNamesAsync()
         => await _databaseService.ExecuteQueryAsync(_queryProvider.GetFunctionsNamesQuery());
 
-    public async Task<QueryResultTable> GetFunctionDefinitionAsync(string functionName)
-        => await _databaseService.ExecuteQueryAsync(_queryProvider.GetFunctionDefinitionQuery(functionName));
+    public async Task<QueryResultTable> GetFunctionDefinitionAsync(string functionSchema, string functionName)
+        => await _databaseService.ExecuteQueryAsync(_queryProvider.GetFunctionDefinitionQuery(functionSchema, functionName));
 
     public async Task<QueryResultTable> GetAllViewsNamesAsync()
         => await _databaseService.ExecuteQueryAsync(_queryProvider.GetViewsNamesQuery());
 
-    public async Task<QueryResultTable> GetViewDefinitionAsync(string viewName)
-        => await _databaseService.ExecuteQueryAsync(_queryProvider.GetViewDefinitionQuery(viewName));
+    public async Task<QueryResultTable> GetViewDefinitionAsync(string viewSchema, string viewName)
+        => await _databaseService.ExecuteQueryAsync(_queryProvider.GetViewDefinitionQuery(viewSchema, viewName));
 
     public async Task<QueryResultTable> GetTableStructureAsync(string schema, string name)
         => await _databaseService.ExecuteQueryAsync(_queryProvider.GetTableStructureQuery(schema, name));

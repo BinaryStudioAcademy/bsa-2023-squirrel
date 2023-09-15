@@ -13,8 +13,8 @@ internal static class GetUserDefinedTypes
 				d.numeric_scale as numeric_scale,
 				t.typnotnull as allow_null,
 				d.domain_default as default,
-				dc.constraint_name as constraint_name,
-				cc.check_clause as check_clause
+				dc.constraint_name as ""ConstraintName"",
+				cc.check_clause as ""ConstraintDefinition""
 			
 			from
 				pg_type as t
@@ -32,7 +32,7 @@ internal static class GetUserDefinedTypes
 					  and dc.constraint_name = cc.constraint_name
 					  
 			where
-			    d.domain_schema NOT IN ('pg_catalog', 'information_schema')  -- or choose specific table_scheme
+			    d.domain_schema NOT IN ('pg_catalog', 'information_schema')
 				
 			order by schema, name
             ";

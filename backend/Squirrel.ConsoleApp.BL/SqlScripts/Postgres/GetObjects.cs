@@ -3,59 +3,65 @@
 internal class GetObjects
 {
     public static string GetStoredProceduresNamesScript =>
-        @"SELECT routine_name as ProcedureName FROM information_schema.routines WHERE routine_type = 'PROCEDURE'";
+        @"SELECT routine_schema as ""Schema"", routine_name as ""ProcedureName"" FROM information_schema.routines 
+            WHERE specific_schema not in ('information_schema', 'pg_catalog') an routine_type = 'PROCEDURE'";
 
-    public static string GetStoredProcedureDefinitionScript(string storedProcedureName) =>
-        @$"SELECT * FROM information_schema.routines WHERE routine_name = '{storedProcedureName}' AND routine_type = 'PROCEDURE'";
+    public static string GetStoredProcedureDefinitionScript(string storedProcedureSchema, string storedProcedureName) =>
+        @$"SELECT routine_definition as ""RoutineDefinition"" FROM information_schema.routines 
+            WHERE routine_schema = '{storedProcedureSchema}' AND routine_name = '{storedProcedureName}' AND routine_type = 'PROCEDURE'";
 
     public static string GetFunctionsNamesScript =>
-        @"SELECT routine_name as ProcedureName FROM information_schema.routines WHERE routine_type = 'FUNCTION'";
+        @"SELECT routine_schema as ""Schema"", routine_name as ""FunctionName"" FROM information_schema.routines 
+            WHERE specific_schema not in ('information_schema', 'pg_catalog') and routine_type = 'FUNCTION'";
 
-    public static string GetFunctionDefinitionScript(string functionName) =>
-        @$"SELECT * FROM information_schema.routines WHERE routine_name = '{functionName}' AND routine_type = 'FUNCTION'";
+    public static string GetFunctionDefinitionScript(string functionSchema, string functionName) =>
+        @$"SELECT routine_definition as ""RoutineDefinition"" FROM information_schema.routines 
+            WHERE routine_schema = '{functionSchema}' AND routine_name = '{functionName}' AND routine_type = 'FUNCTION'";
 
     public static string GetViewsNamesScript =>
-        @"SELECT table_name AS ViewName FROM information_schema.views";
+        @"SELECT table_schema AS ""Schema"", table_name AS ""ViewName""  FROM information_schema.views WHERE table_schema not in ('information_schema', 'pg_catalog')";
 
-    public static string GetViewDefinitionScript(string viewName) =>
-        $"SELECT view_definition FROM information_schema.views WHERE table_name = '{viewName}'";
+    public static string GetViewDefinitionScript(string viewSchema, string viewName) =>
+        @$"SELECT view_definition as ""ViewDefinition"" FROM information_schema.views  WHERE table_schema = '{viewSchema}' AND table_name = '{viewName}'";
 
     public static string GetStoredProceduresScript =>
         @"
             select 
-            routine_schema as schema, 
-            routine_name as name,
-            routine_type as routine_type,
-            data_type as returned_type,
-            type_udt_schema,
-            type_udt_name, 
-            routine_definition as definition
+            routine_schema as ""Schema"", 
+            routine_name as ""Name"",
+            routine_type as ""RoutineType"",
+            data_type as ""ReturnedType"",
+            type_udt_schema as ""UdtTypeSchema"",
+            type_udt_name as ""UdtTypeName"", 
+            routine_definition as ""Definition""
             from information_schema.routines
-            where routine_type = 'PROCEDURE' 
+            where routine_schema not in ('pg_catalog', 'information_schema')
+                  and routine_type = 'PROCEDURE' 
             order by specific_schema
             ";
 
     public static string GetFunctionsScript =>
-        @"
+         @"
             select 
-            routine_schema as schema, 
-            routine_name as name,
-            routine_type as routine_type,
-            data_type as returned_type,
-            type_udt_schema,
-            type_udt_name, 
-            routine_definition as definition
+            routine_schema as ""Schema"", 
+            routine_name as ""Name"",
+            routine_type as ""RoutineType"",
+            case when data_type = 'USER-DEFINED' then type_udt_name else data_type end as ""ReturnedType"",
+            case when data_type = 'USER-DEFINED' then 'True' else 'Fasle' end as ""isUserDefined"", 
+            routine_definition as ""Definition""
             from information_schema.routines
-            where routine_type = ''FUNCTION'' 
+            where routine_schema not in ('pg_catalog', 'information_schema')
+                  and routine_type = 'FUNCTION' 
             order by specific_schema
             ";
 
     public static string GetViewsScript =>
         @"
             select
-	        table_schema as schema, 
-	        table_name as view,
-	        view_definition as definition
+          table_schema as ""Schema"", 
+          table_name as ""Name"",
+          view_definition as ""Definition""
             from information_schema.views
+            where table_schema not in ('pg_catalog', 'information_schema')
             ";
 }

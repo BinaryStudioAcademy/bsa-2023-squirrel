@@ -1,9 +1,9 @@
 <div class="container">
     <div class="content">
-        <div class="dropdown-users" *ngIf="dropdownUsers">
+        <div class="dropdown-users" *ngIf="isDropdownVisible">
             <app-dropdown-select
                 [width]="'100%'"
-                [placeholder]="'Email'"
+                [placeholder]="'Choose members'"
                 [options]="dropdownUsers"
                 [template]="usertemplate"
                 [chipTemplate]="chiptemplate"
@@ -12,6 +12,7 @@
                 (valueChange)="onDropdownValueChange($event)"
             >
             </app-dropdown-select>
+        </div>
             <ng-template #usertemplate let-item>
                 <div class="user-container">
                     <img src="{{ item.avatarUrl }}" />
@@ -21,7 +22,6 @@
             <ng-template #chiptemplate let-item>
                 <p>{{ item.email }}</p>
             </ng-template>
-        </div>
         <div class="action-buttons">
             <app-button text="Add" width="100%" variant="outline-secondary"
                         (buttonOnClick)="addUser()"

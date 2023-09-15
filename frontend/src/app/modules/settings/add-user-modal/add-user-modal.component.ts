@@ -24,6 +24,8 @@ export class AddUserModalComponent extends BaseComponent implements OnInit {
 
     public selectedUsers: UserDto[] = [];
 
+    public isDropdownVisible = false;
+
     public project: ProjectResponseDto;
 
     constructor(
@@ -79,6 +81,7 @@ export class AddUserModalComponent extends BaseComponent implements OnInit {
             .subscribe(
                 (users: UserDto[]) => {
                     this.dropdownUsers = users.filter(user => !this.data.users.some(u => u.id === user.id));
+                    this.isDropdownVisible = true;
                 },
                 () => {
                     this.notificationService.error('Failed to load users');

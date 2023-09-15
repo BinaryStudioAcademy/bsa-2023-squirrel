@@ -21,7 +21,10 @@ public class ConsoleAppHubController : ControllerBase
     [HttpPost("getAllTablesNames")]
     public async Task<ActionResult> GetAllTablesNamesAsync([FromBody] QueryParameters queryParameters)
     {
+        // subscription
+
         await _hubContext.Clients.User(queryParameters.ClientId).GetAllTablesNamesAsync(queryParameters.ClientId);
+
         return NoContent();
     }
 

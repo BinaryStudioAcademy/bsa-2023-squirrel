@@ -37,9 +37,6 @@ export class MainHeaderComponent implements OnInit {
     }
 
     public onDatabaseSelected(value: string) {
-        if (this.selectedDbName === value) {
-            return;
-        }
         this.selectedDbName = value;
         const db = this.db.find(x => x.dbName === value);
 
@@ -60,6 +57,7 @@ export class MainHeaderComponent implements OnInit {
 
         dialogRef.componentInstance.dbName.subscribe({
             next: (db: DatabaseInfoDto) => {
+                this.db.push(db);
                 this.dbNames.push(db.dbName);
             },
         });

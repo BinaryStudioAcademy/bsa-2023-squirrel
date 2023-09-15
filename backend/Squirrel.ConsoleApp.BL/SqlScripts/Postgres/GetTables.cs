@@ -1,15 +1,15 @@
-﻿namespace Squirrel.ConsoleApp.Providers.PostgreSqlScripts
+﻿namespace Squirrel.ConsoleApp.BL.SqlScripts.Postgres;
+
+internal static class GetTables
 {
-    internal static class GetTables
-    {
-        public static string GetTablesNamesScript =>
-            @"SELECT schemaname AS ""schema"", tablename AS ""name"" FROM pg_catalog.pg_tables WHERE schemaname NOT IN ('pg_catalog', 'information_schema')";
+    public static string GetTablesNamesScript =>
+        @"SELECT schemaname AS ""schema"", tablename AS ""name"" FROM pg_catalog.pg_tables WHERE schemaname NOT IN ('pg_catalog', 'information_schema')";
 
-        public static string GetTableDataQueryScript(string schema, string name, int rowsCount) =>
-            $"SELECT '{schema}' AS schema, '{name}' AS name, (SELECT COUNT(*) FROM \"{schema}\".\"{name}\") AS TotalRows, t.* FROM \"{schema}\".\"{name}\" t LIMIT {rowsCount}";
+    public static string GetTableDataQueryScript(string schema, string name, int rowsCount) =>
+        $"SELECT '{schema}' AS schema, '{name}' AS name, (SELECT COUNT(*) FROM \"{schema}\".\"{name}\") AS TotalRows, t.* FROM \"{schema}\".\"{name}\" t LIMIT {rowsCount}";
 
-        public static string GetTableStructureScript(string schema, string name) =>
-            @$"
+    public static string GetTableStructureScript(string schema, string name) =>
+        @$"
             with column_description_table as (
 				select
 					cols.table_schema,
@@ -47,8 +47,14 @@
 			    col.table_name as TableName,
 			    col.column_name as ColumnName,
 				col.ordinal_position as ColumnOrder,
-			    col.data_type as DataType,
-			    col.character_maximum_length as max_length,
+				
+				case when col.domain_name is not NULL then col.domain_name
+					 when col.data_type = 'USER-DEFINED' then col.udt_name 
+					 else col.data_type end as DataType,
+				
+				case when col.data_type = 'USER-DEFINED' or col.domain_name is not NULL then 'True' else 'False' end as IsUserDefined,		 
+				
+			    col.character_maximum_length as MaxLength,
 				-- MaxLength (do we need it?)
 				col.numeric_precision as Precision,
 				col.numeric_scale as Scale,
@@ -92,13 +98,14 @@
 				 and pk_tc.table_name = ccu.table_name
 				 and refc.unique_constraint_name = ccu.constraint_name
 			
-			where col.table_schema not in ('information_schema', 'pg_catalog') AND col.table_schema = '{schema}' AND col.table_name = '{name}'
+			where col.table_schema not in ('information_schema', 'pg_catalog') 
+				  AND col.table_schema = '{schema}' AND col.table_name = '{name}'
 			
 			order by col.table_schema, col.table_name, col.ordinal_position;
             ";
 
-        public static string GetTableChecksAndUniqueConstraintsScript(string schema, string name) =>
-            @$"
+    public static string GetTableChecksAndUniqueConstraintsScript(string schema, string name) =>
+        @$"
             select 
 			    tc.table_schema as TableSchema,
 				   tc.table_name as TableName,
@@ -136,5 +143,4 @@
 			order by tc.table_schema,
 			tc.table_name
             ";
-    }
 }

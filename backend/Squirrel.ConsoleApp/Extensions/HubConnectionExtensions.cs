@@ -31,10 +31,10 @@ public static class HubConnectionExtensions
             hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", clientId, "GetAllStoredProceduresNamesAsync", getActionsService.GetAllStoredProceduresNamesAsync().Result);
         });
 
-        hubConnection.On("GetStoredProcedureDefinitionAsync", (string clientId, string storedProcedureName) =>
+        hubConnection.On("GetStoredProcedureDefinitionAsync", (string clientId, string storedProcedureSchema, string storedProcedureName) =>
         {
             var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
-            hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", clientId, "GetStoredProcedureDefinitionAsync", getActionsService.GetStoredProcedureDefinitionAsync(storedProcedureName).Result);
+            hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", clientId, "GetStoredProcedureDefinitionAsync", getActionsService.GetStoredProcedureDefinitionAsync(storedProcedureSchema, storedProcedureName).Result);
         });
 
         hubConnection.On("GetAllFunctionsNamesAsync", (string clientId) =>
@@ -43,10 +43,10 @@ public static class HubConnectionExtensions
             hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", clientId, "GetAllFunctionsNamesAsync", getActionsService.GetAllFunctionsNamesAsync().Result);
         });
 
-        hubConnection.On("GetFunctionDefinitionAsync", (string clientId, string functionName) =>
+        hubConnection.On("GetFunctionDefinitionAsync", (string clientId, string functionSchemam, string functionName) =>
         {
             var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
-            hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", clientId, "GetFunctionDefinitionAsync", getActionsService.GetFunctionDefinitionAsync(functionName).Result);
+            hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", clientId, "GetFunctionDefinitionAsync", getActionsService.GetFunctionDefinitionAsync(functionSchemam, functionName).Result);
         });
 
         hubConnection.On("GetAllViewsNamesAsync", (string clientId) =>
@@ -55,10 +55,10 @@ public static class HubConnectionExtensions
             hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", clientId, "GetAllViewsNamesAsync", getActionsService.GetAllViewsNamesAsync().Result);
         });
 
-        hubConnection.On("GetViewDefinitionAsync", (string clientId, string viewName) =>
+        hubConnection.On("GetViewDefinitionAsync", (string clientId, string viewSchema, string viewName) =>
         {
             var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
-            hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", clientId, "GetViewDefinitionAsync", getActionsService.GetViewDefinitionAsync(viewName).Result);
+            hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", clientId, "GetViewDefinitionAsync", getActionsService.GetViewDefinitionAsync(viewSchema, viewName).Result);
         });
 
         hubConnection.On("GetTableStructureAsync", (string clientId, string schema, string tableName) =>

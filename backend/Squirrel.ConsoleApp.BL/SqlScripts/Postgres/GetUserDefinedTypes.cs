@@ -1,9 +1,9 @@
-﻿namespace Squirrel.ConsoleApp.Providers.PostgreSqlScripts
+﻿namespace Squirrel.ConsoleApp.BL.SqlScripts.Postgres;
+
+internal static class GetUserDefinedTypes
 {
-    internal static class GetUserDefinedTypes
-    {
-        public static string GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionScript =>
-            @"
+    public static string GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionScript =>
+        @"
             select
 			    t.typnamespace::regnamespace::text as schema,
 				 t.typname as name,
@@ -13,8 +13,8 @@
 				d.numeric_scale as numeric_scale,
 				t.typnotnull as allow_null,
 				d.domain_default as default,
-				dc.constraint_name as constraint_name,
-				cc.check_clause as check_clause
+				dc.constraint_name as ""ConstraintName"",
+				cc.check_clause as ""ConstraintDefinition""
 			
 			from
 				pg_type as t
@@ -32,13 +32,13 @@
 					  and dc.constraint_name = cc.constraint_name
 					  
 			where
-			    d.domain_schema NOT IN ('pg_catalog', 'information_schema')  -- or choose specific table_scheme
+			    d.domain_schema NOT IN ('pg_catalog', 'information_schema')
 				
 			order by schema, name
             ";
 
-        public static string GetUserDefinedTableTypesStructureScript =>
-            @"
+    public static string GetUserDefinedTableTypesStructureScript =>
+        @"
             with types as (
             select n.nspname,
         			t.oid::regtype::text as obj_name,
@@ -111,5 +111,4 @@
                      cols.obj_name,
                      cols.ordinal_position;
             ";
-    }
 }

@@ -17,11 +17,12 @@ public class ConsoleAppHubController : ControllerBase
         _hubContext = hubContext;
     }
 
-
     // https://localhost:7244/api/ConsoleAppHub/getAllTablesNames
     [HttpPost("getAllTablesNames")]
     public async Task<ActionResult> GetAllTablesNamesAsync([FromBody] QueryParameters queryParameters)
     {
+        // subscription will be established here (point for future)
+
         await _hubContext.Clients.User(queryParameters.ClientId).GetAllTablesNamesAsync(queryParameters.ClientId);
         return NoContent();
     }

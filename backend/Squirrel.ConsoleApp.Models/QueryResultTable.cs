@@ -1,4 +1,6 @@
-﻿namespace Squirrel.ConsoleApp.Models;
+﻿using System.Text;
+
+namespace Squirrel.ConsoleApp.Models;
 
 public class QueryResultTable
 {
@@ -19,5 +21,18 @@ public class QueryResultTable
     {
         Rows.Add(row);
         RowCount++;
+    }
+
+    // Just for debugging
+    public override string ToString()
+    {
+        var res = new StringBuilder(string.Join("  |  ", ColumnNames));
+        res.Append("\n---");
+        foreach (var item in Rows)
+        {
+            res.AppendLine("\n" + string.Join("  |  ", item));
+        }
+
+        return res.ToString();
     }
 }

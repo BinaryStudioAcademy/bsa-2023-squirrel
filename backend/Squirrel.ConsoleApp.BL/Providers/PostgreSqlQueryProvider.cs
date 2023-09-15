@@ -1,11 +1,11 @@
 ﻿using Squirrel.ConsoleApp.BL.Interfaces;
-using static Squirrel.ConsoleApp.Providers.SqlServerScripts.GetTables;
-using static Squirrel.ConsoleApp.Providers.SqlServerScripts.GetObjects;
-using static Squirrel.ConsoleApp.Providers.SqlServerScripts.GetUserDefinedTypes;
+using static Squirrel.ConsoleApp.BL.SqlScripts.Postgres.GetTables;
+using static Squirrel.ConsoleApp.BL.SqlScripts.Postgres.GetObjects;
+using static Squirrel.ConsoleApp.BL.SqlScripts.Postgres.GetUserDefinedTypes;
 
-namespace Squirrel.ConsoleApp.Providers;
+namespace Squirrel.ConsoleApp.BL.Providers;
 
-public class SqlServerQueryProvider : IDbQueryProvider
+public class PostgreSqlQueryProvider : IDbQueryProvider
 {
     public string GetTablesNamesQuery() => GetTablesNamesScript;
 
@@ -13,15 +13,15 @@ public class SqlServerQueryProvider : IDbQueryProvider
 
     public string GetStoredProceduresNamesQuery() => GetStoredProceduresNamesScript;
 
-    public string GetStoredProcedureDefinitionQuery(string storedProcedureName) => GetStoredProcedureDefinitionScript(storedProcedureName);
+    public string GetStoredProcedureDefinitionQuery(string storedProcedureSchemastring, string storedProcedureName) => GetStoredProcedureDefinitionScript(storedProcedureSchemastring, storedProcedureName);
 
     public string GetFunctionsNamesQuery() => GetFunctionsNamesScript;
 
-    public string GetFunctionDefinitionQuery(string functionName) => GetFunctionDefinitionScript(functionName);
+    public string GetFunctionDefinitionQuery(string functionSchema, string functionName) => GetFunctionDefinitionScript(functionSchema, functionName);
 
     public string GetViewsNamesQuery() => GetViewsNamesScript;
 
-    public string GetViewDefinitionQuery(string viewName) => GetViewDefinitionScript(viewName);
+    public string GetViewDefinitionQuery(string viewSchema, string viewName) => GetViewDefinitionScript(viewSchema, viewName);
 
     public string GetTableStructureQuery(string schema, string name) => GetTableStructureScript(schema, name);
 

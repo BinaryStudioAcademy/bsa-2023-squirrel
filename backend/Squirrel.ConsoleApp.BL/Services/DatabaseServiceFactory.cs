@@ -1,9 +1,8 @@
 ﻿using Squirrel.ConsoleApp.BL.Interfaces;
-using Squirrel.ConsoleApp.BL.Services;
+using Squirrel.ConsoleApp.BL.Providers;
 using Squirrel.ConsoleApp.Models;
-using Squirrel.ConsoleApp.Providers;
 
-namespace Squirrel.ConsoleApp.Services;
+namespace Squirrel.ConsoleApp.BL.Services;
 
 public class DatabaseServiceFactory
 {

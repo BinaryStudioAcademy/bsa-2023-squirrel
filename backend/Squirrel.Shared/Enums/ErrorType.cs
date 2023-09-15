@@ -9,7 +9,10 @@ public enum ErrorType
     NotFound,
     Internal,
     InvalidToken,
+    InvalidBranchName,
     InvalidProject,
+    LargeFile,
+    InvalidFileFormat,
     RefreshTokenExpired,
     SqlSyntax
 }

@@ -36,13 +36,13 @@
     position: relative
     margin: 0 auto 30px
 
-    .edit-icon
+    .edit-icon, .delete-icon
+        cursor: pointer
         display: flex
         flex-direction: column
         align-items: center
         justify-content: center
         position: absolute
-        transform: translateX(-50%) translateY(-40%)
         bottom: 0
         right: 0
         width: 36px
@@ -50,12 +50,26 @@
         border-radius: 10px
         overflow: hidden
         text-align: center
+
+
+    .edit-icon
+        transform: translateX(-50%) translateY(-40%)
         background: $link-color
 
+    .delete-icon
+        transform: translateX(50%) translateY(-40%)
+        background: $text-danger
+
     .edit-icon input[type='file']
+        z-index: 100
         position: absolute
         transform: scale(2)
         opacity: 0
+        cursor: pointer
+        width: 100%
+        height: 100%
+        font-size: 0
+
 
 .form-inputs
     display: flex

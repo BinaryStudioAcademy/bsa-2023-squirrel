@@ -1,21 +1,27 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
+import { BaseComponent } from '@core/base/base.component';
+import { BranchService } from '@core/services/branch.service';
+import { takeUntil } from 'rxjs';
+
+import { BranchDto } from 'src/app/models/branch/branch-dto';
+
+import { CreateBranchModalComponent } from '../../create-branch-modal/create-branch-modal.component';
 
 @Component({
     selector: 'app-navbar-header',
     templateUrl: './navbar-header.component.html',
     styleUrls: ['./navbar-header.component.sass'],
 })
-export class NavbarHeaderComponent implements OnInit {
+export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDestroy {
+    public branches: BranchDto[] = [];
+
     @ViewChild('modalContent') modalContent: TemplateRef<any>;
 
-    /*  component for passing as a modal
-        import { ComponentType } from '@angular/cdk/portal';
-    */
-    // modalComponent: ComponentType<NotFoundComponent> = NotFoundComponent;
+    public currentProjectId: number;
 
-    public branches: string[];
-
-    public selectedBranch: string;
+    public selectedBranch: BranchDto;
 
     public navLinks: { path: string; displayName: string }[] = [
         { displayName: 'Changes', path: './changes' },
@@ -26,11 +32,47 @@ export class NavbarHeaderComponent implements OnInit {
         { displayName: 'Settings', path: './settings' },
     ];
 
-    ngOnInit(): void {
-        this.branches = ['Branch 1', 'Branch 2', 'Branch 3', 'Branch 4'];
+    // eslint-disable-next-line no-empty-function
+    constructor(
+        private branchService: BranchService,
+        public dialog: MatDialog,
+        private route: ActivatedRoute,
+    ) {
+        super();
     }
 
-    public onBranchSelected(value: string) {
+    ngOnInit(): void {
+        this.route.params.subscribe((params) => { this.currentProjectId = params['id']; });
+        this.branchService.getAllBranches(this.currentProjectId)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((branches) => { this.branches = branches; });
+    }
+
+    public onBranchSelected(value: any) {
         this.selectedBranch = value;
+        this.branchService.selectBranch(this.currentProjectId, value.id);
+    }
+
+    public openBranchModal() {
+        const dialogRef = this.dialog.open(CreateBranchModalComponent, {
+            width: '50%',
+            data: { projectId: this.currentProjectId, branches: this.branches },
+        });
+
+        dialogRef.componentInstance.branchCreated.subscribe((branch) => {
+            this.onBranchSelected(branch);
+            this.branches.push(branch);
+        });
+    }
+
+    public getCurrentBranch() {
+        const currentBranchId = this.branchService.getCurrentBranch(this.currentProjectId);
+        const currentBranch = this.branches.find(x => x.id === currentBranchId);
+
+        return currentBranch ? this.branches.indexOf(currentBranch) : 0;
+    }
+
+    filterBranch(item: BranchDto, value: string) {
+        return item.name.includes(value);
     }
 }

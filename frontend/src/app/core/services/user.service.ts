@@ -36,6 +36,18 @@ export class UserService {
         return this.httpService.getRequest<UserProfileDto>(`${this.routePrefix}/user-profile`);
     }
 
+    public uploadAvatar(avatar: File) {
+        const formData = new FormData();
+
+        formData.append('avatar', avatar);
+
+        return this.httpService.postRequest(`${this.routePrefix}/add-avatar`, formData);
+    }
+
+    public deleteAvatar() {
+        return this.httpService.deleteRequest(`${this.routePrefix}/delete-avatar`);
+    }
+
     public getAllUsers(): Observable<UserDto[]> {
         return this.httpService.getRequest<UserDto[]>(`${this.routePrefix}/all`);
     }

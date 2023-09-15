@@ -38,7 +38,7 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
         private branchService: BranchService,
         public dialog: MatDialog,
         private route: ActivatedRoute,
-        private changesService: LoadChangesService
+        private changesService: LoadChangesService,
     ) {
         super();
     }

@@ -53,7 +53,9 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((branches) => { this.branches = branches; });
 
-        this.sharedProject.project$.subscribe({
+        this.sharedProject.project$.pipe(
+            takeUntil(this.unsubscribe$),
+        ).subscribe({
             next: project => {
                 this.isSettingsEnabled = project!.isAuthor;
             },

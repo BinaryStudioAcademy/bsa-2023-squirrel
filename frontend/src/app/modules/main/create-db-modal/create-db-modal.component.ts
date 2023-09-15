@@ -1,25 +1,27 @@
 import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { BaseComponent } from '@core/base/base.component';
 import { ConsoleConnectService } from '@core/services/console-connect.service';
 import { DatabaseService } from '@core/services/database.service';
 import { NotificationService } from '@core/services/notification.service';
+import { SqlService } from '@core/services/sql.service';
+import { takeUntil } from 'rxjs';
 
 import { DbConnection } from '../../../models/console/db-connection';
 import { DatabaseInfoDto } from '../../../models/database/database-info-dto';
 import { NewDatabaseDto } from '../../../models/database/new-database-dto';
+import { QueryParameters } from '../../../models/sql-service/query-parameters';
 
 @Component({
     selector: 'app-create-db-modal',
     templateUrl: './create-db-modal.component.html',
     styleUrls: ['./create-db-modal.component.sass'],
 })
-export class CreateDbModalComponent implements OnInit {
+export class CreateDbModalComponent extends BaseComponent implements OnInit {
     @Output() public dbName = new EventEmitter<DatabaseInfoDto>();
 
     public dbForm: FormGroup = new FormGroup({});
-
-    public localhost: boolean = false;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) private data: any,
@@ -28,8 +30,10 @@ export class CreateDbModalComponent implements OnInit {
         private databaseService: DatabaseService,
         private notificationService: NotificationService,
         public dialogRef: MatDialogRef<CreateDbModalComponent>,
-        // eslint-disable-next-line no-empty-function
-    ) {}
+        private sqlService: SqlService,
+    ) {
+        super();
+    }
 
     public ngOnInit() {
         this.initializeForm();
@@ -66,6 +70,37 @@ export class CreateDbModalComponent implements OnInit {
                 this.notificationService.error('Failed to connect to database');
             },
         });
+    }
+
+    public addDataBaseRemote() {
+        // const connect: DbConnectionRemote = {
+        //     dbName: this.dbForm.value.dbName,
+        //     serverName: this.dbForm.value.serverName,
+        //     port: +this.dbForm.value.port,
+        //     username: this.dbForm.value.username,
+        //     password: this.dbForm.value.password,
+        //     dbEngine: this.data.dbEngine,
+        //     isLocalhost: this.dbForm.value.localhost,
+        //     guid: this.dbForm.value.guid,
+        // };
+
+        const query: QueryParameters = {
+            clientId: this.dbForm.value.guid,
+            filterSchema: '',
+            filterName: '',
+            filterRowsCount: 1,
+        };
+
+        this.sqlService.getAllTablesNames(query)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe({
+                next: () => {
+                    this.notificationService.info('db has stable connection');
+                },
+                error: () => {
+                    this.notificationService.error('fail connect to db');
+                },
+            });
     }
 
     public changeLocalHost() {

@@ -4,7 +4,9 @@
 </div>
 
 <app-barrier></app-barrier>
-<form id="dbForm" [formGroup]="dbForm" (ngSubmit)="addDataBase()" class="db-form">
+<form id="dbForm" [formGroup]="dbForm"
+      (ngSubmit)="dbForm.value['localhost'] ? addDataBase() : addDataBaseRemote()"
+      class="db-form">
     <div class="input-wrapper">
         <label>Db Name</label>
         <app-input [formControl]="$any(dbForm.controls['dbName'])"
@@ -51,7 +53,7 @@
         </app-input>
     </div>
 
-    <ng-container *ngIf="dbForm.value['localhost']">
+    <ng-container *ngIf="!dbForm.value['localhost']">
         <app-barrier></app-barrier>
         <div class="input-wrapper">
             <label>Key
@@ -67,7 +69,7 @@
     <div class="modal-footer">
         <div class="toggle">
             <mat-slide-toggle formControlName="localhost" (change)="changeLocalHost()"></mat-slide-toggle>
-            <p>{{dbForm.value['localhost'] === true ? 'local db' : 'remote db'}}</p>
+            <p>{{dbForm.value['localhost'] ? 'local db' : 'remote db'}}</p>
         </div>
 
         <div class="btn-group">

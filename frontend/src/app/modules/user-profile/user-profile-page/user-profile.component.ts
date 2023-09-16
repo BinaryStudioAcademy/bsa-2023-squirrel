@@ -143,6 +143,7 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
                     this.spinner.hide();
                     this.notificationService.info('Names successfully updated');
                     this.initUserNamesForm();
+                    window.location.reload();
                 },
                 (error) => {
                     this.spinner.hide();

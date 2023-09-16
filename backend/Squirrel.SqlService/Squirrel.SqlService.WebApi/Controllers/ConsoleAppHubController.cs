@@ -33,8 +33,7 @@ public class ConsoleAppHubController : ControllerBase
     {
         var registerQuery = RegisterQuery();
         await _hubContext.Clients.User(queryParameters.ClientId).GetAllTablesNamesAsync(registerQuery.queryId);
-        var result = await registerQuery.tcs.Task;
-        return Ok(result);
+        return Ok(await registerQuery.tcs.Task);
     }
 
     // https://localhost:7244/api/ConsoleAppHub/getTableData

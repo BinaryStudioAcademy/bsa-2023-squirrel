@@ -44,7 +44,7 @@
 			
 			select distinct
 				col.table_schema as TableSchema,
-			    col.table_name as TableName,
+			    col.table_name as Name,
 			    col.column_name as ColumnName,
 				col.ordinal_position as ColumnOrder,
 			    col.data_type as DataType,
@@ -101,7 +101,7 @@
             @$"
             select 
 			    tc.table_schema as TableSchema,
-				   tc.table_name as TableName,
+				   tc.table_name as Name,
 				   tc.constraint_name as ConstraintName,
 				   string_agg(col.column_name, ', ') as Columns,
 				   case when pgc.contype = 'c' then 'CHECK'

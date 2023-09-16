@@ -6,7 +6,6 @@ using Newtonsoft.Json.Converters;
 using Squirrel.ConsoleApp.BL.Interfaces;
 using Squirrel.ConsoleApp.BL.Services;
 using Squirrel.ConsoleApp.Filters;
-using Squirrel.ConsoleApp.Services;
 using Squirrel.Core.WebAPI.Extensions;
 using Squirrel.Core.WebAPI.Validators.Project;
 
@@ -54,6 +53,8 @@ public class Startup
 
     public void Configure(IApplicationBuilder app)
     {
+        app.RegisterHubs(Configuration);
+
         app.UseCors(builder => builder
             .AllowAnyMethod()
             .AllowAnyHeader()
@@ -65,7 +66,5 @@ public class Startup
         {
             cfg.MapControllers();
         });
-
-        app.RegisterHubs(Configuration);
     }
 }

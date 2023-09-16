@@ -3,10 +3,10 @@
 internal static class GetTables
 {
     public static string GetTablesNamesScript =>
-        @"SELECT TABLE_SCHEMA AS 'SCHEMA', TABLE_NAME AS 'NAME' FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' ORDER BY 'SCHEMA', 'NAME'";
+        @"SELECT TABLE_SCHEMA AS 'Schema', TABLE_NAME AS 'Name' FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' ORDER BY 'SCHEMA', 'NAME'";
 
     public static string GetTableDataQueryScript(string schema, string name, int rowsCount) =>
-        @$"SELECT TOP ({rowsCount}) '{schema}' AS [SCHEMA], '{name}' AS [NAME], (SELECT COUNT(*) FROM [{schema}].[{name}]) AS TotalRows, * FROM [{schema}].[{name}]";
+        @$"SELECT TOP ({rowsCount}) '{schema}' AS [Schema], '{name}' AS [Name], (SELECT COUNT(*) FROM [{schema}].[{name}]) AS TotalRows, * FROM [{schema}].[{name}]";
 
     public static string GetTableStructureScript(string schema, string table) =>
         @$"
@@ -14,16 +14,16 @@ internal static class GetTables
               DECLARE @TableName NVARCHAR(100) = '{table}'; 
 
               SELECT	OBJECT_SCHEMA_NAME(syso.id) [Schema],
-		                syso.name [Table],
-		                sysc.name [Column],
+		                syso.name [Name],
+		                sysc.name [ColumnName],
 		                sysc.colorder [ColumnOrder],   
 		                syst.name [DataType],
 		                CASE WHEN syst.status = 1 THEN 'True' ELSE 'False' END [IsUserDefined],
-		                CASE WHEN syst.name IN ('binary','varbinary','char','nchar','varchar','nvarchar') OR syst.status = 1 
-			                THEN sysc.prec ELSE NULL END [MaxLength],
-		                syscmnts.text [Default],
+                        syscmnts.text [Default],
 		                sysc.prec [Precision],   
-		                sysc.scale [Scale],   
+		                sysc.scale [Scale], 
+		                CASE WHEN syst.name IN ('binary','varbinary','char','nchar','varchar','nvarchar') OR syst.status = 1 
+			                THEN sysc.prec ELSE NULL END [MaxLength],  
 		                CASE WHEN sysc.isnullable = 1 THEN 'True' ELSE 'False' END [AllowNulls],   
 		                CASE WHEN sysc.[status] = 128 THEN 'True' ELSE 'False' END [Identity],
 		                CASE WHEN sysc.colstat = 1 THEN 'True' ELSE 'False' END [PrimaryKey],  
@@ -52,7 +52,7 @@ internal static class GetTables
                 DECLARE @TableName NVARCHAR(100) = '{name}'; 
                 
                 SELECT TC.TABLE_SCHEMA [Schema],	
-                      TC.TABLE_NAME [Table],
+                      TC.TABLE_NAME [Name],
                       TC.Constraint_Name [ConstraintName],
                       STRING_AGG(CC.Column_Name, ', ') [Columns],
                       MAX(CASE WHEN TC.CONSTRAINT_TYPE = 'CHECK' THEN C.CHECK_CLAUSE ELSE NULL END) [CheckClause]

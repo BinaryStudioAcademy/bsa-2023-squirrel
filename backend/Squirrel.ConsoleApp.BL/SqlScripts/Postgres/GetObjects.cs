@@ -25,19 +25,17 @@ internal class GetObjects
         @$"SELECT view_definition as ""ViewDefinition"" FROM information_schema.views  WHERE table_schema = '{viewSchema}' AND table_name = '{viewName}'";
 
     public static string GetStoredProceduresScript =>
-        @"
-            select 
+        @"select 
             routine_schema as ""Schema"", 
             routine_name as ""Name"",
-            routine_type as ""RoutineType"",
-            data_type as ""ReturnedType"",
-            type_udt_schema as ""UdtTypeSchema"",
-            type_udt_name as ""UdtTypeName"", 
             routine_definition as ""Definition""
+
             from information_schema.routines
-            where routine_schema not in ('pg_catalog', 'information_schema')
-                  and routine_type = 'PROCEDURE' 
-            order by specific_schema
+            where 
+	            specific_schema not in ('information_schema', 'pg_catalog')  -- or choose specific table_scheme
+	            and routine_type in ('PROCEDURE') 
+
+            order by specific_schema, routine_type
             ";
 
     public static string GetFunctionsScript =>
@@ -45,9 +43,8 @@ internal class GetObjects
             select 
             routine_schema as ""Schema"", 
             routine_name as ""Name"",
-            routine_type as ""RoutineType"",
             case when data_type = 'USER-DEFINED' then type_udt_name else data_type end as ""ReturnedType"",
-            case when data_type = 'USER-DEFINED' then 'True' else 'Fasle' end as ""isUserDefined"", 
+            case when data_type = 'USER-DEFINED' then 'True' else 'False' end as ""isUserDefined"", 
             routine_definition as ""Definition""
             from information_schema.routines
             where routine_schema not in ('pg_catalog', 'information_schema')

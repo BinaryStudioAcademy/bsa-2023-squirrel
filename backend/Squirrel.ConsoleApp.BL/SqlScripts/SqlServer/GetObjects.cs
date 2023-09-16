@@ -3,11 +3,11 @@
 internal class GetObjects
 {
     public static string GetStoredProceduresNamesScript =>
-        @"SELECT SCHEMA_NAME(schema_id) AS ProcedureSchema, NAME as ProcedureName FROM SYS.OBJECTS WHERE TYPE_DESC = 'SQL_STORED_PROCEDURE'";
+        @"SELECT SCHEMA_NAME(schema_id) AS Schema, NAME as Name FROM SYS.OBJECTS WHERE TYPE_DESC = 'SQL_STORED_PROCEDURE'";
 
     public static string GetStoredProcedureDefinitionScript(string storedProcedureSchema, string storedProcedureName) =>
         @$"
-                SELECT M.definition [ROUTINE_DEFINITION] 
+                SELECT M.definition [Definition] 
 
                 FROM INFORMATION_SCHEMA.ROUTINES R INNER JOIN sys.sql_modules M ON M.object_id = OBJECT_ID(R.ROUTINE_NAME)
 
@@ -15,12 +15,12 @@ internal class GetObjects
             ";
 
     public static string GetFunctionsNamesScript =>
-        @"SELECT SCHEMA_NAME(schema_id) AS FunctionSchema, NAME as FunctionName FROM SYS.OBJECTS 
+        @"SELECT SCHEMA_NAME(schema_id) AS Schema, NAME as Name FROM SYS.OBJECTS 
             WHERE TYPE_DESC = 'SQL_SCALAR_FUNCTION' OR TYPE_DESC = 'SQL_TABLE_VALUED_FUNCTION' OR TYPE_DESC = 'SQL_INLINE_TABLE_VALUED_FUNCTION'";
 
     public static string GetFunctionDefinitionScript(string functionSchema, string functionName) =>
         @$"
-                SELECT M.definition [ROUTINE_DEFINITION] 
+                SELECT M.definition [Definition] 
 
                 FROM INFORMATION_SCHEMA.ROUTINES R INNER JOIN sys.sql_modules M ON M.object_id = OBJECT_ID(R.ROUTINE_NAME)
 
@@ -28,11 +28,11 @@ internal class GetObjects
             ";
 
     public static string GetViewsNamesScript =>
-        @$"SELECT SCHEMA_NAME(schema_id) AS ViewSchema, NAME as ViewName FROM SYS.OBJECTS WHERE TYPE_DESC = 'VIEW'";
+        @$"SELECT SCHEMA_NAME(schema_id) AS Schema, NAME as Name FROM SYS.OBJECTS WHERE TYPE_DESC = 'VIEW'";
 
     public static string GetViewDefinitionScript(string viewSchema, string viewName) =>
         @$"
-                SELECT M.definition [VIEW_DEFINITION] 
+                SELECT M.definition [Definition] 
 
                 FROM INFORMATION_SCHEMA.VIEWS V INNER JOIN sys.sql_modules M ON M.object_id = OBJECT_ID(V.TABLE_NAME)
 

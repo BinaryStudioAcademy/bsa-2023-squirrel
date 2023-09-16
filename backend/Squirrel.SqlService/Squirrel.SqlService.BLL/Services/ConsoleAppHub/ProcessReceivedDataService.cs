@@ -2,6 +2,9 @@
 using Squirrel.ConsoleApp.Models;
 using Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
 using Squirrel.SqlService.BLL.Models.DTO;
+using Squirrel.SqlService.BLL.Models.DTO.Function;
+using Squirrel.SqlService.BLL.Models.DTO.Procedure;
+using Squirrel.SqlService.BLL.Models.DTO.Shared;
 
 namespace Squirrel.SqlService.BLL.Services.ConsoleAppHub;
 
@@ -52,24 +55,28 @@ public class ProcessReceivedDataService : IProcessReceivedDataService
         return _mapper.Map<TableConstraintsDto>(queryResultTable);
     }
 
-    public async Task AllStoredProceduresNamesProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable)
+    public async Task<ProcedureNamesDto> AllStoredProceduresNamesProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable)
     {
         await ShowResult(clientId, queryResultTable);
+        return _mapper.Map<ProcedureNamesDto>(queryResultTable);
     }
 
-    public async Task StoredProcedureDefinitionProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable)
+    public async Task<RoutineDefinitionDto> StoredProcedureDefinitionProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable)
     {
         await ShowResult(clientId, queryResultTable);
+        return _mapper.Map<RoutineDefinitionDto>(queryResultTable);
     }
 
-    public async Task AllFunctionsNamesProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable)
+    public async Task<FunctionNamesDto> AllFunctionsNamesProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable)
     {
         await ShowResult(clientId, queryResultTable);
+        return _mapper.Map<FunctionNamesDto>(queryResultTable);;
     }
 
-    public async Task FunctionDefinitionProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable)
+    public async Task<RoutineDefinitionDto> FunctionDefinitionProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable)
     {
         await ShowResult(clientId, queryResultTable);
+        return _mapper.Map<RoutineDefinitionDto>(queryResultTable);
     }
 
     public async Task AllViewsNamesProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable)
@@ -82,14 +89,16 @@ public class ProcessReceivedDataService : IProcessReceivedDataService
         await ShowResult(clientId, queryResultTable);
     }
 
-    public async Task StoredProceduresWithDetailProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable)
+    public async Task<ProcedureDetailsDto> StoredProceduresWithDetailProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable)
     {
         await ShowResult(clientId, queryResultTable);
+        return _mapper.Map<ProcedureDetailsDto>(queryResultTable);
     }
 
-    public async Task FunctionsWithDetailProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable)
+    public async Task<FunctionDetailsDto> FunctionsWithDetailProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable)
     {
         await ShowResult(clientId, queryResultTable);
+        return _mapper.Map<FunctionDetailsDto>(queryResultTable);
     }
 
     public async Task ViewsWithDetailProcessReceivedDataAsync(string clientId, QueryResultTable queryResultTable)

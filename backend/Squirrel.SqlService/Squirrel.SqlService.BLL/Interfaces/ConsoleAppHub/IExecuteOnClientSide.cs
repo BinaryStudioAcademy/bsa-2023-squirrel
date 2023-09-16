@@ -5,7 +5,7 @@ public interface IExecuteOnClientSide
     Task SetClientId(string guid);
 
     // Actions
-    Task GetAllTablesNamesAsync(string clientId);
+    Task GetAllTablesNamesAsync(Guid httpId);
     Task GetTableDataAsync(string clientId, string schema, string tableName, int rowsCount);
 
     Task GetAllStoredProceduresNamesAsync(string clientId);

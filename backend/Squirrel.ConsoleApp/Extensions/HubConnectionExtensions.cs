@@ -3,7 +3,13 @@ using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
 using Squirrel.ConsoleApp.BL.Interfaces;
 
-namespace Squirrel.Core.WebAPI.Extensions;
+namespace Squirrel.ConsoleApp.Extensions;
+
+public struct RequestInfo
+{
+    public string ClientId { get; set; }
+    public Guid HttpId { get; set; }
+}
 
 public static class HubConnectionExtensions
 {
@@ -13,10 +19,10 @@ public static class HubConnectionExtensions
         // that we work with current DatabaseService and QueryProvider (from Client's settings file).
         // Every time when we get IGetActionsService, we reread settings file.
 
-        hubConnection.On("GetAllTablesNamesAsync", (string clientId) =>
+        hubConnection.On("GetAllTablesNamesAsync", (Guid httpId) =>
         {
             var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
-            hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", clientId, "GetAllTablesNamesAsync", getActionsService.GetAllTablesNamesAsync().Result);
+            hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", httpId, "GetAllTablesNamesAsync", getActionsService.GetAllTablesNamesAsync().Result);
         });
 
         hubConnection.On("GetTableDataAsync", (string clientId, string schema, string tableName, int rowsCount) =>

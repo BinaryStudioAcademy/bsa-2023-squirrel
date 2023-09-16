@@ -16,19 +16,19 @@ public sealed class TableProfile : Profile
 
         CreateMap<QueryResultTable, TableStructureDto>()
             .ForMember(dest => dest.Schema, opt => opt.MapFrom(src => src.Rows.Any() ? src.Rows[0][0] : null))
-            .ForMember(dest => dest.TableName, opt => opt.MapFrom(src => src.Rows.Any() ? src.Rows[0][1] : null))
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Rows.Any() ? src.Rows[0][1] : null))
             .ForMember(dest => dest.Columns, opt => opt.MapFrom(src 
                 => src.Rows.Select(row => MapToObject<TableColumnInfo>(src.ColumnNames.Select(e => e.ToLower()).ToList(), row))));
 
         CreateMap<QueryResultTable, TableConstraintsDto>()
             .ForMember(dest => dest.Schema, opt => opt.MapFrom(src => src.Rows.Any() ? src.Rows[0][0] : null))
-            .ForMember(dest => dest.TableName, opt => opt.MapFrom(src => src.Rows.Any() ? src.Rows[0][1] : null))
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Rows.Any() ? src.Rows[0][1] : null))
             .ForMember(dest => dest.Constraints, opt => opt.MapFrom(src 
                 => src.Rows.Select(row => MapToObject<Constraint>(src.ColumnNames.Select(e => e.ToLower()).ToList(), row))));
 
         CreateMap<QueryResultTable, TableDataDto>()
             .ForMember(dest => dest.Schema, opt => opt.MapFrom(src => src.Rows.Any() ? src.Rows[0][0] : null))
-            .ForMember(dest => dest.TableName, opt => opt.MapFrom(src => src.Rows.Any() ? src.Rows[0][1] : null))
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Rows.Any() ? src.Rows[0][1] : null))
             .ForMember(dest => dest.TotalRows, opt => opt.MapFrom(src => src.Rows.Any() ? int.Parse(src.Rows[0][2]) : 0))
             .ForMember(dest => dest.Rows, opt => opt.MapFrom(src
                 => src.Rows.Select(row => MapToDataRow(src.ColumnNames, row))));

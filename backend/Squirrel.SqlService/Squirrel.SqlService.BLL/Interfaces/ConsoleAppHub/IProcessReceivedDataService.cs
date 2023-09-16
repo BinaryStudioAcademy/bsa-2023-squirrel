@@ -5,26 +5,26 @@ namespace Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
 public interface IProcessReceivedDataService
 {
     // Actions
-    Task AllTablesNamesProcessReceivedDataAsync(Guid httpId, QueryResultTableDTO queryResultTableDTO);
-    Task TableDataProcessReceivedDataAsync(Guid httpId, QueryResultTableDTO queryResultTableDTO);
+    Task AllTablesNamesProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO);
+    Task TableDataProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO);
 
-    Task AllStoredProceduresNamesProcessReceivedDataAsync(Guid httpId, QueryResultTableDTO queryResultTableDTO);
-    Task StoredProcedureDefinitionProcessReceivedDataAsync(Guid httpId, QueryResultTableDTO queryResultTableDTO);
+    Task AllStoredProceduresNamesProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO);
+    Task StoredProcedureDefinitionProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO);
 
-    Task AllFunctionsNamesProcessReceivedDataAsync(Guid httpId, QueryResultTableDTO queryResultTableDTO);
-    Task FunctionDefinitionProcessReceivedDataAsync(Guid httpId, QueryResultTableDTO queryResultTableDTO);
+    Task AllFunctionsNamesProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO);
+    Task FunctionDefinitionProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO);
 
-    Task AllViewsNamesProcessReceivedDataAsync(Guid httpId, QueryResultTableDTO queryResultTableDTO);
-    Task ViewDefinitionProcessReceivedDataAsync(Guid httpId, QueryResultTableDTO queryResultTableDTO);
+    Task AllViewsNamesProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO);
+    Task ViewDefinitionProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO);
 
-    Task TableStructureProcessReceivedDataAsync(Guid httpId, QueryResultTableDTO queryResultTableDTO);
-    Task TableChecksAndUniqueConstraintsProcessReceivedDataAsync(Guid httpId, QueryResultTableDTO queryResultTableDTO);
+    Task TableStructureProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO);
+    Task TableChecksAndUniqueConstraintsProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO);
 
-    Task StoredProceduresWithDetailProcessReceivedDataAsync(Guid httpId, QueryResultTableDTO queryResultTableDTO);
-    Task FunctionsWithDetailProcessReceivedDataAsync(Guid httpId, QueryResultTableDTO queryResultTableDTO);
-    Task ViewsWithDetailProcessReceivedDataAsync(Guid httpId, QueryResultTableDTO queryResultTableDTO);
+    Task StoredProceduresWithDetailProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO);
+    Task FunctionsWithDetailProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO);
+    Task ViewsWithDetailProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO);
 
-    Task UserDefinedTypesWithDefaultsAndRulesAndDefinitionProcessReceivedDataAsync(Guid httpId, QueryResultTableDTO queryResultTableDTO);
-    Task UserDefinedTableTypesProcessReceivedDataAsync(Guid httpId, QueryResultTableDTO queryResultTableDTO);
+    Task UserDefinedTypesWithDefaultsAndRulesAndDefinitionProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO);
+    Task UserDefinedTableTypesProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO);
 }
 

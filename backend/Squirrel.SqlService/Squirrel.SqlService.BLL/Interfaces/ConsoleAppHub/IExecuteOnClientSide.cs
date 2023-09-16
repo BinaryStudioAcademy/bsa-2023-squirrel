@@ -5,26 +5,26 @@ public interface IExecuteOnClientSide
     Task SetClientId(string guid);
 
     // Actions
-    Task GetAllTablesNamesAsync(Guid httpId);
-    Task GetTableDataAsync(string clientId, string schema, string tableName, int rowsCount);
+    Task GetAllTablesNamesAsync(Guid queryId);
+    Task GetTableDataAsync(Guid queryId, string schema, string tableName, int rowsCount);
 
-    Task GetAllStoredProceduresNamesAsync(string clientId);
-    Task GetStoredProcedureDefinitionAsync(string clientId, string storedProcedureName);
+    Task GetAllStoredProceduresNamesAsync(Guid queryId);
+    Task GetStoredProcedureDefinitionAsync(Guid queryId, string storedProcedureName);
 
-    Task GetAllFunctionsNamesAsync(string clientId);
-    Task GetFunctionDefinitionAsync(string clientId, string functionName);
+    Task GetAllFunctionsNamesAsync(Guid queryId);
+    Task GetFunctionDefinitionAsync(Guid queryId, string functionName);
 
-    Task GetAllViewsNamesAsync(string clientId);
-    Task GetViewDefinitionAsync(string clientId, string viewName);
+    Task GetAllViewsNamesAsync(Guid queryId);
+    Task GetViewDefinitionAsync(Guid queryId, string viewName);
 
-    Task GetTableStructureAsync(string clientId, string schema, string tableName);
-    Task GetTableChecksAndUniqueConstraintsAsync(string clientId, string schema, string tableName);
+    Task GetTableStructureAsync(Guid queryId, string schema, string tableName);
+    Task GetTableChecksAndUniqueConstraintsAsync(Guid queryId, string schema, string tableName);
 
-    Task GetStoredProceduresWithDetailAsync(string clientId);
-    Task GetFunctionsWithDetailAsync(string clientId);
-    Task GetViewsWithDetailAsync(string clientId);
+    Task GetStoredProceduresWithDetailAsync(Guid queryId);
+    Task GetFunctionsWithDetailAsync(Guid queryId);
+    Task GetViewsWithDetailAsync(Guid queryId);
 
-    Task GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync(string clientId);
-    Task GetUserDefinedTableTypesAsync(string clientId);
+    Task GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync(Guid queryId);
+    Task GetUserDefinedTableTypesAsync(Guid queryId);
 }
 

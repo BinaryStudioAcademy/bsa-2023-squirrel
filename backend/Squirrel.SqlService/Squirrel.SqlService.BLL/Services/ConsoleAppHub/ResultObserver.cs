@@ -6,19 +6,19 @@ public class ResultObserver
 {
     private readonly Dictionary<Guid, TaskCompletionSource<QueryResultTableDTO>> _pendingRequests = new();
 
-    public TaskCompletionSource<QueryResultTableDTO> Register(Guid httpId)
+    public TaskCompletionSource<QueryResultTableDTO> Register(Guid queryId)
     {
         var tcs = new TaskCompletionSource<QueryResultTableDTO>();
-        _pendingRequests[httpId] = tcs;
+        _pendingRequests[queryId] = new TaskCompletionSource<QueryResultTableDTO>();
         return tcs;
     }
 
-    public void SetResult(Guid httpId, QueryResultTableDTO queryResultTableDto)
+    public void SetResult(Guid queryId, QueryResultTableDTO queryResultTableDto)
     {
-        if (_pendingRequests.TryGetValue(httpId, out var tcs))
+        if (_pendingRequests.TryGetValue(queryId, out var tcs))
         {
             tcs.SetResult(queryResultTableDto);
-            _pendingRequests.Remove(httpId);
+            _pendingRequests.Remove(queryId);
         }
     }
 }

@@ -26,79 +26,79 @@ public class ProcessReceivedDataService : IProcessReceivedDataService
         return Task.CompletedTask;
     }
 
-    public async Task AllTablesNamesProcessReceivedDataAsync(Guid httpId, QueryResultTableDTO queryResultTableDTO)
+    public async Task AllTablesNamesProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO)
     {
-        _resultObserver.SetResult(httpId, queryResultTableDTO);
-        await ShowResult(httpId, queryResultTableDTO);
+        _resultObserver.SetResult(queryId, queryResultTableDTO);
+        await ShowResult(queryId, queryResultTableDTO);
     }
 
-    public async Task TableDataProcessReceivedDataAsync(Guid httpId, QueryResultTableDTO queryResultTableDTO)
+    public async Task TableDataProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO)
     {
-        await ShowResult(httpId, queryResultTableDTO);
+        await ShowResult(queryId, queryResultTableDTO);
     }
 
-    public async Task AllStoredProceduresNamesProcessReceivedDataAsync(Guid httpId, QueryResultTableDTO queryResultTableDTO)
+    public async Task AllStoredProceduresNamesProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO)
     {
-        await ShowResult(httpId, queryResultTableDTO);
+        await ShowResult(queryId, queryResultTableDTO);
     }
 
-    public async Task StoredProcedureDefinitionProcessReceivedDataAsync(Guid httpId, QueryResultTableDTO queryResultTableDTO)
+    public async Task StoredProcedureDefinitionProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO)
     {
-        await ShowResult(httpId, queryResultTableDTO);
+        await ShowResult(queryId, queryResultTableDTO);
     }
 
-    public async Task AllFunctionsNamesProcessReceivedDataAsync(Guid httpId, QueryResultTableDTO queryResultTableDTO)
+    public async Task AllFunctionsNamesProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO)
     {
-        await ShowResult(httpId, queryResultTableDTO);
+        await ShowResult(queryId, queryResultTableDTO);
     }
 
-    public async Task FunctionDefinitionProcessReceivedDataAsync(Guid httpId, QueryResultTableDTO queryResultTableDTO)
+    public async Task FunctionDefinitionProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO)
     {
-        await ShowResult(httpId, queryResultTableDTO);
+        await ShowResult(queryId, queryResultTableDTO);
     }
 
-    public async Task AllViewsNamesProcessReceivedDataAsync(Guid httpId, QueryResultTableDTO queryResultTableDTO)
+    public async Task AllViewsNamesProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO)
     {
-        await ShowResult(httpId, queryResultTableDTO);
+        await ShowResult(queryId, queryResultTableDTO);
     }
 
-    public async Task ViewDefinitionProcessReceivedDataAsync(Guid httpId, QueryResultTableDTO queryResultTableDTO)
+    public async Task ViewDefinitionProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO)
     {
-        await ShowResult(httpId, queryResultTableDTO);
+        await ShowResult(queryId, queryResultTableDTO);
     }
 
-    public async Task TableStructureProcessReceivedDataAsync(Guid httpId, QueryResultTableDTO queryResultTableDTO)
+    public async Task TableStructureProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO)
     {
-        await ShowResult(httpId, queryResultTableDTO);
+        await ShowResult(queryId, queryResultTableDTO);
     }
 
-    public async Task TableChecksAndUniqueConstraintsProcessReceivedDataAsync(Guid httpId, QueryResultTableDTO queryResultTableDTO)
+    public async Task TableChecksAndUniqueConstraintsProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO)
     {
-        await ShowResult(httpId, queryResultTableDTO);
+        await ShowResult(queryId, queryResultTableDTO);
     }
 
-    public async Task StoredProceduresWithDetailProcessReceivedDataAsync(Guid httpId, QueryResultTableDTO queryResultTableDTO)
+    public async Task StoredProceduresWithDetailProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO)
     {
-        await ShowResult(httpId, queryResultTableDTO);
+        await ShowResult(queryId, queryResultTableDTO);
     }
 
-    public async Task FunctionsWithDetailProcessReceivedDataAsync(Guid httpId, QueryResultTableDTO queryResultTableDTO)
+    public async Task FunctionsWithDetailProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO)
     {
-        await ShowResult(httpId, queryResultTableDTO);
+        await ShowResult(queryId, queryResultTableDTO);
     }
 
-    public async Task ViewsWithDetailProcessReceivedDataAsync(Guid httpId, QueryResultTableDTO queryResultTableDTO)
+    public async Task ViewsWithDetailProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO)
     {
-        await ShowResult(httpId, queryResultTableDTO);
+        await ShowResult(queryId, queryResultTableDTO);
     }
 
-    public async Task UserDefinedTypesWithDefaultsAndRulesAndDefinitionProcessReceivedDataAsync(Guid httpId, QueryResultTableDTO queryResultTableDTO)
+    public async Task UserDefinedTypesWithDefaultsAndRulesAndDefinitionProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO)
     {
-        await ShowResult(httpId, queryResultTableDTO);
+        await ShowResult(queryId, queryResultTableDTO);
     }
 
-    public async Task UserDefinedTableTypesProcessReceivedDataAsync(Guid httpId, QueryResultTableDTO queryResultTableDTO)
+    public async Task UserDefinedTableTypesProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO)
     {
-        await ShowResult(httpId, queryResultTableDTO);
+        await ShowResult(queryId, queryResultTableDTO);
     }
 }

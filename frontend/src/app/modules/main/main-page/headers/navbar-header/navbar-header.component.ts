@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { BaseComponent } from '@core/base/base.component';
 import { BranchService } from '@core/services/branch.service';
 import { LoadChangesService } from '@core/services/load-changes.service';
+import { SharedProjectService } from '@core/services/shared-project.service';
 import { takeUntil } from 'rxjs';
 
 import { BranchDto } from 'src/app/models/branch/branch-dto';
@@ -19,6 +20,8 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
     public branches: BranchDto[] = [];
 
     @ViewChild('modalContent') modalContent: TemplateRef<any>;
+
+    public isSettingsEnabled: boolean = false;
 
     public currentProjectId: number;
 
@@ -38,6 +41,7 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
         private branchService: BranchService,
         public dialog: MatDialog,
         private route: ActivatedRoute,
+        private sharedProject: SharedProjectService,
         private changesService: LoadChangesService,
     ) {
         super();
@@ -48,6 +52,14 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
         this.branchService.getAllBranches(this.currentProjectId)
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((branches) => { this.branches = branches; });
+
+        this.sharedProject.project$.pipe(
+            takeUntil(this.unsubscribe$),
+        ).subscribe({
+            next: project => {
+                this.isSettingsEnabled = project!.isAuthor;
+            },
+        });
     }
 
     public onBranchSelected(value: any) {

@@ -9,7 +9,7 @@ public class ResultObserver
     public TaskCompletionSource<QueryResultTableDTO> Register(Guid queryId)
     {
         var tcs = new TaskCompletionSource<QueryResultTableDTO>();
-        _pendingRequests[queryId] = new TaskCompletionSource<QueryResultTableDTO>();
+        _pendingRequests[queryId] = tcs;
         return tcs;
     }
 

@@ -20,7 +20,7 @@ public sealed class ConsoleAppHub : Hub<IExecuteOnClientSide>
         await Clients.Caller.SetClientId(Context.UserIdentifier);
     }
 
-    public async Task ProcessReceivedDataFromClientSide(Guid httpId, string requestActionName, QueryResultTableDTO queryResultTableDTO)
+    public async Task ProcessReceivedDataFromClientSide(Guid queryId, string requestActionName, QueryResultTableDTO queryResultTableDTO)
     {
         if (!_requestActionToProcessReceivedData.ContainsKey(requestActionName))
         {
@@ -28,7 +28,7 @@ public sealed class ConsoleAppHub : Hub<IExecuteOnClientSide>
         }
 
         await (_requestActionToProcessReceivedData.GetValueOrDefault(requestActionName)
-            ?.Invoke(httpId, queryResultTableDTO) ?? throw new NullReferenceException());
+            ?.Invoke(queryId, queryResultTableDTO) ?? throw new NullReferenceException());
     }
 
     private void InitRequestActionDict()

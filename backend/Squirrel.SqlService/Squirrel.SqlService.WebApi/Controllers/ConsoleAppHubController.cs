@@ -26,15 +26,15 @@ public class ConsoleAppHubController : ControllerBase
         var tcs = _resultObserver.Register(queryId);
         return (queryId, tcs);
     }
-
-
+    
     // https://localhost:7244/api/ConsoleAppHub/getAllTablesNames
     [HttpPost("getAllTablesNames")]
     public async Task<ActionResult> GetAllTablesNamesAsync([FromBody] QueryParameters queryParameters)
     {
         var registerQuery = RegisterQuery();
         await _hubContext.Clients.User(queryParameters.ClientId).GetAllTablesNamesAsync(registerQuery.queryId);
-        return Ok(await registerQuery.tcs.Task);
+        var result = await registerQuery.tcs.Task;
+        return Ok(result);
     }
 
     // https://localhost:7244/api/ConsoleAppHub/getTableData

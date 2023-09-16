@@ -11,11 +11,6 @@ public class ProcessReceivedDataService : IProcessReceivedDataService
     {
         _resultObserver = resultObserver;
     }
-    // TODO: Implement all functions to process data received from ConsoleApp 
-
-    /// <summary>
-    /// Just for debugging and demo
-    /// </summary>
     private Task ShowResult(Guid httpId, QueryResultTableDTO queryResultTableDTO)
     {
         Console.WriteLine($"------------------------------------------------------------------");
@@ -34,71 +29,85 @@ public class ProcessReceivedDataService : IProcessReceivedDataService
 
     public async Task TableDataProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO)
     {
+        _resultObserver.SetResult(queryId, queryResultTableDTO);
         await ShowResult(queryId, queryResultTableDTO);
     }
 
     public async Task AllStoredProceduresNamesProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO)
     {
+        _resultObserver.SetResult(queryId, queryResultTableDTO);
         await ShowResult(queryId, queryResultTableDTO);
     }
 
     public async Task StoredProcedureDefinitionProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO)
     {
+        _resultObserver.SetResult(queryId, queryResultTableDTO);
         await ShowResult(queryId, queryResultTableDTO);
     }
 
     public async Task AllFunctionsNamesProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO)
     {
+        _resultObserver.SetResult(queryId, queryResultTableDTO);
         await ShowResult(queryId, queryResultTableDTO);
     }
 
     public async Task FunctionDefinitionProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO)
     {
+        _resultObserver.SetResult(queryId, queryResultTableDTO);
         await ShowResult(queryId, queryResultTableDTO);
     }
 
     public async Task AllViewsNamesProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO)
     {
+        _resultObserver.SetResult(queryId, queryResultTableDTO);
         await ShowResult(queryId, queryResultTableDTO);
     }
 
     public async Task ViewDefinitionProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO)
     {
+        _resultObserver.SetResult(queryId, queryResultTableDTO);
         await ShowResult(queryId, queryResultTableDTO);
     }
 
     public async Task TableStructureProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO)
     {
+        _resultObserver.SetResult(queryId, queryResultTableDTO);
         await ShowResult(queryId, queryResultTableDTO);
     }
 
     public async Task TableChecksAndUniqueConstraintsProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO)
     {
+        _resultObserver.SetResult(queryId, queryResultTableDTO);
         await ShowResult(queryId, queryResultTableDTO);
     }
 
     public async Task StoredProceduresWithDetailProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO)
     {
+        _resultObserver.SetResult(queryId, queryResultTableDTO);
         await ShowResult(queryId, queryResultTableDTO);
     }
 
     public async Task FunctionsWithDetailProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO)
     {
+        _resultObserver.SetResult(queryId, queryResultTableDTO);
         await ShowResult(queryId, queryResultTableDTO);
     }
 
     public async Task ViewsWithDetailProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO)
     {
+        _resultObserver.SetResult(queryId, queryResultTableDTO);
         await ShowResult(queryId, queryResultTableDTO);
     }
 
     public async Task UserDefinedTypesWithDefaultsAndRulesAndDefinitionProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO)
     {
+        _resultObserver.SetResult(queryId, queryResultTableDTO);
         await ShowResult(queryId, queryResultTableDTO);
     }
 
     public async Task UserDefinedTableTypesProcessReceivedDataAsync(Guid queryId, QueryResultTableDTO queryResultTableDTO)
     {
+        _resultObserver.SetResult(queryId, queryResultTableDTO);
         await ShowResult(queryId, queryResultTableDTO);
     }
 }

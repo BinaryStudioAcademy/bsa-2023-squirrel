@@ -1,9 +1,9 @@
-﻿namespace Squirrel.SqlService.BLL.Models.DTO;
+﻿using Squirrel.SqlService.BLL.Models.DTO.Abstract;
 
-public class TableDataDto
+namespace Squirrel.SqlService.BLL.Models.DTO;
+
+public class TableDataDto: BaseDbItem
 {
-    public string Schema { get; set; } = null!;
-    public string Name { get; set; } = null!;
     public int TotalRows { get; set; }
     public List<Dictionary<string, string>> Rows { get; set; } = new();
 }

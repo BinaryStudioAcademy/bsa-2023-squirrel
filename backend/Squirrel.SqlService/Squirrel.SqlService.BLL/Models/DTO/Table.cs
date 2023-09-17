@@ -1,7 +1,6 @@
-﻿namespace Squirrel.SqlService.BLL.Models.DTO;
+﻿using Squirrel.SqlService.BLL.Models.DTO.Abstract;
 
-public class Table
-{
-    public string Schema { get; set; } = null!;
-    public string Name { get; set; } = null!;
-}
+namespace Squirrel.SqlService.BLL.Models.DTO;
+
+public class Table : BaseDbItem
+{ }

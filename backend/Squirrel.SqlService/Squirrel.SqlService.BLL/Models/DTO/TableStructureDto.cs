@@ -1,8 +1,8 @@
-﻿namespace Squirrel.SqlService.BLL.Models.DTO;
+﻿using Squirrel.SqlService.BLL.Models.DTO.Abstract;
 
-public class TableStructureDto
+namespace Squirrel.SqlService.BLL.Models.DTO;
+
+public class TableStructureDto: BaseDbItem
 {
-    public string Schema { get; set; } = null!;
-    public string Name { get; set; } = null!;
     public List<TableColumnInfo> Columns { get; set; } = new();
 }

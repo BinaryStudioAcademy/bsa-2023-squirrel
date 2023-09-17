@@ -6,7 +6,7 @@ namespace Squirrel.SqlService.BLL.Models.DTO;
 public class DbStructureDto
 {
     public List<TableStructureDto>? TableStructures { get; set; }
-    public List<TableConstraintsDto>? Constraints { get; set; }
+    public TableConstraintsDto? Constraints { get; set; }
     public FunctionDetailsDto? FunctionDetails { get; set; }
     public ProcedureDetailsDto? ProcedureDetails { get; set; }
 }

@@ -1,9 +1,9 @@
+using Squirrel.SqlService.BLL.Models.DTO.Abstract;
+
 namespace Squirrel.SqlService.BLL.Models.DTO.Function;
 
-public class FunctionDetailInfo
+public class FunctionDetailInfo: BaseDbItem
 {
-    public string Schema { get; set; } = null!;
-    public string Name { get; set; } = null!;
     public string ReturnedType { get; set; } = null!;
     public bool? IsUserDefined { get; set; }
     public string Definition { get; set; } = null!;

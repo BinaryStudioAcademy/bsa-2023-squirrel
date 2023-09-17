@@ -1,4 +1,5 @@
-﻿using Squirrel.Shared.DTO.Text;
+﻿using Squirrel.Shared.DTO.DatabaseItem;
+using Squirrel.Shared.DTO.Text;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace Squirrel.SqlService.BLL.Interfaces
 {
     public interface IContentDifferenceService
     {
-        Task<InLineDiffResultDto> GetInlineContentDiffsAsync(int commitId, Guid tempBlobId);
-        Task<SideBySideDiffResultDto> GetSideBySideContentDiffsAsync(int commitId, Guid tempBlobId);
+        Task<List<DatabaseItemContentCompare>> GetInlineContentDiffsAsync(int commitId, Guid tempBlobId);
+        Task<List<DatabaseItemContentCompare>> GetSideBySideContentDiffsAsync(int commitId, Guid tempBlobId);
     }
 }

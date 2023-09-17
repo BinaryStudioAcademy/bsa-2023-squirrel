@@ -14,8 +14,8 @@ export class LoadChangesService {
     // eslint-disable-next-line no-empty-function
     constructor(private httpClient: HttpInternalService) { }
 
-    public loadChangesRequest() {
-        this.httpClient.postRequest<string>(`${this.loadChangesRoutePrefix}`, null!)
+    public loadChangesRequest(guid: string) {
+        this.httpClient.postRequest<string>(`${this.loadChangesRoutePrefix}/${guid}`, null!)
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe({
                 next: (event) => {

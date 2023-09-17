@@ -19,7 +19,7 @@ public sealed class ChangeRecordService : BaseService, IChangeRecordService
     }
 
 
-    public async Task<Guid> AddChangeRecordAsync()
+    public async Task<Guid> AddChangeRecordAsync(Guid clientId)
     {
         ChangeRecord changeRecordEntity = new()
         {
@@ -27,7 +27,7 @@ public sealed class ChangeRecordService : BaseService, IChangeRecordService
             UniqueChangeId = Guid.NewGuid()
         };
 
-        await _dBStructureSaver.SaveDBStructureToAzureBlob(changeRecordEntity);
+        await _dBStructureSaver.SaveDBStructureToAzureBlob(changeRecordEntity, clientId);
 
         var createdChangeRecord = (await _context.ChangeRecords.AddAsync(changeRecordEntity)).Entity;
         await _context.SaveChangesAsync();

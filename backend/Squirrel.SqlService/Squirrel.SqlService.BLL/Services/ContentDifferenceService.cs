@@ -13,6 +13,7 @@ namespace Squirrel.SqlService.BLL.Services
         private readonly IBlobStorageService _blobStorageService;
         private readonly IConfiguration _configuration;
         private readonly ITextService _textService;
+        private readonly ISqlFormatterService _sqlFormatterService;
 
         public ContentDifferenceService(IBlobStorageService blobStorageService, IConfiguration configuration, ITextService textService)
         {

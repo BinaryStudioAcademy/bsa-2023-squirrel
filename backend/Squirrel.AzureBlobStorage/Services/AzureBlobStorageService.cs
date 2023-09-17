@@ -1,7 +1,9 @@
 ﻿using Azure.Storage.Blobs.Models;
 using Azure.Storage.Blobs;
 using Squirrel.AzureBlobStorage.Interfaces;
-using Squirrel.AzureBlobStorage.Models;
+using System.Reflection.Metadata;
+using Azure;
+using Blob = Squirrel.AzureBlobStorage.Models.Blob;
 
 namespace Squirrel.AzureBlobStorage.Services;
 
@@ -67,6 +69,25 @@ public class AzureBlobStorageService : IBlobStorageService
         var blobClient = await GetBlobClientInternalAsync(containerName, blobId);
 
         return await blobClient.DeleteIfExistsAsync();
+    }
+
+    public async Task<ICollection<Blob>> GetFilteredBlobsByName(string containerName, string blobNameSubstring)
+    {
+        var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
+        if (await containerClient.ExistsAsync())
+        {
+            throw new InvalidOperationException($"Container with name: {containerName} doesn`t exist");
+        }
+        var blobsPages = containerClient.GetBlobsAsync(prefix: blobNameSubstring).AsPages(default, default);
+        ICollection<Blob> blobs = new List<Blob>();
+        await foreach (Page<BlobItem> blobPage in blobsPages)
+        {
+            foreach (BlobItem blobItem in blobPage.Values)
+            {
+                blobs.Add(await DownloadAsync(containerName, blobItem.Name));
+            }
+        }
+        return blobs;
     }
 
     private async Task<BlobContainerClient> GetOrCreateContainerByNameAsync(string name)

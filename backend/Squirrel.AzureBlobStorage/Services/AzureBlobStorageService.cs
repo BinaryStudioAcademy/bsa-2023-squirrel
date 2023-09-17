@@ -74,7 +74,7 @@ public class AzureBlobStorageService : IBlobStorageService
     public async Task<ICollection<Blob>> GetFilteredBlobsByName(string containerName, string blobNameSubstring)
     {
         var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
-        if (await containerClient.ExistsAsync())
+        if (!await containerClient.ExistsAsync())
         {
             throw new InvalidOperationException($"Container with name: {containerName} doesn`t exist");
         }

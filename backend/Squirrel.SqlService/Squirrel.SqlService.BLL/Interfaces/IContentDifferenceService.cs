@@ -9,7 +9,7 @@ namespace Squirrel.SqlService.BLL.Interfaces
 {
     public interface IContentDifferenceService
     {
-        Task<InLineDiffResultDto> GetInlineContentDiffsAsync(string commitBlobId, string tempBlobId);
-        Task<SideBySideDiffResultDto> GetSideBySideContentDiffsAsync(string commitBlobId, string tempBlobId);
+        Task<InLineDiffResultDto> GetInlineContentDiffsAsync(int commitId, Guid tempBlobId);
+        Task<SideBySideDiffResultDto> GetSideBySideContentDiffsAsync(int commitId, Guid tempBlobId);
     }
 }

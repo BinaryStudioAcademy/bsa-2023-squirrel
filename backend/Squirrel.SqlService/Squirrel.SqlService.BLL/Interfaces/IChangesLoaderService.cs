@@ -1,7 +1,9 @@
-﻿namespace Squirrel.SqlService.BLL.Interfaces;
+﻿using Squirrel.Shared.DTO.DatabaseItem;
+
+namespace Squirrel.SqlService.BLL.Interfaces;
 
 public interface IChangesLoaderService
 {
-    Task LoadChangesToBlobAsync(Guid changeId, Guid clientId);
+    Task<ICollection<DatabaseItem>> LoadChangesToBlobAsync(Guid changeId, Guid clientId);
 }
 

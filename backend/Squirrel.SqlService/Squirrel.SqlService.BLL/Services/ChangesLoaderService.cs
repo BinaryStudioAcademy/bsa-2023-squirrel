@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Squirrel.AzureBlobStorage.Interfaces;
 using Squirrel.AzureBlobStorage.Models;
+using Squirrel.Shared.DTO.DatabaseItem;
 using Squirrel.SqlService.BLL.Interfaces;
 using System.Text;
 
@@ -21,7 +22,7 @@ public class ChangesLoaderService : IChangesLoaderService
         _configuration = configuration;
     }
 
-    public async Task LoadChangesToBlobAsync(Guid changeId, Guid clientId)
+    public async Task<ICollection<DatabaseItem>> LoadChangesToBlobAsync(Guid changeId, Guid clientId)
     {
         // TODO get actual db structure
         var dbStructure = _dbItemsRetrievalService.GetAllItems();
@@ -42,5 +43,7 @@ public class ChangesLoaderService : IChangesLoaderService
         var containerName = _configuration["UserDbChangesBlobContainerName"];
 
         await _blobStorageService.UploadAsync(containerName, blob);
+
+        return dbStructure;
     }
 }

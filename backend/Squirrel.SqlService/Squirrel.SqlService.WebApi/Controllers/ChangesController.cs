@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Squirrel.Shared.DTO.DatabaseItem;
 using Squirrel.SqlService.BLL.Interfaces;
 
 namespace Squirrel.SqlService.WebApi.Controllers;
@@ -15,9 +16,8 @@ public sealed class ChangesController : ControllerBase
     }
 
     [HttpPost("{clientId}")]
-    public async Task<ActionResult> SaveChangesToBlob([FromBody] Guid changeId, Guid clientId)
+    public async Task<ActionResult<ICollection<DatabaseItem>>> SaveChangesToBlob([FromBody] Guid changeId, Guid clientId)
     {
-        await _changesLoaderService.LoadChangesToBlobAsync(changeId, clientId);
-        return Ok();
+        return Ok(await _changesLoaderService.LoadChangesToBlobAsync(changeId, clientId));
     }
 }

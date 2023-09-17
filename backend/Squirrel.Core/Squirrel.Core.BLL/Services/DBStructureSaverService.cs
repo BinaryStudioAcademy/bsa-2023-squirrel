@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Squirrel.AzureBlobStorage.Models;
 using Squirrel.Core.DAL.Entities;
+using Squirrel.Shared.DTO.DatabaseItem;
 
 namespace Squirrel.Core.BLL.Interfaces;
 
@@ -15,9 +15,9 @@ public class DBStructureSaverService : IDBStructureSaverService
         _configuration = configuration;
     }
 
-    public async Task SaveDBStructureToAzureBlob(ChangeRecord changeRecord, Guid clientId)
+    public async Task<ICollection<DatabaseItem>> SaveDBStructureToAzureBlob(ChangeRecord changeRecord, Guid clientId)
     {
-        await _httpClientService.PostAsync<Guid, Blob>
+        return await _httpClientService.PostAsync<Guid, ICollection<DatabaseItem>>
             ($"{_configuration["SqlServiceUrl"]}/api/Changes/{clientId}", changeRecord.UniqueChangeId);
     }
 }

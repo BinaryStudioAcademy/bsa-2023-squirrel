@@ -1,6 +1,8 @@
-﻿namespace Squirrel.Core.BLL.Interfaces;
+﻿using Squirrel.Shared.DTO.DatabaseItem;
+
+namespace Squirrel.Core.BLL.Interfaces;
 
 public interface IChangeRecordService
 {
-    Task<Guid> AddChangeRecordAsync(Guid clientId);
+    Task<ICollection<DatabaseItem>> AddChangeRecordAsync(Guid clientId);
 }

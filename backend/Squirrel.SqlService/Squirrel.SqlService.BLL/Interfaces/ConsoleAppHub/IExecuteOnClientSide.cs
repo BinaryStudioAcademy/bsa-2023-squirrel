@@ -9,10 +9,10 @@ public interface IExecuteOnClientSide
     Task GetTableDataAsync(string clientId, string schema, string tableName, int rowsCount);
 
     Task GetAllStoredProceduresNamesAsync(string clientId);
-    Task GetStoredProcedureDefinitionAsync(string clientId, string storedProcedureName);
+    Task GetStoredProcedureDefinitionAsync(string clientId, string schemaName, string storedProcedureName);
 
     Task GetAllFunctionsNamesAsync(string clientId);
-    Task GetFunctionDefinitionAsync(string clientId, string functionName);
+    Task GetFunctionDefinitionAsync(string clientId, string schemaName, string functionName);
 
     Task GetAllViewsNamesAsync(string clientId);
     Task GetViewDefinitionAsync(string clientId, string viewName);

@@ -17,11 +17,12 @@ public class ConsoleAppHubController : ControllerBase
         _hubContext = hubContext;
     }
 
-
     // https://localhost:7244/api/ConsoleAppHub/getAllTablesNames
     [HttpPost("getAllTablesNames")]
     public async Task<ActionResult> GetAllTablesNamesAsync([FromBody] QueryParameters queryParameters)
     {
+        // subscription will be established here (point for future)
+
         await _hubContext.Clients.User(queryParameters.ClientId).GetAllTablesNamesAsync(queryParameters.ClientId);
         return NoContent();
     }
@@ -46,7 +47,11 @@ public class ConsoleAppHubController : ControllerBase
     [HttpPost("getStoredProcedureDefinition")]
     public async Task<ActionResult> GetStoredProcedureDefinitionAsync([FromBody] QueryParameters queryParameters)
     {
-        await _hubContext.Clients.User(queryParameters.ClientId).GetStoredProcedureDefinitionAsync(queryParameters.ClientId, queryParameters.FilterName);
+        await _hubContext.Clients.User(queryParameters.ClientId)
+                                 .GetStoredProcedureDefinitionAsync(
+                                     queryParameters.ClientId,
+                                     queryParameters.FilterSchema,
+                                     queryParameters.FilterName);
         return NoContent();
     }
 
@@ -62,7 +67,11 @@ public class ConsoleAppHubController : ControllerBase
     [HttpPost("getFunctionDefinition")]
     public async Task<ActionResult> GetFunctionDefinitionAsync([FromBody] QueryParameters queryParameters)
     {
-        await _hubContext.Clients.User(queryParameters.ClientId).GetFunctionDefinitionAsync(queryParameters.ClientId, queryParameters.FilterName);
+        await _hubContext.Clients.User(queryParameters.ClientId)
+                                 .GetFunctionDefinitionAsync(
+                                     queryParameters.ClientId,
+                                     queryParameters.FilterSchema,
+                                     queryParameters.FilterName);
         return NoContent();
     }
 

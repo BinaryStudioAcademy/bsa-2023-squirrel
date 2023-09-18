@@ -9,7 +9,6 @@ import { ValidationsFn } from '@shared/helpers/validations-fn';
 import { finalize, takeUntil } from 'rxjs';
 
 import { UpdateUserNamesDto } from 'src/app/models/user/update-user-names-dto';
-import { UpdateUserNotificationsDto } from 'src/app/models/user/update-user-notifications-dto';
 import { UpdateUserPasswordDto } from 'src/app/models/user/update-user-password-dto';
 import { UserProfileDto } from 'src/app/models/user/user-profile-dto';
 
@@ -73,7 +72,6 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
     private initializeForms() {
         this.initUserNamesForm();
         this.initChangePasswordForm();
-        this.initNotificationsValue();
     }
 
     private initUserNamesForm() {
@@ -113,11 +111,6 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
         this.passwordForm.controls['newPassword'].valueChanges.subscribe(() => {
             this.passwordForm.controls['repeatPassword'].updateValueAndValidity();
         });
-    }
-
-    private initNotificationsValue() {
-        this.squirrelNotification = this.currentUser.squirrelNotification;
-        this.emailNotification = this.currentUser.emailNotification;
     }
 
     public updateUserNames() {
@@ -174,30 +167,6 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
                     this.spinner.hide();
                     this.notificationService.info('Password successfully updated');
                     this.initChangePasswordForm();
-                },
-                (error) => {
-                    this.spinner.hide();
-                    this.notificationService.error(error.message);
-                },
-            );
-    }
-
-    public updateUserNotifications() {
-        this.spinner.show();
-        const userData: UpdateUserNotificationsDto = {
-            squirrelNotification: this.squirrelNotification,
-            emailNotification: this.emailNotification,
-        };
-
-        this.userService
-            .updateUserNotifications(userData)
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe(
-                (user) => {
-                    this.currentUser = user;
-                    this.spinner.hide();
-                    this.notificationService.info('Notifications successfully updated');
-                    this.initNotificationsValue();
                 },
                 (error) => {
                     this.spinner.hide();

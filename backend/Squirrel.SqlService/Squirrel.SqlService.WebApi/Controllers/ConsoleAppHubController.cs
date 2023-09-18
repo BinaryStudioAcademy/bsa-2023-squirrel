@@ -14,12 +14,14 @@ public class ConsoleAppHubController : ControllerBase
 {
     private readonly IHubContext<ConsoleAppHub, IExecuteOnClientSide> _hubContext;
     private readonly ResultObserver _resultObserver;
+    private readonly (Guid queryId, TaskCompletionSource<QueryResultTable> tcs) _queryParameters;
 
     public ConsoleAppHubController(IHubContext<ConsoleAppHub, IExecuteOnClientSide> hubContext,
         ResultObserver resultObserver)
     {
         _hubContext = hubContext;
         _resultObserver = resultObserver;
+        _queryParameters = RegisterQuery();
     }
 
     private (Guid queryId, TaskCompletionSource<QueryResultTable> tcs) RegisterQuery()
@@ -33,128 +35,115 @@ public class ConsoleAppHubController : ControllerBase
     [HttpPost("getAllTablesNames")]
     public async Task<ActionResult> GetAllTablesNamesAsync([FromBody] QueryParameters queryParameters)
     {
-        var registerQuery = RegisterQuery();
-        await _hubContext.Clients.User(queryParameters.ClientId).GetAllTablesNamesAsync(registerQuery.queryId);
-        return Ok(await registerQuery.tcs.Task);
+        await _hubContext.Clients.User(queryParameters.ClientId).GetAllTablesNamesAsync(_queryParameters.queryId);
+        return Ok(await _queryParameters.tcs.Task);
     }
 
     // https://localhost:7244/api/ConsoleAppHub/getTableData
     [HttpPost("getTableData")]
     public async Task<ActionResult> GetTableDataAsync([FromBody] QueryParameters queryParameters)
     {
-        var registerQuery = RegisterQuery();
-        await _hubContext.Clients.User(queryParameters.ClientId).GetTableDataAsync(registerQuery.queryId,
+        await _hubContext.Clients.User(queryParameters.ClientId).GetTableDataAsync(_queryParameters.queryId,
             queryParameters.FilterSchema, queryParameters.FilterName, queryParameters.FilterRowsCount);
-        return Ok(await registerQuery.tcs.Task);
+        return Ok(await _queryParameters.tcs.Task);
     }
 
     // https://localhost:7244/api/ConsoleAppHub/getAllStoredProceduresNames
     [HttpPost("getAllStoredProceduresNames")]
     public async Task<ActionResult> GetAllStoredProceduresNamesAsync([FromBody] QueryParameters queryParameters)
     {
-        var registerQuery = RegisterQuery();
         await _hubContext.Clients.User(queryParameters.ClientId)
-            .GetAllStoredProceduresNamesAsync(registerQuery.queryId);
-        return Ok(await registerQuery.tcs.Task);
+            .GetAllStoredProceduresNamesAsync(_queryParameters.queryId);
+        return Ok(await _queryParameters.tcs.Task);
     }
 
     // https://localhost:7244/api/ConsoleAppHub/getStoredProcedureDefinition
     [HttpPost("getStoredProcedureDefinition")]
     public async Task<ActionResult> GetStoredProcedureDefinitionAsync([FromBody] QueryParameters queryParameters)
     {
-        var registerQuery = RegisterQuery();
         await _hubContext.Clients.User(queryParameters.ClientId)
-            .GetStoredProcedureDefinitionAsync(registerQuery.queryId, queryParameters.FilterSchema,
+            .GetStoredProcedureDefinitionAsync(_queryParameters.queryId, queryParameters.FilterSchema,
                 queryParameters.FilterName);
-        return Ok(await registerQuery.tcs.Task);
+        return Ok(await _queryParameters.tcs.Task);
     }
 
     // https://localhost:7244/api/ConsoleAppHub/getAllFunctionsNames
     [HttpPost("getAllFunctionsNames")]
     public async Task<ActionResult> GetAllFunctionsNamesAsync([FromBody] QueryParameters queryParameters)
     {
-        var registerQuery = RegisterQuery();
-        await _hubContext.Clients.User(queryParameters.ClientId).GetAllFunctionsNamesAsync(registerQuery.queryId);
-        return Ok(await registerQuery.tcs.Task);
+        await _hubContext.Clients.User(queryParameters.ClientId).GetAllFunctionsNamesAsync(_queryParameters.queryId);
+        return Ok(await _queryParameters.tcs.Task);
     }
 
     // https://localhost:7244/api/ConsoleAppHub/getFunctionDefinition
     [HttpPost("getFunctionDefinition")]
     public async Task<ActionResult> GetFunctionDefinitionAsync([FromBody] QueryParameters queryParameters)
     {
-        var registerQuery = RegisterQuery();
         await _hubContext.Clients.User(queryParameters.ClientId)
-            .GetFunctionDefinitionAsync(registerQuery.queryId, queryParameters.FilterSchema,
+            .GetFunctionDefinitionAsync(_queryParameters.queryId, queryParameters.FilterSchema,
                 queryParameters.FilterName);
-        return Ok(await registerQuery.tcs.Task);
+        return Ok(await _queryParameters.tcs.Task);
     }
 
     // https://localhost:7244/api/ConsoleAppHub/getAllViewsNames
     [HttpPost("getAllViewsNames")]
     public async Task<ActionResult> GetAllViewsNamesAsync([FromBody] QueryParameters queryParameters)
     {
-        var registerQuery = RegisterQuery();
-        await _hubContext.Clients.User(queryParameters.ClientId).GetAllViewsNamesAsync(registerQuery.queryId);
-        return Ok(await registerQuery.tcs.Task);
+        await _hubContext.Clients.User(queryParameters.ClientId).GetAllViewsNamesAsync(_queryParameters.queryId);
+        return Ok(await _queryParameters.tcs.Task);
     }
 
     // https://localhost:7244/api/ConsoleAppHub/getViewDefinition
     [HttpPost("getViewDefinition")]
     public async Task<ActionResult> GetViewDefinitionAsync([FromBody] QueryParameters queryParameters)
     {
-        var registerQuery = RegisterQuery();
         await _hubContext.Clients.User(queryParameters.ClientId)
-            .GetViewDefinitionAsync(registerQuery.queryId, queryParameters.FilterName);
-        return Ok(await registerQuery.tcs.Task);
+            .GetViewDefinitionAsync(_queryParameters.queryId, queryParameters.FilterName);
+        return Ok(await _queryParameters.tcs.Task);
     }
 
     // https://localhost:7244/api/ConsoleAppHub/getTableStructure
     [HttpPost("getTableStructure")]
     public async Task<ActionResult> GetTableStructureAsync([FromBody] QueryParameters queryParameters)
     {
-        var registerQuery = RegisterQuery();
-        await _hubContext.Clients.User(queryParameters.ClientId).GetTableStructureAsync(registerQuery.queryId,
+        await _hubContext.Clients.User(queryParameters.ClientId).GetTableStructureAsync(_queryParameters.queryId,
             queryParameters.FilterSchema, queryParameters.FilterName);
-        return Ok(await registerQuery.tcs.Task);
+        return Ok(await _queryParameters.tcs.Task);
     }
 
     // https://localhost:7244/api/ConsoleAppHub/getTableChecksAndUniqueConstraints
     [HttpPost("getTableChecksAndUniqueConstraints")]
     public async Task<ActionResult> GetTableChecksAndUniqueConstraintsAsync([FromBody] QueryParameters queryParameters)
     {
-        var registerQuery = RegisterQuery();
         await _hubContext.Clients.User(queryParameters.ClientId)
-            .GetTableChecksAndUniqueConstraintsAsync(registerQuery.queryId, queryParameters.FilterSchema,
+            .GetTableChecksAndUniqueConstraintsAsync(_queryParameters.queryId, queryParameters.FilterSchema,
                 queryParameters.FilterName);
-        return Ok(await registerQuery.tcs.Task);
+        return Ok(await _queryParameters.tcs.Task);
     }
 
     // https://localhost:7244/api/ConsoleAppHub/getStoredProceduresWithDetail
     [HttpPost("getStoredProceduresWithDetail")]
     public async Task<ActionResult> GetStoredProceduresWithDetailAsync([FromBody] QueryParameters queryParameters)
     {
-        var registerQuery = RegisterQuery();
         await _hubContext.Clients.User(queryParameters.ClientId)
-            .GetStoredProceduresWithDetailAsync(registerQuery.queryId);
-        return Ok(await registerQuery.tcs.Task);
+            .GetStoredProceduresWithDetailAsync(_queryParameters.queryId);
+        return Ok(await _queryParameters.tcs.Task);
     }
 
     // https://localhost:7244/api/ConsoleAppHub/getFunctionsWithDetail
     [HttpPost("getFunctionsWithDetail")]
     public async Task<ActionResult> GetFunctionsWithDetailAsync([FromBody] QueryParameters queryParameters)
     {
-        var registerQuery = RegisterQuery();
-        await _hubContext.Clients.User(queryParameters.ClientId).GetFunctionsWithDetailAsync(registerQuery.queryId);
-        return Ok(await registerQuery.tcs.Task);
+        await _hubContext.Clients.User(queryParameters.ClientId).GetFunctionsWithDetailAsync(_queryParameters.queryId);
+        return Ok(await _queryParameters.tcs.Task);
     }
 
     // https://localhost:7244/api/ConsoleAppHub/getViewsWithDetail
     [HttpPost("getViewsWithDetail")]
     public async Task<ActionResult> GetViewsWithDetailAsync([FromBody] QueryParameters queryParameters)
     {
-        var registerQuery = RegisterQuery();
-        await _hubContext.Clients.User(queryParameters.ClientId).GetViewsWithDetailAsync(registerQuery.queryId);
-        return Ok(await registerQuery.tcs.Task);
+        await _hubContext.Clients.User(queryParameters.ClientId).GetViewsWithDetailAsync(_queryParameters.queryId);
+        return Ok(await _queryParameters.tcs.Task);
     }
 
     // https://localhost:7244/api/ConsoleAppHub/getUserDefinedTypesWithDefaultsAndRulesAndDefinition
@@ -162,19 +151,17 @@ public class ConsoleAppHubController : ControllerBase
     public async Task<ActionResult> GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync(
         [FromBody] QueryParameters queryParameters)
     {
-        var registerQuery = RegisterQuery();
         await _hubContext.Clients.User(queryParameters.ClientId)
-            .GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync(registerQuery.queryId);
-        return Ok(await registerQuery.tcs.Task);
+            .GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync(_queryParameters.queryId);
+        return Ok(await _queryParameters.tcs.Task);
     }
 
     // https://localhost:7244/api/ConsoleAppHub/getUserDefinedTableTypes
     [HttpPost("getUserDefinedTableTypes")]
     public async Task<ActionResult> GetUserDefinedTableTypesAsync([FromBody] QueryParameters queryParameters)
     {
-        var registerQuery = RegisterQuery();
         await _hubContext.Clients.User(queryParameters.ClientId)
-            .GetUserDefinedTableTypesAsync(registerQuery.queryId);
-        return Ok(await registerQuery.tcs.Task);
+            .GetUserDefinedTableTypesAsync(_queryParameters.queryId);
+        return Ok(await _queryParameters.tcs.Task);
     }
 }

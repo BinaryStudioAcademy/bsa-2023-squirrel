@@ -1,9 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Squirrel.ConsoleApp.Models;
 using Squirrel.SqlService.BLL.Hubs;
 using Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
 using Squirrel.SqlService.BLL.Models.ConsoleAppHub;
+using Squirrel.SqlService.BLL.Models.DTO;
+using Squirrel.SqlService.BLL.Models.DTO.Function;
+using Squirrel.SqlService.BLL.Models.DTO.Procedure;
 using Squirrel.SqlService.BLL.Services.ConsoleAppHub;
 
 namespace Squirrel.SqlService.WebApi.Controllers;
@@ -14,13 +18,15 @@ public class ConsoleAppHubController : ControllerBase
 {
     private readonly IHubContext<ConsoleAppHub, IExecuteOnClientSide> _hubContext;
     private readonly ResultObserver _resultObserver;
+    private readonly IMapper _mapper;
     private readonly (Guid queryId, TaskCompletionSource<QueryResultTable> tcs) _queryParameters;
 
     public ConsoleAppHubController(IHubContext<ConsoleAppHub, IExecuteOnClientSide> hubContext,
-        ResultObserver resultObserver)
+        ResultObserver resultObserver, IMapper mapper)
     {
         _hubContext = hubContext;
         _resultObserver = resultObserver;
+        _mapper = mapper;
         _queryParameters = RegisterQuery();
     }
 
@@ -33,24 +39,24 @@ public class ConsoleAppHubController : ControllerBase
 
     // https://localhost:7244/api/ConsoleAppHub/getAllTablesNames
     [HttpPost("getAllTablesNames")]
-    public async Task<ActionResult> GetAllTablesNamesAsync([FromBody] QueryParameters queryParameters)
+    public async Task<ActionResult<TableNamesDto>> GetAllTablesNamesAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId).GetAllTablesNamesAsync(_queryParameters.queryId);
-        return Ok(await _queryParameters.tcs.Task);
+        return Ok(_mapper.Map<TableNamesDto>(await _queryParameters.tcs.Task));
     }
 
     // https://localhost:7244/api/ConsoleAppHub/getTableData
     [HttpPost("getTableData")]
-    public async Task<ActionResult> GetTableDataAsync([FromBody] QueryParameters queryParameters)
+    public async Task<ActionResult<TableDataDto>> GetTableDataAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId).GetTableDataAsync(_queryParameters.queryId,
             queryParameters.FilterSchema, queryParameters.FilterName, queryParameters.FilterRowsCount);
-        return Ok(await _queryParameters.tcs.Task);
+        return Ok(_mapper.Map<TableDataDto>(await _queryParameters.tcs.Task));
     }
 
     // https://localhost:7244/api/ConsoleAppHub/getAllStoredProceduresNames
     [HttpPost("getAllStoredProceduresNames")]
-    public async Task<ActionResult> GetAllStoredProceduresNamesAsync([FromBody] QueryParameters queryParameters)
+    public async Task<ActionResult<ProcedureNamesDto>> GetAllStoredProceduresNamesAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId)
             .GetAllStoredProceduresNamesAsync(_queryParameters.queryId);
@@ -104,38 +110,38 @@ public class ConsoleAppHubController : ControllerBase
 
     // https://localhost:7244/api/ConsoleAppHub/getTableStructure
     [HttpPost("getTableStructure")]
-    public async Task<ActionResult> GetTableStructureAsync([FromBody] QueryParameters queryParameters)
+    public async Task<ActionResult<TableStructureDto>> GetTableStructureAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId).GetTableStructureAsync(_queryParameters.queryId,
             queryParameters.FilterSchema, queryParameters.FilterName);
-        return Ok(await _queryParameters.tcs.Task);
+        return Ok(_mapper.Map<TableStructureDto>(await _queryParameters.tcs.Task));
     }
 
     // https://localhost:7244/api/ConsoleAppHub/getTableChecksAndUniqueConstraints
     [HttpPost("getTableChecksAndUniqueConstraints")]
-    public async Task<ActionResult> GetTableChecksAndUniqueConstraintsAsync([FromBody] QueryParameters queryParameters)
+    public async Task<ActionResult<TableConstraintsDto>> GetTableChecksAndUniqueConstraintsAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId)
             .GetTableChecksAndUniqueConstraintsAsync(_queryParameters.queryId, queryParameters.FilterSchema,
                 queryParameters.FilterName);
-        return Ok(await _queryParameters.tcs.Task);
+        return Ok(_mapper.Map<TableConstraintsDto>(await _queryParameters.tcs.Task));
     }
 
     // https://localhost:7244/api/ConsoleAppHub/getStoredProceduresWithDetail
     [HttpPost("getStoredProceduresWithDetail")]
-    public async Task<ActionResult> GetStoredProceduresWithDetailAsync([FromBody] QueryParameters queryParameters)
+    public async Task<ActionResult<ProcedureDetailsDto>> GetStoredProceduresWithDetailAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId)
             .GetStoredProceduresWithDetailAsync(_queryParameters.queryId);
-        return Ok(await _queryParameters.tcs.Task);
+        return Ok(_mapper.Map<ProcedureDetailsDto>(await _queryParameters.tcs.Task));
     }
 
     // https://localhost:7244/api/ConsoleAppHub/getFunctionsWithDetail
     [HttpPost("getFunctionsWithDetail")]
-    public async Task<ActionResult> GetFunctionsWithDetailAsync([FromBody] QueryParameters queryParameters)
+    public async Task<ActionResult<FunctionDetailsDto>> GetFunctionsWithDetailAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId).GetFunctionsWithDetailAsync(_queryParameters.queryId);
-        return Ok(await _queryParameters.tcs.Task);
+        return Ok(_mapper.Map<FunctionDetailsDto>(await _queryParameters.tcs.Task));
     }
 
     // https://localhost:7244/api/ConsoleAppHub/getViewsWithDetail

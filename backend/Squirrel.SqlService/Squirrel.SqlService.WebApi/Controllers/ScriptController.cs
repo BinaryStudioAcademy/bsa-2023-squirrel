@@ -24,7 +24,7 @@ public class ScriptController : ControllerBase
     {
         ValidateInput(inboundScriptDto);
 
-        return Ok(_sqlFormatterService.GetFormattedSql(inboundScriptDto.DbEngine, inboundScriptDto.InputSql!));
+        return Ok(_sqlFormatterService.GetFormattedSql(inboundScriptDto.DbEngine, inboundScriptDto.Content!));
     }
 
     /// <summary>
@@ -35,7 +35,7 @@ public class ScriptController : ControllerBase
     {
         ValidateInput(inboundScriptDto);
 
-        var scriptToExecute = _sqlFormatterService.GetFormattedSql(inboundScriptDto.DbEngine, inboundScriptDto.InputSql!);
+        var scriptToExecute = _sqlFormatterService.GetFormattedSql(inboundScriptDto.DbEngine, inboundScriptDto.Content!);
 
         return Ok();
     }
@@ -43,7 +43,7 @@ public class ScriptController : ControllerBase
 
     private void ValidateInput(InboundScriptDto inboundScriptDto)
     {
-        if (inboundScriptDto == null || string.IsNullOrEmpty(inboundScriptDto.InputSql))
+        if (inboundScriptDto == null || string.IsNullOrEmpty(inboundScriptDto.Content))
         {
             throw new SqlSyntaxException("InputSql cannot be Null or Empty");
         }

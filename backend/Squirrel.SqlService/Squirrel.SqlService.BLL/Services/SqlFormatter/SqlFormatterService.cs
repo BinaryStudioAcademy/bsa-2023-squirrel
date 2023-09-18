@@ -3,6 +3,7 @@ using Squirrel.Shared.Exceptions;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
 using System.Diagnostics;
 using Squirrel.Core.DAL.Enums;
+using Squirrel.SqlService.BLL.Models.DTO.Script;
 
 namespace Squirrel.SqlService.BLL.Services.SqlFormatter;
 
@@ -13,7 +14,7 @@ public class SqlFormatterService : ISqlFormatterService
     {
         _pythonExePath = pythonExePath;
     }
-    public string GetFormattedSql(DbEngine dbEngine, string inputSql)
+    public ScriptContentDto GetFormattedSql(DbEngine dbEngine, string inputSql)
     {
         return dbEngine switch
         {
@@ -22,7 +23,7 @@ public class SqlFormatterService : ISqlFormatterService
             _ => throw new NotImplementedException($"Database type {dbEngine} is not supported."),
         };
     }
-    private string FormatMsSqlServer(string inputSql)
+    private ScriptContentDto FormatMsSqlServer(string inputSql)
     {
         var scriptGenerator = new Sql160ScriptGenerator(GetFormattingOptions());
 
@@ -33,10 +34,10 @@ public class SqlFormatterService : ISqlFormatterService
         }
 
         scriptGenerator.GenerateScript(fragment, out var result);
-        return result;
+        return new ScriptContentDto { Content = result };
     }
 
-    private string FormatPostgreSql(string inputSql)
+    private ScriptContentDto FormatPostgreSql(string inputSql)
     {
         var assemblyPath = typeof(SqlFormatterService).Assembly.Location.Split('\\').SkipLast(1);
         var filePath = string.Join("\\", assemblyPath) + "\\Services\\SqlFormatter\\PgSqlParser.py";
@@ -68,7 +69,7 @@ public class SqlFormatterService : ISqlFormatterService
         {
             File.Delete(argsFile);
         }
-        return result;
+        return new ScriptContentDto { Content = result };
     }
 
     private SqlScriptGeneratorOptions GetFormattingOptions()

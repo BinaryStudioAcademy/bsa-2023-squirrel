@@ -19,8 +19,8 @@ public class ScriptController : ControllerBase
     /// <summary>
     /// Find errors and format provided SQL script
     /// </summary>
-    [HttpPost("format")]
-    public ActionResult<string> GetFormattedSql([FromBody] InboundScriptDto inboundScriptDto)
+    [HttpPut("format")]
+    public ActionResult<ScriptContentDto> GetFormattedSql([FromBody] InboundScriptDto inboundScriptDto)
     {
         ValidateInput(inboundScriptDto);
 
@@ -31,7 +31,7 @@ public class ScriptController : ControllerBase
     /// Execute provided SQL script
     /// </summary>
     [HttpPost("execute")]
-    public ActionResult<string> ExecuteFormattedSql([FromBody] InboundScriptDto inboundScriptDto)
+    public ActionResult<ScriptResultDto> ExecuteFormattedSql([FromBody] InboundScriptDto inboundScriptDto)
     {
         ValidateInput(inboundScriptDto);
 

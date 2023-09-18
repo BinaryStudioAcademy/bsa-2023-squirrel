@@ -14,13 +14,13 @@ public sealed class ContentDifferenceController : ControllerBase
         _contentDifferenceService = contentDifference;
     }
 
-    [HttpGet("inline/{commitBlobId}/{tempBlobId}")]
+    [HttpGet("inline/{commitId}/{tempBlobId}")]
     public async Task<ActionResult> GetInlineContentDifference(int commitId, Guid tempBlobId)
     {
         return Ok(await _contentDifferenceService.GetInlineContentDiffsAsync(commitId, tempBlobId));
     }
 
-    [HttpGet("sidebyside/{commitBlobId}/{tempBlobId}")]
+    [HttpGet("sidebyside/{commitId}/{tempBlobId}")]
     public async Task<ActionResult> GetSideBySideContentDifference(int commitId, Guid tempBlobId)
     {
         return Ok(await _contentDifferenceService.GetSideBySideContentDiffsAsync(commitId, tempBlobId));

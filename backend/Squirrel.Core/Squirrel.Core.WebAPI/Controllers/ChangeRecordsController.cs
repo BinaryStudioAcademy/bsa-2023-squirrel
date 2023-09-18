@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Squirrel.Core.BLL.Interfaces;
-using Squirrel.Shared.DTO.DatabaseItem;
 
 namespace Squirrel.Core.WebAPI.Controllers;
 
@@ -18,7 +17,7 @@ public class ChangeRecordsController : ControllerBase
     }
 
     [HttpPost("{clientId}")]
-    public async Task<ActionResult<ICollection<DatabaseItem>>> AddChangeRecord(Guid clientId)
+    public async Task<ActionResult<Guid>> AddChangeRecord(Guid clientId)
     {
         return Ok(await _changeRecordService.AddChangeRecordAsync(clientId));
     }

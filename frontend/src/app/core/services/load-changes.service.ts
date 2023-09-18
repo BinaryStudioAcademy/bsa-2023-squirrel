@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 
-import { DatabaseItem } from 'src/app/models/database-items/database-item';
-
 import { HttpInternalService } from './http-internal.service';
 
 @Injectable({
@@ -17,7 +15,7 @@ export class LoadChangesService {
     constructor(private httpClient: HttpInternalService) { }
 
     public loadChangesRequest(guid: string) {
-        this.httpClient.postRequest<DatabaseItem[]>(`${this.loadChangesRoutePrefix}/${guid}`, null!)
+        this.httpClient.postRequest<string>(`${this.loadChangesRoutePrefix}/${guid}`, null!)
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe({
                 next: (event) => {

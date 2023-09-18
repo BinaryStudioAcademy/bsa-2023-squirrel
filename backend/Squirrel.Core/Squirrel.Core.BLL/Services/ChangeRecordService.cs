@@ -3,7 +3,6 @@ using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.BLL.Services.Abstract;
 using Squirrel.Core.DAL.Context;
 using Squirrel.Core.DAL.Entities;
-using Squirrel.Shared.DTO.DatabaseItem;
 
 namespace Squirrel.Core.BLL.Services;
 
@@ -20,7 +19,7 @@ public sealed class ChangeRecordService : BaseService, IChangeRecordService
     }
 
 
-    public async Task<ICollection<DatabaseItem>> AddChangeRecordAsync(Guid clientId)
+    public async Task<Guid> AddChangeRecordAsync(Guid clientId)
     {
         ChangeRecord changeRecordEntity = new()
         {
@@ -28,11 +27,11 @@ public sealed class ChangeRecordService : BaseService, IChangeRecordService
             UniqueChangeId = Guid.NewGuid()
         };
 
-        var dbItems = await _dBStructureSaver.SaveDBStructureToAzureBlob(changeRecordEntity, clientId);
+        await _dBStructureSaver.SaveDBStructureToAzureBlob(changeRecordEntity, clientId);
 
-        await _context.ChangeRecords.AddAsync(changeRecordEntity);
+        var addedChangeRecord = (await _context.ChangeRecords.AddAsync(changeRecordEntity)).Entity;
         await _context.SaveChangesAsync();
 
-        return dbItems;
+        return addedChangeRecord.UniqueChangeId;
     }
 }

@@ -81,10 +81,15 @@ public sealed class ProjectService : BaseService, IProjectService
             .Include(project => project.Tags)
             .Include(project => project.Users)
             .FirstOrDefaultAsync(project => project.Id == projectId);
+        var currentUserId = _userIdGetter.GetCurrentUserId();
 
         ValidateProject(project);
 
-        return _mapper.Map<ProjectResponseDto>(project);
+        var mappedProject = _mapper.Map<ProjectResponseDto>(project);
+        
+        mappedProject.IsAuthor = project!.CreatedBy == currentUserId;
+
+        return mappedProject;
     }
 
     public async Task DeleteProjectAsync(int projectId)

@@ -7,12 +7,13 @@ public interface IExecuteOnClientSide
     // Actions
     Task GetAllTablesNamesAsync(Guid queryId);
     Task GetTableDataAsync(Guid queryId, string schema, string tableName, int rowsCount);
-
     Task GetAllStoredProceduresNamesAsync(Guid queryId);
-    Task GetStoredProcedureDefinitionAsync(Guid queryId, string storedProcedureName);
 
     Task GetAllFunctionsNamesAsync(Guid queryId);
-    Task GetFunctionDefinitionAsync(Guid queryId, string functionName);
+
+    Task GetStoredProcedureDefinitionAsync(Guid queryId, string schemaName, string storedProcedureName);
+    
+    Task GetFunctionDefinitionAsync(Guid queryId, string schemaName, string functionName);
 
     Task GetAllViewsNamesAsync(Guid queryId);
     Task GetViewDefinitionAsync(Guid queryId, string viewName);
@@ -27,4 +28,3 @@ public interface IExecuteOnClientSide
     Task GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync(Guid queryId);
     Task GetUserDefinedTableTypesAsync(Guid queryId);
 }
-

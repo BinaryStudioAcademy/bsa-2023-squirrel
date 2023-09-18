@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Squirrel.ConsoleApp.Models;
 using Squirrel.SqlService.BLL.Hubs;
 using Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
 using Squirrel.SqlService.BLL.Models.ConsoleAppHub;
@@ -14,19 +15,20 @@ public class ConsoleAppHubController : ControllerBase
     private readonly IHubContext<ConsoleAppHub, IExecuteOnClientSide> _hubContext;
     private readonly ResultObserver _resultObserver;
 
-    public ConsoleAppHubController(IHubContext<ConsoleAppHub, IExecuteOnClientSide> hubContext, ResultObserver resultObserver)
+    public ConsoleAppHubController(IHubContext<ConsoleAppHub, IExecuteOnClientSide> hubContext,
+        ResultObserver resultObserver)
     {
         _hubContext = hubContext;
         _resultObserver = resultObserver;
     }
-    
-    private (Guid queryId, TaskCompletionSource<QueryResultTableDTO> tcs) RegisterQuery()
+
+    private (Guid queryId, TaskCompletionSource<QueryResultTable> tcs) RegisterQuery()
     {
         var queryId = Guid.NewGuid();
         var tcs = _resultObserver.Register(queryId);
         return (queryId, tcs);
     }
-    
+
     // https://localhost:7244/api/ConsoleAppHub/getAllTablesNames
     [HttpPost("getAllTablesNames")]
     public async Task<ActionResult> GetAllTablesNamesAsync([FromBody] QueryParameters queryParameters)
@@ -62,7 +64,8 @@ public class ConsoleAppHubController : ControllerBase
     {
         var registerQuery = RegisterQuery();
         await _hubContext.Clients.User(queryParameters.ClientId)
-            .GetStoredProcedureDefinitionAsync(registerQuery.queryId, queryParameters.FilterName);
+            .GetStoredProcedureDefinitionAsync(registerQuery.queryId, queryParameters.FilterSchema,
+                queryParameters.FilterName);
         return Ok(await registerQuery.tcs.Task);
     }
 
@@ -81,7 +84,8 @@ public class ConsoleAppHubController : ControllerBase
     {
         var registerQuery = RegisterQuery();
         await _hubContext.Clients.User(queryParameters.ClientId)
-            .GetFunctionDefinitionAsync(registerQuery.queryId, queryParameters.FilterName);
+            .GetFunctionDefinitionAsync(registerQuery.queryId, queryParameters.FilterSchema,
+                queryParameters.FilterName);
         return Ok(await registerQuery.tcs.Task);
     }
 

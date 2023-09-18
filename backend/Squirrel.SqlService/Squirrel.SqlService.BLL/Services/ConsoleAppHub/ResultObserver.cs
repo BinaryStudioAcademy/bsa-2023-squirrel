@@ -1,17 +1,17 @@
 ﻿using System.Collections.Concurrent;
+using Squirrel.ConsoleApp.Models;
 using Squirrel.Shared.Exceptions;
-using Squirrel.SqlService.BLL.Models.ConsoleAppHub;
 
 namespace Squirrel.SqlService.BLL.Services.ConsoleAppHub;
 
 public class ResultObserver
 {
-    private readonly ConcurrentDictionary<Guid, TaskCompletionSource<QueryResultTableDTO>> _pendingRequests = new();
+    private readonly ConcurrentDictionary<Guid, TaskCompletionSource<QueryResultTable>> _pendingRequests = new();
     private const int SecondsToTimeout = 20;
 
-    public TaskCompletionSource<QueryResultTableDTO> Register(Guid queryId)
+    public TaskCompletionSource<QueryResultTable> Register(Guid queryId)
     {
-        var tcs = new TaskCompletionSource<QueryResultTableDTO>();
+        var tcs = new TaskCompletionSource<QueryResultTable>();
         if (!_pendingRequests.TryAdd(queryId, tcs))
         {
             throw new QueryAlreadyExistException(queryId);
@@ -22,7 +22,7 @@ public class ResultObserver
         return tcs;
     }
 
-    public void SetResult(Guid queryId, QueryResultTableDTO queryResultTableDto)
+    public void SetResult(Guid queryId, QueryResultTable queryResultTableDto)
     {
         if (_pendingRequests.TryRemove(queryId, out var tcs))
         {

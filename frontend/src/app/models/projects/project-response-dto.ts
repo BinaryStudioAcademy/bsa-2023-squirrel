@@ -4,6 +4,7 @@ import { DbEngine } from './db-engine';
 
 export interface ProjectResponseDto {
     id: number;
+    isAuthor: boolean;
     name: string;
     description: string | null;
     dbEngine: DbEngine;

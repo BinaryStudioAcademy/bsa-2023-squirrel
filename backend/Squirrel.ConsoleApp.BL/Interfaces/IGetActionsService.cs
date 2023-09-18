@@ -8,13 +8,13 @@ public interface IGetActionsService
     Task<QueryResultTable> GetTableDataAsync(string schema, string name, int rowsCount);
 
     Task<QueryResultTable> GetAllStoredProceduresNamesAsync();
-    Task<QueryResultTable> GetStoredProcedureDefinitionAsync(string storedProcedureName);
+    Task<QueryResultTable> GetStoredProcedureDefinitionAsync(string storedProcedureSchema, string storedProcedureName);
 
     Task<QueryResultTable> GetAllFunctionsNamesAsync();
-    Task<QueryResultTable> GetFunctionDefinitionAsync(string functionName);
+    Task<QueryResultTable> GetFunctionDefinitionAsync(string functionSchema, string functionName);
 
     Task<QueryResultTable> GetAllViewsNamesAsync();
-    Task<QueryResultTable> GetViewDefinitionAsync(string viewName);
+    Task<QueryResultTable> GetViewDefinitionAsync(string viewSchema, string viewName);
 
     Task<QueryResultTable> GetTableStructureAsync(string schema, string name);
     Task<QueryResultTable> GetTableChecksAndUniqueConstraintsAsync(string schema, string name);

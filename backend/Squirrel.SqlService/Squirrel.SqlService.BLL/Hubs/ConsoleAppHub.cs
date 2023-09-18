@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using Squirrel.ConsoleApp.Models;
 using Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
-using Squirrel.SqlService.BLL.Models.ConsoleAppHub;
 
 namespace Squirrel.SqlService.BLL.Hubs;
 
 public sealed class ConsoleAppHub : Hub<IExecuteOnClientSide>
 {
     private readonly IProcessReceivedDataService _processReceivedDataService;
-    private readonly Dictionary<string, Func<Guid, QueryResultTableDTO, Task>> _requestActionToProcessReceivedData = new();
+
+    private readonly Dictionary<string, Func<Guid, QueryResultTable, Task>> _requestActionToProcessReceivedData = new();
 
     public ConsoleAppHub(IProcessReceivedDataService processReceivedDataService)
     {
@@ -19,16 +20,17 @@ public sealed class ConsoleAppHub : Hub<IExecuteOnClientSide>
     {
         await Clients.Caller.SetClientId(Context.UserIdentifier);
     }
+    
+    public async Task ProcessReceivedDataFromClientSide(Guid queryId, string requestActionName, QueryResultTable queryResultTable)
 
-    public async Task ProcessReceivedDataFromClientSide(Guid queryId, string requestActionName, QueryResultTableDTO queryResultTableDTO)
     {
         if (!_requestActionToProcessReceivedData.ContainsKey(requestActionName))
         {
             return;
         }
-
+        
         await (_requestActionToProcessReceivedData.GetValueOrDefault(requestActionName)
-            ?.Invoke(queryId, queryResultTableDTO) ?? throw new NullReferenceException());
+            ?.Invoke(queryId, queryResultTable) ?? throw new NullReferenceException());
     }
 
     private void InitRequestActionDict()
@@ -36,7 +38,7 @@ public sealed class ConsoleAppHub : Hub<IExecuteOnClientSide>
         _requestActionToProcessReceivedData.Add("GetAllTablesNamesAsync", _processReceivedDataService.AllTablesNamesProcessReceivedDataAsync);
         _requestActionToProcessReceivedData.Add("GetTableDataAsync", _processReceivedDataService.TableDataProcessReceivedDataAsync);
         _requestActionToProcessReceivedData.Add("GetAllStoredProceduresNamesAsync", _processReceivedDataService.AllStoredProceduresNamesProcessReceivedDataAsync);
-        _requestActionToProcessReceivedData.Add("GetStoredProcedureDefinitionAsync", _processReceivedDataService.StoredProcedureDefinitionProcessReceivedDataAsync);
+        _requestActionToProcessReceivedData.Add("GetStoredProcedureDefinitionAsync", _processReceivedDataService.StoredProceduresWithDetailProcessReceivedDataAsync);
         _requestActionToProcessReceivedData.Add("GetAllFunctionsNamesAsync", _processReceivedDataService.AllFunctionsNamesProcessReceivedDataAsync);
         _requestActionToProcessReceivedData.Add("GetFunctionDefinitionAsync", _processReceivedDataService.FunctionDefinitionProcessReceivedDataAsync);
         _requestActionToProcessReceivedData.Add("GetAllViewsNamesAsync", _processReceivedDataService.AllViewsNamesProcessReceivedDataAsync);

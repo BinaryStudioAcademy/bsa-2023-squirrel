@@ -17,7 +17,7 @@ public class ScriptController : ControllerBase
     }
 
     /// <summary>
-    /// Find errors and format provided SQL scripts.
+    /// Find errors and format provided SQL script
     /// </summary>
     [HttpPost("format")]
     public ActionResult<string> GetFormattedSql([FromBody] InboundScriptDto inboundScriptDto)
@@ -28,14 +28,14 @@ public class ScriptController : ControllerBase
     }
 
     /// <summary>
-    /// Execute provided SQL scripts.
+    /// Execute provided SQL script
     /// </summary>
     [HttpPost("execute")]
     public ActionResult<string> ExecuteFormattedSql([FromBody] InboundScriptDto inboundScriptDto)
     {
         ValidateInput(inboundScriptDto);
 
-        var scriptToEecute = _sqlFormatterService.GetFormattedSql(inboundScriptDto.DbEngine, inboundScriptDto.InputSql!);
+        var scriptToExecute = _sqlFormatterService.GetFormattedSql(inboundScriptDto.DbEngine, inboundScriptDto.InputSql!);
 
         return Ok();
     }

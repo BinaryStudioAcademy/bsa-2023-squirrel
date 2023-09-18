@@ -57,6 +57,6 @@ export class ProjectsPageComponent extends BaseComponent implements OnInit {
 
     chooseProject(project: ProjectResponseDto) {
         this.sharedProject.setProject(project);
-        this.router.navigateByUrl(`main/${project.id}`);
+        this.router.navigateByUrl(`projects/${project.id}`);
     }
 }

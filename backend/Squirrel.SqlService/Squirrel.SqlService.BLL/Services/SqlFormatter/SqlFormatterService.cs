@@ -13,7 +13,7 @@ public class SqlFormatterService : ISqlFormatterService
     {
         _pythonExePath = pythonExePath;
     }
-    public string GetFormattedSql(string inputSql, DbEngine dbEngine)
+    public string GetFormattedSql(DbEngine dbEngine, string inputSql)
     {
         return dbEngine switch
         {
@@ -22,7 +22,7 @@ public class SqlFormatterService : ISqlFormatterService
             _ => throw new NotImplementedException($"Database type {dbEngine} is not supported."),
         };
     }
-    public string FormatMsSqlServer(string inputSql)
+    private string FormatMsSqlServer(string inputSql)
     {
         var scriptGenerator = new Sql160ScriptGenerator(GetFormattingOptions());
 
@@ -36,7 +36,7 @@ public class SqlFormatterService : ISqlFormatterService
         return result;
     }
 
-    public string FormatPostgreSql(string inputSql)
+    private string FormatPostgreSql(string inputSql)
     {
         var assemblyPath = typeof(SqlFormatterService).Assembly.Location.Split('\\').SkipLast(1);
         var filePath = string.Join("\\", assemblyPath) + "\\Services\\SqlFormatter\\PgSqlParser.py";

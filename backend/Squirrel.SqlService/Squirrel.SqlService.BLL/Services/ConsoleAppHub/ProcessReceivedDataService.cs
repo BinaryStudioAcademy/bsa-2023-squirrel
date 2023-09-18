@@ -11,10 +11,10 @@ public class ProcessReceivedDataService : IProcessReceivedDataService
     {
         _resultObserver = resultObserver;
     }
-    private Task ShowResult(Guid httpId, QueryResultTableDTO queryResultTableDTO)
+    private Task ShowResult(Guid queryId, QueryResultTableDTO queryResultTableDTO)
     {
         Console.WriteLine($"------------------------------------------------------------------");
-        Console.WriteLine($"Successfully recived data from user '{httpId}'");
+        Console.WriteLine($"Successfully recived data from user '{queryId}'");
         Console.WriteLine($"    result:");
         Console.WriteLine(queryResultTableDTO);
         Console.WriteLine($"------------------------------------------------------------------");

@@ -1,17 +1,13 @@
-﻿using AutoMapper;
-using Squirrel.ConsoleApp.Models;
+﻿using Squirrel.ConsoleApp.Models;
 using Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
-using Squirrel.SqlService.BLL.Models.DTO.Shared;
 
 namespace Squirrel.SqlService.BLL.Services.ConsoleAppHub;
 
 public class ProcessReceivedDataService : IProcessReceivedDataService
 {
     private readonly ResultObserver _resultObserver;
-    private readonly IMapper _mapper;
-    public ProcessReceivedDataService(IMapper mapper, ResultObserver resultObserver)
+    public ProcessReceivedDataService(ResultObserver resultObserver)
     {
-        _mapper = mapper;
         _resultObserver = resultObserver;
     }
 
@@ -48,11 +44,11 @@ public class ProcessReceivedDataService : IProcessReceivedDataService
         _resultObserver.SetResult(queryId, queryResultTable);
         await ShowResult(queryId, queryResultTable);
     }
-
-    public async Task<RoutineDefinitionDto> FunctionDefinitionProcessReceivedDataAsync(Guid queryId, QueryResultTable queryResultTable)
+    
+    public async Task FunctionDefinitionProcessReceivedDataAsync(Guid queryId, QueryResultTable queryResultTable)
     {
+        _resultObserver.SetResult(queryId, queryResultTable);
         await ShowResult(queryId, queryResultTable);
-        return _mapper.Map<RoutineDefinitionDto>(queryResultTable);
     }
 
     public async Task AllViewsNamesProcessReceivedDataAsync(Guid queryId, QueryResultTable queryResultTable)
@@ -79,10 +75,10 @@ public class ProcessReceivedDataService : IProcessReceivedDataService
         await ShowResult(queryId, queryResultTable);
     }
 
-    public async Task<RoutineDefinitionDto> StoredProceduresWithDetailProcessReceivedDataAsync(Guid queryId, QueryResultTable queryResultTable)
+    public async Task StoredProceduresWithDetailProcessReceivedDataAsync(Guid queryId, QueryResultTable queryResultTable)
     {
+        _resultObserver.SetResult(queryId, queryResultTable);
         await ShowResult(queryId, queryResultTable);
-        return _mapper.Map<RoutineDefinitionDto>(queryResultTable);
     }
 
     public async Task FunctionsWithDetailProcessReceivedDataAsync(Guid queryId, QueryResultTable queryResultTable)

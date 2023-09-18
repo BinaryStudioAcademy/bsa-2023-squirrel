@@ -8,6 +8,7 @@ using Squirrel.SqlService.BLL.Models.ConsoleAppHub;
 using Squirrel.SqlService.BLL.Models.DTO;
 using Squirrel.SqlService.BLL.Models.DTO.Function;
 using Squirrel.SqlService.BLL.Models.DTO.Procedure;
+using Squirrel.SqlService.BLL.Models.DTO.Shared;
 using Squirrel.SqlService.BLL.Services.ConsoleAppHub;
 
 namespace Squirrel.SqlService.WebApi.Controllers;
@@ -83,12 +84,12 @@ public class ConsoleAppHubController : ControllerBase
 
     // https://localhost:7244/api/ConsoleAppHub/getFunctionDefinition
     [HttpPost("getFunctionDefinition")]
-    public async Task<ActionResult> GetFunctionDefinitionAsync([FromBody] QueryParameters queryParameters)
+    public async Task<ActionResult<RoutineDefinitionDto>> GetFunctionDefinitionAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId)
             .GetFunctionDefinitionAsync(_queryParameters.queryId, queryParameters.FilterSchema,
                 queryParameters.FilterName);
-        return Ok(await _queryParameters.tcs.Task);
+        return Ok(_mapper.Map<RoutineDefinitionDto>(await _queryParameters.tcs.Task));
     }
 
     // https://localhost:7244/api/ConsoleAppHub/getAllViewsNames
@@ -101,11 +102,11 @@ public class ConsoleAppHubController : ControllerBase
 
     // https://localhost:7244/api/ConsoleAppHub/getViewDefinition
     [HttpPost("getViewDefinition")]
-    public async Task<ActionResult> GetViewDefinitionAsync([FromBody] QueryParameters queryParameters)
+    public async Task<ActionResult<RoutineDefinitionDto>> GetViewDefinitionAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId)
             .GetViewDefinitionAsync(_queryParameters.queryId, queryParameters.FilterName);
-        return Ok(await _queryParameters.tcs.Task);
+        return Ok(_mapper.Map<RoutineDefinitionDto>(await _queryParameters.tcs.Task));
     }
 
     // https://localhost:7244/api/ConsoleAppHub/getTableStructure

@@ -71,14 +71,14 @@ public class AzureBlobStorageService : IBlobStorageService
         return await blobClient.DeleteIfExistsAsync();
     }
 
-    public async Task<ICollection<Blob>> GetFilteredBlobsByName(string containerName, string blobNameSubstring)
+    public async Task<ICollection<Blob>> GetAllBlobsByContainerNameAsync(string containerName)
     {
         var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
         if (!await containerClient.ExistsAsync())
         {
             throw new InvalidOperationException($"Container with name: {containerName} doesn`t exist");
         }
-        var blobsPages = containerClient.GetBlobsAsync(prefix: blobNameSubstring).AsPages(default, default);
+        var blobsPages = containerClient.GetBlobsAsync().AsPages(default, default);
         ICollection<Blob> blobs = new List<Blob>();
         await foreach (Page<BlobItem> blobPage in blobsPages)
         {
@@ -88,6 +88,20 @@ public class AzureBlobStorageService : IBlobStorageService
             }
         }
         return blobs;
+    }
+
+    public async Task<ICollection<string>> GetContainersByPrefixAsync(string prefix)
+    {
+        var containerPages = _blobServiceClient.GetBlobContainersAsync(prefix: prefix).AsPages(default, default);
+        ICollection<string> containers = new List<string>();
+        await foreach (Page<BlobContainerItem> blobContainerPage in containerPages)
+        {
+            foreach (var container in blobContainerPage.Values)
+            {
+                containers.Add(container.Name);
+            }
+        }
+        return containers;
     }
 
     private async Task<BlobContainerClient> GetOrCreateContainerByNameAsync(string name)

@@ -1,6 +1,8 @@
-﻿namespace Squirrel.SqlService.BLL.Models.DTO;
+﻿using Squirrel.SqlService.BLL.Models.DTO.Abstract;
 
-public class Constraint
+namespace Squirrel.SqlService.BLL.Models.DTO;
+
+public class Constraint: BaseDbItem
 {
     public string ConstraintName { get; set; } = null!;
     public string Columns { get; set; } = null!;

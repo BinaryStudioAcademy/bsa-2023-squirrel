@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Squirrel.Core.BLL.Hubs;
 using Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
 using Squirrel.SqlService.BLL.Models.ConsoleAppHub;
+using Squirrel.SqlService.BLL.Models.DTO;
 
 namespace Squirrel.SqlService.WebApi.Controllers;
 

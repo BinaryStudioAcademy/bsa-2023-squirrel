@@ -46,6 +46,21 @@ public sealed class HttpClientService : IHttpClientService
         return await response.GetModelAsync<TResponse>();
     }
 
+    public async Task PostAsync<TRequest>(string requestUrl, TRequest requestData)
+    {
+        // Serialize the request data to JSON (assuming you're sending JSON).
+        var content = JsonContent.Create(requestData);
+
+        // Send a POST request to the URL with the serialized data.
+        var response = await _httpClient.PostAsync(requestUrl, content);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            // Throw HTTP error responses here.
+            throw new HttpRequestException($"HTTP Error: {response.StatusCode}");
+        }
+    }
+
     public async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request)
         => await _httpClient.SendAsync(request).ConfigureAwait(false);
 }

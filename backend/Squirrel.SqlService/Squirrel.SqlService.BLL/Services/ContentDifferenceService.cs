@@ -13,6 +13,9 @@ using System.Reflection.Metadata;
 using Blob = Squirrel.AzureBlobStorage.Models.Blob;
 using Squirrel.Core.DAL.Entities;
 using static System.Reflection.Metadata.BlobBuilder;
+using System.Collections.Generic;
+using Squirrel.SqlService.BLL.Models.DTO.Function;
+using Squirrel.SqlService.BLL.Models.DTO.Procedure;
 
 namespace Squirrel.SqlService.BLL.Services;
 
@@ -44,18 +47,37 @@ public class ContentDifferenceService : IContentDifferenceService
         var containers = await _blobStorageService.GetContainersByPrefixAsync(commitId.ToString());
         var dbStructure = await GetTempBlobContentAsync(tempBlobId);
         var differenceList = new List<DatabaseItemContentCompare>();
+        var markedBlobIds = new List<string>();
 
-        await CompareDbItemsContent(dbStructure.TableStructures, containers, commitId, DatabaseItemType.Table, differenceList);
-        await CompareDbItemsContent(dbStructure.Constraints.Constraints, containers, commitId, DatabaseItemType.Constraint, differenceList);
-        await CompareDbItemsContent(dbStructure.FunctionDetails.Details, containers, commitId, DatabaseItemType.Function, differenceList);
-        await CompareDbItemsContent(dbStructure.ProcedureDetails.Details, containers, commitId, DatabaseItemType.StoredProcedure, differenceList);
-      
+        await CompareDbItemsContent(dbStructure.TableStructures!, containers, commitId, DatabaseItemType.Table, differenceList, markedBlobIds);
+        await CompareDbItemsContent(dbStructure.Constraints!.Constraints, containers, commitId, DatabaseItemType.Constraint, differenceList, markedBlobIds);
+        await CompareDbItemsContent(dbStructure.FunctionDetails!.Details, containers, commitId, DatabaseItemType.Function, differenceList, markedBlobIds);
+        await CompareDbItemsContent(dbStructure.ProcedureDetails!.Details, containers, commitId, DatabaseItemType.StoredProcedure, differenceList, markedBlobIds);
+
+        await CompareRemovedDbItems(new TableStructureDto(), containers, differenceList, markedBlobIds);
+        await CompareRemovedDbItems(new Constraint(), containers, differenceList, markedBlobIds);
+        await CompareRemovedDbItems(new FunctionDetailInfo(), containers, differenceList, markedBlobIds);
+        await CompareRemovedDbItems(new ProcedureDetailInfo(), containers, differenceList, markedBlobIds);
 
         return differenceList;
     }
 
+    private async Task CompareRemovedDbItems(BaseDbItem dbitem, ICollection<string> containers, List<DatabaseItemContentCompare> differenceList, 
+        List<string> markedBlobIds)
+    {
+        foreach (var container in containers)
+        {
+            var blobs = await _blobStorageService.GetAllBlobsByContainerNameAsync(container);
+            var unmarkedBlobs = blobs.Where(blob => !markedBlobIds.Contains(blob.Id));
+            foreach (var blob in unmarkedBlobs)
+            {
+                differenceList.Add(GetDbItemDifference(blob.Content!, dbitem, DatabaseItemType.Table));
+            }
+        }
+    }
+
     private async Task CompareDbItemsContent<T>(List<T> dbStructureItemCollection, ICollection<string> containers, 
-        int commitId, DatabaseItemType itemType, List<DatabaseItemContentCompare> differenceList) where T : BaseDbItem
+        int commitId, DatabaseItemType itemType, List<DatabaseItemContentCompare> differenceList, List<string> markedBlobIds) where T : BaseDbItem
     {
         ICollection<Blob> blobs = new List<Blob>();
         var dbItemContainer = containers.FirstOrDefault(cont => cont == $"{commitId}_{itemType}");
@@ -68,14 +90,16 @@ public class ContentDifferenceService : IContentDifferenceService
             var currentBlob = blobs.FirstOrDefault(blob => blob.Id == $"{dbItem.Schema}_{dbItem.Name}");
             if (currentBlob is null)
             {
-                differenceList.Add(await GetDbItemDifference(Encoding.UTF8.GetBytes(""), dbItem, DatabaseItemType.Table));
+                differenceList.Add(GetDbItemDifference(Encoding.UTF8.GetBytes(""), dbItem, DatabaseItemType.Table));
                 continue;
             }
-            differenceList.Add(await GetDbItemDifference(currentBlob.Content!, dbItem, DatabaseItemType.Table));
+            differenceList.Add(GetDbItemDifference(currentBlob.Content!, dbItem, DatabaseItemType.Table));
+            markedBlobIds.Add(currentBlob.Id);
+
         }
     }
 
-    private async Task<DatabaseItemContentCompare> GetDbItemDifference<T>(byte[] blobContent, T dbItem, 
+    private DatabaseItemContentCompare GetDbItemDifference<T>(byte[] blobContent, T dbItem, 
         DatabaseItemType itemType) where T : BaseDbItem
     {
         if (blobContent is null)
@@ -134,22 +158,10 @@ public class ContentDifferenceService : IContentDifferenceService
         await _blobStorageService.UploadAsync(_configuration["UserDbCommitsBlobContainerName"], blob2);
     }
 
-    //commitBlobId must be from CORE.DAL -> CommitFiles.BlobId
-    private async Task<T> GetCommitBlobContentAsync<T>(string containerName, string blobId)
-    {
-        var blob = await _blobStorageService.DownloadAsync(containerName, blobId);
-        if (blob.Content is not null)
-        {
-            var jsonString = Encoding.UTF8.GetString(blob.Content);
-            return JsonConvert.DeserializeObject<T>(jsonString)!;
-        }
-        throw new Exception("Blob Content is empty");
-    }
-
     private async Task<DbStructureDto> GetTempBlobContentAsync(Guid tempBlobId)
     {
         var blob = await _blobStorageService.DownloadAsync(_configuration["UserDbChangesBlobContainerName"], tempBlobId.ToString());
-        if (blob?.Content is not null)
+        if (blob.Content is not null)
         {
             var jsonString = Encoding.UTF8.GetString(blob.Content);
             return JsonConvert.DeserializeObject<DbStructureDto>(jsonString)!;

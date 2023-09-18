@@ -7,7 +7,7 @@ import { SpinnerService } from '@core/services/spinner.service';
 import { UserService } from '@core/services/user.service';
 import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { ValidationsFn } from '@shared/helpers/validations-fn';
-import {finalize, take, takeUntil} from 'rxjs';
+import { finalize, take, takeUntil } from 'rxjs';
 
 import { UpdateUserNamesDto } from 'src/app/models/user/update-user-names-dto';
 import { UpdateUserNotificationsDto } from 'src/app/models/user/update-user-notifications-dto';

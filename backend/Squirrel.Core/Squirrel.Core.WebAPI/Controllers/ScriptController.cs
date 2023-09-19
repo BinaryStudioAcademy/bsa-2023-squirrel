@@ -7,7 +7,7 @@ namespace Squirrel.Core.WebAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-//[Authorize]
+[Authorize]
 public sealed class ScriptController : ControllerBase
 {
     private readonly IScriptService _scriptService;

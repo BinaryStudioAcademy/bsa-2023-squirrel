@@ -1,17 +1,20 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BaseComponent } from '@core/base/base.component';
+import { EventService } from '@core/services/event.service';
 import { NotificationService } from '@core/services/notification.service';
 import { SpinnerService } from '@core/services/spinner.service';
 import { UserService } from '@core/services/user.service';
 import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { ValidationsFn } from '@shared/helpers/validations-fn';
-import { finalize, takeUntil } from 'rxjs';
+import { finalize, take, takeUntil } from 'rxjs';
 
 import { UpdateUserNamesDto } from 'src/app/models/user/update-user-names-dto';
 import { UpdateUserNotificationsDto } from 'src/app/models/user/update-user-notifications-dto';
 import { UpdateUserPasswordDto } from 'src/app/models/user/update-user-password-dto';
 import { UserProfileDto } from 'src/app/models/user/user-profile-dto';
+
+import { UserDto } from '../../../models/user/user-dto';
 
 @Component({
     selector: 'app-user-profile',
@@ -29,6 +32,8 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
 
     public currentUser: UserProfileDto;
 
+    public userForUpdateService: UserDto | undefined;
+
     public userNamesForm: FormGroup = new FormGroup({});
 
     public passwordForm: FormGroup = new FormGroup({});
@@ -42,6 +47,7 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
         private userService: UserService,
         private notificationService: NotificationService,
         private spinner: SpinnerService,
+        private eventService: EventService,
     ) {
         super();
     }
@@ -52,6 +58,10 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
 
     private fetchCurrentUser() {
         this.spinner.show();
+
+        this.eventService.userChangedEvent$.pipe(take(1)).subscribe((user: UserDto | undefined) => {
+            this.userForUpdateService = user;
+        });
 
         this.userService
             .getUserProfile()
@@ -142,6 +152,7 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
                     this.currentUser = user;
                     this.spinner.hide();
                     this.notificationService.info('Names successfully updated');
+                    this.updateServiceInfo(userData);
                     this.initUserNamesForm();
                 },
                 (error) => {
@@ -149,6 +160,19 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
                     this.notificationService.error(error.message);
                 },
             );
+    }
+
+    public updateServiceInfo(user: UpdateUserNamesDto) {
+        const userUpdateService: UserDto = {
+            userName: user.userName,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            avatarUrl: this.currentUser?.avatarUrl || '',
+            id: this.userForUpdateService!.id,
+            email: this.userForUpdateService!.email,
+        };
+
+        this.eventService.userChanged(userUpdateService);
     }
 
     public updateUserPassword() {

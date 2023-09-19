@@ -1,8 +1,8 @@
-﻿using Squirrel.Core.BLL.Extensions;
-using Squirrel.Core.BLL.Interfaces;
+﻿using Squirrel.Shared.Extensions;
+using Squirrel.Shared.Interfaces;
 using System.Net.Http.Json;
 
-namespace Squirrel.Core.BLL.Services;
+namespace Squirrel.Shared.Services;
 
 public sealed class HttpClientService : IHttpClientService
 {

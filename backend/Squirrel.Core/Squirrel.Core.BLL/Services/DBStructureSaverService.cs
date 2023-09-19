@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Squirrel.Core.DAL.Entities;
+using Squirrel.Shared.Interfaces;
 
 namespace Squirrel.Core.BLL.Interfaces;
 

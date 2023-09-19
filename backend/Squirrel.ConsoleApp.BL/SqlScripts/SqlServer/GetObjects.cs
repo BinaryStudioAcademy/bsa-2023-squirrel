@@ -3,7 +3,10 @@
 internal class GetObjects
 {
     public static string GetStoredProceduresNamesScript =>
-        @"SELECT SCHEMA_NAME(schema_id) AS Schema, NAME as Name FROM SYS.OBJECTS WHERE TYPE_DESC = 'SQL_STORED_PROCEDURE'";
+        @"SELECT 
+                SCHEMA_NAME(schema_id) AS SchemaName, 
+                name AS Name 
+            FROM sys.objects WHERE TYPE_DESC = 'SQL_STORED_PROCEDURE'";
 
     public static string GetStoredProcedureDefinitionScript(string storedProcedureSchema, string storedProcedureName) =>
         @$"
@@ -15,7 +18,11 @@ internal class GetObjects
             ";
 
     public static string GetFunctionsNamesScript =>
-        @"SELECT SCHEMA_NAME(schema_id) AS Schema, NAME as Name FROM SYS.OBJECTS 
+        @"SELECT 
+                SCHEMA_NAME(schema_id) AS SchemaName, 
+                name AS Name, 
+                TYPE_DESC
+            FROM sys.objects
             WHERE TYPE_DESC = 'SQL_SCALAR_FUNCTION' OR TYPE_DESC = 'SQL_TABLE_VALUED_FUNCTION' OR TYPE_DESC = 'SQL_INLINE_TABLE_VALUED_FUNCTION'";
 
     public static string GetFunctionDefinitionScript(string functionSchema, string functionName) =>

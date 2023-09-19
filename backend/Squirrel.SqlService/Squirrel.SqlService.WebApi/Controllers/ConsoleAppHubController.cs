@@ -61,7 +61,7 @@ public class ConsoleAppHubController : ControllerBase
     {
         await _hubContext.Clients.User(queryParameters.ClientId)
             .GetAllStoredProceduresNamesAsync(_queryParameters.queryId);
-        return Ok(await _queryParameters.tcs.Task);
+        return Ok(_mapper.Map<ProcedureNamesDto>(await _queryParameters.tcs.Task));
     }
 
     // https://localhost:7244/api/ConsoleAppHub/getStoredProcedureDefinition
@@ -76,10 +76,10 @@ public class ConsoleAppHubController : ControllerBase
 
     // https://localhost:7244/api/ConsoleAppHub/getAllFunctionsNames
     [HttpPost("getAllFunctionsNames")]
-    public async Task<ActionResult> GetAllFunctionsNamesAsync([FromBody] QueryParameters queryParameters)
+    public async Task<ActionResult<FunctionNamesDto>> GetAllFunctionsNamesAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId).GetAllFunctionsNamesAsync(_queryParameters.queryId);
-        return Ok(await _queryParameters.tcs.Task);
+        return Ok(_mapper.Map<FunctionNamesDto>(await _queryParameters.tcs.Task));
     }
 
     // https://localhost:7244/api/ConsoleAppHub/getFunctionDefinition

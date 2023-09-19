@@ -19,20 +19,20 @@ export class LoadChangesService {
     constructor(private httpClient: HttpInternalService) { }
 
     public loadChangesRequest(guid: string) {
-        this.httpClient.postRequest<string>(`${this.loadChangesRoutePrefix}/${guid}`, null!)
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe({
-                next: (event) => {
-                    // eslint-disable-next-line no-console
-                    console.log(event);
-                },
-                error: (error) => {
-                    // eslint-disable-next-line no-console
-                    console.log(error);
-                },
-            });
+        // this.httpClient.postRequest<string>(`${this.loadChangesRoutePrefix}/${guid}`, null!)
+        //     .pipe(takeUntil(this.unsubscribe$))
+        //     .subscribe({
+        //         next: (event) => {
+        //             // eslint-disable-next-line no-console
+        //             console.log(event);
+        //         },
+        //         error: (error) => {
+        //             // eslint-disable-next-line no-console
+        //             console.log(error);
+        //         },
+        //     });
 
-        this.httpClient.getRequest<DatabaseItem[]>(`${this.databaseItemsRoutePrefix}`)
+        this.httpClient.getRequest<DatabaseItem[]>(`${this.databaseItemsRoutePrefix}/${guid}`)
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe({
                 next: (event) => {

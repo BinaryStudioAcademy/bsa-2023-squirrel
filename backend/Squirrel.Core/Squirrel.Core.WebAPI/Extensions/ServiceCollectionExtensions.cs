@@ -1,15 +1,17 @@
 ﻿using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Squirrel.AzureBlobStorage.Models;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.BLL.Services;
 using Squirrel.Core.Common.DTO.Auth;
 using Squirrel.Core.Common.Interfaces;
 using Squirrel.Core.Common.JWT;
+using Squirrel.Shared.Interfaces;
+using Squirrel.Shared.Services;
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
-using Squirrel.AzureBlobStorage.Models;
 
 namespace Squirrel.Core.WebAPI.Extensions;
 
@@ -115,7 +117,7 @@ public static class ServiceCollectionExtensions
     {
         services.Configure<AuthenticationSettings>(configuration.GetSection<AuthenticationSettings>());
     }
-    
+
     public static void ConfigureAzureBlobStorage(this IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<BlobStorageOptions>(configuration.GetSection<BlobStorageOptions>());

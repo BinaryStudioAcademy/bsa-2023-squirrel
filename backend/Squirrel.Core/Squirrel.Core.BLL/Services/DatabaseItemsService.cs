@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Shared.DTO.DatabaseItem;
+using Squirrel.Shared.Interfaces;
 
 namespace Squirrel.Core.BLL.Services;
 
@@ -15,9 +16,9 @@ public class DatabaseItemsService : IDatabaseItemsService
         _configuration = configuration;
     }
 
-    public async Task<List<DatabaseItem>> GetAllItems()
+    public async Task<List<DatabaseItem>> GetAllItemsAsync(Guid clientId)
     {
         return await _httpClientService.GetAsync<List<DatabaseItem>>
-            ($"{_configuration["SqlServiceUrl"]}/api/DatabaseItems");
+            ($"{_configuration["SqlServiceUrl"]}/api/DatabaseItems/{clientId}");
     }
 }

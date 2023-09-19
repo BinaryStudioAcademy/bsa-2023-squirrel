@@ -14,22 +14,9 @@ public sealed class ContentDifferenceController : ControllerBase
         _contentDifferenceService = contentDifference;
     }
 
-    [HttpGet("inline/{commitId}/{tempBlobId}")]
-    public async Task<ActionResult> GetInlineContentDifference(int commitId, Guid tempBlobId)
+    [HttpGet("{commitId}/{tempBlobId}")]
+    public async Task<ActionResult> GetContentDiffsAsync(int commitId, Guid tempBlobId)
     {
-        return Ok(await _contentDifferenceService.GetInlineContentDiffsAsync(commitId, tempBlobId));
-    }
-
-    [HttpGet("sidebyside/{commitId}/{tempBlobId}")]
-    public async Task<ActionResult> GetSideBySideContentDifference(int commitId, Guid tempBlobId)
-    {
-        return Ok(await _contentDifferenceService.GetSideBySideContentDiffsAsync(commitId, tempBlobId));
-    }
-
-    [HttpGet("generate-tempBlob")]
-    public async Task<ActionResult> GenerateTempBlob(int basedOnCommitId)
-    {
-        await _contentDifferenceService.GenerateTempBlobContentAsync(basedOnCommitId);
-        return Ok();
+        return Ok(await _contentDifferenceService.GetContentDiffsAsync(commitId, tempBlobId));
     }
 }

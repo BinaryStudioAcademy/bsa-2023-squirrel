@@ -6,6 +6,7 @@ using Squirrel.Core.WebAPI.Extensions;
 using Squirrel.Shared.Middlewares;
 using Squirrel.SqlService.WebApi.Extensions;
 using Squirrel.SqlService.WebApi.Middlewares;
+using Squirrel.SqlService.BLL.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,10 +20,10 @@ builder.Services.AddSquirrelCoreContext(builder.Configuration);
 builder.Services.ConfigureCors(builder.Configuration);
 builder.Services.AddMongoDbService(builder.Configuration);
 builder.Services.AddAzureBlobStorage(builder.Configuration);
-builder.Services.RegisterCustomServices();
 builder.Services.AddSignalR();
 builder.Services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
-
+builder.Services.RegisterCustomServices(builder.Configuration);
+builder.Services.AddAutoMapper();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();

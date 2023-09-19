@@ -32,13 +32,13 @@ public sealed class UserConfig : IEntityTypeConfiguration<User>
                .HasForeignKey(x => x.CreatedBy)
                .IsRequired()
                .OnDelete(DeleteBehavior.NoAction);
-        
+
         builder.HasMany(x => x.Comments)
                .WithOne(x => x.Author)
                .HasForeignKey(x => x.CreatedBy)
                .IsRequired()
                .OnDelete(DeleteBehavior.NoAction);
-        
+
         builder.HasMany(x => x.PullRequests)
                .WithOne(x => x.Author)
                .HasForeignKey(x => x.CreatedBy)
@@ -54,7 +54,7 @@ public sealed class UserConfig : IEntityTypeConfiguration<User>
                       r => r.HasOne(x => x.User)
                             .WithMany(x => x.PullRequestReviewers)
                             .HasForeignKey(x => x.UserId));
-        
+
         builder.HasMany(x => x.Projects)
                .WithMany(x => x.Users)
                .UsingEntity<UserProject>(
@@ -64,5 +64,11 @@ public sealed class UserConfig : IEntityTypeConfiguration<User>
                       r => r.HasOne(x => x.User)
                             .WithMany(x => x.UserProjects)
                             .HasForeignKey(x => x.UserId));
+
+        builder.HasMany(x => x.ChangeRecords)
+              .WithOne(x => x.User)
+              .HasForeignKey(x => x.CreatedBy)
+              .IsRequired()
+              .OnDelete(DeleteBehavior.NoAction);
     }
 }

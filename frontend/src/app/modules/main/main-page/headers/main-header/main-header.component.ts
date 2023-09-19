@@ -1,12 +1,11 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DatabaseService } from '@core/services/database.service';
 import { SharedProjectService } from '@core/services/shared-project.service';
 import { CreateDbModalComponent } from '@modules/main/create-db-modal/create-db-modal.component';
 
+import { DatabaseDto } from 'src/app/models/database/database-dto';
 import { ProjectResponseDto } from 'src/app/models/projects/project-response-dto';
-
-import { DatabaseInfoDto } from '../../../../../models/database/database-info-dto';
 
 @Component({
     selector: 'app-main-header',
@@ -14,15 +13,15 @@ import { DatabaseInfoDto } from '../../../../../models/database/database-info-dt
     styleUrls: ['./main-header.component.sass'],
 })
 export class MainHeaderComponent implements OnInit {
-    @Output() choseDb = new EventEmitter<DatabaseInfoDto>();
-
     public project: ProjectResponseDto;
 
     public selectedDbName: string;
 
     public dbNames: string[] = [];
 
-    public db: DatabaseInfoDto[] = [];
+    public databases: DatabaseDto[] = [];
+
+    private currentDb: DatabaseDto;
 
     constructor(
         private sharedProject: SharedProjectService,
@@ -38,11 +37,9 @@ export class MainHeaderComponent implements OnInit {
 
     public onDatabaseSelected(value: string) {
         this.selectedDbName = value;
-        const db = this.db.find(x => x.dbName === value);
+        this.currentDb = this.databases!.find(database => database.dbName === this.selectedDbName)!;
 
-        if (db) {
-            this.choseDb.emit(db);
-        }
+        this.sharedProject.setCurrentDb(this.currentDb);
     }
 
     public openCreateModal(): void {
@@ -55,10 +52,10 @@ export class MainHeaderComponent implements OnInit {
             autoFocus: false,
         });
 
-        dialogRef.componentInstance.dbName.subscribe({
-            next: (db: DatabaseInfoDto) => {
-                this.db.push(db);
-                this.dbNames.push(db.dbName);
+        dialogRef.componentInstance.addedDatabase.subscribe({
+            next: (addedDatabase: DatabaseDto) => {
+                this.databases.push(addedDatabase);
+                this.dbNames.push(addedDatabase.dbName);
             },
         });
     }
@@ -77,8 +74,9 @@ export class MainHeaderComponent implements OnInit {
     private loadDatabases() {
         this.databaseService.getAllDatabases(this.project.id).subscribe({
             next: databases => {
+                this.databases = databases;
                 this.dbNames = databases.map(database => database.dbName);
-                this.db = databases;
+                this.sharedProject.setCurrentDb(databases[0]);
             },
         });
     }

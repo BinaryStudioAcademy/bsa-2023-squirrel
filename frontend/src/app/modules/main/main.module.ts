@@ -7,13 +7,14 @@ import { AngularDelegate, ModalController } from '@ionic/angular';
 import { SharedModule } from '@shared/shared.module';
 
 import { CreateDbModalComponent } from './create-db-modal/create-db-modal.component';
+import { CreateBranchModalComponent } from './main-page/create-branch-modal/create-branch-modal.component';
 import { MainHeaderComponent } from './main-page/headers/main-header/main-header.component';
 import { NavbarHeaderComponent } from './main-page/headers/navbar-header/navbar-header.component';
 import { MainComponent } from './main-page/main-page.component';
 import { MainRoutingModule } from './main-routing.module';
 
 @NgModule({
-    declarations: [MainComponent, MainHeaderComponent, NavbarHeaderComponent, CreateDbModalComponent],
+    declarations: [MainComponent, MainHeaderComponent, NavbarHeaderComponent, CreateBranchModalComponent, CreateDbModalComponent],
     imports: [SharedModule, MainRoutingModule, MatSelectModule, MatButtonModule, MatDialogModule, MatSlideToggleModule],
     providers: [ModalController, AngularDelegate],
 })

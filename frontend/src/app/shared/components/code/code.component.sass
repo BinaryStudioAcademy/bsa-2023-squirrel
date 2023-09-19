@@ -1,0 +1,55 @@
+@import "/src/styles/color"
+@import "/src/styles/reusable"
+@import "/src/styles/weights"
+
+
+table
+    width: 100%
+    td
+        padding: 4px
+        
+
+table, th, td
+    border: none
+    border-spacing: 0px
+    height: 0px
+
+.container
+    margin-right: 10px
+    width: 100%
+
+.header
+    height: 38px
+    padding: 0 5px
+
+.name
+    @extend .title
+    font-weight: $semi-bold-weight
+    font-size: 18px
+    margin: 0
+
+.code
+    width: calc(100% - 40px)
+    background-color: $white
+    padding: 4px 8px
+
+.line-number
+    @extend .line-descriptor
+
+.line-symbol
+    @extend .line-descriptor
+
+.line-descriptor
+    text-align: center
+    padding: 0
+    margin: 0
+
+.line-content
+    text-align: left
+    width: 100%
+
+.code-section
+    background-color: $line-color
+    border-radius: 5px
+    overflow: auto
+    height: 90%

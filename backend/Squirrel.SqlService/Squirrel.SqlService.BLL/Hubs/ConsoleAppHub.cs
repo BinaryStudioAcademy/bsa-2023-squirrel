@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using Squirrel.ConsoleApp.Models;
 using Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
-using Squirrel.SqlService.BLL.Models.ConsoleAppHub;
 
-namespace Squirrel.Core.BLL.Hubs;
+namespace Squirrel.SqlService.BLL.Hubs;
 
 public sealed class ConsoleAppHub : Hub<IExecuteOnClientSide>
 {
     private readonly IProcessReceivedDataService _processReceivedDataService;
-    private readonly Dictionary<string, Func<string, QueryResultTableDTO, Task>> requestActionToProcessReceivedData = new();
+
+    private readonly Dictionary<string, Func<Guid, QueryResultTable, Task>> _requestActionToProcessReceivedData = new();
 
     public ConsoleAppHub(IProcessReceivedDataService processReceivedDataService)
     {
@@ -19,34 +20,35 @@ public sealed class ConsoleAppHub : Hub<IExecuteOnClientSide>
     {
         await Clients.Caller.SetClientId(Context.UserIdentifier);
     }
+    
+    public async Task ProcessReceivedDataFromClientSide(Guid queryId, string requestActionName, QueryResultTable queryResultTable)
 
-    public async Task ProcessReceivedDataFromClientSide(string clientId, string requestActionName, QueryResultTableDTO queryResultTableDTO)
     {
-        if (!requestActionToProcessReceivedData.ContainsKey(requestActionName))
+        if (!_requestActionToProcessReceivedData.ContainsKey(requestActionName))
         {
             return;
         }
-
-        await (requestActionToProcessReceivedData.GetValueOrDefault(requestActionName)
-            ?.Invoke(clientId, queryResultTableDTO) ?? throw new NullReferenceException());
+        
+        await (_requestActionToProcessReceivedData.GetValueOrDefault(requestActionName)
+            ?.Invoke(queryId, queryResultTable) ?? throw new NullReferenceException());
     }
 
     private void InitRequestActionDict()
     {
-        requestActionToProcessReceivedData.Add("GetAllTablesNamesAsync", _processReceivedDataService.AllTablesNamesProcessReceivedDataAsync);
-        requestActionToProcessReceivedData.Add("GetTableDataAsync", _processReceivedDataService.TableDataProcessReceivedDataAsync);
-        requestActionToProcessReceivedData.Add("GetAllStoredProceduresNamesAsync", _processReceivedDataService.AllStoredProceduresNamesProcessReceivedDataAsync);
-        requestActionToProcessReceivedData.Add("GetStoredProcedureDefinitionAsync", _processReceivedDataService.StoredProcedureDefinitionProcessReceivedDataAsync);
-        requestActionToProcessReceivedData.Add("GetAllFunctionsNamesAsync", _processReceivedDataService.AllFunctionsNamesProcessReceivedDataAsync);
-        requestActionToProcessReceivedData.Add("GetFunctionDefinitionAsync", _processReceivedDataService.FunctionDefinitionProcessReceivedDataAsync);
-        requestActionToProcessReceivedData.Add("GetAllViewsNamesAsync", _processReceivedDataService.AllViewsNamesProcessReceivedDataAsync);
-        requestActionToProcessReceivedData.Add("GetViewDefinitionAsync", _processReceivedDataService.ViewDefinitionProcessReceivedDataAsync);
-        requestActionToProcessReceivedData.Add("GetTableStructureAsync", _processReceivedDataService.TableStructureProcessReceivedDataAsync);
-        requestActionToProcessReceivedData.Add("GetTableChecksAndUniqueConstraintsAsync", _processReceivedDataService.TableChecksAndUniqueConstraintsProcessReceivedDataAsync);
-        requestActionToProcessReceivedData.Add("GetStoredProceduresWithDetailAsync", _processReceivedDataService.StoredProceduresWithDetailProcessReceivedDataAsync);
-        requestActionToProcessReceivedData.Add("GetFunctionsWithDetailAsync", _processReceivedDataService.FunctionsWithDetailProcessReceivedDataAsync);
-        requestActionToProcessReceivedData.Add("GetViewsWithDetailAsync", _processReceivedDataService.ViewsWithDetailProcessReceivedDataAsync);
-        requestActionToProcessReceivedData.Add("GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync", _processReceivedDataService.UserDefinedTypesWithDefaultsAndRulesAndDefinitionProcessReceivedDataAsync);
-        requestActionToProcessReceivedData.Add("GetUserDefinedTableTypesAsync", _processReceivedDataService.UserDefinedTableTypesProcessReceivedDataAsync);
+        _requestActionToProcessReceivedData.Add("GetAllTablesNamesAsync", _processReceivedDataService.AllTablesNamesProcessReceivedDataAsync);
+        _requestActionToProcessReceivedData.Add("GetTableDataAsync", _processReceivedDataService.TableDataProcessReceivedDataAsync);
+        _requestActionToProcessReceivedData.Add("GetAllStoredProceduresNamesAsync", _processReceivedDataService.AllStoredProceduresNamesProcessReceivedDataAsync);
+        _requestActionToProcessReceivedData.Add("GetStoredProcedureDefinitionAsync", _processReceivedDataService.StoredProceduresWithDetailProcessReceivedDataAsync);
+        _requestActionToProcessReceivedData.Add("GetAllFunctionsNamesAsync", _processReceivedDataService.AllFunctionsNamesProcessReceivedDataAsync);
+        _requestActionToProcessReceivedData.Add("GetFunctionDefinitionAsync", _processReceivedDataService.FunctionDefinitionProcessReceivedDataAsync);
+        _requestActionToProcessReceivedData.Add("GetAllViewsNamesAsync", _processReceivedDataService.AllViewsNamesProcessReceivedDataAsync);
+        _requestActionToProcessReceivedData.Add("GetViewDefinitionAsync", _processReceivedDataService.ViewDefinitionProcessReceivedDataAsync);
+        _requestActionToProcessReceivedData.Add("GetTableStructureAsync", _processReceivedDataService.TableStructureProcessReceivedDataAsync);
+        _requestActionToProcessReceivedData.Add("GetTableChecksAndUniqueConstraintsAsync", _processReceivedDataService.TableChecksAndUniqueConstraintsProcessReceivedDataAsync);
+        _requestActionToProcessReceivedData.Add("GetStoredProceduresWithDetailAsync", _processReceivedDataService.StoredProceduresWithDetailProcessReceivedDataAsync);
+        _requestActionToProcessReceivedData.Add("GetFunctionsWithDetailAsync", _processReceivedDataService.FunctionsWithDetailProcessReceivedDataAsync);
+        _requestActionToProcessReceivedData.Add("GetViewsWithDetailAsync", _processReceivedDataService.ViewsWithDetailProcessReceivedDataAsync);
+        _requestActionToProcessReceivedData.Add("GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync", _processReceivedDataService.UserDefinedTypesWithDefaultsAndRulesAndDefinitionProcessReceivedDataAsync);
+        _requestActionToProcessReceivedData.Add("GetUserDefinedTableTypesAsync", _processReceivedDataService.UserDefinedTableTypesProcessReceivedDataAsync);
     }
 }

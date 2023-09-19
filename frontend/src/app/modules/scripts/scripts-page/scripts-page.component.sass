@@ -1,0 +1,51 @@
+@import "/src/styles/color"
+
+.container
+    margin: 10px
+
+.bordered
+    border: 1px solid $black
+    border-radius: 5px
+
+.main-content
+    display: flex
+    gap: 25px
+
+.scripts-sector
+    display: flex
+    flex-direction: column
+    overflow-y: auto
+    width: 25%
+    height: 60vh
+
+.listbox
+    list-style: none
+    padding: 0
+    margin: 0
+
+.option
+    position: relative
+
+.selected-option
+    background: $dark-shadow
+
+.editor-sector
+    display: flex
+    width: 75%
+    height: 100%
+    align-items: flex-start
+
+.buttons-sector
+    margin-top: 20px
+    display: flex
+    justify-content: space-between
+
+.buttons-container
+    display: flex
+    gap: 20px
+
+textarea
+    flex-grow: 1
+    padding: 10px
+    height: 60vh
+    resize: none

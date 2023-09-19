@@ -48,8 +48,8 @@ export class ProjectsPageComponent extends BaseComponent implements OnInit {
 
     public openCreateModal(): void {
         const dialogRef = this.dialog.open(CreateProjectModalComponent, {
-            width: '500px',
-            height: '45%',
+            width: '450px',
+            height: '400px',
         });
 
         dialogRef.componentInstance.projectCreated.subscribe(() => this.loadProjects());
@@ -57,6 +57,6 @@ export class ProjectsPageComponent extends BaseComponent implements OnInit {
 
     chooseProject(project: ProjectResponseDto) {
         this.sharedProject.setProject(project);
-        this.router.navigateByUrl(`main/${project.id}`);
+        this.router.navigateByUrl(`projects/${project.id}/changes`);
     }
 }

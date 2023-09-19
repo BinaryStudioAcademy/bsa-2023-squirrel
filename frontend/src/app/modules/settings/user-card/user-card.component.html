@@ -1,7 +1,8 @@
 <div class="user-card">
     <app-avatar
         class="avatar"
-        [imgLink]="user.avatarUrl ? user.avatarUrl : ''"
+        [imgLink]="user.avatarUrl"
+        [userName]="user.firstName + ' ' + user.lastName"
         size="36"
     ></app-avatar>
     <div class="name-email">

@@ -8,8 +8,9 @@ import { NotificationService } from '@core/services/notification.service';
 import { SqlService } from '@core/services/sql.service';
 import { takeUntil } from 'rxjs';
 
+import { DatabaseDto } from 'src/app/models/database/database-dto';
+
 import { DbConnection } from '../../../models/console/db-connection';
-import { DatabaseInfoDto } from '../../../models/database/database-info-dto';
 import { NewDatabaseDto } from '../../../models/database/new-database-dto';
 import { QueryParameters } from '../../../models/sql-service/query-parameters';
 
@@ -19,7 +20,7 @@ import { QueryParameters } from '../../../models/sql-service/query-parameters';
     styleUrls: ['./create-db-modal.component.sass'],
 })
 export class CreateDbModalComponent extends BaseComponent implements OnInit {
-    @Output() public dbName = new EventEmitter<DatabaseInfoDto>();
+    @Output() public addedDatabase = new EventEmitter<DatabaseDto>();
 
     public dbForm: FormGroup = new FormGroup({});
 
@@ -63,8 +64,8 @@ export class CreateDbModalComponent extends BaseComponent implements OnInit {
         };
 
         this.consoleConnectService.connect(connect).subscribe({
-            next: condoleId => {
-                this.saveDb(condoleId.guid);
+            next: guid => {
+                this.saveDb(guid);
             },
             error: () => {
                 this.notificationService.error('Failed to connect to database');
@@ -125,9 +126,9 @@ export class CreateDbModalComponent extends BaseComponent implements OnInit {
 
         this.databaseService.addDatabase(database)
             .subscribe({
-                next: dbInfo => {
+                next: () => {
                     this.notificationService.info('database was successfully added');
-                    this.dbName.emit(dbInfo);
+                    this.addedDatabase.emit(database);
                     this.close();
                 },
                 error: () => {

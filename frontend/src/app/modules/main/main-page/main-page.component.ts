@@ -48,6 +48,7 @@ export class MainComponent extends BaseComponent implements OnInit, OnDestroy {
     override ngOnDestroy() {
         this.broadcastHub.stop();
         this.sharedProject.setProject(null);
+        this.sharedProject.setCurrentDb(null);
         super.ngOnDestroy();
     }
 

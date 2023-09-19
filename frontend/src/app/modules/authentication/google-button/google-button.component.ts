@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Input } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, Input } from '@angular/core';
 import { AuthService } from '@core/services/auth.service';
 import { SpinnerService } from '@core/services/spinner.service';
 import { environment } from '@env/environment';
@@ -48,6 +48,19 @@ export class GoogleButtonComponent implements AfterViewInit {
 
         // also display the One Tap dialog
         google.accounts.id.prompt();
+    }
+
+    @HostListener('window:resize', ['$event'])
+    onResize(): void {
+        this.updateGoogleButtonWidth();
+    }
+
+    private updateGoogleButtonWidth(): void {
+        this.width = `${this.elementRef.nativeElement.querySelector('#signInGoogle').offsetWidth.toString()}px`;
+
+        google.accounts.id.renderButton(document.getElementById('signInGoogle'), {
+            width: this.width,
+        });
     }
 
     private handleCredentialResponse(response: CredentialResponse) {

@@ -1,13 +1,20 @@
-import { ComponentType } from '@angular/cdk/portal';
-import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, TemplateRef } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import {
+    Component,
+    ElementRef,
+    EventEmitter,
+    HostListener,
+    Input,
+    OnChanges,
+    Output,
+    SimpleChanges,
+    TemplateRef } from '@angular/core';
 
 @Component({
     selector: 'app-dropdown',
     templateUrl: './dropdown.component.html',
     styleUrls: ['./dropdown.component.sass'],
 })
-export class DropdownComponent implements OnInit {
+export class DropdownComponent implements OnChanges {
     public searchTerm: string = '';
 
     public isActive = false;
@@ -16,7 +23,13 @@ export class DropdownComponent implements OnInit {
 
     @Input() width: number;
 
-    @Input() modalTemplate: TemplateRef<any> | ComponentType<any>;
+    @Input() selectedByDefault: number = 0;
+
+    @Input() includeButton: boolean = false;
+
+    @Output() selectedValueChanged = new EventEmitter<string>();
+
+    @Output() buttonClicked = new EventEmitter();
 
     @Input() dropdownIcon: string;
 
@@ -25,8 +38,6 @@ export class DropdownComponent implements OnInit {
     @Input() modalOption: string = '+ Add New';
 
     @Input() filterPredicate?: (item: any, value: string) => boolean = this.filterByName;
-
-    @Output() selectedValueChanged = new EventEmitter<any>();
 
     public selectedOption: any;
 
@@ -39,12 +50,13 @@ export class DropdownComponent implements OnInit {
 
     constructor(
         private elementRef: ElementRef,
-        private matDialog: MatDialog,
         // eslint-disable-next-line no-empty-function
     ) {}
 
-    ngOnInit(): void {
-        [this.selectedOption] = this.options;
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes['options'] || changes['selectedByDefault']) {
+            this.selectedOption = this.options[this.selectedByDefault];
+        }
     }
 
     onOptionSelected(value: string) {
@@ -52,8 +64,8 @@ export class DropdownComponent implements OnInit {
         this.selectedValueChanged.emit(this.selectedOption);
     }
 
-    public openModal() {
-        this.matDialog.open(this.modalTemplate);
+    public onButtonClick() {
+        this.buttonClicked.emit();
     }
 
     public filterOptions(): string[] {

@@ -9,5 +9,6 @@ public sealed class BranchProfile : Profile
     public BranchProfile()
     {
         CreateMap<Branch, BranchDto>()!.ReverseMap();
+        CreateMap<Branch, BranchCreateDto>()!.ReverseMap();
     }
 }

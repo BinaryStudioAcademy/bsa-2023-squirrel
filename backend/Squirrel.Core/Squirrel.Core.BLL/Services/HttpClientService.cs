@@ -1,5 +1,6 @@
 ﻿using Squirrel.Core.BLL.Extensions;
 using Squirrel.Core.BLL.Interfaces;
+using System.Net.Http.Json;
 
 namespace Squirrel.Core.BLL.Services;
 
@@ -14,20 +15,42 @@ public sealed class HttpClientService : IHttpClientService
 
     public async Task<TResponse> GetAsync<TResponse>(string requestUrl)
     {
-        // Send a GET request to the url.
         var response = await _httpClient.GetAsync(requestUrl);
 
         if (!response.IsSuccessStatusCode)
         {
-            // Throw HTTP error responses here.
             throw new HttpRequestException($"HTTP Error: {response.StatusCode}");
         }
 
-        // Return the TResponse
         return await response.GetModelAsync<TResponse>();
+    }
+
+    public async Task<TResponse> PostAsync<TRequest, TResponse>(string requestUrl, TRequest requestData)
+    {
+        var content = JsonContent.Create(requestData);
+
+        var response = await _httpClient.PostAsync(requestUrl, content);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new HttpRequestException($"HTTP Error: {response.StatusCode}");
+        }
+
+        return await response.GetModelAsync<TResponse>();
+    }
+
+    public async Task PostAsync<TRequest>(string requestUrl, TRequest requestData)
+    {
+        var content = JsonContent.Create(requestData);
+
+        var response = await _httpClient.PostAsync(requestUrl, content);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new HttpRequestException($"HTTP Error: {response.StatusCode}");
+        }
     }
 
     public async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request)
         => await _httpClient.SendAsync(request).ConfigureAwait(false);
-
 }

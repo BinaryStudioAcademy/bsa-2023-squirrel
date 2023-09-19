@@ -17,7 +17,7 @@ const routes: Routes = [
         loadChildren: () => import('./modules/projects/projects.module').then((m) => m.ProjectsModule),
     },
     {
-        path: 'main/:id',
+        path: 'projects/:id',
         canActivate: [AuthGuard],
         data: { requiresToken: true },
         loadChildren: () => import('./modules/main/main.module').then((m) => m.MainModule),

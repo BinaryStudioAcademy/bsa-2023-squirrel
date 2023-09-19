@@ -45,7 +45,7 @@ public class ScriptController : ControllerBase
 
     private void ValidateInput(InboundScriptDto inboundScriptDto)
     {
-        if (inboundScriptDto == null || string.IsNullOrEmpty(inboundScriptDto.Content))
+        if (inboundScriptDto == null || string.IsNullOrEmpty(inboundScriptDto.Content) || string.IsNullOrWhiteSpace(inboundScriptDto.Content))
         {
             throw new SqlSyntaxException("InputSql cannot be Null or Empty");
         }

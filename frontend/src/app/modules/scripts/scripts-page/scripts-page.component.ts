@@ -12,6 +12,7 @@ import { ProjectResponseDto } from 'src/app/models/projects/project-response-dto
 import { RunScriptDto } from 'src/app/models/scripts/run-script-dto';
 import { ScriptContentDto } from 'src/app/models/scripts/script-content-dto';
 import { ScriptDto } from 'src/app/models/scripts/script-dto';
+import { ScriptErrorDto } from 'src/app/models/scripts/script-error-dto';
 
 import { CreateScriptModalComponent } from '../create-script-modal/create-script-modal.component';
 
@@ -26,6 +27,12 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
     public scripts: ScriptDto[] = [];
 
     public selectedScript: ScriptDto | undefined;
+
+    public scriptErrors: { [scriptId: number]: ScriptErrorDto } = {};
+
+    get currentScriptError(): ScriptErrorDto | undefined {
+        return this.selectedScript ? this.scriptErrors[this.selectedScript.id] : undefined;
+    }
 
     private selectedOptionElement: HTMLLIElement | undefined;
 
@@ -49,7 +56,7 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
         this.initializeForm();
     }
 
-    public onScriptSelected($event: any) {
+    public onScriptSelected($event: any): void {
         const option = $event.option.element as HTMLLIElement;
 
         if (this.selectedOptionElement) {
@@ -124,11 +131,15 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
             .subscribe(
                 (updatedScript: ScriptContentDto) => {
                     this.updateScriptContent(updatedScript.content);
+                    // Clear the error for the current script
+                    if (this.selectedScript) {
+                        delete this.scriptErrors[this.selectedScript.id];
+                    }
                     this.notification.info('Script content successfully formatted');
                 },
-                (err) => {
+                (err: ScriptErrorDto) => {
                     this.notification.error('Format Script error');
-                    this.updateScriptContentError(JSON.stringify(err));
+                    this.updateScriptContentError(err);
                 },
             );
     }
@@ -143,12 +154,9 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
         }
     }
 
-    public updateScriptContentError(errorContent: string): void {
+    public updateScriptContentError(error: ScriptErrorDto): void {
         if (this.selectedScript) {
-            this.selectedScript.content = `${this.selectedScript.content}\n${errorContent}`;
-            this.form.patchValue({
-                scriptContent: this.selectedScript.content,
-            });
+            this.scriptErrors[this.selectedScript.id] = error;
         }
     }
 

@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 
+import { DatabaseItem } from 'src/app/models/database-items/database-item';
+
 import { HttpInternalService } from './http-internal.service';
 
 @Injectable({
@@ -11,11 +13,26 @@ export class LoadChangesService {
 
     private readonly loadChangesRoutePrefix = '/api/changerecords';
 
+    private readonly databaseItemsRoutePrefix = '/api/databaseitems';
+
     // eslint-disable-next-line no-empty-function
     constructor(private httpClient: HttpInternalService) { }
 
-    public loadChangesRequest() {
-        this.httpClient.postRequest<string>(`${this.loadChangesRoutePrefix}`, null!)
+    public loadChangesRequest(guid: string) {
+        this.httpClient.postRequest<string>(`${this.loadChangesRoutePrefix}/${guid}`, null!)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe({
+                next: (event) => {
+                    // eslint-disable-next-line no-console
+                    console.log(event);
+                },
+                error: (error) => {
+                    // eslint-disable-next-line no-console
+                    console.log(error);
+                },
+            });
+
+        this.httpClient.getRequest<DatabaseItem[]>(`${this.databaseItemsRoutePrefix}`)
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe({
                 next: (event) => {

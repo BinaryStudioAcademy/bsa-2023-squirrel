@@ -16,11 +16,11 @@ public sealed class ProjectDatabaseService : BaseService, IProjectDatabaseServic
     {
     }
 
-    public async Task<List<DatabaseInfoDto>> GetAllProjectDbNamesAsync(int projectId)
+    public async Task<List<ProjectDatabaseDto>> GetAllProjectDbAsync(int projectId)
     {
         return await _context.ProjectDatabases
             .Where(p => p.ProjectId == projectId)
-            .ProjectTo<DatabaseInfoDto>(_mapper.ConfigurationProvider)
+            .ProjectTo<ProjectDatabaseDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
     }
 
@@ -32,7 +32,7 @@ public sealed class ProjectDatabaseService : BaseService, IProjectDatabaseServic
         {
             throw new InvalidProjectException();
         }
-        
+
         var addedProjectDb = (await _context.ProjectDatabases.AddAsync(projectDb)).Entity;
         await _context.SaveChangesAsync();
 

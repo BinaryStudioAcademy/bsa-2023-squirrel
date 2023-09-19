@@ -4,10 +4,12 @@ import { ActivatedRoute } from '@angular/router';
 import { BaseComponent } from '@core/base/base.component';
 import { BranchService } from '@core/services/branch.service';
 import { LoadChangesService } from '@core/services/load-changes.service';
+import { NotificationService } from '@core/services/notification.service';
 import { SharedProjectService } from '@core/services/shared-project.service';
 import { takeUntil } from 'rxjs';
 
 import { BranchDto } from 'src/app/models/branch/branch-dto';
+import { DatabaseDto } from 'src/app/models/database/database-dto';
 
 import { CreateBranchModalComponent } from '../../create-branch-modal/create-branch-modal.component';
 
@@ -27,6 +29,8 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
 
     public selectedBranch: BranchDto;
 
+    public selectedDatabase: DatabaseDto;
+
     public navLinks: { path: string; displayName: string }[] = [
         { displayName: 'Changes', path: './changes' },
         { displayName: 'PRs', path: './pull-requests' },
@@ -43,6 +47,7 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
         private route: ActivatedRoute,
         private sharedProject: SharedProjectService,
         private changesService: LoadChangesService,
+        private notificationService: NotificationService,
     ) {
         super();
     }
@@ -91,6 +96,17 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
     }
 
     public loadChanges() {
-        this.changesService.loadChangesRequest();
+        this.sharedProject.currentDb$.pipe(
+            takeUntil(this.unsubscribe$),
+        ).subscribe({
+            next: currentDb => {
+                if (!currentDb) {
+                    this.notificationService.error('No database currently selected');
+                } else {
+                    this.selectedDatabase = currentDb!;
+                    this.changesService.loadChangesRequest(this.selectedDatabase.guid);
+                }
+            },
+        });
     }
 }

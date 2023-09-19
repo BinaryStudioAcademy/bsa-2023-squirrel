@@ -63,14 +63,16 @@ export class CreateDbModalComponent extends BaseComponent implements OnInit {
             isLocalhost: this.dbForm.value.localhost,
         };
 
-        this.consoleConnectService.connect(connect).subscribe({
-            next: guid => {
-                this.saveDb(guid);
-            },
-            error: () => {
-                this.notificationService.error('Failed to connect to database');
-            },
-        });
+        this.consoleConnectService.connect(connect)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe({
+                next: guid => {
+                    this.saveDb(guid);
+                },
+                error: () => {
+                    this.notificationService.error('Failed to connect to database');
+                },
+            });
     }
 
     public addDataBaseRemote() {
@@ -91,10 +93,10 @@ export class CreateDbModalComponent extends BaseComponent implements OnInit {
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe({
                 next: () => {
-                    this.notificationService.info('db has stable connection');
+                    this.saveDb(connect.clientId);
                 },
                 error: () => {
-                    this.notificationService.error('fail connect to db');
+                    this.notificationService.error('Failed to connect to database');
                 },
             });
     }

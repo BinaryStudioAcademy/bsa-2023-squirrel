@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil, tap } from 'rxjs';
 
 import { DatabaseItemsService } from './database-items.service';
 import { HttpInternalService } from './http-internal.service';
+import { SpinnerService } from './spinner.service';
 
 @Injectable({
     providedIn: 'root',
@@ -12,10 +13,17 @@ export class LoadChangesService {
 
     private readonly loadChangesRoutePrefix = '/api/changerecords';
 
-    // eslint-disable-next-line no-empty-function
-    constructor(private httpClient: HttpInternalService, private databaseItemsService: DatabaseItemsService) { }
+    constructor(
+        private httpClient: HttpInternalService,
+        private databaseItemsService: DatabaseItemsService,
+        private spinner: SpinnerService,
+    ) {
+        // eslint-disable-next-line no-empty-function
+    }
 
     public loadChangesRequest(guid: string) {
+        this.spinner.show();
+
         this.httpClient.postRequest<string>(`${this.loadChangesRoutePrefix}/${guid}`, null!)
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe({
@@ -30,7 +38,10 @@ export class LoadChangesService {
             });
 
         this.databaseItemsService.getAllItems(guid)
-            .pipe(takeUntil(this.unsubscribe$))
+            .pipe(
+                takeUntil(this.unsubscribe$),
+                tap(() => this.spinner.hide()),
+            )
             .subscribe({
                 next: (event) => {
                     // eslint-disable-next-line no-console

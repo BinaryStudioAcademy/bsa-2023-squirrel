@@ -1,20 +1,21 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { environment } from '@env/environment';
+import { Observable } from 'rxjs';
 
 import { CreateScriptDto } from 'src/app/models/scripts/create-script-dto';
-import { ScriptDto } from 'src/app/models/scripts/script-dto';
-
-import { HttpInternalService } from './http-internal.service';
 import { RunScriptDto } from 'src/app/models/scripts/run-script-dto';
 import { ScriptContentDto } from 'src/app/models/scripts/script-content-dto';
+import { ScriptDto } from 'src/app/models/scripts/script-dto';
 import { ScriptResultDto } from 'src/app/models/scripts/script-result-dto';
+
+import { HttpInternalService } from './http-internal.service';
 
 @Injectable({
     providedIn: 'root',
 })
 export class ScriptService {
     private readonly scriptRoutePrefix = '/api/script';
+
     private readonly sqlServiceUrl = environment.sqlServiceUrl;
 
     // eslint-disable-next-line no-empty-function

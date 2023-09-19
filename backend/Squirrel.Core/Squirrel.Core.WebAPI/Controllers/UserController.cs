@@ -40,15 +40,6 @@ public class UserController : ControllerBase
         return NoContent();
     }
 
-    /// <summary>
-    /// Update user notifications
-    /// </summary>
-    [HttpPut("update-notifications")]
-    public async Task<ActionResult<UserProfileDto>> UpdateUserNotifications([FromBody] UpdateUserNotificationsDto updateUserNotificationsdDto)
-    {
-        return Ok(await _userService.UpdateNotificationsAsync(updateUserNotificationsdDto));
-    }
-
     [HttpGet("fromToken")]
     public async Task<ActionResult<UserDto>> GetUserFromToken()
     {

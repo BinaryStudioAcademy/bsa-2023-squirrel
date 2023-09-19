@@ -27,6 +27,9 @@ public class SettingController : ControllerBase
     {
         // we need IntegratedSecurity = true to connect
         // to MSSQL local DB (it will be changed as SettingController updates)
+
+        connectionStringDto.IntegratedSecurity = true;
+
         var connectionString = _connectionStringService.BuildConnectionString(connectionStringDto);
         var databaseService = DatabaseServiceFactory.CreateDatabaseService(connectionStringDto.DbEngine, connectionString);
         var databaseProvider = DatabaseServiceFactory.CreateDbQueryProvider(connectionStringDto.DbEngine);

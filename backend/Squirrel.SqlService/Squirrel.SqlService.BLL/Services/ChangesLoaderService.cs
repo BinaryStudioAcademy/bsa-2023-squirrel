@@ -21,7 +21,7 @@ public class ChangesLoaderService : IChangesLoaderService
         _configuration = configuration;
     }
 
-    public async Task LoadChangesToBlobAsync(Guid changeId)
+    public async Task LoadChangesToBlobAsync(Guid changeId, Guid clientId)
     {
         // TODO get actual db structure
         var dbStructure = _dbItemsRetrievalService.GetAllItems();

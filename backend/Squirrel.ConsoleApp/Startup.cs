@@ -5,8 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Converters;
 using Squirrel.ConsoleApp.BL.Interfaces;
 using Squirrel.ConsoleApp.BL.Services;
+using Squirrel.ConsoleApp.Extensions;
 using Squirrel.ConsoleApp.Filters;
-using Squirrel.Core.WebAPI.Extensions;
 using Squirrel.Core.WebAPI.Validators.Project;
 
 namespace Squirrel.ConsoleApp;

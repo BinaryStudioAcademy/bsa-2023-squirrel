@@ -2,5 +2,5 @@
 
 public interface IChangeRecordService
 {
-    Task<Guid> AddChangeRecordAsync();
+    Task<Guid> AddChangeRecordAsync(Guid clientId);
 }

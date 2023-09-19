@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Squirrel.AzureBlobStorage.Interfaces;
 using Squirrel.Core.BLL.Extensions;
@@ -132,19 +131,6 @@ public sealed class UserService : BaseService, IUserService
 
         _context.Users.Update(userEntity);
         await _context.SaveChangesAsync();
-    }
-
-    public async Task<UserProfileDto> UpdateNotificationsAsync(UpdateUserNotificationsDto updateNotificationsDto)
-    {
-        var userEntity = await GetUserByIdInternal(_userIdGetter.GetCurrentUserId());
-
-        userEntity.SquirrelNotification = updateNotificationsDto.SquirrelNotification;
-        userEntity.EmailNotification = updateNotificationsDto.EmailNotification;
-
-        _context.Users.Update(userEntity);
-        await _context.SaveChangesAsync();
-
-        return _mapper.Map<UserProfileDto>(userEntity);
     }
 
     public async Task<User?> GetUserEntityByEmail(string email)

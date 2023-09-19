@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '@env/environment';
 
+import { DbConnectionRemote } from '../../models/console/db-connection-remote';
 import { QueryParameters } from '../../models/sql-service/query-parameters';
 
 @Injectable({
@@ -15,5 +16,9 @@ export class SqlService {
 
     public getAllTablesNames(query: QueryParameters) {
         return this.http.post(`${this.baseUrl}/getAllTablesNames`, query);
+    }
+
+    public remoteConnect(dbConnectionRemote: DbConnectionRemote) {
+        return this.http.post(`${this.baseUrl}/dbConnect`, dbConnectionRemote);
     }
 }

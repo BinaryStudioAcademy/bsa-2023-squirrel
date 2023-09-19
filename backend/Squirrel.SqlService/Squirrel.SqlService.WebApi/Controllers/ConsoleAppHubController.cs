@@ -171,4 +171,13 @@ public class ConsoleAppHubController : ControllerBase
             .GetUserDefinedTableTypesAsync(_queryParameters.queryId);
         return Ok(await _queryParameters.tcs.Task);
     }
+    
+    // https://localhost:7244/api/ConsoleAppHub/getUserDefinedTableTypes
+    [HttpPost("dbConnect")]
+    public async Task<ActionResult> ConnectToDb([FromBody] RemoteConnect remoteConnect)
+    {
+        await _hubContext.Clients.User(remoteConnect.ClientId)
+            .RemoteConnectAsync(_queryParameters.queryId, remoteConnect.DbConnection);
+        return Ok(await _queryParameters.tcs.Task);
+    }
 }

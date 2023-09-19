@@ -11,8 +11,8 @@ import { takeUntil } from 'rxjs';
 import { DatabaseDto } from 'src/app/models/database/database-dto';
 
 import { DbConnection } from '../../../models/console/db-connection';
+import { DbConnectionRemote } from '../../../models/console/db-connection-remote';
 import { NewDatabaseDto } from '../../../models/database/new-database-dto';
-import { QueryParameters } from '../../../models/sql-service/query-parameters';
 
 @Component({
     selector: 'app-create-db-modal',
@@ -74,25 +74,20 @@ export class CreateDbModalComponent extends BaseComponent implements OnInit {
     }
 
     public addDataBaseRemote() {
-        // const connect: DbConnectionRemote = {
-        //     dbName: this.dbForm.value.dbName,
-        //     serverName: this.dbForm.value.serverName,
-        //     port: +this.dbForm.value.port,
-        //     username: this.dbForm.value.username,
-        //     password: this.dbForm.value.password,
-        //     dbEngine: this.data.dbEngine,
-        //     isLocalhost: this.dbForm.value.localhost,
-        //     guid: this.dbForm.value.guid,
-        // };
-
-        const query: QueryParameters = {
+        const connect: DbConnectionRemote = {
+            dbConnection: {
+                dbName: this.dbForm.value.dbName,
+                serverName: this.dbForm.value.serverName,
+                port: +this.dbForm.value.port,
+                username: this.dbForm.value.username,
+                password: this.dbForm.value.password,
+                dbEngine: this.data.dbEngine,
+                isLocalhost: this.dbForm.value.localhost,
+            },
             clientId: this.dbForm.value.guid,
-            filterSchema: '',
-            filterName: '',
-            filterRowsCount: 1,
         };
 
-        this.sqlService.getAllTablesNames(query)
+        this.sqlService.remoteConnect(connect)
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe({
                 next: () => {

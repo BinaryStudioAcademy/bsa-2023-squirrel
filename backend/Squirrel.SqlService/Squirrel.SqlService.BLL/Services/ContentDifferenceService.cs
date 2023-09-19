@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Squirrel.AzureBlobStorage.Interfaces;
-using Squirrel.AzureBlobStorage.Models;
 using Squirrel.Shared.Enums;
 using Squirrel.Shared.DTO.DatabaseItem;
 using Squirrel.Shared.DTO.Text;
@@ -9,13 +8,10 @@ using Squirrel.SqlService.BLL.Interfaces;
 using Squirrel.SqlService.BLL.Models.DTO;
 using System.Text;
 using Squirrel.SqlService.BLL.Models.DTO.Abstract;
-using System.Reflection.Metadata;
 using Blob = Squirrel.AzureBlobStorage.Models.Blob;
-using Squirrel.Core.DAL.Entities;
-using static System.Reflection.Metadata.BlobBuilder;
-using System.Collections.Generic;
 using Squirrel.SqlService.BLL.Models.DTO.Function;
 using Squirrel.SqlService.BLL.Models.DTO.Procedure;
+using System.Reflection.Metadata;
 
 namespace Squirrel.SqlService.BLL.Services;
 
@@ -54,52 +50,55 @@ public class ContentDifferenceService : IContentDifferenceService
         await CompareDbItemsContent(dbStructure.FunctionDetails!.Details, containers, commitId, DatabaseItemType.Function, differenceList, markedBlobIds);
         await CompareDbItemsContent(dbStructure.ProcedureDetails!.Details, containers, commitId, DatabaseItemType.StoredProcedure, differenceList, markedBlobIds);
 
-        await CompareRemovedDbItems(new TableStructureDto(), containers, differenceList, markedBlobIds);
-        await CompareRemovedDbItems(new Constraint(), containers, differenceList, markedBlobIds);
-        await CompareRemovedDbItems(new FunctionDetailInfo(), containers, differenceList, markedBlobIds);
-        await CompareRemovedDbItems(new ProcedureDetailInfo(), containers, differenceList, markedBlobIds);
+        var tableContainer = GetContainerName(commitId, DatabaseItemType.Table);
+        await CompareRemovedDbItems(new TableStructureDto(), DatabaseItemType.Table, tableContainer, differenceList, markedBlobIds);
+        
+        var constraintContainer = GetContainerName(commitId, DatabaseItemType.Constraint);
+        await CompareRemovedDbItems(new Constraint(), DatabaseItemType.Constraint, constraintContainer, differenceList, markedBlobIds);
+        
+        var functionContainer = GetContainerName(commitId, DatabaseItemType.Function);
+        await CompareRemovedDbItems(new FunctionDetailInfo(), DatabaseItemType.Function, functionContainer, differenceList, markedBlobIds);
+        
+        var spContainer = GetContainerName(commitId, DatabaseItemType.StoredProcedure);
+        await CompareRemovedDbItems(new ProcedureDetailInfo(), DatabaseItemType.StoredProcedure, spContainer, differenceList, markedBlobIds);
 
         return differenceList;
     }
 
-    private async Task CompareRemovedDbItems(BaseDbItem dbitem, ICollection<string> containers, List<DatabaseItemContentCompare> differenceList, 
-        List<string> markedBlobIds)
+    private async Task CompareRemovedDbItems<T>(T dbitem, DatabaseItemType itemType, string containerName, List<DatabaseItemContentCompare> differenceList,
+        List<string> markedBlobIds) where T : BaseDbItem
     {
-        foreach (var container in containers)
+        var blobs = await _blobStorageService.GetAllBlobsByContainerNameAsync(containerName);
+        var unmarkedBlobs = blobs.Where(blob => !markedBlobIds.Contains(blob.Id));
+        foreach (var blob in unmarkedBlobs)
         {
-            var blobs = await _blobStorageService.GetAllBlobsByContainerNameAsync(container);
-            var unmarkedBlobs = blobs.Where(blob => !markedBlobIds.Contains(blob.Id));
-            foreach (var blob in unmarkedBlobs)
-            {
-                differenceList.Add(GetDbItemDifference(blob.Content!, dbitem, DatabaseItemType.Table));
-            }
+            differenceList.Add(GetDbItemDifference(dbitem, blob.Content!, itemType));
         }
     }
 
-    private async Task CompareDbItemsContent<T>(List<T> dbStructureItemCollection, ICollection<string> containers, 
+    private async Task CompareDbItemsContent<T>(List<T> dbStructureItemCollection, ICollection<string> containers,
         int commitId, DatabaseItemType itemType, List<DatabaseItemContentCompare> differenceList, List<string> markedBlobIds) where T : BaseDbItem
     {
         ICollection<Blob> blobs = new List<Blob>();
-        var dbItemContainer = containers.FirstOrDefault(cont => cont == $"{commitId}_{itemType}");
+        var dbItemContainer = containers.FirstOrDefault(cont => cont == GetContainerName(commitId, itemType));
         if (dbItemContainer is not null)
         {
             blobs = await _blobStorageService.GetAllBlobsByContainerNameAsync(dbItemContainer);
         }
         foreach (T dbItem in dbStructureItemCollection)
         {
-            var currentBlob = blobs.FirstOrDefault(blob => blob.Id == $"{dbItem.Schema}_{dbItem.Name}");
+            var currentBlob = blobs.FirstOrDefault(blob => blob.Id == GetBlobName(dbItem.Schema, dbItem.Name));
             if (currentBlob is null)
             {
-                differenceList.Add(GetDbItemDifference(Encoding.UTF8.GetBytes(""), dbItem, DatabaseItemType.Table));
+                differenceList.Add(GetDbItemDifference(Encoding.UTF8.GetBytes(""), dbItem, itemType));
                 continue;
             }
-            differenceList.Add(GetDbItemDifference(currentBlob.Content!, dbItem, DatabaseItemType.Table));
+            differenceList.Add(GetDbItemDifference(currentBlob.Content!, dbItem, itemType));
             markedBlobIds.Add(currentBlob.Id);
-
         }
     }
 
-    private DatabaseItemContentCompare GetDbItemDifference<T>(byte[] blobContent, T dbItem, 
+    private DatabaseItemContentCompare GetDbItemDifference<T>(byte[] blobContent, T dbItem,
         DatabaseItemType itemType) where T : BaseDbItem
     {
         if (blobContent is null)
@@ -128,34 +127,32 @@ public class ContentDifferenceService : IContentDifferenceService
         return dbItemContentCompare;
     }
 
-    private List<string> GetBlobsByCommitId(int commitId)
+    private DatabaseItemContentCompare GetDbItemDifference<T>(T dbItem, byte[] blobContent, DatabaseItemType itemType) where T: BaseDbItem
     {
-        // TODO: get commitId and objectType and objectName
-        // projectId_commitId_objectType_objectName
-        var blobIds = new List<string>();
-        blobIds.Add("15_10_Function_Test1");
-        blobIds.Add("15_10_Function_Test2");
-        return blobIds;
-    }
-    private async Task Test(int commitId)
-    {
-        // TODO: get commitId and objectType and objectName
-        // projectId_commitId_objectType_objectName
-        var sql1 = @"CREATE FUNCTION east_or_west (   @long DECIMAL(9,6)  )  RETURNS VARCHAR(36) AS  BEGIN   DECLARE @return_value CHAR(4);   SET @return_value = 'same';      IF (@long > 0.00) SET @return_value = 'east';      IF (@long < 0.00) SET @return_value = 'west';         RETURN @return_value  END;";
-        var sql2 = @"   CREATE FUNCTION dbo.fn_diagramobjects()    RETURNS int   WITH EXECUTE AS N'dbo'   AS   BEGIN    declare @id_upgraddiagrams  int    declare @id_sysdiagrams   int    declare @id_helpdiagrams  int    declare @id_helpdiagramdefinition int    declare @id_creatediagram int    declare @id_renamediagram int    declare @id_alterdiagram  int     declare @id_dropdiagram  int    declare @InstalledObjects int      select @InstalledObjects = 0      select  @id_upgraddiagrams = object_id(N'dbo.sp_upgraddiagrams'),     @id_sysdiagrams = object_id(N'dbo.sysdiagrams'),     @id_helpdiagrams = object_id(N'dbo.sp_helpdiagrams'),     @id_helpdiagramdefinition = object_id(N'dbo.sp_helpdiagramdefinition'),     @id_creatediagram = object_id(N'dbo.sp_creatediagram'),     @id_renamediagram = object_id(N'dbo.sp_renamediagram'),     @id_alterdiagram = object_id(N'dbo.sp_alterdiagram'),      @id_dropdiagram = object_id(N'dbo.sp_dropdiagram')      if @id_upgraddiagrams is not null     select @InstalledObjects = @InstalledObjects + 1    if @id_sysdiagrams is not null     select @InstalledObjects = @InstalledObjects + 2    if @id_helpdiagrams is not null     select @InstalledObjects = @InstalledObjects + 4    if @id_helpdiagramdefinition is not null     select @InstalledObjects = @InstalledObjects + 8    if @id_creatediagram is not null     select @InstalledObjects = @InstalledObjects + 16    if @id_renamediagram is not null     select @InstalledObjects = @InstalledObjects + 32    if @id_alterdiagram  is not null     select @InstalledObjects = @InstalledObjects + 64    if @id_dropdiagram is not null     select @InstalledObjects = @InstalledObjects + 128        return @InstalledObjects    END   ";
-        var blob1 = new Blob
+        if (blobContent is null)
         {
-            Id = "15_10_Function_Test1",
-            ContentType = "application/json",
-            Content = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(sql1)),
-        };
-        var blob2 = new Blob
+            throw new Exception("Blob Content is empty");
+        }
+
+        var jsonString = Encoding.UTF8.GetString(blobContent);
+        var commitItemContent = JsonConvert.DeserializeObject<T>(jsonString)!;
+
+        var textPair = new TextPairRequestDto
         {
-            Id = "15_10_Function_Test2",
-            ContentType = "application/json",
-            Content = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(sql2)),
+            //TODO with models - not json
+            OldText = JsonConvert.SerializeObject(commitItemContent),
+            NewText = string.Empty,
+            IgnoreWhitespace = true
         };
-        await _blobStorageService.UploadAsync(_configuration["UserDbCommitsBlobContainerName"], blob2);
+        var dbItemContentCompare = new DatabaseItemContentCompare
+        {
+            SchemaName = commitItemContent.Schema,
+            ItemName = commitItemContent.Name,
+            ItemType = itemType,
+            InLineDiff = _textService.GetInlineDiffs(textPair),
+            SideBySideDiff = _textService.GetSideBySideDiffs(textPair),
+        };
+        return dbItemContentCompare;
     }
 
     private async Task<DbStructureDto> GetTempBlobContentAsync(Guid tempBlobId)
@@ -167,5 +164,54 @@ public class ContentDifferenceService : IContentDifferenceService
             return JsonConvert.DeserializeObject<DbStructureDto>(jsonString)!;
         }
         throw new Exception("Blob Content is empty");
+    }
+
+    private string GetContainerName(int commitId, DatabaseItemType itemType)
+    {
+        return $"{commitId}-{itemType}".ToLower();
+    }
+    private string GetBlobName(string schema, string name)
+    {
+        return $"{schema}-{name}".ToLower();
+    }
+
+    public async Task GenerateTempBlobContentAsync(int commitId)
+    {
+        DbStructureDto dbStructure = new DbStructureDto();
+        var tableBlobs = await _blobStorageService.GetAllBlobsByContainerNameAsync($"{commitId}-table");
+        var constBlobs = await _blobStorageService.GetAllBlobsByContainerNameAsync($"{commitId}-constraint");
+        var spBlobs = await _blobStorageService.GetAllBlobsByContainerNameAsync($"{commitId}-storedprocedure");
+        var funcBlobs = await _blobStorageService.GetAllBlobsByContainerNameAsync($"{commitId}-function");
+        foreach (var blob in tableBlobs)
+        {
+            var jsonString = Encoding.UTF8.GetString(blob.Content);
+            var content = JsonConvert.DeserializeObject<TableStructureDto>(jsonString)!;
+            dbStructure.TableStructures.Add(content);
+        }
+        foreach (var blob in constBlobs)
+        {
+            var jsonString = Encoding.UTF8.GetString(blob.Content);
+            var content = JsonConvert.DeserializeObject<Constraint>(jsonString)!;
+            dbStructure.Constraints.Constraints.Add(content);
+        }
+        foreach (var blob in spBlobs)
+        {
+            var jsonString = Encoding.UTF8.GetString(blob.Content);
+            var content = JsonConvert.DeserializeObject<ProcedureDetailInfo>(jsonString)!;
+            dbStructure.ProcedureDetails.Details.Add(content);
+        }
+        foreach (var blob in funcBlobs)
+        {
+            var jsonString = Encoding.UTF8.GetString(blob.Content);
+            var content = JsonConvert.DeserializeObject<FunctionDetailInfo>(jsonString)!;
+            dbStructure.FunctionDetails.Details.Add(content);
+        }
+        var tempblob = new Blob
+        {
+            Id = $"{new Guid()}".ToLower(),
+            ContentType = "application/json",
+            Content = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(dbStructure)),
+        };
+        await _blobStorageService.UploadAsync(_configuration["UserDbChangesBlobContainerName"], tempblob);
     }
 }

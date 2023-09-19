@@ -1,10 +1,6 @@
 ﻿using Squirrel.Shared.DTO.DatabaseItem;
-using Squirrel.Shared.DTO.Text;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Squirrel.Shared.Enums;
+using Squirrel.SqlService.BLL.Models.DTO.Abstract;
 
 namespace Squirrel.SqlService.BLL.Interfaces
 {
@@ -12,5 +8,6 @@ namespace Squirrel.SqlService.BLL.Interfaces
     {
         Task<List<DatabaseItemContentCompare>> GetInlineContentDiffsAsync(int commitId, Guid tempBlobId);
         Task<List<DatabaseItemContentCompare>> GetSideBySideContentDiffsAsync(int commitId, Guid tempBlobId);
+        Task GenerateTempBlobContentAsync(int commitId);
     }
 }

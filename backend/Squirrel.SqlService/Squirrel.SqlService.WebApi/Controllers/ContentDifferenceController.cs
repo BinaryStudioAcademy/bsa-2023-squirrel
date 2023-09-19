@@ -25,4 +25,11 @@ public sealed class ContentDifferenceController : ControllerBase
     {
         return Ok(await _contentDifferenceService.GetSideBySideContentDiffsAsync(commitId, tempBlobId));
     }
+
+    [HttpGet("generate-tempBlob")]
+    public async Task<ActionResult> GenerateTempBlob(int basedOnCommitId)
+    {
+        await _contentDifferenceService.GenerateTempBlobContentAsync(basedOnCommitId);
+        return Ok();
+    }
 }

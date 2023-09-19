@@ -1,13 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BaseComponent } from '@core/base/base.component';
+import { AuthService } from '@core/services/auth.service';
 import { EventService } from '@core/services/event.service';
 import { NotificationService } from '@core/services/notification.service';
 import { SpinnerService } from '@core/services/spinner.service';
 import { UserService } from '@core/services/user.service';
 import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { ValidationsFn } from '@shared/helpers/validations-fn';
-import { finalize, take, takeUntil } from 'rxjs';
+import { finalize, takeUntil } from 'rxjs';
 
 import { UpdateUserNamesDto } from 'src/app/models/user/update-user-names-dto';
 import { UpdateUserNotificationsDto } from 'src/app/models/user/update-user-notifications-dto';
@@ -48,6 +49,7 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
         private notificationService: NotificationService,
         private spinner: SpinnerService,
         private eventService: EventService,
+        public authService: AuthService,
     ) {
         super();
     }
@@ -59,9 +61,12 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
     private fetchCurrentUser() {
         this.spinner.show();
 
-        this.eventService.userChangedEvent$.pipe(take(1)).subscribe((user: UserDto | undefined) => {
-            this.userForUpdateService = user;
-        });
+        this.authService
+            .getUser()
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((user) => {
+                this.userForUpdateService = user;
+            });
 
         this.userService
             .getUserProfile()
@@ -172,6 +177,7 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
             email: this.userForUpdateService!.email,
         };
 
+        this.authService.setCurrentUser(userUpdateService);
         this.eventService.userChanged(userUpdateService);
     }
 

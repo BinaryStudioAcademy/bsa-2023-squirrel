@@ -15,6 +15,6 @@ export class DatabaseItemsService {
     constructor(private httpService: HttpInternalService) {}
 
     public getAllItems(clientId: string): Observable<DatabaseItem[]> {
-        return this.httpService.getRequest<DatabaseItem[]>(`this.databaseItemsRoutePrefix/${clientId}`);
+        return this.httpService.getRequest<DatabaseItem[]>(`${this.databaseItemsRoutePrefix}/${clientId}`);
     }
 }

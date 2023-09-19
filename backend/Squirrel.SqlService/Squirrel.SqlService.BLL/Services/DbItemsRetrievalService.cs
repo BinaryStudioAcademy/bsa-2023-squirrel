@@ -7,6 +7,7 @@ using Squirrel.SqlService.BLL.Models.ConsoleAppHub;
 using Squirrel.SqlService.BLL.Models.DTO;
 using Squirrel.SqlService.BLL.Models.DTO.Function;
 using Squirrel.SqlService.BLL.Models.DTO.Procedure;
+using Squirrel.SqlService.BLL.Models.DTO.View;
 
 namespace Squirrel.SqlService.BLL.Services;
 
@@ -30,19 +31,47 @@ public class DbItemsRetrievalService : IDbItemsRetrievalService
     public async Task<DbStructureDto> GetAllDbStructureAsync(Guid clientId)
     {
         var structuresResult = await GetAllTableStructuresAsync(clientId);
-        var constraintsResult = await GetAllTableConstraintsAsync(clientId);
+
+        // timeout exception here:
+        // var constraintsResult = await GetAllTableConstraintsAsync(clientId);
+
         var functionDetailsResult = await GetAllFunctionDetailsAsync(clientId);
-        var proceduresDetailsResult = await GetAllProcedureDetailsAsync(clientId);
+
+        // QueryExpiredException
+        //var proceduresDetailsResult = await GetAllProcedureDetailsAsync(clientId);
+
+        // timeout exception here:
+        // var viewsDetailsResult = await GetAllViewDetailsAsync(clientId);
+
+        // TODO: if needed will also fetch UserDefinedTableTypes here where we will have dto
 
         var dbStructureResult = new DbStructureDto()
         {
-            //TableStructures = structuresResult,
-            Constraints = constraintsResult,
+            TableStructures = structuresResult,
+            //Constraints = constraintsResult,
             FunctionDetails = functionDetailsResult,
-            ProcedureDetails = proceduresDetailsResult
+            //ProcedureDetails = proceduresDetailsResult,
+            //ViewDetails = viewsDetailsResult
         };
 
         return dbStructureResult;
+    }
+
+    public async Task<ICollection<DatabaseItem>> GetAllItemsAsync(Guid clientId)
+    {
+        List<DatabaseItem> items = new();
+
+        var tableNames = await GetTableNamesAsync(clientId);
+        var viewNames = await GetViewNamesAsync(clientId);
+        var functionNames = await GetFunctionsNamesAsync(clientId);
+        var procedureNames = await GetProceduresNamesAsync(clientId);
+
+        items.AddRange(_mapper.Map<List<DatabaseItem>>(tableNames.Tables));
+        items.AddRange(_mapper.Map<List<DatabaseItem>>(viewNames.Views));
+        items.AddRange(_mapper.Map<List<DatabaseItem>>(functionNames.Functions));
+        items.AddRange(_mapper.Map<List<DatabaseItem>>(procedureNames.Procedures));
+
+        return items;
     }
 
     public async Task<TableNamesDto> GetTableNamesAsync(Guid clientId)
@@ -74,11 +103,11 @@ public class DbItemsRetrievalService : IDbItemsRetrievalService
                 FilterName = table.Name,
             };
 
-            var tableNamesResult = await _httpClientService
+            var tableStructureResult = await _httpClientService
                 .PostAsync<QueryParameters, TableStructureDto>
                 ($"{SqlServiceRoute}/api/ConsoleAppHub/getTableStructure", tableStructureRetriveRequest);
 
-            tablesStructuresResults.Add(tableNamesResult);
+            tablesStructuresResults.Add(tableStructureResult);
         }
 
         return tablesStructuresResults;
@@ -99,11 +128,11 @@ public class DbItemsRetrievalService : IDbItemsRetrievalService
                 FilterSchema = table.Schema,
             };
 
-            var tableNamesResult = await _httpClientService
+            var tableConstraintResult = await _httpClientService
                 .PostAsync<QueryParameters, TableConstraintsDto>
                 ($"{SqlServiceRoute}/api/ConsoleAppHub/getTableChecksAndUniqueConstraints", tableConstraintsRetriveRequest);
 
-            tableConstraintsResult.Add(tableNamesResult);
+            tableConstraintsResult.Add(tableConstraintResult);
         }
 
         return tableConstraintsResult;
@@ -166,18 +195,31 @@ public class DbItemsRetrievalService : IDbItemsRetrievalService
         return procedureDetailResult;
     }
 
-    public async Task<ICollection<DatabaseItem>> GetAllItemsAsync(Guid clientId)
+    public async Task<ViewNamesDto> GetViewNamesAsync(Guid clientId)
     {
-        List<DatabaseItem> items = new();
+        var viewsNamesRetriveRequest = new QueryParameters()
+        {
+            ClientId = clientId.ToString(),
+        };
 
-        var tableNames = await GetTableNamesAsync(clientId);
-        var functionNames = await GetFunctionsNamesAsync(clientId);
-        var procedureNames = await GetProceduresNamesAsync(clientId);
+        var viewsNamesResult = await _httpClientService
+            .PostAsync<QueryParameters, ViewNamesDto>
+            ($"{SqlServiceRoute}/api/ConsoleAppHub/getAllViewsNames", viewsNamesRetriveRequest);
 
-        items.AddRange(_mapper.Map<List<DatabaseItem>>(tableNames.Tables));
-        items.AddRange(_mapper.Map<List<DatabaseItem>>(functionNames.Functions));
-        items.AddRange(_mapper.Map<List<DatabaseItem>>(procedureNames.Procedures));
+        return viewsNamesResult;
+    }
 
-        return items;
+    public async Task<ViewDetailsDto> GetAllViewDetailsAsync(Guid clientId)
+    {
+        var viewDetailsRetriveRequest = new QueryParameters()
+        {
+            ClientId = clientId.ToString(),
+        };
+
+        var viewDetailResult = await _httpClientService
+            .PostAsync<QueryParameters, ViewDetailsDto>
+            ($"{SqlServiceRoute}/api/ConsoleAppHub/getViewsWithDetail", viewDetailsRetriveRequest);
+
+        return viewDetailResult;
     }
 }

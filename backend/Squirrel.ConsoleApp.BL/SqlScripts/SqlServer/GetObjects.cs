@@ -35,7 +35,7 @@ internal class GetObjects
             ";
 
     public static string GetViewsNamesScript =>
-        @$"SELECT SCHEMA_NAME(schema_id) AS Schema, NAME as Name FROM SYS.OBJECTS WHERE TYPE_DESC = 'VIEW'";
+        @$"SELECT SCHEMA_NAME(schema_id) AS SchemaName, name AS Name FROM sys.objects WHERE TYPE_DESC = 'VIEW'";
 
     public static string GetViewDefinitionScript(string viewSchema, string viewName) =>
         @$"

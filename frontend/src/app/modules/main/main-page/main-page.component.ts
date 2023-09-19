@@ -6,13 +6,11 @@ import { NotificationService } from '@core/services/notification.service';
 import { ProjectService } from '@core/services/project.service';
 import { SharedProjectService } from '@core/services/shared-project.service';
 import { SpinnerService } from '@core/services/spinner.service';
-import { SqlService } from '@core/services/sql.service';
 import { finalize, takeUntil } from 'rxjs';
 
 import { ProjectResponseDto } from 'src/app/models/projects/project-response-dto';
 
 import { DatabaseInfoDto } from '../../../models/database/database-info-dto';
-import { QueryParameters } from '../../../models/sql-service/query-parameters';
 
 @Component({
     selector: 'app-home',
@@ -32,7 +30,6 @@ export class MainComponent extends BaseComponent implements OnInit, OnDestroy {
         private notificationService: NotificationService,
         private spinner: SpinnerService,
         private sharedProject: SharedProjectService,
-        private sqlService: SqlService,
     ) {
         super();
     }
@@ -76,28 +73,6 @@ export class MainComponent extends BaseComponent implements OnInit, OnDestroy {
                 error: err => {
                     this.notificationService.error(err.message);
                     this.router.navigateByUrl('projects');
-                },
-            });
-    }
-
-    public choseDb(db: DatabaseInfoDto) {
-        this.currentDb = db;
-        console.log(db.guid);
-        const query: QueryParameters = {
-            clientId: this.currentDb.guid,
-            filterSchema: '',
-            filterName: '',
-            filterRowsCount: 1,
-        };
-
-        this.sqlService.getAllTablesNames(query)
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe({
-                next: () => {
-                    this.notificationService.info('db has stable connection');
-                },
-                error: () => {
-                    this.notificationService.error('fail connect to db');
                 },
             });
     }

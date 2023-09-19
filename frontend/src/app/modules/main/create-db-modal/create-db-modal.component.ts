@@ -110,7 +110,7 @@ export class CreateDbModalComponent extends BaseComponent implements OnInit {
     }
 
     private getValidators() {
-        if (!this.dbForm.value.localhost) {
+        if (this.dbForm.value.localhost) {
             return null;
         }
 

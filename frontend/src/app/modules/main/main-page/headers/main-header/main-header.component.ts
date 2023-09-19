@@ -1,18 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { BaseComponent } from '@core/base/base.component';
 import { DatabaseService } from '@core/services/database.service';
+import { NotificationService } from '@core/services/notification.service';
 import { SharedProjectService } from '@core/services/shared-project.service';
+import { SqlService } from '@core/services/sql.service';
 import { CreateDbModalComponent } from '@modules/main/create-db-modal/create-db-modal.component';
+import { takeUntil } from 'rxjs';
 
 import { DatabaseDto } from 'src/app/models/database/database-dto';
 import { ProjectResponseDto } from 'src/app/models/projects/project-response-dto';
+import { QueryParameters } from 'src/app/models/sql-service/query-parameters';
 
 @Component({
     selector: 'app-main-header',
     templateUrl: './main-header.component.html',
     styleUrls: ['./main-header.component.sass'],
 })
-export class MainHeaderComponent implements OnInit {
+export class MainHeaderComponent extends BaseComponent implements OnInit {
     public project: ProjectResponseDto;
 
     public selectedDbName: string;
@@ -27,8 +32,10 @@ export class MainHeaderComponent implements OnInit {
         private sharedProject: SharedProjectService,
         public dialog: MatDialog,
         private databaseService: DatabaseService,
-        // eslint-disable-next-line no-empty-function
+        private sqlService: SqlService,
+        private notificationService: NotificationService,
     ) {
+        super();
     }
 
     ngOnInit() {
@@ -37,9 +44,9 @@ export class MainHeaderComponent implements OnInit {
 
     public onDatabaseSelected(value: string) {
         this.selectedDbName = value;
-        this.currentDb = this.databases!.find(database => database.dbName === this.selectedDbName)!;
+        const currentDb = this.databases!.find(database => database.dbName === this.selectedDbName)!;
 
-        this.sharedProject.setCurrentDb(this.currentDb);
+        this.choseDb(currentDb);
     }
 
     public openCreateModal(): void {
@@ -76,8 +83,31 @@ export class MainHeaderComponent implements OnInit {
             next: databases => {
                 this.databases = databases;
                 this.dbNames = databases.map(database => database.dbName);
-                this.sharedProject.setCurrentDb(databases[0]);
+                this.choseDb(databases[0]);
             },
         });
+    }
+
+    public choseDb(db: DatabaseDto) {
+        this.currentDb = db;
+        console.log(db.guid);
+        const query: QueryParameters = {
+            clientId: this.currentDb.guid,
+            filterSchema: '',
+            filterName: '',
+            filterRowsCount: 1,
+        };
+
+        this.sqlService.getAllTablesNames(query)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe({
+                next: () => {
+                    this.notificationService.info('db has stable connection');
+                    this.sharedProject.setCurrentDb(db);
+                },
+                error: () => {
+                    this.notificationService.error('fail connect to db');
+                },
+            });
     }
 }

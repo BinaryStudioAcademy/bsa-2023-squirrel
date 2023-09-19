@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { environment } from '@env/environment';
 import { Observable } from 'rxjs';
 
 import { CreateScriptDto } from 'src/app/models/scripts/create-script-dto';
@@ -15,8 +14,6 @@ import { HttpInternalService } from './http-internal.service';
 })
 export class ScriptService {
     private readonly scriptRoutePrefix = '/api/script';
-
-    private readonly sqlServiceUrl = environment.sqlServiceUrl;
 
     // eslint-disable-next-line no-empty-function
     constructor(private httpService: HttpInternalService) {}
@@ -34,10 +31,10 @@ export class ScriptService {
     }
 
     public formatScript(dto: RunScriptDto): Observable<ScriptContentDto> {
-        return this.httpService.putRequest(`${this.sqlServiceUrl}${this.scriptRoutePrefix}/format`, dto);
+        return this.httpService.putRequest(`${this.scriptRoutePrefix}/format`, dto);
     }
 
     public executeScript(dto: RunScriptDto): Observable<ScriptResultDto> {
-        return this.httpService.postRequest(`${this.sqlServiceUrl}${this.scriptRoutePrefix}/execute`, dto);
+        return this.httpService.postRequest(`${this.scriptRoutePrefix}/execute`, dto);
     }
 }

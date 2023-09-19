@@ -3,7 +3,7 @@ using Squirrel.Shared.Exceptions;
 using Microsoft.SqlServer.TransactSql.ScriptDom;
 using System.Diagnostics;
 using Squirrel.Core.DAL.Enums;
-using Squirrel.SqlService.BLL.Models.DTO.Script;
+using Squirrel.Core.Common.DTO.Script;
 
 namespace Squirrel.SqlService.BLL.Services.SqlFormatter;
 
@@ -16,6 +16,8 @@ public class SqlFormatterService : ISqlFormatterService
     }
     public ScriptContentDto GetFormattedSql(DbEngine dbEngine, string inputSql)
     {
+        Validate(inputSql);
+
         return dbEngine switch
         {
             DbEngine.SqlServer => FormatMsSqlServer(inputSql),
@@ -92,6 +94,14 @@ public class SqlFormatterService : ISqlFormatterService
             MultilineViewColumnsList = true,
             MultilineWherePredicatesList = true
         };
+    }
+
+    private void Validate(string inputSql)
+    {
+        if (string.IsNullOrEmpty(inputSql) || string.IsNullOrWhiteSpace(inputSql))
+        {
+            throw new SqlSyntaxException("Input SQL cannot be Null or Empty");
+        }
     }
 
     private string CreateErrorMessage(IList<ParseError> errors)

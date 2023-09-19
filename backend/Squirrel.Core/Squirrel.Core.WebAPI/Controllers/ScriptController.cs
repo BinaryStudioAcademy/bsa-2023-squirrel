@@ -7,7 +7,7 @@ namespace Squirrel.Core.WebAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
+//[Authorize]
 public sealed class ScriptController : ControllerBase
 {
     private readonly IScriptService _scriptService;
@@ -35,5 +35,25 @@ public sealed class ScriptController : ControllerBase
     public async Task<ActionResult<ScriptDto>> UpdateScript(ScriptDto dto)
     {
         return Ok(await _scriptService.UpdateScriptAsync(dto, _userIdGetter.GetCurrentUserId()));
+    }
+
+    /// <summary>
+    /// Find errors and format provided SQL script
+    /// </summary>
+    [HttpPut("format")]
+    public async Task<ActionResult<ScriptContentDto>> GetFormattedSql([FromBody] InboundScriptDto inboundScriptDto)
+    {
+        return Ok(await _scriptService.GetFormattedSqlAsync(inboundScriptDto));
+    }
+
+    /// <summary>
+    /// Execute provided SQL script
+    /// </summary>
+    [HttpPost("execute")]
+    public ActionResult<ScriptResultDto> ExecuteFormattedSql([FromBody] InboundScriptDto inboundScriptDto)
+    {
+        // boilerplate for next PR
+
+        return Ok();
     }
 }

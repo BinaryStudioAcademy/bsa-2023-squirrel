@@ -1,6 +1,6 @@
 ﻿using Squirrel.Core.DAL.Enums;
 
-namespace Squirrel.SqlService.BLL.Models.DTO.Script;
+namespace Squirrel.Core.Common.DTO.Script;
 
 public class InboundScriptDto
 {

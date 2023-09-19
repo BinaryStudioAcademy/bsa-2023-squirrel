@@ -1,6 +1,7 @@
 ﻿using Squirrel.Core.BLL.Extensions;
 using Squirrel.Core.BLL.Interfaces;
 using System.Net.Http.Json;
+using HttpRequestException = Squirrel.Shared.Exceptions.HttpRequestException;
 
 namespace Squirrel.Core.BLL.Services;
 
@@ -28,24 +29,23 @@ public sealed class HttpClientService : IHttpClientService
         return await response.GetModelAsync<TResponse>();
     }
 
-    public async Task<TResponse> PostAsync<TRequest, TResponse>(string requestUrl, TRequest requestData)
+    public async Task<TResponse> SendAsync<TRequest, TResponse>(string requestUrl, TRequest requestData, HttpMethod method)
     {
         // Serialize the request data to JSON (assuming you're sending JSON).
-        var content = JsonContent.Create(requestData);
+        var content = requestData != null ? JsonContent.Create(requestData) : null;
 
-        // Send a POST request to the URL with the serialized data.
-        var response = await _httpClient.PostAsync(requestUrl, content);
+        var message = new HttpRequestMessage { RequestUri = new Uri(requestUrl), Content = content, Method = method };
+
+        // Send a request to the URL with the serialized data.
+        var response = await _httpClient.SendAsync(message);
 
         if (!response.IsSuccessStatusCode)
         {
-            // Throw HTTP error responses here.
-            throw new HttpRequestException($"HTTP Error: {response.StatusCode}");
+            var errorMessage = await response.Content.ReadAsStringAsync();
+            throw new HttpRequestException(errorMessage);
         }
 
         // Return the TResponse
         return await response.GetModelAsync<TResponse>();
     }
-
-    public async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request)
-        => await _httpClient.SendAsync(request).ConfigureAwait(false);
 }

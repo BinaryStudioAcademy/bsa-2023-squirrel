@@ -1,5 +1,5 @@
 ﻿using Squirrel.Core.DAL.Enums;
-using Squirrel.SqlService.BLL.Models.DTO.Script;
+using Squirrel.Core.Common.DTO.Script;
 
 namespace Squirrel.SqlService.BLL.Interfaces;
 

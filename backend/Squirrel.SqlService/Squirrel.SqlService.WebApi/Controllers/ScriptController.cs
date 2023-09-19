@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Squirrel.Shared.Exceptions;
 using Squirrel.SqlService.BLL.Interfaces;
-using Squirrel.SqlService.BLL.Models.DTO.Script;
+using Squirrel.Core.Common.DTO.Script;
 
 namespace Squirrel.SqlService.WebApi.Controllers;
 
@@ -22,8 +21,6 @@ public class ScriptController : ControllerBase
     [HttpPut("format")]
     public ActionResult<ScriptContentDto> GetFormattedSql([FromBody] InboundScriptDto inboundScriptDto)
     {
-        ValidateInput(inboundScriptDto);
-
         return Ok(_sqlFormatterService.GetFormattedSql(inboundScriptDto.DbEngine, inboundScriptDto.Content!));
     }
 
@@ -33,21 +30,10 @@ public class ScriptController : ControllerBase
     [HttpPost("execute")]
     public ActionResult<ScriptResultDto> ExecuteFormattedSql([FromBody] InboundScriptDto inboundScriptDto)
     {
-        ValidateInput(inboundScriptDto);
-
         // boilerplate for next PR
 
         var scriptToExecute = _sqlFormatterService.GetFormattedSql(inboundScriptDto.DbEngine, inboundScriptDto.Content!);
 
         return Ok();
-    }
-
-
-    private void ValidateInput(InboundScriptDto inboundScriptDto)
-    {
-        if (inboundScriptDto == null || string.IsNullOrEmpty(inboundScriptDto.Content) || string.IsNullOrWhiteSpace(inboundScriptDto.Content))
-        {
-            throw new SqlSyntaxException("InputSql cannot be Null or Empty");
-        }
     }
 }

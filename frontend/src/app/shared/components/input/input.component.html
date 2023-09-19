@@ -36,13 +36,11 @@
         </div>
 
         <div class="invalid-feedback" *ngIf="control.errors?.['wrongCharacters']">
-            {{ label === '' ? name : (label | titlecase) }} can contain only Latin letters, Digits and Special
-            characters
+            Only Latin letters, Digits and Special characters
         </div>
 
         <div class="invalid-feedback" *ngIf="control.errors?.['userNameMatch']">
-            {{ label === '' ? name : (label | titlecase) }} must contain only Latin letters, numbers, dashes and
-            underscores
+            Only Latin letters, numbers, dashes and underscores
         </div>
 
         <div class="invalid-feedback" *ngIf="control.errors?.['nameMatch']">

@@ -24,8 +24,8 @@ public sealed class ProjectDatabaseController : ControllerBase
     }
 
     [HttpGet("all/{projectId}")]
-    public async Task<ActionResult<List<DatabaseInfoDto>>> GetAllProjectDatabases(int projectId)
+    public async Task<ActionResult<List<ProjectDatabaseDto>>> GetAllProjectDatabases(int projectId)
     {
-        return Ok(await _projectDatabaseService.GetAllProjectDbNamesAsync(projectId));
+        return Ok(await _projectDatabaseService.GetAllProjectDbAsync(projectId));
     }
 }

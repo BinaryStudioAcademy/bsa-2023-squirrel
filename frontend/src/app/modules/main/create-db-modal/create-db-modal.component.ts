@@ -5,6 +5,8 @@ import { ConsoleConnectService } from '@core/services/console-connect.service';
 import { DatabaseService } from '@core/services/database.service';
 import { NotificationService } from '@core/services/notification.service';
 
+import { DatabaseDto } from 'src/app/models/database/database-dto';
+
 import { DbConnection } from '../../../models/console/db-connection';
 import { NewDatabaseDto } from '../../../models/database/new-database-dto';
 
@@ -14,7 +16,7 @@ import { NewDatabaseDto } from '../../../models/database/new-database-dto';
     styleUrls: ['./create-db-modal.component.sass'],
 })
 export class CreateDbModalComponent implements OnInit {
-    @Output() public dbName = new EventEmitter<string>();
+    @Output() public addedDatabase = new EventEmitter<DatabaseDto>();
 
     public dbForm: FormGroup = new FormGroup({});
 
@@ -51,7 +53,7 @@ export class CreateDbModalComponent implements OnInit {
             port: +this.dbForm.value.port,
             username: this.dbForm.value.username,
             password: this.dbForm.value.password,
-            dbEngine: this.data.dbEngine - 1,
+            dbEngine: this.data.dbEngine,
             isLocalhost: this.localhost,
         };
 
@@ -89,9 +91,9 @@ export class CreateDbModalComponent implements OnInit {
 
         this.databaseService.addDatabase(database)
             .subscribe({
-                next: dbName => {
+                next: () => {
                     this.notificationService.info('database was successfully added');
-                    this.dbName.emit(dbName.dbName);
+                    this.addedDatabase.emit(database);
                     this.close();
                 },
                 error: () => {

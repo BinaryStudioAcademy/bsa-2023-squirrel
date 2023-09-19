@@ -32,7 +32,7 @@
             <app-button
                 variant="outline-primary"
                 text="Save"
-                [isDisabled]="!selectedScript"
+                [isDisabled]="!selectedScript || !form.dirty"
                 (buttonOnClick)="saveScript()"></app-button>
         </div>
     </div>

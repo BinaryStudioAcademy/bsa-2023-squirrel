@@ -126,19 +126,29 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
                     this.updateScriptContent(updatedScript.content);
                     this.notification.info('Script content successfully formatted');
                 },
-                (err) => this.notification.error(JSON.stringify(err)),
+                (err) => {
+                    this.notification.error('Format Script error');
+                    this.updateScriptContentError(JSON.stringify(err));
+                },
             );
     }
 
     public updateScriptContent(newContent: string): void {
         if (this.selectedScript) {
             this.selectedScript.content = newContent;
-            this.form.patchValue(
-                {
-                    scriptContent: newContent,
-                },
-                { emitEvent: false },
-            );
+            this.form.patchValue({
+                scriptContent: this.selectedScript.content,
+            });
+            this.form.markAsDirty();
+        }
+    }
+
+    public updateScriptContentError(errorContent: string): void {
+        if (this.selectedScript) {
+            this.selectedScript.content = `${this.selectedScript.content}\n${errorContent}`;
+            this.form.patchValue({
+                scriptContent: this.selectedScript.content,
+            });
         }
     }
 

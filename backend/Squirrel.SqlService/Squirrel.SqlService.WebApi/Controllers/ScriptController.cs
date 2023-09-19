@@ -35,6 +35,8 @@ public class ScriptController : ControllerBase
     {
         ValidateInput(inboundScriptDto);
 
+        // boilerplate for next PR
+
         var scriptToExecute = _sqlFormatterService.GetFormattedSql(inboundScriptDto.DbEngine, inboundScriptDto.Content!);
 
         return Ok();

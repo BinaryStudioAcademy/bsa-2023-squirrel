@@ -24,6 +24,8 @@ export class CreateDbModalComponent extends BaseComponent implements OnInit {
 
     public dbForm: FormGroup = new FormGroup({});
 
+    public integratedSecurity = false;
+
     constructor(
         @Inject(MAT_DIALOG_DATA) private data: any,
         private fb: FormBuilder,
@@ -97,6 +99,7 @@ export class CreateDbModalComponent extends BaseComponent implements OnInit {
             password: this.dbForm.value.password,
             dbEngine: this.data.dbEngine,
             isLocalhost: this.dbForm.value.localhost,
+            integratedSecurity: this.integratedSecurity,
         } as DbConnection;
     }
 

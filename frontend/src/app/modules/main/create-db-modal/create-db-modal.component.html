@@ -53,6 +53,11 @@
         </app-input>
     </div>
 
+    <app-checkbox [label]="'Integrated Security'"
+                  [checked]="integratedSecurity"
+                  (change)="integratedSecurity = !integratedSecurity">>
+    </app-checkbox>
+
     <ng-container *ngIf="!dbForm.value['localhost']">
         <app-barrier></app-barrier>
         <div class="input-wrapper">

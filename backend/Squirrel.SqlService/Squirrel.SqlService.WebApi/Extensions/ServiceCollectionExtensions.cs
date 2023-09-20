@@ -1,7 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using Squirrel.AzureBlobStorage.Interfaces;
-using Squirrel.AzureBlobStorage.Services;
+﻿using Microsoft.Extensions.Options;
 using Squirrel.Core.DAL.Entities;
 using Squirrel.SqlService.BLL.Interfaces;
 using Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
@@ -22,7 +19,6 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IChangesLoaderService, ChangesLoaderService>();
         services.AddScoped<IContentDifferenceService, ContentDifferenceService>();
         services.AddSingleton<IProcessReceivedDataService, ProcessReceivedDataService>();
-        services.AddScoped<IBlobStorageService, AzureBlobStorageService>();
         services.AddSingleton<ResultObserver>();
         services.AddScoped<ISqlFormatterService, SqlFormatterService>(provider =>
             new SqlFormatterService(configuration.GetSection("PythonExePath").Value));

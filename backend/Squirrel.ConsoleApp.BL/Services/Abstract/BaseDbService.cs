@@ -1,9 +1,9 @@
-﻿using System.Data.Common;
-using Squirrel.ConsoleApp.BL.Interfaces;
+﻿using Squirrel.ConsoleApp.BL.Interfaces;
 using Squirrel.ConsoleApp.Models;
+using System.Data.Common;
 
 namespace Squirrel.ConsoleApp.BL.Services.Abstract;
-public abstract class BaseDbService: IDatabaseService
+public abstract class BaseDbService : IDatabaseService
 {
     public string ConnectionString { get; set; }
 
@@ -31,13 +31,15 @@ public abstract class BaseDbService: IDatabaseService
     {
         using var command = CreateCommandInternal(connection, query);
 
+        command.CommandTimeout = 30;
+
         await connection.OpenAsync();
         await using var reader = await command.ExecuteReaderAsync();
 
         var result = BuildTable(reader);
 
         return result;
-}
+    }
 
     private QueryResultTable BuildTable(DbDataReader reader)
     {

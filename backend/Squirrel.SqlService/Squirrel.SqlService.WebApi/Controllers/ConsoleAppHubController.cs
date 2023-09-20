@@ -184,7 +184,7 @@ public class ConsoleAppHubController : ControllerBase
     public async Task<ActionResult> GetViewsWithDetailAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId).GetViewsWithDetailAsync(_queryParameters.queryId);
-        return Ok(await _queryParameters.tcs.Task);
+        return Ok(_mapper.Map<ViewDetailsDto>(await _queryParameters.tcs.Task));
     }
 
     // https://localhost:7244/api/ConsoleAppHub/getUserDefinedTypesWithDefaultsAndRulesAndDefinition

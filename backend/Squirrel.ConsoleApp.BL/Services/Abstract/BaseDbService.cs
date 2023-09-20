@@ -24,6 +24,8 @@ public abstract class BaseDbService : IDatabaseService
 
         var result = BuildTable(reader);
 
+        connection.Close();
+
         return result;
     }
 
@@ -31,12 +33,14 @@ public abstract class BaseDbService : IDatabaseService
     {
         using var command = CreateCommandInternal(connection, query);
 
-        command.CommandTimeout = 30;
+        command.CommandTimeout = 45;
 
         await connection.OpenAsync();
         await using var reader = await command.ExecuteReaderAsync();
 
         var result = BuildTable(reader);
+
+        await connection.CloseAsync();
 
         return result;
     }

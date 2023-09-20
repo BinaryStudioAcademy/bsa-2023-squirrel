@@ -38,16 +38,14 @@ public class DbItemsRetrievalService : IDbItemsRetrievalService
     {
         var proceduresDetailsResult = await GetAllProcedureDetailsAsync(clientId);
         var structuresResult = await GetAllTableStructuresAsync(clientId);
-        //var constraintsResult = await GetAllTableConstraintsAsync(clientId);
+        var constraintsResult = await GetAllTableConstraintsAsync(clientId);
         var functionDetailsResult = await GetAllFunctionDetailsAsync(clientId);
         var viewsDetailsResult = await GetAllViewDetailsAsync(clientId);
-
-        // TODO: if needed will also fetch UserDefinedTableTypes here when we will have dto
 
         var dbStructureResult = new DbStructureDto()
         {
             DbTableStructures = structuresResult.ToList(),
-            //DbConstraints = constraintsResult.ToList(),
+            DbConstraints = constraintsResult.ToList(),
             DbFunctionDetails = functionDetailsResult,
             DbProcedureDetails = proceduresDetailsResult,
             DbViewDetails = viewsDetailsResult

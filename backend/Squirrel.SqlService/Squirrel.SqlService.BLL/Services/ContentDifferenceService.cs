@@ -1,15 +1,15 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Squirrel.AzureBlobStorage.Interfaces;
-using Squirrel.Shared.Enums;
 using Squirrel.Shared.DTO.DatabaseItem;
 using Squirrel.Shared.DTO.Text;
+using Squirrel.Shared.Enums;
 using Squirrel.SqlService.BLL.Interfaces;
 using Squirrel.SqlService.BLL.Models.DTO;
-using System.Text;
-using Blob = Squirrel.AzureBlobStorage.Models.Blob;
 using Squirrel.SqlService.BLL.Models.DTO.Function;
 using Squirrel.SqlService.BLL.Models.DTO.Procedure;
+using System.Text;
+using Blob = Squirrel.AzureBlobStorage.Models.Blob;
 
 namespace Squirrel.SqlService.BLL.Services;
 
@@ -39,19 +39,19 @@ public class ContentDifferenceService : IContentDifferenceService
         var markedBlobIds = new List<string>();
 
         await CompareDbItemsContent(dbStructure.DbTableStructures!, containers, commitId, DatabaseItemType.Table, differenceList, markedBlobIds);
-        await CompareDbItemsContent(dbStructure.DbConstraints!.Constraints, containers, commitId, DatabaseItemType.Constraint, differenceList, markedBlobIds);
+        //await CompareDbItemsContent(dbStructure.DbConstraints!.Constraints, containers, commitId, DatabaseItemType.Constraint, differenceList, markedBlobIds);
         await CompareDbItemsContent(dbStructure.DbFunctionDetails!.Details, containers, commitId, DatabaseItemType.Function, differenceList, markedBlobIds);
         await CompareDbItemsContent(dbStructure.DbProcedureDetails!.Details, containers, commitId, DatabaseItemType.StoredProcedure, differenceList, markedBlobIds);
 
         var tableContainer = GetContainerName(commitId, DatabaseItemType.Table);
         await CompareUnmarkedBlobsContent<TableStructureDto>(DatabaseItemType.Table, tableContainer, differenceList, markedBlobIds);
-        
+
         var constraintContainer = GetContainerName(commitId, DatabaseItemType.Constraint);
         await CompareUnmarkedBlobsContent<Constraint>(DatabaseItemType.Constraint, constraintContainer, differenceList, markedBlobIds);
-        
+
         var functionContainer = GetContainerName(commitId, DatabaseItemType.Function);
         await CompareUnmarkedBlobsContent<FunctionDetailInfo>(DatabaseItemType.Function, functionContainer, differenceList, markedBlobIds);
-        
+
         var spContainer = GetContainerName(commitId, DatabaseItemType.StoredProcedure);
         await CompareUnmarkedBlobsContent<ProcedureDetailInfo>(DatabaseItemType.StoredProcedure, spContainer, differenceList, markedBlobIds);
 
@@ -115,10 +115,10 @@ public class ContentDifferenceService : IContentDifferenceService
         return dbItemContentCompare;
     }
 
-    private DatabaseItemContentCompare GetDbItemDifference<T>(byte[] blobContent, DatabaseItemType itemType) where T: BaseDbItem
+    private DatabaseItemContentCompare GetDbItemDifference<T>(byte[] blobContent, DatabaseItemType itemType) where T : BaseDbItem
     {
         CheckBlockContentNotNull(blobContent);
-        
+
         var commitItemContent = DeserializeBlobContent<T>(blobContent);
 
         var textPair = new TextPairRequestDto

@@ -3,7 +3,7 @@
 internal static class GetTables
 {
     public static string GetTablesNamesScript =>
-        @"SELECT TABLE_SCHEMA AS 'Schema', TABLE_NAME AS 'Name' FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' ORDER BY Name";
+        @"SELECT TABLE_SCHEMA AS Schema, TABLE_NAME AS Name FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' ORDER BY Name, Schema";
 
     public static string GetTableDataQueryScript(string schema, string name, int rowsCount) =>
         @$"SELECT TOP ({rowsCount}) '{schema}' AS [Schema], '{name}' AS [Name], (SELECT COUNT(*) FROM [{schema}].[{name}]) AS TotalRows, * FROM [{schema}].[{name}]";

@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Squirrel.ConsoleApp.Models;
+using Squirrel.Core.Common.DTO.Script;
 using Squirrel.SqlService.BLL.Hubs;
+using Squirrel.SqlService.BLL.Interfaces;
 using Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
 using Squirrel.SqlService.BLL.Models.ConsoleAppHub;
 using Squirrel.SqlService.BLL.Models.DTO;
@@ -20,14 +22,16 @@ public class ConsoleAppHubController : ControllerBase
     private readonly IHubContext<ConsoleAppHub, IExecuteOnClientSide> _hubContext;
     private readonly ResultObserver _resultObserver;
     private readonly IMapper _mapper;
+    private readonly ISqlFormatterService _sqlFormatterService;
     private readonly (Guid queryId, TaskCompletionSource<QueryResultTable> tcs) _queryParameters;
 
-    public ConsoleAppHubController(IHubContext<ConsoleAppHub, IExecuteOnClientSide> hubContext,
+    public ConsoleAppHubController(IHubContext<ConsoleAppHub, IExecuteOnClientSide> hubContext, ISqlFormatterService sqlFormatterService,
         ResultObserver resultObserver, IMapper mapper)
     {
         _hubContext = hubContext;
         _resultObserver = resultObserver;
         _mapper = mapper;
+        _sqlFormatterService = sqlFormatterService;
         _queryParameters = RegisterQuery();
     }
 
@@ -169,6 +173,16 @@ public class ConsoleAppHubController : ControllerBase
     {
         await _hubContext.Clients.User(queryParameters.ClientId)
             .GetUserDefinedTableTypesAsync(_queryParameters.queryId);
+        return Ok(await _queryParameters.tcs.Task);
+    }
+
+    // https://localhost:7244/api/ConsoleAppHub/executeScript
+    [HttpPost("executeScript")]
+    public async Task<ActionResult<QueryResultTable>> ExecuteScriptAsync([FromBody] InboundScriptDto inboundScriptDto)
+    {
+        var formattedScript = _sqlFormatterService.GetFormattedSql(inboundScriptDto.DbEngine, inboundScriptDto.Content!);
+
+        await _hubContext.Clients.User(inboundScriptDto.ClientId.ToString()).ExecuteScriptAsync(_queryParameters.queryId, formattedScript.Content);
         return Ok(await _queryParameters.tcs.Task);
     }
 }

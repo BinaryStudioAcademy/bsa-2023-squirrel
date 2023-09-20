@@ -10,4 +10,3 @@ public class QueryParameters
     public string FilterName { get; set; } = string.Empty;
     public int FilterRowsCount { get; set; }
 }
-

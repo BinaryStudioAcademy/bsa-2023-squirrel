@@ -23,17 +23,4 @@ public class ScriptController : ControllerBase
     {
         return Ok(_sqlFormatterService.GetFormattedSql(inboundScriptDto.DbEngine, inboundScriptDto.Content!));
     }
-
-    /// <summary>
-    /// Execute provided SQL script
-    /// </summary>
-    [HttpPost("execute")]
-    public ActionResult<ScriptResultDto> ExecuteFormattedSql([FromBody] InboundScriptDto inboundScriptDto)
-    {
-        // boilerplate for next PR
-
-        var scriptToExecute = _sqlFormatterService.GetFormattedSql(inboundScriptDto.DbEngine, inboundScriptDto.Content!);
-
-        return Ok();
-    }
 }

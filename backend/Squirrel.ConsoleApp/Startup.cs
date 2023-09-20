@@ -25,6 +25,7 @@ public class Startup
         services.AddScoped<IConnectionStringService, ConnectionStringService>();
         services.AddTransient<IGetActionsService, GetActionsService>();
         services.AddScoped<IJsonSerializerSettingsService, JsonSerializerSettingsService>();
+        services.AddScoped<IConnectionService, ConnectionService>();
 
         var serviceProvider = services.BuildServiceProvider();
         var connectionStringService = serviceProvider.GetRequiredService<IConnectionStringService>();

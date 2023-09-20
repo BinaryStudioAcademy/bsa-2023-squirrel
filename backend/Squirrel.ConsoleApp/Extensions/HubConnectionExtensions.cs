@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
-using Squirrel.ConsoleApp.BL.Exceptions;
 using Squirrel.ConsoleApp.BL.Interfaces;
-using Squirrel.ConsoleApp.BL.Services;
 using Squirrel.ConsoleApp.Models;
 
 namespace Squirrel.ConsoleApp.Extensions;
@@ -108,27 +106,7 @@ public static class HubConnectionExtensions
         
         hubConnection.On("RemoteConnectAsync", (Guid queryId, ConnectionStringDto connectionStringDto) =>
         {
-            // we need IntegratedSecurity = true to connect
-            // to MSSQL local DB (it will be changed as SettingController updates)
-            connectionStringDto.IntegratedSecurity = true;
-
-            var connectionString = app.ApplicationServices.GetRequiredService<IConnectionStringService>().BuildConnectionString(connectionStringDto);
-            var databaseService = DatabaseServiceFactory.CreateDatabaseService(connectionStringDto.DbEngine, connectionString);
-            var databaseProvider = DatabaseServiceFactory.CreateDbQueryProvider(connectionStringDto.DbEngine);
-
-            // Test connection;
-            try
-            {
-                var testQueryResult = databaseService.ExecuteQuery(databaseProvider.GetTablesNamesQuery());
-                Console.WriteLine(testQueryResult);
-            }
-            catch (Exception ex)
-            {
-                throw new DbConnectionFailed(connectionString, ex.Message);
-            }
-
-            app.ApplicationServices.GetRequiredService<IConnectionFileService>().SaveToFile(connectionStringDto);
-            
+            app.ApplicationServices.GetRequiredService<IConnectionService>().TryConnect(connectionStringDto);
             hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", queryId, "RemoteConnectAsync", new QueryResultTable());
         });
     }

@@ -53,17 +53,7 @@ export class CreateDbModalComponent extends BaseComponent implements OnInit {
     }
 
     public addDataBase() {
-        const connect: DbConnection = {
-            dbName: this.dbForm.value.dbName,
-            serverName: this.dbForm.value.serverName,
-            port: +this.dbForm.value.port,
-            username: this.dbForm.value.username,
-            password: this.dbForm.value.password,
-            dbEngine: this.data.dbEngine,
-            isLocalhost: this.dbForm.value.localhost,
-        };
-
-        this.consoleConnectService.connect(connect)
+        this.consoleConnectService.connect(this.getConnection())
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe({
                 next: guid => {
@@ -77,15 +67,7 @@ export class CreateDbModalComponent extends BaseComponent implements OnInit {
 
     public addDataBaseRemote() {
         const connect: DbConnectionRemote = {
-            dbConnection: {
-                dbName: this.dbForm.value.dbName,
-                serverName: this.dbForm.value.serverName,
-                port: +this.dbForm.value.port,
-                username: this.dbForm.value.username,
-                password: this.dbForm.value.password,
-                dbEngine: this.data.dbEngine,
-                isLocalhost: this.dbForm.value.localhost,
-            },
+            dbConnection: this.getConnection(),
             clientId: this.dbForm.value.guid,
         };
 
@@ -104,6 +86,18 @@ export class CreateDbModalComponent extends BaseComponent implements OnInit {
     public changeLocalHost() {
         this.dbForm.get('guid')?.setValidators(this.getValidators());
         this.dbForm.get('guid')?.updateValueAndValidity();
+    }
+
+    private getConnection() {
+        return {
+            dbName: this.dbForm.value.dbName,
+            serverName: this.dbForm.value.serverName,
+            port: +this.dbForm.value.port,
+            username: this.dbForm.value.username,
+            password: this.dbForm.value.password,
+            dbEngine: this.data.dbEngine,
+            isLocalhost: this.dbForm.value.localhost,
+        } as DbConnection;
     }
 
     private getValidators() {

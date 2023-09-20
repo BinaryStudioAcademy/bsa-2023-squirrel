@@ -9,22 +9,17 @@
         <p class="user-email" [appEmailOverflow]="8">{{ currentUser.email }}</p>
     </div>
 </div>
-<hr class="divider" />
-<button mat-menu-item class="menu-item" routerLink="/profile">
-    <mat-icon class="icon" aria-hidden="true">
+<div class="horizontal-separator"></div>
+<button mat-menu-item class="menu-item account" routerLink="/profile">
+    <mat-icon class="icon account-icon" aria-hidden="true">
         <img src="assets/profile_icon.svg" alt="Edit Profile Icon" />
     </mat-icon>
     Edit Profile
 </button>
-<button mat-menu-item class="menu-item">
-    <mat-icon class="icon" aria-hidden="true">
-        <img src="assets/settings_icon.svg" alt="Settings Icon" />
-    </mat-icon>
-    Settings
-</button>
-<button mat-menu-item class="menu-item logout" (click)="signOut()">
-    <mat-icon class="icon logout-icon" aria-hidden="true" style="color: #6f42c1">
-        <img src="assets/logout_icon.svg" alt="Logout Icon" />
+<button mat-menu-item class="menu-item logout" (click)="signOut()" (mouseover)="onMouseOver()" (mouseout)="onMouseOut()">
+    <mat-icon class="icon logout-icon">
+        <img [src]="iconSource" alt="Logout Icon" />
     </mat-icon>
     Log out
 </button>
+

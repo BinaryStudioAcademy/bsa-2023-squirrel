@@ -22,9 +22,7 @@ public sealed class TableProfile : Profile
                 => src.Rows.Select(row => MapToObject<TableColumnInfo>(src.ColumnNames.Select(e => e.ToLower()).ToList(), row))));
 
         CreateMap<QueryResultTable, TableConstraintsDto>()
-            .ForMember(dest => dest.Schema, opt => opt.MapFrom(src => src.Rows.Any() ? src.Rows[0][0] : null))
-            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Rows.Any() ? src.Rows[0][1] : null))
-            .ForMember(dest => dest.Constraints, opt => opt.MapFrom(src
+            .ForMember(dest => dest.Constraints, opt => opt.MapFrom(src 
                 => src.Rows.Select(row => MapToObject<Constraint>(src.ColumnNames.Select(e => e.ToLower()).ToList(), row))));
 
         CreateMap<QueryResultTable, TableDataDto>()

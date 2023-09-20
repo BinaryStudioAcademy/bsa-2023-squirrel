@@ -1,5 +1,4 @@
 ﻿using Squirrel.ConsoleApp.Models;
-
 namespace Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
 
 public interface IProcessReceivedDataService

@@ -16,5 +16,6 @@ public enum ErrorType
     RefreshTokenExpired,
     SqlSyntax,
     InvalidQuery,
-    QueryExpired
+    QueryExpired,
+    HttpRequest
 }

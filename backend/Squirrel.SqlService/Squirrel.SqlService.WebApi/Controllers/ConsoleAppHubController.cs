@@ -14,6 +14,7 @@ using Squirrel.SqlService.BLL.Models.DTO;
 using Squirrel.SqlService.BLL.Models.DTO.Function;
 using Squirrel.SqlService.BLL.Models.DTO.Procedure;
 using Squirrel.SqlService.BLL.Models.DTO.Shared;
+using Squirrel.SqlService.BLL.Models.DTO.View;
 using Squirrel.SqlService.BLL.Services.ConsoleAppHub;
 using System.Text;
 
@@ -128,10 +129,10 @@ public class ConsoleAppHubController : ControllerBase
 
     // https://localhost:7244/api/ConsoleAppHub/getAllViewsNames
     [HttpPost("getAllViewsNames")]
-    public async Task<ActionResult> GetAllViewsNamesAsync([FromBody] QueryParameters queryParameters)
+    public async Task<ActionResult<ViewNamesDto>> GetAllViewsNamesAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId).GetAllViewsNamesAsync(_queryParameters.queryId);
-        return Ok(await _queryParameters.tcs.Task);
+        return Ok(_mapper.Map<ViewNamesDto>(await _queryParameters.tcs.Task));
     }
 
     // https://localhost:7244/api/ConsoleAppHub/getViewDefinition
@@ -181,7 +182,7 @@ public class ConsoleAppHubController : ControllerBase
 
     // https://localhost:7244/api/ConsoleAppHub/getViewsWithDetail
     [HttpPost("getViewsWithDetail")]
-    public async Task<ActionResult> GetViewsWithDetailAsync([FromBody] QueryParameters queryParameters)
+    public async Task<ActionResult<ViewDetailsDto>> GetViewsWithDetailAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId).GetViewsWithDetailAsync(_queryParameters.queryId);
         return Ok(_mapper.Map<ViewDetailsDto>(await _queryParameters.tcs.Task));

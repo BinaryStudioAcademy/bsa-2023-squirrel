@@ -1,7 +1,9 @@
 ﻿using Azure.Storage.Blobs.Models;
 using Azure.Storage.Blobs;
 using Squirrel.AzureBlobStorage.Interfaces;
-using Squirrel.AzureBlobStorage.Models;
+using System.Reflection.Metadata;
+using Azure;
+using Blob = Squirrel.AzureBlobStorage.Models.Blob;
 
 namespace Squirrel.AzureBlobStorage.Services;
 
@@ -18,7 +20,7 @@ public class AzureBlobStorageService : IBlobStorageService
     {
         var blobClient = await GetBlobClientInternalAsync(containerName, blob.Id);
 
-        if (await blobClient.ExistsAsync())
+        if (!await blobClient.ExistsAsync())
         {
             throw new InvalidOperationException($"Blob with id:{blob.Id} already exists.");
         }
@@ -67,6 +69,39 @@ public class AzureBlobStorageService : IBlobStorageService
         var blobClient = await GetBlobClientInternalAsync(containerName, blobId);
 
         return await blobClient.DeleteIfExistsAsync();
+    }
+
+    public async Task<ICollection<Blob>> GetAllBlobsByContainerNameAsync(string containerName)
+    {
+        var containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
+        if (!await containerClient.ExistsAsync())
+        {
+            throw new InvalidOperationException($"Container with name: {containerName} doesn`t exist");
+        }
+        var blobsPages = containerClient.GetBlobsAsync().AsPages(default, default);
+        ICollection<Blob> blobs = new List<Blob>();
+        await foreach (Page<BlobItem> blobPage in blobsPages)
+        {
+            foreach (BlobItem blobItem in blobPage.Values)
+            {
+                blobs.Add(await DownloadAsync(containerName, blobItem.Name));
+            }
+        }
+        return blobs;
+    }
+
+    public async Task<ICollection<string>> GetContainersByPrefixAsync(string prefix)
+    {
+        var containerPages = _blobServiceClient.GetBlobContainersAsync(prefix: prefix).AsPages(default, default);
+        ICollection<string> containers = new List<string>();
+        await foreach (Page<BlobContainerItem> blobContainerPage in containerPages)
+        {
+            foreach (var container in blobContainerPage.Values)
+            {
+                containers.Add(container.Name);
+            }
+        }
+        return containers;
     }
 
     private async Task<BlobContainerClient> GetOrCreateContainerByNameAsync(string name)

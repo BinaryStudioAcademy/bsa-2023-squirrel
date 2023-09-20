@@ -37,7 +37,7 @@ public class ConsoleAppHubController : ControllerBase
         var tcs = _resultObserver.Register(queryId);
         return (queryId, tcs);
     }
-
+    
     // https://localhost:7244/api/ConsoleAppHub/getAllTablesNames
     [HttpPost("getAllTablesNames")]
     public async Task<ActionResult<TableNamesDto>> GetAllTablesNamesAsync([FromBody] QueryParameters queryParameters)

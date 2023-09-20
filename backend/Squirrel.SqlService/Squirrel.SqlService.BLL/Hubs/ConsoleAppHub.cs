@@ -22,7 +22,6 @@ public sealed class ConsoleAppHub : Hub<IExecuteOnClientSide>
     }
     
     public async Task ProcessReceivedDataFromClientSide(Guid queryId, string requestActionName, QueryResultTable queryResultTable)
-
     {
         if (!_requestActionToProcessReceivedData.ContainsKey(requestActionName))
         {

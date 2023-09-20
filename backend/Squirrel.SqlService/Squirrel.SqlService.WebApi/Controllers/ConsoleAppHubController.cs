@@ -59,18 +59,15 @@ public class ConsoleAppHubController : ControllerBase
         };
         await _blobStorageService.UploadAsync($"{commitId}-{type}".ToLower(), blob);
     }
-    public async Task Test<T>(List<T> items, int commitId, DatabaseItemType type) where T : BaseDbItem
+    public async Task Test(TableConstraintsDto items, string schema, string name, int commitId, DatabaseItemType type)
     {
-        foreach (var item in items)
+        var blob = new Blob
         {
-            var blob = new Blob
-            {
-                Id = $"{item.Schema}-{item.Name}".ToLower(),
-                ContentType = "application/json",
-                Content = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(item)),
-            };
-            await _blobStorageService.UploadAsync($"{commitId}-{type}".ToLower(), blob);
-        }
+            Id = $"{schema}-{name}".ToLower(),
+            ContentType = "application/json",
+            Content = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(items)),
+        };
+        await _blobStorageService.UploadAsync($"{commitId}-{type}".ToLower(), blob);
     }
 
     // https://localhost:7244/api/ConsoleAppHub/getAllTablesNames
@@ -160,6 +157,7 @@ public class ConsoleAppHubController : ControllerBase
         await _hubContext.Clients.User(queryParameters.ClientId)
             .GetTableChecksAndUniqueConstraintsAsync(_queryParameters.queryId, queryParameters.FilterSchema,
                 queryParameters.FilterName);
+        await _diffService.GenerateTempBlobContentAsync(2);
         return Ok(_mapper.Map<TableConstraintsDto>(await _queryParameters.tcs.Task));
     }
 
@@ -185,6 +183,7 @@ public class ConsoleAppHubController : ControllerBase
     public async Task<ActionResult<ViewDetailsDto>> GetViewsWithDetailAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId).GetViewsWithDetailAsync(_queryParameters.queryId);
+        await _diffService.GenerateTempBlobContentAsync(2);
         return Ok(_mapper.Map<ViewDetailsDto>(await _queryParameters.tcs.Task));
     }
 

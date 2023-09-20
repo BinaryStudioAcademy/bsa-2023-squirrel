@@ -10,6 +10,8 @@ using System.Text;
 using Blob = Squirrel.AzureBlobStorage.Models.Blob;
 using Squirrel.SqlService.BLL.Models.DTO.Function;
 using Squirrel.SqlService.BLL.Models.DTO.Procedure;
+using Squirrel.SqlService.BLL.Models.DTO.View;
+using System.Reflection.Metadata;
 
 namespace Squirrel.SqlService.BLL.Services;
 
@@ -52,7 +54,7 @@ public class ContentDifferenceService : IContentDifferenceService
         await CompareUnmarkedBlobsContent<TableStructureDto>(DatabaseItemType.Table, tableContainer, differenceList, markedBlobIds);
         
         var constraintContainer = GetContainerName(commitId, DatabaseItemType.Constraint);
-        await CompareUnmarkedBlobsContent<Constraint>(DatabaseItemType.Constraint, constraintContainer, differenceList, markedBlobIds);
+        await CompareUnmarkedConstraintBlobsContent(DatabaseItemType.Constraint, constraintContainer, differenceList, markedBlobIds);
         
         var functionContainer = GetContainerName(commitId, DatabaseItemType.Function);
         await CompareUnmarkedBlobsContent<FunctionDetailInfo>(DatabaseItemType.Function, functionContainer, differenceList, markedBlobIds);
@@ -71,6 +73,37 @@ public class ContentDifferenceService : IContentDifferenceService
         foreach (var blob in unmarkedBlobs)
         {
             differenceList.Add(GetDbItemDifference<T>(blob.Content!, itemType));
+        }
+    }
+
+    private async Task CompareUnmarkedConstraintBlobsContent(DatabaseItemType itemType, string containerName, List<DatabaseItemContentCompare> differenceList,
+    List<string> markedBlobIds)
+    {
+        var blobs = await _blobStorageService.GetAllBlobsByContainerNameAsync(containerName);
+        var unmarkedBlobs = blobs.Where(blob => !markedBlobIds.Contains(blob.Id));
+        foreach (var blob in unmarkedBlobs)
+        {
+            CheckBlockContentNotNull(blob.Content);
+            var jsonString = Encoding.UTF8.GetString(blob.Content);
+            var tableConstraintsDto = JsonConvert.DeserializeObject<TableConstraintsDto>(jsonString)!;
+            foreach (var constraint in tableConstraintsDto.Constraints)
+            {
+                var textPair = new TextPairRequestDto
+                {
+                    OldText = JsonConvert.SerializeObject(constraint),
+                    NewText = string.Empty,
+                    IgnoreWhitespace = true
+                };
+                var dbItemContentCompare = new DatabaseItemContentCompare
+                {
+                    SchemaName = constraint.Schema,
+                    ItemName = constraint.Name,
+                    ItemType = itemType,
+                    InLineDiff = _textService.GetInlineDiffs(textPair),
+                    SideBySideDiff = _textService.GetSideBySideDiffs(textPair),
+                };
+                differenceList.Add(dbItemContentCompare);
+            }
         }
     }
 
@@ -185,7 +218,7 @@ public class ContentDifferenceService : IContentDifferenceService
         var constBlobs = await _blobStorageService.GetAllBlobsByContainerNameAsync($"{commitId}-constraint");
         var spBlobs = await _blobStorageService.GetAllBlobsByContainerNameAsync($"{commitId}-storedprocedure");
         var funcBlobs = await _blobStorageService.GetAllBlobsByContainerNameAsync($"{commitId}-function");
-        var viewBlobs = await _blobStorageService.GetAllBlobsByContainerNameAsync($"{commitId}-{DatabaseItemType.View}");
+        var viewBlobs = await _blobStorageService.GetAllBlobsByContainerNameAsync($"{commitId}-{DatabaseItemType.View}".ToLower());
         foreach (var blob in tableBlobs)
         {
             var jsonString = Encoding.UTF8.GetString(blob.Content);
@@ -209,6 +242,12 @@ public class ContentDifferenceService : IContentDifferenceService
             var jsonString = Encoding.UTF8.GetString(blob.Content);
             var content = JsonConvert.DeserializeObject<FunctionDetailInfo>(jsonString)!;
             dbStructure.DbFunctionDetails.Details.Add(content);
+        }
+        foreach (var blob in viewBlobs)
+        {
+            var jsonString = Encoding.UTF8.GetString(blob.Content);
+            var content = JsonConvert.DeserializeObject<ViewDetailInfo>(jsonString)!;
+            dbStructure.DbViewsDetails.Details.Add(content);
         }
         var tempblob = new Blob
         {

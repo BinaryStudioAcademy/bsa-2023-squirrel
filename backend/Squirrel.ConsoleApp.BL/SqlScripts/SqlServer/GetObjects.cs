@@ -65,7 +65,7 @@ internal class GetObjects
     public static string GetViewsScript =>
         @"
                 SELECT TABLE_SCHEMA [Schema],
-		               TABLE_NAME [View],
+		               TABLE_NAME [Name],
 		               M.definition [Definition]
                 FROM INFORMATION_SCHEMA.VIEWS V
 		        INNER JOIN sys.sql_modules M ON M.object_id = OBJECT_ID(V.TABLE_NAME)

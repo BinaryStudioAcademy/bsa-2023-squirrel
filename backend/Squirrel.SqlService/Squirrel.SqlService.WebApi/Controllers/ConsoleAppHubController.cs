@@ -105,7 +105,7 @@ public class ConsoleAppHubController : ControllerBase
     public async Task<ActionResult<RoutineDefinitionDto>> GetViewDefinitionAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId)
-            .GetViewDefinitionAsync(_queryParameters.queryId, queryParameters.FilterName);
+            .GetViewDefinitionAsync(_queryParameters.queryId, queryParameters.FilterSchema, queryParameters.FilterName);
         return Ok(_mapper.Map<RoutineDefinitionDto>(await _queryParameters.tcs.Task));
     }
 

@@ -34,14 +34,13 @@ public sealed class ProjectService : BaseService, IProjectService
         var createdProject = (await _context.Projects.AddAsync(projectEntity)).Entity;
         await _context.SaveChangesAsync();
 
-        newProjectDto.DefaultBranch.ProjectId = createdProject.Id;
-        var defaultBranch = await _branchService.AddBranchAsync(newProjectDto.DefaultBranch);
+        var defaultBranch = await _branchService.AddBranchAsync(createdProject.Id ,newProjectDto.DefaultBranch);
         createdProject.DefaultBranchId = defaultBranch.Id;
         await _context.SaveChangesAsync();
 
         return _mapper.Map<ProjectResponseDto>(createdProject);
     }
-    
+
     public async Task<ProjectResponseDto> AddUsersToProjectAsync(int projectId, List<UserDto> usersDtos)
     {
         var users = _mapper.Map<List<User>>(usersDtos);
@@ -67,7 +66,6 @@ public sealed class ProjectService : BaseService, IProjectService
             .Include(project => project.Users)
             .FirstOrDefaultAsync(project => project.Id == projectId);
 
-        
         ValidateProject(existingProject);
 
         _mapper.Map(updateProjectDto, existingProject);
@@ -83,22 +81,27 @@ public sealed class ProjectService : BaseService, IProjectService
             .Include(project => project.Tags)
             .Include(project => project.Users)
             .FirstOrDefaultAsync(project => project.Id == projectId);
+        var currentUserId = _userIdGetter.GetCurrentUserId();
 
         ValidateProject(project);
 
-        return _mapper.Map<ProjectResponseDto>(project);
+        var mappedProject = _mapper.Map<ProjectResponseDto>(project);
+        
+        mappedProject.IsAuthor = project!.CreatedBy == currentUserId;
+
+        return mappedProject;
     }
 
     public async Task DeleteProjectAsync(int projectId)
     {
         var project = await _context.Projects.FindAsync(projectId);
-        
+
         ValidateProject(project);
 
         _context.Projects.Remove(project!);
         await _context.SaveChangesAsync();
     }
-    
+
     public async Task<List<UserDto>> GetProjectUsersAsync(int projectId)
     {
         var project = await _context.Projects

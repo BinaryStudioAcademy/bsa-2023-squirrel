@@ -6,9 +6,13 @@ import { NotificationService } from '@core/services/notification.service';
 import { ScriptService } from '@core/services/script.service';
 import { SharedProjectService } from '@core/services/shared-project.service';
 import { SpinnerService } from '@core/services/spinner.service';
-import { Observable, of, switchMap, takeUntil, tap } from 'rxjs';
+import { finalize, Observable, of, switchMap, takeUntil, tap } from 'rxjs';
 
+import { ProjectResponseDto } from 'src/app/models/projects/project-response-dto';
+import { RunScriptDto } from 'src/app/models/scripts/run-script-dto';
+import { ScriptContentDto } from 'src/app/models/scripts/script-content-dto';
 import { ScriptDto } from 'src/app/models/scripts/script-dto';
+import { ScriptErrorDto } from 'src/app/models/scripts/script-error-dto';
 
 import { CreateScriptModalComponent } from '../create-script-modal/create-script-modal.component';
 
@@ -24,9 +28,17 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
 
     public selectedScript: ScriptDto | undefined;
 
+    public scriptErrors: { [scriptId: number]: ScriptErrorDto } = {};
+
+    get currentScriptError(): ScriptErrorDto | undefined {
+        return this.selectedScript ? this.scriptErrors[this.selectedScript.id] : undefined;
+    }
+
     private selectedOptionElement: HTMLLIElement | undefined;
 
     private readonly selectedOptionClass = 'selected-option';
+
+    private project: ProjectResponseDto;
 
     constructor(
         public dialog: MatDialog,
@@ -44,7 +56,7 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
         this.initializeForm();
     }
 
-    public onScriptSelected($event: any) {
+    public onScriptSelected($event: any): void {
         const option = $event.option.element as HTMLLIElement;
 
         if (this.selectedOptionElement) {
@@ -60,7 +72,7 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
     }
 
     public openCreateModal(): void {
-        const dialogRef = this.dialog.open(CreateScriptModalComponent, {
+        const dialogRef: any = this.dialog.open(CreateScriptModalComponent, {
             width: '450px',
             height: '320px',
         });
@@ -97,13 +109,63 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
             .subscribe(
                 (updatedScript: ScriptDto) => {
                     if (this.selectedScript && this.selectedScript.id === updatedScript.id) {
-                        this.selectedScript.content = updatedScript.content;
+                        this.updateScriptContent(updatedScript.content);
                     }
                     this.form.markAsPristine();
                     this.notification.info('Script is successfully saved');
                 },
                 (err) => this.notification.error(err),
             );
+    }
+
+    public formatScript(): void {
+        if (!this.selectedScript) {
+            return;
+        }
+
+        this.spinner.show();
+        const script: RunScriptDto = {
+            projectId: this.selectedScript.projectId,
+            content: this.form.value.scriptContent,
+            dbEngine: this.project.dbEngine,
+        };
+
+        this.scriptService
+            .formatScript(script)
+            .pipe(
+                takeUntil(this.unsubscribe$),
+                finalize(() => this.spinner.hide()),
+            )
+            .subscribe(
+                (updatedScript: ScriptContentDto) => {
+                    this.updateScriptContent(updatedScript.content);
+                    // Clear the error for the current script
+                    if (this.selectedScript) {
+                        delete this.scriptErrors[this.selectedScript.id];
+                    }
+                    this.notification.info('Script content successfully formatted');
+                },
+                (err: ScriptErrorDto) => {
+                    this.notification.error('Format Script error');
+                    this.updateScriptContentError(err);
+                },
+            );
+    }
+
+    public updateScriptContent(newContent: string): void {
+        if (this.selectedScript) {
+            this.selectedScript.content = newContent;
+            this.form.patchValue({
+                scriptContent: this.selectedScript.content,
+            });
+            this.form.markAsDirty();
+        }
+    }
+
+    public updateScriptContentError(error: ScriptErrorDto): void {
+        if (this.selectedScript) {
+            this.scriptErrors[this.selectedScript.id] = error;
+        }
     }
 
     private initializeForm(): void {
@@ -117,6 +179,8 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
             takeUntil(this.unsubscribe$),
             switchMap((project) => {
                 if (project) {
+                    this.project = project;
+
                     return this.scriptService.getAllScripts(project.id).pipe(takeUntil(this.unsubscribe$));
                 }
 

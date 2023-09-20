@@ -5,6 +5,8 @@ import { ConsoleConnectService } from '@core/services/console-connect.service';
 import { DatabaseService } from '@core/services/database.service';
 import { NotificationService } from '@core/services/notification.service';
 
+import { DatabaseDto } from 'src/app/models/database/database-dto';
+
 import { DbConnection } from '../../../models/console/db-connection';
 import { NewDatabaseDto } from '../../../models/database/new-database-dto';
 
@@ -14,7 +16,7 @@ import { NewDatabaseDto } from '../../../models/database/new-database-dto';
     styleUrls: ['./create-db-modal.component.sass'],
 })
 export class CreateDbModalComponent implements OnInit {
-    @Output() public dbName = new EventEmitter<string>();
+    @Output() public addedDatabase = new EventEmitter<DatabaseDto>();
 
     public dbForm: FormGroup = new FormGroup({});
 
@@ -27,8 +29,8 @@ export class CreateDbModalComponent implements OnInit {
         private databaseService: DatabaseService,
         private notificationService: NotificationService,
         public dialogRef: MatDialogRef<CreateDbModalComponent>,
-    ) // eslint-disable-next-line no-empty-function, brace-style, @typescript-eslint/brace-style
-    {}
+        // eslint-disable-next-line no-empty-function
+    ) {}
 
     public ngOnInit() {
         this.initializeForm();
@@ -56,7 +58,7 @@ export class CreateDbModalComponent implements OnInit {
         };
 
         this.consoleConnectService.connect(connect).subscribe({
-            next: (guid) => {
+            next: guid => {
                 this.saveDb(guid);
             },
             error: () => {
@@ -87,16 +89,17 @@ export class CreateDbModalComponent implements OnInit {
             guid,
         };
 
-        this.databaseService.addDatabase(database).subscribe({
-            next: (dbName) => {
-                this.notificationService.info('database was successfully added');
-                this.dbName.emit(dbName.dbName);
-                this.close();
-            },
-            error: () => {
-                this.notificationService.error('Fail to save db to db');
-            },
-        });
+        this.databaseService.addDatabase(database)
+            .subscribe({
+                next: () => {
+                    this.notificationService.info('database was successfully added');
+                    this.addedDatabase.emit(database);
+                    this.close();
+                },
+                error: () => {
+                    this.notificationService.error('Fail to save db to db');
+                },
+            });
     }
 
     public close() {

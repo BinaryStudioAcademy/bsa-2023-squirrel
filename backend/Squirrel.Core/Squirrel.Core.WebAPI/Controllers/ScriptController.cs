@@ -36,4 +36,24 @@ public sealed class ScriptController : ControllerBase
     {
         return Ok(await _scriptService.UpdateScriptAsync(dto, _userIdGetter.GetCurrentUserId()));
     }
+
+    /// <summary>
+    /// Find errors and format provided SQL script
+    /// </summary>
+    [HttpPut("format")]
+    public async Task<ActionResult<ScriptContentDto>> GetFormattedSql([FromBody] InboundScriptDto inboundScriptDto)
+    {
+        return Ok(await _scriptService.GetFormattedSqlAsync(inboundScriptDto));
+    }
+
+    /// <summary>
+    /// Execute provided SQL script
+    /// </summary>
+    [HttpPost("execute")]
+    public ActionResult<ScriptResultDto> ExecuteFormattedSql([FromBody] InboundScriptDto inboundScriptDto)
+    {
+        // boilerplate for next PR
+
+        return Ok();
+    }
 }

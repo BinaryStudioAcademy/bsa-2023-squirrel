@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
+using Squirrel.AzureBlobStorage.Interfaces;
 using Squirrel.Core.BLL.Extensions;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.BLL.Services.Abstract;
@@ -18,12 +18,15 @@ public sealed class UserService : BaseService, IUserService
     private const int MaxNameLength = 25;
     private const int MinNameLength = 2;
     private readonly IUserIdGetter _userIdGetter;
+    private readonly IBlobStorageService _blobStorageService;
 
-    public UserService(SquirrelCoreContext context, IMapper mapper, IUserIdGetter userIdGetter) : base(context, mapper)
+    public UserService(SquirrelCoreContext context, IMapper mapper, IUserIdGetter userIdGetter,
+        IBlobStorageService blobStorageService) : base(context, mapper)
     {
         _userIdGetter = userIdGetter;
+        _blobStorageService = blobStorageService;
     }
-    
+
     public async Task<UserDto> GetUserByIdAsync(int id)
     {
         return _mapper.Map<UserDto>(await GetUserByIdInternal(id));
@@ -31,7 +34,7 @@ public sealed class UserService : BaseService, IUserService
 
     public async Task<UserProfileDto> GetUserProfileAsync()
     {
-        return await _context.Users.ProjectTo<UserProfileDto>(_mapper.ConfigurationProvider).FirstAsync(x => x.Id == _userIdGetter.GetCurrentUserId());
+        return _mapper.Map<UserProfileDto>(await GetUserByIdInternal(_userIdGetter.GetCurrentUserId()));
     }
 
     public async Task<UserDto> GetUserByEmailAsync(string email)
@@ -41,9 +44,10 @@ public sealed class UserService : BaseService, IUserService
         {
             throw new EntityNotFoundException(nameof(User), email);
         }
+
         return _mapper.Map<UserDto>(userEntity);
     }
-    
+
     public async Task<List<UserDto>> GetAllUsersAsync()
     {
         var userEntities = await _context.Users.ToListAsync();
@@ -52,7 +56,7 @@ public sealed class UserService : BaseService, IUserService
         {
             return new List<UserDto>();
         }
-        
+
         return _mapper.Map<List<UserDto>>(userEntities);
     }
 
@@ -63,6 +67,7 @@ public sealed class UserService : BaseService, IUserService
         {
             throw new EntityNotFoundException(nameof(User), username);
         }
+
         return _mapper.Map<UserDto>(userEntity);
     }
 
@@ -116,7 +121,8 @@ public sealed class UserService : BaseService, IUserService
     {
         var userEntity = await GetUserByIdInternal(_userIdGetter.GetCurrentUserId());
 
-        if (!SecurityUtils.ValidatePassword(changePasswordDto.CurrentPassword, userEntity.PasswordHash!, userEntity.Salt!))
+        if (!SecurityUtils.ValidatePassword(changePasswordDto.CurrentPassword, userEntity.PasswordHash!,
+                userEntity.Salt!))
         {
             throw new InvalidPasswordException();
         }
@@ -125,19 +131,6 @@ public sealed class UserService : BaseService, IUserService
 
         _context.Users.Update(userEntity);
         await _context.SaveChangesAsync();
-    }
-
-    public async Task<UserProfileDto> UpdateNotificationsAsync(UpdateUserNotificationsDto updateNotificationsDto)
-    {
-        var userEntity = await GetUserByIdInternal(_userIdGetter.GetCurrentUserId());
-
-        userEntity.SquirrelNotification = updateNotificationsDto.SquirrelNotification;
-        userEntity.EmailNotification = updateNotificationsDto.EmailNotification;
-
-        _context.Users.Update(userEntity);
-        await _context.SaveChangesAsync();
-
-        return _mapper.Map<UserProfileDto>(userEntity);
     }
 
     public async Task<User?> GetUserEntityByEmail(string email)
@@ -150,7 +143,7 @@ public sealed class UserService : BaseService, IUserService
         return await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
     }
 
-    private async Task<User> GetUserByIdInternal(int id)
+    public async Task<User> GetUserByIdInternal(int id)
     {
         var userEntity = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
 

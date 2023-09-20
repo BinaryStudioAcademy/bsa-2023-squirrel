@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Squirrel.ConsoleApp.BL.Exceptions;
 using Squirrel.ConsoleApp.BL.Interfaces;
+using Squirrel.ConsoleApp.BL.Services;
 using Squirrel.ConsoleApp.Models;
-using Squirrel.ConsoleApp.Services;
 
 namespace Squirrel.ConsoleApp.Controllers;
 
@@ -25,7 +25,11 @@ public class SettingController : ControllerBase
     [HttpPost("connect")]
     public IActionResult Post(ConnectionStringDto connectionStringDto)
     {
-        _connectionFileService.SaveToFile(connectionStringDto);
+        // we need IntegratedSecurity = true to connect
+        // to MSSQL local DB (it will be changed as SettingController updates)
+
+        connectionStringDto.IntegratedSecurity = true;
+
         var connectionString = _connectionStringService.BuildConnectionString(connectionStringDto);
         var databaseService = DatabaseServiceFactory.CreateDatabaseService(connectionStringDto.DbEngine, connectionString);
         var databaseProvider = DatabaseServiceFactory.CreateDbQueryProvider(connectionStringDto.DbEngine);
@@ -40,7 +44,9 @@ public class SettingController : ControllerBase
         {
             throw new DbConnectionFailed(connectionString, ex.Message);
         }
-        
+
+        _connectionFileService.SaveToFile(connectionStringDto);
+
         return Ok(_clientIdFileService.GetClientId());
     }
 }

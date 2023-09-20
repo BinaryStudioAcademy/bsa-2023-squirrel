@@ -17,9 +17,12 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ITextService, TextService>();
         services.AddScoped<IDependencyAnalyzer, DependencyAnalyzer>();
         services.AddScoped<IDbItemsRetrievalService, DbItemsRetrievalService>();
+        services.AddScoped<IChangesLoaderService, ChangesLoaderService>();
+        services.AddScoped<IContentDifferenceService, ContentDifferenceService>();
         services.AddSingleton<IProcessReceivedDataService, ProcessReceivedDataService>();
-        services.AddScoped<ISqlFormatterService, SqlFormatterService>(provider => 
-        new SqlFormatterService(configuration.GetSection("PythonExePath").Value));
+        services.AddSingleton<ResultObserver>();
+        services.AddScoped<ISqlFormatterService, SqlFormatterService>(provider =>
+            new SqlFormatterService(configuration.GetSection("PythonExePath").Value));
     }
 
     public static void ConfigureCors(this IServiceCollection services, IConfiguration configuration)
@@ -38,6 +41,7 @@ public static class ServiceCollectionExtensions
         services.Configure<MongoDatabaseConnectionSettings>(configuration.GetSection("MongoDatabase"));
 
         services.AddTransient<IMongoService<User>>(s =>
-            new MongoService<User>(s.GetRequiredService<IOptions<MongoDatabaseConnectionSettings>>(), "UserCollection"));
+            new MongoService<User>(s.GetRequiredService<IOptions<MongoDatabaseConnectionSettings>>(),
+                "UserCollection"));
     }
 }

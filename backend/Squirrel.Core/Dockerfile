@@ -20,6 +20,7 @@ RUN dotnet publish "Squirrel.Core.WebAPI.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
+COPY Squirrel.Core/Squirrel.Core.WebAPI/Resources/SquirrelSetup.msi /app/Resources/
 COPY --from=publish /app/publish .
 ENV ASPNETCORE_URLS http://*:5050
 ENTRYPOINT ["dotnet", "Squirrel.Core.WebAPI.dll"]

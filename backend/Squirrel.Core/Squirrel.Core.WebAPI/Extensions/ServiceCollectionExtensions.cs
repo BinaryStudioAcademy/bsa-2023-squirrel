@@ -7,8 +7,6 @@ using Squirrel.Core.BLL.Services;
 using Squirrel.Core.Common.DTO.Auth;
 using Squirrel.Core.Common.Interfaces;
 using Squirrel.Core.Common.JWT;
-using Squirrel.Shared.Interfaces;
-using Squirrel.Shared.Services;
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;

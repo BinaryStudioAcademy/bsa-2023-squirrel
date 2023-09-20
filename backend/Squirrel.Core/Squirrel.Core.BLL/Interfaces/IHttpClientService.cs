@@ -1,4 +1,4 @@
-﻿namespace Squirrel.Shared.Interfaces;
+﻿namespace Squirrel.Core.BLL.Interfaces;
 
 public interface IHttpClientService
 {

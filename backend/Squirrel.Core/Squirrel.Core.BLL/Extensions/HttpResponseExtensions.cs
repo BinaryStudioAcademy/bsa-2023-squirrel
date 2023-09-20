@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Squirrel.Shared.Extensions;
+namespace Squirrel.Core.BLL.Extensions;
 
 public static class HttpResponseExtensions
 {

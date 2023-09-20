@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject, takeUntil, tap } from 'rxjs';
+import { finalize, Subject, takeUntil } from 'rxjs';
 
 import { DatabaseItemsService } from './database-items.service';
 import { HttpInternalService } from './http-internal.service';
@@ -25,7 +25,10 @@ export class LoadChangesService {
         this.spinner.show();
 
         this.httpClient.postRequest<string>(`${this.loadChangesRoutePrefix}/${guid}`, null!)
-            .pipe(takeUntil(this.unsubscribe$))
+            .pipe(
+                takeUntil(this.unsubscribe$),
+                finalize(() => this.spinner.hide()),
+            )
             .subscribe({
                 next: (event) => {
                     // eslint-disable-next-line no-console
@@ -40,7 +43,6 @@ export class LoadChangesService {
         this.databaseItemsService.getAllItems(guid)
             .pipe(
                 takeUntil(this.unsubscribe$),
-                tap(() => this.spinner.hide()),
             )
             .subscribe({
                 next: (event) => {

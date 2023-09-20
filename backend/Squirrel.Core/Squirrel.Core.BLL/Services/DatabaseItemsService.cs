@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Shared.DTO.DatabaseItem;
-using Squirrel.Shared.Interfaces;
 
 namespace Squirrel.Core.BLL.Services;
 

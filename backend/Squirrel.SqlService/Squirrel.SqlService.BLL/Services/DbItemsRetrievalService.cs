@@ -1,57 +1,60 @@
 ﻿using AutoMapper;
-using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.SignalR;
+using Squirrel.ConsoleApp.Models;
 using Squirrel.Shared.DTO.DatabaseItem;
-using Squirrel.Shared.Interfaces;
 using Squirrel.SqlService.BLL.Interfaces;
+using Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
 using Squirrel.SqlService.BLL.Models.ConsoleAppHub;
 using Squirrel.SqlService.BLL.Models.DTO;
 using Squirrel.SqlService.BLL.Models.DTO.Function;
 using Squirrel.SqlService.BLL.Models.DTO.Procedure;
 using Squirrel.SqlService.BLL.Models.DTO.View;
+using Squirrel.SqlService.BLL.Services.ConsoleAppHub;
 
 namespace Squirrel.SqlService.BLL.Services;
 
 public class DbItemsRetrievalService : IDbItemsRetrievalService
 {
-    private readonly IHttpClientService _httpClientService;
+    private readonly IHubContext<Hubs.ConsoleAppHub, IExecuteOnClientSide> _hubContext;
+    private readonly ResultObserver _resultObserver;
     private readonly IMapper _mapper;
-    private readonly IConfiguration _configuration;
 
-    private readonly string SqlServiceRoute;
-
-    public DbItemsRetrievalService(IHttpClientService httpClientService, IMapper mapper, IConfiguration configuration)
+    public DbItemsRetrievalService(IHubContext<Hubs.ConsoleAppHub, IExecuteOnClientSide> hubContext,
+        ResultObserver resultObserver, IMapper mapper)
     {
-        _httpClientService = httpClientService;
+        _hubContext = hubContext;
+        _resultObserver = resultObserver;
         _mapper = mapper;
-        _configuration = configuration;
+    }
 
-        SqlServiceRoute = _configuration["SqlServiceRoute"];
+    private (Guid queryId, TaskCompletionSource<QueryResultTable> tcs) RegisterQuery()
+    {
+        var queryId = Guid.NewGuid();
+        var tcs = _resultObserver.Register(queryId);
+        return (queryId, tcs);
     }
 
     public async Task<DbStructureDto> GetAllDbStructureAsync(Guid clientId)
     {
         var structuresResult = await GetAllTableStructuresAsync(clientId);
 
-        // timeout exception here:
-        // var constraintsResult = await GetAllTableConstraintsAsync(clientId);
+        //var constraintsResult = await GetAllTableConstraintsAsync(clientId);
 
         var functionDetailsResult = await GetAllFunctionDetailsAsync(clientId);
 
-        // QueryExpiredException
         //var proceduresDetailsResult = await GetAllProcedureDetailsAsync(clientId);
 
-        // timeout exception here:
-        // var viewsDetailsResult = await GetAllViewDetailsAsync(clientId);
+        var viewsDetailsResult = await GetAllViewDetailsAsync(clientId);
 
-        // TODO: if needed will also fetch UserDefinedTableTypes here where we will have dto
+        // TODO: if needed will also fetch UserDefinedTableTypes here when we will have dto
 
         var dbStructureResult = new DbStructureDto()
         {
-            TableStructures = structuresResult,
-            //Constraints = constraintsResult,
-            FunctionDetails = functionDetailsResult,
-            //ProcedureDetails = proceduresDetailsResult,
-            //ViewDetails = viewsDetailsResult
+            DbTableStructures = structuresResult.ToList(),
+            //DbConstraints = constraintsResult.ToList(),
+            DbFunctionDetails = functionDetailsResult,
+            //DbProcedureDetails = proceduresDetailsResult,
+            DbViewDetails = viewsDetailsResult
         };
 
         return dbStructureResult;
@@ -76,14 +79,10 @@ public class DbItemsRetrievalService : IDbItemsRetrievalService
 
     public async Task<TableNamesDto> GetTableNamesAsync(Guid clientId)
     {
-        var tableNamesRetriveRequest = new QueryParameters()
-        {
-            ClientId = clientId.ToString(),
-        };
+        var queryParametersRequest = RegisterQuery();
 
-        var tableNamesResult = await _httpClientService
-            .PostAsync<QueryParameters, TableNamesDto>
-            ($"{SqlServiceRoute}/api/ConsoleAppHub/getAllTablesNames", tableNamesRetriveRequest);
+        await _hubContext.Clients.User(clientId.ToString()).GetAllTablesNamesAsync(queryParametersRequest.queryId);
+        var tableNamesResult = _mapper.Map<TableNamesDto>(await queryParametersRequest.tcs.Task);
 
         return tableNamesResult;
     }
@@ -96,16 +95,19 @@ public class DbItemsRetrievalService : IDbItemsRetrievalService
 
         foreach (var table in tableNames.Tables)
         {
-            var tableStructureRetriveRequest = new QueryParameters()
+            var queryParameters = new QueryParameters()
             {
                 ClientId = clientId.ToString(),
                 FilterSchema = table.Schema,
                 FilterName = table.Name,
             };
 
-            var tableStructureResult = await _httpClientService
-                .PostAsync<QueryParameters, TableStructureDto>
-                ($"{SqlServiceRoute}/api/ConsoleAppHub/getTableStructure", tableStructureRetriveRequest);
+            var queryParametersRequest = RegisterQuery();
+
+            await _hubContext.Clients.User(queryParameters.ClientId)
+                .GetTableStructureAsync(queryParametersRequest.queryId, queryParameters.FilterSchema, queryParameters.FilterName);
+
+            var tableStructureResult = _mapper.Map<TableStructureDto>(await queryParametersRequest.tcs.Task);
 
             tablesStructuresResults.Add(tableStructureResult);
         }
@@ -121,16 +123,19 @@ public class DbItemsRetrievalService : IDbItemsRetrievalService
 
         foreach (var table in tableNames.Tables)
         {
-            var tableConstraintsRetriveRequest = new QueryParameters()
+            var queryParameters = new QueryParameters()
             {
                 ClientId = clientId.ToString(),
                 FilterName = table.Name,
                 FilterSchema = table.Schema,
             };
 
-            var tableConstraintResult = await _httpClientService
-                .PostAsync<QueryParameters, TableConstraintsDto>
-                ($"{SqlServiceRoute}/api/ConsoleAppHub/getTableChecksAndUniqueConstraints", tableConstraintsRetriveRequest);
+            var queryParametersRequest = RegisterQuery();
+
+            await _hubContext.Clients.User(queryParameters.ClientId)
+                .GetTableChecksAndUniqueConstraintsAsync(queryParametersRequest.queryId, queryParameters.FilterSchema, queryParameters.FilterName);
+
+            var tableConstraintResult = _mapper.Map<TableConstraintsDto>(await queryParametersRequest.tcs.Task);
 
             tableConstraintsResult.Add(tableConstraintResult);
         }
@@ -140,85 +145,62 @@ public class DbItemsRetrievalService : IDbItemsRetrievalService
 
     public async Task<FunctionNamesDto> GetFunctionsNamesAsync(Guid clientId)
     {
-        var functionNamesRetriveRequest = new QueryParameters()
-        {
-            ClientId = clientId.ToString(),
-        };
+        var queryParametersRequest = RegisterQuery();
 
-        var functionNamesResult = await _httpClientService
-            .PostAsync<QueryParameters, FunctionNamesDto>
-            ($"{SqlServiceRoute}/api/ConsoleAppHub/getAllFunctionsNames", functionNamesRetriveRequest);
+        await _hubContext.Clients.User(clientId.ToString()).GetAllFunctionsNamesAsync(queryParametersRequest.queryId);
+        var functionNamesResult = _mapper.Map<FunctionNamesDto>(await queryParametersRequest.tcs.Task);
 
         return functionNamesResult;
     }
 
     public async Task<FunctionDetailsDto> GetAllFunctionDetailsAsync(Guid clientId)
     {
-        var functionDetailRetriveRequest = new QueryParameters()
-        {
-            ClientId = clientId.ToString(),
-        };
+        var queryParametersRequest = RegisterQuery();
 
-        var functionDetailResult = await _httpClientService
-            .PostAsync<QueryParameters, FunctionDetailsDto>
-            ($"{SqlServiceRoute}/api/ConsoleAppHub/getFunctionsWithDetail", functionDetailRetriveRequest);
-
+        await _hubContext.Clients.User(clientId.ToString()).GetFunctionsWithDetailAsync(queryParametersRequest.queryId);
+        var functionDetailResult = _mapper.Map<FunctionDetailsDto>(await queryParametersRequest.tcs.Task);
 
         return functionDetailResult;
     }
 
     public async Task<ProcedureNamesDto> GetProceduresNamesAsync(Guid clientId)
     {
-        var proceduresNamesRetriveRequest = new QueryParameters()
-        {
-            ClientId = clientId.ToString(),
-        };
+        var queryParametersRequest = RegisterQuery();
 
-        var proceduresNamesResult = await _httpClientService
-            .PostAsync<QueryParameters, ProcedureNamesDto>
-            ($"{SqlServiceRoute}/api/ConsoleAppHub/getAllStoredProceduresNames", proceduresNamesRetriveRequest);
+        await _hubContext.Clients.User(clientId.ToString())
+            .GetAllStoredProceduresNamesAsync(queryParametersRequest.queryId);
+        var proceduresNamesResult = _mapper.Map<ProcedureNamesDto>(await queryParametersRequest.tcs.Task);
 
         return proceduresNamesResult;
     }
 
     public async Task<ProcedureDetailsDto> GetAllProcedureDetailsAsync(Guid clientId)
     {
-        var procedureDetailsRetriveRequest = new QueryParameters()
-        {
-            ClientId = clientId.ToString(),
-        };
+        var queryParametersRequest = RegisterQuery();
 
-        var procedureDetailResult = await _httpClientService
-            .PostAsync<QueryParameters, ProcedureDetailsDto>
-            ($"{SqlServiceRoute}/api/ConsoleAppHub/getStoredProceduresWithDetail", procedureDetailsRetriveRequest);
+        await _hubContext.Clients.User(clientId.ToString())
+            .GetStoredProceduresWithDetailAsync(queryParametersRequest.queryId);
+        var procedureDetailResult = _mapper.Map<ProcedureDetailsDto>(await queryParametersRequest.tcs.Task);
 
         return procedureDetailResult;
     }
 
     public async Task<ViewNamesDto> GetViewNamesAsync(Guid clientId)
     {
-        var viewsNamesRetriveRequest = new QueryParameters()
-        {
-            ClientId = clientId.ToString(),
-        };
+        var queryParametersRequest = RegisterQuery();
 
-        var viewsNamesResult = await _httpClientService
-            .PostAsync<QueryParameters, ViewNamesDto>
-            ($"{SqlServiceRoute}/api/ConsoleAppHub/getAllViewsNames", viewsNamesRetriveRequest);
+        await _hubContext.Clients.User(clientId.ToString()).GetAllViewsNamesAsync(queryParametersRequest.queryId);
+        var viewsNamesResult = _mapper.Map<ViewNamesDto>(await queryParametersRequest.tcs.Task);
 
         return viewsNamesResult;
     }
 
     public async Task<ViewDetailsDto> GetAllViewDetailsAsync(Guid clientId)
     {
-        var viewDetailsRetriveRequest = new QueryParameters()
-        {
-            ClientId = clientId.ToString(),
-        };
+        var queryParametersRequest = RegisterQuery();
 
-        var viewDetailResult = await _httpClientService
-            .PostAsync<QueryParameters, ViewDetailsDto>
-            ($"{SqlServiceRoute}/api/ConsoleAppHub/getViewsWithDetail", viewDetailsRetriveRequest);
+        await _hubContext.Clients.User(clientId.ToString()).GetViewsWithDetailAsync(queryParametersRequest.queryId);
+        var viewDetailResult = _mapper.Map<ViewDetailsDto>(await queryParametersRequest.tcs.Task);
 
         return viewDetailResult;
     }

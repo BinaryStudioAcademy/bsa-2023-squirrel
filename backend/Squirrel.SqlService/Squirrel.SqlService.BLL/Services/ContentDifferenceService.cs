@@ -87,7 +87,7 @@ public class ContentDifferenceService : IContentDifferenceService
         var unmarkedBlobs = blobs.Where(blob => !markedBlobIds.Contains(blob.Id));
         foreach (var blob in unmarkedBlobs)
         {
-            CheckBlockContentNotNull(blob.Content);
+            CheckBlockContentNotNull(blob.Content!);
             var jsonString = Encoding.UTF8.GetString(blob.Content);
             var tableConstraintsDto = JsonConvert.DeserializeObject<TableConstraintsDto>(jsonString)!;
             foreach (var constraint in tableConstraintsDto.Constraints)

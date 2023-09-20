@@ -4,13 +4,9 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Squirrel.AzureBlobStorage.Interfaces;
 using Squirrel.AzureBlobStorage.Models;
-using Squirrel.Core.DAL.Entities;
 using Squirrel.Shared.DTO.SelectedItems;
-using Squirrel.Shared.Enums;
 using Squirrel.SqlService.BLL.Interfaces;
 using Squirrel.SqlService.BLL.Models.DTO;
-using Squirrel.SqlService.BLL.Models.DTO.Function;
-using Squirrel.SqlService.BLL.Models.DTO.Procedure;
 using System.Text;
 
 namespace Squirrel.SqlService.BLL.Services;
@@ -28,47 +24,43 @@ public class CommitFilesService : ICommitFilesService
     public async Task SaveSelectedFiles(SelectedItemsDto selectedItems)
     {
         var staged = await GetStagedAsync(selectedItems.Guid);
-        foreach (var section in selectedItems.SelectedItems)
+        foreach (var selected in selectedItems.StoredProcedures) 
         {
-            var children = section.Children.Where(x => x.Selected == true);
-            foreach (var child in children)
+            var item = staged.DbProcedureDetails?.Details.FirstOrDefault(x => x.Name == selected);
+            if (item != null) 
             {
-                if (section.Name == "Functions" && staged.DbFunctionDetails != null)
-                {
-                    var function = staged.DbFunctionDetails.Details.FirstOrDefault(x => x.Name == child.Name);
-                    if (function != null)
-                    {
-                        var blobContent = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(function));
-                        await SaveToBlob($"{selectedItems.CommitId}-functions", $"{function.Schema}-{function.Name}".ToLower(), blobContent);
-                    }
-                }
-                else if (section.Name == "Stored Procedures" && staged.DbProcedureDetails != null)
-                {
-                    var procedure = staged.DbProcedureDetails.Details.FirstOrDefault(x => x.Name == child.Name);
-                    if (procedure != null)
-                    {
-                        var blobContent = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(procedure));
-                        await SaveToBlob($"{selectedItems.CommitId}-procedures", $"{procedure.Schema}-{procedure.Name}".ToLower(), blobContent);
-                    }
-                }
-                else if (section.Name == "Constraints" && staged.DbConstraints != null)
-                {
-                    var constraint = staged.DbConstraints.Constraints.FirstOrDefault(x => x.Name == child.Name);
-                    if(constraint != null)
-                    {
-                        // save to mongo
-                    }
-                }
-                else if (section.Name == "Tables" && staged.DbTableStructures != null)
-                {
-                    var table = staged.DbTableStructures.FirstOrDefault(x => x.Name == child.Name);
-                    if(table != null)
-                    {
-                        // save to mongo
-                    }
-                }
-                // TO DO OTHER ENTITIES
+                var blobContent = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(item));
+                await SaveToBlob($"{selectedItems.CommitId}-procedures", $"{item.Schema}-{item.Name}".ToLower(), blobContent);
             }
+        }
+        foreach (var selected in selectedItems.Functions)
+        {
+            var item = staged.DbFunctionDetails?.Details.FirstOrDefault(x => x.Name == selected);
+            if (item != null)
+            {
+                var blobContent = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(item));
+                await SaveToBlob($"{selectedItems.CommitId}-functions", $"{item.Schema}-{item.Name}".ToLower(), blobContent);
+            }
+        }
+        foreach (var selected in selectedItems.Tables)
+        {
+            var item = staged.DbTableStructures?.FirstOrDefault(x => x.Name == selected);
+            if (item != null)
+            {
+                // mongo
+            }
+        }
+        foreach (var selected in selectedItems.Constraints)
+        {
+            var item = staged.DbConstraints?.Constraints.FirstOrDefault(x => x.Name == selected);
+            if (item != null)
+            {
+                // mongo
+            }
+        }
+        foreach (var selected in selectedItems.Types)
+        {
+            // TODO
         }
     }
 

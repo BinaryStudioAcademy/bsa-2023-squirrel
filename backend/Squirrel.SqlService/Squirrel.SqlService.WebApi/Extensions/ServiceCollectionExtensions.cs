@@ -21,6 +21,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IContentDifferenceService, ContentDifferenceService>();
         services.AddSingleton<IProcessReceivedDataService, ProcessReceivedDataService>();
         services.AddSingleton<ResultObserver>();
+        services.AddScoped<ICommitFilesService, CommitFilesService>();
         services.AddScoped<ISqlFormatterService, SqlFormatterService>(provider =>
             new SqlFormatterService(configuration.GetSection("PythonExePath").Value));
     }

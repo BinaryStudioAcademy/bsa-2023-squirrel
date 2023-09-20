@@ -56,6 +56,7 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
         this.form.patchValue({
             scriptContent: this.selectedScript ? this.selectedScript.content : '',
         });
+        this.form.markAsPristine();
     }
 
     public openCreateModal(): void {

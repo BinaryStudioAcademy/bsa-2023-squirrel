@@ -39,7 +39,12 @@ public class ContentDifferenceService : IContentDifferenceService
         var markedBlobIds = new List<string>();
 
         await CompareDbItemsContent(dbStructure.DbTableStructures!, containers, commitId, DatabaseItemType.Table, differenceList, markedBlobIds);
-        await CompareDbItemsContent(dbStructure.DbConstraints!.Constraints, containers, commitId, DatabaseItemType.Constraint, differenceList, markedBlobIds);
+
+        foreach (var tableConstraints in dbStructure.DbConstraints!)
+        {
+            await CompareDbItemsContent(tableConstraints.Constraints, containers, commitId, DatabaseItemType.Constraint, differenceList, markedBlobIds);
+        }
+        
         await CompareDbItemsContent(dbStructure.DbFunctionDetails!.Details, containers, commitId, DatabaseItemType.Function, differenceList, markedBlobIds);
         await CompareDbItemsContent(dbStructure.DbProcedureDetails!.Details, containers, commitId, DatabaseItemType.StoredProcedure, differenceList, markedBlobIds);
 

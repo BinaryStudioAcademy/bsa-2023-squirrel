@@ -34,13 +34,12 @@ public class ConnectionService: IConnectionService
         {
             var testQueryResult = databaseService.ExecuteQuery(databaseProvider.GetTablesNamesQuery());
             Console.WriteLine(testQueryResult);
+            _connectionFileService.SaveToFile(connectionStringDto);
         }
         catch (Exception ex)
         {
             throw new DbConnectionFailed(connectionString, ex.Message);
         }
-
-        _connectionFileService.SaveToFile(connectionStringDto);
 
         return _clientIdFileService.GetClientId();
     }

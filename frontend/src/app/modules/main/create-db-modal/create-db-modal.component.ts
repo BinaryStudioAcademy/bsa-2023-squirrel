@@ -59,8 +59,8 @@ export class CreateDbModalComponent extends BaseComponent implements OnInit {
                 next: guid => {
                     this.saveDb(guid);
                 },
-                error: () => {
-                    this.notificationService.error('Failed to connect to database');
+                error: (error) => {
+                    this.notificationService.error(error);
                 },
             });
     }

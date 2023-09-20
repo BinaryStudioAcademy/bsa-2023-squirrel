@@ -63,6 +63,7 @@ export class MainHeaderComponent extends BaseComponent implements OnInit {
             next: (addedDatabase: DatabaseDto) => {
                 this.databases.push(addedDatabase);
                 this.dbNames.push(addedDatabase.dbName);
+                this.choseDb(addedDatabase);
             },
         });
     }
@@ -90,7 +91,6 @@ export class MainHeaderComponent extends BaseComponent implements OnInit {
 
     public choseDb(db: DatabaseDto) {
         this.currentDb = db;
-        console.log(db.guid);
         const query: QueryParameters = {
             clientId: this.currentDb.guid,
             filterSchema: '',

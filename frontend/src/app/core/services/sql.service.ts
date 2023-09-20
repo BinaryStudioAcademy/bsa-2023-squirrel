@@ -15,10 +15,10 @@ export class SqlService {
     constructor(private http: HttpClient) { }
 
     public getAllTablesNames(query: QueryParameters) {
-        return this.http.post(`${this.baseUrl}/getAllTablesNames`, query);
+        return this.http.post(`${this.baseUrl}/get-all-tables-names`, query);
     }
 
     public remoteConnect(dbConnectionRemote: DbConnectionRemote) {
-        return this.http.post(`${this.baseUrl}/dbConnect`, dbConnectionRemote);
+        return this.http.post(`${this.baseUrl}/db-connect`, dbConnectionRemote);
     }
 }

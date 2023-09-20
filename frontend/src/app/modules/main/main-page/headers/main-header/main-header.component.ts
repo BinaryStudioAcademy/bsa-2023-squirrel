@@ -46,7 +46,7 @@ export class MainHeaderComponent extends BaseComponent implements OnInit {
         this.selectedDbName = value;
         const currentDb = this.databases!.find(database => database.dbName === this.selectedDbName)!;
 
-        this.choseDb(currentDb);
+        this.selectDb(currentDb);
     }
 
     public openCreateModal(): void {
@@ -59,13 +59,15 @@ export class MainHeaderComponent extends BaseComponent implements OnInit {
             autoFocus: false,
         });
 
-        dialogRef.componentInstance.addedDatabase.subscribe({
-            next: (addedDatabase: DatabaseDto) => {
-                this.databases.push(addedDatabase);
-                this.dbNames.push(addedDatabase.dbName);
-                this.choseDb(addedDatabase);
-            },
-        });
+        dialogRef.componentInstance.addedDatabase
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe({
+                next: (addedDatabase: DatabaseDto) => {
+                    this.databases.push(addedDatabase);
+                    this.dbNames.push(addedDatabase.dbName);
+                    this.selectDb(addedDatabase);
+                },
+            });
     }
 
     private loadProject() {
@@ -80,16 +82,18 @@ export class MainHeaderComponent extends BaseComponent implements OnInit {
     }
 
     private loadDatabases() {
-        this.databaseService.getAllDatabases(this.project.id).subscribe({
-            next: databases => {
-                this.databases = databases;
-                this.dbNames = databases.map(database => database.dbName);
-                this.choseDb(databases[0]);
-            },
-        });
+        this.databaseService.getAllDatabases(this.project.id)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe({
+                next: databases => {
+                    this.databases = databases;
+                    this.dbNames = databases.map(database => database.dbName);
+                    this.selectDb(databases[0]);
+                },
+            });
     }
 
-    public choseDb(db: DatabaseDto) {
+    public selectDb(db: DatabaseDto) {
         this.currentDb = db;
         const query: QueryParameters = {
             clientId: this.currentDb.guid,

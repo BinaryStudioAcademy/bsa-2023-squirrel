@@ -38,34 +38,30 @@ public class ConsoleAppHubController : ControllerBase
         return (queryId, tcs);
     }
     
-    // https://localhost:7244/api/ConsoleAppHub/getAllTablesNames
-    [HttpPost("getAllTablesNames")]
+    [HttpPost("all-tables-names")]
     public async Task<ActionResult<TableNamesDto>> GetAllTablesNamesAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId).GetAllTablesNamesAsync(_queryParameters.queryId);
         return Ok(_mapper.Map<TableNamesDto>(await _queryParameters.tcs.Task));
     }
-
-    // https://localhost:7244/api/ConsoleAppHub/getTableData
-    [HttpPost("getTableData")]
+    
+    [HttpPost("table-data")]
     public async Task<ActionResult<TableDataDto>> GetTableDataAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId).GetTableDataAsync(_queryParameters.queryId,
             queryParameters.FilterSchema, queryParameters.FilterName, queryParameters.FilterRowsCount);
         return Ok(_mapper.Map<TableDataDto>(await _queryParameters.tcs.Task));
     }
-
-    // https://localhost:7244/api/ConsoleAppHub/getAllStoredProceduresNames
-    [HttpPost("getAllStoredProceduresNames")]
+    
+    [HttpPost("all-stored-procedures-names")]
     public async Task<ActionResult<ProcedureNamesDto>> GetAllStoredProceduresNamesAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId)
             .GetAllStoredProceduresNamesAsync(_queryParameters.queryId);
         return Ok(await _queryParameters.tcs.Task);
     }
-
-    // https://localhost:7244/api/ConsoleAppHub/getStoredProcedureDefinition
-    [HttpPost("getStoredProcedureDefinition")]
+    
+    [HttpPost("stored-procedure-definition")]
     public async Task<ActionResult> GetStoredProcedureDefinitionAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId)
@@ -73,17 +69,15 @@ public class ConsoleAppHubController : ControllerBase
                 queryParameters.FilterName);
         return Ok(await _queryParameters.tcs.Task);
     }
-
-    // https://localhost:7244/api/ConsoleAppHub/getAllFunctionsNames
-    [HttpPost("getAllFunctionsNames")]
+    
+    [HttpPost("all-functions-names")]
     public async Task<ActionResult> GetAllFunctionsNamesAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId).GetAllFunctionsNamesAsync(_queryParameters.queryId);
         return Ok(await _queryParameters.tcs.Task);
     }
-
-    // https://localhost:7244/api/ConsoleAppHub/getFunctionDefinition
-    [HttpPost("getFunctionDefinition")]
+    
+    [HttpPost("function-definition")]
     public async Task<ActionResult<RoutineDefinitionDto>> GetFunctionDefinitionAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId)
@@ -91,26 +85,23 @@ public class ConsoleAppHubController : ControllerBase
                 queryParameters.FilterName);
         return Ok(_mapper.Map<RoutineDefinitionDto>(await _queryParameters.tcs.Task));
     }
-
-    // https://localhost:7244/api/ConsoleAppHub/getAllViewsNames
-    [HttpPost("getAllViewsNames")]
+    
+    [HttpPost("all-views-names")]
     public async Task<ActionResult> GetAllViewsNamesAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId).GetAllViewsNamesAsync(_queryParameters.queryId);
         return Ok(await _queryParameters.tcs.Task);
     }
-
-    // https://localhost:7244/api/ConsoleAppHub/getViewDefinition
-    [HttpPost("getViewDefinition")]
+    
+    [HttpPost("view-definition")]
     public async Task<ActionResult<RoutineDefinitionDto>> GetViewDefinitionAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId)
             .GetViewDefinitionAsync(_queryParameters.queryId, queryParameters.FilterName);
         return Ok(_mapper.Map<RoutineDefinitionDto>(await _queryParameters.tcs.Task));
     }
-
-    // https://localhost:7244/api/ConsoleAppHub/getTableStructure
-    [HttpPost("getTableStructure")]
+    
+    [HttpPost("table-structure")]
     public async Task<ActionResult<TableStructureDto>> GetTableStructureAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId).GetTableStructureAsync(_queryParameters.queryId,
@@ -118,8 +109,7 @@ public class ConsoleAppHubController : ControllerBase
         return Ok(_mapper.Map<TableStructureDto>(await _queryParameters.tcs.Task));
     }
 
-    // https://localhost:7244/api/ConsoleAppHub/getTableChecksAndUniqueConstraints
-    [HttpPost("getTableChecksAndUniqueConstraints")]
+    [HttpPost("tTable-checks-and-unique-constraints")]
     public async Task<ActionResult<TableConstraintsDto>> GetTableChecksAndUniqueConstraintsAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId)
@@ -127,9 +117,8 @@ public class ConsoleAppHubController : ControllerBase
                 queryParameters.FilterName);
         return Ok(_mapper.Map<TableConstraintsDto>(await _queryParameters.tcs.Task));
     }
-
-    // https://localhost:7244/api/ConsoleAppHub/getStoredProceduresWithDetail
-    [HttpPost("getStoredProceduresWithDetail")]
+    
+    [HttpPost("stored-procedures-with-detail")]
     public async Task<ActionResult<ProcedureDetailsDto>> GetStoredProceduresWithDetailAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId)
@@ -137,24 +126,21 @@ public class ConsoleAppHubController : ControllerBase
         return Ok(_mapper.Map<ProcedureDetailsDto>(await _queryParameters.tcs.Task));
     }
 
-    // https://localhost:7244/api/ConsoleAppHub/getFunctionsWithDetail
-    [HttpPost("getFunctionsWithDetail")]
+    [HttpPost("functions-with-detail")]
     public async Task<ActionResult<FunctionDetailsDto>> GetFunctionsWithDetailAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId).GetFunctionsWithDetailAsync(_queryParameters.queryId);
         return Ok(_mapper.Map<FunctionDetailsDto>(await _queryParameters.tcs.Task));
     }
-
-    // https://localhost:7244/api/ConsoleAppHub/getViewsWithDetail
-    [HttpPost("getViewsWithDetail")]
+    
+    [HttpPost("views-with-detail")]
     public async Task<ActionResult> GetViewsWithDetailAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId).GetViewsWithDetailAsync(_queryParameters.queryId);
         return Ok(await _queryParameters.tcs.Task);
     }
-
-    // https://localhost:7244/api/ConsoleAppHub/getUserDefinedTypesWithDefaultsAndRulesAndDefinition
-    [HttpPost("getUserDefinedTypesWithDefaultsAndRulesAndDefinition")]
+    
+    [HttpPost("user-defined-types-with-defaults-and-rules-and-definition")]
     public async Task<ActionResult> GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync(
         [FromBody] QueryParameters queryParameters)
     {
@@ -162,9 +148,8 @@ public class ConsoleAppHubController : ControllerBase
             .GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync(_queryParameters.queryId);
         return Ok(await _queryParameters.tcs.Task);
     }
-
-    // https://localhost:7244/api/ConsoleAppHub/getUserDefinedTableTypes
-    [HttpPost("getUserDefinedTableTypes")]
+    
+    [HttpPost("user-defined-table-types")]
     public async Task<ActionResult> GetUserDefinedTableTypesAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId)
@@ -172,8 +157,7 @@ public class ConsoleAppHubController : ControllerBase
         return Ok(await _queryParameters.tcs.Task);
     }
     
-    // https://localhost:7244/api/ConsoleAppHub/getUserDefinedTableTypes
-    [HttpPost("dbConnect")]
+    [HttpPost("db-connect")]
     public async Task<ActionResult> ConnectToDb([FromBody] RemoteConnect remoteConnect)
     {
         await _hubContext.Clients.User(remoteConnect.ClientId)

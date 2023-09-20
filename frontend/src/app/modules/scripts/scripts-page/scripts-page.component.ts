@@ -8,11 +8,13 @@ import { SharedProjectService } from '@core/services/shared-project.service';
 import { SpinnerService } from '@core/services/spinner.service';
 import { finalize, Observable, of, switchMap, takeUntil, tap } from 'rxjs';
 
+import { DatabaseDto } from 'src/app/models/database/database-dto';
 import { ProjectResponseDto } from 'src/app/models/projects/project-response-dto';
 import { RunScriptDto } from 'src/app/models/scripts/run-script-dto';
 import { ScriptContentDto } from 'src/app/models/scripts/script-content-dto';
 import { ScriptDto } from 'src/app/models/scripts/script-dto';
 import { ScriptErrorDto } from 'src/app/models/scripts/script-error-dto';
+import { ScriptResultDto } from 'src/app/models/scripts/script-result-dto';
 
 import { CreateScriptModalComponent } from '../create-script-modal/create-script-modal.component';
 
@@ -40,6 +42,8 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
 
     private project: ProjectResponseDto;
 
+    private currentDb: DatabaseDto;
+
     constructor(
         public dialog: MatDialog,
         private formBuilder: FormBuilder,
@@ -54,6 +58,7 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
     ngOnInit(): void {
         this.loadScripts();
         this.initializeForm();
+        this.loadCurrentDb();
     }
 
     public onScriptSelected($event: any): void {
@@ -120,7 +125,10 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
             projectId: this.selectedScript.projectId,
             content: this.form.value.scriptContent,
             dbEngine: this.project.dbEngine,
+            clientId: null,
         };
+
+        console.log(script);
 
         this.scriptService
             .formatScript(script)
@@ -139,6 +147,39 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
                 },
                 (err: ScriptErrorDto) => {
                     this.notification.error('Format Script error');
+                    this.updateScriptContentError(err);
+                },
+            );
+    }
+
+    public executeScript(): void {
+        if (!this.selectedScript) {
+            return;
+        }
+
+        this.spinner.show();
+        const script: RunScriptDto = {
+            projectId: this.selectedScript.projectId,
+            content: this.form.value.scriptContent,
+            dbEngine: this.project.dbEngine,
+            clientId: this.currentDb.guid,
+        };
+
+        this.scriptService
+            .executeScript(script)
+            .pipe(
+                takeUntil(this.unsubscribe$),
+                finalize(() => this.spinner.hide()),
+            )
+            .subscribe(
+                (executed: ScriptResultDto) => {
+                    if (this.selectedScript) {
+                        this.scriptErrors[this.selectedScript.id].message = executed.result;
+                    }
+                    this.notification.info('Script successfully executed');
+                },
+                (err: ScriptErrorDto) => {
+                    this.notification.error('Script execution error');
                     this.updateScriptContentError(err);
                 },
             );
@@ -189,6 +230,24 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
                 this.selectedScript = this.scripts.find((s) => s.id === selectedScriptId);
             }
             this.spinner.hide();
+        });
+    }
+
+    private loadCurrentDb() {
+        let hasReceivedData = false;
+
+        this.sharedProject.currentDb$.pipe(takeUntil(this.unsubscribe$)).subscribe({
+            next: (currentDb) => {
+                if (!currentDb) {
+                    if (hasReceivedData) {
+                        this.notification.error('No database currently selected');
+                    }
+                } else {
+                    this.currentDb = currentDb;
+                    this.notification.info(`Current Db guid is: '${this.currentDb.guid}'`);
+                }
+                hasReceivedData = true;
+            },
         });
     }
 }

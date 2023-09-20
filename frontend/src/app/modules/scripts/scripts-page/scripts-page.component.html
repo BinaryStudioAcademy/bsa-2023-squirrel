@@ -32,7 +32,11 @@
                 text="Format"
                 [isDisabled]="!selectedScript"
                 (buttonOnClick)="formatScript()"></app-button>
-            <app-button variant="outline-primary" text="Execute" [isDisabled]="!selectedScript"></app-button>
+            <app-button
+                variant="outline-primary"
+                text="Execute"
+                [isDisabled]="!selectedScript"
+                (buttonOnClick)="executeScript()"></app-button>
             <app-button
                 variant="outline-primary"
                 text="Save"

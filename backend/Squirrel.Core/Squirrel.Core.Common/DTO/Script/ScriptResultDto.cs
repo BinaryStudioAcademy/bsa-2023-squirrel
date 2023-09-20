@@ -2,5 +2,5 @@
 
 public class ScriptResultDto
 {
-    public string ExecutionContent { get; set; } = null!;
+    public string Result { get; set; } = null!;
 }

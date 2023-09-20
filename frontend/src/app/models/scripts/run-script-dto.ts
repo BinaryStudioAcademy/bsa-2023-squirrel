@@ -4,4 +4,5 @@ export interface RunScriptDto {
     content: string;
     projectId: number;
     dbEngine: DbEngine;
+    clientId: string | null;
 }

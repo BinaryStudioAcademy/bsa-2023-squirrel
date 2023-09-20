@@ -1,3 +1,3 @@
 export interface ScriptResultDto {
-    execution: string;
+    result: string;
 }

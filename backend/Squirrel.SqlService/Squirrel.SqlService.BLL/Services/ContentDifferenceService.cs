@@ -88,7 +88,7 @@ public class ContentDifferenceService : IContentDifferenceService
         foreach (var blob in unmarkedBlobs)
         {
             CheckBlockContentNotNull(blob.Content!);
-            var jsonString = Encoding.UTF8.GetString(blob.Content);
+            var jsonString = Encoding.UTF8.GetString(blob.Content!);
             var tableConstraintsDto = JsonConvert.DeserializeObject<TableConstraintsDto>(jsonString)!;
             foreach (var constraint in tableConstraintsDto.Constraints)
             {

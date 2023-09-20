@@ -1,8 +1,13 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Newtonsoft.Json;
+using Squirrel.AzureBlobStorage.Interfaces;
+using Squirrel.AzureBlobStorage.Models;
 using Squirrel.ConsoleApp.Models;
+using Squirrel.Shared.Enums;
 using Squirrel.SqlService.BLL.Hubs;
+using Squirrel.SqlService.BLL.Interfaces;
 using Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
 using Squirrel.SqlService.BLL.Models.ConsoleAppHub;
 using Squirrel.SqlService.BLL.Models.DTO;
@@ -10,6 +15,7 @@ using Squirrel.SqlService.BLL.Models.DTO.Function;
 using Squirrel.SqlService.BLL.Models.DTO.Procedure;
 using Squirrel.SqlService.BLL.Models.DTO.Shared;
 using Squirrel.SqlService.BLL.Services.ConsoleAppHub;
+using System.Text;
 
 namespace Squirrel.SqlService.WebApi.Controllers;
 
@@ -21,14 +27,18 @@ public class ConsoleAppHubController : ControllerBase
     private readonly ResultObserver _resultObserver;
     private readonly IMapper _mapper;
     private readonly (Guid queryId, TaskCompletionSource<QueryResultTable> tcs) _queryParameters;
+    private readonly IBlobStorageService _blobStorageService;
+    private readonly IContentDifferenceService _diffService;
 
     public ConsoleAppHubController(IHubContext<ConsoleAppHub, IExecuteOnClientSide> hubContext,
-        ResultObserver resultObserver, IMapper mapper)
+        ResultObserver resultObserver, IMapper mapper, IBlobStorageService blobStorageService, IContentDifferenceService differenceService)
     {
         _hubContext = hubContext;
         _resultObserver = resultObserver;
         _mapper = mapper;
         _queryParameters = RegisterQuery();
+        _blobStorageService = blobStorageService;
+        _diffService = differenceService;
     }
 
     private (Guid queryId, TaskCompletionSource<QueryResultTable> tcs) RegisterQuery()
@@ -37,7 +47,31 @@ public class ConsoleAppHubController : ControllerBase
         var tcs = _resultObserver.Register(queryId);
         return (queryId, tcs);
     }
-    
+
+    public async Task Test<T>(T item, int commitId, DatabaseItemType type) where T : BaseDbItem
+    {
+        var blob = new Blob
+        {
+            Id = $"{item.Schema}-{item.Name}".ToLower(),
+            ContentType = "application/json",
+            Content = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(item)),
+        };
+        await _blobStorageService.UploadAsync($"{commitId}-{type}".ToLower(), blob);
+    }
+    public async Task Test<T>(List<T> items, int commitId, DatabaseItemType type) where T : BaseDbItem
+    {
+        foreach (var item in items)
+        {
+            var blob = new Blob
+            {
+                Id = $"{item.Schema}-{item.Name}".ToLower(),
+                ContentType = "application/json",
+                Content = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(item)),
+            };
+            await _blobStorageService.UploadAsync($"{commitId}-{type}".ToLower(), blob);
+        }
+    }
+
     // https://localhost:7244/api/ConsoleAppHub/getAllTablesNames
     [HttpPost("getAllTablesNames")]
     public async Task<ActionResult<TableNamesDto>> GetAllTablesNamesAsync([FromBody] QueryParameters queryParameters)

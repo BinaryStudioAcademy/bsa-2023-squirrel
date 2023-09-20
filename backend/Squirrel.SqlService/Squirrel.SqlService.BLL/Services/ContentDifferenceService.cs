@@ -177,4 +177,45 @@ public class ContentDifferenceService : IContentDifferenceService
     {
         return $"{schema}-{name}".ToLower();
     }
+
+    public async Task GenerateTempBlobContentAsync(int commitId)
+    {
+        DbStructureDto dbStructure = new DbStructureDto();
+        var tableBlobs = await _blobStorageService.GetAllBlobsByContainerNameAsync($"{commitId}-table");
+        var constBlobs = await _blobStorageService.GetAllBlobsByContainerNameAsync($"{commitId}-constraint");
+        var spBlobs = await _blobStorageService.GetAllBlobsByContainerNameAsync($"{commitId}-storedprocedure");
+        var funcBlobs = await _blobStorageService.GetAllBlobsByContainerNameAsync($"{commitId}-function");
+        var viewBlobs = await _blobStorageService.GetAllBlobsByContainerNameAsync($"{commitId}-{DatabaseItemType.View}");
+        foreach (var blob in tableBlobs)
+        {
+            var jsonString = Encoding.UTF8.GetString(blob.Content);
+            var content = JsonConvert.DeserializeObject<TableStructureDto>(jsonString)!;
+            dbStructure.DbTableStructures.Add(content);
+        }
+        foreach (var blob in constBlobs)
+        {
+            var jsonString = Encoding.UTF8.GetString(blob.Content);
+            var content = JsonConvert.DeserializeObject<TableConstraintsDto>(jsonString)!;
+            dbStructure.DbConstraints.Add(content);
+        }
+        foreach (var blob in spBlobs)
+        {
+            var jsonString = Encoding.UTF8.GetString(blob.Content);
+            var content = JsonConvert.DeserializeObject<ProcedureDetailInfo>(jsonString)!;
+            dbStructure.DbProcedureDetails.Details.Add(content);
+        }
+        foreach (var blob in funcBlobs)
+        {
+            var jsonString = Encoding.UTF8.GetString(blob.Content);
+            var content = JsonConvert.DeserializeObject<FunctionDetailInfo>(jsonString)!;
+            dbStructure.DbFunctionDetails.Details.Add(content);
+        }
+        var tempblob = new Blob
+        {
+            Id = $"{new Guid()}".ToLower(),
+            ContentType = "application/json",
+            Content = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(dbStructure)),
+        };
+        await _blobStorageService.UploadAsync(_configuration["UserDbChangesBlobContainerName"], tempblob);
+    }
 }

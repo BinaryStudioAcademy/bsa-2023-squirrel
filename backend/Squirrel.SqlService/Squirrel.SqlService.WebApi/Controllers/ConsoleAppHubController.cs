@@ -182,7 +182,7 @@ public class ConsoleAppHubController : ControllerBase
     {
         var formattedScript = _sqlFormatterService.GetFormattedSql(inboundScriptDto.DbEngine, inboundScriptDto.Content!);
 
-        await _hubContext.Clients.User(inboundScriptDto.ClientId!).ExecuteScriptAsync(_queryParameters.queryId, formattedScript.Content);
+        await _hubContext.Clients.User(inboundScriptDto.ClientId!).ExecuteScriptAsync(_queryParameters.queryId, formattedScript.Content!);
         return Ok(await _queryParameters.tcs.Task);
     }
 }

@@ -1,8 +1,7 @@
-﻿using Azure.Storage.Blobs.Models;
+﻿using Azure;
 using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using Squirrel.AzureBlobStorage.Interfaces;
-using System.Reflection.Metadata;
-using Azure;
 using Blob = Squirrel.AzureBlobStorage.Models.Blob;
 
 namespace Squirrel.AzureBlobStorage.Services;
@@ -20,7 +19,7 @@ public class AzureBlobStorageService : IBlobStorageService
     {
         var blobClient = await GetBlobClientInternalAsync(containerName, blob.Id);
 
-        if (!await blobClient.ExistsAsync())
+        if (await blobClient.ExistsAsync())
         {
             throw new InvalidOperationException($"Blob with id:{blob.Id} already exists.");
         }

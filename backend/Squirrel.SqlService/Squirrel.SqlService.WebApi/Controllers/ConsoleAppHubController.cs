@@ -9,7 +9,9 @@ using Squirrel.SqlService.BLL.Models.DTO;
 using Squirrel.SqlService.BLL.Models.DTO.Function;
 using Squirrel.SqlService.BLL.Models.DTO.Procedure;
 using Squirrel.SqlService.BLL.Models.DTO.Shared;
+using Squirrel.SqlService.BLL.Models.DTO.View;
 using Squirrel.SqlService.BLL.Services.ConsoleAppHub;
+
 
 namespace Squirrel.SqlService.WebApi.Controllers;
 
@@ -58,7 +60,7 @@ public class ConsoleAppHubController : ControllerBase
     {
         await _hubContext.Clients.User(queryParameters.ClientId)
             .GetAllStoredProceduresNamesAsync(_queryParameters.queryId);
-        return Ok(await _queryParameters.tcs.Task);
+        return Ok(_mapper.Map<ProcedureNamesDto>(await _queryParameters.tcs.Task));
     }
     
     [HttpPost("stored-procedure-definition")]
@@ -71,10 +73,10 @@ public class ConsoleAppHubController : ControllerBase
     }
     
     [HttpPost("all-functions-names")]
-    public async Task<ActionResult> GetAllFunctionsNamesAsync([FromBody] QueryParameters queryParameters)
+    public async Task<ActionResult<FunctionNamesDto>> GetAllFunctionsNamesAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId).GetAllFunctionsNamesAsync(_queryParameters.queryId);
-        return Ok(await _queryParameters.tcs.Task);
+        return Ok(_mapper.Map<FunctionNamesDto>(await _queryParameters.tcs.Task));
     }
     
     [HttpPost("function-definition")]
@@ -87,17 +89,17 @@ public class ConsoleAppHubController : ControllerBase
     }
     
     [HttpPost("all-views-names")]
-    public async Task<ActionResult> GetAllViewsNamesAsync([FromBody] QueryParameters queryParameters)
+    public async Task<ActionResult<ViewNamesDto>> GetAllViewsNamesAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId).GetAllViewsNamesAsync(_queryParameters.queryId);
-        return Ok(await _queryParameters.tcs.Task);
+        return Ok(_mapper.Map<ViewNamesDto>(await _queryParameters.tcs.Task));
     }
     
     [HttpPost("view-definition")]
     public async Task<ActionResult<RoutineDefinitionDto>> GetViewDefinitionAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId)
-            .GetViewDefinitionAsync(_queryParameters.queryId, queryParameters.FilterName);
+            .GetViewDefinitionAsync(_queryParameters.queryId, queryParameters.FilterSchema, queryParameters.FilterName);
         return Ok(_mapper.Map<RoutineDefinitionDto>(await _queryParameters.tcs.Task));
     }
     
@@ -134,10 +136,10 @@ public class ConsoleAppHubController : ControllerBase
     }
     
     [HttpPost("views-with-detail")]
-    public async Task<ActionResult> GetViewsWithDetailAsync([FromBody] QueryParameters queryParameters)
+    public async Task<ActionResult<ViewDetailsDto>> GetViewsWithDetailAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId).GetViewsWithDetailAsync(_queryParameters.queryId);
-        return Ok(await _queryParameters.tcs.Task);
+        return Ok(_mapper.Map<ViewDetailsDto>(await _queryParameters.tcs.Task));
     }
     
     [HttpPost("user-defined-types-with-defaults-and-rules-and-definition")]

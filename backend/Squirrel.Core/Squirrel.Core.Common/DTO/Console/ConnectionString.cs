@@ -1,6 +1,6 @@
 ﻿using Squirrel.Core.DAL.Enums;
 
-namespace Squirrel.SqlService.BLL.Models.ConsoleAppHub;
+namespace Squirrel.Core.Common.DTO.Console;
 
 public class ConnectionString
 {

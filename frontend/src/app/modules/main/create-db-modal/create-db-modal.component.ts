@@ -3,9 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { BaseComponent } from '@core/base/base.component';
 import { ConsoleConnectService } from '@core/services/console-connect.service';
+import { ConsoleConnectRemoteService } from '@core/services/console-connect-remote.service';
 import { DatabaseService } from '@core/services/database.service';
 import { NotificationService } from '@core/services/notification.service';
-import { SqlService } from '@core/services/sql.service';
 import { takeUntil } from 'rxjs';
 
 import { DatabaseDto } from 'src/app/models/database/database-dto';
@@ -33,7 +33,7 @@ export class CreateDbModalComponent extends BaseComponent implements OnInit {
         private databaseService: DatabaseService,
         private notificationService: NotificationService,
         public dialogRef: MatDialogRef<CreateDbModalComponent>,
-        private sqlService: SqlService,
+        private consoleConnectRemote: ConsoleConnectRemoteService,
     ) {
         super();
     }
@@ -73,7 +73,7 @@ export class CreateDbModalComponent extends BaseComponent implements OnInit {
             clientId: this.dbForm.value.guid,
         };
 
-        this.sqlService.remoteConnect(connect)
+        this.consoleConnectRemote.tryConnect(connect)
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe({
                 next: () => {

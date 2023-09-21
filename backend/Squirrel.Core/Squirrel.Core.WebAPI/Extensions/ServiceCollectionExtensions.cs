@@ -9,6 +9,7 @@ using Squirrel.Core.Common.JWT;
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
+using NuGet.Protocol.Plugins;
 using Squirrel.AzureBlobStorage.Models;
 
 namespace Squirrel.Core.WebAPI.Extensions;
@@ -32,6 +33,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IProjectDatabaseService, ProjectDatabaseService>();
         services.AddScoped<IImageService, ImageService>();
         services.AddScoped<IScriptService, ScriptService>();
+        services.AddScoped<IConsoleConnectService, ConsoleConnectService>();
 
         services.AddScoped<IChangeRecordService, ChangeRecordService>();
         services.AddTransient<IDBStructureSaverService, DBStructureSaverService>();

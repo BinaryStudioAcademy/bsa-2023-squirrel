@@ -4,7 +4,7 @@ import { BaseComponent } from '@core/base/base.component';
 import { DatabaseService } from '@core/services/database.service';
 import { NotificationService } from '@core/services/notification.service';
 import { SharedProjectService } from '@core/services/shared-project.service';
-import { SqlService } from '@core/services/sql.service';
+import { TablesService } from '@core/services/tables.service';
 import { CreateDbModalComponent } from '@modules/main/create-db-modal/create-db-modal.component';
 import { takeUntil } from 'rxjs';
 
@@ -32,8 +32,8 @@ export class MainHeaderComponent extends BaseComponent implements OnInit {
         private sharedProject: SharedProjectService,
         public dialog: MatDialog,
         private databaseService: DatabaseService,
-        private sqlService: SqlService,
         private notificationService: NotificationService,
+        private tableService: TablesService,
     ) {
         super();
     }
@@ -102,7 +102,7 @@ export class MainHeaderComponent extends BaseComponent implements OnInit {
             filterRowsCount: 1,
         };
 
-        this.sqlService.getAllTablesNames(query)
+        this.tableService.getAllTablesNames(query)
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe({
                 next: () => {

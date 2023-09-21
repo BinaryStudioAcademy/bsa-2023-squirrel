@@ -1,4 +1,6 @@
-﻿namespace Squirrel.SqlService.BLL.Models.DTO;
+﻿using Squirrel.SqlService.BLL.Models.DTO;
+
+namespace Squirrel.Shared.DTO.Table;
 
 public class TableDataDto: BaseDbItem
 {

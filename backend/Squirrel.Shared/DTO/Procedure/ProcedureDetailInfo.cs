@@ -1,4 +1,6 @@
-namespace Squirrel.SqlService.BLL.Models.DTO.Procedure;
+using Squirrel.SqlService.BLL.Models.DTO;
+
+namespace Squirrel.Shared.DTO.Procedure;
 
 public class ProcedureDetailInfo: BaseDbItem
 {

@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Squirrel.Core.BLL.Interfaces;
-using Squirrel.SqlService.BLL.Models.ConsoleAppHub;
+using Squirrel.Shared.DTO;
+using Squirrel.Shared.DTO.ConsoleAppHub;
+using Squirrel.Shared.DTO.Table;
 using Squirrel.SqlService.BLL.Models.DTO;
 
 namespace Squirrel.Core.WebAPI.Controllers;

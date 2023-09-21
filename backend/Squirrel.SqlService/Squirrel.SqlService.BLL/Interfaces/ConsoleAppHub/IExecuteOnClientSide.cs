@@ -1,4 +1,4 @@
-﻿using Squirrel.SqlService.BLL.Models.ConsoleAppHub;
+﻿using Squirrel.Shared.DTO.ConsoleAppHub;
 
 namespace Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
 

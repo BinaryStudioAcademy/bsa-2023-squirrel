@@ -1,5 +1,6 @@
-﻿using Squirrel.SqlService.BLL.Models.DTO.Function;
-using Squirrel.SqlService.BLL.Models.DTO.Procedure;
+﻿using Squirrel.Shared.DTO.Function;
+using Squirrel.Shared.DTO.Procedure;
+using Squirrel.Shared.DTO.Table;
 using Squirrel.SqlService.BLL.Models.DTO.View;
 
 namespace Squirrel.SqlService.BLL.Models.DTO;

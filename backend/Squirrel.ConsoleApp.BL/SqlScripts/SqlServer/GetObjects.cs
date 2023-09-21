@@ -3,10 +3,7 @@
 internal class GetObjects
 {
     public static string GetStoredProceduresNamesScript =>
-        @"SELECT 
-                SCHEMA_NAME(schema_id) AS SchemaName, 
-                name AS Name 
-            FROM sys.objects WHERE TYPE_DESC = 'SQL_STORED_PROCEDURE'";
+        @"SELECT SCHEMA_NAME(schema_id) [Schema], NAME [Name] FROM SYS.OBJECTS WHERE TYPE_DESC = 'SQL_STORED_PROCEDURE'";
 
     public static string GetStoredProcedureDefinitionScript(string storedProcedureSchema, string storedProcedureName) =>
         @$"
@@ -18,10 +15,7 @@ internal class GetObjects
             ";
 
     public static string GetFunctionsNamesScript =>
-        @"SELECT 
-                SCHEMA_NAME(schema_id) AS SchemaName, 
-                name AS Name
-            FROM sys.objects
+        @"SELECT SCHEMA_NAME(schema_id) [Schema], NAME [Name] FROM SYS.OBJECTS 
             WHERE TYPE_DESC = 'SQL_SCALAR_FUNCTION' OR TYPE_DESC = 'SQL_TABLE_VALUED_FUNCTION' OR TYPE_DESC = 'SQL_INLINE_TABLE_VALUED_FUNCTION'";
 
     public static string GetFunctionDefinitionScript(string functionSchema, string functionName) =>
@@ -34,7 +28,7 @@ internal class GetObjects
             ";
 
     public static string GetViewsNamesScript =>
-        @$"SELECT SCHEMA_NAME(schema_id) AS SchemaName, name AS Name FROM sys.objects WHERE TYPE_DESC = 'VIEW'";
+        @$"SELECT SCHEMA_NAME(schema_id) [Schema], NAME [Name] FROM SYS.OBJECTS WHERE TYPE_DESC = 'VIEW'";
 
     public static string GetViewDefinitionScript(string viewSchema, string viewName) =>
         @$"
@@ -71,7 +65,7 @@ internal class GetObjects
     public static string GetViewsScript =>
         @"
                 SELECT TABLE_SCHEMA [Schema],
-		               TABLE_NAME [View],
+		               TABLE_NAME [Name],
 		               M.definition [Definition]
                 FROM INFORMATION_SCHEMA.VIEWS V
 		        INNER JOIN sys.sql_modules M ON M.object_id = OBJECT_ID(V.TABLE_NAME)

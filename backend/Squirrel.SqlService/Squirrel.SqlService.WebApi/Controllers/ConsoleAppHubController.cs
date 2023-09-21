@@ -12,6 +12,7 @@ using Squirrel.SqlService.BLL.Models.DTO.Shared;
 using Squirrel.SqlService.BLL.Models.DTO.View;
 using Squirrel.SqlService.BLL.Services.ConsoleAppHub;
 
+
 namespace Squirrel.SqlService.WebApi.Controllers;
 
 [Route("api/[controller]")]
@@ -38,7 +39,7 @@ public class ConsoleAppHubController : ControllerBase
         var tcs = _resultObserver.Register(queryId);
         return (queryId, tcs);
     }
-    
+
     // https://localhost:7244/api/ConsoleAppHub/getAllTablesNames
     [HttpPost("getAllTablesNames")]
     public async Task<ActionResult<TableNamesDto>> GetAllTablesNamesAsync([FromBody] QueryParameters queryParameters)
@@ -106,7 +107,7 @@ public class ConsoleAppHubController : ControllerBase
     public async Task<ActionResult<RoutineDefinitionDto>> GetViewDefinitionAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId)
-            .GetViewDefinitionAsync(_queryParameters.queryId, queryParameters.FilterName);
+            .GetViewDefinitionAsync(_queryParameters.queryId, queryParameters.FilterSchema, queryParameters.FilterName);
         return Ok(_mapper.Map<RoutineDefinitionDto>(await _queryParameters.tcs.Task));
     }
 

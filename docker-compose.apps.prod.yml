@@ -37,7 +37,7 @@ services:
         networks:
             - back
         ports:
-            - "7244:7244"
+            - "5076:5076"
         environment:
             ASPNETCORE_ENVIRONMENT: 'Production'
         env_file:

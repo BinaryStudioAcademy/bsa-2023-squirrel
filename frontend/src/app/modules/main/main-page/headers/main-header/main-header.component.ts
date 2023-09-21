@@ -6,7 +6,7 @@ import { NotificationService } from '@core/services/notification.service';
 import { SharedProjectService } from '@core/services/shared-project.service';
 import { TablesService } from '@core/services/tables.service';
 import { CreateDbModalComponent } from '@modules/main/create-db-modal/create-db-modal.component';
-import { takeUntil } from 'rxjs';
+import { take, takeUntil } from 'rxjs';
 
 import { DatabaseDto } from 'src/app/models/database/database-dto';
 import { ProjectResponseDto } from 'src/app/models/projects/project-response-dto';
@@ -71,14 +71,16 @@ export class MainHeaderComponent extends BaseComponent implements OnInit {
     }
 
     private loadProject() {
-        this.sharedProject.project$.subscribe({
-            next: project => {
-                if (project) {
-                    this.project = project;
-                    this.loadDatabases();
-                }
-            },
-        });
+        this.sharedProject.project$
+            .pipe(take(1))
+            .subscribe({
+                next: project => {
+                    if (project) {
+                        this.project = project;
+                        this.loadDatabases();
+                    }
+                },
+            });
     }
 
     private loadDatabases() {

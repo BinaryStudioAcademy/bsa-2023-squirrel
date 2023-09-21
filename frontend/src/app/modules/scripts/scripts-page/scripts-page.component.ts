@@ -152,6 +152,7 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
                 (err: ScriptErrorDto) => {
                     this.notification.error('Format script error');
                     this.updateScriptContentError(err);
+                    this.scrollToResult('.script-error');
                 },
             );
     }
@@ -268,10 +269,12 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
     }
 
     private scrollToResult(resultDivSector: string) {
-        const targetDiv = document.querySelector(resultDivSector);
+        setTimeout(() => {
+            const targetDiv = document.querySelector(resultDivSector);
 
-        if (targetDiv) {
-            targetDiv.scrollIntoView({ behavior: 'smooth' });
-        }
+            if (targetDiv) {
+                targetDiv.scrollIntoView({ behavior: 'smooth' });
+            }
+        }, 100);
     }
 }

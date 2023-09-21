@@ -39,7 +39,7 @@ internal static class GetUserDefinedTypes
 
     public static string GetUserDefinedTableTypesStructureScript =>
         @"
-            with types as (
+             with types as (
             select n.nspname,
         			t.oid::regtype::text as obj_name,
                     case
@@ -92,10 +92,10 @@ internal static class GetUserDefinedTypes
             select cols.schema_name as schema,
         		cols.name as name,
                 cols.column_name as column_name,
-                cols.ordinal_position as ordinal_position,
-        		attrs.data_type as base_type,
-        		attrs.attribute_udt_schema,
-        		attrs.attribute_udt_name,
+                cols.ordinal_position as ordinal_position,				
+				case when attrs.data_type = 'USER-DEFINED' then attribute_udt_name
+					 else attrs.data_type end as base_type,
+				case when attrs.data_type = 'USER-DEFINED' then 'True' else 'False' end as isUserDefined,
         		attrs.character_maximum_length as max_length,
         		attrs.numeric_precision as numeric_precision, 
         		attrs.numeric_scale as numeric_scale,

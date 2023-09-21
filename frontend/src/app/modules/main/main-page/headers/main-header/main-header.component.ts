@@ -65,7 +65,6 @@ export class MainHeaderComponent extends BaseComponent implements OnInit {
                 next: (addedDatabase: DatabaseDto) => {
                     this.databases.push(addedDatabase);
                     this.dbNames.push(addedDatabase.dbName);
-                    this.selectDb(addedDatabase);
                 },
             });
     }

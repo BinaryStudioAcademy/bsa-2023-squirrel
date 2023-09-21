@@ -77,7 +77,7 @@ public class CommitFilesService : ICommitFilesService
         }
         foreach (var selected in selectedItems.Constraints)
         {
-            var item = staged.DbConstraints?.Constraints.FirstOrDefault(x => x.Name == selected);
+            var item = staged.DbConstraints.FirstOrDefault(x => x.Name == selected);
             if (item != null)
             {
                 var blobContent = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(item));
@@ -86,6 +86,22 @@ public class CommitFilesService : ICommitFilesService
                     BlobId = $"{item.Schema}-{item.Name}".ToLower(),
                     FileName = item.Name,
                     FileType = Shared.Enums.DatabaseItemType.Constraint
+                };
+                await SaveToBlob(file, selectedItems.CommitId, blobContent);
+                saved.Add(file);
+            }
+        }
+        foreach (var selected in selectedItems.Views)
+        {
+            var item = staged.DbViewsDetails.Details.FirstOrDefault(x => x.Name == selected);
+            if (item != null)
+            {
+                var blobContent = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(item));
+                var file = new CommitFileDto
+                {
+                    BlobId = $"{item.Schema}-{item.Name}".ToLower(),
+                    FileName = item.Name,
+                    FileType = Shared.Enums.DatabaseItemType.View
                 };
                 await SaveToBlob(file, selectedItems.CommitId, blobContent);
                 saved.Add(file);
@@ -121,25 +137,58 @@ public class CommitFilesService : ICommitFilesService
 
     public DbStructureDto GetTestStructure()
     {
-        var constraints = new List<Constraint>()
+        var constraints = new List<TableConstraintsDto>()
         {
-            new Constraint 
-            { 
-                CheckClause = "test",
-                Columns = "test1",
-                ConstraintName = "test",
-                Name = "contraint1",
-                Schema = "test"
-            }
-            ,
-            new Constraint
+            new TableConstraintsDto
             {
-                CheckClause = "test",
-                Columns = "test1",
-                ConstraintName = "test",
-                Name = "contraint2",
-                Schema = "test"
-            }
+                Name = "constraint1",
+                Schema = "test",
+                Constraints =  new List<Constraint>()
+                {
+                    new Constraint
+                    {
+                        CheckClause = "test",
+                        Columns = "test1",
+                        ConstraintName = "test",
+                        Name = "contraint1",
+                        Schema = "test"
+                    }
+                    ,
+                    new Constraint
+                    {
+                        CheckClause = "test",
+                        Columns = "test1",
+                        ConstraintName = "test",
+                        Name = "constraint1",
+                        Schema = "test"
+                    }
+                }
+            },
+            new TableConstraintsDto
+            {
+                Name = "constraint2",
+                Schema = "test",
+                Constraints =  new List<Constraint>()
+                {
+                    new Constraint
+                    {
+                        CheckClause = "test",
+                        Columns = "test1",
+                        ConstraintName = "test",
+                        Name = "constraint2",
+                        Schema = "test"
+                    }
+                    ,
+                    new Constraint
+                    {
+                        CheckClause = "test",
+                        Columns = "test1",
+                        ConstraintName = "test",
+                        Name = "constraint2",
+                        Schema = "test"
+                    }
+                }
+            },
         };
         var procedures = new List<ProcedureDetailInfo>()
         {
@@ -152,7 +201,7 @@ public class CommitFilesService : ICommitFilesService
         };
         return new DbStructureDto
         {
-            DbConstraints = new TableConstraintsDto { Constraints = constraints },
+            DbConstraints = constraints,
             DbProcedureDetails = new ProcedureDetailsDto { Details = procedures }
         };
     }

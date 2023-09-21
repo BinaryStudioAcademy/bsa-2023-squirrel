@@ -28,6 +28,7 @@ builder.Services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 builder.Services.RegisterCustomServices(builder.Configuration);
 builder.Services.AddAutoMapper();
 builder.Services.AddSwaggerGen();
+builder.WebHost.UseUrls("http://*:5076");
 
 var app = builder.Build();
 

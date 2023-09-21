@@ -48,7 +48,7 @@ public class DbItemsRetrievalService : IDbItemsRetrievalService
             DbConstraints = constraintsResult.ToList(),
             DbFunctionDetails = functionDetailsResult,
             DbProcedureDetails = proceduresDetailsResult,
-            DbViewDetails = viewsDetailsResult
+            DbViewsDetails = viewsDetailsResult
         };
 
         return dbStructureResult;

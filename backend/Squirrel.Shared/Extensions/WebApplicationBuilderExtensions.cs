@@ -1,6 +1,7 @@
-﻿using Serilog;
+﻿using Microsoft.AspNetCore.Builder;
+using Serilog;
 
-namespace Squirrel.Core.WebAPI.Extensions;
+namespace Squirrel.Shared.Extensions;
 
 public static class WebApplicationBuilderExtensions
 {

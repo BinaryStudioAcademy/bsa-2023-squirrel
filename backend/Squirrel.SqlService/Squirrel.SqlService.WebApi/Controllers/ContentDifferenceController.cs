@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Squirrel.Shared.DTO.DatabaseItem;
 using Squirrel.SqlService.BLL.Interfaces;
 
 namespace Squirrel.SqlService.WebApi.Controllers;
@@ -15,7 +16,7 @@ public sealed class ContentDifferenceController : ControllerBase
     }
 
     [HttpGet("{commitId}/{tempBlobId}")]
-    public async Task<ActionResult> GetContentDiffsAsync(int commitId, Guid tempBlobId)
+    public async Task<ActionResult<List<DatabaseItemContentCompare>>> GetContentDiffsAsync(int commitId, Guid tempBlobId)
     {
         return Ok(await _contentDifferenceService.GetContentDiffsAsync(commitId, tempBlobId));
     }

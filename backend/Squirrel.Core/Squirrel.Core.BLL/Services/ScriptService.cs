@@ -63,9 +63,9 @@ public sealed class ScriptService : BaseService, IScriptService
             ($"{_configuration["SqlServiceUrl"]}/api/Script/format", inboundScriptDto, HttpMethod.Put);
     }
 
-    public async Task<QueryResultTable> ExecuteSqlSciptAsync(InboundScriptDto inboundScriptDto)
+    public async Task<QueryResultTable> ExecuteSqlScriptAsync(InboundScriptDto inboundScriptDto)
     {
         return await _httpClientService.SendAsync<InboundScriptDto, QueryResultTable>
-           ($"{_configuration["SqlServiceUrl"]}/api/ConsoleAppHub/executeScript", inboundScriptDto, HttpMethod.Post);
+           ($"{_configuration["SqlServiceUrl"]}/api/ConsoleAppHub/execute-script", inboundScriptDto, HttpMethod.Post);
     }
 }

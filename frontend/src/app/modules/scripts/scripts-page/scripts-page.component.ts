@@ -10,7 +10,7 @@ import { finalize, Observable, of, switchMap, takeUntil, tap } from 'rxjs';
 
 import { DatabaseDto } from 'src/app/models/database/database-dto';
 import { ProjectResponseDto } from 'src/app/models/projects/project-response-dto';
-import { RunScriptDto } from 'src/app/models/scripts/run-script-dto';
+import { ExecuteScriptDto } from 'src/app/models/scripts/execute-script-dto';
 import { ScriptContentDto } from 'src/app/models/scripts/script-content-dto';
 import { ScriptDto } from 'src/app/models/scripts/script-dto';
 import { ScriptErrorDto } from 'src/app/models/scripts/script-error-dto';
@@ -127,7 +127,7 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
         }
 
         this.spinner.show();
-        const script: RunScriptDto = {
+        const script: ExecuteScriptDto = {
             projectId: this.selectedScript.projectId,
             content: this.form.value.scriptContent,
             dbEngine: this.project.dbEngine,
@@ -162,7 +162,7 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
         }
 
         this.spinner.show();
-        const script: RunScriptDto = {
+        const script: ExecuteScriptDto = {
             projectId: this.selectedScript.projectId,
             content: this.form.value.scriptContent,
             dbEngine: this.project.dbEngine,

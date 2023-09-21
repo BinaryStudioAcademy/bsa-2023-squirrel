@@ -10,8 +10,6 @@ import { finalize, takeUntil } from 'rxjs';
 
 import { ProjectResponseDto } from 'src/app/models/projects/project-response-dto';
 
-import { DatabaseInfoDto } from '../../../models/database/database-info-dto';
-
 @Component({
     selector: 'app-home',
     templateUrl: './main-page.component.html',
@@ -19,8 +17,6 @@ import { DatabaseInfoDto } from '../../../models/database/database-info-dto';
 })
 export class MainComponent extends BaseComponent implements OnInit, OnDestroy {
     public project: ProjectResponseDto;
-
-    public currentDb: DatabaseInfoDto;
 
     constructor(
         private broadcastHub: BroadcastHubService,

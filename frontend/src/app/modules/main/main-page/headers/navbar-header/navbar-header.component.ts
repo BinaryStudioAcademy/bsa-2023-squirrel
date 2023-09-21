@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { BaseComponent } from '@core/base/base.component';
 import { BranchService } from '@core/services/branch.service';
+import { CommitChangesService } from '@core/services/commit-changes.service';
 import { DatabaseItemsService } from '@core/services/database-items.service';
 import { LoadChangesService } from '@core/services/load-changes.service';
 import { NotificationService } from '@core/services/notification.service';
@@ -24,6 +25,8 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
     public branches: BranchDto[] = [];
 
     @ViewChild('modalContent') modalContent: TemplateRef<any>;
+
+    public currentChangesGuId: string;
 
     public isSettingsEnabled: boolean = false;
 
@@ -51,6 +54,7 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
         private changesService: LoadChangesService,
         private notificationService: NotificationService,
         private databaseItemsService: DatabaseItemsService,
+        private commitChangesService: CommitChangesService,
         private spinner: SpinnerService,
     ) {
         super();
@@ -128,6 +132,7 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
             .subscribe({
                 next: (event) => {
                     // eslint-disable-next-line no-console
+                    this.currentChangesGuId = event;
                     console.log(event);
                 },
                 error: (error) => {
@@ -151,6 +156,22 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
                     // eslint-disable-next-line no-console
                     console.log(error);
                     this.notificationService.error('An error occured while attempting to load list of db items');
+                },
+            });
+
+        this.commitChangesService.getContentDiffs(1, this.currentChangesGuId)
+            .pipe(
+                takeUntil(this.unsubscribe$),
+                finalize(() => this.spinner.hide()),
+            )
+            .subscribe({
+                next: (contentChanges) => {
+                    console.log(contentChanges);
+                },
+                error: (error) => {
+                    console.log(error);
+
+                    this.notificationService.error('An error occured while attempting to load changes');
                 },
             });
     }

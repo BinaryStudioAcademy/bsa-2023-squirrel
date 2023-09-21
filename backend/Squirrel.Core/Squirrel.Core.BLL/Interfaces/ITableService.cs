@@ -1,5 +1,5 @@
-﻿using Squirrel.Core.Common.DTO.SqlService;
-using Squirrel.Core.Common.DTO.Table;
+﻿using Squirrel.SqlService.BLL.Models.ConsoleAppHub;
+using Squirrel.SqlService.BLL.Models.DTO;
 
 namespace Squirrel.Core.BLL.Interfaces;
 

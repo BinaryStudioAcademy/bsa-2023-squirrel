@@ -1,8 +1,9 @@
-﻿using Squirrel.SqlService.BLL.Models.DTO.Function;
-using Squirrel.SqlService.BLL.Models.DTO.Procedure;
-using Squirrel.SqlService.BLL.Models.DTO.View;
+﻿using Squirrel.Shared.DTO.Function;
+using Squirrel.Shared.DTO.Procedure;
+using Squirrel.Shared.DTO.Table;
+using Squirrel.Shared.DTO.View;
 
-namespace Squirrel.SqlService.BLL.Models.DTO;
+namespace Squirrel.Shared.DTO;
 
 public class DbStructureDto
 {

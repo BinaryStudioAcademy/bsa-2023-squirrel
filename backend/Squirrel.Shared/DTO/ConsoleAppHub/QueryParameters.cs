@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Squirrel.SqlService.BLL.Models.ConsoleAppHub;
+namespace Squirrel.Shared.DTO.ConsoleAppHub;
 
 public class QueryParameters
 {

@@ -1,4 +1,4 @@
-namespace Squirrel.SqlService.BLL.Models.DTO.Function;
+namespace Squirrel.Shared.DTO.Function;
 
 public class FunctionNamesDto
 {

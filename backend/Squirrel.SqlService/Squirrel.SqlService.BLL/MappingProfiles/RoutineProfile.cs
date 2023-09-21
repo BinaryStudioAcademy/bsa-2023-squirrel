@@ -1,6 +1,6 @@
 using AutoMapper;
 using Squirrel.ConsoleApp.Models;
-using Squirrel.SqlService.BLL.Models.DTO.Shared;
+using Squirrel.Shared.DTO.Definition;
 
 namespace Squirrel.SqlService.BLL.MappingProfiles;
 

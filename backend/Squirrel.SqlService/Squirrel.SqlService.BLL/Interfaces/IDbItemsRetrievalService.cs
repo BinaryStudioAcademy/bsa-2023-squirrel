@@ -1,8 +1,10 @@
-﻿using Squirrel.Shared.DTO.DatabaseItem;
+﻿using Squirrel.Shared.DTO;
+using Squirrel.Shared.DTO.DatabaseItem;
+using Squirrel.Shared.DTO.Function;
+using Squirrel.Shared.DTO.Procedure;
+using Squirrel.Shared.DTO.Table;
+using Squirrel.Shared.DTO.View;
 using Squirrel.SqlService.BLL.Models.DTO;
-using Squirrel.SqlService.BLL.Models.DTO.Function;
-using Squirrel.SqlService.BLL.Models.DTO.Procedure;
-using Squirrel.SqlService.BLL.Models.DTO.View;
 
 namespace Squirrel.SqlService.BLL.Interfaces;
 

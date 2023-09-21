@@ -32,8 +32,14 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
 
     public scriptErrors: { [scriptId: number]: ScriptErrorDto } = {};
 
+    public scriptResults: { [scriptId: number]: ScriptResultDto } = {};
+
     get currentScriptError(): ScriptErrorDto | undefined {
         return this.selectedScript ? this.scriptErrors[this.selectedScript.id] : undefined;
+    }
+
+    get currentScriptResult(): ScriptResultDto | undefined {
+        return this.selectedScript ? this.scriptResults[this.selectedScript.id] : undefined;
     }
 
     private selectedOptionElement: HTMLLIElement | undefined;
@@ -128,8 +134,6 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
             clientId: null,
         };
 
-        console.log(script);
-
         this.scriptService
             .formatScript(script)
             .pipe(
@@ -173,9 +177,11 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
             )
             .subscribe(
                 (executed: ScriptResultDto) => {
+                    // Clear the error for the current script
                     if (this.selectedScript) {
-                        this.scriptErrors[this.selectedScript.id].message = executed.result;
+                        delete this.scriptErrors[this.selectedScript.id];
                     }
+                    this.updateScriptResult(executed);
                     this.notification.info('Script successfully executed');
                 },
                 (err: ScriptErrorDto) => {
@@ -192,6 +198,12 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
                 scriptContent: this.selectedScript.content,
             });
             this.form.markAsDirty();
+        }
+    }
+
+    public updateScriptResult(newResult: ScriptResultDto): void {
+        if (this.selectedScript) {
+            this.scriptResults[this.selectedScript.id] = newResult;
         }
     }
 

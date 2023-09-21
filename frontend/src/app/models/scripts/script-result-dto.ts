@@ -1,3 +1,6 @@
 export interface ScriptResultDto {
-    result: string;
+    columnNames: string[];
+    rows: string[][];
+    rowCount: number;
+    columnCount: number;
 }

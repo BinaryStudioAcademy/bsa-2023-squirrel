@@ -133,6 +133,7 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
                 next: (event) => {
                     // eslint-disable-next-line no-console
                     this.currentChangesGuId = event;
+                    this.loadCommitChanges();
                     console.log(event);
                 },
                 error: (error) => {
@@ -158,21 +159,10 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
                     this.notificationService.error('An error occured while attempting to load list of db items');
                 },
             });
+    }
 
-        this.commitChangesService.getContentDiffs(1, this.currentChangesGuId)
-            .pipe(
-                takeUntil(this.unsubscribe$),
-                finalize(() => this.spinner.hide()),
-            )
-            .subscribe({
-                next: (contentChanges) => {
-                    console.log(contentChanges);
-                },
-                error: (error) => {
-                    console.log(error);
-
-                    this.notificationService.error('An error occured while attempting to load changes');
-                },
-            });
+    public loadCommitChanges() {
+        this.spinner.show();
+        this.commitChangesService.getContentDiffs(1, this.currentChangesGuId);
     }
 }

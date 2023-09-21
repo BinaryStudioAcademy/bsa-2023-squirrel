@@ -22,5 +22,5 @@ RUN dotnet publish "Squirrel.SqlService.WebApi.csproj" -c Release -o /app/publis
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENV ASPNETCORE_URLS https://*:7244
+ENV ASPNETCORE_URLS http://*:5076
 ENTRYPOINT ["dotnet", "Squirrel.SqlService.WebApi.dll"]

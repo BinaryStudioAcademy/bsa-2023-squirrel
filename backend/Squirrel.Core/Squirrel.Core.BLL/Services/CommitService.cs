@@ -122,29 +122,26 @@ public class CommitService : BaseService, ICommitService
         foreach (var section in nodes)
         {
             var children = section.Children.Where(x => x.Selected == true);
-            foreach (var child in children)
+            switch (section.Name)
             {
-                if (section.Name == "Functions")
-                {
-                    selectedItems.Functions.Add(child.Name);
-                }
-                else if (section.Name == "Stored Procedures")
-                {
-                    selectedItems.StoredProcedures.Add(child.Name);
-                }
-                else if (section.Name == "Constraints")
-                {
-                    selectedItems.Constraints.Add(child.Name);
-                }
-                else if (section.Name == "Tables")
-                {
-                    selectedItems.Tables.Add(child.Name);
-                }
-                else if (section.Name == "Types")
-                {
-                    selectedItems.Types.Add(child.Name);
-                }
-                //...
+                case "Functions":
+                    selectedItems.Functions.AddRange(children.Select(child => child.Name));
+                    break;
+                case "Stored Procedures":
+                    selectedItems.StoredProcedures.AddRange(children.Select(child => child.Name));
+                    break;
+                case "Constraints":
+                    selectedItems.Constraints.AddRange(children.Select(child => child.Name));
+                    break;
+                case "Tables":
+                    selectedItems.Tables.AddRange(children.Select(child => child.Name));
+                    break;
+                case "Types":
+                    selectedItems.Types.AddRange(children.Select(child => child.Name));
+                    break;
+                case "Views":
+                    selectedItems.Views.AddRange(children.Select(child => child.Name));
+                    break;
             }
         }
     }

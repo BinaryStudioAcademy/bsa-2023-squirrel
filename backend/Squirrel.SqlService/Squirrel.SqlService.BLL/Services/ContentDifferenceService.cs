@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Squirrel.AzureBlobStorage.Interfaces;
 using Squirrel.Shared.Enums;

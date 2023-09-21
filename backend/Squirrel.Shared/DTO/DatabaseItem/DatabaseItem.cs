@@ -4,14 +4,7 @@ namespace Squirrel.Shared.DTO.DatabaseItem;
 
 public sealed class DatabaseItem
 {
-    public string Name { get; set; }
+    public string Name { get; set; } = null!;
     public DatabaseItemType Type { get; set; }
-    public string Schema { get; set; }
-
-    public DatabaseItem(string name, DatabaseItemType type, string schema)
-    {
-        Name = name;
-        Type = type;
-        Schema = schema;
-    }
+    public string Schema { get; set; } = null!;
 }

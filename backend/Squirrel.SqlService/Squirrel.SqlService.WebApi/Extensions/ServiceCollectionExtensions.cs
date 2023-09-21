@@ -17,6 +17,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IDependencyAnalyzer, DependencyAnalyzer>();
         services.AddScoped<IDbItemsRetrievalService, DbItemsRetrievalService>();
         services.AddScoped<IChangesLoaderService, ChangesLoaderService>();
+
         services.AddScoped<IContentDifferenceService, ContentDifferenceService>();
         services.AddSingleton<IProcessReceivedDataService, ProcessReceivedDataService>();
         services.AddSingleton<ResultObserver>();

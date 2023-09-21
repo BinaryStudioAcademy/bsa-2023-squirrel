@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Squirrel.Core.BLL.Interfaces;
@@ -7,6 +8,7 @@ using Squirrel.Core.Common.DTO.Commit;
 using Squirrel.Core.DAL.Context;
 using Squirrel.Core.DAL.Entities;
 using Squirrel.Core.DAL.Enums;
+using Squirrel.Shared.DTO.CommitFile;
 using Squirrel.Shared.DTO.SelectedItems;
 using Squirrel.Shared.Exceptions;
 using System.Text;
@@ -27,6 +29,7 @@ public class CommitService : BaseService, ICommitService
 
     public async Task<CommitDto> CreateCommit(CreateCommitDto dto)
     {
+        // Create commit
         var currentUserId = _userIdGetter.GetCurrentUserId();
         var user = _context.Users.FirstOrDefault(x => x.Id == currentUserId);
         if (user == null)
@@ -42,15 +45,42 @@ public class CommitService : BaseService, ICommitService
             Author = user 
         };
 
-        await AddCommitToBranchAsync(dto.BranchId, commit);
+        var branchEntity = await GetBranchInternalAsync(dto.BranchId);
+
+        await AddCommitToBranchAsync(branchEntity, commit);
 
         var items = await SaveFilesAsync(dto.ChangesGuid, commit.Id, dto.SelectedItems);
+        // Update commit with saved files
+        var entity = AddFilesToCommit(commit, items);
+        // Add parent commit, if exist
+        var head = branchEntity.BranchCommits.FirstOrDefault(x => x.IsHead);
+        if (head != null)
+        {
+            var commitParent = new CommitParent
+            {
+                Commit = entity,
+                ParentCommit = head.Commit,
+            };
+            _context.CommitParents.Add(commitParent);
 
-        var entity = await AddFilesToCommitAsync(commit, items);
+            head.IsHead = false;
+            _context.BranchCommits.Update(head);
+        }
+        // Update commit to be HEAD
+        var branchCommit = await _context.BranchCommits
+            .FirstOrDefaultAsync(x => x.BranchId == branchEntity.Id);
+        if (branchCommit == null)
+        {
+            throw new EntityNotFoundException(nameof(branchEntity));
+        }
+        branchCommit.IsHead = true;
+        _context.BranchCommits.Update(branchCommit);
+        // Save changes
+        await _context.SaveChangesAsync();
         return _mapper.Map<CommitDto>(entity);
     }
 
-    private async Task<SelectedItemsDto> SaveFilesAsync(string changesGuid, int commitId, ICollection<TreeNodeDto> nodes)
+    private async Task<ICollection<CommitFileDto>> SaveFilesAsync(string changesGuid, int commitId, ICollection<TreeNodeDto> nodes)
     {
         var selectedDto = new SelectedItemsDto
         {
@@ -60,24 +90,31 @@ public class CommitService : BaseService, ICommitService
 
         MapTreeNodes(selectedDto, nodes);
 
-        await _httpClientService.SendAsync
+        return await _httpClientService.SendAsync<SelectedItemsDto, ICollection<CommitFileDto>>
             ($"{_configuration["SqlServiceUrl"]}/api/CommitFiles/", selectedDto, HttpMethod.Post);
-
-        return selectedDto;
     }
 
-    private async Task AddCommitToBranchAsync(int branchId, Commit commit)
+    private async Task AddCommitToBranchAsync(Branch branchEntity, Commit commit)
     {
-
-        var branchEntity = _context.Branches.FirstOrDefault(x => x.Id == branchId);
-        if (branchEntity == null)
-        {
-            throw new EntityNotFoundException(nameof(Branch), branchId);
-        }
         branchEntity.Commits.Add(commit);
         _context.Branches.Update(branchEntity);
 
         await _context.SaveChangesAsync();
+    }
+
+    private async Task<Branch> GetBranchInternalAsync(int id)
+    {
+        var branchEntity = await _context.Branches
+            .AsSplitQuery()
+            .Include(x => x.BranchCommits)
+                .ThenInclude(x => x.Commit)
+            .FirstOrDefaultAsync(x => x.Id == id);
+        if (branchEntity == null)
+        {
+            throw new EntityNotFoundException(nameof(Branch), id);
+        }
+
+        return branchEntity;
     }
 
     private void MapTreeNodes(SelectedItemsDto selectedItems, ICollection<TreeNodeDto> nodes)
@@ -112,66 +149,15 @@ public class CommitService : BaseService, ICommitService
         }
     }
 
-    private async Task<Commit> AddFilesToCommitAsync(Commit commit, SelectedItemsDto items)
+    private Commit AddFilesToCommit(Commit commit, ICollection<CommitFileDto> files)
     {
-        foreach (var selected in items.StoredProcedures)
+        var commitFileEntities = _mapper.Map<ICollection<CommitFile>>(files);
+        foreach (var item in commitFileEntities)
         {
-            commit.CommitFiles.Add(
-                new CommitFile 
-                { 
-                    BlobId = commit.Id.ToString(), FileName = selected, FileType = FileType.StoredProcedure 
-                }
-            );
-        }
-        foreach (var selected in items.Functions)
-        {
-            commit.CommitFiles.Add(
-                new CommitFile
-                {
-                    BlobId = commit.Id.ToString(),
-                    FileName = selected,
-                    FileType = FileType.Function
-                }
-            );
-        }
-        foreach (var selected in items.Tables)
-        {
-            commit.CommitFiles.Add(
-                new CommitFile
-                {
-                    BlobId = commit.Id.ToString(),
-                    FileName = selected,
-                    FileType = FileType.Table
-                }
-            );
-        }
-        foreach (var selected in items.Constraints)
-        {
-            commit.CommitFiles.Add(
-            new CommitFile
-                {
-                    BlobId = commit.Id.ToString(),
-                    FileName = selected,
-                    FileType = FileType.Constraint
-                }
-            );
-        }
-        foreach (var selected in items.Types)
-        {
-            commit.CommitFiles.Add(
-                new CommitFile
-                {
-                    BlobId = commit.Id.ToString(),
-                    FileName = selected,
-                    FileType = FileType.Type
-                }
-            );
+            commit.CommitFiles.Add(item);
         }
         commit.IsSaved = true;
 
-        var result = _context.Commits.Update(commit).Entity;
-        await _context.SaveChangesAsync();
-
-        return result;
+        return _context.Commits.Update(commit).Entity;
     }
 }

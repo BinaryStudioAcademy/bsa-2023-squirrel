@@ -43,7 +43,7 @@ export class MainHeaderComponent extends BaseComponent implements OnInit {
     }
 
     public onDatabaseSelected(value: string) {
-        const currentDb = this.databases!.find(database => database.dbName === this.selectedDbName)!;
+        const currentDb = this.databases!.find(database => database.dbName === value)!;
 
         this.selectDb(currentDb);
     }

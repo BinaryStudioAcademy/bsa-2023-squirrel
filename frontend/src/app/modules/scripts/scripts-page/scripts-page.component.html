@@ -36,9 +36,28 @@
     <div *ngIf="currentScriptResult" class="script-result">
         <p>
             <strong>Last result from query "{{selectedScript?.title}}" at {{ currentScriptResult.date |
-                date:'medium' }}</strong>
+                date:'medium' }}:</strong>
         </p>
-        <p>{{ currentScriptResult.columnNames }}</p>
-        <p>{{ currentScriptResult.rows }}</p>
+        <table mat-table [dataSource]="currentScriptResult.rows">
+            <ng-container *ngFor="let columnName of currentScriptResult.columnNames" [matColumnDef]="columnName">
+                <th class="cell" mat-header-cell *matHeaderCellDef> {{ columnName }} </th>
+                <td class="cell" mat-cell *matCellDef="let element">
+                    {{ element[currentScriptResult.columnNames.indexOf(columnName)] }}
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="currentScriptResult.columnNames"></tr>
+            <tr mat-row *matRowDef="let row; columns: currentScriptResult.columnNames;"></tr>
+        </table>
+
+        <table>
+            <tr>
+                <th *ngFor="let columnName of currentScriptResult.columnNames">
+                    {{ columnName }}
+                </th>
+            </tr>
+            <tr *ngFor="let row of currentScriptResult.rows">
+                <td class="cell" *ngFor="let cell of row"> {{ cell }} </td>
+            </tr>
+        </table>
     </div>
 </div>

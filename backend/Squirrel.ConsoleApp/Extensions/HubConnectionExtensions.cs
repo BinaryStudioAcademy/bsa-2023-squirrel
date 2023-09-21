@@ -103,10 +103,10 @@ public static class HubConnectionExtensions
             hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", queryId, "GetUserDefinedTableTypesAsync", getActionsService.GetUserDefinedTableTypesAsync().Result);
         });
 
-        hubConnection.On("ExecuteScriptAsync", (Guid queryId, string sctiptContent) =>
+        hubConnection.On("ExecuteScriptAsync", (Guid queryId, string scriptContent) =>
         {
             var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
-            hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", queryId, "ExecuteScriptAsync", getActionsService.ExecuteScriptAsync(sctiptContent).Result);
+            hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", queryId, "ExecuteScriptAsync", getActionsService.ExecuteScriptAsync(scriptContent).Result);
         });
     }
 }

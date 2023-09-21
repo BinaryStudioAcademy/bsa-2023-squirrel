@@ -150,7 +150,7 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
                     this.notification.info('Script content successfully formatted');
                 },
                 (err: ScriptErrorDto) => {
-                    this.notification.error('Format Script error');
+                    this.notification.error('Format script error');
                     this.updateScriptContentError(err);
                 },
             );

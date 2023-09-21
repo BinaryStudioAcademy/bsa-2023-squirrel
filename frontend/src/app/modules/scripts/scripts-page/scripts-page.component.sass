@@ -1,5 +1,8 @@
 @import "/src/styles/color"
 
+p
+    margin: 15px
+
 .container
     margin: 10px
 
@@ -60,9 +63,18 @@ textarea
 
 .script-result
     color: $text-main
-    background-color: $light-gray
-    padding: 10px
+    //background-color: $light-gray
+    //padding: 10px
     border: 1px solid $black
     border-radius: 5px
     margin-top: 10px
     margin-bottom: 10px
+    overflow: scroll
+
+.cell
+    text-align: center
+    margin-right: 5px
+    margin-left: 5px
+    max-width: 10%
+    text-overflow: ellipsis
+    overflow: auto

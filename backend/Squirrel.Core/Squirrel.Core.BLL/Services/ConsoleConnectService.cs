@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Squirrel.Core.BLL.Interfaces;
-using Squirrel.SqlService.BLL.Models.ConsoleAppHub;
+using Squirrel.Shared.DTO.ConsoleAppHub;
 
 namespace Squirrel.Core.BLL.Services;
 

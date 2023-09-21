@@ -1,4 +1,4 @@
-﻿namespace Squirrel.SqlService.BLL.Models.ConsoleAppHub;
+﻿namespace Squirrel.Shared.DTO.ConsoleAppHub;
 
 public class RemoteConnect
 {

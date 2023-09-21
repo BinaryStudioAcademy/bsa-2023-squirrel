@@ -51,6 +51,7 @@ export class MainHeaderComponent extends BaseComponent implements OnInit {
     public openCreateModal(): void {
         const dialogRef = this.dialog.open(CreateDbModalComponent, {
             width: '700px',
+            maxHeight: '90%',
             data: {
                 dbEngine: this.project.dbEngine,
                 projectId: this.project.id,

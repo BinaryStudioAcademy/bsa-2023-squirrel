@@ -1,6 +1,4 @@
-using Squirrel.SqlService.BLL.Models.DTO;
-
-namespace Squirrel.Shared.DTO.Function;
+namespace Squirrel.SqlService.BLL.Models.DTO.Function;
 
 public class FunctionDetailInfo: BaseDbItem
 {

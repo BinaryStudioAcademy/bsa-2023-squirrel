@@ -1,4 +1,4 @@
-namespace Squirrel.Shared.DTO.Procedure;
+namespace Squirrel.SqlService.BLL.Models.DTO.Procedure;
 
 public class ProcedureDetailsDto
 {

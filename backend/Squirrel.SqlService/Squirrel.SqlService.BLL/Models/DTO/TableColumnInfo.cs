@@ -1,4 +1,4 @@
-﻿namespace Squirrel.Shared.DTO.Table;
+﻿namespace Squirrel.SqlService.BLL.Models.DTO;
 
 public class TableColumnInfo
 {

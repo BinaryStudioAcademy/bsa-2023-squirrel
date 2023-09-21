@@ -1,6 +1,9 @@
-﻿namespace Squirrel.Core.BLL.Interfaces;
+﻿using Squirrel.Core.Common.DTO.SqlService;
+using Squirrel.Core.Common.DTO.Table;
+
+namespace Squirrel.Core.BLL.Interfaces;
 
 public interface ITableService
 {
-    Task GetTablesName();
+    Task<TableNamesDto> GetTablesName(QueryParameters queryParameters);
 }

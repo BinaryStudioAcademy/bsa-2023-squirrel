@@ -34,6 +34,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IImageService, ImageService>();
         services.AddScoped<IScriptService, ScriptService>();
         services.AddScoped<IConsoleConnectService, ConsoleConnectService>();
+        services.AddScoped<ITableService, TableService>();
 
         services.AddScoped<IChangeRecordService, ChangeRecordService>();
         services.AddTransient<IDBStructureSaverService, DBStructureSaverService>();

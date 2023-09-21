@@ -43,7 +43,6 @@ export class MainHeaderComponent extends BaseComponent implements OnInit {
     }
 
     public onDatabaseSelected(value: string) {
-        this.selectedDbName = value;
         const currentDb = this.databases!.find(database => database.dbName === this.selectedDbName)!;
 
         this.selectDb(currentDb);
@@ -108,6 +107,7 @@ export class MainHeaderComponent extends BaseComponent implements OnInit {
                 next: () => {
                     this.notificationService.info('db has stable connection');
                     this.sharedProject.setCurrentDb(db);
+                    this.selectedDbName = db.dbName;
                 },
                 error: () => {
                     this.notificationService.error('fail connect to db');

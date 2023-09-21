@@ -28,6 +28,7 @@ public class SettingController : ControllerBase
         // we need IntegratedSecurity = true to connect
         // to MSSQL local DB (it will be changed as SettingController updates)
 
+        // this will be updated in Vald PR
         //connectionStringDto.IntegratedSecurity = true;
 
         var connectionString = _connectionStringService.BuildConnectionString(connectionStringDto);

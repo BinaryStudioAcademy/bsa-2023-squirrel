@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using Squirrel.Core.DAL.Entities;
 using Squirrel.SqlService.BLL.Interfaces;
 using Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;

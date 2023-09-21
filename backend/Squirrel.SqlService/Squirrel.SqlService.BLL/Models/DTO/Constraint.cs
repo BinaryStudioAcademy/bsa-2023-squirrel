@@ -1,6 +1,4 @@
-﻿using Squirrel.Shared.DTO;
-
-namespace Squirrel.SqlService.BLL.Models.DTO;
+﻿namespace Squirrel.SqlService.BLL.Models.DTO;
 
 public class Constraint: BaseDbItem
 {

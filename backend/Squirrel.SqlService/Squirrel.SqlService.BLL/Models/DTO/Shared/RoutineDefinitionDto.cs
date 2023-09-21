@@ -1,4 +1,4 @@
-namespace Squirrel.Shared.DTO.Definition;
+namespace Squirrel.SqlService.BLL.Models.DTO.Shared;
 
 public class RoutineDefinitionDto
 {

@@ -1,8 +1,8 @@
 using AutoMapper;
 using Squirrel.ConsoleApp.Models;
 using Squirrel.Shared.DTO.DatabaseItem;
-using Squirrel.Shared.DTO.Procedure;
 using Squirrel.Shared.Enums;
+using Squirrel.SqlService.BLL.Models.DTO.Procedure;
 using static Squirrel.SqlService.BLL.Extensions.MappingExtensions;
 
 

@@ -1,16 +1,14 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.SignalR;
 using Squirrel.ConsoleApp.Models;
-using Squirrel.Shared.DTO;
-using Squirrel.Shared.DTO.ConsoleAppHub;
 using Squirrel.Shared.DTO.DatabaseItem;
-using Squirrel.Shared.DTO.Function;
-using Squirrel.Shared.DTO.Procedure;
-using Squirrel.Shared.DTO.Table;
-using Squirrel.Shared.DTO.View;
 using Squirrel.SqlService.BLL.Interfaces;
 using Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
+using Squirrel.SqlService.BLL.Models.ConsoleAppHub;
 using Squirrel.SqlService.BLL.Models.DTO;
+using Squirrel.SqlService.BLL.Models.DTO.Function;
+using Squirrel.SqlService.BLL.Models.DTO.Procedure;
+using Squirrel.SqlService.BLL.Models.DTO.View;
 using Squirrel.SqlService.BLL.Services.ConsoleAppHub;
 
 namespace Squirrel.SqlService.BLL.Services;

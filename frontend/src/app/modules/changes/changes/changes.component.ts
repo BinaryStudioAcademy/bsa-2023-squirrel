@@ -13,8 +13,6 @@ import { DatabaseItemContentCompare } from '../../../models/database-items/datab
     styleUrls: ['./changes.component.sass'],
 })
 export class ChangesComponent extends BaseComponent implements OnInit {
-    public textPair: TextPairDifferenceDto;
-
     contentChanges: DatabaseItemContentCompare[] = [];
 
     constructor(

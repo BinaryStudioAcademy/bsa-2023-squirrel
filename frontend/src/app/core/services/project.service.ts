@@ -15,6 +15,8 @@ import { HttpInternalService } from './http-internal.service';
 export class ProjectService {
     private readonly projectsApiUrl = '/api/project';
 
+    private currentProjectId: number = 0;
+
     // eslint-disable-next-line no-empty-function
     constructor(private httpService: HttpInternalService) {}
 
@@ -50,5 +52,13 @@ export class ProjectService {
 
     public getProjectUsers(projectId: number): Observable<UserDto[]> {
         return this.httpService.getRequest<UserDto[]>(`${this.projectsApiUrl}/team/${projectId}`);
+    }
+
+    public getCurrentProjectId() {
+        return this.currentProjectId;
+    }
+
+    public setCurrentProjectId(id: number) {
+        this.currentProjectId = id;
     }
 }

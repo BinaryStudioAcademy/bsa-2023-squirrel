@@ -10,6 +10,7 @@ using Squirrel.Core.DAL.Entities;
 using Squirrel.Core.DAL.Enums;
 using Squirrel.Shared.DTO.CommitFile;
 using Squirrel.Shared.DTO.SelectedItems;
+using Squirrel.Shared.Enums;
 using Squirrel.Shared.Exceptions;
 using System.Text;
 using static Azure.Core.HttpHeader;
@@ -19,23 +20,27 @@ public class CommitService : BaseService, ICommitService
 {
     private readonly IHttpClientService _httpClientService;
     private readonly IUserIdGetter _userIdGetter;
-    public readonly IConfiguration _configuration;
-    public CommitService(SquirrelCoreContext context, IMapper mapper, IHttpClientService httpClientService, IUserIdGetter userIdGetter, IConfiguration configuration) : base(context, mapper)
+    private readonly IConfiguration _configuration;
+    private readonly IUserService _userService;
+    public CommitService(
+        SquirrelCoreContext context,
+        IMapper mapper,
+        IHttpClientService httpClientService,
+        IUserIdGetter userIdGetter,
+        IConfiguration configuration,
+        IUserService userService) : base(context, mapper)
     {
         _httpClientService = httpClientService;
         _userIdGetter = userIdGetter;
         _configuration = configuration;
+        _userService = userService;
     }
 
     public async Task<CommitDto> CreateCommit(CreateCommitDto dto)
     {
         // Create commit
         var currentUserId = _userIdGetter.GetCurrentUserId();
-        var user = _context.Users.FirstOrDefault(x => x.Id == currentUserId);
-        if (user == null)
-        {
-            throw new EntityNotFoundException(nameof(User), currentUserId);
-        }
+        var user = await _userService.GetUserByIdInternal(currentUserId);
 
         var commit = new Commit 
         { 
@@ -124,22 +129,22 @@ public class CommitService : BaseService, ICommitService
             var children = section.Children.Where(x => x.Selected == true);
             switch (section.Name)
             {
-                case "Functions":
+                case ItemCategory.Function:
                     selectedItems.Functions.AddRange(children.Select(child => child.Name));
                     break;
-                case "Stored Procedures":
+                case ItemCategory.StoredProcedure:
                     selectedItems.StoredProcedures.AddRange(children.Select(child => child.Name));
                     break;
-                case "Constraints":
+                case ItemCategory.Constraint:
                     selectedItems.Constraints.AddRange(children.Select(child => child.Name));
                     break;
-                case "Tables":
+                case ItemCategory.Table:
                     selectedItems.Tables.AddRange(children.Select(child => child.Name));
                     break;
-                case "Types":
+                case ItemCategory.Type:
                     selectedItems.Types.AddRange(children.Select(child => child.Name));
                     break;
-                case "Views":
+                case ItemCategory.View:
                     selectedItems.Views.AddRange(children.Select(child => child.Name));
                     break;
             }

@@ -10,7 +10,7 @@ import { finalize, Observable, of, switchMap, takeUntil, tap } from 'rxjs';
 
 import { DatabaseDto } from 'src/app/models/database/database-dto';
 import { ProjectResponseDto } from 'src/app/models/projects/project-response-dto';
-import { RunScriptDto } from 'src/app/models/scripts/run-script-dto';
+import { ExecuteScriptDto } from 'src/app/models/scripts/execute-script-dto';
 import { ScriptContentDto } from 'src/app/models/scripts/script-content-dto';
 import { ScriptDto } from 'src/app/models/scripts/script-dto';
 import { ScriptErrorDto } from 'src/app/models/scripts/script-error-dto';
@@ -127,7 +127,7 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
         }
 
         this.spinner.show();
-        const script: RunScriptDto = {
+        const script: ExecuteScriptDto = {
             projectId: this.selectedScript.projectId,
             content: this.form.value.scriptContent,
             dbEngine: this.project.dbEngine,
@@ -150,8 +150,9 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
                     this.notification.info('Script content successfully formatted');
                 },
                 (err: ScriptErrorDto) => {
-                    this.notification.error('Format Script error');
+                    this.notification.error('Format script error');
                     this.updateScriptContentError(err);
+                    this.scrollToResult('.script-error');
                 },
             );
     }
@@ -162,7 +163,7 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
         }
 
         this.spinner.show();
-        const script: RunScriptDto = {
+        const script: ExecuteScriptDto = {
             projectId: this.selectedScript.projectId,
             content: this.form.value.scriptContent,
             dbEngine: this.project.dbEngine,
@@ -183,10 +184,12 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
                     }
                     this.updateScriptResult(executed);
                     this.notification.info('Script successfully executed');
+                    this.scrollToResult('.script-result');
                 },
                 (err: ScriptErrorDto) => {
                     this.notification.error('Script execution error');
                     this.updateScriptContentError(err);
+                    this.scrollToResult('.script-error');
                 },
             );
     }
@@ -203,12 +206,14 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
 
     public updateScriptResult(newResult: ScriptResultDto): void {
         if (this.selectedScript) {
+            newResult.date = new Date();
             this.scriptResults[this.selectedScript.id] = newResult;
         }
     }
 
     public updateScriptContentError(error: ScriptErrorDto): void {
         if (this.selectedScript) {
+            error.date = new Date();
             this.scriptErrors[this.selectedScript.id] = error;
         }
     }
@@ -252,14 +257,24 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
             next: (currentDb) => {
                 if (!currentDb) {
                     if (hasReceivedData) {
-                        this.notification.error('No database currently selected');
+                        this.notification.error('No database currently selected!');
                     }
                 } else {
                     this.currentDb = currentDb;
-                    this.notification.info(`Current Db guid is: '${this.currentDb.guid}'`);
+                    this.notification.info(`Current database client id is: '${this.currentDb.guid}'`);
                 }
                 hasReceivedData = true;
             },
         });
+    }
+
+    private scrollToResult(resultDivSector: string) {
+        setTimeout(() => {
+            const targetDiv = document.querySelector(resultDivSector);
+
+            if (targetDiv) {
+                targetDiv.scrollIntoView({ behavior: 'smooth' });
+            }
+        }, 100);
     }
 }

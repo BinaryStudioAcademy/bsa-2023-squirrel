@@ -43,11 +43,33 @@
     </div>
 
     <div *ngIf="currentScriptError" class="script-error">
-        <p>{{ currentScriptError.message }}</p>
+        <p>
+            <strong
+                >Last error from query "{{ selectedScript?.title }}" at {{ currentScriptError.date | date : 'medium' }}:
+                {{ currentScriptError.message }}</strong
+            >
+        </p>
     </div>
 
     <div *ngIf="currentScriptResult" class="script-result">
-        <p>{{ currentScriptResult.columnNames }}</p>
-        <p>{{ currentScriptResult.rows }}</p>
+        <p>
+            <strong
+                >Last result from query "{{ selectedScript?.title }}" at
+                {{ currentScriptResult.date | date : 'medium' }}:</strong
+            >
+        </p>
+        <div class="table-wrapper">
+            <table mat-table [dataSource]="currentScriptResult.rows">
+                <ng-container *ngFor="let columnName of currentScriptResult.columnNames" [matColumnDef]="columnName">
+                    <th class="cell" mat-header-cell *matHeaderCellDef>{{ columnName }}</th>
+                    <td class="cell" mat-cell *matCellDef="let element">
+                        {{ element[currentScriptResult.columnNames.indexOf(columnName)] }}
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="currentScriptResult.columnNames"></tr>
+                <tr mat-row *matRowDef="let row; columns: currentScriptResult.columnNames"></tr>
+            </table>
+        </div>
     </div>
+    <div class="spacing-div"></div>
 </div>

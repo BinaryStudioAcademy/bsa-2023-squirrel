@@ -176,13 +176,14 @@ public class ConsoleAppHubController : ControllerBase
         return Ok(await _queryParameters.tcs.Task);
     }
 
-    // https://localhost:7244/api/ConsoleAppHub/executeScript
-    [HttpPost("executeScript")]
+    // https://localhost:7244/api/ConsoleAppHub/execute-script
+    [HttpPost("execute-script")]
     public async Task<ActionResult<QueryResultTable>> ExecuteScriptAsync([FromBody] InboundScriptDto inboundScriptDto)
     {
-        var formattedScript = _sqlFormatterService.GetFormattedSql(inboundScriptDto.DbEngine, inboundScriptDto.Content!);
-
-        await _hubContext.Clients.User(inboundScriptDto.ClientId!).ExecuteScriptAsync(_queryParameters.queryId, formattedScript.Content!);
+        var formattedScript = _sqlFormatterService.GetFormattedSql(inboundScriptDto.DbEngine, inboundScriptDto.Content!); 
+        await _hubContext.Clients.User(inboundScriptDto.ClientId!)
+                         .ExecuteScriptAsync(_queryParameters.queryId, formattedScript.Content!);
+        
         return Ok(await _queryParameters.tcs.Task);
     }
 }

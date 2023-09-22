@@ -3,4 +3,5 @@ export interface ScriptResultDto {
     rows: string[][];
     rowCount: number;
     columnCount: number;
+    date: Date | undefined;
 }

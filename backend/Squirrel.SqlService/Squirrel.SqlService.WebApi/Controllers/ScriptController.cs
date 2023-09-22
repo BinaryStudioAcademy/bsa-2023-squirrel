@@ -6,7 +6,7 @@ namespace Squirrel.SqlService.WebApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ScriptController : ControllerBase
+public sealed class ScriptController : ControllerBase
 {
     private readonly ISqlFormatterService _sqlFormatterService;
 

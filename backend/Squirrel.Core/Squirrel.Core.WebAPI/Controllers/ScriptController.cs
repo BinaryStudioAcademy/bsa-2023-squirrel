@@ -53,6 +53,6 @@ public sealed class ScriptController : ControllerBase
     [HttpPost("execute")]
     public async Task<ActionResult<QueryResultTable>> ExecuteSqlScript([FromBody] InboundScriptDto inboundScriptDto)
     {
-        return Ok(await _scriptService.ExecuteSqlSciptAsync(inboundScriptDto));
+        return Ok(await _scriptService.ExecuteSqlScriptAsync(inboundScriptDto));
     }
 }

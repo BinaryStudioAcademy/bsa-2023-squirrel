@@ -14,7 +14,7 @@ public class ProcessReceivedDataService : IProcessReceivedDataService
     private Task ShowResult(Guid queryId, QueryResultTable queryResultTable)
     {
         Console.WriteLine($"------------------------------------------------------------------");
-        Console.WriteLine($"Successfully recived data from user '{queryId}'");
+        Console.WriteLine($"Successfully received data from user '{queryId}'");
         Console.WriteLine($"    result:");
         Console.WriteLine(queryResultTable);
         Console.WriteLine($"------------------------------------------------------------------");

@@ -1,5 +1,8 @@
 @import "/src/styles/color"
 
+p
+    margin: 15px
+
 .container
     margin: 10px
 
@@ -60,9 +63,49 @@ textarea
 
 .script-result
     color: $text-main
-    background-color: $light-gray
-    padding: 10px
     border: 1px solid $black
     border-radius: 5px
     margin-top: 10px
     margin-bottom: 10px
+    overflow: scroll
+    padding-bottom: 10px
+
+.spacing-div
+    height: 10px
+
+.cell
+    text-align: center
+    margin-right: 5px
+    margin-left: 5px
+    max-width: 10%
+    text-overflow: ellipsis
+    white-space: nowrap
+    overflow: hidden
+
+table
+    margin-left: 15px
+    width: 100%
+    max-width: 100%
+    overflow-x: auto
+    display: block
+    border-spacing: 0
+
+    th, td  
+        padding: 5px 10px
+
+    th
+        background-color: $light-gray
+
+.table-wrapper
+    overflow-x: auto
+    overflow-y: hidden
+    height: calc(100% + 10px)
+    margin-bottom: 15px
+    padding-bottom: 15px
+
+    &::-webkit-scrollbar
+        width: 10px
+
+    &::-webkit-scrollbar-thumb
+        background-color: $dark-grey
+        outline: 1px solid $light-gray

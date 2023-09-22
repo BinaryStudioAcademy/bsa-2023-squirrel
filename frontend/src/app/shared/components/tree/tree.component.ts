@@ -1,5 +1,5 @@
 /* eslint-disable function-paren-newline */
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 
 import { TreeNode } from './models/TreeNode.model';
 
@@ -8,28 +8,33 @@ import { TreeNode } from './models/TreeNode.model';
     templateUrl: './tree.component.html',
     styleUrls: ['./tree.component.sass'],
 })
-export class TreeComponent implements OnInit {
+export class TreeComponent implements OnInit, OnChanges {
     @Input() asCheckList: boolean = false;
 
     @Input() height: string = '100%';
 
     @Output() selectionChange = new EventEmitter<{ selectedNodes: TreeNode[]; originalStructure: TreeNode[] }>();
 
-    @Input() treeData: TreeNode[] = [
-        {
-            name: 'Category 1',
-            children: [{ name: 'Subcategory 1.1' }, { name: 'Subcategory 1.2' }],
-        },
-        {
-            name: 'Category 2',
-            children: [{ name: 'Subcategory 2.1' }, { name: 'Subcategory 2.2' }],
-        },
-    ];
+    @Output() messageChange = new EventEmitter<string>();
+
+    @Input() treeData: TreeNode[] = [];
 
     public filteredTreeData: TreeNode[] = [];
 
+    public message: string;
+
     ngOnInit(): void {
         this.filteredTreeData = this.treeData;
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['treeData']) {
+            this.filteredTreeData = this.treeData;
+        }
+    }
+
+    public messageChanged() {
+        this.messageChange.emit(this.message);
     }
 
     public filterTree(event: Event): void {

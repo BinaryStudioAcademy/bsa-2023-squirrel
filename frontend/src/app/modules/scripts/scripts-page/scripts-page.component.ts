@@ -67,24 +67,38 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
         this.loadCurrentDb();
     }
 
-    public onScriptSelected($event: any): void {
-        const option = $event.option.element as HTMLLIElement;
-
-        if (this.selectedOptionElement) {
-            this.selectedOptionElement.classList.remove(this.selectedOptionClass);
+    public onScriptSelected(script: ScriptDto): void {
+        if (script.id === this.selectedScript?.id) {
+            return;
         }
-        option.classList.add(this.selectedOptionClass);
-        this.selectedOptionElement = option;
-        [this.selectedScript] = $event.value as ScriptDto[];
+
+        console.log(script);
+
+        if (this.form.dirty) {
+            if (!window.confirm('You have unsaved changes in the script. Do you really want to leave?')) {
+                return;
+            }
+        }
+
+        //const option = $event.option.element as HTMLLIElement;
+
+        // if (this.selectedOptionElement) {
+        //     this.selectedOptionElement.classList.remove(this.selectedOptionClass);
+        // }
+        //option.classList.add(this.selectedOptionClass);
+        //this.selectedOptionElement = option;
+        //[this.selectedScript] = $event.value as ScriptDto[];
+        this.selectedScript = script;
         this.form.patchValue({
             scriptContent: this.selectedScript ? this.selectedScript.content : '',
         });
+        this.form.markAsPristine();
     }
 
     public openCreateModal(): void {
         const dialogRef: any = this.dialog.open(CreateScriptModalComponent, {
             width: '450px',
-            height: '400px',
+            height: '325px',
         });
 
         dialogRef.componentInstance.scriptCreated.subscribe((newScript: ScriptDto) => {
@@ -111,9 +125,8 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
             .pipe(tap(() => this.spinner.hide(), takeUntil(this.unsubscribe$)))
             .subscribe(
                 (updatedScript: ScriptDto) => {
-                    if (this.selectedScript && this.selectedScript.id === updatedScript.id) {
-                        this.updateScriptContent(updatedScript.content);
-                    }
+                    this.selectedScript = updatedScript;
+                    this.scripts[this.scripts.findIndex((s) => s.id === updatedScript.id)] = updatedScript;
                     this.form.markAsPristine();
                     this.notification.info('Script is successfully saved');
                 },
@@ -196,9 +209,8 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
 
     public updateScriptContent(newContent: string): void {
         if (this.selectedScript) {
-            this.selectedScript.content = newContent;
             this.form.patchValue({
-                scriptContent: this.selectedScript.content,
+                scriptContent: newContent,
             });
             this.form.markAsDirty();
         }

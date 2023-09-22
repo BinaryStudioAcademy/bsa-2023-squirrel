@@ -144,6 +144,12 @@ export class ChangesComponent implements OnInit, OnDestroy {
             .subscribe(x => {
             // eslint-disable-next-line no-console
                 console.log(x.body);
+                this.items.forEach(parent => {
+                    if (parent.children) {
+                        parent.children = parent.children.filter(item => !item.selected);
+                    }
+                });
+                this.items = this.items.filter(item => !item.selected && item.children && item.children?.length > 0);
             });
     }
 

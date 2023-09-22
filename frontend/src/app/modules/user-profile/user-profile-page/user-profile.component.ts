@@ -59,15 +59,15 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
                 takeUntil(this.unsubscribe$),
                 finalize(() => this.spinner.hide()),
             )
-            .subscribe(
-                (userProfile) => {
+            .subscribe({
+                next: (userProfile) => {
                     this.currentUser = userProfile;
                     this.initializeForms();
                 },
-                () => {
+                error: () => {
                     this.notificationService.error('Failed to fetch current user');
                 },
-            );
+            });
     }
 
     private initializeForms() {
@@ -137,18 +137,18 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
         this.userService
             .updateUserNames(userData)
             .pipe(takeUntil(this.unsubscribe$))
-            .subscribe(
-                (user) => {
+            .subscribe({
+                next: (user) => {
                     this.currentUser = user;
                     this.spinner.hide();
                     this.notificationService.info('Names successfully updated');
                     this.initUserNamesForm();
                 },
-                (error) => {
+                error: (error) => {
                     this.spinner.hide();
                     this.notificationService.error(error.message);
                 },
-            );
+            });
     }
 
     public updateUserPassword() {
@@ -169,17 +169,17 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
         this.userService
             .updateUserPassword(userData)
             .pipe(takeUntil(this.unsubscribe$))
-            .subscribe(
-                () => {
+            .subscribe({
+                next: () => {
                     this.spinner.hide();
                     this.notificationService.info('Password successfully updated');
                     this.initChangePasswordForm();
                 },
-                (error) => {
+                error: (error) => {
                     this.spinner.hide();
                     this.notificationService.error(error.message);
                 },
-            );
+            });
     }
 
     public updateUserNotifications() {
@@ -192,18 +192,18 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
         this.userService
             .updateUserNotifications(userData)
             .pipe(takeUntil(this.unsubscribe$))
-            .subscribe(
-                (user) => {
+            .subscribe({
+                next: (user) => {
                     this.currentUser = user;
                     this.spinner.hide();
                     this.notificationService.info('Notifications successfully updated');
                     this.initNotificationsValue();
                 },
-                (error) => {
+                error: (error) => {
                     this.spinner.hide();
                     this.notificationService.error(error.message);
                 },
-            );
+            });
     }
 
     public onFileChange(event: Event) {

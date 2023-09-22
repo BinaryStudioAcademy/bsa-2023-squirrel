@@ -85,17 +85,20 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
 
         this.scriptService
             .updateScript(script)
-            .pipe(tap(() => this.spinner.hide(), takeUntil(this.unsubscribe$)))
-            .subscribe(
-                (updatedScript: ScriptDto) => {
+            .pipe(
+                takeUntil(this.unsubscribe$),
+                tap(() => this.spinner.hide()),
+            )
+            .subscribe({
+                next: (updatedScript: ScriptDto) => {
                     if (this.selectedScript && this.selectedScript.id === updatedScript.id) {
                         this.selectedScript.content = updatedScript.content;
                     }
                     this.form.markAsPristine();
                     this.notification.info('Script is successfully saved');
                 },
-                (err) => this.notification.error(err),
-            );
+                error: (err) => this.notification.error(err),
+            });
     }
 
     private initializeForm(): void {

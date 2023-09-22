@@ -36,14 +36,14 @@ export class ProjectsPageComponent extends BaseComponent implements OnInit {
         this.projectService
             .getAllUserProjects()
             .pipe(takeUntil(this.unsubscribe$))
-            .subscribe(
-                (projects: ProjectResponseDto[]) => {
+            .subscribe({
+                next: (projects: ProjectResponseDto[]) => {
                     this.projects = projects;
                 },
-                () => {
+                error: () => {
                     this.notificationService.error('Failed to load projects');
                 },
-            );
+            });
     }
 
     public openCreateModal(): void {

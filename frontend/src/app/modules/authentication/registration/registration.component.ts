@@ -84,14 +84,14 @@ export class RegistrationComponent extends BaseComponent implements OnInit {
         this.authService
             .register(userRegistrationData)
             .pipe(takeUntil(this.unsubscribe$))
-            .subscribe(
-                () => {
+            .subscribe({
+                next: () => {
                     this.router.navigateByUrl('/projects');
                 },
-                (err: ErrorDetailsDto) => {
+                error: (err: ErrorDetailsDto) => {
                     this.spinner.hide();
                     this.notificationService.error(err.message);
                 },
-            );
+            });
     }
 }

@@ -2,8 +2,8 @@
     <div class="main-content" *ngIf="scripts.length > 0">
         <div class="scripts-sector">
             <ul cdkListbox [cdkListboxValue]="scripts" class="listbox bordered">
-                <li *ngFor="let script of scripts" [cdkOption]="script" class="option"
-                    [ngClass]="selectedScript?.id === script.id ? 'selected-option' : ''"
+                <li class="option" *ngFor="let script of scripts" [cdkOption]="script"
+                    [class.selected-option]="selectedScript?.id === script.id"
                     [class.unsaved]="form.dirty && selectedScript?.id === script.id">
                     <app-script [script]="script" (click)="onScriptSelected(script)"></app-script>
                 </li>
@@ -11,8 +11,9 @@
         </div>
         <div class="editor-sector">
             <!-- TODO: create custom TextEditorComponent -->
-            <textarea class="editor bordered" [ngModel]="selectedScript?.content"
-                (ngModelChange)="updateScriptContent($event)"></textarea>
+            <textarea class="editor bordered" [formControl]="$any(form.controls['scriptContent'])">
+                {{selectedScript?.content}}
+            </textarea>
         </div>
     </div>
 

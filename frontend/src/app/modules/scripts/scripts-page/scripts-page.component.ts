@@ -34,21 +34,21 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
 
     public scriptResults: { [scriptId: number]: ScriptResultDto } = {};
 
-    get currentScriptError(): ScriptErrorDto | undefined {
+    public get currentScriptError(): ScriptErrorDto | undefined {
         return this.selectedScript ? this.scriptErrors[this.selectedScript.id] : undefined;
     }
 
-    get currentScriptResult(): ScriptResultDto | undefined {
+    public get currentScriptResult(): ScriptResultDto | undefined {
         return this.selectedScript ? this.scriptResults[this.selectedScript.id] : undefined;
     }
-
-    private selectedOptionElement: HTMLLIElement | undefined;
-
-    private readonly selectedOptionClass = 'selected-option';
 
     private project: ProjectResponseDto;
 
     private currentDb: DatabaseDto;
+
+    private readonly scriptResultComponentSelector = 'app-script-result';
+
+    private readonly scriptErrorComponentSelector = 'app-script-error-result';
 
     constructor(
         public dialog: MatDialog,
@@ -61,7 +61,7 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
         super();
     }
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.loadScripts();
         this.initializeForm();
         this.loadCurrentDb();
@@ -72,25 +72,15 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
             return;
         }
 
-        console.log(script);
-
         if (this.form.dirty) {
             if (!window.confirm('You have unsaved changes in the script. Do you really want to leave?')) {
                 return;
             }
         }
 
-        //const option = $event.option.element as HTMLLIElement;
-
-        // if (this.selectedOptionElement) {
-        //     this.selectedOptionElement.classList.remove(this.selectedOptionClass);
-        // }
-        //option.classList.add(this.selectedOptionClass);
-        //this.selectedOptionElement = option;
-        //[this.selectedScript] = $event.value as ScriptDto[];
         this.selectedScript = script;
         this.form.patchValue({
-            scriptContent: this.selectedScript ? this.selectedScript.content : '',
+            scriptContent: script.content,
         });
         this.form.markAsPristine();
     }
@@ -122,16 +112,16 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
 
         this.scriptService
             .updateScript(script)
-            .pipe(tap(() => this.spinner.hide(), takeUntil(this.unsubscribe$)))
-            .subscribe(
-                (updatedScript: ScriptDto) => {
+            .pipe(tap({ next: () => this.spinner.hide() }), takeUntil(this.unsubscribe$))
+            .subscribe({
+                next: (updatedScript: ScriptDto) => {
                     this.selectedScript = updatedScript;
                     this.scripts[this.scripts.findIndex((s) => s.id === updatedScript.id)] = updatedScript;
                     this.form.markAsPristine();
                     this.notification.info('Script is successfully saved');
                 },
-                (err) => this.notification.error(err),
-            );
+                error: (err) => this.notification.error(err),
+            });
     }
 
     public formatScript(): void {
@@ -153,21 +143,26 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
                 takeUntil(this.unsubscribe$),
                 finalize(() => this.spinner.hide()),
             )
-            .subscribe(
-                (updatedScript: ScriptContentDto) => {
-                    this.updateScriptContent(updatedScript.content);
-                    // Clear the error for the current script
+            .subscribe({
+                next: (updatedContent: ScriptContentDto) => {
+                    this.selectedScript!.content = updatedContent.content;
+                    this.scripts[this.scripts.findIndex((s) => s.id === this.selectedScript!.id)].content =
+                        updatedContent.content;
+                    this.form.patchValue({
+                        scriptContent: updatedContent.content,
+                    });
+                    this.form.markAsDirty();
                     if (this.selectedScript) {
                         delete this.scriptErrors[this.selectedScript.id];
                     }
                     this.notification.info('Script content successfully formatted');
                 },
-                (err: ScriptErrorDto) => {
+                error: (err: ScriptErrorDto) => {
                     this.notification.error('Format script error');
                     this.updateScriptContentError(err);
-                    this.scrollToResult('.script-error');
+                    this.scrollToResult(false);
                 },
-            );
+            });
     }
 
     public executeScript(): void {
@@ -189,31 +184,21 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
                 takeUntil(this.unsubscribe$),
                 finalize(() => this.spinner.hide()),
             )
-            .subscribe(
-                (executed: ScriptResultDto) => {
-                    // Clear the error for the current script
+            .subscribe({
+                next: (executed: ScriptResultDto) => {
                     if (this.selectedScript) {
                         delete this.scriptErrors[this.selectedScript.id];
                     }
                     this.updateScriptResult(executed);
                     this.notification.info('Script successfully executed');
-                    this.scrollToResult('.script-result');
+                    this.scrollToResult(true);
                 },
-                (err: ScriptErrorDto) => {
+                error: (err: ScriptErrorDto) => {
                     this.notification.error('Script execution error');
                     this.updateScriptContentError(err);
-                    this.scrollToResult('.script-error');
+                    this.scrollToResult(false);
                 },
-            );
-    }
-
-    public updateScriptContent(newContent: string): void {
-        if (this.selectedScript) {
-            this.form.patchValue({
-                scriptContent: newContent,
             });
-            this.form.markAsDirty();
-        }
     }
 
     public updateScriptResult(newResult: ScriptResultDto): void {
@@ -280,13 +265,15 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
         });
     }
 
-    private scrollToResult(resultDivSector: string) {
+    private scrollToResult(isSuccessful: boolean) {
         setTimeout(() => {
-            const targetDiv = document.querySelector(resultDivSector);
+            const targetComponent = document.querySelector(
+                isSuccessful ? this.scriptResultComponentSelector : this.scriptErrorComponentSelector,
+            );
 
-            if (targetDiv) {
-                targetDiv.scrollIntoView({ behavior: 'smooth' });
+            if (targetComponent) {
+                targetComponent.scrollIntoView({ behavior: 'smooth' });
             }
-        }, 100);
+        }, 0);
     }
 }

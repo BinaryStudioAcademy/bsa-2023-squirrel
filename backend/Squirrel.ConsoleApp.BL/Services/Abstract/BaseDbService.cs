@@ -41,13 +41,14 @@ public abstract class BaseDbService: IDatabaseService
 
     private QueryResultTable BuildTable(DbDataReader reader)
     {
+        var nullValue = "null";
         var result = new QueryResultTable(Enumerable.Range(0, reader.FieldCount).Select(reader.GetName).ToArray());
         while (reader.Read())
         {
             var row = new string[reader.FieldCount];
             for (int i = 0; i < reader.FieldCount; i++)
             {
-                row[i] = reader[i].ToString() ?? string.Empty;
+                row[i] = reader[i] is DBNull ? nullValue : reader[i].ToString() ?? nullValue;
             }
             result.AddRow(row);
         }

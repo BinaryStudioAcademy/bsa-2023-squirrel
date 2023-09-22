@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { BaseComponent } from '@core/base/base.component';
+import { CanComponentDeactivate } from '@core/guards/unsaved-script.guard';
 import { NotificationService } from '@core/services/notification.service';
 import { ScriptService } from '@core/services/script.service';
 import { SharedProjectService } from '@core/services/shared-project.service';
@@ -23,7 +24,7 @@ import { CreateScriptModalComponent } from '../create-script-modal/create-script
     templateUrl: './scripts-page.component.html',
     styleUrls: ['./scripts-page.component.sass'],
 })
-export class ScriptsPageComponent extends BaseComponent implements OnInit {
+export class ScriptsPageComponent extends BaseComponent implements OnInit, CanComponentDeactivate {
     public form: FormGroup;
 
     public scripts: ScriptDto[] = [];
@@ -33,6 +34,8 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
     public scriptErrors: { [scriptId: number]: ScriptErrorDto } = {};
 
     public scriptResults: { [scriptId: number]: ScriptResultDto } = {};
+
+    public readonly rowsCountForToTopBtn = 20;
 
     public get currentScriptError(): ScriptErrorDto | undefined {
         return this.selectedScript ? this.scriptErrors[this.selectedScript.id] : undefined;
@@ -65,6 +68,14 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
         this.loadScripts();
         this.initializeForm();
         this.loadCurrentDb();
+    }
+
+    public canDeactivate(): boolean {
+        if (this.form.dirty) {
+            return window.confirm('You have unsaved changes. Do you really want to leave?');
+        }
+
+        return true;
     }
 
     public onScriptSelected(script: ScriptDto): void {
@@ -158,7 +169,6 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
                     this.notification.info('Script content successfully formatted');
                 },
                 error: (err: ScriptErrorDto) => {
-                    this.notification.error('Format script error');
                     this.updateScriptContentError(err);
                     this.scrollToResult(false);
                 },
@@ -185,16 +195,15 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
                 finalize(() => this.spinner.hide()),
             )
             .subscribe({
-                next: (executed: ScriptResultDto) => {
+                next: (executedScriptResult: ScriptResultDto) => {
                     if (this.selectedScript) {
                         delete this.scriptErrors[this.selectedScript.id];
                     }
-                    this.updateScriptResult(executed);
-                    this.notification.info('Script successfully executed');
+                    this.updateScriptResult(executedScriptResult);
+                    this.notification.info('Script is successfully executed');
                     this.scrollToResult(true);
                 },
                 error: (err: ScriptErrorDto) => {
-                    this.notification.error('Script execution error');
                     this.updateScriptContentError(err);
                     this.scrollToResult(false);
                 },
@@ -213,6 +222,18 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
             error.date = new Date();
             this.scriptErrors[this.selectedScript.id] = error;
         }
+    }
+
+    public scrollToResult(isSuccessful: boolean) {
+        setTimeout(() => {
+            const targetComponent = document.querySelector(
+                isSuccessful ? this.scriptResultComponentSelector : this.scriptErrorComponentSelector,
+            );
+
+            if (targetComponent) {
+                targetComponent.scrollIntoView({ behavior: 'smooth' });
+            }
+        }, 0);
     }
 
     private initializeForm(): void {
@@ -263,17 +284,5 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
                 hasReceivedData = true;
             },
         });
-    }
-
-    private scrollToResult(isSuccessful: boolean) {
-        setTimeout(() => {
-            const targetComponent = document.querySelector(
-                isSuccessful ? this.scriptResultComponentSelector : this.scriptErrorComponentSelector,
-            );
-
-            if (targetComponent) {
-                targetComponent.scrollIntoView({ behavior: 'smooth' });
-            }
-        }, 0);
     }
 }

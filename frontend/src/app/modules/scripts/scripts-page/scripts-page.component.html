@@ -37,5 +37,9 @@
         [scriptTitle]="selectedScript?.title ?? ''">
     </app-script-result>
 
-    <div class="spacing-div"></div>
+    <div class="spacing-div">
+        <app-button *ngIf="currentScriptResult && currentScriptResult.rowCount > rowsCountForToTopBtn"
+            (buttonOnClick)="scrollToResult(true)" text="To the top of the table">
+        </app-button>
+    </div>
 </div>

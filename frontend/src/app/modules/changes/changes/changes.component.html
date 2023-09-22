@@ -1,8 +1,10 @@
 <div class="container">
     <div class="main-content">
         <app-tree [asCheckList]="true"></app-tree>
-        <div class="solution-sector">
-            <app-code *ngFor="let changes of contentChanges" [textPair]="changes.sideBySideDiff" [height]="'100%'" [header]="changes.schemaName + '.' + changes.itemName" ></app-code>
+        <div class="changes-content">
+            <div *ngFor="let changes of contentChanges" class="solution-sector">
+                <app-code [textPair]="changes.sideBySideDiff" [height]="'100%'" [header]="changes.schemaName + '.' + changes.itemName" ></app-code>
+            </div>
         </div>
     </div>
 

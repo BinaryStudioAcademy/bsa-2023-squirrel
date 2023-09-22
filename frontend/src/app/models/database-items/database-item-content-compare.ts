@@ -6,7 +6,7 @@ import { DatabaseItemType } from './database-item-type';
 export interface DatabaseItemContentCompare {
     schemaName: string;
     itemName: string;
-    type: DatabaseItemType;
-    sideBySideDiffDto: TextPairDifferenceDto;
-    inLineDiffResultDto: InLineDiffResultDto;
+    itemType: DatabaseItemType;
+    sideBySideDiff: TextPairDifferenceDto;
+    inLineDiff: InLineDiffResultDto;
 }

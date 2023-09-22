@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BaseComponent } from '@core/base/base.component';
 import { CommitChangesService } from '@core/services/commit-changes.service';
-import { Subscription, takeUntil } from 'rxjs';
+import { takeUntil } from 'rxjs';
 
 import { TextPairDifferenceDto } from 'src/app/models/text-pair/text-pair-difference-dto';
 
@@ -17,8 +17,6 @@ export class ChangesComponent extends BaseComponent implements OnInit {
 
     contentChanges: DatabaseItemContentCompare[] = [];
 
-    private contentChangesSubscription: Subscription;
-
     constructor(
         private commitChangesService: CommitChangesService,
     ) {
@@ -31,7 +29,5 @@ export class ChangesComponent extends BaseComponent implements OnInit {
             .subscribe((changes) => {
                 this.contentChanges = changes;
             });
-
-        this.textPair = this.contentChanges[0].sideBySideDiffDto;
     }
 }

@@ -1,6 +1,5 @@
 <div class="container">
     <div class="main-content" *ngIf="scripts.length > 0">
-        <!-- TODO: create custom ListBoxComponent -->
         <div class="scripts-sector">
             <ul cdkListbox [cdkListboxValue]="scripts" class="listbox bordered">
                 <li *ngFor="let script of scripts" [cdkOption]="script" class="option"
@@ -33,23 +32,9 @@
         [scriptTitle]="selectedScript?.title ?? ''">
     </app-script-error-result>
 
-    <div *ngIf="currentScriptResult" class="script-result">
-        <p>
-            <strong>Last result from query "{{ selectedScript?.title }}" at
-                {{ currentScriptResult.date | date : 'medium' }}:</strong>
-        </p>
-        <div class="table-wrapper">
-            <table mat-table [dataSource]="currentScriptResult.rows">
-                <ng-container *ngFor="let columnName of currentScriptResult.columnNames" [matColumnDef]="columnName">
-                    <th class="cell" mat-header-cell *matHeaderCellDef>{{ columnName }}</th>
-                    <td class="cell" mat-cell *matCellDef="let element">
-                        {{ element[currentScriptResult.columnNames.indexOf(columnName)] }}
-                    </td>
-                </ng-container>
-                <tr mat-header-row *matHeaderRowDef="currentScriptResult.columnNames"></tr>
-                <tr mat-row *matRowDef="let row; columns: currentScriptResult.columnNames"></tr>
-            </table>
-        </div>
-    </div>
+    <app-script-result *ngIf="currentScriptResult" [scriptResult]="currentScriptResult"
+        [scriptTitle]="selectedScript?.title ?? ''">
+    </app-script-result>
+
     <div class="spacing-div"></div>
 </div>

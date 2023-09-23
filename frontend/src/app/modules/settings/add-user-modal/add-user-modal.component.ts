@@ -54,16 +54,16 @@ export class AddUserModalComponent extends BaseComponent implements OnInit {
             .pipe(
                 takeUntil(this.unsubscribe$),
             )
-            .subscribe(
-                () => {
+            .subscribe({
+                next: () => {
                     this.dialogRef.close(this.selectedUsers);
                     this.notificationService.info('Users added successfully');
                     this.userAdded.emit(this.selectedUsers);
                 },
-                () => {
+                error: () => {
                     this.notificationService.error('Failed to added users');
                 },
-            );
+            });
     }
 
     public close(): void {
@@ -79,12 +79,14 @@ export class AddUserModalComponent extends BaseComponent implements OnInit {
             .getAllUsers()
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe(
-                (users: UserDto[]) => {
-                    this.dropdownUsers = users.filter(user => !this.data.users.some(u => u.id === user.id));
-                    this.isDropdownVisible = true;
-                },
-                () => {
-                    this.notificationService.error('Failed to load users');
+                {
+                    next: (users: UserDto[]) => {
+                        this.dropdownUsers = users.filter(user => !this.data.users.some(u => u.id === user.id));
+                        this.isDropdownVisible = true;
+                    },
+                    error: () => {
+                        this.notificationService.error('Failed to load users');
+                    },
                 },
             );
         this.sharedProjectService.project$.subscribe({

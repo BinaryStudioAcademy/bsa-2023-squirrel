@@ -70,14 +70,14 @@ export class GeneralSettingsComponent extends BaseComponent implements OnInit {
                 takeUntil(this.unsubscribe$),
                 tap(() => this.spinner.hide()),
             )
-            .subscribe(
-                () => {
+            .subscribe({
+                next: () => {
                     this.notificationService.info('Project updated successfully');
                 },
-                () => {
+                error: () => {
                     this.notificationService.error('Failed to update project');
                 },
-            );
+            });
 
         this.spinner.hide();
     }

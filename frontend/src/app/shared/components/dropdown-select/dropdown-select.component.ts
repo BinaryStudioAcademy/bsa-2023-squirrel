@@ -17,8 +17,8 @@ import { DomSanitizer } from '@angular/platform-browser';
     templateUrl: './dropdown-select.component.html',
     styleUrls: ['./dropdown-select.component.sass'],
 })
-export class DropdownSelectComponent implements OnInit {
-    @Input() options: any[];
+export class DropdownSelectComponent<T> implements OnInit {
+    @Input() options: T[];
 
     @Input() selectedIds: number[] = [];
 
@@ -30,11 +30,11 @@ export class DropdownSelectComponent implements OnInit {
 
     @Input() placeholder: string = 'Select...';
 
-    @Input() template: TemplateRef<any>;
+    @Input() template: TemplateRef<T>;
 
-    @Input() chipTemplate: TemplateRef<any>;
+    @Input() chipTemplate: TemplateRef<T>;
 
-    @Input() filterPredicate?: (item: any, value: string) => boolean;
+    @Input() filterPredicate?: (item: T, value: string) => boolean;
 
     @Output() valueChange = new EventEmitter();
 
@@ -44,13 +44,13 @@ export class DropdownSelectComponent implements OnInit {
 
     private currentId: number = -1;
 
-    public internalOptions: any[];
+    public internalOptions: T[];
 
-    public filteredOptions: any[];
+    public filteredOptions: T[];
 
-    public selectedOptions: any[];
+    public selectedOptions: T[];
 
-    public currentValue: any;
+    public currentValue: T;
 
     public dropdownOpen: boolean = false;
 
@@ -95,8 +95,8 @@ export class DropdownSelectComponent implements OnInit {
         this.dropdownOpen = false;
     }
 
-    sanitize(value: any) {
-        return this.sanitizer.sanitize(SecurityContext.HTML, value);
+    sanitize(value: unknown) {
+        return this.sanitizer.sanitize(SecurityContext.HTML, value as string);
     }
 
     selectByIndex(i: number) {
@@ -105,7 +105,7 @@ export class DropdownSelectComponent implements OnInit {
         this.select(value);
     }
 
-    select(value: any) {
+    select(value: T) {
         if (this.internalOptions.indexOf(value) === this.placeholderId) {
             this.selectedOptions = [value];
         } else {
@@ -132,7 +132,7 @@ export class DropdownSelectComponent implements OnInit {
         }
     }
 
-    isSelected(option: any) {
+    isSelected(option: T) {
         return this.selectedOptions.some((x) => x === option);
     }
 
@@ -146,7 +146,7 @@ export class DropdownSelectComponent implements OnInit {
             return this.internalOptions.filter(
                 this.filterPredicate
                     ? (option) => this.filterPredicate?.call(this, option, filter)
-                    : (option) => option.toLowerCase().indexOf(filter.toLowerCase()) >= 0,
+                    : (option) => (option as unknown as string).toLowerCase().indexOf(filter.toLowerCase()) >= 0,
             );
         }
 

@@ -19,7 +19,7 @@ export class DropdownComponent implements OnChanges {
 
     public isActive = false;
 
-    @Input() options: any[] = [];
+    @Input() options: unknown[] = [];
 
     @Input() width: number;
 
@@ -27,13 +27,13 @@ export class DropdownComponent implements OnChanges {
 
     @Input() includeButton: boolean = false;
 
-    @Output() selectedValueChanged = new EventEmitter<string>();
+    @Output() selectedValueChanged = new EventEmitter();
 
     @Output() buttonClicked = new EventEmitter();
 
     @Input() dropdownIcon: string;
 
-    @Input() template: TemplateRef<any>;
+    @Input() template: TemplateRef<unknown>;
 
     @Input() modalOption: string = '+ Add New';
 
@@ -69,7 +69,7 @@ export class DropdownComponent implements OnChanges {
     }
 
     public filterOptions(): string[] {
-        return this.options.filter((option) => this.filterPredicate?.call(this, option, this.searchTerm));
+        return this.options.filter((option) => this.filterPredicate?.call(this, option, this.searchTerm)) as string[];
     }
 
     public filterByName(option: string, value: string) {

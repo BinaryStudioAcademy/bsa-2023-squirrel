@@ -37,14 +37,6 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, CanCo
 
     public readonly rowsCountForToTopBtn = 20;
 
-    public get currentScriptError(): ScriptErrorDto | undefined {
-        return this.selectedScript ? this.scriptErrors[this.selectedScript.id] : undefined;
-    }
-
-    public get currentScriptResult(): ScriptResultDto | undefined {
-        return this.selectedScript ? this.scriptResults[this.selectedScript.id] : undefined;
-    }
-
     private project: ProjectResponseDto;
 
     private currentDb: DatabaseDto;
@@ -62,6 +54,14 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, CanCo
         private notification: NotificationService,
     ) {
         super();
+    }
+
+    public get currentScriptError(): ScriptErrorDto | undefined {
+        return this.selectedScript ? this.scriptErrors[this.selectedScript.id] : undefined;
+    }
+
+    public get currentScriptResult(): ScriptResultDto | undefined {
+        return this.selectedScript ? this.scriptResults[this.selectedScript.id] : undefined;
     }
 
     public ngOnInit(): void {
@@ -90,9 +90,7 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, CanCo
         }
 
         this.selectedScript = script;
-        this.form.patchValue({
-            scriptContent: script.content,
-        });
+        this.updateEditorContent(script.content);
         this.form.markAsPristine();
     }
 
@@ -159,13 +157,9 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, CanCo
                     this.selectedScript!.content = updatedContent.content;
                     this.scripts[this.scripts.findIndex((s) => s.id === this.selectedScript!.id)].content =
                         updatedContent.content;
-                    this.form.patchValue({
-                        scriptContent: updatedContent.content,
-                    });
+                    this.updateEditorContent(updatedContent.content);
                     this.form.markAsDirty();
-                    if (this.selectedScript) {
-                        delete this.scriptErrors[this.selectedScript.id];
-                    }
+                    this.removeLastErrorForSelectedScript();
                     this.notification.info('Script content successfully formatted');
                 },
                 error: (err: ScriptErrorDto) => {
@@ -196,9 +190,7 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, CanCo
             )
             .subscribe({
                 next: (executedScriptResult: ScriptResultDto) => {
-                    if (this.selectedScript) {
-                        delete this.scriptErrors[this.selectedScript.id];
-                    }
+                    this.removeLastErrorForSelectedScript();
                     this.updateScriptResult(executedScriptResult);
                     this.notification.info('Script is successfully executed');
                     this.scrollToResult(true);
@@ -208,20 +200,6 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, CanCo
                     this.scrollToResult(false);
                 },
             });
-    }
-
-    public updateScriptResult(newResult: ScriptResultDto): void {
-        if (this.selectedScript) {
-            newResult.date = new Date();
-            this.scriptResults[this.selectedScript.id] = newResult;
-        }
-    }
-
-    public updateScriptContentError(error: ScriptErrorDto): void {
-        if (this.selectedScript) {
-            error.date = new Date();
-            this.scriptErrors[this.selectedScript.id] = error;
-        }
     }
 
     public scrollToResult(isSuccessful: boolean) {
@@ -234,6 +212,26 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, CanCo
                 targetComponent.scrollIntoView({ behavior: 'smooth' });
             }
         }, 0);
+    }
+
+    private removeLastErrorForSelectedScript(): void {
+        if (this.selectedScript) {
+            delete this.scriptErrors[this.selectedScript.id];
+        }
+    }
+
+    private updateScriptResult(newResult: ScriptResultDto): void {
+        if (this.selectedScript) {
+            newResult.date = new Date();
+            this.scriptResults[this.selectedScript.id] = newResult;
+        }
+    }
+
+    private updateScriptContentError(error: ScriptErrorDto): void {
+        if (this.selectedScript) {
+            error.date = new Date();
+            this.scriptErrors[this.selectedScript.id] = error;
+        }
     }
 
     private initializeForm(): void {
@@ -283,6 +281,12 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, CanCo
                 }
                 hasReceivedData = true;
             },
+        });
+    }
+
+    private updateEditorContent(content: string): void {
+        this.form.patchValue({
+            scriptContent: content,
         });
     }
 }

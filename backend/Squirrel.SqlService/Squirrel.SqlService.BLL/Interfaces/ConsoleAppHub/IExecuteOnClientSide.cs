@@ -15,7 +15,7 @@ public interface IExecuteOnClientSide
     Task GetFunctionDefinitionAsync(Guid queryId, string schemaName, string functionName);
 
     Task GetAllViewsNamesAsync(Guid queryId);
-    Task GetViewDefinitionAsync(Guid queryId, string viewName);
+    Task GetViewDefinitionAsync(Guid queryId, string schemaName, string viewName);
 
     Task GetTableStructureAsync(Guid queryId, string schema, string tableName);
     Task GetTableChecksAndUniqueConstraintsAsync(Guid queryId, string schema, string tableName);

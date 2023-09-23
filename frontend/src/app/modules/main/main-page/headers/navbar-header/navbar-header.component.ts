@@ -3,10 +3,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { BaseComponent } from '@core/base/base.component';
 import { BranchService } from '@core/services/branch.service';
+import { DatabaseItemsService } from '@core/services/database-items.service';
 import { LoadChangesService } from '@core/services/load-changes.service';
 import { NotificationService } from '@core/services/notification.service';
 import { SharedProjectService } from '@core/services/shared-project.service';
-import { takeUntil } from 'rxjs';
+import { SpinnerService } from '@core/services/spinner.service';
+import { finalize, takeUntil } from 'rxjs';
 
 import { BranchDto } from 'src/app/models/branch/branch-dto';
 import { DatabaseDto } from 'src/app/models/database/database-dto';
@@ -48,6 +50,8 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
         private sharedProject: SharedProjectService,
         private changesService: LoadChangesService,
         private notificationService: NotificationService,
+        private databaseItemsService: DatabaseItemsService,
+        private spinner: SpinnerService,
     ) {
         super();
     }
@@ -100,16 +104,59 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
         return item.name.includes(value);
     }
 
-    public loadChanges() {
-        this.sharedProject.currentDb$.pipe(takeUntil(this.unsubscribe$)).subscribe({
-            next: (currentDb) => {
-                if (!currentDb) {
-                    this.notificationService.error('No database currently selected');
-                } else {
-                    this.selectedDatabase = currentDb!;
-                    this.changesService.loadChangesRequest(this.selectedDatabase.guid);
-                }
+    public getCurrentDatabase() {
+        this.sharedProject.currentDb$.pipe(
+            takeUntil(this.unsubscribe$),
+        ).subscribe({
+            next: currentDb => {
+                this.selectedDatabase = currentDb!;
             },
         });
+    }
+
+    public loadChanges() {
+        this.getCurrentDatabase();
+
+        if (!this.selectedDatabase) {
+            this.notificationService.error('No database currently selected');
+
+            return;
+        }
+
+        this.spinner.show();
+
+        this.changesService.loadChangesRequest(this.selectedDatabase.guid)
+            .pipe(
+                takeUntil(this.unsubscribe$),
+                finalize(() => this.spinner.hide()),
+            )
+            .subscribe({
+                next: (event) => {
+                    // eslint-disable-next-line no-console
+                    console.log(event);
+                },
+                error: (error) => {
+                    // eslint-disable-next-line no-console
+                    console.log(error);
+
+                    this.notificationService.error('An error occured while attempting to load changes');
+                },
+            });
+
+        this.databaseItemsService.getAllItems(this.selectedDatabase.guid)
+            .pipe(
+                takeUntil(this.unsubscribe$),
+            )
+            .subscribe({
+                next: (event) => {
+                    // eslint-disable-next-line no-console
+                    console.log(event);
+                },
+                error: (error) => {
+                    // eslint-disable-next-line no-console
+                    console.log(error);
+                    this.notificationService.error('An error occured while attempting to load list of db items');
+                },
+            });
     }
 }

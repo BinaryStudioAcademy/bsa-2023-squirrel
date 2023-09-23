@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
-
-import { DatabaseItem } from 'src/app/models/database-items/database-item';
+import { Observable, Subject } from 'rxjs';
 
 import { HttpInternalService } from './http-internal.service';
 
@@ -13,36 +11,11 @@ export class LoadChangesService {
 
     private readonly loadChangesRoutePrefix = '/api/changerecords';
 
-    private readonly databaseItemsRoutePrefix = '/api/databaseitems';
+    constructor(private httpClient: HttpInternalService) {
+        // eslint-disable-next-line no-empty-function
+    }
 
-    // eslint-disable-next-line no-empty-function
-    constructor(private httpClient: HttpInternalService) { }
-
-    public loadChangesRequest(guid: string) {
-        this.httpClient.postRequest<string>(`${this.loadChangesRoutePrefix}/${guid}`, null!)
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe({
-                next: (event) => {
-                    // eslint-disable-next-line no-console
-                    console.log(event);
-                },
-                error: (error) => {
-                    // eslint-disable-next-line no-console
-                    console.log(error);
-                },
-            });
-
-        this.httpClient.getRequest<DatabaseItem[]>(`${this.databaseItemsRoutePrefix}`)
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe({
-                next: (event) => {
-                    // eslint-disable-next-line no-console
-                    console.log(event);
-                },
-                error: (error) => {
-                    // eslint-disable-next-line no-console
-                    console.log(error);
-                },
-            });
+    public loadChangesRequest(guid: string): Observable<string> {
+        return this.httpClient.postRequest<string>(`${this.loadChangesRoutePrefix}/${guid}`, null!);
     }
 }

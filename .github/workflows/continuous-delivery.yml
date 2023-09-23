@@ -54,7 +54,7 @@ jobs:
           tags: alinasielina/squirrel_sql:latest
           context: ./backend
           file: ./backend/Squirrel.SqlService/Dockerfile
-          build-args: PROJECT_PORT=7244
+          build-args: PROJECT_PORT=5076
           push: true
 
   build_notifier_service:

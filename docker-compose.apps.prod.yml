@@ -15,6 +15,7 @@ services:
             - /etc/environment
         volumes:
            - ./resources:/app/Resources
+           - ./logs:/app/Logs
 
 
     squirrel_notifier:
@@ -37,11 +38,13 @@ services:
         networks:
             - back
         ports:
-            - "7244:7244"
+            - "5076:5076"
         environment:
             ASPNETCORE_ENVIRONMENT: 'Production'
         env_file:
             - /etc/environment
+        volumes:
+            - ./logs:/app/Logs
 
     squirrel_frontend:
         depends_on:

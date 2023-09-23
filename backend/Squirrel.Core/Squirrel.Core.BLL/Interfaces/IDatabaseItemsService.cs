@@ -4,5 +4,5 @@ namespace Squirrel.Core.BLL.Interfaces;
 
 public interface IDatabaseItemsService
 {
-    Task<List<DatabaseItem>> GetAllItems();
+    Task<List<DatabaseItem>> GetAllItemsAsync(Guid clientId);
 }

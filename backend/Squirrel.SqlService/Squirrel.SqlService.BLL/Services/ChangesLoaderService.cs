@@ -24,7 +24,7 @@ public class ChangesLoaderService : IChangesLoaderService
     public async Task LoadChangesToBlobAsync(Guid changeId, Guid clientId)
     {
         // TODO get actual db structure
-        var dbStructure = _dbItemsRetrievalService.GetAllItems();
+        var dbStructure = await _dbItemsRetrievalService.GetAllDbStructureAsync(clientId);
 
         // Serialize the dbStructure to a JSON string
         var jsonString = JsonConvert.SerializeObject(dbStructure);

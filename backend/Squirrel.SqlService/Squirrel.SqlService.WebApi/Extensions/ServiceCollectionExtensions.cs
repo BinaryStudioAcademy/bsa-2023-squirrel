@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using Squirrel.Core.DAL.Entities;
 using Squirrel.SqlService.BLL.Interfaces;
 using Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
@@ -18,6 +17,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IDependencyAnalyzer, DependencyAnalyzer>();
         services.AddScoped<IDbItemsRetrievalService, DbItemsRetrievalService>();
         services.AddScoped<IChangesLoaderService, ChangesLoaderService>();
+
         services.AddScoped<IContentDifferenceService, ContentDifferenceService>();
         services.AddSingleton<IProcessReceivedDataService, ProcessReceivedDataService>();
         services.AddSingleton<ResultObserver>();

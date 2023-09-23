@@ -39,4 +39,10 @@ export class ValidationsFn {
             (/(?=.*[a-z])/.test(control.value)
                 ? null : { lowerExist: true });
     }
+
+    static branchNameMatch(): ValidatorFn {
+        return (control: AbstractControl) =>
+            (/^(?!-)[A-Za-z0-9- _@]+(?<!-)$/.test(control.value) && !/[_-]{2,}/.test(control.value)
+                ? null : { branchNameMatch: true });
+    }
 }

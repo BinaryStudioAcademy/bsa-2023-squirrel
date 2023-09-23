@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" [class.padding-bottom]="currentScriptResult || currentScriptError">
     <div class="main-content" *ngIf="scripts.length > 0">
         <div class="scripts-sector">
             <ul cdkListbox [cdkListboxValue]="scripts" class="listbox bordered">
@@ -37,9 +37,7 @@
         [scriptTitle]="selectedScript?.title ?? ''">
     </app-script-result>
 
-    <div class="spacing-div">
-        <app-button *ngIf="currentScriptResult && currentScriptResult.rowCount > rowsCountForToTopBtn"
-            (buttonOnClick)="scrollToResult(true)" text="To the top of the table">
-        </app-button>
-    </div>
+    <app-button class="to-top-btn" *ngIf="isToTopBtnShowed" (buttonOnClick)="scrollToResult(true)" variant="filled">
+        <fa-icon [icon]=" arrowUp" style="color: white"></fa-icon>
+    </app-button>
 </div>

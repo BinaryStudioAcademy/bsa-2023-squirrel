@@ -53,16 +53,21 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
     }
 
     ngOnInit(): void {
-        this.route.params.subscribe((params) => { this.currentProjectId = params['id']; });
-        this.branchService.getAllBranches(this.currentProjectId)
+        this.route.params.subscribe((params) => {
+            this.currentProjectId = params['id'];
+        });
+        this.branchService
+            .getAllBranches(this.currentProjectId)
             .pipe(takeUntil(this.unsubscribe$))
-            .subscribe((branches) => { this.branches = branches; });
+            .subscribe((branches) => {
+                this.branches = branches;
+            });
 
-        this.sharedProject.project$.pipe(
-            takeUntil(this.unsubscribe$),
-        ).subscribe({
-            next: project => {
-                this.isSettingsEnabled = project!.isAuthor;
+        this.sharedProject.project$.pipe(takeUntil(this.unsubscribe$)).subscribe({
+            next: (project) => {
+                if (project) {
+                    this.isSettingsEnabled = project.isAuthor;
+                }
             },
         });
     }
@@ -86,7 +91,7 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
 
     public getCurrentBranch() {
         const currentBranchId = this.branchService.getCurrentBranch(this.currentProjectId);
-        const currentBranch = this.branches.find(x => x.id === currentBranchId);
+        const currentBranch = this.branches.find((x) => x.id === currentBranchId);
 
         return currentBranch ? this.branches.indexOf(currentBranch) : 0;
     }
@@ -96,10 +101,8 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
     }
 
     public loadChanges() {
-        this.sharedProject.currentDb$.pipe(
-            takeUntil(this.unsubscribe$),
-        ).subscribe({
-            next: currentDb => {
+        this.sharedProject.currentDb$.pipe(takeUntil(this.unsubscribe$)).subscribe({
+            next: (currentDb) => {
                 if (!currentDb) {
                     this.notificationService.error('No database currently selected');
                 } else {

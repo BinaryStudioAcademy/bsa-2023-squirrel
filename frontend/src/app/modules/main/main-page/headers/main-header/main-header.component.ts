@@ -27,9 +27,8 @@ export class MainHeaderComponent implements OnInit {
         private sharedProject: SharedProjectService,
         public dialog: MatDialog,
         private databaseService: DatabaseService,
-        // eslint-disable-next-line no-empty-function
-    ) {
-    }
+    ) // eslint-disable-next-line no-empty-function
+    {}
 
     ngOnInit() {
         this.loadProject();
@@ -37,7 +36,7 @@ export class MainHeaderComponent implements OnInit {
 
     public onDatabaseSelected(value: string) {
         this.selectedDbName = value;
-        this.currentDb = this.databases!.find(database => database.dbName === this.selectedDbName)!;
+        this.currentDb = this.databases!.find((database) => database.dbName === this.selectedDbName)!;
 
         this.sharedProject.setCurrentDb(this.currentDb);
     }
@@ -62,7 +61,7 @@ export class MainHeaderComponent implements OnInit {
 
     private loadProject() {
         this.sharedProject.project$.subscribe({
-            next: project => {
+            next: (project) => {
                 if (project) {
                     this.project = project;
                     this.loadDatabases();
@@ -73,9 +72,9 @@ export class MainHeaderComponent implements OnInit {
 
     private loadDatabases() {
         this.databaseService.getAllDatabases(this.project.id).subscribe({
-            next: databases => {
+            next: (databases) => {
                 this.databases = databases;
-                this.dbNames = databases.map(database => database.dbName);
+                this.dbNames = databases.map((database) => database.dbName);
                 this.sharedProject.setCurrentDb(databases[0]);
             },
         });

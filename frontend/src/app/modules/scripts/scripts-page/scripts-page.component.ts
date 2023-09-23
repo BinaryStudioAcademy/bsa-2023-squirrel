@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { BaseComponent } from '@core/base/base.component';
@@ -7,6 +7,7 @@ import { NotificationService } from '@core/services/notification.service';
 import { ScriptService } from '@core/services/script.service';
 import { SharedProjectService } from '@core/services/shared-project.service';
 import { SpinnerService } from '@core/services/spinner.service';
+import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { finalize, Observable, of, switchMap, takeUntil, tap } from 'rxjs';
 
 import { DatabaseDto } from 'src/app/models/database/database-dto';
@@ -35,7 +36,9 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, CanCo
 
     public scriptResults: { [scriptId: number]: ScriptResultDto } = {};
 
-    public readonly rowsCountForToTopBtn = 20;
+    public isToTopBtnShowed = false;
+
+    public arrowUp = faArrowUp;
 
     private project: ProjectResponseDto;
 
@@ -52,6 +55,7 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, CanCo
         private spinner: SpinnerService,
         private sharedProject: SharedProjectService,
         private notification: NotificationService,
+        private elementRef: ElementRef,
     ) {
         super();
     }
@@ -212,6 +216,14 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, CanCo
                 targetComponent.scrollIntoView({ behavior: 'smooth' });
             }
         }, 0);
+    }
+
+    @HostListener('window:scroll')
+    public onScroll(): void {
+        const element = this.elementRef.nativeElement.querySelector('app-script-result');
+        const elementRect = element.getBoundingClientRect();
+
+        this.isToTopBtnShowed = elementRect.top < 0;
     }
 
     private removeLastErrorForSelectedScript(): void {

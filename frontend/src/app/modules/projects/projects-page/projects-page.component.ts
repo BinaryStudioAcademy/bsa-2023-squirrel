@@ -49,7 +49,6 @@ export class ProjectsPageComponent extends BaseComponent implements OnInit {
     public openCreateModal(): void {
         const dialogRef = this.dialog.open(CreateProjectModalComponent, {
             width: '450px',
-            height: '400px',
         });
 
         dialogRef.componentInstance.projectCreated.subscribe(() => this.loadProjects());

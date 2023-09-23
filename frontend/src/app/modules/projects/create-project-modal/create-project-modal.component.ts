@@ -41,7 +41,10 @@ export class CreateProjectModalComponent extends BaseComponent implements OnInit
 
     public createForm() {
         this.projectForm = this.fb.group({
-            projectName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
+            projectName: ['', [
+                Validators.required,
+                Validators.minLength(3),
+                Validators.maxLength(50), ValidationsFn.projectNameMatch()]],
             defaultBranchName: ['', [
                 Validators.required,
                 Validators.minLength(3),
@@ -56,7 +59,7 @@ export class CreateProjectModalComponent extends BaseComponent implements OnInit
 
         const newProject: NewProjectDto = {
             project: {
-                name: this.projectForm.value.projectName,
+                name: this.projectForm.value.projectName.trim(),
                 description: null,
                 dbEngine: parseInt(this.projectForm.value.selectedEngine, 10) as DbEngine,
             },
@@ -85,5 +88,11 @@ export class CreateProjectModalComponent extends BaseComponent implements OnInit
 
     public close(): void {
         this.dialogRef.close();
+    }
+
+    public replaceSpacesWithHyphens(event: Event) {
+        const inputElement = event.target as HTMLInputElement;
+
+        inputElement.value = BranchNameFormatter.formatBranchName(inputElement.value);
     }
 }

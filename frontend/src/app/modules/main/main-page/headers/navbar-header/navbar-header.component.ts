@@ -62,7 +62,7 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
         });
     }
 
-    public onBranchSelected(value: any) {
+    public onBranchSelected(value: BranchDto) {
         this.selectedBranch = value;
         this.branchService.selectBranch(this.currentProjectId, value.id);
     }

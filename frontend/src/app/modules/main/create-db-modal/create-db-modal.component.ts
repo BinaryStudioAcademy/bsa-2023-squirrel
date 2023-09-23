@@ -51,7 +51,7 @@ export class CreateDbModalComponent implements OnInit {
             port: +this.dbForm.value.port,
             username: this.dbForm.value.username,
             password: this.dbForm.value.password,
-            dbEngine: this.data.dbEngine - 1,
+            dbEngine: this.data.dbEngine,
             isLocalhost: this.localhost,
         };
 

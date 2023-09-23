@@ -113,17 +113,17 @@ export class PullRequestListComponent {
         return [pullRequest, pullRequest, pullRequest, pullRequest, pullRequest, pullRequest, pullRequest];
     }
 
-    filter(item: any, value: string) {
+    filter(item: UserDto, value: string) {
         return UserPredicates.findByFullNameOrUsernameOrEmail(item, value);
     }
 
-    onAuthorSelectionChange($event: any) {
+    onAuthorSelectionChange($event: string) {
         // TODO: add filter logic, remove log
         // eslint-disable-next-line no-console
         console.log($event);
     }
 
-    onBranchTypeSelectionChange($event: any) {
+    onBranchTypeSelectionChange($event: string) {
         // TODO: add filter logic, remove log
         // eslint-disable-next-line no-console
         console.log($event);

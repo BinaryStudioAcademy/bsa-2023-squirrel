@@ -40,7 +40,7 @@ export class AuthService {
         return this.currentUser
             ? of(this.currentUser)
             : this.userService.getUserFromToken().pipe(
-                map((resp: any) => {
+                map((resp: UserDto) => {
                     this.currentUser = resp;
                     this.eventService.userChanged(this.currentUser);
 

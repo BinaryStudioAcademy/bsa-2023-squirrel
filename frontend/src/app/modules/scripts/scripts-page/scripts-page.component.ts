@@ -1,3 +1,4 @@
+import { ListboxValueChangeEvent } from '@angular/cdk/listbox';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -44,8 +45,8 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
         this.initializeForm();
     }
 
-    public onScriptSelected($event: any) {
-        const option = $event.option.element as HTMLLIElement;
+    public onScriptSelected($event: ListboxValueChangeEvent<ScriptDto>) {
+        const option = $event.option!.element as HTMLLIElement;
 
         if (this.selectedOptionElement) {
             this.selectedOptionElement.classList.remove(this.selectedOptionClass);

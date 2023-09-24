@@ -125,12 +125,12 @@
                     </div>
                     <div class="checkbox-group">
                         <app-checkbox
-                            [checked]="squirrelNotification"
-                            (change)="squirrelNotification = !squirrelNotification"
+                            [isChecked]="isSquirrelNotificationEnabled"
+                            (change)="isSquirrelNotificationEnabled = !isSquirrelNotificationEnabled"
                             label="On Squirrel"></app-checkbox>
                         <app-checkbox
-                            [checked]="emailNotification"
-                            (change)="emailNotification = !emailNotification"
+                            [isChecked]="isEmailNotificationEnabled"
+                            (change)="isEmailNotificationEnabled = !isEmailNotificationEnabled"
                             label="Email"></app-checkbox>
                     </div>
                 </div>

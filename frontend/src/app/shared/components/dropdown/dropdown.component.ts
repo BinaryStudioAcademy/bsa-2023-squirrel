@@ -14,18 +14,18 @@ import {
     templateUrl: './dropdown.component.html',
     styleUrls: ['./dropdown.component.sass'],
 })
-export class DropdownComponent implements OnChanges {
+export class DropdownComponent<T> implements OnChanges {
     public searchTerm: string = '';
 
     public isActive = false;
 
-    @Input() options: unknown[] = [];
+    @Input() options: T[] = [];
 
     @Input() width: number;
 
     @Input() selectedByDefault: number = 0;
 
-    @Input() includeButton: boolean = false;
+    @Input() isButtonIncluded: boolean = false;
 
     @Output() selectedValueChanged = new EventEmitter();
 
@@ -33,13 +33,13 @@ export class DropdownComponent implements OnChanges {
 
     @Input() dropdownIcon: string;
 
-    @Input() template: TemplateRef<unknown>;
+    @Input() template: TemplateRef<T>;
 
     @Input() modalOption: string = '+ Add New';
 
-    @Input() filterPredicate?: (item: any, value: string) => boolean = this.filterByName;
+    @Input() filterPredicate?: (item: T, value: string) => boolean = this.filterByName;
 
-    public selectedOption: any;
+    public selectedOption: T;
 
     @HostListener('document:click', ['$event'])
     onClick(event: Event): void {
@@ -59,7 +59,7 @@ export class DropdownComponent implements OnChanges {
         }
     }
 
-    onOptionSelected(value: string) {
+    onOptionSelected(value: T) {
         this.selectedOption = value;
         this.selectedValueChanged.emit(this.selectedOption);
     }
@@ -68,12 +68,12 @@ export class DropdownComponent implements OnChanges {
         this.buttonClicked.emit();
     }
 
-    public filterOptions(): string[] {
-        return this.options.filter((option) => this.filterPredicate?.call(this, option, this.searchTerm)) as string[];
+    public filterOptions(): T[] {
+        return this.options.filter((option) => this.filterPredicate?.call(this, option, this.searchTerm)) as T[];
     }
 
-    public filterByName(option: string, value: string) {
-        return option.toLowerCase().includes(value);
+    public filterByName(option: T, value: string) {
+        return (option as unknown as string).toLowerCase().includes(value);
     }
 
     public toggleActiveClass() {

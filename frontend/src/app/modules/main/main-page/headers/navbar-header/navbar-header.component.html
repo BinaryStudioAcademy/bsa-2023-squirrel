@@ -19,7 +19,7 @@
             [template]="branchtemplate"
             [filterPredicate]="filterBranch"
             [options]="branches"
-            [includeButton]="true"></app-dropdown>
+            [isButtonIncluded]="true"></app-dropdown>
         <ng-template #branchtemplate let-item>
            {{ item.name }}
         </ng-template>

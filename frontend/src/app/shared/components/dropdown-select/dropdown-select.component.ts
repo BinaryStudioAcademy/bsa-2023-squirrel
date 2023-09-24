@@ -52,7 +52,7 @@ export class DropdownSelectComponent<T> implements OnInit {
 
     public currentValue: T;
 
-    public dropdownOpen: boolean = false;
+    public isDropdownOpen: boolean = false;
 
     public get dropdownElement(): Element {
         return this.element.nativeElement.querySelector('.dropdown-list');
@@ -73,7 +73,7 @@ export class DropdownSelectComponent<T> implements OnInit {
 
     onInputChanged() {
         this.filteredOptions = this.filter(this.input);
-        if (!this.dropdownOpen) {
+        if (!this.isDropdownOpen) {
             this.toggleDropdown();
         }
     }
@@ -92,7 +92,7 @@ export class DropdownSelectComponent<T> implements OnInit {
 
     closeDropdown() {
         this.dropdownElement.setAttribute('aria-expanded', 'false');
-        this.dropdownOpen = false;
+        this.isDropdownOpen = false;
     }
 
     sanitize(value: unknown) {
@@ -137,8 +137,8 @@ export class DropdownSelectComponent<T> implements OnInit {
     }
 
     toggleDropdown() {
-        this.dropdownOpen = !this.dropdownOpen;
-        this.dropdownElement.setAttribute('aria-expanded', this.dropdownOpen ? 'true' : 'false');
+        this.isDropdownOpen = !this.isDropdownOpen;
+        this.dropdownElement.setAttribute('aria-expanded', this.isDropdownOpen ? 'true' : 'false');
     }
 
     filter(filter: string) {
@@ -156,7 +156,7 @@ export class DropdownSelectComponent<T> implements OnInit {
     // To allow keyboard manipulations
     @HostListener('document:keydown', ['$event'])
     handleKeyPressedEvents($event: KeyboardEvent) {
-        if (!this.dropdownOpen) {
+        if (!this.isDropdownOpen) {
             return;
         }
         if (

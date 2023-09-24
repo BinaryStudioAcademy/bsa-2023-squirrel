@@ -9,7 +9,7 @@ export class LoadingSpinnerComponent {
     // eslint-disable-next-line no-empty-function
     constructor(public spinnerService: SpinnerService) {}
 
-    @Input() overlay: boolean;
+    @Input() isOverlay: boolean;
 
     @Input() size = '20px';
 

@@ -1,6 +1,6 @@
 <div class="rounded-container">
     <div class="header">
-        <h5>Pull Requests</h5>
+        <h5 class="heading">Pull Requests</h5>
         <app-button [height]="'100%'" [text]="'Create PR'"></app-button>
     </div>
 
@@ -27,23 +27,23 @@
         </div>
         <div class="checkbox">
             <input type="checkbox" id="reviewing" />
-            <label for="reviewing">I'm reviewing</label>
+            <label class="checkbox-label" for="reviewing">I'm reviewing</label>
         </div>
         <ng-template #usertemplate let-item>
             <div class="user-container">
-                <img src="{{ item.avatarUrl }}" alt="User Avatar"/>
-                <p>{{ getFullName(item) }}</p>
+                <img class="user-avatar" src="{{ item.avatarUrl }}" alt="User Avatar"/>
+                <p class="text-content">{{ getFullName(item) }}</p>
             </div>
         </ng-template>
         <ng-template #chiptemplate let-item>
-            <p>{{ item.email }}</p>
+            <p class="text-content">{{ item.email }}</p>
         </ng-template>
     </div>
     <div class="table">
         <div class="table-headers">
-            <p class="first">Summary</p>
-            <p class="second">Activity</p>
-            <p class="third">Reviewers</p>
+            <p class="text-content first">Summary</p>
+            <p class="text-content second">Activity</p>
+            <p class="text-content third">Reviewers</p>
         </div>
         <div class="table-content">
             <div class="pull-request-container" *ngFor="let pr of pullRequests">

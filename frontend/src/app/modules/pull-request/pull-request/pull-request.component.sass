@@ -28,14 +28,14 @@
     width: 35%
     display: flex
     justify-content: center
-    > div
+    > .activity-element
         display: flex
         align-items: center
 
 .comments
     > *
         padding-right: 3px
-    p
+    .comment-count
         margin-bottom: 4px
 
 .reviewiers
@@ -54,7 +54,7 @@
     outline: 4px solid $avatar-offline-outline
     .online
         outline: 4px solid $avatar-online-outline
-    img
+    .avatar-picture
         width: 100%
         height: 100%
         border-radius: 50%
@@ -88,7 +88,7 @@
         margin-right: 12px
 
 .secondary-info
-    p
+    .content
         font-size: 12px
         opacity: 0.5
         font-style: normal
@@ -102,10 +102,10 @@
     display: inline-block
     white-space: nowrap
     align-items: center
-    p
+    .content
         padding: 9px
         margin-block: 0
-p
+.content
     margin-bottom: 0
 
 @media screen and (max-width: 750px)

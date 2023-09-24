@@ -29,6 +29,12 @@ const routes: Routes = [
         loadChildren: () => import('./modules/user-profile/user-profile.module').then((m) => m.UserProfileModule),
     },
     {
+        path: 'downloads',
+        canActivate: [AuthGuard],
+        data: { requiresToken: true },
+        loadChildren: () => import('./modules/downloads/downloads.module').then((m) => m.DownloadsModule),
+    },
+    {
         path: '**',
         component: NotFoundComponent,
     },

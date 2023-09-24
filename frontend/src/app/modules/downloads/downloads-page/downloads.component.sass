@@ -1,0 +1,57 @@
+@import "/src/styles/color"
+@import "/src/styles/weights"
+
+.downloads-container
+  width: 100%
+  margin: auto
+  padding: 30px 30px 30px 80px
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1)
+  font-weight: $semi-bold-weight
+
+.header
+    display: flex
+    justify-content: space-between
+    align-items: center
+    border-bottom: 1px solid $grey
+    padding-bottom: 20px
+    padding-left: 20px
+
+.downloads-header
+    font-size: 28px
+    font-weight: $bold-weight
+
+.downloads-container
+    display: flex
+    justify-content: space-between
+    padding: 30px
+
+.content
+    display: flex
+    flex-direction: column
+    width: 100%
+
+.section
+    margin-top: 20px
+    background-color: $project-background-color
+    padding-bottom: 20px
+    margin-left: 30px
+
+.download-card
+    width: 30%
+    box-shadow: 0 4px 8px $light-shadow
+    transition: all 0.3s ease
+    cursor: pointer
+    padding: 20px
+    text-align: center
+
+    &:hover
+        transform: translateY(-10px)
+        box-shadow: 0 8px 16px $dark-shadow
+
+    fa-icon
+        width: 100%
+        margin: 0 auto
+        font-size: 48px
+
+    h3
+        margin-top: 20px

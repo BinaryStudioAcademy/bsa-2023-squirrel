@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OperatingSystem = Squirrel.Core.Common.Models.OperatingSystem;
 
 namespace Squirrel.Core.WebAPI.Controllers;
 
@@ -13,9 +14,10 @@ public class StaticFilesController : Controller
         _configuration = configuration;
     }
 
-    [HttpGet("squirrel-installer"), DisableRequestSizeLimit]
-    public async Task<IActionResult> DownloadSquirrelInstaller()
+    [HttpGet("squirrel-installer/{operatingSystem}"), DisableRequestSizeLimit]
+    public async Task<IActionResult> DownloadSquirrelInstaller(OperatingSystem operatingSystem)
     {
+        // path will be updated using 'operatingSystem' after task 152
         var filePath = _configuration["ConsoleSetupFilePath"];
 
         if (!System.IO.File.Exists(filePath))
@@ -23,6 +25,7 @@ public class StaticFilesController : Controller
             return NotFound();
         }
 
+        // fileDownloadName will be updated using 'operatingSystem' after task 152
         return File(
             await System.IO.File.ReadAllBytesAsync(filePath),
             "application/octet-stream",

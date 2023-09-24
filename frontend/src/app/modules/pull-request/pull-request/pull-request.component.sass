@@ -38,25 +38,6 @@
     p
         margin-bottom: 4px
 
-.avatar-container
-    list-style-type: none
-    display: flex
-    margin: auto
-    padding: 0
-    flex-direction: row
-    .avatar:not(:first-child)
-        margin-left: -10px
-    .overflowed
-        @extend .avatar
-        display: flex
-        justify-content: center
-        align-items: center
-        background-color: $misc-background-color
-        color: $text-light
-        font-weight: $semi-bold-weight
-        font-size: 14px
-        outline-color: white !important
-
 .reviewiers
     width: 15%
     display: flex
@@ -78,6 +59,25 @@
         height: 100%
         border-radius: 50%
         object-fit: cover
+
+.avatar-container
+    list-style-type: none
+    display: flex
+    margin: auto
+    padding: 0
+    flex-direction: row
+    .avatar:not(:first-child)
+        margin-left: -10px
+    .overflowed
+        @extend .avatar
+        display: flex
+        justify-content: center
+        align-items: center
+        background-color: $misc-background-color
+        color: $text-light
+        font-weight: $semi-bold-weight
+        font-size: 14px
+        outline-color: white
 
 .primary-info
     display: flex

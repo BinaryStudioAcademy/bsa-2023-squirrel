@@ -18,6 +18,7 @@ import { ScriptDto } from 'src/app/models/scripts/script-dto';
 import { ScriptErrorDto } from 'src/app/models/scripts/script-error-dto';
 import { ScriptResultDto } from 'src/app/models/scripts/script-result-dto';
 
+import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 import { CreateScriptModalComponent } from '../create-script-modal/create-script-modal.component';
 
 @Component({
@@ -74,9 +75,11 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, CanCo
         this.loadCurrentDb();
     }
 
-    public canDeactivate(): boolean {
+    public canDeactivate(): Observable<boolean> | boolean {
         if (this.form.dirty) {
-            return window.confirm('You have unsaved changes. Do you really want to leave?');
+            const dialogRef = this.dialog.open(ConfirmationDialogComponent);
+
+            return dialogRef.afterClosed();
         }
 
         return true;
@@ -88,14 +91,18 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, CanCo
         }
 
         if (this.form.dirty) {
-            if (!window.confirm('You have unsaved changes in the script. Do you really want to leave?')) {
-                return;
-            }
+            const dialogRef = this.dialog.open(ConfirmationDialogComponent);
+
+            dialogRef.afterClosed().subscribe((confirmed) => {
+                if (confirmed) {
+                    this.selectScript(script);
+                }
+            });
+
+            return;
         }
 
-        this.selectedScript = script;
-        this.updateEditorContent(script.content);
-        this.form.markAsPristine();
+        this.selectScript(script);
     }
 
     public openCreateModal(): void {
@@ -300,5 +307,11 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, CanCo
         this.form.patchValue({
             scriptContent: content,
         });
+    }
+
+    private selectScript(script: ScriptDto): void {
+        this.selectedScript = script;
+        this.updateEditorContent(script.content);
+        this.form.markAsPristine();
     }
 }

@@ -18,7 +18,7 @@ public sealed class ConsoleAppHub : Hub<IExecuteOnClientSide>
 
     public override async Task OnConnectedAsync()
     {
-        await Clients.Caller.SetClientId(Context.UserIdentifier);
+        await Clients.Caller.SetClientId(Context.UserIdentifier!);
     }
     
     public async Task ProcessReceivedDataFromClientSide(Guid queryId, string requestActionName, QueryResultTable queryResultTable)

@@ -10,8 +10,9 @@ export class EmailOverflowDirective implements AfterViewInit {
 
     private overflowSeparator: string = '...';
 
-    // eslint-disable-next-line no-empty-function
-    constructor(private el: ElementRef, private renderer: Renderer2) {}
+    constructor(private el: ElementRef, private renderer: Renderer2) {
+        // Intentionally left empty for dependency injection purposes only
+    }
 
     ngAfterViewInit(): void {
         this.truncate();

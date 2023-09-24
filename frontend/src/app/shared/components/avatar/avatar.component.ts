@@ -36,8 +36,9 @@ export class AvatarComponent implements OnInit {
         this.initializeAvatar();
     }
 
-    // eslint-disable-next-line no-empty-function
-    constructor(private hslGenerator: HSLGenerator) {}
+    constructor(private hslGenerator: HSLGenerator) {
+        // Intentionally left empty for dependency injection purposes only
+    }
 
     private initializeAvatar(): void {
         this.hostStyle = {

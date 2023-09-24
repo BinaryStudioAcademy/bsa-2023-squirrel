@@ -50,8 +50,9 @@ export class DropdownComponent<T> implements OnChanges {
 
     constructor(
         private elementRef: ElementRef,
-        // eslint-disable-next-line no-empty-function
-    ) {}
+    ) {
+        // Intentionally left empty for dependency injection purposes only
+    }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['options'] || changes['selectedByDefault']) {

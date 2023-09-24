@@ -11,8 +11,9 @@ import { HttpInternalService } from './http-internal.service';
 export class BranchService {
     private routePrefix = '/api/branch';
 
-    // eslint-disable-next-line no-empty-function
-    constructor(private httpService: HttpInternalService) { }
+    constructor(private httpService: HttpInternalService) {
+        // Intentionally left empty for dependency injection purposes only
+    }
 
     public getAllBranches(projectId: number) {
         return this.httpService.getRequest<BranchDto[]>(`${this.routePrefix}/${projectId}`);

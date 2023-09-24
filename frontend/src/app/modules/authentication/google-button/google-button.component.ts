@@ -16,8 +16,9 @@ export class GoogleButtonComponent implements AfterViewInit {
 
     public width: string;
 
-    // eslint-disable-next-line no-empty-function
-    constructor(private authService: AuthService, private spinner: SpinnerService, private elementRef: ElementRef) {}
+    constructor(private authService: AuthService, private spinner: SpinnerService, private elementRef: ElementRef) {
+        // Intentionally left empty for dependency injection purposes only
+    }
 
     ngAfterViewInit(): void {
         this.spinner.show();
@@ -51,8 +52,6 @@ export class GoogleButtonComponent implements AfterViewInit {
     }
 
     private handleCredentialResponse(response: CredentialResponse) {
-        // eslint-disable-next-line no-console
-        console.log(`Encoded JWT ID token: ${response.credential}`);
         this.authService.signInViaGoogle(response);
     }
 }

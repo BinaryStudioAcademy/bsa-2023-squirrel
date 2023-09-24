@@ -16,8 +16,9 @@ export class BroadcastHubService {
 
     private subscriptions: Subscription[] = [];
 
-    // eslint-disable-next-line no-empty-function
-    constructor(private hubFactory: SignalRHubFactoryService) {}
+    constructor(private hubFactory: SignalRHubFactoryService) {
+        // Intentionally left empty for dependency injection purposes only
+    }
 
     async start() {
         this.hubConnection = this.hubFactory.createHub(this.hubUrl);

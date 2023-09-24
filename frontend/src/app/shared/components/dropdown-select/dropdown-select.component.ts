@@ -58,8 +58,9 @@ export class DropdownSelectComponent<T> implements OnInit {
         return this.element.nativeElement.querySelector('.dropdown-list');
     }
 
-    // eslint-disable-next-line no-empty-function
-    constructor(private element: ElementRef, private sanitizer: DomSanitizer) {}
+    constructor(private element: ElementRef, private sanitizer: DomSanitizer) {
+        // Intentionally left empty for dependency injection purposes only
+    }
 
     ngOnInit(): void {
         this.internalOptions = [...this.options];

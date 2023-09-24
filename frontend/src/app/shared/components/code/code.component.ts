@@ -19,8 +19,9 @@ export class CodeComponent implements OnChanges {
 
     private deleteColor: string = 'rgba(248,81,73,0.3)';
 
-    // eslint-disable-next-line no-empty-function
-    constructor(private renderer: Renderer2, private el: ElementRef) {}
+    constructor(private renderer: Renderer2, private el: ElementRef) {
+        // Intentionally left empty for dependency injection purposes only
+    }
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['textPair']) {

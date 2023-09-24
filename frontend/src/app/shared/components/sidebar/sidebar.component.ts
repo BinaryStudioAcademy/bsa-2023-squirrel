@@ -7,8 +7,9 @@ import { FilesDownloaderService } from '@core/services/files-downloader.service'
     styleUrls: ['./sidebar.component.sass'],
 })
 export class SidebarComponent {
-    // eslint-disable-next-line no-empty-function
-    constructor(private filesDownloader: FilesDownloaderService) {}
+    constructor(private filesDownloader: FilesDownloaderService) {
+        // Intentionally left empty for dependency injection purposes only
+    }
 
     downloadApp() {
         this.filesDownloader.downloadSquirrelInstaller();

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { NotificationService } from '@core/services/notification.service';
 import { UserPredicates } from '@shared/helpers/user-predicates';
 
 import { Branch } from 'src/app/models/branch/branch';
@@ -21,7 +22,7 @@ export class PullRequestListComponent {
 
     public searchForm: FormGroup = new FormGroup({});
 
-    constructor(private fb: FormBuilder) {
+    constructor(private fb: FormBuilder, private notificationService: NotificationService) {
         this.dropdownItems = this.getBranchTypes();
         this.searchForm = this.fb.group({
             search: ['', []],
@@ -118,14 +119,10 @@ export class PullRequestListComponent {
     }
 
     onAuthorSelectionChange($event: string) {
-        // TODO: add filter logic, remove log
-        // eslint-disable-next-line no-console
-        console.log($event);
+        this.notificationService.info(`Author '${$event}' selected successfully`);
     }
 
     onBranchTypeSelectionChange($event: string) {
-        // TODO: add filter logic, remove log
-        // eslint-disable-next-line no-console
-        console.log($event);
+        this.notificationService.info(`Branch '${$event}' selected successfully`);
     }
 }

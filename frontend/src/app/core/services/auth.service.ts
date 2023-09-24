@@ -31,8 +31,10 @@ export class AuthService {
         private ngZone: NgZone,
         private spinner: SpinnerService,
         private userService: UserService,
-        private eventService: EventService, // eslint-disable-next-line no-empty-function
-    ) {}
+        private eventService: EventService,
+    ) {
+        // Intentionally left empty for dependency injection purposes only
+    }
 
     private currentUser: UserDto | undefined;
 

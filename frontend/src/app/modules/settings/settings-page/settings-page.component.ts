@@ -7,8 +7,9 @@ import { SettingsService } from '@core/services/settings.service';
     styleUrls: ['./settings-page.component.sass'],
 })
 export class SettingsPageComponent {
-    // eslint-disable-next-line no-empty-function
-    constructor(private settingsService: SettingsService) {}
+    constructor(private settingsService: SettingsService) {
+        // Intentionally left empty for dependency injection purposes only
+    }
 
     get activeTab(): string {
         return this.settingsService.activeTab;

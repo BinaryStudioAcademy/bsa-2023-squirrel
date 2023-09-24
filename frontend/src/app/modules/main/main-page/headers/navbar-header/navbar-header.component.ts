@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { BaseComponent } from '@core/base/base.component';
 import { BranchService } from '@core/services/branch.service';
 import { LoadChangesService } from '@core/services/load-changes.service';
+import { NotificationService } from '@core/services/notification.service';
 import { SharedProjectService } from '@core/services/shared-project.service';
 import { takeUntil } from 'rxjs';
 
@@ -36,13 +37,13 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
         { displayName: 'Settings', path: './settings' },
     ];
 
-    // eslint-disable-next-line no-empty-function
     constructor(
         private branchService: BranchService,
         public dialog: MatDialog,
         private route: ActivatedRoute,
         private sharedProject: SharedProjectService,
         private changesService: LoadChangesService,
+        private notificationService: NotificationService,
     ) {
         super();
     }
@@ -91,6 +92,15 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
     }
 
     public loadChanges() {
-        this.changesService.loadChangesRequest();
+        this.changesService.loadChangesRequest()
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe({
+                next: () => {
+                    this.notificationService.info('Changes loaded successfully');
+                },
+                error: () => {
+                    this.notificationService.error('An error occurred while attempting to load changes');
+                },
+            });
     }
 }

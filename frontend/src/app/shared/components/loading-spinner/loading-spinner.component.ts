@@ -6,8 +6,9 @@ import { SpinnerService } from '@core/services/spinner.service';
     templateUrl: './loading-spinner.component.html',
 })
 export class LoadingSpinnerComponent {
-    // eslint-disable-next-line no-empty-function
-    constructor(public spinnerService: SpinnerService) {}
+    constructor(public spinnerService: SpinnerService) {
+        // Intentionally left empty for dependency injection purposes only
+    }
 
     @Input() isOverlay: boolean;
 

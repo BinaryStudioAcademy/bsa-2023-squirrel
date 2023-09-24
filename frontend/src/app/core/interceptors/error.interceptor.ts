@@ -8,8 +8,9 @@ import { catchError, switchMap } from 'rxjs/operators';
     providedIn: 'root',
 })
 export class ErrorInterceptor implements HttpInterceptor {
-    // eslint-disable-next-line no-empty-function
-    constructor(private authService: AuthService) {}
+    constructor(private authService: AuthService) {
+        // Intentionally left empty for dependency injection purposes only
+    }
 
     intercept(request: HttpRequest<unknown>, next: HttpHandler) {
         return next.handle(request).pipe(

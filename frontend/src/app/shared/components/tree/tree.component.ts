@@ -1,4 +1,3 @@
-/* eslint-disable function-paren-newline */
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 import { TreeNode } from './models/tree-node.model';
@@ -45,8 +44,7 @@ export class TreeComponent implements OnInit {
             .map((category) => ({
                 name: category.name,
                 children: category.children?.filter((subcategory) =>
-                    subcategory.name.toLowerCase().includes(searchTerm.toLowerCase()),
-                ),
+                    subcategory.name.toLowerCase().includes(searchTerm.toLowerCase())),
             }))
             .filter((category) => category.children?.length && category.children?.length > 0);
     }

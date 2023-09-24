@@ -27,8 +27,9 @@ export class CreateDbModalComponent implements OnInit {
         private databaseService: DatabaseService,
         private notificationService: NotificationService,
         public dialogRef: MatDialogRef<CreateDbModalComponent>,
-        // eslint-disable-next-line no-empty-function
-    ) {}
+    ) {
+        // Intentionally left empty for dependency injection purposes only
+    }
 
     public ngOnInit() {
         this.initializeForm();

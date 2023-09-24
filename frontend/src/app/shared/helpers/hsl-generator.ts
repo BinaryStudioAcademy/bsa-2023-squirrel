@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 @Injectable({
     providedIn: 'root',
 })
-export class HslGeneratorService {
+export class HSLGenerator {
     public generateHSLString(name: string): string {
         const hRange = [0, 360];
         const sRange = [50, 75];

@@ -33,7 +33,9 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
 
     public passwordForm: FormGroup = new FormGroup({});
 
-    private readonly maxFileLength = 5 * 1024 * 1024;
+    private readonly megabyteLength = 1048576;
+
+    private readonly maxFileLength = 5242880;
 
     private readonly allowedTypes = ['image/png', 'image/jpeg'];
 
@@ -235,7 +237,7 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
 
     public fileValidate(file: File) {
         if (file.size > this.maxFileLength) {
-            this.notificationService.error(`The file size should not exceed ${this.maxFileLength / (1024 * 1024)}MB`);
+            this.notificationService.error(`The file size should not exceed ${this.maxFileLength / this.megabyteLength}MB`);
 
             return false;
         }

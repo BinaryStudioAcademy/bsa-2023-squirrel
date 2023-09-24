@@ -8,6 +8,10 @@ import { catchError, switchMap } from 'rxjs/operators';
     providedIn: 'root',
 })
 export class ErrorInterceptor implements HttpInterceptor {
+    private readonly unauthorizedErrorStatusCode = 401;
+
+    private readonly forbiddenErrorStatusCode = 403;
+
     constructor(private authService: AuthService) {
         // Intentionally left empty for dependency injection purposes only
     }
@@ -15,11 +19,11 @@ export class ErrorInterceptor implements HttpInterceptor {
     intercept(request: HttpRequest<unknown>, next: HttpHandler) {
         return next.handle(request).pipe(
             catchError((error: HttpErrorResponse) => {
-                if (error.status === 401 && error.headers.has('Token-Expired')) {
+                if (error.status === this.unauthorizedErrorStatusCode && error.headers.has('Token-Expired')) {
                     return this.authService.refreshTokens().pipe(switchMap(() => next.handle(request)));
                 }
 
-                if (error.status === 403) {
+                if (error.status === this.forbiddenErrorStatusCode) {
                     this.authService.signOut();
                 }
 

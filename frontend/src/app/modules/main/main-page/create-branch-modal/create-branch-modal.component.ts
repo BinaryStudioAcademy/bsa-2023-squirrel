@@ -26,6 +26,8 @@ export class CreateBranchModalComponent extends BaseComponent implements OnInit 
 
     public branchForm: FormGroup;
 
+    private readonly invalidTokenErrorType = 7;
+
     constructor(
         public dialogRef: MatDialogRef<CreateBranchModalComponent>,
         private fb: FormBuilder,
@@ -69,7 +71,7 @@ export class CreateBranchModalComponent extends BaseComponent implements OnInit 
             .addBranch(this.projectId, branch)
             .pipe(
                 catchError((error: ErrorDetailsDto): Observable<BranchDto | null> => {
-                    if (error.errorType === 7) {
+                    if (error.errorType === this.invalidTokenErrorType) {
                         this.notificationService.error(error.message);
                     } else {
                         this.notificationService.error('Failed to create branch');

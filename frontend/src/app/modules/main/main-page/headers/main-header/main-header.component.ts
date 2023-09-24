@@ -24,11 +24,11 @@ export class MainHeaderComponent implements OnInit {
     private currentDb: DatabaseDto;
 
     constructor(
-        private sharedProject: SharedProjectService,
         public dialog: MatDialog,
+        private sharedProject: SharedProjectService,
         private databaseService: DatabaseService,
-    ) // eslint-disable-next-line no-empty-function
-    {}
+        // eslint-disable-next-line no-empty-function
+    ) {}
 
     ngOnInit() {
         this.loadProject();

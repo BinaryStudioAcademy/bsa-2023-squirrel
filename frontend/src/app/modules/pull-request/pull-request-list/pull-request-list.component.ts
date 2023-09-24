@@ -32,12 +32,12 @@ export class PullRequestListComponent {
         this.dropdownAuthors = this.getAuthors();
     }
 
-    getBranchTypes() {
+    private getBranchTypes() {
         // TODO: fetch data from server, remove placeholder data
         return ['All', 'Open', 'Declined', 'Merged'];
     }
 
-    getAuthors() {
+    private getAuthors() {
         // TODO: fetch data from server, remove placeholder data
         const user = {
             id: 1,
@@ -67,11 +67,11 @@ export class PullRequestListComponent {
         return [user, user2, user3];
     }
 
-    getFullName(item: UserDto) {
+    public getFullName(item: UserDto) {
         return `${item.firstName} ${item.lastName} ${item.userName ? `(${item.userName})` : ''}`;
     }
 
-    getPullRequests() {
+    private getPullRequests() {
         // TODO: fetch data from server, remove placeholder data
         const user = {
             id: 1,
@@ -114,15 +114,15 @@ export class PullRequestListComponent {
         return [pullRequest, pullRequest, pullRequest, pullRequest, pullRequest, pullRequest, pullRequest];
     }
 
-    filter(item: UserDto, value: string) {
+    public filter(item: UserDto, value: string) {
         return UserPredicates.findByFullNameOrUsernameOrEmail(item, value);
     }
 
-    onAuthorSelectionChange($event: string) {
+    public onAuthorSelectionChange($event: string) {
         this.notificationService.info(`Author '${$event}' selected successfully`);
     }
 
-    onBranchTypeSelectionChange($event: string) {
+    public onBranchTypeSelectionChange($event: string) {
         this.notificationService.info(`Branch '${$event}' selected successfully`);
     }
 }

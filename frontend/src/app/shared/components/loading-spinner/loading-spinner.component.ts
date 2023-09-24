@@ -10,15 +10,15 @@ export class LoadingSpinnerComponent {
         // Intentionally left empty for dependency injection purposes only
     }
 
-    @Input() isOverlay: boolean;
+    @Input() public isOverlay: boolean;
 
-    @Input() size = '20px';
+    @Input() public size = '20px';
 
-    @Input() top = '30%';
+    @Input() public top = '30%';
 
-    @Input() left = '49%';
+    @Input() public left = '49%';
 
-    @Input() position = 'absolute';
+    @Input() public position = 'absolute';
 
-    @Input() margin = '100px auto';
+    @Input() public margin = '100px auto';
 }

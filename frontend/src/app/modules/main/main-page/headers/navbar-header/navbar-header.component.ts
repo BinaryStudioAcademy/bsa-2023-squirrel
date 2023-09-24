@@ -48,7 +48,7 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
         super();
     }
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.route.params.subscribe((params) => { this.currentProjectId = params['id']; });
         this.branchService.getAllBranches(this.currentProjectId)
             .pipe(takeUntil(this.unsubscribe$))
@@ -87,7 +87,7 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
         return currentBranch ? this.branches.indexOf(currentBranch) : 0;
     }
 
-    filterBranch(item: BranchDto, value: string) {
+    public filterBranch(item: BranchDto, value: string) {
         return item.name.includes(value);
     }
 

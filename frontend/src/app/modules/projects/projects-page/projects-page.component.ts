@@ -28,7 +28,7 @@ export class ProjectsPageComponent extends BaseComponent implements OnInit {
         super();
     }
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.loadProjects();
     }
 
@@ -55,7 +55,7 @@ export class ProjectsPageComponent extends BaseComponent implements OnInit {
         dialogRef.componentInstance.projectCreated.subscribe(() => this.loadProjects());
     }
 
-    chooseProject(project: ProjectResponseDto) {
+    public chooseProject(project: ProjectResponseDto) {
         this.sharedProject.setProject(project);
         this.router.navigateByUrl(`main/${project.id}`);
     }

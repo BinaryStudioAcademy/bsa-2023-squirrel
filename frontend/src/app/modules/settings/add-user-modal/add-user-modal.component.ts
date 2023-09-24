@@ -40,11 +40,11 @@ export class AddUserModalComponent extends BaseComponent implements OnInit {
         super();
     }
 
-    getFullName(item: UserDto) {
+    public getFullName(item: UserDto) {
         return `${item.firstName} ${item.lastName} ${item.userName ? `(${item.userName})` : ''}`;
     }
 
-    filter(item: any, value: string) {
+    public filter(item: any, value: string) {
         return UserPredicates.findByFullNameOrUsernameOrEmail(item, value);
     }
 
@@ -74,7 +74,7 @@ export class AddUserModalComponent extends BaseComponent implements OnInit {
         this.selectedUsers = selectedItems;
     }
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.userService
             .getAllUsers()
             .pipe(takeUntil(this.unsubscribe$))

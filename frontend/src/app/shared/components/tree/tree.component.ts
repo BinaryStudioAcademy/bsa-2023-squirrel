@@ -8,13 +8,13 @@ import { TreeNode } from './models/tree-node.model';
     styleUrls: ['./tree.component.sass'],
 })
 export class TreeComponent implements OnInit {
-    @Input() asCheckList: boolean = false;
+    @Input() public asCheckList: boolean = false;
 
-    @Input() height: string = '100%';
+    @Input() public height: string = '100%';
 
-    @Output() selectionChange = new EventEmitter<{ selectedNodes: TreeNode[]; originalStructure: TreeNode[] }>();
+    @Output() public selectionChange = new EventEmitter<{ selectedNodes: TreeNode[]; originalStructure: TreeNode[] }>();
 
-    @Input() treeData: TreeNode[] = [
+    @Input() public treeData: TreeNode[] = [
         {
             name: 'Category 1',
             children: [{ name: 'Subcategory 1.1' }, { name: 'Subcategory 1.2' }],
@@ -27,7 +27,7 @@ export class TreeComponent implements OnInit {
 
     public filteredTreeData: TreeNode[] = [];
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.filteredTreeData = this.treeData;
     }
 

@@ -13,12 +13,12 @@ export class SettingsMenuComponent implements OnInit {
         // Intentionally left empty for dependency injection purposes only
     }
 
-    setActiveTab(tabName: string): void {
+    public setActiveTab(tabName: string): void {
         this.settingsService.setActiveTab(tabName);
         this.activeTab = tabName;
     }
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.activeTab = this.settingsService.activeTab;
     }
 }

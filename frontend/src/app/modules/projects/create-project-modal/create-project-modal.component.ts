@@ -34,7 +34,7 @@ export class CreateProjectModalComponent extends BaseComponent implements OnInit
         super();
     }
 
-    ngOnInit() {
+    public ngOnInit() {
         this.createForm();
     }
 

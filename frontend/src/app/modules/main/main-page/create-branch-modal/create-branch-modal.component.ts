@@ -39,7 +39,7 @@ export class CreateBranchModalComponent extends BaseComponent implements OnInit 
         this.projectId = data.projectId;
     }
 
-    ngOnInit() {
+    public ngOnInit() {
         this.createForm();
     }
 

@@ -26,7 +26,7 @@ export class MainHeaderComponent implements OnInit {
         // Intentionally left empty for dependency injection purposes only
     }
 
-    ngOnInit() {
+    public ngOnInit() {
         this.loadProject();
     }
 

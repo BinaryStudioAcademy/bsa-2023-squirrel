@@ -8,5 +8,5 @@ import { UserDto } from '../../../models/user/user-dto';
     styleUrls: ['./user-card.component.sass'],
 })
 export class UserCardComponent {
-    @Input() user: UserDto;
+    @Input() public user: UserDto;
 }

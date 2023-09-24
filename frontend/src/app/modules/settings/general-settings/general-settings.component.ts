@@ -33,7 +33,7 @@ export class GeneralSettingsComponent extends BaseComponent implements OnInit {
         super();
     }
 
-    ngOnInit() {
+    public ngOnInit() {
         this.sharedProjectService.project$.subscribe({
             next: project => {
                 if (project) {
@@ -51,7 +51,7 @@ export class GeneralSettingsComponent extends BaseComponent implements OnInit {
         });
     }
 
-    onSaveClick(): void {
+    public onSaveClick(): void {
         this.spinner.show();
 
         this.project.name = this.projectForm.value.projectName;

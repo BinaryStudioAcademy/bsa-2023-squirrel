@@ -18,14 +18,14 @@ export class ConfirmationModalComponent {
         // do nothing
     }
 
-    handleConfirmationModalSubmit() {
+    public handleConfirmationModalSubmit() {
         this.spinnerService.show();
         this.confirmationModalData.callbackMethod();
         this.spinnerService.hide();
         this.confirmationModalRef.close();
     }
 
-    closeConfirmationModal(): void {
+    public closeConfirmationModal(): void {
         this.confirmationModalRef.close();
     }
 }

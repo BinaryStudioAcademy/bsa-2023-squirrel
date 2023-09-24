@@ -4,7 +4,7 @@ import { AfterViewInit, Directive, ElementRef, Input, Renderer2 } from '@angular
     selector: '[appEmailOverflow]',
 })
 export class EmailOverflowDirective implements AfterViewInit {
-    @Input() appEmailOverflow: number = 8;
+    @Input() public appEmailOverflow: number = 8;
 
     private length = this.appEmailOverflow;
 
@@ -14,11 +14,11 @@ export class EmailOverflowDirective implements AfterViewInit {
         // Intentionally left empty for dependency injection purposes only
     }
 
-    ngAfterViewInit(): void {
+    public ngAfterViewInit(): void {
         this.truncate();
     }
 
-    truncate() {
+    private truncate() {
         const element = this.el.nativeElement;
 
         const text = (element.innerText as string).split('@');

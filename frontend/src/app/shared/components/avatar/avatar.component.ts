@@ -32,7 +32,7 @@ export class AvatarComponent implements OnInit {
 
     public hostStyle: Style = {};
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.initializeAvatar();
     }
 
@@ -99,7 +99,7 @@ export class AvatarComponent implements OnInit {
         return this.constructInitials(initials);
     }
 
-    handleImgError() {
+    public handleImgError() {
         this.imgLink = '';
         this.initializeAvatar();
     }

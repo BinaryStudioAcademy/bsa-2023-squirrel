@@ -30,7 +30,7 @@ export class MainComponent extends BaseComponent implements OnInit, OnDestroy {
         super();
     }
 
-    async ngOnInit() {
+    public async ngOnInit() {
         this.loadProject();
         await this.broadcastHub.start();
         this.broadcastHub.listenMessages((msg) => {
@@ -38,7 +38,7 @@ export class MainComponent extends BaseComponent implements OnInit, OnDestroy {
         });
     }
 
-    override ngOnDestroy() {
+    public override ngOnDestroy() {
         this.broadcastHub.stop();
         this.sharedProject.setProject(null);
         super.ngOnDestroy();

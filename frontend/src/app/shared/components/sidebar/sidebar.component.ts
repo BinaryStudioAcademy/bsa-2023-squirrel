@@ -11,7 +11,7 @@ export class SidebarComponent {
         // Intentionally left empty for dependency injection purposes only
     }
 
-    downloadApp() {
+    public downloadApp() {
         this.filesDownloader.downloadSquirrelInstaller();
     }
 }

@@ -9,11 +9,11 @@ import { TextPairDifferenceDto } from 'src/app/models/text-pair/text-pair-differ
     styleUrls: ['./code.component.sass'],
 })
 export class CodeComponent implements OnChanges {
-    @Input() textPair: TextPairDifferenceDto;
+    @Input() public textPair: TextPairDifferenceDto;
 
-    @Input() height: string = '100%';
+    @Input() public height: string = '100%';
 
-    @Input() header: string = 'Solution';
+    @Input() public header: string = 'Solution';
 
     private insertColor: string = 'rgba(63,185,80,0.5)';
 
@@ -23,7 +23,7 @@ export class CodeComponent implements OnChanges {
         // Intentionally left empty for dependency injection purposes only
     }
 
-    ngOnChanges(changes: SimpleChanges): void {
+    public ngOnChanges(changes: SimpleChanges): void {
         if (changes['textPair']) {
             for (let i = 0; i < this.textPair.newTextLines.length; i++) {
                 const oldText = this.textPair.oldTextLines[i];

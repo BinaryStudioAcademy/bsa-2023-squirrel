@@ -1,3 +1,7 @@
 export interface ScriptResultDto {
-    execution: string;
+    columnNames: string[];
+    rows: string[][];
+    rowCount: number;
+    columnCount: number;
+    date: Date | undefined;
 }

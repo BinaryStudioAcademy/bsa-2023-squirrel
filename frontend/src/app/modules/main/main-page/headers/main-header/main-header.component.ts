@@ -29,8 +29,8 @@ export class MainHeaderComponent extends BaseComponent implements OnInit {
     private currentDb: DatabaseDto;
 
     constructor(
-        private sharedProject: SharedProjectService,
         public dialog: MatDialog,
+        private sharedProject: SharedProjectService,
         private databaseService: DatabaseService,
         private notificationService: NotificationService,
         private tableService: TablesService,
@@ -43,9 +43,10 @@ export class MainHeaderComponent extends BaseComponent implements OnInit {
     }
 
     public onDatabaseSelected(value: string) {
-        const currentDb = this.databases!.find(database => database.dbName === value)!;
+        this.selectedDbName = value;
+        this.currentDb = this.databases!.find((database) => database.dbName === this.selectedDbName)!;
 
-        this.selectDb(currentDb);
+        this.selectDb(this.currentDb);
     }
 
     public openCreateModal(): void {
@@ -59,24 +60,22 @@ export class MainHeaderComponent extends BaseComponent implements OnInit {
             autoFocus: false,
         });
 
-        dialogRef.componentInstance.addedDatabase
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe({
-                next: (addedDatabase: DatabaseDto) => {
-                    this.databases.push(addedDatabase);
-                    this.dbNames.push(addedDatabase.dbName);
-                },
-            });
+        dialogRef.componentInstance.addedDatabase.pipe(takeUntil(this.unsubscribe$)).subscribe({
+            next: (addedDatabase: DatabaseDto) => {
+                this.databases.push(addedDatabase);
+                this.dbNames.push(addedDatabase.dbName);
+            },
+        });
     }
 
     private loadProject() {
         this.sharedProject.project$
             .pipe(
-                filter(project => project !== null),
+                filter((project) => project !== null),
                 take(1),
             )
             .subscribe({
-                next: project => {
+                next: (project) => {
                     if (project) {
                         this.project = project;
                         this.loadDatabases();
@@ -86,12 +85,13 @@ export class MainHeaderComponent extends BaseComponent implements OnInit {
     }
 
     private loadDatabases() {
-        this.databaseService.getAllDatabases(this.project.id)
+        this.databaseService
+            .getAllDatabases(this.project.id)
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe({
-                next: databases => {
+                next: (databases) => {
                     this.databases = databases;
-                    this.dbNames = databases.map(database => database.dbName);
+                    this.dbNames = databases.map((database) => database.dbName);
                     this.selectDb(databases[0]);
                 },
             });
@@ -106,7 +106,8 @@ export class MainHeaderComponent extends BaseComponent implements OnInit {
             filterRowsCount: 1,
         };
 
-        this.tableService.getAllTablesNames(query)
+        this.tableService
+            .getAllTablesNames(query)
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe({
                 next: () => {

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Squirrel.ConsoleApp.Models;
+using Squirrel.Core.Common.DTO.Script;
 using Squirrel.Shared.DTO.ConsoleAppHub;
 using Squirrel.Shared.DTO.Definition;
 using Squirrel.Shared.DTO.Function;
@@ -9,9 +10,9 @@ using Squirrel.Shared.DTO.Procedure;
 using Squirrel.Shared.DTO.Table;
 using Squirrel.Shared.DTO.View;
 using Squirrel.SqlService.BLL.Hubs;
+using Squirrel.SqlService.BLL.Interfaces;
 using Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
 using Squirrel.SqlService.BLL.Services.ConsoleAppHub;
-
 
 namespace Squirrel.SqlService.WebApi.Controllers;
 
@@ -22,14 +23,16 @@ public class ConsoleAppHubController : ControllerBase
     private readonly IHubContext<ConsoleAppHub, IExecuteOnClientSide> _hubContext;
     private readonly ResultObserver _resultObserver;
     private readonly IMapper _mapper;
+    private readonly ISqlFormatterService _sqlFormatterService;
     private readonly (Guid queryId, TaskCompletionSource<QueryResultTable> tcs) _queryParameters;
 
-    public ConsoleAppHubController(IHubContext<ConsoleAppHub, IExecuteOnClientSide> hubContext,
+    public ConsoleAppHubController(IHubContext<ConsoleAppHub, IExecuteOnClientSide> hubContext, ISqlFormatterService sqlFormatterService,
         ResultObserver resultObserver, IMapper mapper)
     {
         _hubContext = hubContext;
         _resultObserver = resultObserver;
         _mapper = mapper;
+        _sqlFormatterService = sqlFormatterService;
         _queryParameters = RegisterQuery();
     }
 
@@ -164,6 +167,16 @@ public class ConsoleAppHubController : ControllerBase
     {
         await _hubContext.Clients.User(remoteConnect.ClientId)
             .RemoteConnectAsync(_queryParameters.queryId, remoteConnect.DbConnection);
+        return Ok(await _queryParameters.tcs.Task);
+    }
+
+    [HttpPost("execute-script")]
+    public async Task<ActionResult<QueryResultTable>> ExecuteScriptAsync([FromBody] InboundScriptDto inboundScriptDto)
+    {
+        var formattedScript = _sqlFormatterService.GetFormattedSql(inboundScriptDto.DbEngine, inboundScriptDto.Content!); 
+        await _hubContext.Clients.User(inboundScriptDto.ClientId!)
+                         .ExecuteScriptAsync(_queryParameters.queryId, formattedScript.Content!);
+        
         return Ok(await _queryParameters.tcs.Task);
     }
 }

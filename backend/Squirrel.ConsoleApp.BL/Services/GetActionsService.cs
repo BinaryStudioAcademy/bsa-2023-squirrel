@@ -60,4 +60,7 @@ public class GetActionsService : IGetActionsService
 
     public async Task<QueryResultTable> GetUserDefinedTableTypesAsync()
         => await _databaseService.ExecuteQueryAsync(_queryProvider.GetUserDefinedTableTypesStructureQuery());
+
+    public async Task<QueryResultTable> ExecuteScriptAsync(string scriptContent)
+        => await _databaseService.ExecuteQueryAsync(scriptContent);
 }

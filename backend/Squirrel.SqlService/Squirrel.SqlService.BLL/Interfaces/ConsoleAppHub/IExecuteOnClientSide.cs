@@ -29,4 +29,6 @@ public interface IExecuteOnClientSide
     Task GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync(Guid queryId);
     Task GetUserDefinedTableTypesAsync(Guid queryId);
     Task RemoteConnectAsync(Guid queryId, ConnectionString connectionString);
+
+    Task ExecuteScriptAsync(Guid queryId, string scriptContent);
 }

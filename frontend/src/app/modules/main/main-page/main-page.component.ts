@@ -59,17 +59,20 @@ export class MainComponent extends BaseComponent implements OnInit, OnDestroy {
 
         this.projectService.setCurrentProjectId(Number(projectId));
 
-        this.projectService.getProject(projectId)
+        this.projectService
+            .getProject(projectId)
             .pipe(
                 takeUntil(this.unsubscribe$),
                 finalize(() => this.spinner.hide()),
             )
             .subscribe({
-                next: project => {
-                    this.project = project;
-                    this.sharedProject.setProject(project);
+                next: (project) => {
+                    if (project) {
+                        this.project = project;
+                        this.sharedProject.setProject(project);
+                    }
                 },
-                error: err => {
+                error: (err) => {
                     this.notificationService.error(err.message);
                     this.router.navigateByUrl('projects');
                 },

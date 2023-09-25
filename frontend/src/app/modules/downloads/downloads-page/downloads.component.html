@@ -10,16 +10,21 @@
     <div class="horizontal-separator"></div>
 
     <div class="downloads-container">
-        <div class="download-card" (click)="downloadApp(OS.Windows)">
-            <fa-icon [icon]="faWindows"></fa-icon>
-            <h3>Console App for Windows</h3>
-            <app-button variant="filled" text="Download"></app-button>
-        </div>
+        <img src="/assets/squirrel.svg" alt="Squirrel" class="squirrel-image" />
 
-        <div class="download-card" (click)="downloadApp(OS.Macos)">
-            <fa-icon [icon]="faApple"></fa-icon>
-            <h3>Console App for MacOS</h3>
-            <app-button variant="filled" text="Download"></app-button>
+        <p class="description-text">
+            From version control to continuous delivery, Squirrel helps developers enhance their application delivery
+            processes by automating database development.
+        </p>
+
+        <div class="buttons-container">
+            <app-button variant="outline-secondary" text="Download" (click)="downloadApp(OS.Windows)">
+                <fa-icon [icon]="faWindows"></fa-icon>
+            </app-button>
+
+            <app-button variant="outline-secondary" text="Download" (click)="downloadApp(OS.Macos)">
+                <fa-icon [icon]="faApple"></fa-icon>
+            </app-button>
         </div>
     </div>
 </div>

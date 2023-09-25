@@ -1,34 +1,6 @@
 @import "/src/styles/color"
 @import "/src/styles/weights"
 
-.downloads-container
-    display: flex
-    flex-direction: column
-    justify-content: space-between
-    padding: 30px
-    margin-left: 80px
-
-.download-card
-    width: 30%
-    box-shadow: 0 4px 8px $light-shadow
-    transition: all 0.3s ease
-    cursor: pointer
-    padding: 20px
-    margin-top: 20px
-    text-align: center
-
-    &:hover
-        transform: translateY(-10px)
-        box-shadow: 0 8px 16px $dark-shadow
-
-    fa-icon
-        width: 100%
-        margin: 0 auto
-        font-size: 48px
-
-    h3
-        margin-top: 20px
-
 .upper-panel-container
     display: flex
     justify-content: space-between
@@ -44,3 +16,33 @@
     margin-left: 80px
     font-size: 28px
     font-weight: $bold-weight
+
+.downloads-container
+    display: flex
+    flex-direction: column
+    justify-content: space-between
+    align-items: center
+    padding: 30px
+    margin-top: 80px
+    margin-left: 100px
+    max-width: 400px
+
+.squirrel-image
+    width: 100%
+    max-width: 400px
+
+.description-text
+    margin-top: 20px
+    text-align: left
+    max-width: 350px
+
+.buttons-container
+    display: flex
+    align-items: center
+    justify-content: space-between
+    width: 100%
+    max-width: 600px
+    margin-top: 20px
+
+fa-icon
+    font-size: 20px

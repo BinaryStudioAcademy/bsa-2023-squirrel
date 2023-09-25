@@ -13,5 +13,5 @@
         'outline-secondary-button': variant === 'outline-secondary' && !isDisabled
     }"
     (click)="handleClick()">
-    {{ text }}
+    {{ text }} <ng-content></ng-content>
 </button>

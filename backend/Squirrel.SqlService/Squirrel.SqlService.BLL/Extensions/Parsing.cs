@@ -4,7 +4,7 @@ public static class Parsing
 {
     public static int? ParseNullableInt(this string value)
     {
-        if (string.IsNullOrEmpty(value))
+        if (string.IsNullOrEmpty(value) || value.Equals("null"))
         {
             return null;
         }
@@ -14,7 +14,7 @@ public static class Parsing
 
     public static bool? ParseNullableBool(this string value)
     {
-        if (string.IsNullOrEmpty(value))
+        if (string.IsNullOrEmpty(value) || value.Equals("null"))
         {
             return null;
         }

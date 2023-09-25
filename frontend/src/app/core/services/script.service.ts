@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { CreateScriptDto } from 'src/app/models/scripts/create-script-dto';
-import { RunScriptDto } from 'src/app/models/scripts/run-script-dto';
+import { ExecuteScriptDto } from 'src/app/models/scripts/execute-script-dto';
 import { ScriptContentDto } from 'src/app/models/scripts/script-content-dto';
 import { ScriptDto } from 'src/app/models/scripts/script-dto';
 import { ScriptResultDto } from 'src/app/models/scripts/script-result-dto';
@@ -30,11 +30,11 @@ export class ScriptService {
         return this.httpService.putRequest(this.scriptRoutePrefix, dto);
     }
 
-    public formatScript(dto: RunScriptDto): Observable<ScriptContentDto> {
+    public formatScript(dto: ExecuteScriptDto): Observable<ScriptContentDto> {
         return this.httpService.putRequest(`${this.scriptRoutePrefix}/format`, dto);
     }
 
-    public executeScript(dto: RunScriptDto): Observable<ScriptResultDto> {
+    public executeScript(dto: ExecuteScriptDto): Observable<ScriptResultDto> {
         return this.httpService.postRequest(`${this.scriptRoutePrefix}/execute`, dto);
     }
 }

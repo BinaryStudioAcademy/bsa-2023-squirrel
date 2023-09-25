@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Squirrel.ConsoleApp.Models;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.Common.DTO.Script;
 
@@ -50,10 +51,8 @@ public sealed class ScriptController : ControllerBase
     /// Execute provided SQL script
     /// </summary>
     [HttpPost("execute")]
-    public ActionResult<ScriptResultDto> ExecuteFormattedSql([FromBody] InboundScriptDto inboundScriptDto)
+    public async Task<ActionResult<QueryResultTable>> ExecuteSqlScript([FromBody] InboundScriptDto inboundScriptDto)
     {
-        // boilerplate for next PR
-
-        return Ok();
+        return Ok(await _scriptService.ExecuteSqlScriptAsync(inboundScriptDto));
     }
 }

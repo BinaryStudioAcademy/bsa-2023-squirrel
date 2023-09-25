@@ -18,7 +18,7 @@ public sealed class ConsoleAppHub : Hub<IExecuteOnClientSide>
 
     public override async Task OnConnectedAsync()
     {
-        await Clients.Caller.SetClientId(Context.UserIdentifier);
+        await Clients.Caller.SetClientId(Context.UserIdentifier!);
     }
     
     public async Task ProcessReceivedDataFromClientSide(Guid queryId, string requestActionName, QueryResultTable queryResultTable)
@@ -50,5 +50,6 @@ public sealed class ConsoleAppHub : Hub<IExecuteOnClientSide>
         _requestActionToProcessReceivedData.Add("GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync", _processReceivedDataService.UserDefinedTypesWithDefaultsAndRulesAndDefinitionProcessReceivedDataAsync);
         _requestActionToProcessReceivedData.Add("GetUserDefinedTableTypesAsync", _processReceivedDataService.UserDefinedTableTypesProcessReceivedDataAsync);
         _requestActionToProcessReceivedData.Add("RemoteConnectAsync", _processReceivedDataService.RemoteConnectProcessAsync);
+        _requestActionToProcessReceivedData.Add("ExecuteScriptAsync", _processReceivedDataService.ExecuteScriptProcessReceivedDataAsync);
     }
 }

@@ -47,18 +47,27 @@ public abstract class BaseDbService : IDatabaseService
 
     private QueryResultTable BuildTable(DbDataReader reader)
     {
-        var result = new QueryResultTable(Enumerable.Range(0, reader.FieldCount).Select(reader.GetName).ToArray());
+        // to display 'null' in empty cells in results table on UI
+        const string nullValue = "null";
+
+        var fieldCount = reader.FieldCount;
+        var columnNames = Enumerable.Range(0, fieldCount).Select(reader.GetName).ToArray();
+        var result = new QueryResultTable(columnNames);
+
         while (reader.Read())
         {
-            var row = new string[reader.FieldCount];
-            for (int i = 0; i < reader.FieldCount; i++)
+            var row = new List<string>(fieldCount);
+            for (int i = 0; i < fieldCount; i++)
             {
-                row[i] = reader[i].ToString() ?? string.Empty;
+                var value = reader.IsDBNull(i) ? nullValue : reader[i].ToString();
+                row.Add(value ?? nullValue);
             }
-            result.AddRow(row);
+            result.AddRow(row.ToArray());
         }
+
         return result;
     }
+
 
     private DbCommand CreateCommandInternal(DbConnection connection, string query)
     {

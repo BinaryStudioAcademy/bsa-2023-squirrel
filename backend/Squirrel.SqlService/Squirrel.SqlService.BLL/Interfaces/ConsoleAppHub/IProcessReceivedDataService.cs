@@ -27,4 +27,5 @@ public interface IProcessReceivedDataService
 
     Task RemoteConnectProcessAsync(Guid queryId, QueryResultTable queryResultTable);
 
+    Task ExecuteScriptProcessReceivedDataAsync(Guid queryId, QueryResultTable queryResultTable);
 }

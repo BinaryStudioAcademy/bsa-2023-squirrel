@@ -25,4 +25,6 @@ public interface IProcessReceivedDataService
     Task UserDefinedTypesWithDefaultsAndRulesAndDefinitionProcessReceivedDataAsync(Guid queryId, QueryResultTable queryResultTable);
     Task UserDefinedTableTypesProcessReceivedDataAsync(Guid queryId, QueryResultTable queryResultTable);
 
+    Task RemoteConnectProcessAsync(Guid queryId, QueryResultTable queryResultTable);
+
 }

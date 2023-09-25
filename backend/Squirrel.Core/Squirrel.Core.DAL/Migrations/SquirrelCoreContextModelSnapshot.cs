@@ -379,6 +379,8 @@ namespace Squirrel.Core.DAL.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasAlternateKey("Guid");
+
                     b.HasIndex("ProjectId");
 
                     b.ToTable("ProjectDatabases");

@@ -4,9 +4,9 @@ internal static class GetUserDefinedTypes
 {
     public static string GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionScript =>
 @"
-SELECT	SCHEMA_NAME(userDefinedTypes.schema_id) [UserTypeSchema],
-		userDefinedTypes.name [UserTypeName],
-		TYPE_NAME(userDefinedTypes.system_type_id) [BaseTypeName],
+SELECT	SCHEMA_NAME(userDefinedTypes.schema_id) [Schema],
+		userDefinedTypes.name [Name],
+		TYPE_NAME(userDefinedTypes.system_type_id) [BaseType],
 		CASE WHEN TYPE_NAME(userDefinedTypes.system_type_id) IN ('binary','varbinary','char','nchar','varchar','nvarchar')
 			THEN userDefinedTypes.max_length ELSE NULL END [MaxLength],
 		userDefinedTypes.precision [Precision],
@@ -21,7 +21,7 @@ SELECT	SCHEMA_NAME(userDefinedTypes.schema_id) [UserTypeSchema],
              + N' FROM '   
              + tBaseTypeComputation.baseTypeName   
              + CASE WHEN userDefinedTypeProperties.is_nullable = 0 THEN N' NOT NULL' ELSE N'' END   
-             + N'; ' END [UserTypeDefinition], 
+             + N'; ' END [Definition], 
 		OBJECT_DEFINITION(userDefinedTypes.default_object_id) [Default],
 		OBJECT_NAME(userDefinedTypes.rule_object_id) [ConstraintName],
 		OBJECT_DEFINITION(userDefinedTypes.rule_object_id) [ConstraintDefinition]
@@ -116,8 +116,10 @@ WHERE userDefinedTypes.is_user_defined = 1
 
     public static string GetUserDefinedTableTypesStructureScript =>
 @"
-SELECT	systt.name [UserTableTypeName],
-		sysc.name [Column],
+SELECT	
+    	SCHEMA_NAME(systt.schema_id) [UserTypeSchema],
+        systt.name [UserTableTypeName],
+		sysc.name [ColumnName],
 		sysc.colorder [ColumnOrder],
 		syst.name [DataType],
 		CASE WHEN syst.status = 1 THEN 'True' ELSE 'False' END [IsUserDefined],
@@ -127,8 +129,8 @@ SELECT	systt.name [UserTableTypeName],
 		sysc.scale [Scale],
 		syscmnts.text [Default],
 		CASE WHEN sysc.isnullable = 1 THEN 'True' ELSE 'False' END [AllowNulls],
-		CASE WHEN sysc.[status] = 128 THEN 'True' ELSE 'False' END [Identity],
-		CASE WHEN sysc.colstat = 1 THEN 'True' ELSE 'False' END [PrimaryKey]
+		CASE WHEN sysc.[status] = 128 THEN 'True' ELSE 'False' END [IsIdentity],
+		CASE WHEN sysc.colstat = 1 THEN 'True' ELSE 'False' END [IsPrimaryKey]
 FROM [sys].[syscolumns] as sysc
 JOIN sys.table_types as systt ON systt.type_table_object_id = sysc.id
 LEFT JOIN [sys].[syscomments] AS syscmnts on sysc.cdefault = syscmnts.id

@@ -5,16 +5,16 @@ internal static class GetUserDefinedTypes
     public static string GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionScript =>
         @"
             select
-			    t.typnamespace::regnamespace::text as schema,
-				 t.typname as name,
-				d.data_type as base_type,
-				d.character_maximum_length as max_length,
-				d.numeric_precision as numeric_precision,
-				d.numeric_scale as numeric_scale,
-				t.typnotnull as allow_null,
+			    t.typnamespace::regnamespace::text as Schema,
+				 t.typname as Name,
+				d.data_type as BaseType,
+				d.character_maximum_length as MaxLength,
+				d.numeric_precision as Precision,
+				d.numeric_scale as Scale,
+				t.typnotnull as AllowNulls,
 				d.domain_default as default,
-				dc.constraint_name as ""ConstraintName"",
-				cc.check_clause as ""ConstraintDefinition""
+				dc.constraint_name as ConstraintName,
+				cc.check_clause as ConstraintDefinition
 			
 			from
 				pg_type as t
@@ -39,7 +39,7 @@ internal static class GetUserDefinedTypes
 
     public static string GetUserDefinedTableTypesStructureScript =>
         @"
-             with types as (
+            with types as (
             select n.nspname,
         			t.oid::regtype::text as obj_name,
                     case
@@ -91,15 +91,15 @@ internal static class GetUserDefinedTypes
         
             select cols.schema_name as schema,
         		cols.name as name,
-                cols.column_name as column_name,
-                cols.ordinal_position as ordinal_position,				
+                cols.column_name as ColumnName,
+                cols.ordinal_position as ColumnOrder,				
 				case when attrs.data_type = 'USER-DEFINED' then attribute_udt_name
-					 else attrs.data_type end as base_type,
+					 else attrs.data_type end as DataType,
 				case when attrs.data_type = 'USER-DEFINED' then 'True' else 'False' end as isUserDefined,
-        		attrs.character_maximum_length as max_length,
-        		attrs.numeric_precision as numeric_precision, 
-        		attrs.numeric_scale as numeric_scale,
-                case when attrs.is_nullable = 'YES' then 'True' else 'False' end as allow_null
+        		attrs.character_maximum_length as MaxLength,
+        		attrs.numeric_precision as Precision, 
+        		attrs.numeric_scale as Scale,
+                case when attrs.is_nullable = 'YES' then 'True' else 'False' end as AllowNulls
         		
             from cols 
         	left join information_schema.attributes as attrs

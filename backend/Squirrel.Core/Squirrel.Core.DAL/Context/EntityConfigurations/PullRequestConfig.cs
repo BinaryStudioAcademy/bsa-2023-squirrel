@@ -16,11 +16,11 @@ public sealed class PullRequestConfig : IEntityTypeConfiguration<PullRequest>
         builder.Property(x => x.IsReviewed).IsRequired();
         builder.Property(x => x.UpdatedAt)
                .IsRequired()
-               .HasDefaultValueSql("getutcdate()")
+               .HasDefaultValueSql(SquirrelCoreContext.SqlGetDateFunction)
                .ValueGeneratedOnAddOrUpdate();
         builder.Property(x => x.CreatedAt)
                .IsRequired()
-               .HasDefaultValueSql("getutcdate()")
+               .HasDefaultValueSql(SquirrelCoreContext.SqlGetDateFunction)
                .ValueGeneratedOnAdd();
     }
 }

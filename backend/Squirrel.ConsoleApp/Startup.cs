@@ -14,9 +14,9 @@ namespace Squirrel.ConsoleApp;
 public class Startup
 {
     public static IConfiguration Configuration { get; } = new ConfigurationBuilder()
-        .SetBasePath(AppContext.BaseDirectory)
-        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-        .Build();
+                                                          .SetBasePath(AppContext.BaseDirectory)
+                                                          .AddJsonFile(Program.AppSettingsFileName, optional: false, reloadOnChange: true)
+                                                          .Build();
 
     public void ConfigureServices(IServiceCollection services)
     {

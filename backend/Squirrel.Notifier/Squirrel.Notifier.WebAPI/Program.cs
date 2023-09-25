@@ -2,10 +2,12 @@ using Squirrel.Notifier.WebAPI.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var appSettingsFileName = "appsettings";
+
 builder.Configuration
     .SetBasePath(builder.Environment.ContentRootPath)
-    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", reloadOnChange: true, optional: true)
+    .AddJsonFile($"{appSettingsFileName}.json", optional: true, reloadOnChange: true)
+    .AddJsonFile($"{appSettingsFileName}.{builder.Environment.EnvironmentName}.json", reloadOnChange: true, optional: true)
     .AddEnvironmentVariables()
     .Build();
 

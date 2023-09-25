@@ -9,11 +9,13 @@ using Squirrel.Shared.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var appSettingsFileName = "appsettings";
+
 // Add services to the container.
 builder.Configuration
     .SetBasePath(builder.Environment.ContentRootPath)
-    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", reloadOnChange: true, optional: true)
+    .AddJsonFile($"{appSettingsFileName}.json", optional: true, reloadOnChange: true)
+    .AddJsonFile($"{appSettingsFileName}.{builder.Environment.EnvironmentName}.json", reloadOnChange: true, optional: true)
     .AddEnvironmentVariables()
     .Build();
 
@@ -61,7 +63,7 @@ app.UseCors(opt => opt
     .AllowAnyOrigin()
     .WithExposedHeaders("Token-Expired"));
 
-app.UseStaticFiles(new StaticFileOptions()
+app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources")),
     RequestPath = new PathString("/Resources")

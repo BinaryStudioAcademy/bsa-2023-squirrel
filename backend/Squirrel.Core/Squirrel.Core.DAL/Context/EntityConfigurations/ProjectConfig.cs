@@ -15,11 +15,11 @@ public sealed class ProjectConfig : IEntityTypeConfiguration<Project>
         builder.Property(x => x.CreatedBy).IsRequired();
         builder.Property(x => x.CreatedAt)
                .IsRequired()
-               .HasDefaultValueSql("getutcdate()")
+               .HasDefaultValueSql(SquirrelCoreContext.SqlGetDateFunction)
                .ValueGeneratedOnAdd();
         builder.Property(x => x.UpdatedAt)
                .IsRequired()
-               .HasDefaultValueSql("getutcdate()")
+               .HasDefaultValueSql(SquirrelCoreContext.SqlGetDateFunction)
                .ValueGeneratedOnAddOrUpdate();
 
         builder.HasOne(x => x.DefaultBranch)

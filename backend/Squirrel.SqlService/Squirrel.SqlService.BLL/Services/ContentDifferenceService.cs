@@ -17,6 +17,7 @@ namespace Squirrel.SqlService.BLL.Services;
 
 public class ContentDifferenceService : IContentDifferenceService
 {
+    private const string UserDbChangesBlobContainerNameSection = "UserDbChangesBlobContainerName";
     private readonly IBlobStorageService _blobStorageService;
     private readonly IConfiguration _configuration;
     private readonly ITextService _textService;
@@ -199,7 +200,7 @@ public class ContentDifferenceService : IContentDifferenceService
 
     private async Task<DbStructureDto> GetTempBlobContentAsync(Guid tempBlobId)
     {
-        var blob = await _blobStorageService.DownloadAsync(_configuration["UserDbChangesBlobContainerName"], tempBlobId.ToString());
+        var blob = await _blobStorageService.DownloadAsync(_configuration[UserDbChangesBlobContainerNameSection], tempBlobId.ToString());
         if (blob.Content is not null)
         {
             var jsonString = Encoding.UTF8.GetString(blob.Content);

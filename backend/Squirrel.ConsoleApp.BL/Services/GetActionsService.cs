@@ -8,9 +8,9 @@ public class GetActionsService : IGetActionsService
     private readonly IDbQueryProvider _queryProvider;
     private readonly IDatabaseService _databaseService;
 
-    public GetActionsService(IConnectionFileService _connectionFileService, IConnectionStringService connectionStringService)
+    public GetActionsService(IConnectionFileService connectionFileService, IConnectionStringService connectionStringService)
     {
-        var connectionString = _connectionFileService.ReadFromFile();
+        var connectionString = connectionFileService.ReadFromFile();
 
         _queryProvider = DatabaseServiceFactory.CreateDbQueryProvider(connectionString.DbEngine);
         _databaseService = DatabaseServiceFactory.CreateDatabaseService(connectionString.DbEngine, connectionStringService.BuildConnectionString(connectionString));
@@ -26,7 +26,7 @@ public class GetActionsService : IGetActionsService
         => await _databaseService.ExecuteQueryAsync(_queryProvider.GetStoredProceduresNamesQuery());
 
     public async Task<QueryResultTable> GetStoredProcedureDefinitionAsync(string storedProcedureSchema, string storedProcedureName)
-        => await _databaseService.ExecuteQueryAsync(_queryProvider.GetStoredProcedureDefinitionQuery(storedProcedureSchema,storedProcedureName));
+        => await _databaseService.ExecuteQueryAsync(_queryProvider.GetStoredProcedureDefinitionQuery(storedProcedureSchema, storedProcedureName));
 
     public async Task<QueryResultTable> GetAllFunctionsNamesAsync()
         => await _databaseService.ExecuteQueryAsync(_queryProvider.GetFunctionsNamesQuery());
@@ -60,4 +60,7 @@ public class GetActionsService : IGetActionsService
 
     public async Task<QueryResultTable> GetUserDefinedTableTypesAsync()
         => await _databaseService.ExecuteQueryAsync(_queryProvider.GetUserDefinedTableTypesStructureQuery());
+
+    public async Task<QueryResultTable> ExecuteScriptAsync(string scriptContent)
+        => await _databaseService.ExecuteQueryAsync(scriptContent);
 }

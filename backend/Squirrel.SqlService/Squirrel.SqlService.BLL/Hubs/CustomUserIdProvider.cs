@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 
-namespace Squirrel.Core.BLL.Hubs;
+namespace Squirrel.SqlService.BLL.Hubs;
 
 public class CustomUserIdProvider : IUserIdProvider
 {
     public virtual string GetUserId(HubConnectionContext connection)
     {
-        var claim = connection.User?.FindFirst("ClientId");
+        var claim = connection.User.FindFirst("ClientId");
 
         if (claim is null)
         {

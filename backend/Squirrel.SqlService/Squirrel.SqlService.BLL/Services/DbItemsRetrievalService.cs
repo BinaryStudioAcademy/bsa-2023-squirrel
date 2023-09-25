@@ -2,27 +2,23 @@
 using Microsoft.AspNetCore.SignalR;
 using Squirrel.ConsoleApp.Models;
 using Squirrel.Shared.DTO.DatabaseItem;
+using Squirrel.Shared.DTO.Function;
+using Squirrel.Shared.DTO.Procedure;
+using Squirrel.Shared.DTO.Table;
+using Squirrel.Shared.DTO.View;
 using Squirrel.SqlService.BLL.Interfaces;
 using Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
-using Squirrel.SqlService.BLL.Models.ConsoleAppHub;
-using Squirrel.SqlService.BLL.Models.DTO;
-using Squirrel.SqlService.BLL.Models.DTO.Function;
-using Squirrel.SqlService.BLL.Models.DTO.Procedure;
-using Squirrel.SqlService.BLL.Models.DTO.UserDefinedType.DataType;
-using Squirrel.SqlService.BLL.Models.DTO.UserDefinedType.TableType;
-using Squirrel.SqlService.BLL.Models.DTO.View;
-using Squirrel.SqlService.BLL.Services.ConsoleAppHub;
 
 namespace Squirrel.SqlService.BLL.Services;
 
 public class DbItemsRetrievalService : IDbItemsRetrievalService
 {
     private readonly IHubContext<Hubs.ConsoleAppHub, IExecuteOnClientSide> _hubContext;
-    private readonly ResultObserver _resultObserver;
+    private readonly IResultObserver _resultObserver;
     private readonly IMapper _mapper;
 
     public DbItemsRetrievalService(IHubContext<Hubs.ConsoleAppHub, IExecuteOnClientSide> hubContext,
-        ResultObserver resultObserver, IMapper mapper)
+        IResultObserver resultObserver, IMapper mapper)
     {
         _hubContext = hubContext;
         _resultObserver = resultObserver;

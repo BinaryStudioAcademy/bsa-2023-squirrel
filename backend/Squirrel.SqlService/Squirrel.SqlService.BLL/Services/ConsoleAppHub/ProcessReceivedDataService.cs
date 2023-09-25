@@ -5,19 +5,20 @@ namespace Squirrel.SqlService.BLL.Services.ConsoleAppHub;
 
 public class ProcessReceivedDataService : IProcessReceivedDataService
 {
-    private readonly ResultObserver _resultObserver;
-    public ProcessReceivedDataService(ResultObserver resultObserver)
+    private readonly IResultObserver _resultObserver;
+    
+    public ProcessReceivedDataService(IResultObserver resultObserver)
     {
         _resultObserver = resultObserver;
     }
 
     private Task ShowResult(Guid queryId, QueryResultTable queryResultTable)
     {
-        Console.WriteLine($"------------------------------------------------------------------");
-        Console.WriteLine($"Successfully recived data from user '{queryId}'");
-        Console.WriteLine($"    result:");
+        Console.WriteLine("------------------------------------------------------------------");
+        Console.WriteLine($"Successfully received data from user '{queryId}'");
+        Console.WriteLine("    result:");
         Console.WriteLine(queryResultTable);
-        Console.WriteLine($"------------------------------------------------------------------");
+        Console.WriteLine("------------------------------------------------------------------");
         return Task.CompletedTask;
     }
     
@@ -100,6 +101,18 @@ public class ProcessReceivedDataService : IProcessReceivedDataService
     }
 
     public async Task UserDefinedTableTypesProcessReceivedDataAsync(Guid queryId, QueryResultTable queryResultTable)
+    {
+        _resultObserver.SetResult(queryId, queryResultTable);
+        await ShowResult(queryId, queryResultTable);
+    }
+
+    public async Task RemoteConnectProcessAsync(Guid queryId, QueryResultTable queryResultTable)
+    {
+        _resultObserver.SetResult(queryId, queryResultTable);
+        await ShowResult(queryId, queryResultTable);
+    }
+
+    public async Task ExecuteScriptProcessReceivedDataAsync(Guid queryId, QueryResultTable queryResultTable)
     {
         _resultObserver.SetResult(queryId, queryResultTable);
         await ShowResult(queryId, queryResultTable);

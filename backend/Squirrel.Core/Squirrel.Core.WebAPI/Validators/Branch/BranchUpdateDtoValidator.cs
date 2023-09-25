@@ -4,8 +4,8 @@ using System.Text.RegularExpressions;
 
 namespace Squirrel.Core.WebAPI.Validators.Branch;
 
-public class BranchUpdateDtoValidator: AbstractValidator<BranchUpdateDto>
-{ 
+public class BranchUpdateDtoValidator : AbstractValidator<BranchUpdateDto>
+{
     public BranchUpdateDtoValidator()
     {
         RuleFor(x => x.Name)

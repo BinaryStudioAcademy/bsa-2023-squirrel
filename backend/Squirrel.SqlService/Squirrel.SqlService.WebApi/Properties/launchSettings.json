@@ -5,14 +5,14 @@
     "anonymousAuthentication": true,
     "iisExpress": {
       "applicationUrl": "http://localhost:5076",
-      "sslPort": 44308
+      "sslPort": 0
     }
   },
   "profiles": {
     "Squirrel.SqlService.WebApi": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "launchBrowser": true,
+      "launchBrowser": false,
       "launchUrl": "swagger",
       "applicationUrl": "http://localhost:5076",
       "environmentVariables": {

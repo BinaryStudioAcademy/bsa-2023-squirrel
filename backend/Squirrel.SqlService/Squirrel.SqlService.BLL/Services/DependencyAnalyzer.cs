@@ -1,11 +1,11 @@
-﻿using Squirrel.SqlService.BLL.Interfaces;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
+using Squirrel.SqlService.BLL.Interfaces;
 
 namespace Squirrel.SqlService.BLL.Services;
 
 public class DependencyAnalyzer : IDependencyAnalyzer
 {
-    public List<string> AnalyzeDependencies(string spContent, List<string>? objectList = null)
+    public ICollection<string> AnalyzeDependencies(string spContent, List<string>? objectList = null)
     {
         var references = FindReferences(spContent);
 
@@ -27,22 +27,22 @@ public class DependencyAnalyzer : IDependencyAnalyzer
         return dependencies;
     }
 
-    private List<string> FindReferences(string spContent)
+    private ICollection<string> FindReferences(string spContent)
     {
         var references = new List<string>();
 
         // Used regular expressions to find references
-        Regex spRegex = new Regex(
+        var spRegex = new Regex(
            @"(?<=\execute|exec\s+)(?:(?:([#@_a-z][#@_$\.0-9a-z]*)(?!\]))|[\[]([#@_a-z][#@_$\.0-9a-z\s]*)[\]])",
             RegexOptions.IgnoreCase);
 
-        Regex functionRegex = new Regex(
+        var functionRegex = new Regex(
             @"\b\w+\.\w+\s*(?=\()",
             RegexOptions.IgnoreCase);
 
         // Got matches from both regex patterns
-        MatchCollection spMatches = spRegex.Matches(spContent);
-        MatchCollection functionMatches = functionRegex.Matches(spContent);
+        var spMatches = spRegex.Matches(spContent);
+        var functionMatches = functionRegex.Matches(spContent);
 
         // Combined the results into a single list
         references.AddRange(spMatches.Concat(functionMatches).Select(m => m.Value));

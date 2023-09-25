@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Squirrel.AzureBlobStorage\Squirrel.AzureBlobStorage.csproj" />
+    <ProjectReference Include="..\..\Squirrel.ConsoleApp.Models\Squirrel.ConsoleApp.Models.csproj" />
     <ProjectReference Include="..\..\Squirrel.Shared\Squirrel.Shared.csproj" />
     <ProjectReference Include="..\Squirrel.Core.Common\Squirrel.Core.Common.csproj" />
   </ItemGroup>

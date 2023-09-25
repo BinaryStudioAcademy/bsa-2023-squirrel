@@ -19,7 +19,8 @@ public static class ApplicationBuilderExtensions
         var fileService = app.ApplicationServices.GetRequiredService<IClientIdFileService>();
 
         var _clientId = fileService?.GetClientId() ?? string.Empty;
-
+        ClientIdOutput(_clientId);
+        
         var _hubConnection = new HubConnectionBuilder()
             .WithUrl(Path.Combine(config.GetSection("SignalRSettings")["HubConnectionUrl"], $"?ClientId={_clientId}"))
             .WithAutomaticReconnect()
@@ -36,10 +37,19 @@ public static class ApplicationBuilderExtensions
             }
 
             fileService?.SetClientId(guid);
+            ClientIdOutput(guid);
         });
 
         _hubConnection.RegisterActions(app);
 
         _hubConnection.StartAsync();
+    }
+
+    private static void ClientIdOutput(string clientId)
+    {
+        if (!string.IsNullOrEmpty(clientId))
+        {
+            Console.WriteLine($"Unique key: {clientId}");
+        }
     }
 }

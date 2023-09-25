@@ -1,43 +1,43 @@
-<div class="container">
+<div class="container" [class.padding-bottom]="currentScriptResult || currentScriptError">
     <div class="main-content" *ngIf="scripts.length > 0">
-        <!-- TODO: create custom ListBoxComponent -->
         <div class="scripts-sector">
-            <ul
-                cdkListbox
-                [cdkListboxValue]="scripts"
-                (cdkListboxValueChange)="onScriptSelected($event)"
-                class="listbox bordered">
-                <li *ngFor="let script of scripts" [cdkOption]="script" class="option">
-                    <app-script [script]="script"></app-script>
+            <ul cdkListbox [cdkListboxValue]="scripts" class="listbox bordered">
+                <li class="option" *ngFor="let script of scripts" [cdkOption]="script"
+                    [class.selected-option]="selectedScript?.id === script.id"
+                    [class.unsaved]="form.dirty && selectedScript?.id === script.id">
+                    <app-script [script]="script" (click)="onScriptSelected(script)"></app-script>
                 </li>
             </ul>
         </div>
         <div class="editor-sector">
             <!-- TODO: create custom TextEditorComponent -->
-            <textarea
-                class="editor bordered"
-                [ngModel]="selectedScript?.content"
-                (ngModelChange)="updateScriptContent($event)"></textarea>
+            <textarea class="editor bordered" [formControl]="$any(form.controls['scriptContent'])">
+                {{selectedScript?.content}}
+            </textarea>
         </div>
-    </div>
-    <div *ngIf="currentScriptError" class="script-error">
-        <p>{{ currentScriptError.message }}</p>
     </div>
 
     <div class="buttons-sector">
         <app-button variant="outline-primary" text="Create new" (buttonOnClick)="openCreateModal()"></app-button>
         <div class="buttons-container">
-            <app-button
-                variant="outline-secondary"
-                text="Format"
-                [isDisabled]="!selectedScript"
+            <app-button variant="outline-secondary" text="Format" [isDisabled]="!selectedScript"
                 (buttonOnClick)="formatScript()"></app-button>
-            <app-button variant="outline-primary" text="Execute" [isDisabled]="!selectedScript"></app-button>
-            <app-button
-                variant="outline-primary"
-                text="Save"
-                [isDisabled]="!selectedScript || !form.dirty"
+            <app-button variant="outline-primary" text="Execute" [isDisabled]="!selectedScript"
+                (buttonOnClick)="executeScript()"></app-button>
+            <app-button variant="outline-primary" text="Save" [isDisabled]="!selectedScript || !form.dirty"
                 (buttonOnClick)="saveScript()"></app-button>
         </div>
     </div>
+
+    <app-script-error-result *ngIf="currentScriptError" [scriptError]="currentScriptError"
+        [scriptTitle]="selectedScript?.title ?? ''">
+    </app-script-error-result>
+
+    <app-script-result *ngIf="currentScriptResult" [scriptResult]="currentScriptResult"
+        [scriptTitle]="selectedScript?.title ?? ''">
+    </app-script-result>
+
+    <app-button class="to-top-btn" *ngIf="isToTopBtnShowed" (buttonOnClick)="scrollToResult(true)" variant="filled">
+        <fa-icon [icon]=" arrowUp" style="color: white"></fa-icon>
+    </app-button>
 </div>

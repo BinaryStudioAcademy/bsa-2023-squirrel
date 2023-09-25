@@ -1,13 +1,17 @@
 import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { BaseComponent } from '@core/base/base.component';
 import { ConsoleConnectService } from '@core/services/console-connect.service';
+import { ConsoleConnectRemoteService } from '@core/services/console-connect-remote.service';
 import { DatabaseService } from '@core/services/database.service';
 import { NotificationService } from '@core/services/notification.service';
+import { takeUntil } from 'rxjs';
 
 import { DatabaseDto } from 'src/app/models/database/database-dto';
 
 import { DbConnection } from '../../../models/console/db-connection';
+import { DbConnectionRemote } from '../../../models/console/db-connection-remote';
 import { NewDatabaseDto } from '../../../models/database/new-database-dto';
 
 @Component({
@@ -15,12 +19,12 @@ import { NewDatabaseDto } from '../../../models/database/new-database-dto';
     templateUrl: './create-db-modal.component.html',
     styleUrls: ['./create-db-modal.component.sass'],
 })
-export class CreateDbModalComponent implements OnInit {
+export class CreateDbModalComponent extends BaseComponent implements OnInit {
     @Output() public addedDatabase = new EventEmitter<DatabaseDto>();
 
     public dbForm: FormGroup = new FormGroup({});
 
-    public localhost: boolean = false;
+    public integratedSecurity = false;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) private data: any,
@@ -29,8 +33,10 @@ export class CreateDbModalComponent implements OnInit {
         private databaseService: DatabaseService,
         private notificationService: NotificationService,
         public dialogRef: MatDialogRef<CreateDbModalComponent>,
-        // eslint-disable-next-line no-empty-function
-    ) {}
+        private consoleConnectRemote: ConsoleConnectRemoteService,
+    ) {
+        super();
+    }
 
     public ngOnInit() {
         this.initializeForm();
@@ -39,43 +45,66 @@ export class CreateDbModalComponent implements OnInit {
     private initializeForm() {
         this.dbForm = this.fb.group({
             dbName: ['', Validators.required],
-            serverName: ['', this.getServerNameValidators()],
+            serverName: ['', Validators.required],
             port: [''],
             username: [''],
             password: [''],
+            localhost: [false],
+            guid: ['', this.getValidators()],
         });
     }
 
     public addDataBase() {
-        const connect: DbConnection = {
+        this.consoleConnectService.connect(this.getConnection())
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe({
+                next: guid => {
+                    this.saveDb(guid);
+                },
+                error: (error) => {
+                    this.notificationService.error(error);
+                },
+            });
+    }
+
+    public addDataBaseRemote() {
+        const connect: DbConnectionRemote = {
+            dbConnection: this.getConnection(),
+            clientId: this.dbForm.value.guid,
+        };
+
+        this.consoleConnectRemote.tryConnect(connect)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe({
+                next: () => {
+                    this.saveDb(connect.clientId);
+                },
+                error: () => {
+                    this.notificationService.error('Failed to connect to database');
+                },
+            });
+    }
+
+    public changeLocalHost() {
+        this.dbForm.get('guid')?.setValidators(this.getValidators());
+        this.dbForm.get('guid')?.updateValueAndValidity();
+    }
+
+    private getConnection() {
+        return {
             dbName: this.dbForm.value.dbName,
             serverName: this.dbForm.value.serverName,
             port: +this.dbForm.value.port,
             username: this.dbForm.value.username,
             password: this.dbForm.value.password,
             dbEngine: this.data.dbEngine,
-            isLocalhost: this.localhost,
-        };
-
-        this.consoleConnectService.connect(connect).subscribe({
-            next: guid => {
-                this.saveDb(guid);
-            },
-            error: () => {
-                this.notificationService.error('Failed to connect to database');
-            },
-        });
+            isLocalhost: this.dbForm.value.localhost,
+            integratedSecurity: this.integratedSecurity,
+        } as DbConnection;
     }
 
-    public changeLocalHost() {
-        this.localhost = !this.localhost;
-
-        this.dbForm.get('serverName')?.setValidators(this.getServerNameValidators());
-        this.dbForm.get('serverName')?.updateValueAndValidity();
-    }
-
-    private getServerNameValidators() {
-        if (this.localhost) {
+    private getValidators() {
+        if (this.dbForm.value.localhost) {
             return null;
         }
 

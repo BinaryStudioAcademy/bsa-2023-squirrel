@@ -11,6 +11,8 @@ public sealed class ProjectDatabaseConfig : IEntityTypeConfiguration<ProjectData
         builder.Property(x => x.DbName).IsRequired().HasMaxLength(20);
         builder.Property(x => x.Guid).IsRequired();
 
+        builder.HasAlternateKey(x => x.Guid);
+        
         builder.HasOne(x => x.Project)
                .WithMany(x => x.ProjectDatabases)
                .HasForeignKey(x => x.ProjectId)

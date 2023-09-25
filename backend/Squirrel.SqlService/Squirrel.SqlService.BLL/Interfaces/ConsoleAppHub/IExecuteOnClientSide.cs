@@ -1,4 +1,6 @@
-﻿namespace Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
+﻿using Squirrel.Shared.DTO.ConsoleAppHub;
+
+namespace Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
 
 public interface IExecuteOnClientSide
 {
@@ -26,4 +28,5 @@ public interface IExecuteOnClientSide
 
     Task GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync(Guid queryId);
     Task GetUserDefinedTableTypesAsync(Guid queryId);
+    Task RemoteConnectAsync(Guid queryId, ConnectionString connectionString);
 }

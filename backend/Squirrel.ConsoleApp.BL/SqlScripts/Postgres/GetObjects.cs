@@ -7,22 +7,23 @@ internal class GetObjects
             WHERE specific_schema not in ('information_schema', 'pg_catalog') and routine_type = 'PROCEDURE'";
 
     public static string GetStoredProcedureDefinitionScript(string storedProcedureSchema, string storedProcedureName) =>
-        @$"SELECT routine_definition as ""RoutineDefinition"" FROM information_schema.routines 
-            WHERE routine_schema = '{storedProcedureSchema}' AND routine_name = '{storedProcedureName}' AND routine_type = 'PROCEDURE'";
+        @"SELECT routine_definition as ""RoutineDefinition"" FROM information_schema.routines 
+            WHERE routine_schema = @storedProcedureSchema AND routine_name = @storedProcedureName AND routine_type = 'PROCEDURE'";
 
     public static string GetFunctionsNamesScript =>
         @"SELECT routine_schema as ""Schema"", routine_name as ""FunctionName"" FROM information_schema.routines 
             WHERE specific_schema not in ('information_schema', 'pg_catalog') and routine_type = 'FUNCTION'";
 
     public static string GetFunctionDefinitionScript(string functionSchema, string functionName) =>
-        @$"SELECT routine_definition as ""RoutineDefinition"" FROM information_schema.routines 
-            WHERE routine_schema = '{functionSchema}' AND routine_name = '{functionName}' AND routine_type = 'FUNCTION'";
+        @"SELECT routine_definition as ""RoutineDefinition"" FROM information_schema.routines 
+            WHERE routine_schema = @functionSchema AND routine_name = @functionName AND routine_type = 'FUNCTION'";
 
     public static string GetViewsNamesScript =>
         @"SELECT table_schema AS ""Schema"", table_name AS ""ViewName""  FROM information_schema.views WHERE table_schema not in ('information_schema', 'pg_catalog')";
 
     public static string GetViewDefinitionScript(string viewSchema, string viewName) =>
-        @$"SELECT view_definition as ""ViewDefinition"" FROM information_schema.views  WHERE table_schema = '{viewSchema}' AND table_name = '{viewName}'";
+        @"SELECT view_definition as ""ViewDefinition"" FROM information_schema.views  
+           WHERE table_schema = @viewSchema AND table_name = @viewName";
 
     public static string GetStoredProceduresScript =>
         @"select 

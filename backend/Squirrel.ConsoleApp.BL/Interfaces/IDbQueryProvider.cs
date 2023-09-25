@@ -6,7 +6,7 @@ public interface IDbQueryProvider
     string GetTableDataQuery(string schema, string tableName, int rowsCount);
 
     string GetStoredProceduresNamesQuery();
-    string GetStoredProcedureDefinitionQuery(string storedProcedureSchema, string storedProcedureName);
+    string GetStoredProcedureDefinitionQuery(string storedProcedureSchemaString, string storedProcedureName);
 
     string GetFunctionsNamesQuery();
     string GetFunctionDefinitionQuery(string functionSchema, string functionName);

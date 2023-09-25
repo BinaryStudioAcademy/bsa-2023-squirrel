@@ -13,7 +13,7 @@ public class PostgreSqlQueryProvider : IDbQueryProvider
 
     public string GetStoredProceduresNamesQuery() => GetStoredProceduresNamesScript;
 
-    public string GetStoredProcedureDefinitionQuery(string storedProcedureSchemastring, string storedProcedureName) => GetStoredProcedureDefinitionScript(storedProcedureSchemastring, storedProcedureName);
+    public string GetStoredProcedureDefinitionQuery(string storedProcedureSchemaString, string storedProcedureName) => GetStoredProcedureDefinitionScript(storedProcedureSchemaString, storedProcedureName);
 
     public string GetFunctionsNamesQuery() => GetFunctionsNamesScript;
 

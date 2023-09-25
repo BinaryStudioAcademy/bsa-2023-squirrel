@@ -13,7 +13,7 @@ public class SqlServerQueryProvider : IDbQueryProvider
 
     public string GetStoredProceduresNamesQuery() => GetStoredProceduresNamesScript;
 
-    public string GetStoredProcedureDefinitionQuery(string storedProcedureSchema, string storedProcedureName) => GetStoredProcedureDefinitionScript(storedProcedureSchema, storedProcedureName);
+    public string GetStoredProcedureDefinitionQuery(string storedProcedureSchemaString, string storedProcedureName) => GetStoredProcedureDefinitionScript(storedProcedureSchemaString, storedProcedureName);
 
     public string GetFunctionsNamesQuery() => GetFunctionsNamesScript;
 

@@ -16,7 +16,7 @@ public sealed class ProjectDatabaseService : BaseService, IProjectDatabaseServic
     {
     }
 
-    public async Task<List<ProjectDatabaseDto>> GetAllProjectDbAsync(int projectId)
+    public async Task<ICollection<ProjectDatabaseDto>> GetAllProjectDbAsync(int projectId)
     {
         return await _context.ProjectDatabases
             .Where(p => p.ProjectId == projectId)

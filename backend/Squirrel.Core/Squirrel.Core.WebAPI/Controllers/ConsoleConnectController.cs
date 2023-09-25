@@ -17,7 +17,7 @@ public class ConsoleConnectController : ControllerBase
         _consoleConnectService = consoleConnectService;
     }
     [HttpPost("db-connect")]
-    public async Task<ActionResult> ConnectToDb([FromBody] RemoteConnect remoteConnect)
+    public async Task<ActionResult> ConnectToDbAsync([FromBody] RemoteConnect remoteConnect)
     {
         await _consoleConnectService.TryConnect(remoteConnect);
         return Ok();

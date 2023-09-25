@@ -19,7 +19,7 @@ public class TableController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<TableNamesDto>> GetTableNames(QueryParameters queryParameters)
+    public async Task<ActionResult<TableNamesDto>> GetTableNamesAsync(QueryParameters queryParameters)
     {
         return Ok(await _tableService.GetTablesName(queryParameters));
     }

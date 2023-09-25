@@ -1,0 +1,30 @@
+<div class="downloads-page">
+    <div class="sidebar">
+        <app-sidebar></app-sidebar>
+    </div>
+
+    <div class="upper-panel-container">
+        <h3 class="mat-h3">Downloads</h3>
+    </div>
+
+    <div class="horizontal-separator"></div>
+
+    <div class="downloads-container">
+        <img src="/assets/squirrel.svg" alt="Squirrel" class="squirrel-image" />
+
+        <p class="description-text">
+            From version control to continuous delivery, Squirrel helps developers enhance their application delivery
+            processes by automating database development.
+        </p>
+
+        <div class="buttons-container">
+            <app-button variant="outline-secondary" text="Download" (click)="downloadApp(OS.Windows)">
+                <fa-icon [icon]="faWindows"></fa-icon>
+            </app-button>
+
+            <app-button variant="outline-secondary" text="Download" (click)="downloadApp(OS.Macos)">
+                <fa-icon [icon]="faApple"></fa-icon>
+            </app-button>
+        </div>
+    </div>
+</div>

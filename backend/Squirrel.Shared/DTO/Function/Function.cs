@@ -1,4 +1,5 @@
 namespace Squirrel.Shared.DTO.Function;
 
-public class Function: BaseDbItem
-{ }
+public class Function : BaseDbItem
+{
+}

@@ -77,7 +77,7 @@ public class AzureBlobStorageService : IBlobStorageService
         {
             throw new InvalidOperationException($"Container with name: {containerName} doesn`t exist");
         }
-        var blobsPages = containerClient.GetBlobsAsync().AsPages(default, default);
+        var blobsPages = containerClient.GetBlobsAsync().AsPages();
         ICollection<Blob> blobs = new List<Blob>();
         await foreach (Page<BlobItem> blobPage in blobsPages)
         {
@@ -91,7 +91,7 @@ public class AzureBlobStorageService : IBlobStorageService
 
     public async Task<ICollection<string>> GetContainersByPrefixAsync(string prefix)
     {
-        var containerPages = _blobServiceClient.GetBlobContainersAsync(prefix: prefix).AsPages(default, default);
+        var containerPages = _blobServiceClient.GetBlobContainersAsync(prefix: prefix).AsPages();
         ICollection<string> containers = new List<string>();
         await foreach (Page<BlobContainerItem> blobContainerPage in containerPages)
         {

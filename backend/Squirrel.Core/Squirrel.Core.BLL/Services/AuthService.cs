@@ -1,16 +1,16 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.BLL.Services.Abstract;
 using Squirrel.Core.Common.DTO.Auth;
 using Squirrel.Core.Common.Interfaces;
 using Squirrel.Core.DAL.Context;
 using Squirrel.Core.DAL.Entities;
-using static Google.Apis.Auth.GoogleJsonWebSignature;
-using Microsoft.Extensions.Options;
 using Squirrel.Core.Common.DTO.Users;
 using Squirrel.Core.Common.Security;
 using Squirrel.Shared.Exceptions;
+using static Google.Apis.Auth.GoogleJsonWebSignature;
 
 namespace Squirrel.Core.BLL.Services;
 
@@ -69,7 +69,7 @@ public sealed class AuthService : BaseService, IAuthService
 
     public async Task<AuthUserDto> LoginAsync(UserLoginDto userLoginDto)
     {
-        var userEntity = await _userService.GetUserEntityByEmail(userLoginDto.Email);
+        var userEntity = await _userService.GetUserEntityByEmailAsync(userLoginDto.Email);
 
         if (userEntity is null ||
             !SecurityUtils.ValidatePassword(userLoginDto.Password, userEntity.PasswordHash!, userEntity.Salt!))

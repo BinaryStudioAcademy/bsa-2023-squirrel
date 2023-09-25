@@ -6,7 +6,9 @@ namespace Squirrel.ConsoleApp.BL.Services;
 
 public class PostgreSqlService : BaseDbService
 {
-    public PostgreSqlService(string connectionString): base(connectionString) {}
+    public PostgreSqlService(string connectionString) : base(connectionString)
+    {
+    }
 
     public override QueryResultTable ExecuteQuery(string query)
     {

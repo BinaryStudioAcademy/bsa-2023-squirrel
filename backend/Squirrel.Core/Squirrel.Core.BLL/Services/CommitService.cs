@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.BLL.Services.Abstract;
 using Squirrel.Core.Common.DTO.Commit;
@@ -39,7 +38,7 @@ public class CommitService : BaseService, ICommitService
     {
         // Create commit
         var currentUserId = _userIdGetter.GetCurrentUserId();
-        var user = await _userService.GetUserByIdInternal(currentUserId);
+        var user = await _userService.GetUserByIdInternalAsync(currentUserId);
 
         var commit = _mapper.Map<Commit>(dto);
         commit.Author = user;

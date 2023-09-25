@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using Squirrel.Core.DAL.Entities.Common.AuditEntity;
+﻿using Squirrel.Core.DAL.Entities.Common.AuditEntity;
 using Squirrel.Core.DAL.Entities.JoinEntities;
 using Squirrel.Core.DAL.Enums;
 

@@ -13,6 +13,9 @@ namespace Squirrel.Core.BLL.Services;
 
 public sealed class ScriptService : BaseService, IScriptService
 {
+    private const string SqlServiceUrl = "SqlServiceUrl";
+    private const string ExecuteScriptRoutePrefix = "/api/ConsoleAppHub/execute-script";
+    private const string FormatScriptRoutePrefix = "/api/Script/format";
     private readonly IConfiguration _configuration;
     private readonly IHttpClientService _httpClientService;
 
@@ -48,7 +51,7 @@ public sealed class ScriptService : BaseService, IScriptService
         return _mapper.Map<ScriptDto>(updatedScript);
     }
 
-    public async Task<List<ScriptDto>> GetAllScriptsAsync(int projectId)
+    public async Task<ICollection<ScriptDto>> GetAllScriptsAsync(int projectId)
     {
         var scripts = await _context.Scripts
                                     .Where(x => x.ProjectId == projectId)
@@ -60,12 +63,12 @@ public sealed class ScriptService : BaseService, IScriptService
     public async Task<ScriptContentDto> GetFormattedSqlAsync(InboundScriptDto inboundScriptDto)
     {
         return await _httpClientService.SendAsync<InboundScriptDto, ScriptContentDto>
-            ($"{_configuration["SqlServiceUrl"]}/api/Script/format", inboundScriptDto, HttpMethod.Put);
+            ($"{_configuration[SqlServiceUrl]}{FormatScriptRoutePrefix}", inboundScriptDto, HttpMethod.Put);
     }
 
     public async Task<QueryResultTable> ExecuteSqlScriptAsync(InboundScriptDto inboundScriptDto)
     {
         return await _httpClientService.SendAsync<InboundScriptDto, QueryResultTable>
-           ($"{_configuration["SqlServiceUrl"]}/api/ConsoleAppHub/execute-script", inboundScriptDto, HttpMethod.Post);
+           ($"{_configuration[SqlServiceUrl]}{ExecuteScriptRoutePrefix}", inboundScriptDto, HttpMethod.Post);
     }
 }

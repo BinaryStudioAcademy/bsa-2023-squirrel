@@ -8,6 +8,8 @@ using Squirrel.SqlService.BLL.Models.ConsoleAppHub;
 using Squirrel.SqlService.BLL.Models.DTO;
 using Squirrel.SqlService.BLL.Models.DTO.Function;
 using Squirrel.SqlService.BLL.Models.DTO.Procedure;
+using Squirrel.SqlService.BLL.Models.DTO.UserDefinedType.DataType;
+using Squirrel.SqlService.BLL.Models.DTO.UserDefinedType.TableType;
 using Squirrel.SqlService.BLL.Models.DTO.View;
 using Squirrel.SqlService.BLL.Services.ConsoleAppHub;
 
@@ -41,6 +43,8 @@ public class DbItemsRetrievalService : IDbItemsRetrievalService
         var constraintsResult = await GetAllTableConstraintsAsync(clientId);
         var functionDetailsResult = await GetAllFunctionDetailsAsync(clientId);
         var viewsDetailsResult = await GetAllViewDetailsAsync(clientId);
+        var udtDataTypeDetailsResult = await GetAllUdtDataTypeDetails(clientId);
+        var udtTableTypeDetailsResult = await GetAllUdtTableTypeDetails(clientId);
 
         var dbStructureResult = new DbStructureDto()
         {
@@ -48,7 +52,9 @@ public class DbItemsRetrievalService : IDbItemsRetrievalService
             DbConstraints = constraintsResult.ToList(),
             DbFunctionDetails = functionDetailsResult,
             DbProcedureDetails = proceduresDetailsResult,
-            DbViewsDetails = viewsDetailsResult
+            DbViewsDetails = viewsDetailsResult,
+            DbUserDefinedDataTypeDetailsDto = udtDataTypeDetailsResult,
+            DbUserDefinedTableTypeDetailsDto = udtTableTypeDetailsResult
         };
 
         return dbStructureResult;
@@ -131,7 +137,10 @@ public class DbItemsRetrievalService : IDbItemsRetrievalService
 
             var tableConstraintResult = _mapper.Map<TableConstraintsDto>(await queryParametersRequest.tcs.Task);
 
-            tableConstraintsResult.Add(tableConstraintResult);
+            if (tableConstraintResult.Constraints.Any())
+            {
+                tableConstraintsResult.Add(tableConstraintResult);
+            }
         }
 
         return tableConstraintsResult;
@@ -197,5 +206,28 @@ public class DbItemsRetrievalService : IDbItemsRetrievalService
         var viewDetailResult = _mapper.Map<ViewDetailsDto>(await queryParametersRequest.tcs.Task);
 
         return viewDetailResult;
+    }
+
+    public async Task<UserDefinedDataTypeDetailsDto> GetAllUdtDataTypeDetails(Guid clientId)
+    {
+        var queryParametersRequest = RegisterQuery();
+
+        await _hubContext.Clients.User(clientId.ToString())
+            .GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync(queryParametersRequest.queryId);
+        var udtDataTypeDetailsResult = _mapper.Map<UserDefinedDataTypeDetailsDto>(await queryParametersRequest.tcs.Task);
+
+        return udtDataTypeDetailsResult;
+    }
+
+    public async Task<UserDefinedTables> GetAllUdtTableTypeDetails(Guid clientId)
+    {
+        var queryParametersRequest = RegisterQuery();
+        
+        await _hubContext.Clients.User(clientId.ToString())
+            .GetUserDefinedTableTypesAsync(queryParametersRequest.queryId);
+
+        var udtTableTypeDetails = _mapper.Map<UserDefinedTables>(await queryParametersRequest.tcs.Task);
+
+        return udtTableTypeDetails;
     }
 }

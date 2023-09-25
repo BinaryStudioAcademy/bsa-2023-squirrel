@@ -1,14 +1,13 @@
-﻿using Bogus.DataSets;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Squirrel.AzureBlobStorage.Interfaces;
 using Squirrel.AzureBlobStorage.Models;
+using Squirrel.Shared.DTO;
 using Squirrel.Shared.DTO.CommitFile;
+using Squirrel.Shared.DTO.Procedure;
 using Squirrel.Shared.DTO.SelectedItems;
+using Squirrel.Shared.DTO.Table;
 using Squirrel.SqlService.BLL.Interfaces;
-using Squirrel.SqlService.BLL.Models.DTO;
-using Squirrel.SqlService.BLL.Models.DTO.Procedure;
 using System.Text;
 
 namespace Squirrel.SqlService.BLL.Services;
@@ -132,7 +131,7 @@ public class CommitFilesService : ICommitFilesService
 
         var json = Encoding.UTF8.GetString(blob.Content ?? throw new ArgumentNullException());
         
-        return JsonConvert.DeserializeObject<DbStructureDto>(json);
+        return JsonConvert.DeserializeObject<DbStructureDto>(json) ?? throw new JsonException($"{nameof(DbStructureDto)} deserialized as null!");
     }
 
     public DbStructureDto GetTestStructure()

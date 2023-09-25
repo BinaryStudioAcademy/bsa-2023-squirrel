@@ -6,5 +6,4 @@ namespace Squirrel.SqlService.BLL.Interfaces;
 public interface ICommitFilesService
 {
     Task<ICollection<CommitFileDto>> SaveSelectedFiles(SelectedItemsDto selectedItems);
-    DbStructureDto GetTestStructure();
 }

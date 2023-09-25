@@ -11,7 +11,8 @@ using Blob = Squirrel.AzureBlobStorage.Models.Blob;
 using Squirrel.SqlService.BLL.Models.DTO.Function;
 using Squirrel.SqlService.BLL.Models.DTO.Procedure;
 using Squirrel.SqlService.BLL.Models.DTO.View;
-using System.Reflection.Metadata;
+using Squirrel.SqlService.BLL.Models.DTO.UserDefinedType.DataType;
+using Squirrel.SqlService.BLL.Models.DTO.UserDefinedType.TableType;
 
 namespace Squirrel.SqlService.BLL.Services;
 
@@ -50,6 +51,11 @@ public class ContentDifferenceService : IContentDifferenceService
         await CompareDbItemsContent(dbStructure.DbFunctionDetails!.Details, containers, commitId, DatabaseItemType.Function, differenceList, markedBlobIds);
         await CompareDbItemsContent(dbStructure.DbProcedureDetails!.Details, containers, commitId, DatabaseItemType.StoredProcedure, differenceList, markedBlobIds);
         await CompareDbItemsContent(dbStructure.DbViewsDetails!.Details, containers, commitId, DatabaseItemType.View, differenceList, markedBlobIds);
+        await CompareDbItemsContent(dbStructure.DbUserDefinedDataTypeDetailsDto.Details, containers, commitId,
+            DatabaseItemType.UserDefinedDataType, differenceList, markedBlobIds);
+
+        await CompareDbItemsContent(dbStructure.DbUserDefinedTableTypeDetailsDto.Tables, containers, commitId, DatabaseItemType.UserDefinedTableType,
+            differenceList, markedBlobIds);
 
         var tableContainer = GetContainerName(commitId, DatabaseItemType.Table);
         await CompareUnmarkedBlobsContent<TableStructureDto>(DatabaseItemType.Table, tableContainer, differenceList, markedBlobIds);
@@ -65,6 +71,14 @@ public class ContentDifferenceService : IContentDifferenceService
 
         var viewContainer = GetContainerName(commitId, DatabaseItemType.View);
         await CompareUnmarkedBlobsContent<ViewDetailInfo>(DatabaseItemType.View, viewContainer, differenceList, markedBlobIds);
+
+        var udDataTypeContainer = GetContainerName(commitId, DatabaseItemType.UserDefinedDataType);
+        await CompareUnmarkedBlobsContent<UserDefinedDataTypeDetailInfo>(DatabaseItemType.UserDefinedDataType, 
+            udDataTypeContainer, differenceList, markedBlobIds);
+
+        var udTableTypeContainer = GetContainerName(commitId, DatabaseItemType.UserDefinedTableType);
+        await CompareUnmarkedBlobsContent<UserDefinedTableDetailsDto>(DatabaseItemType.UserDefinedTableType,
+            udTableTypeContainer, differenceList, markedBlobIds);
         
         return differenceList;
     }

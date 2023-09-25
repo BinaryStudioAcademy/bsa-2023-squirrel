@@ -31,59 +31,59 @@ public class ContentDifferenceService : IContentDifferenceService
 
     public async Task<List<DatabaseItemContentCompare>> GetContentDiffsAsync(int commitId, Guid tempBlobId)
     {
-        return await GetTextPairFromBlobs(commitId, tempBlobId);
+        return await GetTextPairFromBlobsAsync(commitId, tempBlobId);
     }
 
-    private async Task<List<DatabaseItemContentCompare>> GetTextPairFromBlobs(int commitId, Guid tempBlobId)
+    private async Task<List<DatabaseItemContentCompare>> GetTextPairFromBlobsAsync(int commitId, Guid tempBlobId)
     {
         var containers = await _blobStorageService.GetContainersByPrefixAsync(commitId.ToString());
         var dbStructure = await GetTempBlobContentAsync(tempBlobId);
         var differenceList = new List<DatabaseItemContentCompare>();
         var markedBlobIds = new List<string>();
 
-        await CompareDbItemsContent(dbStructure.DbTableStructures!, containers, commitId, DatabaseItemType.Table, differenceList, markedBlobIds);
+        await CompareDbItemsContentAsync(dbStructure.DbTableStructures!, containers, commitId, DatabaseItemType.Table, differenceList, markedBlobIds);
 
         foreach (var tableConstraints in dbStructure.DbConstraints!)
         {
-            await CompareDbItemsContent(tableConstraints.Constraints, containers, commitId, DatabaseItemType.Constraint, differenceList, markedBlobIds);
+            await CompareDbItemsContentAsync(tableConstraints.Constraints, containers, commitId, DatabaseItemType.Constraint, differenceList, markedBlobIds);
         }
         
-        await CompareDbItemsContent(dbStructure.DbFunctionDetails!.Details, containers, commitId, DatabaseItemType.Function, differenceList, markedBlobIds);
-        await CompareDbItemsContent(dbStructure.DbProcedureDetails!.Details, containers, commitId, DatabaseItemType.StoredProcedure, differenceList, markedBlobIds);
-        await CompareDbItemsContent(dbStructure.DbViewsDetails!.Details, containers, commitId, DatabaseItemType.View, differenceList, markedBlobIds);
-        await CompareDbItemsContent(dbStructure.DbUserDefinedDataTypeDetailsDto.Details, containers, commitId,
+        await CompareDbItemsContentAsync(dbStructure.DbFunctionDetails!.Details, containers, commitId, DatabaseItemType.Function, differenceList, markedBlobIds);
+        await CompareDbItemsContentAsync(dbStructure.DbProcedureDetails!.Details, containers, commitId, DatabaseItemType.StoredProcedure, differenceList, markedBlobIds);
+        await CompareDbItemsContentAsync(dbStructure.DbViewsDetails!.Details, containers, commitId, DatabaseItemType.View, differenceList, markedBlobIds);
+        await CompareDbItemsContentAsync(dbStructure.DbUserDefinedDataTypeDetailsDto.Details, containers, commitId,
             DatabaseItemType.UserDefinedDataType, differenceList, markedBlobIds);
 
-        await CompareDbItemsContent(dbStructure.DbUserDefinedTableTypeDetailsDto.Tables, containers, commitId, DatabaseItemType.UserDefinedTableType,
+        await CompareDbItemsContentAsync(dbStructure.DbUserDefinedTableTypeDetailsDto.Tables, containers, commitId, DatabaseItemType.UserDefinedTableType,
             differenceList, markedBlobIds);
 
         var tableContainer = GetContainerName(commitId, DatabaseItemType.Table);
-        await CompareUnmarkedBlobsContent<TableStructureDto>(DatabaseItemType.Table, tableContainer, differenceList, markedBlobIds);
+        await CompareUnmarkedBlobsContentAsync<TableStructureDto>(DatabaseItemType.Table, tableContainer, differenceList, markedBlobIds);
         
         var constraintContainer = GetContainerName(commitId, DatabaseItemType.Constraint);
-        await CompareUnmarkedConstraintBlobsContent(DatabaseItemType.Constraint, constraintContainer, differenceList, markedBlobIds);
+        await CompareUnmarkedConstraintBlobsContentAsync(DatabaseItemType.Constraint, constraintContainer, differenceList, markedBlobIds);
         
         var functionContainer = GetContainerName(commitId, DatabaseItemType.Function);
-        await CompareUnmarkedBlobsContent<FunctionDetailInfo>(DatabaseItemType.Function, functionContainer, differenceList, markedBlobIds);
+        await CompareUnmarkedBlobsContentAsync<FunctionDetailInfo>(DatabaseItemType.Function, functionContainer, differenceList, markedBlobIds);
         
         var spContainer = GetContainerName(commitId, DatabaseItemType.StoredProcedure);
-        await CompareUnmarkedBlobsContent<ProcedureDetailInfo>(DatabaseItemType.StoredProcedure, spContainer, differenceList, markedBlobIds);
+        await CompareUnmarkedBlobsContentAsync<ProcedureDetailInfo>(DatabaseItemType.StoredProcedure, spContainer, differenceList, markedBlobIds);
 
         var viewContainer = GetContainerName(commitId, DatabaseItemType.View);
-        await CompareUnmarkedBlobsContent<ViewDetailInfo>(DatabaseItemType.View, viewContainer, differenceList, markedBlobIds);
+        await CompareUnmarkedBlobsContentAsync<ViewDetailInfo>(DatabaseItemType.View, viewContainer, differenceList, markedBlobIds);
 
         var udDataTypeContainer = GetContainerName(commitId, DatabaseItemType.UserDefinedDataType);
-        await CompareUnmarkedBlobsContent<UserDefinedDataTypeDetailInfo>(DatabaseItemType.UserDefinedDataType, 
+        await CompareUnmarkedBlobsContentAsync<UserDefinedDataTypeDetailInfo>(DatabaseItemType.UserDefinedDataType, 
             udDataTypeContainer, differenceList, markedBlobIds);
 
         var udTableTypeContainer = GetContainerName(commitId, DatabaseItemType.UserDefinedTableType);
-        await CompareUnmarkedBlobsContent<UserDefinedTableDetailsDto>(DatabaseItemType.UserDefinedTableType,
+        await CompareUnmarkedBlobsContentAsync<UserDefinedTableDetailsDto>(DatabaseItemType.UserDefinedTableType,
             udTableTypeContainer, differenceList, markedBlobIds);
         
         return differenceList;
     }
 
-    private async Task CompareUnmarkedBlobsContent<T>(DatabaseItemType itemType, string containerName, List<DatabaseItemContentCompare> differenceList,
+    private async Task CompareUnmarkedBlobsContentAsync<T>(DatabaseItemType itemType, string containerName, List<DatabaseItemContentCompare> differenceList,
         List<string> markedBlobIds) where T : BaseDbItem
     {
         var blobs = await _blobStorageService.GetAllBlobsByContainerNameAsync(containerName);
@@ -94,7 +94,7 @@ public class ContentDifferenceService : IContentDifferenceService
         }
     }
 
-    private async Task CompareUnmarkedConstraintBlobsContent(DatabaseItemType itemType, string containerName, List<DatabaseItemContentCompare> differenceList,
+    private async Task CompareUnmarkedConstraintBlobsContentAsync(DatabaseItemType itemType, string containerName, List<DatabaseItemContentCompare> differenceList,
     List<string> markedBlobIds)
     {
         var blobs = await _blobStorageService.GetAllBlobsByContainerNameAsync(containerName);
@@ -125,7 +125,7 @@ public class ContentDifferenceService : IContentDifferenceService
         }
     }
 
-    private async Task CompareDbItemsContent<T>(List<T> dbStructureItemCollection, ICollection<string> containers,
+    private async Task CompareDbItemsContentAsync<T>(List<T> dbStructureItemCollection, ICollection<string> containers,
         int commitId, DatabaseItemType itemType, List<DatabaseItemContentCompare> differenceList, List<string> markedBlobIds) where T : BaseDbItem
     {
         ICollection<Blob> blobs = new List<Blob>();

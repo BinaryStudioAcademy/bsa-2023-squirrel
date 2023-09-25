@@ -10,5 +10,6 @@ public class CommitProfile: Profile
     {
         CreateMap<Commit, CommitDto>();
         CreateMap<CommitFileDto, CommitFile>().ReverseMap();
+        CreateMap<CreateCommitDto, Commit>();
     }
 }

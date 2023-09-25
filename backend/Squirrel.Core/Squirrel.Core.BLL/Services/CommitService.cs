@@ -7,13 +7,10 @@ using Squirrel.Core.BLL.Services.Abstract;
 using Squirrel.Core.Common.DTO.Commit;
 using Squirrel.Core.DAL.Context;
 using Squirrel.Core.DAL.Entities;
-using Squirrel.Core.DAL.Enums;
 using Squirrel.Shared.DTO.CommitFile;
 using Squirrel.Shared.DTO.SelectedItems;
 using Squirrel.Shared.Enums;
 using Squirrel.Shared.Exceptions;
-using System.Text;
-using static Azure.Core.HttpHeader;
 
 namespace Squirrel.Core.BLL.Services;
 public class CommitService : BaseService, ICommitService
@@ -42,13 +39,8 @@ public class CommitService : BaseService, ICommitService
         var currentUserId = _userIdGetter.GetCurrentUserId();
         var user = await _userService.GetUserByIdInternal(currentUserId);
 
-        var commit = new Commit 
-        { 
-            Message = dto.Message, 
-            PreScript = dto.PreScript, 
-            PostScript = dto.PostScript, 
-            Author = user 
-        };
+        var commit = _mapper.Map<Commit>(dto);
+        commit.Author = user;
 
         var branchEntity = await GetBranchInternalAsync(dto.BranchId);
 

@@ -25,4 +25,5 @@ public interface IGetActionsService
 
     Task<QueryResultTable> GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync();
     Task<QueryResultTable> GetUserDefinedTableTypesAsync();
+    Task<QueryResultTable> ExecuteScriptAsync(string scriptContent);
 }

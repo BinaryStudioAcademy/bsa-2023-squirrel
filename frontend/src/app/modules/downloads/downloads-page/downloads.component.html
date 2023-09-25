@@ -1,31 +1,25 @@
-<div class="downloads-container">
+<div class="downloads-page">
     <div class="sidebar">
         <app-sidebar></app-sidebar>
     </div>
 
-    <div class="content">
-        <div class="header">
-            <h3 class="downloads-header">Downloads</h3>
+    <div class="upper-panel-container">
+        <h3 class="mat-h3">Downloads</h3>
+    </div>
+
+    <div class="horizontal-separator"></div>
+
+    <div class="downloads-container">
+        <div class="download-card" (click)="downloadApp(OS.Windows)">
+            <fa-icon [icon]="faWindows"></fa-icon>
+            <h3>Console App for Windows</h3>
+            <app-button variant="filled" text="Download"></app-button>
         </div>
 
-        <section class="section">
-            <div class="download-card" (click)="downloadApp(OS.Windows)">
-                <fa-icon [icon]="faWindows"></fa-icon>
-                <h3>Console App for Windows</h3>
-                <app-button variant="filled" text="Download"></app-button>
-            </div>
-
-            <div class="download-card" (click)="downloadApp(OS.Linux)">
-                <fa-icon [icon]="faLinux"></fa-icon>
-                <h3>Console App for Linux</h3>
-                <app-button variant="filled" text="Download"></app-button>
-            </div>
-
-            <div class="download-card" (click)="downloadApp(OS.Macos)">
-                <fa-icon [icon]="faApple"></fa-icon>
-                <h3>Console App for MacOS</h3>
-                <app-button variant="filled" text="Download"></app-button>
-            </div>
-        </section>
+        <div class="download-card" (click)="downloadApp(OS.Macos)">
+            <fa-icon [icon]="faApple"></fa-icon>
+            <h3>Console App for MacOS</h3>
+            <app-button variant="filled" text="Download"></app-button>
+        </div>
     </div>
 </div>

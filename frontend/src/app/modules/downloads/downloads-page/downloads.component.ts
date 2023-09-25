@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FilesDownloaderService } from '@core/services/files-downloader.service';
-import { faApple, faLinux, faWindows } from '@fortawesome/free-brands-svg-icons';
+import { faApple, faWindows } from '@fortawesome/free-brands-svg-icons';
 
 import { OperatingSystem } from 'src/app/models/downloads/operating-system';
 
@@ -16,8 +16,6 @@ export class DownloadsComponent {
     public OS = OperatingSystem;
 
     public faWindows = faWindows;
-
-    public faLinux = faLinux;
 
     public faApple = faApple;
 

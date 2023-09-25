@@ -40,7 +40,7 @@ public sealed class BranchService : BaseService, IBranchService
         return _mapper.Map<BranchDto[]>(branches);
     }
 
-    public async Task DeleteBranch(int branchId)
+    public async Task DeleteBranchAsync(int branchId)
     {
         var entity = await _context.Branches.FirstOrDefaultAsync(x => x.Id == branchId);
         if (entity == null)
@@ -53,7 +53,7 @@ public sealed class BranchService : BaseService, IBranchService
         await _context.SaveChangesAsync();
     }
 
-    public async Task<BranchDto> UpdateBranch(int branchId, BranchUpdateDto branchUpdateDto)
+    public async Task<BranchDto> UpdateBranchAsync(int branchId, BranchUpdateDto branchUpdateDto)
     {
         var entity = await _context.Branches.FirstOrDefaultAsync(x => x.Id == branchId);
         if (entity == null)

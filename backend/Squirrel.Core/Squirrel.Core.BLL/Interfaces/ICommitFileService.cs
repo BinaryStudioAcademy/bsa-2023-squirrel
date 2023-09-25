@@ -2,5 +2,5 @@ namespace Squirrel.Core.BLL.Interfaces;
 
 public interface ICommitFileService
 {
-    Task<List<string>> GetBlobIdsByCommitId(int commitId);
+    Task<List<string>> GetBlobIdsByCommitIdAsync(int commitId);
 }

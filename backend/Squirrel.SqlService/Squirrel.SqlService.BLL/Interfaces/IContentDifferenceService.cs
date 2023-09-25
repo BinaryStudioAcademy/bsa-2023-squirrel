@@ -1,5 +1,4 @@
 ﻿using Squirrel.Shared.DTO.DatabaseItem;
-using Squirrel.Shared.Enums;
 
 namespace Squirrel.SqlService.BLL.Interfaces
 {

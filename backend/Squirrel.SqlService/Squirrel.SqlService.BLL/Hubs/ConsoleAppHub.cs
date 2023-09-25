@@ -21,7 +21,7 @@ public sealed class ConsoleAppHub : Hub<IExecuteOnClientSide>
         await Clients.Caller.SetClientId(Context.UserIdentifier);
     }
     
-    public async Task ProcessReceivedDataFromClientSide(Guid queryId, string requestActionName, QueryResultTable queryResultTable)
+    public async Task ProcessReceivedDataFromClientSideAsync(Guid queryId, string requestActionName, QueryResultTable queryResultTable)
     {
         if (!_requestActionToProcessReceivedData.ContainsKey(requestActionName))
         {

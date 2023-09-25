@@ -3,20 +3,20 @@ using Squirrel.Core.DAL.Entities;
 
 namespace Squirrel.Core.BLL.Interfaces;
 
-public class DBStructureSaverService : IDBStructureSaverService
+public class DbStructureSaverService : IDbStructureSaverService
 {
     private readonly IHttpClientService _httpClientService;
     private readonly IConfiguration _configuration;
 
-    public DBStructureSaverService(IHttpClientService httpClientService, IConfiguration configuration)
+    public DbStructureSaverService(IHttpClientService httpClientService, IConfiguration configuration)
     {
         _httpClientService = httpClientService;
         _configuration = configuration;
     }
 
-    public async Task SaveDBStructureToAzureBlob(ChangeRecord changeRecord, Guid clientId)
+    public async Task SaveDBStructureToAzureBlobAsync(ChangeRecord changeRecord, Guid clientId)
     {
-        await _httpClientService.SendAsync<Guid>
+        await _httpClientService.SendAsync
             ($"{_configuration["SqlServiceUrl"]}/api/Changes/{clientId}", changeRecord.UniqueChangeId, HttpMethod.Post);
     }
 }

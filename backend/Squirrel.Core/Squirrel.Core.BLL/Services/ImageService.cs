@@ -35,7 +35,7 @@ public class ImageService : IImageService
     {
         ValidateImage(avatar);
 
-        var userEntity = await _userService.GetUserByIdInternal(_userIdGetter.GetCurrentUserId());
+        var userEntity = await _userService.GetUserByIdInternalAsync(_userIdGetter.GetCurrentUserId());
 
         var content = await CropAvatar(avatar);
         var guid = userEntity.AvatarUrl ?? Guid.NewGuid().ToString();
@@ -56,7 +56,7 @@ public class ImageService : IImageService
 
     public async Task DeleteAvatarAsync()
     {
-        var userEntity = await _userService.GetUserByIdInternal(_userIdGetter.GetCurrentUserId());
+        var userEntity = await _userService.GetUserByIdInternalAsync(_userIdGetter.GetCurrentUserId());
         if (userEntity.AvatarUrl == null)
         {
             throw new EntityNotFoundException(nameof(User.AvatarUrl));

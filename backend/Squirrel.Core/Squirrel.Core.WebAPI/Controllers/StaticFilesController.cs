@@ -14,7 +14,7 @@ public class StaticFilesController : Controller
     }
 
     [HttpGet("squirrel-installer"), DisableRequestSizeLimit]
-    public async Task<IActionResult> DownloadSquirrelInstaller()
+    public async Task<IActionResult> DownloadSquirrelInstallerAsync()
     {
         var filePath = _configuration["ConsoleSetupFilePath"];
 

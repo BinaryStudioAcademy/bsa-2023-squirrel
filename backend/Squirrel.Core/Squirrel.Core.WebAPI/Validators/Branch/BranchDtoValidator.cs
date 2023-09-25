@@ -11,6 +11,6 @@ public class BranchDtoValidator : AbstractValidator<BranchDto>
         RuleFor(x => x.Name)
             .MinimumLength(3)
             .MaximumLength(200)
-            .Must(x => Regex.IsMatch(x, @"^[\w\-@]+$"));
+            .Matches(@"^[\w\-@]+$");
     }
 }

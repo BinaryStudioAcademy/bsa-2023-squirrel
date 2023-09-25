@@ -13,7 +13,7 @@ public sealed class CommitFileService: ICommitFileService
         _context = context;
     }
     
-    public async Task<List<string>> GetBlobIdsByCommitId(int commitId)
+    public async Task<List<string>> GetBlobIdsByCommitIdAsync(int commitId)
     {
         return await _context.CommitFiles
             .Where(f => f.CommitId == commitId)

@@ -9,10 +9,8 @@ using Squirrel.Shared.DTO.Procedure;
 using Squirrel.Shared.DTO.Table;
 using Squirrel.SqlService.BLL.Hubs;
 using Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
-using Squirrel.SqlService.BLL.Models.DTO;
 using Squirrel.SqlService.BLL.Models.DTO.View;
 using Squirrel.SqlService.BLL.Services.ConsoleAppHub;
-
 
 namespace Squirrel.SqlService.WebApi.Controllers;
 
@@ -34,13 +32,6 @@ public class ConsoleAppHubController : ControllerBase
         _queryParameters = RegisterQuery();
     }
 
-    private (Guid queryId, TaskCompletionSource<QueryResultTable> tcs) RegisterQuery()
-    {
-        var queryId = Guid.NewGuid();
-        var tcs = _resultObserver.Register(queryId);
-        return (queryId, tcs);
-    }
-    
     [HttpPost("all-tables-names")]
     public async Task<ActionResult<TableNamesDto>> GetAllTablesNamesAsync([FromBody] QueryParameters queryParameters)
     {
@@ -161,10 +152,17 @@ public class ConsoleAppHubController : ControllerBase
     }
     
     [HttpPost("db-connect")]
-    public async Task<ActionResult> ConnectToDb([FromBody] RemoteConnect remoteConnect)
+    public async Task<ActionResult> ConnectToDbAsync([FromBody] RemoteConnect remoteConnect)
     {
         await _hubContext.Clients.User(remoteConnect.ClientId)
             .RemoteConnectAsync(_queryParameters.queryId, remoteConnect.DbConnection);
         return Ok(await _queryParameters.tcs.Task);
+    }
+    
+    private (Guid queryId, TaskCompletionSource<QueryResultTable> tcs) RegisterQuery()
+    {
+        var queryId = Guid.NewGuid();
+        var tcs = _resultObserver.Register(queryId);
+        return (queryId, tcs);
     }
 }

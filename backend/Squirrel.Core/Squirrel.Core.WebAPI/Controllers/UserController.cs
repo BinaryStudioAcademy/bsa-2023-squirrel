@@ -25,7 +25,7 @@ public class UserController : ControllerBase
     /// Update user names
     /// </summary>
     [HttpPut("update-names")]
-    public async Task<ActionResult<UserProfileDto>> UpdateUserNames([FromBody] UpdateUserNamesDto updateUserDto)
+    public async Task<ActionResult<UserProfileDto>> UpdateUserNamesAsync([FromBody] UpdateUserNamesDto updateUserDto)
     {
         return Ok(await _userService.UpdateUserNamesAsync(updateUserDto));
     }
@@ -34,40 +34,40 @@ public class UserController : ControllerBase
     /// Update user password
     /// </summary>
     [HttpPut("update-password")]
-    public async Task<ActionResult> UpdatePassword([FromBody] UpdateUserPasswordDto changePasswordDto)
+    public async Task<ActionResult> UpdatePasswordAsync([FromBody] UpdateUserPasswordDto changePasswordDto)
     {
         await _userService.ChangePasswordAsync(changePasswordDto);
         return NoContent();
     }
 
     [HttpGet("fromToken")]
-    public async Task<ActionResult<UserDto>> GetUserFromToken()
+    public async Task<ActionResult<UserDto>> GetUserFromTokenAsync()
     {
         return Ok(await _userService.GetUserByIdAsync(_userIdGetter.GetCurrentUserId()));
     }
 
     [HttpGet("user-profile")]
-    public async Task<ActionResult<UserProfileDto>> GetUserProfile()
+    public async Task<ActionResult<UserProfileDto>> GetUserProfileAsync()
     {
         return Ok(await _userService.GetUserProfileAsync());
     }
 
     [HttpPost("add-avatar")]
-    public async Task<ActionResult> AddUserAvatar(IFormFile avatar)
+    public async Task<ActionResult> AddUserAvatarAsync(IFormFile avatar)
     {
         await _imageService.AddAvatarAsync(avatar);
         return NoContent();
     }
     
     [HttpDelete("delete-avatar")]
-    public async Task<ActionResult> DeleteUserAvatar()
+    public async Task<ActionResult> DeleteUserAvatarAsync()
     {
         await _imageService.DeleteAvatarAsync();
         return NoContent();
     }
     
     [HttpGet("all")]
-    public async Task<ActionResult<List<UserDto>>> GetAllUsers()
+    public async Task<ActionResult<List<UserDto>>> GetAllUsersAsync()
     {
         return Ok(await _userService.GetAllUsersAsync());
     }

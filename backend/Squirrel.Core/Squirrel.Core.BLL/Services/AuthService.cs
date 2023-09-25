@@ -69,7 +69,7 @@ public sealed class AuthService : BaseService, IAuthService
 
     public async Task<AuthUserDto> LoginAsync(UserLoginDto userLoginDto)
     {
-        var userEntity = await _userService.GetUserEntityByEmail(userLoginDto.Email);
+        var userEntity = await _userService.GetUserEntityByEmailAsync(userLoginDto.Email);
 
         if (userEntity is null ||
             !SecurityUtils.ValidatePassword(userLoginDto.Password, userEntity.PasswordHash!, userEntity.Salt!))

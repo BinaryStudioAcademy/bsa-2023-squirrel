@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.SignalR;
 using Squirrel.AzureBlobStorage.Extensions;
-using Squirrel.Core.BLL.Hubs;
 using Squirrel.Core.DAL.Extensions;
 using Squirrel.Core.WebAPI.Extensions;
 using Squirrel.Shared.Middlewares;
@@ -8,6 +7,7 @@ using Squirrel.Shared.Extensions;
 using Squirrel.SqlService.WebApi.Extensions;
 using Squirrel.SqlService.WebApi.Middlewares;
 using Squirrel.SqlService.BLL.Extensions;
+using Squirrel.SqlService.BLL.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 

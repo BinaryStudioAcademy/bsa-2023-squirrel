@@ -36,7 +36,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ITableService, TableService>();
 
         services.AddScoped<IChangeRecordService, ChangeRecordService>();
-        services.AddTransient<IDBStructureSaverService, DBStructureSaverService>();
+        services.AddTransient<IDbStructureSaverService, DbStructureSaverService>();
 
         services.AddSingleton<IHttpClientService, HttpClientService>();
 

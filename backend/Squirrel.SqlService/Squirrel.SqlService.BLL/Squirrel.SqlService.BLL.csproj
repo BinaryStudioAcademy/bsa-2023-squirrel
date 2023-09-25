@@ -28,10 +28,15 @@
     <None Update="Services\SqlFormatter\PgSqlParser.py">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Remove="Models\DTO\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\DTO\" />
+    <Compile Remove="Models\DTO\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Models\DTO\**" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,7 @@
-﻿using FluentValidation.AspNetCore;
+﻿using System.Reflection;
+using System.Text;
+using System.Text.Json.Serialization;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Squirrel.AzureBlobStorage.Models;
@@ -7,9 +10,6 @@ using Squirrel.Core.BLL.Services;
 using Squirrel.Core.Common.DTO.Auth;
 using Squirrel.Core.Common.Interfaces;
 using Squirrel.Core.Common.JWT;
-using System.Reflection;
-using System.Text;
-using System.Text.Json.Serialization;
 
 namespace Squirrel.Core.WebAPI.Extensions;
 
@@ -34,8 +34,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IScriptService, ScriptService>();
         services.AddScoped<IConsoleConnectService, ConsoleConnectService>();
         services.AddScoped<ITableService, TableService>();
-
         services.AddScoped<IChangeRecordService, ChangeRecordService>();
+        
         services.AddTransient<IDbStructureSaverService, DbStructureSaverService>();
 
         services.AddSingleton<IHttpClientService, HttpClientService>();
@@ -102,9 +102,10 @@ public static class ServiceCollectionExtensions
                 {
                     OnAuthenticationFailed = context =>
                     {
+                        var tokenExpiredHeader = "Token-Expired";
                         if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
                         {
-                            context.Response.Headers.Add("Token-Expired", "true");
+                            context.Response.Headers.Add(tokenExpiredHeader, "true");
                         }
 
                         return Task.CompletedTask;

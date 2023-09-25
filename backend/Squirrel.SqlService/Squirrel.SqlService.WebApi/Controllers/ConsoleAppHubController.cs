@@ -21,13 +21,13 @@ namespace Squirrel.SqlService.WebApi.Controllers;
 public class ConsoleAppHubController : ControllerBase
 {
     private readonly IHubContext<ConsoleAppHub, IExecuteOnClientSide> _hubContext;
-    private readonly ResultObserver _resultObserver;
+    private readonly IResultObserver _resultObserver;
     private readonly IMapper _mapper;
     private readonly ISqlFormatterService _sqlFormatterService;
     private readonly (Guid queryId, TaskCompletionSource<QueryResultTable> tcs) _queryParameters;
 
     public ConsoleAppHubController(IHubContext<ConsoleAppHub, IExecuteOnClientSide> hubContext, ISqlFormatterService sqlFormatterService,
-        ResultObserver resultObserver, IMapper mapper)
+        IResultObserver resultObserver, IMapper mapper)
     {
         _hubContext = hubContext;
         _resultObserver = resultObserver;

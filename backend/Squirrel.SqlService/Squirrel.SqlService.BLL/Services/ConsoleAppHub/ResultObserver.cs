@@ -1,10 +1,11 @@
 ﻿using System.Collections.Concurrent;
 using Squirrel.ConsoleApp.Models;
 using Squirrel.Shared.Exceptions;
+using Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
 
 namespace Squirrel.SqlService.BLL.Services.ConsoleAppHub;
 
-public class ResultObserver
+public sealed class ResultObserver : IResultObserver
 {
     private readonly ConcurrentDictionary<Guid, TaskCompletionSource<QueryResultTable>> _pendingRequests = new();
     private const int SecondsToTimeout = 45;

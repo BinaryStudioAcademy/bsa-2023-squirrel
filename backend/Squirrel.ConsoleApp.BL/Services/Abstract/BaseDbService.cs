@@ -1,9 +1,9 @@
-﻿using System.Data.Common;
-using Squirrel.ConsoleApp.BL.Interfaces;
+﻿using Squirrel.ConsoleApp.BL.Interfaces;
 using Squirrel.ConsoleApp.Models;
+using System.Data.Common;
 
 namespace Squirrel.ConsoleApp.BL.Services.Abstract;
-public abstract class BaseDbService: IDatabaseService
+public abstract class BaseDbService : IDatabaseService
 {
     public string ConnectionString { get; set; }
 
@@ -24,6 +24,8 @@ public abstract class BaseDbService: IDatabaseService
 
         var result = BuildTable(reader);
 
+        connection.Close();
+
         return result;
     }
 
@@ -31,28 +33,41 @@ public abstract class BaseDbService: IDatabaseService
     {
         using var command = CreateCommandInternal(connection, query);
 
+        command.CommandTimeout = 45;
+
         await connection.OpenAsync();
         await using var reader = await command.ExecuteReaderAsync();
 
         var result = BuildTable(reader);
 
+        await connection.CloseAsync();
+
         return result;
-}
+    }
 
     private QueryResultTable BuildTable(DbDataReader reader)
     {
-        var result = new QueryResultTable(Enumerable.Range(0, reader.FieldCount).Select(reader.GetName).ToArray());
+        // to display 'null' in empty cells in results table on UI
+        const string nullValue = "null";
+
+        var fieldCount = reader.FieldCount;
+        var columnNames = Enumerable.Range(0, fieldCount).Select(reader.GetName).ToArray();
+        var result = new QueryResultTable(columnNames);
+
         while (reader.Read())
         {
-            var row = new string[reader.FieldCount];
-            for (int i = 0; i < reader.FieldCount; i++)
+            var row = new List<string>(fieldCount);
+            for (int i = 0; i < fieldCount; i++)
             {
-                row[i] = reader[i].ToString() ?? string.Empty;
+                var value = reader.IsDBNull(i) ? nullValue : reader[i].ToString();
+                row.Add(value ?? nullValue);
             }
-            result.AddRow(row);
+            result.AddRow(row.ToArray());
         }
+
         return result;
     }
+
 
     private DbCommand CreateCommandInternal(DbConnection connection, string query)
     {

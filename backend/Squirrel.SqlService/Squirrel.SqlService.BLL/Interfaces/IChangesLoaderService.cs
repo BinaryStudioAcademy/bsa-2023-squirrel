@@ -2,6 +2,6 @@
 
 public interface IChangesLoaderService
 {
-    Task LoadChangesToBlobAsync(Guid changeId);
+    Task LoadChangesToBlobAsync(Guid changeId, Guid clientId);
 }
 

@@ -15,10 +15,10 @@ public sealed class DatabaseItemsController : ControllerBase
         _databaseItemsService = databaseItemsService;
     }
 
-    [HttpGet]
-    public async Task<ActionResult<List<DatabaseItem>>> GetAllItems()
+    [HttpGet("{clientId}")]
+    public async Task<ActionResult<List<DatabaseItem>>> GetAllDbItemsAsync(Guid clientId)
     {
-        return Ok(await _databaseItemsService.GetAllItems());
+        return Ok(await _databaseItemsService.GetAllItemsAsync(clientId));
     }
 }
 

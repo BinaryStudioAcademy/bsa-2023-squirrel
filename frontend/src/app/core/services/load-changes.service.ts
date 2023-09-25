@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 import { HttpInternalService } from './http-internal.service';
 
@@ -11,21 +11,11 @@ export class LoadChangesService {
 
     private readonly loadChangesRoutePrefix = '/api/changerecords';
 
-    // eslint-disable-next-line no-empty-function
-    constructor(private httpClient: HttpInternalService) { }
+    constructor(private httpClient: HttpInternalService) {
+        // eslint-disable-next-line no-empty-function
+    }
 
-    public loadChangesRequest() {
-        this.httpClient.postRequest<string>(`${this.loadChangesRoutePrefix}`, null!)
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe({
-                next: (event) => {
-                    // eslint-disable-next-line no-console
-                    console.log(event);
-                },
-                error: (error) => {
-                    // eslint-disable-next-line no-console
-                    console.log(error);
-                },
-            });
+    public loadChangesRequest(guid: string): Observable<string> {
+        return this.httpClient.postRequest<string>(`${this.loadChangesRoutePrefix}/${guid}`, null!);
     }
 }

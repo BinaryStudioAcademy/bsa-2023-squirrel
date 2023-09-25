@@ -15,9 +15,9 @@ public class DatabaseItemsService : IDatabaseItemsService
         _configuration = configuration;
     }
 
-    public async Task<List<DatabaseItem>> GetAllItems()
+    public async Task<ICollection<DatabaseItem>> GetAllItemsAsync(Guid clientId)
     {
         return await _httpClientService.GetAsync<List<DatabaseItem>>
-            ($"{_configuration["SqlServiceUrl"]}/api/DatabaseItems");
+            ($"{_configuration["SqlServiceUrl"]}/api/DatabaseItems/{clientId}");
     }
 }

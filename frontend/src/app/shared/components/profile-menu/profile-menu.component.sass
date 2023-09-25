@@ -30,26 +30,42 @@
     color: $text-main
     font-weight: $bold-weight
 
-.divider
-    border-color: $shadow
+.horizontal-separator
+    border-bottom: 1px solid $light-gray
+    width: 100%
+    margin-top: 8px
 
 .menu-item
     color: $text-main
     display: flex
+    height: 45px
     align-items: center
     font-family: "Montserrat", sans-serif
+
     .icon
         margin-right: 8px
-        color: $text-light
         img
             width: 20px
             height: 20px
             margin-bottom: 8px
 
+    &.logout:hover
+        color: $link-color
+        .icon img
+            margin-bottom: 6px
+            margin-left: 2px
+
 .logout
-    color: $link-color
     .icon
         img
             width: 20px
             height: 20px
+            margin-bottom: 6px
+            margin-left: 2px
+
+.account
+    .icon
+        img
+            width: 23px
+            height: 23px
             margin-bottom: 6px

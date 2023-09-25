@@ -1,7 +1,11 @@
 @import "/src/styles/color"
+@import "/src/styles/weights"
 
 .container
     margin: 10px
+
+.padding-bottom
+    padding-bottom: 70px
 
 .bordered
     border: 1px solid $black
@@ -20,6 +24,7 @@
 
 .listbox
     list-style: none
+    cursor: pointer
     padding: 0
     margin: 0
 
@@ -44,8 +49,23 @@
     display: flex
     gap: 20px
 
-textarea
+.editor
     flex-grow: 1
     padding: 10px
     height: 60vh
     resize: none
+
+.spacing-div
+    display: flex
+    justify-content: center
+    align-items: center
+    padding: 35px
+
+.unsaved
+    font-style: italic
+    font-weight: $bold-weight
+
+.to-top-btn
+    position: fixed
+    bottom: 20px
+    right: 25px

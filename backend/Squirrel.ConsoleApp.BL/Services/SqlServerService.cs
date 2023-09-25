@@ -6,7 +6,9 @@ namespace Squirrel.ConsoleApp.BL.Services;
 
 public class SqlServerService : BaseDbService
 {
-    public SqlServerService(string connectionString): base(connectionString) {}
+    public SqlServerService(string connectionString) : base(connectionString)
+    {
+    }
 
     public override QueryResultTable ExecuteQuery(string query)
     {

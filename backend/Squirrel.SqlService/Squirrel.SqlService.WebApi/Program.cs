@@ -1,14 +1,16 @@
 using Microsoft.AspNetCore.SignalR;
 using Squirrel.AzureBlobStorage.Extensions;
-using Squirrel.Core.BLL.Hubs;
 using Squirrel.Core.DAL.Extensions;
-using Squirrel.Core.WebAPI.Extensions;
 using Squirrel.Shared.Middlewares;
+using Squirrel.Shared.Extensions;
 using Squirrel.SqlService.WebApi.Extensions;
 using Squirrel.SqlService.WebApi.Middlewares;
 using Squirrel.SqlService.BLL.Extensions;
+using Squirrel.SqlService.BLL.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddSerilog();
 
 // Add services to the container.
 
@@ -25,6 +27,7 @@ builder.Services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 builder.Services.RegisterCustomServices(builder.Configuration);
 builder.Services.AddAutoMapper();
 builder.Services.AddSwaggerGen();
+builder.WebHost.UseUrls("http://*:5076");
 
 var app = builder.Build();
 

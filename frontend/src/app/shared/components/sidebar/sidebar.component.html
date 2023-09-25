@@ -7,10 +7,7 @@
             <div class="tab nav" routerLink="/projects" routerLinkActive="active">
                 <img class="folder-icon" src="/assets/open_folder_icon.png" alt="Folder Icon" />
             </div>
-            <div class="tab nav" routerLink="/main" routerLinkActive="active">
-                <img class="bell-icon" src="/assets/notification_icon.png" alt="Bell Icon" />
-            </div>
-            <div class="tab nav" (click)="downloadApp()">
+            <div class="tab nav" routerLink="/downloads" routerLinkActive="active">
                 <img class="download-icon" src="/assets/download_icon.png" alt="Download Icon" />
             </div>
         </div>
@@ -19,10 +16,7 @@
                 <app-profile-menu></app-profile-menu>
             </mat-menu>
             <div class="tab" [matMenuTriggerFor]="userMenu">
-                <img
-                    class="account-icon"
-                    src="/assets/account_circle_icon.png"
-                    alt="Account Icon" />
+                <img class="account-icon" src="/assets/account_circle_icon.png" alt="Account Icon" />
             </div>
         </div>
     </div>

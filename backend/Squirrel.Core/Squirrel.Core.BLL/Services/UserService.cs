@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Squirrel.AzureBlobStorage.Interfaces;
 using Squirrel.Core.BLL.Extensions;
@@ -30,18 +29,18 @@ public sealed class UserService : BaseService, IUserService
 
     public async Task<UserDto> GetUserByIdAsync(int id)
     {
-        return _mapper.Map<UserDto>(await GetUserByIdInternal(id));
+        return _mapper.Map<UserDto>(await GetUserByIdInternalAsync(id));
     }
 
     public async Task<UserProfileDto> GetUserProfileAsync()
     {
-        return _mapper.Map<UserProfileDto>(await GetUserByIdInternal(_userIdGetter.GetCurrentUserId()));
+        return _mapper.Map<UserProfileDto>(await GetUserByIdInternalAsync(_userIdGetter.GetCurrentUserId()));
     }
 
     public async Task<UserDto> GetUserByEmailAsync(string email)
     {
-        var userEntity = await GetUserEntityByEmail(email);
-        if (userEntity == null)
+        var userEntity = await GetUserEntityByEmailAsync(email);
+        if (userEntity is null)
         {
             throw new EntityNotFoundException(nameof(User), email);
         }
@@ -49,11 +48,11 @@ public sealed class UserService : BaseService, IUserService
         return _mapper.Map<UserDto>(userEntity);
     }
 
-    public async Task<List<UserDto>> GetAllUsersAsync()
+    public async Task<ICollection<UserDto>> GetAllUsersAsync()
     {
         var userEntities = await _context.Users.ToListAsync();
 
-        if (userEntities == null)
+        if (userEntities is null)
         {
             return new List<UserDto>();
         }
@@ -63,8 +62,8 @@ public sealed class UserService : BaseService, IUserService
 
     public async Task<UserDto> GetUserByUsernameAsync(string username)
     {
-        var userEntity = await GetUserEntityByUsername(username);
-        if (userEntity == null)
+        var userEntity = await GetUserEntityByUsernameAsync(username);
+        if (userEntity is null)
         {
             throw new EntityNotFoundException(nameof(User), username);
         }
@@ -74,7 +73,7 @@ public sealed class UserService : BaseService, IUserService
 
     public async Task<UserDto> CreateUserAsync(UserRegisterDto userDto, bool isGoogleAuth)
     {
-        if (await GetUserEntityByUsername(userDto.Username) is not null)
+        if (await GetUserEntityByUsernameAsync(userDto.Username) is not null)
         {
             if (isGoogleAuth)
             {
@@ -87,7 +86,7 @@ public sealed class UserService : BaseService, IUserService
             }
         }
 
-        if (await GetUserEntityByEmail(userDto.Email) is not null)
+        if (await GetUserEntityByEmailAsync(userDto.Email) is not null)
         {
             throw new EmailAlreadyRegisteredException();
         }
@@ -101,11 +100,11 @@ public sealed class UserService : BaseService, IUserService
 
     public async Task<UserProfileDto> UpdateUserNamesAsync(UpdateUserNamesDto updateUserDto)
     {
-        var userEntity = await GetUserByIdInternal(_userIdGetter.GetCurrentUserId());
+        var userEntity = await GetUserByIdInternalAsync(_userIdGetter.GetCurrentUserId());
 
-        var existingUserWithSameUsername = await GetUserEntityByUsername(updateUserDto.Username);
+        var existingUserWithSameUsername = await GetUserEntityByUsernameAsync(updateUserDto.Username);
 
-        if (existingUserWithSameUsername != null && existingUserWithSameUsername.Id != _userIdGetter.GetCurrentUserId())
+        if (existingUserWithSameUsername is not null && existingUserWithSameUsername.Id != _userIdGetter.GetCurrentUserId())
         {
             throw new UsernameAlreadyRegisteredException();
         }
@@ -120,7 +119,7 @@ public sealed class UserService : BaseService, IUserService
 
     public async Task ChangePasswordAsync(UpdateUserPasswordDto changePasswordDto)
     {
-        var userEntity = await GetUserByIdInternal(_userIdGetter.GetCurrentUserId());
+        var userEntity = await GetUserByIdInternalAsync(_userIdGetter.GetCurrentUserId());
 
         if (!SecurityUtils.ValidatePassword(changePasswordDto.CurrentPassword, userEntity.PasswordHash!,
                 userEntity.Salt!))
@@ -134,34 +133,21 @@ public sealed class UserService : BaseService, IUserService
         await _context.SaveChangesAsync();
     }
 
-    public async Task<UserProfileDto> UpdateNotificationsAsync(UpdateUserNotificationsDto updateNotificationsDto)
-    {
-        var userEntity = await GetUserByIdInternal(_userIdGetter.GetCurrentUserId());
-
-        userEntity.SquirrelNotification = updateNotificationsDto.SquirrelNotification;
-        userEntity.EmailNotification = updateNotificationsDto.EmailNotification;
-
-        _context.Users.Update(userEntity);
-        await _context.SaveChangesAsync();
-
-        return _mapper.Map<UserProfileDto>(userEntity);
-    }
-
-    public async Task<User?> GetUserEntityByEmail(string email)
+    public async Task<User?> GetUserEntityByEmailAsync(string email)
     {
         return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
     }
 
-    public async Task<User?> GetUserEntityByUsername(string username)
+    public async Task<User?> GetUserEntityByUsernameAsync(string username)
     {
         return await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
     }
 
-    public async Task<User> GetUserByIdInternal(int id)
+    public async Task<User> GetUserByIdInternalAsync(int id)
     {
         var userEntity = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
 
-        if (userEntity == null)
+        if (userEntity is null)
         {
             throw new EntityNotFoundException(nameof(User), id);
         }

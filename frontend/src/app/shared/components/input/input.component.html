@@ -11,8 +11,10 @@
                 'padding-right': type === 'password' ? '40px' : '15px'
             }"/>
         <span *ngIf="type === 'password'" class="hide" (click)="show = !show">
-            <img src="assets/{{ show ? 'hide-1.svg' : 'hide-2.svg' }}" alt="show/hide"/>
+            <img [src]="show ? 'assets/hide-1.svg' : 'assets/hide-2.svg'" alt="show/hide" [ngClass]="show ? 'hide-icon' : 'show-icon'" />
         </span>
+
+
     </div>
 
     <div *ngIf="control.touched">
@@ -36,13 +38,11 @@
         </div>
 
         <div class="invalid-feedback" *ngIf="control.errors?.['wrongCharacters']">
-            {{ label === '' ? name : (label | titlecase) }} can contain only Latin letters, Digits and Special
-            characters
+            Only Latin letters, Digits and Special characters
         </div>
 
         <div class="invalid-feedback" *ngIf="control.errors?.['userNameMatch']">
-            {{ label === '' ? name : (label | titlecase) }} must contain only Latin letters, numbers, dashes and
-            underscores
+            Only Latin letters, numbers, dashes and underscores
         </div>
 
         <div class="invalid-feedback" *ngIf="control.errors?.['nameMatch']">
@@ -52,5 +52,13 @@
         <div class="invalid-feedback" *ngIf="control.errors?.['lowerExist']">At least one lowercase letter</div>
 
         <div class="invalid-feedback" *ngIf="control.errors?.['upperExist']">At least one uppercase letter</div>
+
+        <div class="invalid-feedback" *ngIf="control.errors?.['branchNameMatch']">
+            Branch name must contain latin/number/dash/underscore and not contain double dashes or dash on the start/end
+        </div>
+
+        <div class="invalid-feedback" *ngIf="control.errors?.['projectNameMatch']">
+           Must contain Only Latin letters, digits, special characters, spaces and no repeated spaces
+        </div>
     </div>
 </div>

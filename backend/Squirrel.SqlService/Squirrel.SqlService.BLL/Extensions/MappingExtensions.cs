@@ -12,7 +12,11 @@ public static class MappingExtensions
         foreach (var propertyName in propertyNames)
         {
             var property = typeof(T).GetProperty(propertyName);
-            if (property == null || !rowNames.Contains(propertyName.ToLower())) continue;
+            if (property is null || !rowNames.Contains(propertyName.ToLower()))
+            {
+                continue;
+            }
+
             var value = rowValues[rowNames.IndexOf(propertyName.ToLower())];
             if (property.PropertyType == typeof(string))
                 property.SetValue(obj, value);

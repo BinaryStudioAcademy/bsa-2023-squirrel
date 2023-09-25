@@ -57,11 +57,11 @@ export class ChangesComponent implements OnInit, OnDestroy {
             });
     }
 
-    ngOnInit(): void {
-        this.currentProjectId = this.projectService.getCurrentProjectId();
+    public ngOnInit(): void {
+        this.currentProjectId = this.projectService.currentProjectId;
     }
 
-    ngOnDestroy(): void {
+    public ngOnDestroy(): void {
         this.unsubscribe$.next();
         this.unsubscribe$.complete();
     }
@@ -72,6 +72,32 @@ export class ChangesComponent implements OnInit, OnDestroy {
         if (!this.selectedItems.some(x => x.children?.some(y => y.selected))) { return false; }
 
         return true;
+    }
+
+    public commit() {
+        const branchId = this.branchService.getCurrentBranch(this.currentProjectId);
+        const commit = {
+            branchId,
+            postScript: '',
+            preScript: '',
+            selectedItems: this.selectedItems,
+            changesGuid: this.guid,
+            message: this.message,
+        } as CreateCommitDto;
+
+        this.spinner.show();
+        this.commitService.commit(commit)
+            .pipe(takeUntil(this.unsubscribe$), finalize(this.spinner.hide))
+            .subscribe(x => {
+                // eslint-disable-next-line no-console
+                console.log(x.body);
+                this.items.forEach(parent => {
+                    if (parent.children) {
+                        parent.children = parent.children.filter(item => !item.selected);
+                    }
+                });
+                this.items = this.items.filter(item => !item.selected && item.children && item.children?.length > 0);
+            });
     }
 
     public selectionChanged(event: { selectedNodes: TreeNode[]; originalStructure: TreeNode[]; }) {
@@ -125,32 +151,6 @@ export class ChangesComponent implements OnInit, OnDestroy {
             default:
                 return 'Unknown category';
         }
-    }
-
-    public commit() {
-        const branchId = this.branchService.getCurrentBranch(this.currentProjectId);
-        const commit = {
-            branchId,
-            postScript: '',
-            preScript: '',
-            selectedItems: this.selectedItems,
-            changesGuid: this.guid,
-            message: this.message,
-        } as CreateCommitDto;
-
-        this.spinner.show();
-        this.commitService.commit(commit)
-            .pipe(takeUntil(this.unsubscribe$), finalize(this.spinner.hide))
-            .subscribe(x => {
-            // eslint-disable-next-line no-console
-                console.log(x.body);
-                this.items.forEach(parent => {
-                    if (parent.children) {
-                        parent.children = parent.children.filter(item => !item.selected);
-                    }
-                });
-                this.items = this.items.filter(item => !item.selected && item.children && item.children?.length > 0);
-            });
     }
 
     private initMockedDifferences() {

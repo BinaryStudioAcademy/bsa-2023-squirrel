@@ -6,8 +6,9 @@ import { AuthService } from '@core/services/auth.service';
     providedIn: 'root',
 })
 export class AuthGuard implements CanActivate, CanActivateChild {
-    // eslint-disable-next-line no-empty-function
-    constructor(private authService: AuthService, private router: Router) {}
+    constructor(private authService: AuthService, private router: Router) {
+        // Intentionally left empty for dependency injection purposes only
+    }
 
     public canActivate(route: ActivatedRouteSnapshot) {
         return this.checkForActivation(route);

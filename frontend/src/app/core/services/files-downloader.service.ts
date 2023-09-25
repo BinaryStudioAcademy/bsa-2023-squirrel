@@ -14,8 +14,9 @@ export class FilesDownloaderService {
 
     private readonly staticFilesRoutePrefix = '/api/staticfiles';
 
-    // eslint-disable-next-line no-empty-function
-    constructor(private httpClient: HttpInternalService, private notificationService: NotificationService) {}
+    constructor(private httpClient: HttpInternalService, private notificationService: NotificationService) {
+        // Intentionally left empty for dependency injection purposes only
+    }
 
     public downloadSquirrelInstaller() {
         this.httpClient.getFullBlobRequest(`${this.staticFilesRoutePrefix}/squirrel-installer`)

@@ -13,8 +13,9 @@ import { HttpInternalService } from './http-internal.service';
 export class UserService {
     private readonly routePrefix = '/api/user';
 
-    // eslint-disable-next-line no-empty-function
-    constructor(private httpService: HttpInternalService) {}
+    constructor(private httpService: HttpInternalService) {
+        // Intentionally left empty for dependency injection purposes only
+    }
 
     public updateUserNames(dto: UpdateUserNamesDto): Observable<UserProfileDto> {
         return this.httpService.putRequest<UserProfileDto>(`${this.routePrefix}/update-names`, dto);

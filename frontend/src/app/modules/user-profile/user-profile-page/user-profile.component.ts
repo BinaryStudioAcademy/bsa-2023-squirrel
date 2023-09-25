@@ -19,9 +19,9 @@ import { UserProfileDto } from 'src/app/models/user/user-profile-dto';
     styleUrls: ['./user-profile.component.sass'],
 })
 export class UserProfileComponent extends BaseComponent implements OnInit, OnDestroy {
-    public squirrelNotification: boolean;
+    public isSquirrelNotificationEnabled: boolean;
 
-    public emailNotification: boolean;
+    public isEmailNotificationEnabled: boolean;
 
     public penIcon = faPen;
 
@@ -33,7 +33,9 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
 
     public passwordForm: FormGroup = new FormGroup({});
 
-    private readonly maxFileLength = 5 * 1024 * 1024;
+    private readonly megabyteLength = 1048576;
+
+    private readonly maxFileLength = 5242880;
 
     private readonly allowedTypes = ['image/png', 'image/jpeg'];
 
@@ -116,8 +118,8 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
     }
 
     private initNotificationsValue() {
-        this.squirrelNotification = this.currentUser.squirrelNotification;
-        this.emailNotification = this.currentUser.emailNotification;
+        this.isSquirrelNotificationEnabled = this.currentUser.squirrelNotification;
+        this.isEmailNotificationEnabled = this.currentUser.emailNotification;
     }
 
     public updateUserNames() {
@@ -185,8 +187,8 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
     public updateUserNotifications() {
         this.spinner.show();
         const userData: UpdateUserNotificationsDto = {
-            squirrelNotification: this.squirrelNotification,
-            emailNotification: this.emailNotification,
+            squirrelNotification: this.isSquirrelNotificationEnabled,
+            emailNotification: this.isEmailNotificationEnabled,
         };
 
         this.userService
@@ -235,7 +237,7 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
 
     public fileValidate(file: File) {
         if (file.size > this.maxFileLength) {
-            this.notificationService.error(`The file size should not exceed ${this.maxFileLength / (1024 * 1024)}MB`);
+            this.notificationService.error(`The file size should not exceed ${this.maxFileLength / this.megabyteLength}MB`);
 
             return false;
         }

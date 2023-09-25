@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { NotificationService } from '@core/services/notification.service';
 import { UserPredicates } from '@shared/helpers/user-predicates';
 
 import { Branch } from 'src/app/models/branch/branch';
@@ -21,7 +22,7 @@ export class PullRequestListComponent {
 
     public searchForm: FormGroup = new FormGroup({});
 
-    constructor(private fb: FormBuilder) {
+    constructor(private fb: FormBuilder, private notificationService: NotificationService) {
         this.dropdownItems = this.getBranchTypes();
         this.searchForm = this.fb.group({
             search: ['', []],
@@ -31,12 +32,12 @@ export class PullRequestListComponent {
         this.dropdownAuthors = this.getAuthors();
     }
 
-    getBranchTypes() {
+    private getBranchTypes() {
         // TODO: fetch data from server, remove placeholder data
         return ['All', 'Open', 'Declined', 'Merged'];
     }
 
-    getAuthors() {
+    private getAuthors() {
         // TODO: fetch data from server, remove placeholder data
         const user = {
             id: 1,
@@ -66,11 +67,11 @@ export class PullRequestListComponent {
         return [user, user2, user3];
     }
 
-    getFullName(item: UserDto) {
+    public getFullName(item: UserDto) {
         return `${item.firstName} ${item.lastName} ${item.userName ? `(${item.userName})` : ''}`;
     }
 
-    getPullRequests() {
+    private getPullRequests() {
         // TODO: fetch data from server, remove placeholder data
         const user = {
             id: 1,
@@ -113,19 +114,15 @@ export class PullRequestListComponent {
         return [pullRequest, pullRequest, pullRequest, pullRequest, pullRequest, pullRequest, pullRequest];
     }
 
-    filter(item: UserDto, value: string) {
+    public filter(item: UserDto, value: string) {
         return UserPredicates.findByFullNameOrUsernameOrEmail(item, value);
     }
 
-    onAuthorSelectionChange($event: string) {
-        // TODO: add filter logic, remove log
-        // eslint-disable-next-line no-console
-        console.log($event);
+    public onAuthorSelectionChange($event: string) {
+        this.notificationService.info(`Author '${$event}' selected successfully`);
     }
 
-    onBranchTypeSelectionChange($event: string) {
-        // TODO: add filter logic, remove log
-        // eslint-disable-next-line no-console
-        console.log($event);
+    public onBranchTypeSelectionChange($event: string) {
+        this.notificationService.info(`Branch '${$event}' selected successfully`);
     }
 }

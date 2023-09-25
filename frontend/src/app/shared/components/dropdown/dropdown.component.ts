@@ -14,35 +14,35 @@ import {
     templateUrl: './dropdown.component.html',
     styleUrls: ['./dropdown.component.sass'],
 })
-export class DropdownComponent implements OnChanges {
+export class DropdownComponent<T> implements OnChanges {
     public searchTerm: string = '';
 
     public isActive = false;
 
-    @Input() options: unknown[] = [];
+    @Input() public options: T[] = [];
 
-    @Input() width: number;
+    @Input() public width: number;
 
-    @Input() selectedByDefault: number = 0;
+    @Input() public selectedByDefault: number = 0;
 
-    @Input() includeButton: boolean = false;
+    @Input() public isButtonIncluded: boolean = false;
 
-    @Output() selectedValueChanged = new EventEmitter();
+    @Output() public selectedValueChanged = new EventEmitter();
 
-    @Output() buttonClicked = new EventEmitter();
+    @Output() public buttonClicked = new EventEmitter();
 
-    @Input() dropdownIcon: string;
+    @Input() public dropdownIcon: string;
 
-    @Input() template: TemplateRef<unknown>;
+    @Input() public template: TemplateRef<T>;
 
-    @Input() modalOption: string = '+ Add New';
+    @Input() public modalOption: string = '+ Add New';
 
-    @Input() filterPredicate?: (item: any, value: string) => boolean = this.filterByName;
+    @Input() public filterPredicate?: (item: T, value: string) => boolean = this.filterByName;
 
-    public selectedOption: any;
+    public selectedOption: T;
 
     @HostListener('document:click', ['$event'])
-    onClick(event: Event): void {
+    public onClick(event: Event): void {
         if (!this.elementRef.nativeElement.contains(event.target)) {
             this.isActive = false;
         }
@@ -50,16 +50,17 @@ export class DropdownComponent implements OnChanges {
 
     constructor(
         private elementRef: ElementRef,
-        // eslint-disable-next-line no-empty-function
-    ) {}
+    ) {
+        // Intentionally left empty for dependency injection purposes only
+    }
 
-    ngOnChanges(changes: SimpleChanges) {
+    public ngOnChanges(changes: SimpleChanges) {
         if (changes['options'] || changes['selectedByDefault']) {
             this.selectedOption = this.options[this.selectedByDefault];
         }
     }
 
-    onOptionSelected(value: string) {
+    public onOptionSelected(value: T) {
         this.selectedOption = value;
         this.selectedValueChanged.emit(this.selectedOption);
     }
@@ -68,12 +69,12 @@ export class DropdownComponent implements OnChanges {
         this.buttonClicked.emit();
     }
 
-    public filterOptions(): string[] {
-        return this.options.filter((option) => this.filterPredicate?.call(this, option, this.searchTerm)) as string[];
+    public filterOptions(): T[] {
+        return this.options.filter((option) => this.filterPredicate?.call(this, option, this.searchTerm)) as T[];
     }
 
-    public filterByName(option: string, value: string) {
-        return option.toLowerCase().includes(value);
+    public filterByName(option: T, value: string) {
+        return (option as unknown as string).toLowerCase().includes(value);
     }
 
     public toggleActiveClass() {

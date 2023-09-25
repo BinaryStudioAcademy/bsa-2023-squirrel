@@ -6,23 +6,23 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
     styleUrls: ['./button.component.sass'],
 })
 export class ButtonComponent {
-    @Input() text = '';
+    @Input() public text = '';
 
-    @Input() width = 'auto';
+    @Input() public width = 'auto';
 
-    @Input() height = '45px';
+    @Input() public height = '45px';
 
-    @Input() padding = '10px 20px';
+    @Input() public padding = '10px 20px';
 
-    @Input() fontSize = '16px';
+    @Input() public fontSize = '16px';
 
-    @Input() variant = 'outline-primary';
+    @Input() public variant = 'outline-primary';
 
-    @Input() isDisabled = false;
+    @Input() public isDisabled = false;
 
-    @Output() buttonOnClick: EventEmitter<void> = new EventEmitter<void>();
+    @Output() public buttonOnClick: EventEmitter<void> = new EventEmitter<void>();
 
-    handleClick(): void {
+    public handleClick(): void {
         this.buttonOnClick.emit();
     }
 }

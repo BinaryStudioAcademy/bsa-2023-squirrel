@@ -12,14 +12,15 @@ declare const google: any;
     styleUrls: ['./google-button.component.sass'],
 })
 export class GoogleButtonComponent implements AfterViewInit {
-    @Input() authType = 'signin_with';
+    @Input() public authType = 'signin_with';
 
     public width: string;
 
-    // eslint-disable-next-line no-empty-function
-    constructor(private authService: AuthService, private spinner: SpinnerService, private elementRef: ElementRef) {}
+    constructor(private authService: AuthService, private spinner: SpinnerService, private elementRef: ElementRef) {
+        // Intentionally left empty for dependency injection purposes only
+    }
 
-    ngAfterViewInit(): void {
+    public ngAfterViewInit(): void {
         this.spinner.show();
         this.width = `${this.elementRef.nativeElement.querySelector('#signInGoogle').offsetWidth.toString()}px`;
         // button rendering should be done asynchronously
@@ -51,8 +52,6 @@ export class GoogleButtonComponent implements AfterViewInit {
     }
 
     private handleCredentialResponse(response: CredentialResponse) {
-        // eslint-disable-next-line no-console
-        console.log(`Encoded JWT ID token: ${response.credential}`);
         this.authService.signInViaGoogle(response);
     }
 }

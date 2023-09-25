@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { BaseComponent } from '@core/base/base.component';
 import { BranchService } from '@core/services/branch.service';
 import { LoadChangesService } from '@core/services/load-changes.service';
+import { NotificationService } from '@core/services/notification.service';
 import { SharedProjectService } from '@core/services/shared-project.service';
 import { takeUntil } from 'rxjs';
 
@@ -36,18 +37,18 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
         { displayName: 'Settings', path: './settings' },
     ];
 
-    // eslint-disable-next-line no-empty-function
     constructor(
         private branchService: BranchService,
         public dialog: MatDialog,
         private route: ActivatedRoute,
         private sharedProject: SharedProjectService,
         private changesService: LoadChangesService,
+        private notificationService: NotificationService,
     ) {
         super();
     }
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.route.params.subscribe((params) => { this.currentProjectId = params['id']; });
         this.branchService.getAllBranches(this.currentProjectId)
             .pipe(takeUntil(this.unsubscribe$))
@@ -86,11 +87,20 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
         return currentBranch ? this.branches.indexOf(currentBranch) : 0;
     }
 
-    filterBranch(item: BranchDto, value: string) {
+    public filterBranch(item: BranchDto, value: string) {
         return item.name.includes(value);
     }
 
     public loadChanges() {
-        this.changesService.loadChangesRequest();
+        this.changesService.loadChangesRequest()
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe({
+                next: () => {
+                    this.notificationService.info('Changes loaded successfully');
+                },
+                error: () => {
+                    this.notificationService.error('An error occurred while attempting to load changes');
+                },
+            });
     }
 }

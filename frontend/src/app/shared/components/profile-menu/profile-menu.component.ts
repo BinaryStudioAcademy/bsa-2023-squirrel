@@ -18,11 +18,11 @@ export class ProfileMenuComponent extends BaseComponent implements OnInit, OnDes
         super();
     }
 
-    signOut() {
+    public signOut() {
         this.authService.signOut();
     }
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.authService
             .getUser()
             .pipe(takeUntil(this.unsubscribe$))

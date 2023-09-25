@@ -9,7 +9,7 @@ import { ProjectResponseDto } from '../../../models/projects/project-response-dt
     styleUrls: ['./project-card.component.sass'],
 })
 export class ProjectCardComponent implements OnInit {
-    @Input() project: ProjectResponseDto;
+    @Input() public project: ProjectResponseDto;
 
     public engineLogoImage: string = '';
 
@@ -19,14 +19,11 @@ export class ProjectCardComponent implements OnInit {
 
     public DBE = DbEngine;
 
-    // eslint-disable-next-line @typescript-eslint/no-useless-constructor,no-empty-function,@typescript-eslint/no-empty-function
-    constructor() {}
-
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.initializeProjectCard();
     }
 
-    initializeProjectCard(): void {
+    private initializeProjectCard(): void {
         this.engineLogoImage =
             this.project.dbEngine === DbEngine.PostgreSQL ? this.postgresSqlLogo : this.sqlServerLogo;
     }

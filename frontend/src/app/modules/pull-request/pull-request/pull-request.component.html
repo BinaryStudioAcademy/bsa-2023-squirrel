@@ -1,37 +1,37 @@
 <div class="container">
     <div class="summary main-text">
         <div class="avatar">
-            <img src="{{ pullRequest.author.avatarUrl }}" />
+            <img class="avatar-picture" src="{{ pullRequest.author.avatarUrl }}" alt="Author Avatar"/>
         </div>
         <div class="info">
             <div class="primary-info">
-                <p>{{ pullRequest.title }}</p>
+                <p class="content">{{ pullRequest.title }}</p>
                 <div class="branch">
-                    <p>{{ pullRequest.sourceBranch.name }}</p>
+                    <p class="content">{{ pullRequest.sourceBranch.name }}</p>
                 </div>
-                <img src="assets/arrow_right_icon.svg" />
+                <img src="assets/arrow_right_icon.svg" alt="Right Arrow Icon"/>
                 <div class="branch">
-                    <p>{{ pullRequest.destinationBranch.name }}</p>
+                    <p class="content">{{ pullRequest.destinationBranch.name }}</p>
                 </div>
             </div>
             <div class="secondary-info">
-                <p>{{ getSecondaryInfo() }}</p>
+                <p class="content">{{ getSecondaryInfo() }}</p>
             </div>
         </div>
     </div>
     <div class="activity main-text">
-        <div class="comments" *ngIf="pullRequest.comments.length > 0">
-            <img class="sms_icon" src="assets/sms_icon.svg" />
-            <p>{{ pullRequest.comments.length }}</p>
+        <div class="activity-element comments" *ngIf="pullRequest.comments.length > 0">
+            <img class="sms_icon" src="assets/sms_icon.svg" alt="SMS Icon"/>
+            <p class="content comment-count">{{ pullRequest.comments.length }}</p>
         </div>
     </div>
     <div class="reviewiers">
         <div class="avatar-container">
             <div *ngFor="let reviewer of pullRequest.reviewers.slice(0, 3)" class="avatar">
-                <img src="{{ reviewer.avatarUrl }}" />
+                <img class="avatar-picture" src="{{ reviewer.avatarUrl }}" alt="Reviewer Avatar"/>
             </div>
             <div class="overflowed" *ngIf="pullRequest.reviewers.length > 3">
-                <p>+{{ pullRequest.reviewers.length - 3 }}</p>
+                <p class="content">+{{ pullRequest.reviewers.length - 3 }}</p>
             </div>
         </div>
     </div>

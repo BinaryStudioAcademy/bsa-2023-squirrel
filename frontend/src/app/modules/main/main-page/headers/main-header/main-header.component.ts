@@ -22,11 +22,11 @@ export class MainHeaderComponent implements OnInit {
         private sharedProject: SharedProjectService,
         public dialog: MatDialog,
         private databaseService: DatabaseService,
-        // eslint-disable-next-line no-empty-function
     ) {
+        // Intentionally left empty for dependency injection purposes only
     }
 
-    ngOnInit() {
+    public ngOnInit() {
         this.loadProject();
     }
 

@@ -40,7 +40,7 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit {
         super();
     }
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.loadScripts();
         this.initializeForm();
     }

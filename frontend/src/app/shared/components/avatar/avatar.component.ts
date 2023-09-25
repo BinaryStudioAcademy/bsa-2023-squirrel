@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { HslGeneratorService } from '@shared/helpers/hsl-generator.service';
+import { HSLGenerator } from '@shared/helpers/hsl-generator';
 
 type Style = Partial<CSSStyleDeclaration>;
 
@@ -32,12 +32,13 @@ export class AvatarComponent implements OnInit {
 
     public hostStyle: Style = {};
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.initializeAvatar();
     }
 
-    // eslint-disable-next-line no-empty-function
-    constructor(private hslGenerator: HslGeneratorService) {}
+    constructor(private hslGenerator: HSLGenerator) {
+        // Intentionally left empty for dependency injection purposes only
+    }
 
     private initializeAvatar(): void {
         this.hostStyle = {
@@ -98,7 +99,7 @@ export class AvatarComponent implements OnInit {
         return this.constructInitials(initials);
     }
 
-    handleImgError() {
+    public handleImgError() {
         this.imgLink = '';
         this.initializeAvatar();
     }

@@ -10,8 +10,9 @@ import { NewDatabaseDto } from '../../models/database/new-database-dto';
 export class DatabaseService {
     private readonly databaseApiUrl = '/api/projectDatabase';
 
-    // eslint-disable-next-line no-empty-function
-    constructor(private httpService: HttpInternalService) { }
+    constructor(private httpService: HttpInternalService) {
+        // Intentionally left empty for dependency injection purposes only
+    }
 
     public addDatabase(newDatabase: NewDatabaseDto) {
         return this.httpService.postRequest<DatabaseInfoDto>(this.databaseApiUrl, newDatabase);

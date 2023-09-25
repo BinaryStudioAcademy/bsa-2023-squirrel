@@ -10,8 +10,9 @@ import { DbConnection } from '../../models/console/db-connection';
 export class ConsoleConnectService {
     public baseUrl: string = environment.consoleUrl;
 
-    // eslint-disable-next-line no-empty-function
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) {
+        // Intentionally left empty for dependency injection purposes only
+    }
 
     public connect(dbConnection: DbConnection) {
         return this.http.post<string>(`${this.baseUrl}/setting/connect`, dbConnection);

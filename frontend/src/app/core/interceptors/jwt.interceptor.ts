@@ -5,15 +5,17 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
-    // eslint-disable-next-line no-empty-function
-    constructor(private authService: AuthService) {}
+    constructor(private authService: AuthService) {
+        // Intentionally left empty for dependency injection purposes only
+    }
 
     intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
         const accessToken = this.authService.getAccessToken();
 
         if (accessToken) {
-            // eslint-disable-next-line no-param-reassign
-            request = request.clone({ setHeaders: { Authorization: `Bearer ${accessToken}` } });
+            const clonedRequest = request.clone({ setHeaders: { Authorization: `Bearer ${accessToken}` } });
+
+            return next.handle(clonedRequest);
         }
 
         return next.handle(request);

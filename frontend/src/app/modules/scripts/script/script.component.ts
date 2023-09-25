@@ -11,7 +11,4 @@ export class ScriptComponent {
     @Input() public script: ScriptDto;
 
     @Input() public avatarUrl: string = 'assets/profile_icon.svg';
-
-    // eslint-disable-next-line @typescript-eslint/no-useless-constructor, no-empty-function, @typescript-eslint/no-empty-function
-    constructor() {}
 }

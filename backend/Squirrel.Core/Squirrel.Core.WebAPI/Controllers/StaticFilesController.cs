@@ -13,11 +13,11 @@ public class StaticFilesController : Controller
     {
         _configuration = configuration;
     }
-
+    
     [HttpGet("squirrel-installer/{operatingSystem}"), DisableRequestSizeLimit]
-    public async Task<IActionResult> DownloadSquirrelInstaller(OperatingSystem operatingSystem)
+    public async Task<IActionResult> DownloadSquirrelInstallerAsync(OperatingSystem operatingSystem)
     {
-        // path will be updated using 'operatingSystem' after task 152
+        // Path will be updated using 'operatingSystem' after task 152
         var filePath = _configuration["ConsoleSetupFilePath"];
 
         if (!System.IO.File.Exists(filePath))

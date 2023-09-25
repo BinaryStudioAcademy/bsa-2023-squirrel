@@ -21,19 +21,19 @@ public sealed class ScriptController : ControllerBase
     }
 
     [HttpGet("{projectId}/all")]
-    public async Task<ActionResult<List<ScriptDto>>> GetAllScripts(int projectId)
+    public async Task<ActionResult<List<ScriptDto>>> GetAllScriptsAsync(int projectId)
     {
         return Ok(await _scriptService.GetAllScriptsAsync(projectId));
     }
 
     [HttpPost]
-    public async Task<ActionResult<ScriptDto>> CreateScript(CreateScriptDto dto)
+    public async Task<ActionResult<ScriptDto>> CreateScriptAsync(CreateScriptDto dto)
     {
         return Ok(await _scriptService.CreateScriptAsync(dto, _userIdGetter.GetCurrentUserId()));
     }
 
     [HttpPut]
-    public async Task<ActionResult<ScriptDto>> UpdateScript(ScriptDto dto)
+    public async Task<ActionResult<ScriptDto>> UpdateScriptAsync(ScriptDto dto)
     {
         return Ok(await _scriptService.UpdateScriptAsync(dto, _userIdGetter.GetCurrentUserId()));
     }
@@ -42,7 +42,7 @@ public sealed class ScriptController : ControllerBase
     /// Find errors and format provided SQL script
     /// </summary>
     [HttpPut("format")]
-    public async Task<ActionResult<ScriptContentDto>> GetFormattedSql([FromBody] InboundScriptDto inboundScriptDto)
+    public async Task<ActionResult<ScriptContentDto>> GetFormattedSqlAsync([FromBody] InboundScriptDto inboundScriptDto)
     {
         return Ok(await _scriptService.GetFormattedSqlAsync(inboundScriptDto));
     }

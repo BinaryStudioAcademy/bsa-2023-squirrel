@@ -1,7 +1,6 @@
-﻿using Squirrel.Core.BLL.Hubs;
-using Squirrel.SqlService.BLL.Hubs;
+﻿using Squirrel.SqlService.BLL.Hubs;
 
-namespace Squirrel.Core.WebAPI.Extensions;
+namespace Squirrel.SqlService.WebApi.Extensions;
 
 public static class ApplicationBuilderExtensions
 {

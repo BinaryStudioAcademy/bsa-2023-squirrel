@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Squirrel.Shared.DTO.Text;
 using Squirrel.SqlService.BLL.Interfaces;
 

@@ -1,5 +1,4 @@
 ﻿using System.Data.SqlClient;
-using System.Runtime.CompilerServices;
 using Npgsql;
 using Squirrel.ConsoleApp.BL.Interfaces;
 using Squirrel.ConsoleApp.Models;

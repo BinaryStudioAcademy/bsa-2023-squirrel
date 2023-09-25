@@ -1,15 +1,14 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.Text;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Squirrel.AzureBlobStorage.Interfaces;
 using Squirrel.AzureBlobStorage.Models;
 using Squirrel.SqlService.BLL.Interfaces;
-using System.Text;
 
 namespace Squirrel.SqlService.BLL.Services;
 
 public class ChangesLoaderService : IChangesLoaderService
 {
-    // mocked data for now
     private readonly IDbItemsRetrievalService _dbItemsRetrievalService;
     private readonly IBlobStorageService _blobStorageService;
     private readonly IConfiguration _configuration;
@@ -30,7 +29,7 @@ public class ChangesLoaderService : IChangesLoaderService
         var jsonString = JsonConvert.SerializeObject(dbStructure);
 
         // Convert the JSON string to a byte array using UTF-8 encoding
-        byte[] contentBytes = Encoding.UTF8.GetBytes(jsonString);
+        var contentBytes = Encoding.UTF8.GetBytes(jsonString);
 
         var blob = new Blob
         {

@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace Squirrel.Core.WebAPI.Validators.Branch;
 
-public class BranchCreateDtoValidator: AbstractValidator<BranchCreateDto>
+public class BranchCreateDtoValidator : AbstractValidator<BranchCreateDto>
 {
     public BranchCreateDtoValidator()
     {

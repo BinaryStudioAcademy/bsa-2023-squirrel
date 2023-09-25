@@ -17,7 +17,7 @@ public class SettingController : ControllerBase
 
     // http://localhost:44567/setting/connect
     [HttpPost("connect")]
-    public IActionResult Post(ConnectionStringDto connectionStringDto)
+    public IActionResult ConnectAsync(ConnectionStringDto connectionStringDto)
     {
         return Ok(_connectionService.TryConnect(connectionStringDto));
     }

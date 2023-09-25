@@ -4,7 +4,6 @@ namespace Squirrel.SqlService.WebApi.Middlewares;
 
 public class SignalRMiddleware
 {
-
     private readonly RequestDelegate _next;
 
     public SignalRMiddleware(RequestDelegate next)

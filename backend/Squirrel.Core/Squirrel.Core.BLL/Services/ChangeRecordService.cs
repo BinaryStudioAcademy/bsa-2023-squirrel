@@ -9,9 +9,9 @@ namespace Squirrel.Core.BLL.Services;
 public sealed class ChangeRecordService : BaseService, IChangeRecordService
 {
     private readonly IUserIdGetter _userIdGetter;
-    private readonly IDBStructureSaverService _dBStructureSaver;
+    private readonly IDbStructureSaverService _dBStructureSaver;
 
-    public ChangeRecordService(SquirrelCoreContext context, IMapper mapper, IUserIdGetter userIdGetter, IDBStructureSaverService dBStructureSaver)
+    public ChangeRecordService(SquirrelCoreContext context, IMapper mapper, IUserIdGetter userIdGetter, IDbStructureSaverService dBStructureSaver)
         : base(context, mapper)
     {
         _userIdGetter = userIdGetter;
@@ -27,7 +27,7 @@ public sealed class ChangeRecordService : BaseService, IChangeRecordService
             UniqueChangeId = Guid.NewGuid()
         };
 
-        await _dBStructureSaver.SaveDBStructureToAzureBlob(changeRecordEntity, clientId);
+        await _dBStructureSaver.SaveDbStructureToAzureBlobAsync(changeRecordEntity, clientId);
 
         var addedChangeRecord = (await _context.ChangeRecords.AddAsync(changeRecordEntity)).Entity;
         await _context.SaveChangesAsync();

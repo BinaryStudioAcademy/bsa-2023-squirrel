@@ -5,6 +5,7 @@ import { NotificationService } from '@core/services/notification.service';
 import { ProjectService } from '@core/services/project.service';
 import { SharedProjectService } from '@core/services/shared-project.service';
 import { SpinnerService } from '@core/services/spinner.service';
+import { ValidationsFn } from '@shared/helpers/validations-fn';
 import { takeUntil, tap } from 'rxjs';
 
 import { ProjectResponseDto } from '../../../models/projects/project-response-dto';
@@ -47,16 +48,12 @@ export class GeneralSettingsComponent extends BaseComponent implements OnInit {
                 Validators.required,
                 Validators.minLength(3),
                 Validators.maxLength(50),
-                Validators.pattern(/^(?![\u0410-\u044F\u0400-\u04FF]).*$/)]],
+                ValidationsFn.noCyrillic()]],
             description: [this.project.description, [Validators.maxLength(1000)]],
         });
     }
 
     onSaveClick(): void {
-        if (!this.projectForm.valid) {
-            return;
-        }
-
         this.spinner.show();
 
         this.project.name = this.projectForm.value.projectName;

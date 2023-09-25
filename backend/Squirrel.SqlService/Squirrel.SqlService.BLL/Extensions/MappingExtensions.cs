@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Squirrel.SqlService.BLL.Models.DTO.UserDefinedType.TableType;
 
 namespace Squirrel.SqlService.BLL.Extensions;
 
@@ -22,6 +23,30 @@ public static class MappingExtensions
                 property.SetValue(obj, value.ParseNullableBool());
         }
         return obj;
+    }
+
+    public static List<UserDefinedTableDetailsDto> MapToUdtTables(IList<string> rowNames, IList<string[]> rowValues)
+    {
+        var rowsGroup = rowValues.GroupBy(row => new { Schema = row[0], Name = row[1] });
+
+        var tables = new List<UserDefinedTableDetailsDto>();
+        foreach (var group in rowsGroup)
+        {
+            var tableDetails = new UserDefinedTableDetailsDto
+            {
+                Schema = group.Key.Schema,
+                Name = group.Key.Name
+            };
+            
+            foreach (var row in group)
+            {
+                tableDetails.Columns.Add(MapToObject<UserDefinedTableTypeColumnInfo>(rowNames,row));
+            }
+            
+            tables.Add(tableDetails);
+        }
+
+        return tables;
     }
 
     public static Dictionary<string, string> MapToDataRow(IList<string> rowNames, IList<string> rowValues)

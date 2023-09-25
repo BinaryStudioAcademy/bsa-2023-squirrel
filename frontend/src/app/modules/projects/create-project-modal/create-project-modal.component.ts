@@ -5,6 +5,7 @@ import { BaseComponent } from '@core/base/base.component';
 import { NotificationService } from '@core/services/notification.service';
 import { ProjectService } from '@core/services/project.service';
 import { SpinnerService } from '@core/services/spinner.service';
+import { ValidationsFn } from '@shared/helpers/validations-fn';
 import { takeUntil, tap } from 'rxjs';
 
 import { DbEngine } from 'src/app/models/projects/db-engine';
@@ -43,7 +44,8 @@ export class CreateProjectModalComponent extends BaseComponent implements OnInit
                 Validators.required,
                 Validators.minLength(3),
                 Validators.maxLength(50),
-                Validators.pattern(/^(?![\u0410-\u044F\u0400-\u04FF]).*$/)]],
+                ValidationsFn.noCyrillic(),
+            ]],
             defaultBranchName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(200)]],
             selectedEngine: ['', Validators.required],
         });

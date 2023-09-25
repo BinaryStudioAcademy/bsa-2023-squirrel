@@ -39,4 +39,10 @@ export class ValidationsFn {
             (/(?=.*[a-z])/.test(control.value)
                 ? null : { lowerExist: true });
     }
+
+    static noCyrillic(): ValidatorFn {
+        return (control: AbstractControl) =>
+            (/^(?![\u0410-\u044F\u0400-\u04FF]).*$/.test(control.value)
+                ? null : { noCyrillic: true });
+    }
 }

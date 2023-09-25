@@ -6,11 +6,11 @@ using Squirrel.Shared.Enums;
 using Squirrel.Shared.DTO.DatabaseItem;
 using Squirrel.Shared.DTO.Text;
 using Squirrel.SqlService.BLL.Interfaces;
-using Squirrel.SqlService.BLL.Models.DTO.View;
 using Squirrel.Shared.DTO;
 using Squirrel.Shared.DTO.Function;
 using Squirrel.Shared.DTO.Procedure;
 using Squirrel.Shared.DTO.Table;
+using Squirrel.Shared.DTO.View;
 using Blob = Squirrel.AzureBlobStorage.Models.Blob;
 
 namespace Squirrel.SqlService.BLL.Services;

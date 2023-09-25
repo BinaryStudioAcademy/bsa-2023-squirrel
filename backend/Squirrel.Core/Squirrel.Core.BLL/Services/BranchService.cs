@@ -23,7 +23,7 @@ public sealed class BranchService : BaseService, IBranchService
         await EnsureUniquenessAsync(branch.Name, projectId);
 
         var createdBranch = (await _context.Branches.AddAsync(branch)).Entity;
-        if (branchDto.ParentId != null)
+        if (branchDto.ParentId is not null)
         {
             await InheritBranchInternalAsync(createdBranch, branchDto.ParentId ?? 0);
         }
@@ -42,7 +42,7 @@ public sealed class BranchService : BaseService, IBranchService
     public async Task DeleteBranchAsync(int branchId)
     {
         var entity = await _context.Branches.FirstOrDefaultAsync(x => x.Id == branchId);
-        if (entity == null)
+        if (entity is null)
         {
             throw new EntityNotFoundException();
         }
@@ -55,7 +55,7 @@ public sealed class BranchService : BaseService, IBranchService
     public async Task<BranchDto> UpdateBranchAsync(int branchId, BranchUpdateDto branchUpdateDto)
     {
         var entity = await _context.Branches.FirstOrDefaultAsync(x => x.Id == branchId);
-        if (entity == null)
+        if (entity is null)
         {
             throw new EntityNotFoundException();
         }

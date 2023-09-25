@@ -1,4 +1,4 @@
-namespace Squirrel.SqlService.BLL.Models.DTO.View;
+namespace Squirrel.Shared.DTO.View;
 
 public class ViewNamesDto
 {

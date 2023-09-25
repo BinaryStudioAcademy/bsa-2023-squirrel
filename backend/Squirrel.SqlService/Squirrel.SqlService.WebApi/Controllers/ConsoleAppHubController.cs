@@ -8,11 +8,10 @@ using Squirrel.Shared.DTO.Function;
 using Squirrel.Shared.DTO.Procedure;
 using Squirrel.Shared.DTO.Table;
 using Squirrel.Core.Common.DTO.Script;
+using Squirrel.Shared.DTO.View;
 using Squirrel.SqlService.BLL.Hubs;
 using Squirrel.SqlService.BLL.Interfaces;
 using Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
-using Squirrel.SqlService.BLL.Models.DTO.View;
-using Squirrel.SqlService.BLL.Services.ConsoleAppHub;
 
 namespace Squirrel.SqlService.WebApi.Controllers;
 

@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Squirrel.ConsoleApp.Models;
 
-namespace Squirrel.Core.WebAPI.Validators.Project;
+namespace Squirrel.ConsoleApp.BL.Validators;
 
 public class ConnectionStringDtoValidator : AbstractValidator<ConnectionStringDto>
 {

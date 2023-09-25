@@ -34,7 +34,7 @@ public sealed class ProjectService : BaseService, IProjectService
         var createdProject = (await _context.Projects.AddAsync(projectEntity)).Entity;
         await _context.SaveChangesAsync();
 
-        var defaultBranch = await _branchService.AddBranchAsync(createdProject.Id ,newProjectDto.DefaultBranch);
+        var defaultBranch = await _branchService.AddBranchAsync(createdProject.Id, newProjectDto.DefaultBranch);
         createdProject.DefaultBranchId = defaultBranch.Id;
         await _context.SaveChangesAsync();
 
@@ -48,7 +48,7 @@ public sealed class ProjectService : BaseService, IProjectService
         foreach (var user in usersDtos)
         {
             var userEntity = await _context.Users.FindAsync(user.Id);
-            if (userEntity == null)
+            if (userEntity is null)
             {
                 throw new EntityNotFoundException(nameof(User));
             }

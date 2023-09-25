@@ -5,9 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Converters;
 using Squirrel.ConsoleApp.BL.Interfaces;
 using Squirrel.ConsoleApp.BL.Services;
+using Squirrel.ConsoleApp.BL.Validators;
 using Squirrel.ConsoleApp.Extensions;
 using Squirrel.ConsoleApp.Filters;
-using Squirrel.Core.WebAPI.Validators.Project;
 
 namespace Squirrel.ConsoleApp;
 
@@ -36,8 +36,8 @@ public class Startup
 
         Console.WriteLine($"DB Settings:\n - DbType: {connectionString.DbEngine}\n - Connection string: {connectionStringService.BuildConnectionString(connectionString)}");
        
-        services.AddScoped<IDbQueryProvider>(c => DatabaseServiceFactory.CreateDbQueryProvider(connectionString.DbEngine));
-        services.AddScoped<IDatabaseService>(c => DatabaseServiceFactory.CreateDatabaseService(connectionString.DbEngine, connectionStringService.BuildConnectionString(connectionString)));
+        services.AddScoped<IDbQueryProvider>(_ => DatabaseServiceFactory.CreateDbQueryProvider(connectionString.DbEngine));
+        services.AddScoped<IDatabaseService>(_ => DatabaseServiceFactory.CreateDatabaseService(connectionString.DbEngine, connectionStringService.BuildConnectionString(connectionString)));
 
         services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<ConnectionStringDtoValidator>());
         

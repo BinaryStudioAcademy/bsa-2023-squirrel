@@ -30,7 +30,7 @@ public class BuildAvatarLinkAction : IMappingAction<User, UserProfileDto>, IMapp
 
     private string? BuildLink(string? avatarUrl)
     {
-        return avatarUrl != null
+        return avatarUrl is not null
             ? $"{_blobServiceClient.Uri.AbsoluteUri}{_blobStorageOptions.ImagesContainer}/{avatarUrl}"
             : null;
     }

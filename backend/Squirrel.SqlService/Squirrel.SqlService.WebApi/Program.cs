@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.SignalR;
 using Squirrel.AzureBlobStorage.Extensions;
 using Squirrel.Core.DAL.Extensions;
-using Squirrel.Core.WebAPI.Extensions;
 using Squirrel.Shared.Middlewares;
 using Squirrel.Shared.Extensions;
 using Squirrel.SqlService.WebApi.Extensions;

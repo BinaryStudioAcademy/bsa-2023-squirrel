@@ -46,7 +46,7 @@ public class ImageService : IImageService
             Content = content
         };
 
-        await (userEntity.AvatarUrl == null
+        await (userEntity.AvatarUrl is null
             ? _blobStorageService.UploadAsync(_blobStorageOptions.ImagesContainer, blob)
             : _blobStorageService.UpdateAsync(_blobStorageOptions.ImagesContainer, blob));
 
@@ -57,7 +57,7 @@ public class ImageService : IImageService
     public async Task DeleteAvatarAsync()
     {
         var userEntity = await _userService.GetUserByIdInternalAsync(_userIdGetter.GetCurrentUserId());
-        if (userEntity.AvatarUrl == null)
+        if (userEntity.AvatarUrl is null)
         {
             throw new EntityNotFoundException(nameof(User.AvatarUrl));
         }

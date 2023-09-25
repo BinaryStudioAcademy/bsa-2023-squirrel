@@ -29,7 +29,7 @@ public sealed class HttpClientService : IHttpClientService
     public async Task<TResponse> SendAsync<TRequest, TResponse>(string requestUrl, TRequest requestData, HttpMethod method)
     {
         // Serialize the request data to JSON (assuming you're sending JSON).
-        var content = requestData != null ? JsonContent.Create(requestData) : null;
+        var content = requestData is not null ? JsonContent.Create(requestData) : null;
 
         var message = new HttpRequestMessage { RequestUri = new Uri(requestUrl), Content = content, Method = method };
 
@@ -48,7 +48,7 @@ public sealed class HttpClientService : IHttpClientService
     public async Task SendAsync<TRequest>(string requestUrl, TRequest requestData, HttpMethod method)
     {
         // Serialize the request data to JSON (assuming you're sending JSON).
-        var content = requestData != null ? JsonContent.Create(requestData) : null;
+        var content = requestData is not null ? JsonContent.Create(requestData) : null;
 
         var message = new HttpRequestMessage { RequestUri = new Uri(requestUrl), Content = content, Method = method };
 

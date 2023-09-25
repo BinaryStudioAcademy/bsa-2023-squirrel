@@ -40,7 +40,7 @@ public sealed class UserService : BaseService, IUserService
     public async Task<UserDto> GetUserByEmailAsync(string email)
     {
         var userEntity = await GetUserEntityByEmailAsync(email);
-        if (userEntity == null)
+        if (userEntity is null)
         {
             throw new EntityNotFoundException(nameof(User), email);
         }
@@ -52,7 +52,7 @@ public sealed class UserService : BaseService, IUserService
     {
         var userEntities = await _context.Users.ToListAsync();
 
-        if (userEntities == null)
+        if (userEntities is null)
         {
             return new List<UserDto>();
         }
@@ -63,7 +63,7 @@ public sealed class UserService : BaseService, IUserService
     public async Task<UserDto> GetUserByUsernameAsync(string username)
     {
         var userEntity = await GetUserEntityByUsernameAsync(username);
-        if (userEntity == null)
+        if (userEntity is null)
         {
             throw new EntityNotFoundException(nameof(User), username);
         }
@@ -104,7 +104,7 @@ public sealed class UserService : BaseService, IUserService
 
         var existingUserWithSameUsername = await GetUserEntityByUsernameAsync(updateUserDto.Username);
 
-        if (existingUserWithSameUsername != null && existingUserWithSameUsername.Id != _userIdGetter.GetCurrentUserId())
+        if (existingUserWithSameUsername is not null && existingUserWithSameUsername.Id != _userIdGetter.GetCurrentUserId())
         {
             throw new UsernameAlreadyRegisteredException();
         }
@@ -147,7 +147,7 @@ public sealed class UserService : BaseService, IUserService
     {
         var userEntity = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
 
-        if (userEntity == null)
+        if (userEntity is null)
         {
             throw new EntityNotFoundException(nameof(User), id);
         }

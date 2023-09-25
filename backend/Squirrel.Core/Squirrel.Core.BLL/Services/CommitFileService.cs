@@ -4,7 +4,7 @@ using Squirrel.Core.DAL.Context;
 
 namespace Squirrel.Core.BLL.Services;
 
-public sealed class CommitFileService: ICommitFileService
+public sealed class CommitFileService : ICommitFileService
 {
     private readonly SquirrelCoreContext _context;
 

@@ -1,7 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.DAL.Entities;
 
-namespace Squirrel.Core.BLL.Interfaces;
+namespace Squirrel.Core.BLL.Services;
 
 public class DbStructureSaverService : IDbStructureSaverService
 {

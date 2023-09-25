@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using Squirrel.Core.Common.DTO.Branch;
-using System.Text.RegularExpressions;
 
 namespace Squirrel.Core.WebAPI.Validators.Branch;
 

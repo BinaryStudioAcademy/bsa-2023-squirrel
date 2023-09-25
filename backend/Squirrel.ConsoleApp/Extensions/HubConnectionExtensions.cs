@@ -109,5 +109,11 @@ public static class HubConnectionExtensions
             app.ApplicationServices.GetRequiredService<IConnectionService>().TryConnect(connectionStringDto);
             hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", queryId, "RemoteConnectAsync", new QueryResultTable());
         });
+
+        hubConnection.On("ExecuteScriptAsync", (Guid queryId, string scriptContent) =>
+        {
+            var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
+            hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", queryId, "ExecuteScriptAsync", getActionsService.ExecuteScriptAsync(scriptContent).Result);
+        });
     }
 }

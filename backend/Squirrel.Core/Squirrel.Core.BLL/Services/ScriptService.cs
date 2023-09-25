@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Squirrel.ConsoleApp.Models;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.BLL.Services.Abstract;
 using Squirrel.Core.Common.DTO.Script;
@@ -60,5 +61,11 @@ public sealed class ScriptService : BaseService, IScriptService
     {
         return await _httpClientService.SendAsync<InboundScriptDto, ScriptContentDto>
             ($"{_configuration["SqlServiceUrl"]}/api/Script/format", inboundScriptDto, HttpMethod.Put);
+    }
+
+    public async Task<QueryResultTable> ExecuteSqlScriptAsync(InboundScriptDto inboundScriptDto)
+    {
+        return await _httpClientService.SendAsync<InboundScriptDto, QueryResultTable>
+           ($"{_configuration["SqlServiceUrl"]}/api/ConsoleAppHub/execute-script", inboundScriptDto, HttpMethod.Post);
     }
 }

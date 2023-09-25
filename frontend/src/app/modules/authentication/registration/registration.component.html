@@ -3,8 +3,6 @@
         <h4>Sign Up</h4>
 
         <div class="additional-sing-up">
-            <app-button class="margin-top" text="Sign Up with GitHub" variant="outline-primary" width="100%">
-            </app-button>
             <app-google-button authType="signup_with"></app-google-button>
         </div>
 
@@ -16,32 +14,38 @@
             class="registration-form"
             action="">
             <app-input
+                class="input username"
                 [formControl]="$any(registerForm.controls['username'])"
                 [label]="'username'"
                 placeholder="Enter your Username">
             </app-input>
             <app-input
+                class="input email"
                 [formControl]="$any(registerForm.controls['email'])"
                 [label]="'email'"
                 placeholder="Enter your Email">
             </app-input>
             <app-input
+                class="input first-name"
                 [formControl]="$any(registerForm.controls['firstName'])"
                 [label]="'first Name'"
                 placeholder="Enter your FirstName">
             </app-input>
             <app-input
+                class="input last-name"
                 [formControl]="$any(registerForm.controls['lastName'])"
                 [label]="'last Name'"
                 placeholder="Enter your LastName">
             </app-input>
             <app-input
+                class="input password"
                 [formControl]="$any(registerForm.controls['password'])"
                 [label]="'password'"
                 [type]="'password'"
                 placeholder="Enter your Password">
             </app-input>
             <app-input
+                class="input confirm-password"
                 [formControl]="$any(registerForm.controls['confirmPassword'])"
                 [label]="'confirm Password'"
                 [type]="'password'"

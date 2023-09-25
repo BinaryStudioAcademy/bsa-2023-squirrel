@@ -1,9 +1,11 @@
 using Microsoft.Extensions.FileProviders;
+using Squirrel.AzureBlobStorage.Extensions;
 using Squirrel.Core.BLL.Extensions;
 using Squirrel.Core.DAL.Extensions;
 using Squirrel.Core.WebAPI.Extensions;
 using Squirrel.Core.WebAPI.Middlewares;
 using Squirrel.Shared.Middlewares;
+using Squirrel.Shared.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,10 +25,13 @@ builder.Services.AddAuthenticationSettings(builder.Configuration);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.RegisterCustomServices();
-builder.Services.AddAutoMapper();
 builder.Services.AddSwaggerGen();
 builder.Services.AddValidation();
 builder.Services.ConfigureJwtAuth(builder.Configuration);
+builder.Services.AddAzureBlobStorage(builder.Configuration);
+
+builder.Services.ConfigureAzureBlobStorage(builder.Configuration);
+builder.Services.AddAutoMapper();
 
 builder.Services.AddCors();
 builder.Services.AddHealthChecks();
@@ -47,6 +52,7 @@ app.UseSwaggerUI();
 app.UseMiddleware<GenericExceptionHandlerMiddleware>();
 
 app.UseSquirrelCoreContext();
+app.UseAvatarContainer();
 
 app.UseCors(opt => opt
     .AllowAnyHeader()

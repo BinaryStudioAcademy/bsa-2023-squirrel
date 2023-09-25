@@ -3,6 +3,7 @@ using Squirrel.AzureBlobStorage.Interfaces;
 using Squirrel.AzureBlobStorage.Models;
 
 namespace Squirrel.SqlService.WebApi.Controllers;
+
 [Route("api/[controller]")]
 [ApiController]
 public class BlobController : ControllerBase
@@ -15,25 +16,27 @@ public class BlobController : ControllerBase
     }
 
     [HttpGet("{containerName}/{blobId}")]
-    public async Task<ActionResult<Blob>> GetBlob(string containerName, string blobId)
+    public async Task<ActionResult<Blob>> GetBlobAsync(string containerName, string blobId)
     {
         return Ok(await _blobService.DownloadAsync(containerName, blobId));
     }
 
     [HttpPost("{containerName}")]
-    public async Task<ActionResult<Blob>> UploadBlob(string containerName, [FromBody] Blob blob)
+    public async Task<ActionResult> UploadBlobAsync(string containerName, [FromBody] Blob blob)
     {
-        return Ok(await _blobService.UploadAsync(containerName, blob));
+        await _blobService.UploadAsync(containerName, blob);
+        return Ok();
     }
 
     [HttpPut("{containerName}")]
-    public async Task<ActionResult<Blob>> UpdateBlob(string containerName, [FromBody] Blob blob)
+    public async Task<ActionResult> UpdateBlobAsync(string containerName, [FromBody] Blob blob)
     {
-        return Ok(await _blobService.UpdateAsync(containerName, blob));
+        await _blobService.UpdateAsync(containerName, blob);
+        return Ok();
     }
 
     [HttpDelete("{containerName}/{blobId}")]
-    public async Task<ActionResult<Blob>> DeleteBlob(string containerName, string blobId)
+    public async Task<ActionResult> DeleteBlobAsync(string containerName, string blobId)
     {
         await _blobService.DeleteAsync(containerName, blobId);
         return NoContent();

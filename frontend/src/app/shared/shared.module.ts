@@ -14,6 +14,7 @@ import { AvatarComponent } from './components/avatar/avatar.component';
 import { BarrierComponent } from './components/barrier/barrier.component';
 import { ButtonComponent } from './components/button/button.component';
 import { CheckboxComponent } from './components/checkbox/checkbox.component';
+import { CodeComponent } from './components/code/code.component';
 import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
 import { DropdownComponent } from './components/dropdown/dropdown.component';
 import { DropdownSelectComponent } from './components/dropdown-select/dropdown-select.component';
@@ -55,6 +56,7 @@ import { EmailOverflowDirective } from './directives/email-overflow.directive';
         CheckboxComponent,
         EmailOverflowDirective,
         InfoTooltipComponent,
+        CodeComponent,
     ],
     exports: [
         CommonModule,
@@ -79,6 +81,7 @@ import { EmailOverflowDirective } from './directives/email-overflow.directive';
         CheckboxComponent,
         EmailOverflowDirective,
         InfoTooltipComponent,
+        CodeComponent,
     ],
 })
 export class SharedModule {}

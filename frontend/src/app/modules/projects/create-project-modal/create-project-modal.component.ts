@@ -5,6 +5,7 @@ import { BaseComponent } from '@core/base/base.component';
 import { NotificationService } from '@core/services/notification.service';
 import { ProjectService } from '@core/services/project.service';
 import { SpinnerService } from '@core/services/spinner.service';
+import { BranchNameFormatter } from '@shared/helpers/branch-name-formatter';
 import { ValidationsFn } from '@shared/helpers/validations-fn';
 import { takeUntil, tap } from 'rxjs';
 
@@ -46,7 +47,11 @@ export class CreateProjectModalComponent extends BaseComponent implements OnInit
                 Validators.maxLength(50),
                 ValidationsFn.noCyrillic(),
             ]],
-            defaultBranchName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(200)]],
+            defaultBranchName: ['', [
+                Validators.required,
+                Validators.minLength(3),
+                Validators.maxLength(200),
+                ValidationsFn.branchNameMatch()]],
             selectedEngine: ['', Validators.required],
         });
     }
@@ -56,13 +61,12 @@ export class CreateProjectModalComponent extends BaseComponent implements OnInit
 
         const newProject: NewProjectDto = {
             project: {
-                name: this.projectForm.value.projectName,
+                name: this.projectForm.value.projectName.trim(),
                 description: null,
                 dbEngine: parseInt(this.projectForm.value.selectedEngine, 10) as DbEngine,
             },
             defaultBranch: {
-                name: this.projectForm.value.defaultBranchName,
-                isActive: true,
+                name: BranchNameFormatter.formatBranchName(this.projectForm.value.defaultBranchName),
             },
         };
 
@@ -86,5 +90,11 @@ export class CreateProjectModalComponent extends BaseComponent implements OnInit
 
     public close(): void {
         this.dialogRef.close();
+    }
+
+    public replaceSpacesWithHyphens(event: Event) {
+        const inputElement = event.target as HTMLInputElement;
+
+        inputElement.value = BranchNameFormatter.formatBranchName(inputElement.value);
     }
 }

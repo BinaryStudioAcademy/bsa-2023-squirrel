@@ -8,4 +8,5 @@ export interface DbConnection {
     password: string
     dbEngine: DbEngine
     isLocalhost: boolean
+    integratedSecurity: boolean
 }

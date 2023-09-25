@@ -1,0 +1,41 @@
+@import "/src/styles/color"
+@import "/src/styles/weights"
+
+.script-result
+    color: $text-main
+    border: 1px solid $black
+    border-radius: 5px
+    margin-top: 15px
+
+.result-message
+    margin: 15px
+    font-weight: $bold-weight
+
+.cell
+    text-align: center
+    max-width: 10%
+    text-overflow: wrap
+    padding: 10px
+
+.result-table
+    max-width: 100%
+    overflow-x: auto
+    display: block
+    border-spacing: 0
+
+.column-header
+    background-color: $light-gray
+    font-weight: $bold-weight
+    font-size: 14px
+
+.table-wrapper
+    overflow-x: auto
+    overflow-y: hidden
+    height: 100%
+
+    &::-webkit-scrollbar
+        width: 10px
+
+    &::-webkit-scrollbar-thumb
+        background-color: $dark-grey
+        outline: 1px solid $light-gray

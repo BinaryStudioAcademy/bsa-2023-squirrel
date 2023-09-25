@@ -7,12 +7,19 @@ namespace Squirrel.ConsoleApp.BL.Services;
 
 public class ConnectionFileService : IConnectionFileService
 {
-    public void CreateEmptyFile()
+    private IJsonSerializerSettingsService _jsonSettingsService;
+
+    public ConnectionFileService(IJsonSerializerSettingsService jsonSettingsService)
+    {
+        _jsonSettingsService = jsonSettingsService;
+    }
+
+    public void CreateInitFile()
     {
         var filePath = ConnectionFilePath;
         if (!File.Exists(filePath))
         {
-            File.WriteAllText(filePath, "{}");
+            File.WriteAllText(filePath, JsonConvert.SerializeObject(new ConnectionStringDto(), _jsonSettingsService.GetSettings()));
         }
     }
 
@@ -25,22 +32,25 @@ public class ConnectionFileService : IConnectionFileService
         }
 
         var json = File.ReadAllText(filePath);
-        return JsonConvert.DeserializeObject<ConnectionStringDto>(json) ?? throw new JsonReadFailed(filePath);
+        return JsonConvert.DeserializeObject<ConnectionStringDto>(json, _jsonSettingsService.GetSettings()) ?? throw new JsonReadFailed(filePath);
     }
 
     public void SaveToFile(ConnectionStringDto connectionStringDto)
     {
-        var filePath = ConnectionFilePath;
-        string json = JsonConvert.SerializeObject(connectionStringDto, Formatting.Indented);
-        File.WriteAllText(filePath, json);
+        var connectionString = ReadFromFile();
+        if (connectionString.ServerName is not null)
+        {
+            throw new ConnectionAlreadyExist();
+        }
+        string json = JsonConvert.SerializeObject(connectionStringDto, _jsonSettingsService.GetSettings());
+        File.WriteAllText(ConnectionFilePath, json);
     }
 
     private string ConnectionFilePath
     {
         get
         {
-            string userFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            return Path.Combine(userFolder, "squirrel-connection.json");
+            return FilePathHelperService.GetDbSettingsFilePath();
         }
     }
 }

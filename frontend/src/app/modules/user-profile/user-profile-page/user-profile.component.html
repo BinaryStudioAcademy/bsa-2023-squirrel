@@ -19,8 +19,11 @@
                                     [size]="200">
                         </app-avatar>
                         <div class="edit-icon">
-                            <input type="file" id="userAvatar"/>
+                            <input type="file" id="userAvatar" accept="image/png, image/jpeg" (change)="onFileChange($event)"/>
                             <fa-icon [icon]="penIcon" style="color: white"></fa-icon>
+                        </div>
+                        <div *ngIf="currentUser.avatarUrl" class="delete-icon" (click)="deleteAvatar()">
+                            <fa-icon [icon]="trashIcon" style="color: white"></fa-icon>
                         </div>
                     </div>
                 </div>
@@ -108,37 +111,6 @@
                     <app-button variant="filled" text="Save"></app-button>
                 </div>
             </form>
-        </div>
-    </section>
-
-    <section class="section">
-        <h4 class="section-header">Notifications</h4>
-        <div class="notifications-block">
-            <p class="smaller-font">Notifications for all repositories, teams, or conversations you're watching</p>
-            <div class="notify">
-                <div class="form-group form-group-left">
-                    <div class="label-input">
-                        <span class="notify-label">Notify me:</span>
-                    </div>
-                    <div class="checkbox-group">
-                        <app-checkbox
-                            [checked]="squirrelNotification"
-                            (change)="squirrelNotification = !squirrelNotification"
-                            label="On Squirrel"></app-checkbox>
-                        <app-checkbox
-                            [checked]="emailNotification"
-                            (change)="emailNotification = !emailNotification"
-                            label="Email"></app-checkbox>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="label-input"></div>
-                <app-button
-                    variant="filled"
-                    text="Save"
-                    (buttonOnClick)="updateUserNotifications()"></app-button>
-            </div>
         </div>
     </section>
 </div>

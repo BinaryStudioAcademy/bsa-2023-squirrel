@@ -32,6 +32,31 @@ jobs:
           build-args: PROJECT_PORT=5050
           push: true
 
+  build_sql_service:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }} 
+      -
+        name: Build and push Sql Service
+        uses: docker/build-push-action@v4
+        with:
+          tags: alinasielina/squirrel_sql:latest
+          context: ./backend
+          file: ./backend/Squirrel.SqlService/Dockerfile
+          build-args: PROJECT_PORT=5076
+          push: true
+
   build_notifier_service:
     runs-on: ubuntu-latest
     steps:

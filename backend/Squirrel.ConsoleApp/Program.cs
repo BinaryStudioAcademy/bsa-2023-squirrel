@@ -6,7 +6,7 @@ namespace Squirrel.ConsoleApp;
 
 internal class Program
 {
-    static void Main(string[] args)
+    public static void Main(string[] args)
     {
         var config = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json")
@@ -17,11 +17,13 @@ internal class Program
         CreateHostBuilder(args, baseUrl).Build().Run();
     }
 
-    public static IHostBuilder CreateHostBuilder(string[] args, string baseUrl) =>
-        Host.CreateDefaultBuilder(args)
+    public static IHostBuilder CreateHostBuilder(string[] args, string baseUrl)
+    {
+        return Host.CreateDefaultBuilder(args)
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseUrls(baseUrl);
                 webBuilder.UseStartup<Startup>();
             });
+    }
 }

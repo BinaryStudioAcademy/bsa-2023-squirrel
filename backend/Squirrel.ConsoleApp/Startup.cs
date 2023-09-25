@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using Squirrel.ConsoleApp.BL.Extensions;
+using Newtonsoft.Json.Converters;
 using Squirrel.ConsoleApp.BL.Interfaces;
 using Squirrel.ConsoleApp.BL.Services;
+using Squirrel.ConsoleApp.BL.Validators;
+using Squirrel.ConsoleApp.Extensions;
 using Squirrel.ConsoleApp.Filters;
-using Squirrel.ConsoleApp.Models;
-using Squirrel.ConsoleApp.Services;
 
 namespace Squirrel.ConsoleApp;
 
@@ -20,22 +20,42 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.Configure<DbSettings>(Configuration.GetSection(nameof(DbSettings)));
-        var serviceProvider = services.BuildServiceProvider();
-        var dbSettings = serviceProvider.GetRequiredService<IOptionsSnapshot<DbSettings>>().Value;
-
-        services.AddScoped<IDbQueryProvider>(c => DatabaseServiceFactory.CreateDbQueryProvider(dbSettings.DbType));
-        services.AddScoped<IDatabaseService>(c => DatabaseServiceFactory.CreateDatabaseService(dbSettings.DbType, dbSettings.ConnectionString));
-
         services.AddScoped<IConnectionFileService, ConnectionFileService>();
+        services.AddScoped<IClientIdFileService, ClientIdFileService>();
         services.AddScoped<IConnectionStringService, ConnectionStringService>();
-        services.AddScoped<IGetActionsService, GetActionsService>();
+        services.AddTransient<IGetActionsService, GetActionsService>();
+        services.AddScoped<IJsonSerializerSettingsService, JsonSerializerSettingsService>();
+        services.AddScoped<IConnectionService, ConnectionService>();
 
-        services.AddControllers(options => { options.Filters.Add(typeof(CustomExceptionFilter)); });
+        var serviceProvider = services.BuildServiceProvider();
+        var connectionStringService = serviceProvider.GetRequiredService<IConnectionStringService>();
+        var connectionFileService = serviceProvider.GetRequiredService<IConnectionFileService>();
+       
+        connectionFileService.CreateInitFile();
+        var connectionString = connectionFileService.ReadFromFile();
+
+        Console.WriteLine($"DB Settings:\n - DbType: {connectionString.DbEngine}\n - Connection string: {connectionStringService.BuildConnectionString(connectionString)}");
+       
+        services.AddScoped<IDbQueryProvider>(_ => DatabaseServiceFactory.CreateDbQueryProvider(connectionString.DbEngine));
+        services.AddScoped<IDatabaseService>(_ => DatabaseServiceFactory.CreateDatabaseService(connectionString.DbEngine, connectionStringService.BuildConnectionString(connectionString)));
+
+        services.AddControllers().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<ConnectionStringDtoValidator>());
+        
+        services.AddControllers(options =>
+        {
+            options.Filters.Add(typeof(CustomExceptionFilter));
+        });
+
+        services.AddControllers().AddNewtonsoftJson(jsonOptions =>
+        {
+            jsonOptions.SerializerSettings.Converters.Add(new StringEnumConverter());
+        });
     }
 
     public void Configure(IApplicationBuilder app)
     {
+        app.RegisterHubs(Configuration);
+
         app.UseCors(builder => builder
             .AllowAnyMethod()
             .AllowAnyHeader()
@@ -47,14 +67,5 @@ public class Startup
         {
             cfg.MapControllers();
         });
-
-        InitializeFileSettings(app);
-    }
-
-    private static void InitializeFileSettings(IApplicationBuilder app)
-    {
-        using var scope = app.ApplicationServices.GetService<IServiceScopeFactory>()?.CreateScope();
-        var fileService = scope?.ServiceProvider.GetRequiredService<IConnectionFileService>();
-        fileService?.CreateEmptyFile();
     }
 }

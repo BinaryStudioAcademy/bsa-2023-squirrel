@@ -1,6 +1,7 @@
 ﻿using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Squirrel.AzureBlobStorage.Models;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.BLL.Services;
 using Squirrel.Core.Common.DTO.Auth;
@@ -29,6 +30,13 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IProjectService, ProjectService>();
         services.AddScoped<IDatabaseItemsService, DatabaseItemsService>();
         services.AddScoped<IProjectDatabaseService, ProjectDatabaseService>();
+        services.AddScoped<IImageService, ImageService>();
+        services.AddScoped<IScriptService, ScriptService>();
+        services.AddScoped<IConsoleConnectService, ConsoleConnectService>();
+        services.AddScoped<ITableService, TableService>();
+
+        services.AddScoped<IChangeRecordService, ChangeRecordService>();
+        services.AddTransient<IDbStructureSaverService, DbStructureSaverService>();
 
         services.AddSingleton<IHttpClientService, HttpClientService>();
 
@@ -109,6 +117,12 @@ public static class ServiceCollectionExtensions
     {
         services.Configure<AuthenticationSettings>(configuration.GetSection<AuthenticationSettings>());
     }
+
+    public static void ConfigureAzureBlobStorage(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<BlobStorageOptions>(configuration.GetSection<BlobStorageOptions>());
+    }
+
 
     private static IConfigurationSection GetSection<T>(this IConfiguration configuration)
     {

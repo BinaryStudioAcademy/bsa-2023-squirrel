@@ -7,8 +7,9 @@ public class BranchDtoValidator : AbstractValidator<BranchDto>
 {
     public BranchDtoValidator()
     {
-        RuleFor(x => x.Name)!
-            .MinimumLength(3)!
-            .MaximumLength(200);
+        RuleFor(x => x.Name)
+            .MinimumLength(3)
+            .MaximumLength(200)
+            .Matches(@"^[\w\-@]+$");
     }
 }

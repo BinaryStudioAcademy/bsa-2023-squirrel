@@ -1,6 +1,7 @@
 ﻿namespace Squirrel.SqlService.BLL.Interfaces;
+
 public interface IDependencyAnalyzer
 {
-    List<string> AnalyzeDependencies(string spContent, List<string>? objectList = null);
+    ICollection<string> AnalyzeDependencies(string spContent, List<string>? objectList = null);
 }
 

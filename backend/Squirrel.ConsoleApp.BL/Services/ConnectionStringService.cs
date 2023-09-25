@@ -24,7 +24,8 @@ public sealed class ConnectionStringService : IConnectionStringService
             DataSource = connectionStringDto.ServerName,
             InitialCatalog = connectionStringDto.DbName,
             UserID = connectionStringDto.Username,
-            Password = connectionStringDto.Password
+            Password = connectionStringDto.Password,
+            IntegratedSecurity = connectionStringDto.IntegratedSecurity
         }.ConnectionString;
     }
 

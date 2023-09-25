@@ -11,9 +11,12 @@
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="Google.Apis.Auth" Version="1.61.0" />
     <PackageReference Include="DiffPlex" Version="1.7.1" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.0.2" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Squirrel.AzureBlobStorage\Squirrel.AzureBlobStorage.csproj" />
+    <ProjectReference Include="..\..\Squirrel.ConsoleApp.Models\Squirrel.ConsoleApp.Models.csproj" />
     <ProjectReference Include="..\..\Squirrel.Shared\Squirrel.Shared.csproj" />
     <ProjectReference Include="..\Squirrel.Core.Common\Squirrel.Core.Common.csproj" />
   </ItemGroup>

@@ -51,7 +51,7 @@ public sealed class ScriptService : BaseService, IScriptService
         return _mapper.Map<ScriptDto>(updatedScript);
     }
 
-    public async Task<List<ScriptDto>> GetAllScriptsAsync(int projectId)
+    public async Task<ICollection<ScriptDto>> GetAllScriptsAsync(int projectId)
     {
         var scripts = await _context.Scripts
                                     .Where(x => x.ProjectId == projectId)

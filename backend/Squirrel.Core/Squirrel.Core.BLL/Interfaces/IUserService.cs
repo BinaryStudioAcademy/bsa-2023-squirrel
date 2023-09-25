@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Squirrel.Core.Common.DTO.Auth;
+﻿using Squirrel.Core.Common.DTO.Auth;
 using Squirrel.Core.Common.DTO.Users;
 using Squirrel.Core.DAL.Entities;
 
@@ -14,7 +13,7 @@ public interface IUserService
     Task<UserDto> CreateUserAsync(UserRegisterDto userDto, bool isGoogleAuth);
     Task<User?> GetUserEntityByEmailAsync(string email);
     Task<User?> GetUserEntityByUsernameAsync(string username);
-    Task<List<UserDto>> GetAllUsersAsync();
+    Task<ICollection<UserDto>> GetAllUsersAsync();
     Task<UserProfileDto> GetUserProfileAsync();
     Task<UserProfileDto> UpdateUserNamesAsync(UpdateUserNamesDto updateUserDto);
     Task ChangePasswordAsync(UpdateUserPasswordDto userDto);

@@ -14,7 +14,7 @@ public class DbStructureSaverService : IDbStructureSaverService
         _configuration = configuration;
     }
 
-    public async Task SaveDBStructureToAzureBlobAsync(ChangeRecord changeRecord, Guid clientId)
+    public async Task SaveDbStructureToAzureBlobAsync(ChangeRecord changeRecord, Guid clientId)
     {
         await _httpClientService.SendAsync
             ($"{_configuration["SqlServiceUrl"]}/api/Changes/{clientId}", changeRecord.UniqueChangeId, HttpMethod.Post);

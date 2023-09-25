@@ -100,7 +100,7 @@ public sealed class ProjectService : BaseService, IProjectService
         await _context.SaveChangesAsync();
     }
 
-    public async Task<List<UserDto>> GetProjectUsersAsync(int projectId)
+    public async Task<ICollection<UserDto>> GetProjectUsersAsync(int projectId)
     {
         var project = await _context.Projects
             .Include(p => p.Users)
@@ -115,7 +115,7 @@ public sealed class ProjectService : BaseService, IProjectService
         return _mapper.Map<List<UserDto>>(projectUsers);
     }
 
-    public async Task<List<ProjectResponseDto>> GetAllUserProjectsAsync()
+    public async Task<ICollection<ProjectResponseDto>> GetAllUserProjectsAsync()
     {
         var currentUserId = _userIdGetter.GetCurrentUserId();
         var userProjects = await _context.Projects

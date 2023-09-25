@@ -5,7 +5,7 @@ namespace Squirrel.SqlService.BLL.Services;
 
 public class DependencyAnalyzer : IDependencyAnalyzer
 {
-    public List<string> AnalyzeDependencies(string spContent, List<string>? objectList = null)
+    public ICollection<string> AnalyzeDependencies(string spContent, List<string>? objectList = null)
     {
         var references = FindReferences(spContent);
 
@@ -27,7 +27,7 @@ public class DependencyAnalyzer : IDependencyAnalyzer
         return dependencies;
     }
 
-    private List<string> FindReferences(string spContent)
+    private ICollection<string> FindReferences(string spContent)
     {
         var references = new List<string>();
 

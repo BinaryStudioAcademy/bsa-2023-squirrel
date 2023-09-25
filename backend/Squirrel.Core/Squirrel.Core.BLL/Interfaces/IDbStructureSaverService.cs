@@ -4,5 +4,5 @@ namespace Squirrel.Core.BLL.Interfaces;
 
 public interface IDbStructureSaverService
 {
-    Task SaveDBStructureToAzureBlobAsync(ChangeRecord changeRecord, Guid clientId);
+    Task SaveDbStructureToAzureBlobAsync(ChangeRecord changeRecord, Guid clientId);
 }

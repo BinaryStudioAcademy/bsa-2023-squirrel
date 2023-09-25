@@ -48,7 +48,7 @@ public sealed class UserService : BaseService, IUserService
         return _mapper.Map<UserDto>(userEntity);
     }
 
-    public async Task<List<UserDto>> GetAllUsersAsync()
+    public async Task<ICollection<UserDto>> GetAllUsersAsync()
     {
         var userEntities = await _context.Users.ToListAsync();
 

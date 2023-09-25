@@ -27,7 +27,7 @@ public sealed class ChangeRecordService : BaseService, IChangeRecordService
             UniqueChangeId = Guid.NewGuid()
         };
 
-        await _dBStructureSaver.SaveDBStructureToAzureBlobAsync(changeRecordEntity, clientId);
+        await _dBStructureSaver.SaveDbStructureToAzureBlobAsync(changeRecordEntity, clientId);
 
         var addedChangeRecord = (await _context.ChangeRecords.AddAsync(changeRecordEntity)).Entity;
         await _context.SaveChangesAsync();

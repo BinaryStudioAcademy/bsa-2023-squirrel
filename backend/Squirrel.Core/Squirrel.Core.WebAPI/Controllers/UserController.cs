@@ -67,7 +67,7 @@ public class UserController : ControllerBase
     }
     
     [HttpGet("all")]
-    public async Task<ActionResult<List<UserDto>>> GetAllUsersAsync()
+    public async Task<ActionResult<ICollection<UserDto>>> GetAllUsersAsync()
     {
         return Ok(await _userService.GetAllUsersAsync());
     }

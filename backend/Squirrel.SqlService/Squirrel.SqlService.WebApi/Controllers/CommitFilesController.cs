@@ -16,8 +16,8 @@ public class CommitFilesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<ICollection<CommitFileDto>>> Save(SelectedItemsDto dto)
+    public async Task<ActionResult<ICollection<CommitFileDto>>> SaveAsync(SelectedItemsDto dto)
     {
-        return Ok(await _commitFilesService.SaveSelectedFiles(dto));
+        return Ok(await _commitFilesService.SaveSelectedFilesAsync(dto));
     }
 }

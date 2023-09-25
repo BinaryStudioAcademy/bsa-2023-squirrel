@@ -15,5 +15,5 @@ public sealed class Commit : AuditEntity<int>
     public ICollection<CommitParent> CommitsAsChild = new List<CommitParent>();
     public string PreScript { get; set; } = null!;
     public string PostScript { get; set; } = null!;
-    public bool IsSaved { get; set; } = false;
+    public bool IsSaved { get; set; }
 }

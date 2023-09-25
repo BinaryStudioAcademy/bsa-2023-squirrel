@@ -18,8 +18,8 @@ public class CommitController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<CommitDto>> CreateCommit(CreateCommitDto dto)
+    public async Task<ActionResult<CommitDto>> CreateCommitAsync(CreateCommitDto dto)
     {
-        return Ok(await _commitService.CreateCommit(dto));
+        return Ok(await _commitService.CreateCommitAsync(dto));
     }
 }

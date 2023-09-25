@@ -4,9 +4,8 @@ using Squirrel.AzureBlobStorage.Interfaces;
 using Squirrel.AzureBlobStorage.Models;
 using Squirrel.Shared.DTO;
 using Squirrel.Shared.DTO.CommitFile;
-using Squirrel.Shared.DTO.Procedure;
 using Squirrel.Shared.DTO.SelectedItems;
-using Squirrel.Shared.DTO.Table;
+using Squirrel.Shared.Enums;
 using Squirrel.SqlService.BLL.Interfaces;
 using System.Text;
 
@@ -22,89 +21,39 @@ public class CommitFilesService : ICommitFilesService
         _containerName = configuration.GetRequiredSection("UserDbChangesBlobContainerName").Value;
     }
 
-    public async Task<ICollection<CommitFileDto>> SaveSelectedFiles(SelectedItemsDto selectedItems)
+    public async Task<ICollection<CommitFileDto>> SaveSelectedFilesAsync(SelectedItemsDto selectedItems)
     {
         var staged = await GetStagedAsync(selectedItems.Guid);
         var saved = new List<CommitFileDto>();
         foreach (var selected in selectedItems.StoredProcedures) 
         {
             var item = staged.DbProcedureDetails?.Details.FirstOrDefault(x => x.Name == selected);
-            if (item != null) 
-            {
-                var blobContent = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(item));
-                var file = new CommitFileDto
-                {
-                    BlobId = $"{item.Schema}-{item.Name}".ToLower(),
-                    FileName = item.Name,
-                    FileType = Shared.Enums.DatabaseItemType.StoredProcedure
-                };
-                await SaveToBlob(file, selectedItems.CommitId, blobContent);
-                saved.Add(file);
-            }
+            var file = await SaveFileAsync(item, selectedItems.CommitId, DatabaseItemType.StoredProcedure);
+            MarkAsSaved(saved, file);
         }
         foreach (var selected in selectedItems.Functions)
         {
             var item = staged.DbFunctionDetails?.Details.FirstOrDefault(x => x.Name == selected);
-            if (item != null)
-            {
-                var blobContent = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(item));
-                var file = new CommitFileDto
-                {
-                    BlobId = $"{item.Schema}-{item.Name}".ToLower(),
-                    FileName = item.Name,
-                    FileType = Shared.Enums.DatabaseItemType.Function
-                };
-                await SaveToBlob(file, selectedItems.CommitId, blobContent);
-                saved.Add(file);
-            }
+            var file = await SaveFileAsync(item, selectedItems.CommitId, DatabaseItemType.Function);
+            MarkAsSaved(saved, file);
         }
         foreach (var selected in selectedItems.Tables)
         {
             var item = staged.DbTableStructures?.FirstOrDefault(x => x.Name == selected);
-            if (item != null)
-            {
-                var blobContent = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(item));
-                var file = new CommitFileDto
-                {
-                    BlobId = $"{item.Schema}-{item.Name}".ToLower(),
-                    FileName = item.Name,
-                    FileType = Shared.Enums.DatabaseItemType.Table
-                };
-                await SaveToBlob(file, selectedItems.CommitId, blobContent);
-                saved.Add(file);
-            }
+            var file = await SaveFileAsync(item, selectedItems.CommitId, DatabaseItemType.Table);
+            MarkAsSaved(saved, file);
         }
         foreach (var selected in selectedItems.Constraints)
         {
             var item = staged.DbConstraints.FirstOrDefault(x => x.Name == selected);
-            if (item != null)
-            {
-                var blobContent = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(item));
-                var file = new CommitFileDto
-                {
-                    BlobId = $"{item.Schema}-{item.Name}".ToLower(),
-                    FileName = item.Name,
-                    FileType = Shared.Enums.DatabaseItemType.Constraint
-                };
-                await SaveToBlob(file, selectedItems.CommitId, blobContent);
-                saved.Add(file);
-            }
+            var file = await SaveFileAsync(item, selectedItems.CommitId, DatabaseItemType.Constraint);
+            MarkAsSaved(saved, file);
         }
         foreach (var selected in selectedItems.Views)
         {
             var item = staged.DbViewsDetails.Details.FirstOrDefault(x => x.Name == selected);
-            if (item != null)
-            {
-                var blobContent = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(item));
-                var file = new CommitFileDto
-                {
-                    BlobId = $"{item.Schema}-{item.Name}".ToLower(),
-                    FileName = item.Name,
-                    FileType = Shared.Enums.DatabaseItemType.View
-                };
-                await SaveToBlob(file, selectedItems.CommitId, blobContent);
-                saved.Add(file);
-            }
+            var file = await SaveFileAsync(item, selectedItems.CommitId, DatabaseItemType.View);
+            MarkAsSaved(saved, file);
         }
         foreach (var selected in selectedItems.Types)
         {
@@ -114,7 +63,34 @@ public class CommitFilesService : ICommitFilesService
         return saved;
     }
 
-    private async Task SaveToBlob(CommitFileDto dto, int commitId, byte[] content)
+    private void MarkAsSaved(List<CommitFileDto> saved, CommitFileDto? file)
+    {
+        if (file is not null)
+        {
+            saved.Add(file);
+        }
+    }
+
+    private async Task<CommitFileDto?> SaveFileAsync<T>(T? item, int commitId, DatabaseItemType type) where T: BaseDbItem
+    {
+        if (item is null)
+        {
+            return null;
+        }
+
+        var blobContent = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(item));
+        var file = new CommitFileDto
+        {
+            BlobId = $"{item.Schema}-{item.Name}".ToLower(),
+            FileName = item.Name,
+            FileType = type
+        };
+        await SaveToBlobAsync(file, commitId, blobContent);
+
+        return file;
+    }
+
+    private async Task SaveToBlobAsync(CommitFileDto dto, int commitId, byte[] content)
     {
         var blob = new Blob
         {

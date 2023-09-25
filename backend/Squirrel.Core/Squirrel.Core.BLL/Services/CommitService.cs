@@ -13,12 +13,14 @@ using Squirrel.Shared.Enums;
 using Squirrel.Shared.Exceptions;
 
 namespace Squirrel.Core.BLL.Services;
+
 public class CommitService : BaseService, ICommitService
 {
     private readonly IHttpClientService _httpClientService;
     private readonly IUserIdGetter _userIdGetter;
     private readonly IConfiguration _configuration;
     private readonly IUserService _userService;
+
     public CommitService(
         SquirrelCoreContext context,
         IMapper mapper,
@@ -33,7 +35,7 @@ public class CommitService : BaseService, ICommitService
         _userService = userService;
     }
 
-    public async Task<CommitDto> CreateCommit(CreateCommitDto dto)
+    public async Task<CommitDto> CreateCommitAsync(CreateCommitDto dto)
     {
         // Create commit
         var currentUserId = _userIdGetter.GetCurrentUserId();
@@ -51,7 +53,7 @@ public class CommitService : BaseService, ICommitService
         var entity = AddFilesToCommit(commit, items);
         // Add parent commit, if exist
         var head = branchEntity.BranchCommits.FirstOrDefault(x => x.IsHead);
-        if (head != null)
+        if (head is not null)
         {
             var commitParent = new CommitParent
             {
@@ -66,7 +68,7 @@ public class CommitService : BaseService, ICommitService
         // Update commit to be HEAD
         var branchCommit = await _context.BranchCommits
             .FirstOrDefaultAsync(x => x.BranchId == branchEntity.Id);
-        if (branchCommit == null)
+        if (branchCommit is null)
         {
             throw new EntityNotFoundException(nameof(branchEntity));
         }
@@ -106,7 +108,7 @@ public class CommitService : BaseService, ICommitService
             .Include(x => x.BranchCommits)
                 .ThenInclude(x => x.Commit)
             .FirstOrDefaultAsync(x => x.Id == id);
-        if (branchEntity == null)
+        if (branchEntity is null)
         {
             throw new EntityNotFoundException(nameof(Branch), id);
         }

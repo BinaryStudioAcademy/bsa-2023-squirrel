@@ -4,6 +4,7 @@ using Squirrel.Core.DAL.Entities;
 using Squirrel.Shared.DTO.CommitFile;
 
 namespace Squirrel.Core.BLL.MappingProfiles;
+
 public class CommitProfile: Profile
 {
     public CommitProfile()

@@ -6,6 +6,10 @@ namespace Squirrel.Shared.Exceptions;
 
 public class InvalidEmailOrPasswordException : RequestException
 {
-    public InvalidEmailOrPasswordException() : base("Invalid email or password.",
-        ErrorType.InvalidEmailOrPassword, HttpStatusCode.BadRequest) { }
+    public InvalidEmailOrPasswordException() : base(
+        "Invalid email or password.",
+        ErrorType.InvalidEmailOrPassword,
+        HttpStatusCode.BadRequest)
+    {
+    }
 }

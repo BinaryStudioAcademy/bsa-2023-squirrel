@@ -6,6 +6,10 @@ namespace Squirrel.Shared.Exceptions;
 
 public class InvalidPasswordException : RequestException
 {
-    public InvalidPasswordException() : base("Invalid password.",
-        ErrorType.InvalidPassword, HttpStatusCode.BadRequest) { }
+    public InvalidPasswordException() : base(
+        "Invalid password.",
+        ErrorType.InvalidPassword,
+        HttpStatusCode.BadRequest)
+    {
+    }
 }

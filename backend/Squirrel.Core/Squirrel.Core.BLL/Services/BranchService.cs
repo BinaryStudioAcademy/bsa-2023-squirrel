@@ -6,7 +6,6 @@ using Squirrel.Core.Common.DTO.Branch;
 using Squirrel.Core.DAL.Context;
 using Squirrel.Core.DAL.Entities;
 using Squirrel.Shared.Exceptions;
-using System.Runtime.CompilerServices;
 
 namespace Squirrel.Core.BLL.Services;
 
@@ -26,8 +25,8 @@ public sealed class BranchService : BaseService, IBranchService
         var createdBranch = (await _context.Branches.AddAsync(branch)).Entity;
         if (branchDto.ParentId != null)
         {
-            await InheritBranchAsyncInternal(createdBranch, branchDto.ParentId ?? 0);
-        }        
+            await InheritBranchInternalAsync(createdBranch, branchDto.ParentId ?? 0);
+        }
         await _context.SaveChangesAsync();
 
         return _mapper.Map<BranchDto>(createdBranch);
@@ -69,20 +68,21 @@ public sealed class BranchService : BaseService, IBranchService
         return _mapper.Map<BranchDto>(updatedEntity);
     }
 
-    private async Task InheritBranchAsyncInternal(Branch branch, int parentId) 
+    private async Task InheritBranchInternalAsync(Branch branch, int parentId) 
     {
-        var parent = (await _context.Branches.FirstOrDefaultAsync(x => x.Id == parentId)) ?? throw new EntityNotFoundException();
+        var parent = await _context.Branches.FirstOrDefaultAsync(x => x.Id == parentId)
+                     ?? throw new EntityNotFoundException();
 
         branch.BranchCommits = parent.BranchCommits;
     }
 
     private async Task EnsureUniquenessAsync(string branchName, int projectId)
     {
-        if(await _context.Branches
+        if (await _context.Branches
             .AsNoTracking()
             .AnyAsync(branch =>
-                branch.ProjectId == projectId && 
-                string.Equals(branchName, branch.Name))) 
+                branch.ProjectId == projectId &&
+                string.Equals(branchName, branch.Name)))
         {
             throw new BranchAlreadyExistException();
         }

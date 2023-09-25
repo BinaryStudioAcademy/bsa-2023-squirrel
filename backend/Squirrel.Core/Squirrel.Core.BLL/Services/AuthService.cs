@@ -1,16 +1,16 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.BLL.Services.Abstract;
 using Squirrel.Core.Common.DTO.Auth;
 using Squirrel.Core.Common.Interfaces;
 using Squirrel.Core.DAL.Context;
 using Squirrel.Core.DAL.Entities;
-using static Google.Apis.Auth.GoogleJsonWebSignature;
-using Microsoft.Extensions.Options;
 using Squirrel.Core.Common.DTO.Users;
 using Squirrel.Core.Common.Security;
 using Squirrel.Shared.Exceptions;
+using static Google.Apis.Auth.GoogleJsonWebSignature;
 
 namespace Squirrel.Core.BLL.Services;
 

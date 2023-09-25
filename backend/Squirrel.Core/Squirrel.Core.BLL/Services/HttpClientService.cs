@@ -1,6 +1,6 @@
-﻿using Squirrel.Core.BLL.Extensions;
+﻿using System.Net.Http.Json;
+using Squirrel.Core.BLL.Extensions;
 using Squirrel.Core.BLL.Interfaces;
-using System.Net.Http.Json;
 using HttpRequestException = Squirrel.Shared.Exceptions.HttpRequestException;
 
 namespace Squirrel.Core.BLL.Services;

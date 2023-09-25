@@ -9,6 +9,8 @@ using Squirrel.SqlService.BLL.Models.DTO;
 using Squirrel.SqlService.BLL.Models.DTO.Function;
 using Squirrel.SqlService.BLL.Models.DTO.Procedure;
 using Squirrel.SqlService.BLL.Models.DTO.Shared;
+using Squirrel.SqlService.BLL.Models.DTO.UserDefinedType.DataType;
+using Squirrel.SqlService.BLL.Models.DTO.UserDefinedType.TableType;
 using Squirrel.SqlService.BLL.Models.DTO.View;
 using Squirrel.SqlService.BLL.Services.ConsoleAppHub;
 
@@ -157,20 +159,20 @@ public class ConsoleAppHubController : ControllerBase
 
     // https://localhost:7244/api/ConsoleAppHub/getUserDefinedTypesWithDefaultsAndRulesAndDefinition
     [HttpPost("getUserDefinedTypesWithDefaultsAndRulesAndDefinition")]
-    public async Task<ActionResult> GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync(
+    public async Task<ActionResult<UserDefinedDataTypeDetailsDto>> GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync(
         [FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId)
             .GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync(_queryParameters.queryId);
-        return Ok(await _queryParameters.tcs.Task);
+        return Ok(_mapper.Map<UserDefinedDataTypeDetailsDto>(await _queryParameters.tcs.Task));
     }
 
     // https://localhost:7244/api/ConsoleAppHub/getUserDefinedTableTypes
     [HttpPost("getUserDefinedTableTypes")]
-    public async Task<ActionResult> GetUserDefinedTableTypesAsync([FromBody] QueryParameters queryParameters)
+    public async Task<ActionResult<UserDefinedTables>> GetUserDefinedTableTypesAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId)
             .GetUserDefinedTableTypesAsync(_queryParameters.queryId);
-        return Ok(await _queryParameters.tcs.Task);
+        return Ok(_mapper.Map<UserDefinedTables>(await _queryParameters.tcs.Task));
     }
 }

@@ -11,10 +11,8 @@ using Squirrel.Core.Common.DTO.Script;
 using Squirrel.SqlService.BLL.Hubs;
 using Squirrel.SqlService.BLL.Interfaces;
 using Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
-using Squirrel.SqlService.BLL.Models.DTO;
 using Squirrel.SqlService.BLL.Models.DTO.View;
 using Squirrel.SqlService.BLL.Services.ConsoleAppHub;
-
 
 namespace Squirrel.SqlService.WebApi.Controllers;
 
@@ -172,7 +170,6 @@ public class ConsoleAppHubController : ControllerBase
         return Ok(await _queryParameters.tcs.Task);
     }
 
-    // https://localhost:7244/api/ConsoleAppHub/execute-script
     [HttpPost("execute-script")]
     public async Task<ActionResult<QueryResultTable>> ExecuteScriptAsync([FromBody] InboundScriptDto inboundScriptDto)
     {

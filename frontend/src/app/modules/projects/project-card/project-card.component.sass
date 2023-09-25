@@ -1,4 +1,5 @@
 @import "/src/styles/color"
+@import "/src/styles/weights"
 
 $accentColor: #e79925
 
@@ -22,7 +23,7 @@ $accentColor: #e79925
 .project-card
     cursor: pointer
     width: 320px 
-    height: 165px
+    height: 155px
     position: relative
     background-color: $container-grey
     border-radius: 9px
@@ -30,13 +31,13 @@ $accentColor: #e79925
 .side-panel
     width: 14px
     height: 100%
-    left: 0px
+    left: 0
     background: $accentColor
-    border-radius: 9px 0px 0px 9px
+    border-radius: 9px 0 0 9px
 
 .engine-logo-container
     width: 60px
-    height: 60px
+    height: 45px
     top: 12px
     position: absolute
     display: flex
@@ -46,20 +47,19 @@ $accentColor: #e79925
     border-radius: 9px
 
 .engine-logo
-    width: 30px
-    height: 30px
+    padding-left: 10px
+    min-width: 30px
+    min-height: 30px
     position: relative
 
 .project-name
-    width: 265px
+    width: 245px
     left: 70px
-    top: 30px
+    top: 26px
     position: absolute
     color: $text-main
     font-size: 18px
-    font-style: normal
-    font-weight: 600
-    line-height: normal 
+    font-weight: $semi-bold-weight
     white-space: nowrap
     overflow: hidden
     text-overflow: ellipsis
@@ -100,7 +100,7 @@ $accentColor: #e79925
 .project-description-container
     width: 280px
     left: 32px
-    top: 80px
+    top: 70px
     position: absolute
 
 .project-description

@@ -105,6 +105,12 @@ public class ProcessReceivedDataService : IProcessReceivedDataService
         await ShowResult(queryId, queryResultTable);
     }
 
+    public async Task RemoteConnectProcessAsync(Guid queryId, QueryResultTable queryResultTable)
+    {
+        _resultObserver.SetResult(queryId, queryResultTable);
+        await ShowResult(queryId, queryResultTable);
+    }
+
     public async Task ExecuteScriptProcessReceivedDataAsync(Guid queryId, QueryResultTable queryResultTable)
     {
         _resultObserver.SetResult(queryId, queryResultTable);

@@ -49,6 +49,7 @@ public sealed class ConsoleAppHub : Hub<IExecuteOnClientSide>
         _requestActionToProcessReceivedData.Add("GetViewsWithDetailAsync", _processReceivedDataService.ViewsWithDetailProcessReceivedDataAsync);
         _requestActionToProcessReceivedData.Add("GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync", _processReceivedDataService.UserDefinedTypesWithDefaultsAndRulesAndDefinitionProcessReceivedDataAsync);
         _requestActionToProcessReceivedData.Add("GetUserDefinedTableTypesAsync", _processReceivedDataService.UserDefinedTableTypesProcessReceivedDataAsync);
+        _requestActionToProcessReceivedData.Add("RemoteConnectAsync", _processReceivedDataService.RemoteConnectProcessAsync);
         _requestActionToProcessReceivedData.Add("ExecuteScriptAsync", _processReceivedDataService.ExecuteScriptProcessReceivedDataAsync);
     }
 }

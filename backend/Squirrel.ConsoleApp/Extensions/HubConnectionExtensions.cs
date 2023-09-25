@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
 using Squirrel.ConsoleApp.BL.Interfaces;
+using Squirrel.ConsoleApp.Models;
 
 namespace Squirrel.ConsoleApp.Extensions;
 
@@ -101,6 +102,12 @@ public static class HubConnectionExtensions
         {
             var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
             hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", queryId, "GetUserDefinedTableTypesAsync", getActionsService.GetUserDefinedTableTypesAsync().Result);
+        });
+        
+        hubConnection.On("RemoteConnectAsync", (Guid queryId, ConnectionStringDto connectionStringDto) =>
+        {
+            app.ApplicationServices.GetRequiredService<IConnectionService>().TryConnect(connectionStringDto);
+            hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", queryId, "RemoteConnectAsync", new QueryResultTable());
         });
 
         hubConnection.On("ExecuteScriptAsync", (Guid queryId, string scriptContent) =>

@@ -43,19 +43,17 @@ public sealed class ProjectService : BaseService, IProjectService
 
     public async Task<ProjectResponseDto> AddUsersToProjectAsync(int projectId, List<UserDto> usersDtos)
     {
-        var users = _mapper.Map<List<User>>(usersDtos);
-        
-        var existingProject = await _context.Projects
-            .Include(project => project.Users)
-            .FirstOrDefaultAsync(project => project.Id == projectId);
-        
+        var existingProject = await _context.Projects.FindAsync(projectId);
         ValidateProject(existingProject);
-
-        foreach (var user in users)
+        foreach (var user in usersDtos)
         {
-            existingProject!.Users.Add(user);
+            var userEntity = await _context.Users.FindAsync(user.Id);
+            if (userEntity == null)
+            {
+                throw new EntityNotFoundException(nameof(User));
+            }
+            existingProject!.Users.Add(userEntity);
         }
-
         await _context.SaveChangesAsync();
         return _mapper.Map<ProjectResponseDto>(existingProject);
     }

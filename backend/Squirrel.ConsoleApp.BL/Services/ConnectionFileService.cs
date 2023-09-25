@@ -37,6 +37,11 @@ public class ConnectionFileService : IConnectionFileService
 
     public void SaveToFile(ConnectionStringDto connectionStringDto)
     {
+        var connectionString = ReadFromFile();
+        if (connectionString.ServerName is not null)
+        {
+            throw new ConnectionAlreadyExist();
+        }
         string json = JsonConvert.SerializeObject(connectionStringDto, _jsonSettingsService.GetSettings());
         File.WriteAllText(ConnectionFilePath, json);
     }

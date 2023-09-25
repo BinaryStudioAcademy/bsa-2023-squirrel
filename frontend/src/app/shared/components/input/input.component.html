@@ -11,8 +11,9 @@
                 'padding-right': type === 'password' ? '40px' : '15px'
             }"/>
         <span *ngIf="type === 'password'" class="hide" (click)="show = !show">
-            <img [src]="show ? 'assets/hide-1.svg' : 'assets/hide-2.svg'" alt="show/hide" [ngStyle]="{'width.px': show ? 20 : 24, 'height.px': show ? 20 : 24, 'margin-right.px': show ? 2 : 0, 'margin-bottom.px': -4 }" />
+            <img [src]="show ? 'assets/hide-1.svg' : 'assets/hide-2.svg'" alt="show/hide" [ngClass]="show ? 'hide-icon' : 'show-icon'" />
         </span>
+
 
     </div>
 

@@ -1,5 +1,7 @@
 ﻿using Squirrel.SqlService.BLL.Models.DTO.Function;
 using Squirrel.SqlService.BLL.Models.DTO.Procedure;
+using Squirrel.SqlService.BLL.Models.DTO.UserDefinedType.DataType;
+using Squirrel.SqlService.BLL.Models.DTO.UserDefinedType.TableType;
 using Squirrel.SqlService.BLL.Models.DTO.View;
 
 namespace Squirrel.SqlService.BLL.Models.DTO;
@@ -8,6 +10,9 @@ public class DbStructureDto
 {
     public List<TableStructureDto> DbTableStructures { get; set; } = new();
     public List<TableConstraintsDto> DbConstraints { get; set; } = new();
+
+    public UserDefinedDataTypeDetailsDto DbUserDefinedDataTypeDetailsDto { get; set; } = new();
+    public UserDefinedTables DbUserDefinedTableTypeDetailsDto { get; set; } = new();
     public FunctionDetailsDto DbFunctionDetails { get; set; } = new();
     public ProcedureDetailsDto DbProcedureDetails { get; set; } = new();
     public ViewDetailsDto DbViewsDetails { get; set; } = new();

@@ -8,6 +8,8 @@ using Squirrel.Shared.DTO.Function;
 using Squirrel.Shared.DTO.Procedure;
 using Squirrel.Shared.DTO.Table;
 using Squirrel.Core.Common.DTO.Script;
+using Squirrel.Shared.DTO.UserDefinedType.DataType;
+using Squirrel.Shared.DTO.UserDefinedType.TableType;
 using Squirrel.Shared.DTO.View;
 using Squirrel.SqlService.BLL.Hubs;
 using Squirrel.SqlService.BLL.Interfaces;
@@ -106,7 +108,7 @@ public class ConsoleAppHubController : ControllerBase
         return Ok(_mapper.Map<TableStructureDto>(await _queryParameters.tcs.Task));
     }
 
-    [HttpPost("tTable-checks-and-unique-constraints")]
+    [HttpPost("table-checks-and-unique-constraints")]
     public async Task<ActionResult<TableConstraintsDto>> GetTableChecksAndUniqueConstraintsAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId)

@@ -1,9 +1,9 @@
 using AutoMapper;
 using Squirrel.ConsoleApp.Models;
 using Squirrel.Shared.DTO.DatabaseItem;
+using Squirrel.Shared.DTO.UserDefinedType.DataType;
+using Squirrel.Shared.DTO.UserDefinedType.TableType;
 using Squirrel.Shared.Enums;
-using Squirrel.SqlService.BLL.Models.DTO.UserDefinedType.DataType;
-using Squirrel.SqlService.BLL.Models.DTO.UserDefinedType.TableType;
 using static Squirrel.SqlService.BLL.Extensions.MappingExtensions;
 
 namespace Squirrel.SqlService.BLL.MappingProfiles;

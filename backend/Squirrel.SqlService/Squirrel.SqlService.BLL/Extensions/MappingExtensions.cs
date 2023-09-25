@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using Squirrel.SqlService.BLL.Models.DTO.UserDefinedType.TableType;
+using Squirrel.Shared.DTO.UserDefinedType.TableType;
 
 namespace Squirrel.SqlService.BLL.Extensions;
 

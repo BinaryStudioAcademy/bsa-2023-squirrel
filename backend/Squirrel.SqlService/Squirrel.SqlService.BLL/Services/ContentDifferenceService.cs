@@ -10,6 +10,8 @@ using Squirrel.Shared.DTO;
 using Squirrel.Shared.DTO.Function;
 using Squirrel.Shared.DTO.Procedure;
 using Squirrel.Shared.DTO.Table;
+using Squirrel.Shared.DTO.UserDefinedType.DataType;
+using Squirrel.Shared.DTO.UserDefinedType.TableType;
 using Squirrel.Shared.DTO.View;
 using Blob = Squirrel.AzureBlobStorage.Models.Blob;
 

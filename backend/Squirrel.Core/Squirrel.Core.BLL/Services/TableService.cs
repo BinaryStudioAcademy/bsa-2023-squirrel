@@ -16,7 +16,7 @@ public class TableService : ITableService
         _configuration = configuration;
     }
 
-    public async Task<TableNamesDto> GetTablesName(QueryParameters queryParameters)
+    public async Task<TableNamesDto> GetTablesNameAsync(QueryParameters queryParameters)
     {
         return await _httpClientService.SendAsync<QueryParameters, TableNamesDto>(
             $"{_configuration["SqlServiceUrl"]}/api/ConsoleAppHub/all-tables-names", queryParameters, HttpMethod.Post);

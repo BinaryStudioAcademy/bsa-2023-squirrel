@@ -1,4 +1,4 @@
-namespace Squirrel.SqlService.BLL.Models.DTO.UserDefinedType.DataType;
+namespace Squirrel.Shared.DTO.UserDefinedType.DataType;
 
 public class UserDefinedDataTypeDetailsDto
 {

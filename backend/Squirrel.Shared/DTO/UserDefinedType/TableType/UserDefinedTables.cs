@@ -1,4 +1,4 @@
-namespace Squirrel.SqlService.BLL.Models.DTO.UserDefinedType.TableType;
+namespace Squirrel.Shared.DTO.UserDefinedType.TableType;
 
 public class UserDefinedTables
 {

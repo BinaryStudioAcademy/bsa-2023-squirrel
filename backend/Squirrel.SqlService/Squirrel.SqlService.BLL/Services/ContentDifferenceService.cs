@@ -1,5 +1,6 @@
 using System.Text;
 using Microsoft.Extensions.Configuration;
+using Microsoft.SqlServer.TransactSql.ScriptDom;
 using Newtonsoft.Json;
 using Squirrel.AzureBlobStorage.Interfaces;
 using Squirrel.Shared.Enums;
@@ -23,17 +24,84 @@ public class ContentDifferenceService : IContentDifferenceService
     private readonly IBlobStorageService _blobStorageService;
     private readonly IConfiguration _configuration;
     private readonly ITextService _textService;
+    private readonly IDbItemsRetrievalService _dbItemsRetrievalService;
 
-    public ContentDifferenceService(IBlobStorageService blobStorageService, IConfiguration configuration, ITextService textService)
+    public ContentDifferenceService(IBlobStorageService blobStorageService, IConfiguration configuration, ITextService textService, 
+        IDbItemsRetrievalService dbItemsRetrievalService)
     {
         _blobStorageService = blobStorageService;
         _textService = textService;
         _configuration = configuration;
+        _dbItemsRetrievalService = dbItemsRetrievalService;
     }
 
     public async Task<ICollection<DatabaseItemContentCompare>> GetContentDiffsAsync(int commitId, Guid tempBlobId)
     {
         return await GetTextPairFromBlobsAsync(commitId, tempBlobId);
+    }
+
+    public async Task<string> GetBlobJson()
+    {
+        // var blob = await _blobStorageService.DownloadAsync("user-db-changes", "3fa85f64-5717-4562-b3fc-2c963f66afa6");
+        var blob = await _blobStorageService.DownloadAsync("1-userdefinedtabletype", "public-new_table_type");
+        return Encoding.UTF8.GetString(blob.Content);
+    }
+
+    public async Task CreateCommitContainersWithBlobs()
+    {
+        // await CreateFunctions();
+        // await CreateUdDataTypes();
+        await CreateUdTableTypes();
+    }
+
+    private async Task CreateFunctions()
+    {
+        var functions = await _dbItemsRetrievalService.GetAllFunctionDetailsAsync(new Guid("69673201-3e21-4ed0-90e4-4611b7fd5c12"));
+        foreach (var f in functions.Details)
+        {
+            var blobContent = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(f)); 
+            var blob = new Blob
+            {
+                Id = GetBlobName(f.Schema, f.Name),
+                ContentType = "application/json",
+                Content = blobContent
+            };
+            await _blobStorageService.UploadAsync(GetContainerName(1, DatabaseItemType.Function), blob);
+        }
+    }
+
+    private async Task CreateUdDataTypes()
+    {
+        var udts = await _dbItemsRetrievalService.GetAllUdtDataTypeDetails(
+            new Guid("69673201-3e21-4ed0-90e4-4611b7fd5c12"));
+        foreach (var udt in udts.Details)
+        {
+            var blobContent = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(udt));
+            var blob = new Blob
+            {
+                Id = GetBlobName(udt.Schema, udt.Name),
+                ContentType = "application/json",
+                Content = blobContent
+            };
+            await _blobStorageService.UploadAsync(GetContainerName(1, DatabaseItemType.UserDefinedDataType), blob);
+        }
+    }
+    
+    private async Task CreateUdTableTypes()
+    {
+        var udts = await _dbItemsRetrievalService.GetAllUdtTableTypeDetails(
+            new Guid("69673201-3e21-4ed0-90e4-4611b7fd5c12"));
+        foreach (var udt in udts.Tables)
+        {
+            var blobContent = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(udt));
+            var blob = new Blob
+            {
+                Id = GetBlobName(udt.Schema, udt.Name),
+                ContentType = "application/json",
+                Content = blobContent
+            };
+            await _blobStorageService.UploadAsync(GetContainerName(1, DatabaseItemType.UserDefinedTableType), blob);
+        }
     }
 
     private async Task<ICollection<DatabaseItemContentCompare>> GetTextPairFromBlobsAsync(int commitId, Guid tempBlobId)

@@ -4,7 +4,7 @@ using Squirrel.Core.DAL.Context;
 
 namespace Squirrel.Core.BLL.Services;
 
-public sealed class CommitFileService: ICommitFileService
+public sealed class CommitFileService : ICommitFileService
 {
     private readonly SquirrelCoreContext _context;
 
@@ -13,7 +13,7 @@ public sealed class CommitFileService: ICommitFileService
         _context = context;
     }
     
-    public async Task<List<string>> GetBlobIdsByCommitId(int commitId)
+    public async Task<ICollection<string>> GetBlobIdsByCommitIdAsync(int commitId)
     {
         return await _context.CommitFiles
             .Where(f => f.CommitId == commitId)

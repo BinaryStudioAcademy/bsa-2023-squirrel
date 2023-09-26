@@ -6,17 +6,19 @@ namespace Squirrel.ConsoleApp.BL.Services;
 
 public class SqlServerService : BaseDbService
 {
-    public SqlServerService(string connectionString): base(connectionString) {}
+    public SqlServerService(string connectionString) : base(connectionString)
+    {
+    }
 
-    public override QueryResultTable ExecuteQuery(string query)
+    public override QueryResultTable ExecuteQuery(ParameterizedSqlCommand query)
     {
         using var connection = new SqlConnection(ConnectionString);
         return ExecuteQueryFromConnectionInternal(connection, query);
     }
 
-    public override async Task<QueryResultTable> ExecuteQueryAsync(string query)
+    public override async Task<QueryResultTable> ExecuteQueryAsync(ParameterizedSqlCommand query)
     {
-        using var connection = new SqlConnection(ConnectionString);
+        await using var connection = new SqlConnection(ConnectionString);
         return await ExecuteQueryFromConnectionInternalAsync(connection, query);
     }
 }

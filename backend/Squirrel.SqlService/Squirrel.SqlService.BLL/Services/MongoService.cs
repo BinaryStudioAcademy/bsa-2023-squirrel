@@ -5,6 +5,7 @@ using Squirrel.SqlService.BLL.Interfaces;
 using Squirrel.SqlService.BLL.Models.Options;
 
 namespace Squirrel.SqlService.BLL.Services;
+
 public class MongoService<T> : IMongoService<T> where T : Entity<int>
 {
     private readonly IMongoCollection<T> _mongoCollection;

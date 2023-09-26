@@ -1,8 +1,9 @@
 <mat-dialog-content>
-    <h4 class="mat-h4">Create Project</h4>
+    <h4 class="mat-h4">Create Branch</h4>
     <div class="input-container">
         <app-input [placeholder]="'Enter the name of your branch'"
-            [formControl]="$any(branchForm.controls['branchName'])" [label]="'Branch name'">
+                   [formControl]="$any(branchForm.controls['branchName'])" [label]="'Branch name'"
+                   (input)="replaceSpacesWithHyphens($event)">
         </app-input>
     </div>
     <div class="drop-down-container">
@@ -16,7 +17,7 @@
 </mat-dialog-content>
 <mat-dialog-actions class="modal-buttons">
     <app-button text="Create" width="100%" variant="outline-secondary" [isDisabled]="branchForm.invalid"
-        (click)="createBranch()">
+                (click)="createBranch()">
     </app-button>
 
     <app-button text="Close" width="100%" variant="outline-secondary" (click)="close()">

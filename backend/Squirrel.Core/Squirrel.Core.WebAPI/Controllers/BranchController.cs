@@ -21,21 +21,21 @@ public class BranchController : ControllerBase
     }
 
     [HttpPost("{projectId}")]
-    public async Task<ActionResult<BranchDto>> AddBranch(int projectId, [FromBody] BranchCreateDto dto) 
+    public async Task<ActionResult<BranchDto>> AddBranchAsync(int projectId, [FromBody] BranchCreateDto dto) 
     { 
         return Ok(await _branchService.AddBranchAsync(projectId, dto));
     }
 
     [HttpPut("{branchId}")]
-    public async Task<ActionResult<BranchDto>> UpdateBranch(int branchId, [FromBody] BranchUpdateDto dto)
+    public async Task<ActionResult<BranchDto>> UpdateBranchAsync(int branchId, [FromBody] BranchUpdateDto dto)
     {
-        return Ok(await _branchService.UpdateBranch(branchId, dto));
+        return Ok(await _branchService.UpdateBranchAsync(branchId, dto));
     }
 
     [HttpDelete("{branchId}")]
-    public async Task<ActionResult> DeleteBranch(int branchId)
+    public async Task<ActionResult> DeleteBranchAsync(int branchId)
     {
-        await _branchService.DeleteBranch(branchId);
+        await _branchService.DeleteBranchAsync(branchId);
         return NotFound();
     }
 }

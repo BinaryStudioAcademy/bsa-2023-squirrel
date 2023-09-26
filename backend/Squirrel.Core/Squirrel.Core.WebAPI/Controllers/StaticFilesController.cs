@@ -7,28 +7,31 @@ namespace Squirrel.Core.WebAPI.Controllers;
 [Route("api/[controller]")]
 public class StaticFilesController : Controller
 {
+    private const string ConsoleSetupFilePathSection = "ConsoleSetupFilePath";
+    private const string OctetStreamMimeTypeName = "application/octet-stream";
+    private const string ConsoleSetupFileName = "SquirrelSetup.exe";
     private readonly IConfiguration _configuration;
 
     public StaticFilesController(IConfiguration configuration)
     {
         _configuration = configuration;
     }
-
+    
     [HttpGet("squirrel-installer/{operatingSystem}"), DisableRequestSizeLimit]
-    public async Task<IActionResult> DownloadSquirrelInstaller(OperatingSystem operatingSystem)
+    public async Task<IActionResult> DownloadSquirrelInstallerAsync(OperatingSystem operatingSystem)
     {
-        // path will be updated using 'operatingSystem' after task 152
-        var filePath = _configuration["ConsoleSetupFilePath"];
+        // Path will be updated using 'operatingSystem' after task 152
+        var filePath = _configuration[ConsoleSetupFilePathSection];
 
         if (!System.IO.File.Exists(filePath))
         {
             return NotFound();
         }
 
-        // fileDownloadName will be updated using 'operatingSystem' after task 152
+        // FileDownloadName will be updated using 'operatingSystem' after task 152
         return File(
             await System.IO.File.ReadAllBytesAsync(filePath),
-            "application/octet-stream",
-            "SquirrelSetup.exe");
+            OctetStreamMimeTypeName,
+            ConsoleSetupFileName);
     }
 }

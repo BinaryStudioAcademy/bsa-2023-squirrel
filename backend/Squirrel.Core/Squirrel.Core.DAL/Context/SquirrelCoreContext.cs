@@ -6,6 +6,7 @@ namespace Squirrel.Core.DAL.Context;
 
 public class SquirrelCoreContext : DbContext
 {
+    public const string SqlGetDateFunction = "getutcdate()";
     public DbSet<User> Users => Set<User>();
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
     public DbSet<Branch> Branches => Set<Branch>();

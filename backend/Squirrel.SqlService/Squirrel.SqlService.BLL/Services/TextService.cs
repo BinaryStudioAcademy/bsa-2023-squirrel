@@ -36,14 +36,14 @@ public class TextService : ITextService
             {
                 Text = line.Text,
                 Type = line.Type,
-                Position = line.Position.HasValue ? line.Position.Value : -1
+                Position = line.Position ?? -1
             }).ToList(),
 
             NewTextLines = sbsDiff.NewText.Lines.Select(line => new DiffLineResult
             {
                 Text = line.Text,
                 Type = line.Type,
-                Position = line.Position.HasValue ? line.Position.Value : -1
+                Position = line.Position ?? -1
             }).ToList()
         };
 

@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\DTO\**" />
+    <EmbeddedResource Remove="Models\DTO\**" />
+    <None Remove="Models\DTO\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="11.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="DiffPlex" Version="1.7.1" />
@@ -28,10 +34,15 @@
     <None Update="Services\SqlFormatter\PgSqlParser.py">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Remove="Models\DTO\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\DTO\" />
+    <Compile Remove="Models\DTO\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Models\DTO\**" />
   </ItemGroup>
 
 </Project>

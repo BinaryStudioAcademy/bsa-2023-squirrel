@@ -44,7 +44,7 @@ public class SqlFormatterService : ISqlFormatterService
         var assemblyPath = typeof(SqlFormatterService).Assembly.Location.Split('\\').SkipLast(1);
         var filePath = string.Join("\\", assemblyPath) + "\\Services\\SqlFormatter\\PgSqlParser.py";
 
-        string argsFile = string.Format("{0}\\{1}.txt", Path.GetDirectoryName(filePath.ToString()), Guid.NewGuid());
+        string argsFile = string.Format("{0}\\{1}.txt", Path.GetDirectoryName(filePath), Guid.NewGuid());
 
         ProcessStartInfo startInfo = new ProcessStartInfo
         {
@@ -55,16 +55,16 @@ public class SqlFormatterService : ISqlFormatterService
             RedirectStandardError = true
         };
 
-        string result = string.Empty;
+        var result = string.Empty;
 
         try
         {
-            using (StreamWriter sw = new StreamWriter(argsFile))
-            {
-                sw.WriteLine(inputSql);
-                startInfo.Arguments = string.Format(
-                    "{0} {1}", string.Format(@"""{0}""", filePath), string.Format(@"""{0}""", argsFile));
-            }
+            using var sw = new StreamWriter(argsFile);
+            
+            sw.WriteLine(inputSql);
+            startInfo.Arguments = string.Format(
+                "{0} {1}", string.Format(@"""{0}""", filePath), string.Format(@"""{0}""", argsFile));
+            
             PythonScriptExecutor.ExecuteScript(startInfo, out result);
         }
         finally

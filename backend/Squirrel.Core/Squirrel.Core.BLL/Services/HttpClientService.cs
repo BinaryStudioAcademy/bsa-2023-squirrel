@@ -1,6 +1,6 @@
-﻿using Squirrel.Core.BLL.Extensions;
+﻿using System.Net.Http.Json;
+using Squirrel.Core.BLL.Extensions;
 using Squirrel.Core.BLL.Interfaces;
-using System.Net.Http.Json;
 using HttpRequestException = Squirrel.Shared.Exceptions.HttpRequestException;
 
 namespace Squirrel.Core.BLL.Services;
@@ -28,12 +28,8 @@ public sealed class HttpClientService : IHttpClientService
 
     public async Task<TResponse> SendAsync<TRequest, TResponse>(string requestUrl, TRequest requestData, HttpMethod method)
     {
-        // Serialize the request data to JSON (assuming you're sending JSON).
-        var content = requestData != null ? JsonContent.Create(requestData) : null;
-
+        var content = requestData is not null ? JsonContent.Create(requestData) : null;
         var message = new HttpRequestMessage { RequestUri = new Uri(requestUrl), Content = content, Method = method };
-
-        // Send a request to the URL with the serialized data.
         var response = await _httpClient.SendAsync(message);
 
         if (!response.IsSuccessStatusCode)
@@ -47,12 +43,8 @@ public sealed class HttpClientService : IHttpClientService
 
     public async Task SendAsync<TRequest>(string requestUrl, TRequest requestData, HttpMethod method)
     {
-        // Serialize the request data to JSON (assuming you're sending JSON).
-        var content = requestData != null ? JsonContent.Create(requestData) : null;
-
+        var content = requestData is not null ? JsonContent.Create(requestData) : null;
         var message = new HttpRequestMessage { RequestUri = new Uri(requestUrl), Content = content, Method = method };
-
-        // Send a request to the URL with the serialized data.
         var response = await _httpClient.SendAsync(message);
 
         if (!response.IsSuccessStatusCode)

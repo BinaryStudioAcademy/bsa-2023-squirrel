@@ -4,7 +4,7 @@ using Squirrel.ConsoleApp.Models;
 
 namespace Squirrel.ConsoleApp.BL.Services;
 
-public class ConnectionService: IConnectionService
+public class ConnectionService : IConnectionService
 {
     private readonly IConnectionStringService _connectionStringService;
     private readonly IConnectionFileService _connectionFileService;

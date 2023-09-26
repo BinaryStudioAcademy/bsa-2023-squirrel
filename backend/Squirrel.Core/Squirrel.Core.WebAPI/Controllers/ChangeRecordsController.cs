@@ -17,7 +17,7 @@ public class ChangeRecordsController : ControllerBase
     }
 
     [HttpPost("{clientId}")]
-    public async Task<ActionResult<Guid>> AddChangeRecord(Guid clientId)
+    public async Task<ActionResult<Guid>> AddChangeRecordAsync(Guid clientId)
     {
         return Ok(await _changeRecordService.AddChangeRecordAsync(clientId));
     }

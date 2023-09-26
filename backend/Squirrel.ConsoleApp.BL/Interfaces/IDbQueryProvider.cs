@@ -1,26 +1,28 @@
-﻿namespace Squirrel.ConsoleApp.BL.Interfaces;
+﻿using Squirrel.ConsoleApp.Models;
+
+namespace Squirrel.ConsoleApp.BL.Interfaces;
 
 public interface IDbQueryProvider
 {
-    string GetTablesNamesQuery();
-    string GetTableDataQuery(string schema, string tableName, int rowsCount);
+    ParameterizedSqlCommand GetTablesNamesQuery();
+    ParameterizedSqlCommand GetTableDataQuery(string schema, string tableName, int rowsCount);
 
-    string GetStoredProceduresNamesQuery();
-    string GetStoredProcedureDefinitionQuery(string storedProcedureSchema, string storedProcedureName);
+    ParameterizedSqlCommand GetStoredProceduresNamesQuery();
+    ParameterizedSqlCommand GetStoredProcedureDefinitionQuery(string storedProcedureSchemaString, string storedProcedureName);
 
-    string GetFunctionsNamesQuery();
-    string GetFunctionDefinitionQuery(string functionSchema, string functionName);
+    ParameterizedSqlCommand GetFunctionsNamesQuery();
+    ParameterizedSqlCommand GetFunctionDefinitionQuery(string functionSchema, string functionName);
 
-    string GetViewsNamesQuery();
-    string GetViewDefinitionQuery(string viewSchema, string viewName);
+    ParameterizedSqlCommand GetViewsNamesQuery();
+    ParameterizedSqlCommand GetViewDefinitionQuery(string viewSchema, string viewName);
 
-    string GetTableStructureQuery(string schema, string table);
-    string GetTableChecksAndUniqueConstraintsQuery(string schema, string name);
+    ParameterizedSqlCommand GetTableStructureQuery(string schema, string table);
+    ParameterizedSqlCommand GetTableChecksAndUniqueConstraintsQuery(string schema, string name);
 
-    string GetStoredProceduresWithDetailsQuery();
-    string GetFunctionsWithDetailsQuery();
-    string GetViewsWithDetailsQuery();
+    ParameterizedSqlCommand GetStoredProceduresWithDetailsQuery();
+    ParameterizedSqlCommand GetFunctionsWithDetailsQuery();
+    ParameterizedSqlCommand GetViewsWithDetailsQuery();
 
-    string GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionQuery();
-    string GetUserDefinedTableTypesStructureQuery();
+    ParameterizedSqlCommand GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionQuery();
+    ParameterizedSqlCommand GetUserDefinedTableTypesStructureQuery();
 }

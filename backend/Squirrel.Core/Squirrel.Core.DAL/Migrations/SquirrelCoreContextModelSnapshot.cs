@@ -132,10 +132,21 @@ namespace Squirrel.Core.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsSaved")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Message")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("PostScript")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PreScript")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

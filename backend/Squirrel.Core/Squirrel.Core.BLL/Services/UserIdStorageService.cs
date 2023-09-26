@@ -2,6 +2,7 @@
 using Squirrel.Shared.Exceptions;
 
 namespace Squirrel.Core.BLL.Services;
+
 public class UserIdStorageService : IUserIdGetter, IUserIdSetter
 {
     private int _userId;

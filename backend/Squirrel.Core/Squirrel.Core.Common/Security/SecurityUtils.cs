@@ -1,8 +1,7 @@
 ﻿using System.Security.Cryptography;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace Squirrel.Core.Common.Security;
-
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 public static class SecurityUtils
 {

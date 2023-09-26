@@ -109,6 +109,5 @@ internal static class GetUserDefinedTypes
         			  
             order by cols.schema_name,
                      cols.obj_name,
-                     cols.ordinal_position;
-            ";
+                     cols.ordinal_position;";
 }

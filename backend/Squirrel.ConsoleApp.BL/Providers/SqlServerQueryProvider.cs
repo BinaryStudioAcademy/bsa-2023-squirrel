@@ -1,39 +1,102 @@
-﻿using Squirrel.ConsoleApp.BL.Interfaces;
+﻿using System.Data;
+using System.Data.SqlClient;
+using Squirrel.ConsoleApp.BL.Interfaces;
+using Squirrel.ConsoleApp.Models;
 using static Squirrel.ConsoleApp.BL.SqlScripts.SqlServer.GetTables;
 using static Squirrel.ConsoleApp.BL.SqlScripts.SqlServer.GetObjects;
 using static Squirrel.ConsoleApp.BL.SqlScripts.SqlServer.GetUserDefinedTypes;
 
 namespace Squirrel.ConsoleApp.BL.Providers;
 
-public class SqlServerQueryProvider : IDbQueryProvider
+public class SqlServerQueryProvider : BaseProvider, IDbQueryProvider
 {
-    public string GetTablesNamesQuery() => GetTablesNamesScript;
+    public ParameterizedSqlCommand GetTablesNamesQuery() => new(GetTablesNamesScript, new List<SqlParameter>());
 
-    public string GetTableDataQuery(string schema, string name, int rowsCount) => GetTableDataQueryScript(schema, name, rowsCount);
+    public ParameterizedSqlCommand GetTableDataQuery(string schema, string name, int rowsCount)
+    {
+        var schemaParameter = GetParameter(nameof(schema), schema, SqlDbType.NVarChar);
+        var nameParameter = GetParameter(nameof(name), name, SqlDbType.NVarChar);
+        var rowsParameter = GetParameter(nameof(rowsCount), rowsCount, SqlDbType.Int);
+        
+        return new ParameterizedSqlCommand(GetTableDataQueryScript(schema, name, rowsCount), new[]
+        {
+            schemaParameter, nameParameter, rowsParameter
+        });
+    }
 
-    public string GetStoredProceduresNamesQuery() => GetStoredProceduresNamesScript;
+    public ParameterizedSqlCommand GetStoredProceduresNamesQuery() => new(GetStoredProceduresNamesScript, new List<SqlParameter>());
 
-    public string GetStoredProcedureDefinitionQuery(string storedProcedureSchema, string storedProcedureName) => GetStoredProcedureDefinitionScript(storedProcedureSchema, storedProcedureName);
+    public ParameterizedSqlCommand GetStoredProcedureDefinitionQuery(string storedProcedureSchemaString,
+        string storedProcedureName)
+    {
+        var storedProcedureSchemaStringParameter = GetParameter(
+            nameof(storedProcedureSchemaString), storedProcedureSchemaString, SqlDbType.NVarChar);
+        var storedProcedureNameParameter = GetParameter(
+            nameof(storedProcedureName), storedProcedureName, SqlDbType.NVarChar);
+        
+        return new ParameterizedSqlCommand(GetStoredProcedureDefinitionScript(storedProcedureSchemaString, storedProcedureName), new[]
+        {
+            storedProcedureSchemaStringParameter, storedProcedureNameParameter
+        });
+    }
 
-    public string GetFunctionsNamesQuery() => GetFunctionsNamesScript;
+    public ParameterizedSqlCommand GetFunctionsNamesQuery() => new(GetFunctionsNamesScript, new List<SqlParameter>());
 
-    public string GetFunctionDefinitionQuery(string functionSchema, string functionName) => GetFunctionDefinitionScript(functionSchema, functionName);
+    public ParameterizedSqlCommand GetFunctionDefinitionQuery(string functionSchema, string functionName)
+    {
+        var functionSchemaParameter = GetParameter(nameof(functionSchema), functionSchema, SqlDbType.NVarChar);
+        var functionNameParameter = GetParameter(nameof(functionName), functionName, SqlDbType.NVarChar);
+        
+        return new ParameterizedSqlCommand(GetFunctionDefinitionScript(functionSchema, functionName), new[]
+        {
+            functionSchemaParameter, functionNameParameter
+        });
+    }
 
-    public string GetViewsNamesQuery() => GetViewsNamesScript;
+    public ParameterizedSqlCommand GetViewsNamesQuery() => new(GetViewsNamesScript, new List<SqlParameter>());
 
-    public string GetViewDefinitionQuery(string viewSchema, string viewName) => GetViewDefinitionScript(viewSchema, viewName);
+    public ParameterizedSqlCommand GetViewDefinitionQuery(string viewSchema, string viewName)
+    {
+        var viewSchemaParameter = GetParameter(nameof(viewSchema), viewSchema, SqlDbType.NVarChar);
+        var viewNameParameter = GetParameter(nameof(viewName), viewName, SqlDbType.NVarChar);
+        
+        return new ParameterizedSqlCommand(GetViewDefinitionScript(viewSchema, viewName), new[]
+        {
+            viewSchemaParameter, viewNameParameter
+        });
+    }
 
-    public string GetTableStructureQuery(string schema, string name) => GetTableStructureScript(schema, name);
+    public ParameterizedSqlCommand GetTableStructureQuery(string schema, string name)
+    {
+        var schemaParameter = GetParameter(nameof(schema), schema, SqlDbType.NVarChar);
+        var nameParameter = GetParameter(nameof(name), name, SqlDbType.NVarChar);
+        
+        return new ParameterizedSqlCommand(GetTableStructureScript(schema, name), new[]
+        {
+            schemaParameter, nameParameter
+        });
+    }
 
-    public string GetTableChecksAndUniqueConstraintsQuery(string schema, string name) => GetTableChecksAndUniqueConstraintsScript(schema, name);
+    public ParameterizedSqlCommand GetTableChecksAndUniqueConstraintsQuery(string schema, string name)
+    {
+        var schemaParameter = GetParameter(nameof(schema), schema, SqlDbType.NVarChar);
+        var nameParameter = GetParameter(nameof(name), name, SqlDbType.NVarChar);
+        
+        return new ParameterizedSqlCommand(GetTableChecksAndUniqueConstraintsScript(schema, name), new[]
+        {
+            schemaParameter, nameParameter
+        });
+    }
 
-    public string GetStoredProceduresWithDetailsQuery() => GetStoredProceduresScript;
+    public ParameterizedSqlCommand GetStoredProceduresWithDetailsQuery() => new(GetStoredProceduresScript, new List<SqlParameter>());
 
-    public string GetFunctionsWithDetailsQuery() => GetFunctionsScript;
+    public ParameterizedSqlCommand GetFunctionsWithDetailsQuery() => new(GetFunctionsScript, new List<SqlParameter>());
 
-    public string GetViewsWithDetailsQuery() => GetViewsScript;
+    public ParameterizedSqlCommand GetViewsWithDetailsQuery() => new(GetViewsScript, new List<SqlParameter>());
 
-    public string GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionQuery() => GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionScript;
+    public ParameterizedSqlCommand GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionQuery()
+        => new(GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionScript, new List<SqlParameter>());
 
-    public string GetUserDefinedTableTypesStructureQuery() => GetUserDefinedTableTypesStructureScript;
+    public ParameterizedSqlCommand GetUserDefinedTableTypesStructureQuery()
+        => new(GetUserDefinedTableTypesStructureScript, new List<SqlParameter>());
 }

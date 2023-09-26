@@ -33,8 +33,9 @@ public sealed class GenericExceptionHandlerMiddleware
     private static Task HandleException(HttpContext context, Exception exception)
     {
         var (errorDetails, statusCode) = exception.GetErrorDetailsAndStatusCode();
-        
-        context.Response.ContentType = "application/json";
+        var jsonMimeType = "application/json";
+
+        context.Response.ContentType = jsonMimeType;
         context.Response.StatusCode = (int)statusCode;
 
         return context.Response.WriteAsync(SerializeJson(errorDetails));

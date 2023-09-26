@@ -29,6 +29,6 @@ public class StaticFilesController : Controller
         return File(
             await System.IO.File.ReadAllBytesAsync(filePath),
             "application/octet-stream",
-            "SquirrelSetup.msi");
+            "SquirrelSetup.exe");
     }
 }

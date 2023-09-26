@@ -9,7 +9,7 @@ public class StaticFilesController : Controller
 {
     private const string ConsoleSetupFilePathSection = "ConsoleSetupFilePath";
     private const string OctetStreamMimeTypeName = "application/octet-stream";
-    private const string ConsoleSetupFileName = "SquirrelSetup.msi";
+    private const string ConsoleSetupFileName = "SquirrelSetup.exe";
     private readonly IConfiguration _configuration;
 
     public StaticFilesController(IConfiguration configuration)

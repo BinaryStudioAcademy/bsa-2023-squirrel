@@ -16,7 +16,7 @@ public sealed class DatabaseItemsController : ControllerBase
     }
 
     [HttpGet("{clientId}")]
-    public async Task<ActionResult<List<DatabaseItem>>> GetAllDbItemsAsync(Guid clientId)
+    public async Task<ActionResult<ICollection<DatabaseItem>>> GetAllDbItemsAsync(Guid clientId)
     {
         return Ok(await _databaseItemsService.GetAllItemsAsync(clientId));
     }

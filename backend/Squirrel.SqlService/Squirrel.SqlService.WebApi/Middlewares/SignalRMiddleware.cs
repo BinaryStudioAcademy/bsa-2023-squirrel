@@ -2,8 +2,9 @@
 
 namespace Squirrel.SqlService.WebApi.Middlewares;
 
-public class SignalRMiddleware
+public sealed class SignalRMiddleware
 {
+    private const string ClientIdClaimName = "ClientId";
     private readonly RequestDelegate _next;
 
     public SignalRMiddleware(RequestDelegate next)
@@ -13,12 +14,12 @@ public class SignalRMiddleware
 
     public async Task InvokeAsync(HttpContext context)
     {
-        if (context.Request.Query.ContainsKey("ClientId"))
+        if (context.Request.Query.ContainsKey(ClientIdClaimName))
         {
             if (context.User?.Identity is not null)
             {
-                var id = context.Request.Query["ClientId"];
-                ((ClaimsIdentity)context.User.Identity).AddClaim(new Claim("ClientId", id));
+                var id = context.Request.Query[ClientIdClaimName];
+                ((ClaimsIdentity)context.User.Identity).AddClaim(new Claim(ClientIdClaimName, id));
             }
         }
 

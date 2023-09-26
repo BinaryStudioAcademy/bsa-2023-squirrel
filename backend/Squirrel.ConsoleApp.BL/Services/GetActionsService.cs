@@ -1,4 +1,5 @@
-﻿using Squirrel.ConsoleApp.BL.Interfaces;
+﻿using System.Data.SqlClient;
+using Squirrel.ConsoleApp.BL.Interfaces;
 using Squirrel.ConsoleApp.Models;
 
 namespace Squirrel.ConsoleApp.BL.Services;
@@ -62,5 +63,5 @@ public class GetActionsService : IGetActionsService
         => await _databaseService.ExecuteQueryAsync(_queryProvider.GetUserDefinedTableTypesStructureQuery());
 
     public async Task<QueryResultTable> ExecuteScriptAsync(string scriptContent)
-        => await _databaseService.ExecuteQueryAsync(scriptContent);
+        => await _databaseService.ExecuteQueryAsync(new ParameterizedSqlCommand(scriptContent, new List<SqlParameter>()));
 }

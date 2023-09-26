@@ -13,4 +13,7 @@ public sealed class Commit : AuditEntity<int>
     public ICollection<CommitFile> CommitFiles = new List<CommitFile>();
     public ICollection<CommitParent> CommitsAsParent = new List<CommitParent>();
     public ICollection<CommitParent> CommitsAsChild = new List<CommitParent>();
+    public string PreScript { get; set; } = null!;
+    public string PostScript { get; set; } = null!;
+    public bool IsSaved { get; set; }
 }

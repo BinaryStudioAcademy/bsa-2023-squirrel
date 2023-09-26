@@ -7,9 +7,9 @@ using Squirrel.Shared.DTO.DatabaseItem;
 using Squirrel.Shared.DTO.Text;
 using Squirrel.SqlService.BLL.Interfaces;
 using Squirrel.Shared.DTO;
+using Squirrel.Shared.DTO.Table;
 using Squirrel.Shared.DTO.Function;
 using Squirrel.Shared.DTO.Procedure;
-using Squirrel.Shared.DTO.Table;
 using Squirrel.Shared.DTO.UserDefinedType.DataType;
 using Squirrel.Shared.DTO.UserDefinedType.TableType;
 using Squirrel.Shared.DTO.View;
@@ -19,6 +19,7 @@ namespace Squirrel.SqlService.BLL.Services;
 
 public class ContentDifferenceService : IContentDifferenceService
 {
+    private const string UserDbChangesBlobContainerNameSection = "UserDbChangesBlobContainerName";
     private readonly IBlobStorageService _blobStorageService;
     private readonly IConfiguration _configuration;
     private readonly ITextService _textService;
@@ -155,7 +156,6 @@ public class ContentDifferenceService : IContentDifferenceService
         CheckBlockContentNotNull(blobContent);
 
         var commitItemContent = DeserializeBlobContent<T>(blobContent);
-
         var textPair = new TextPairRequestDto
         {
             OldText = JsonConvert.SerializeObject(commitItemContent),
@@ -180,7 +180,6 @@ public class ContentDifferenceService : IContentDifferenceService
         CheckBlockContentNotNull(blobContent);
         
         var commitItemContent = DeserializeBlobContent<T>(blobContent);
-
         var textPair = new TextPairRequestDto
         {
             OldText = JsonConvert.SerializeObject(commitItemContent),
@@ -216,7 +215,7 @@ public class ContentDifferenceService : IContentDifferenceService
 
     private async Task<DbStructureDto> GetTempBlobContentAsync(Guid tempBlobId)
     {
-        var blob = await _blobStorageService.DownloadAsync(_configuration["UserDbChangesBlobContainerName"], tempBlobId.ToString());
+        var blob = await _blobStorageService.DownloadAsync(_configuration[UserDbChangesBlobContainerNameSection], tempBlobId.ToString());
         if (blob.Content is not null)
         {
             var jsonString = Encoding.UTF8.GetString(blob.Content);

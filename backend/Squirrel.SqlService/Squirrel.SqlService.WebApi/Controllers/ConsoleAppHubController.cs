@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Squirrel.ConsoleApp.Models;
+using Squirrel.Core.Common.DTO.Script;
 using Squirrel.Shared.DTO.ConsoleAppHub;
 using Squirrel.Shared.DTO.Definition;
 using Squirrel.Shared.DTO.Function;
@@ -61,7 +62,7 @@ public class ConsoleAppHubController : ControllerBase
     }
     
     [HttpPost("stored-procedure-definition")]
-    public async Task<ActionResult> GetStoredProcedureDefinitionAsync([FromBody] QueryParameters queryParameters)
+    public async Task<IActionResult> GetStoredProcedureDefinitionAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId)
             .GetStoredProcedureDefinitionAsync(_queryParameters.queryId, queryParameters.FilterSchema,
@@ -145,7 +146,7 @@ public class ConsoleAppHubController : ControllerBase
     {
         await _hubContext.Clients.User(queryParameters.ClientId)
             .GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync(_queryParameters.queryId);
-        return Ok(_mapper.Map<UserDefinedDataTypeDetailsDto>(await _queryParameters.tcs.Task));
+        return Ok(await _queryParameters.tcs.Task);
     }
     
     [HttpPost("user-defined-table-types")]
@@ -157,7 +158,7 @@ public class ConsoleAppHubController : ControllerBase
     }
     
     [HttpPost("db-connect")]
-    public async Task<ActionResult> ConnectToDbAsync([FromBody] RemoteConnect remoteConnect)
+    public async Task<IActionResult> ConnectToDbAsync([FromBody] RemoteConnect remoteConnect)
     {
         await _hubContext.Clients.User(remoteConnect.ClientId)
             .RemoteConnectAsync(_queryParameters.queryId, remoteConnect.DbConnection);

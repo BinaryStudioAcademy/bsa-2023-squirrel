@@ -16,8 +16,6 @@ public static class HubConnectionExtensions
         hubConnection.On("GetAllTablesNamesAsync", async (Guid queryId) =>
         {
             var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
-
-            var t = await getActionsService.GetAllTablesNamesAsync();
             await hubConnection.InvokeAsync("ProcessReceivedDataFromClientSideAsync", queryId, "GetAllTablesNamesAsync",
                 await getActionsService.GetAllTablesNamesAsync());
         });
@@ -109,7 +107,7 @@ public static class HubConnectionExtensions
         hubConnection.On("GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync", async (Guid queryId) =>
         {
             var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
-            await hubConnection.InvokeAsync("ProcessReceivedDataFromClientSideAsync", queryId,
+            await hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", queryId,
                 "GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync",
                 await getActionsService.GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync());
         });

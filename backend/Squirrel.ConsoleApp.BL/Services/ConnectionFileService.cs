@@ -7,7 +7,7 @@ namespace Squirrel.ConsoleApp.BL.Services;
 
 public class ConnectionFileService : IConnectionFileService
 {
-    private IJsonSerializerSettingsService _jsonSettingsService;
+    private readonly IJsonSerializerSettingsService _jsonSettingsService;
 
     public ConnectionFileService(IJsonSerializerSettingsService jsonSettingsService)
     {
@@ -42,15 +42,9 @@ public class ConnectionFileService : IConnectionFileService
         {
             throw new ConnectionAlreadyExist();
         }
-        string json = JsonConvert.SerializeObject(connectionStringDto, _jsonSettingsService.GetSettings());
+        var json = JsonConvert.SerializeObject(connectionStringDto, _jsonSettingsService.GetSettings());
         File.WriteAllText(ConnectionFilePath, json);
     }
 
-    private string ConnectionFilePath
-    {
-        get
-        {
-            return FilePathHelperService.GetDbSettingsFilePath();
-        }
-    }
+    private string ConnectionFilePath => FilePathHelperService.GetDbSettingsFilePath();
 }

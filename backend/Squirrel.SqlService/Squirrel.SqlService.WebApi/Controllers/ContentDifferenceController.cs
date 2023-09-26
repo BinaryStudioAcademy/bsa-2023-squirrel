@@ -20,17 +20,4 @@ public sealed class ContentDifferenceController : ControllerBase
     {
         return Ok(await _contentDifferenceService.GetContentDiffsAsync(commitId, tempBlobId));
     }
-    
-    [HttpGet("getBlobJson")]
-    public async Task<ActionResult<string>> GetBlobJson()
-    {
-        return Ok(await _contentDifferenceService.GetBlobJson());
-    }
-    
-    [HttpGet("create-commit-containers-with-blobs")]
-    public async Task<IActionResult> CreateCommitContainersWithBlobs()
-    {
-        await _contentDifferenceService.CreateCommitContainersWithBlobs();
-        return Ok();
-    }
 }

@@ -66,7 +66,7 @@ export class CreateProjectModalComponent extends BaseComponent implements OnInit
                 dbEngine: parseInt(this.projectForm.value.selectedEngine, 10) as DbEngine,
             },
             defaultBranch: {
-                name: BranchNameFormatter.formatBranchName(this.projectForm.value.defaultBranchName),
+                name: BranchNameFormatter.trimBranchName(this.projectForm.value.defaultBranchName),
             },
         };
 

@@ -8,7 +8,7 @@ public interface IDbQueryProvider
     ParameterizedSqlCommand GetTableDataQuery(string schema, string tableName, int rowsCount);
 
     ParameterizedSqlCommand GetStoredProceduresNamesQuery();
-    ParameterizedSqlCommand GetStoredProcedureDefinitionQuery(string storedProcedureSchemaString, string storedProcedureName);
+    ParameterizedSqlCommand GetStoredProcedureDefinitionQuery(string storedProcedureSchema, string storedProcedureName);
 
     ParameterizedSqlCommand GetFunctionsNamesQuery();
     ParameterizedSqlCommand GetFunctionDefinitionQuery(string functionSchema, string functionName);

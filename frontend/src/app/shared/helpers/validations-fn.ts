@@ -40,6 +40,12 @@ export class ValidationsFn {
                 ? null : { lowerExist: true });
     }
 
+    static noCyrillic(): ValidatorFn {
+        return (control: AbstractControl) =>
+            (/^(?![\u0410-\u044F\u0400-\u04FF]).*$/.test(control.value)
+                ? null : { noCyrillic: true });
+    }
+
     static branchNameMatch(): ValidatorFn {
         return (control: AbstractControl) =>
             (/^(?!-)[A-Za-z0-9-_@]+(?<!-)$/.test(control.value) && !/[_-]{2,}/.test(control.value)

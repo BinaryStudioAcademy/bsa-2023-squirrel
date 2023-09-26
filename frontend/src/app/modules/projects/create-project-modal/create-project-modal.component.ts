@@ -44,7 +44,9 @@ export class CreateProjectModalComponent extends BaseComponent implements OnInit
             projectName: ['', [
                 Validators.required,
                 Validators.minLength(3),
-                Validators.maxLength(50), ValidationsFn.projectNameMatch()]],
+                Validators.maxLength(50),
+                ValidationsFn.noCyrillic(),
+            ]],
             defaultBranchName: ['', [
                 Validators.required,
                 Validators.minLength(3),

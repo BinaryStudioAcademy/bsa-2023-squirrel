@@ -26,17 +26,17 @@ public class SqlServerQueryProvider : BaseProvider, IDbQueryProvider
 
     public ParameterizedSqlCommand GetStoredProceduresNamesQuery() => new(GetStoredProceduresNamesScript, new List<SqlParameter>());
 
-    public ParameterizedSqlCommand GetStoredProcedureDefinitionQuery(string storedProcedureSchemaString,
+    public ParameterizedSqlCommand GetStoredProcedureDefinitionQuery(string storedProcedureSchema,
         string storedProcedureName)
     {
-        var storedProcedureSchemaStringParameter = GetParameter(
-            nameof(storedProcedureSchemaString), storedProcedureSchemaString, SqlDbType.NVarChar);
+        var storedProcedureSchemaParameter = GetParameter(
+            nameof(storedProcedureSchema), storedProcedureSchema, SqlDbType.NVarChar);
         var storedProcedureNameParameter = GetParameter(
             nameof(storedProcedureName), storedProcedureName, SqlDbType.NVarChar);
         
-        return new ParameterizedSqlCommand(GetStoredProcedureDefinitionScript(storedProcedureSchemaString, storedProcedureName), new[]
+        return new ParameterizedSqlCommand(GetStoredProcedureDefinitionScript(storedProcedureSchema, storedProcedureName), new[]
         {
-            storedProcedureSchemaStringParameter, storedProcedureNameParameter
+            storedProcedureSchemaParameter, storedProcedureNameParameter
         });
     }
 
@@ -66,14 +66,14 @@ public class SqlServerQueryProvider : BaseProvider, IDbQueryProvider
         });
     }
 
-    public ParameterizedSqlCommand GetTableStructureQuery(string schema, string name)
+    public ParameterizedSqlCommand GetTableStructureQuery(string schema, string table)
     {
         var schemaParameter = GetParameter(nameof(schema), schema, SqlDbType.NVarChar);
-        var nameParameter = GetParameter(nameof(name), name, SqlDbType.NVarChar);
+        var tableParameter = GetParameter(nameof(table), table, SqlDbType.NVarChar);
         
-        return new ParameterizedSqlCommand(GetTableStructureScript(schema, name), new[]
+        return new ParameterizedSqlCommand(GetTableStructureScript(schema, table), new[]
         {
-            schemaParameter, nameParameter
+            schemaParameter, tableParameter
         });
     }
 

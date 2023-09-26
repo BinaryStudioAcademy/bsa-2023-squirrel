@@ -8,7 +8,6 @@ using Squirrel.Shared.DTO.Definition;
 using Squirrel.Shared.DTO.Function;
 using Squirrel.Shared.DTO.Procedure;
 using Squirrel.Shared.DTO.Table;
-using Squirrel.Core.Common.DTO.Script;
 using Squirrel.Shared.DTO.UserDefinedType.DataType;
 using Squirrel.Shared.DTO.UserDefinedType.TableType;
 using Squirrel.Shared.DTO.View;
@@ -62,12 +61,12 @@ public class ConsoleAppHubController : ControllerBase
     }
     
     [HttpPost("stored-procedure-definition")]
-    public async Task<IActionResult> GetStoredProcedureDefinitionAsync([FromBody] QueryParameters queryParameters)
+    public async Task<ActionResult<RoutineDefinitionDto>> GetStoredProcedureDefinitionAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId)
             .GetStoredProcedureDefinitionAsync(_queryParameters.queryId, queryParameters.FilterSchema,
                 queryParameters.FilterName);
-        return Ok(await _queryParameters.tcs.Task);
+        return Ok(_mapper.Map<RoutineDefinitionDto>(await _queryParameters.tcs.Task));
     }
     
     [HttpPost("all-functions-names")]
@@ -146,7 +145,7 @@ public class ConsoleAppHubController : ControllerBase
     {
         await _hubContext.Clients.User(queryParameters.ClientId)
             .GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync(_queryParameters.queryId);
-        return Ok(await _queryParameters.tcs.Task);
+        return Ok(_mapper.Map<UserDefinedDataTypeDetailsDto>(await _queryParameters.tcs.Task));
     }
     
     [HttpPost("user-defined-table-types")]

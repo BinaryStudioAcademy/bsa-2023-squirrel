@@ -139,7 +139,6 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
                     // eslint-disable-next-line no-console
                     this.currentChangesGuId = event;
                     this.loadCommitChanges();
-                    console.log(event);
                 },
                 error: (error) => {
                     // eslint-disable-next-line no-console

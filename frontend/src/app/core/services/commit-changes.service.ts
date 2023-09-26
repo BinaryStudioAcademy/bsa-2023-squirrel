@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpInternalService } from '@core/services/http-internal.service';
+import { NotificationService } from '@core/services/notification.service';
 import { BehaviorSubject } from 'rxjs';
 
 import { DatabaseItemContentCompare } from '../../models/database-items/database-item-content-compare';
@@ -15,7 +16,11 @@ export class CommitChangesService {
     contentChanges$ = this.contentChangesSubject.asObservable();
 
     // eslint-disable-next-line no-empty-function
-    constructor(private httpService: HttpInternalService) {}
+    constructor(
+        private httpService: HttpInternalService,
+        private notificationService: NotificationService,
+        // eslint-disable-next-line no-empty-function
+    ) {}
 
     public getContentDiffs(commitId: number, tempBlobId: string): void {
         this.httpService
@@ -25,7 +30,7 @@ export class CommitChangesService {
                     this.contentChangesSubject.next(contentChanges);
                 },
                 (error) => {
-                    console.log(error);
+                    this.notificationService.error(error.message);
                 },
             );
     }

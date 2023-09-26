@@ -59,8 +59,8 @@
         <div class="invalid-feedback" *ngIf="control.errors?.['upperExist']">At least one uppercase letter</div>
 
         <div class="invalid-feedback" *ngIf="control.errors?.['branchNameMatch']">
-            Branch name must contain latin/number/dash/underscore and not contain double dashes or dash on the start/end
-        </div>
+            Only Latin letters, digits, underscores, hyphens, at signs and spaces are allowed
+         </div>
 
         <div class="invalid-feedback" *ngIf="control.errors?.['projectNameMatch']">
            Must contain Only Latin letters, digits, special characters, spaces and no repeated spaces

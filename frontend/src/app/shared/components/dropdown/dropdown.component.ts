@@ -56,6 +56,7 @@ export class DropdownComponent implements OnChanges {
     ngOnChanges(changes: SimpleChanges) {
         if (changes['options'] || changes['selectedByDefault']) {
             this.selectedOption = this.options[this.selectedByDefault];
+            this.selectedValueChanged.emit(this.selectedOption);
         }
     }
 

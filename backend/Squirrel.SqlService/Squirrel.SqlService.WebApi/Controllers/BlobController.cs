@@ -22,21 +22,21 @@ public class BlobController : ControllerBase
     }
 
     [HttpPost("{containerName}")]
-    public async Task<ActionResult> UploadBlobAsync(string containerName, [FromBody] Blob blob)
+    public async Task<IActionResult> UploadBlobAsync(string containerName, [FromBody] Blob blob)
     {
         await _blobService.UploadAsync(containerName, blob);
         return Ok();
     }
 
     [HttpPut("{containerName}")]
-    public async Task<ActionResult> UpdateBlobAsync(string containerName, [FromBody] Blob blob)
+    public async Task<IActionResult> UpdateBlobAsync(string containerName, [FromBody] Blob blob)
     {
         await _blobService.UpdateAsync(containerName, blob);
         return Ok();
     }
 
     [HttpDelete("{containerName}/{blobId}")]
-    public async Task<ActionResult> DeleteBlobAsync(string containerName, string blobId)
+    public async Task<IActionResult> DeleteBlobAsync(string containerName, string blobId)
     {
         await _blobService.DeleteAsync(containerName, blobId);
         return NoContent();

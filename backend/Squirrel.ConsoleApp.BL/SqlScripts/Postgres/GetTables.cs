@@ -9,7 +9,7 @@ internal static class GetTables
         $"SELECT '{schema}' AS schema, '{name}' AS name, (SELECT COUNT(*) FROM \"{schema}\".\"{name}\") AS TotalRows, t.* FROM \"{schema}\".\"{name}\" t LIMIT {rowsCount}";
 
     public static string GetTableStructureScript(string schema, string name) =>
-        @$"
+        @"
             with column_description_table as (
 				select
 					cols.table_schema,
@@ -99,13 +99,12 @@ internal static class GetTables
 				 and refc.unique_constraint_name = ccu.constraint_name
 			
 			where col.table_schema not in ('information_schema', 'pg_catalog') 
-				  AND col.table_schema = '{schema}' AND col.table_name = '{name}'
+				  AND col.table_schema = @schema AND col.table_name = @name
 			
-			order by col.table_schema, col.table_name, col.ordinal_position;
-            ";
+			order by col.table_schema, col.table_name, col.ordinal_position;";
 
     public static string GetTableChecksAndUniqueConstraintsScript(string schema, string name) =>
-        @$"
+        @"
             select 
 			    tc.table_schema as Schema,
 				   tc.table_name as Name,
@@ -133,7 +132,7 @@ internal static class GetTables
 				 on tc.table_schema = cc.constraint_schema
 				 and tc.constraint_name = cc.constraint_name
 			
-			where tc.constraint_schema not in ('information_schema', 'pg_catalog') AND tc.constraint_schema = '{schema}' AND tc.table_name = '{name}'
+			where tc.constraint_schema not in ('information_schema', 'pg_catalog') AND tc.constraint_schema = @schema AND tc.table_name = @name
 			
 			group by tc.table_schema,
 					 tc.table_name,

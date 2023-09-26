@@ -5,5 +5,5 @@ namespace Squirrel.Core.BLL.Interfaces;
 
 public interface ITableService
 {
-    Task<TableNamesDto> GetTablesName(QueryParameters queryParameters);
+    Task<TableNamesDto> GetTablesNameAsync(QueryParameters queryParameters);
 }

@@ -15,7 +15,7 @@ public class BranchController : ControllerBase
     }
 
     [HttpGet("{projectId}")]
-    public ActionResult<List<BranchDto>> GetAllBranchesAsync(int projectId)
+    public ActionResult<List<BranchDto>> GetAllBranches(int projectId)
     {
         return Ok(_branchService.GetAllBranches(projectId));
     }

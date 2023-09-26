@@ -35,7 +35,6 @@ public class DependencyAnalyzer : IDependencyAnalyzer
         var spRegex = new Regex(
            @"(?<=\execute|exec\s+)(?:(?:([#@_a-z][#@_$\.0-9a-z]*)(?!\]))|[\[]([#@_a-z][#@_$\.0-9a-z\s]*)[\]])",
             RegexOptions.IgnoreCase);
-
         var functionRegex = new Regex(
             @"\b\w+\.\w+\s*(?=\()",
             RegexOptions.IgnoreCase);

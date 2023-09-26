@@ -21,7 +21,7 @@ public sealed class ScriptController : ControllerBase
     }
 
     [HttpGet("{projectId}/all")]
-    public async Task<ActionResult<List<ScriptDto>>> GetAllScriptsAsync(int projectId)
+    public async Task<ActionResult<ICollection<ScriptDto>>> GetAllScriptsAsync(int projectId)
     {
         return Ok(await _scriptService.GetAllScriptsAsync(projectId));
     }

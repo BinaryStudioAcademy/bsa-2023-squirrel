@@ -59,7 +59,7 @@ public class ConsoleAppHubController : ControllerBase
     }
     
     [HttpPost("stored-procedure-definition")]
-    public async Task<ActionResult> GetStoredProcedureDefinitionAsync([FromBody] QueryParameters queryParameters)
+    public async Task<IActionResult> GetStoredProcedureDefinitionAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId)
             .GetStoredProcedureDefinitionAsync(_queryParameters.queryId, queryParameters.FilterSchema,
@@ -138,7 +138,7 @@ public class ConsoleAppHubController : ControllerBase
     }
     
     [HttpPost("user-defined-types-with-defaults-and-rules-and-definition")]
-    public async Task<ActionResult> GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync(
+    public async Task<IActionResult> GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync(
         [FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId)
@@ -147,7 +147,7 @@ public class ConsoleAppHubController : ControllerBase
     }
     
     [HttpPost("user-defined-table-types")]
-    public async Task<ActionResult> GetUserDefinedTableTypesAsync([FromBody] QueryParameters queryParameters)
+    public async Task<IActionResult> GetUserDefinedTableTypesAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId)
             .GetUserDefinedTableTypesAsync(_queryParameters.queryId);
@@ -155,7 +155,7 @@ public class ConsoleAppHubController : ControllerBase
     }
     
     [HttpPost("db-connect")]
-    public async Task<ActionResult> ConnectToDbAsync([FromBody] RemoteConnect remoteConnect)
+    public async Task<IActionResult> ConnectToDbAsync([FromBody] RemoteConnect remoteConnect)
     {
         await _hubContext.Clients.User(remoteConnect.ClientId)
             .RemoteConnectAsync(_queryParameters.queryId, remoteConnect.DbConnection);

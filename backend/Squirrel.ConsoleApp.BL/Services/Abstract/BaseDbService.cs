@@ -3,6 +3,7 @@ using Squirrel.ConsoleApp.Models;
 using System.Data.Common;
 
 namespace Squirrel.ConsoleApp.BL.Services.Abstract;
+
 public abstract class BaseDbService : IDatabaseService
 {
     public string ConnectionString { get; set; }
@@ -12,16 +13,17 @@ public abstract class BaseDbService : IDatabaseService
         ConnectionString = connectionString;
     }
 
-    public abstract QueryResultTable ExecuteQuery(string query);
-    public abstract Task<QueryResultTable> ExecuteQueryAsync(string query);
+    public abstract QueryResultTable ExecuteQuery(ParameterizedSqlCommand query);
+    
+    public abstract Task<QueryResultTable> ExecuteQueryAsync(ParameterizedSqlCommand query);
 
-    private protected QueryResultTable ExecuteQueryFromConnectionInternal(DbConnection connection, string query)
+    private protected QueryResultTable ExecuteQueryFromConnectionInternal(DbConnection connection, ParameterizedSqlCommand query)
     {
         using var command = CreateCommandInternal(connection, query);
 
         connection.Open();
+        
         using var reader = command.ExecuteReader();
-
         var result = BuildTable(reader);
 
         connection.Close();
@@ -29,15 +31,14 @@ public abstract class BaseDbService : IDatabaseService
         return result;
     }
 
-    private protected async Task<QueryResultTable> ExecuteQueryFromConnectionInternalAsync(DbConnection connection, string query)
+    private protected async Task<QueryResultTable> ExecuteQueryFromConnectionInternalAsync(DbConnection connection, ParameterizedSqlCommand query)
     {
         using var command = CreateCommandInternal(connection, query);
-
         command.CommandTimeout = 45;
 
         await connection.OpenAsync();
+        
         await using var reader = await command.ExecuteReaderAsync();
-
         var result = BuildTable(reader);
 
         await connection.CloseAsync();
@@ -67,12 +68,12 @@ public abstract class BaseDbService : IDatabaseService
 
         return result;
     }
-
-
-    private DbCommand CreateCommandInternal(DbConnection connection, string query)
+    
+    private DbCommand CreateCommandInternal(DbConnection connection, ParameterizedSqlCommand query)
     {
         var command = connection.CreateCommand();
-        command.CommandText = query;
+        command.CommandText = query.Body;
+        command.Parameters.AddRange(query.Parameters.ToArray());
         return command;
     }
 }

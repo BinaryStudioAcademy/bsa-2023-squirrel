@@ -8,6 +8,9 @@ namespace Squirrel.ConsoleApp.Extensions;
 
 public static class ApplicationBuilderExtensions
 {
+    private const string SignalRSettingsSection = "SignalRSettings";
+    private const string HubConnectionUrl = "HubConnectionUrl";
+    
     public static void InitializeFileSettings(this IApplicationBuilder app)
     {
         var fileService = app.ApplicationServices.GetRequiredService<IConnectionFileService>();
@@ -22,12 +25,12 @@ public static class ApplicationBuilderExtensions
         ClientIdOutput(clientId);
         
         var hubConnection = new HubConnectionBuilder()
-            .WithUrl(Path.Combine(config.GetSection("SignalRSettings")["HubConnectionUrl"], $"?ClientId={clientId}"))
+            .WithUrl(Path.Combine(config.GetSection(SignalRSettingsSection)[HubConnectionUrl], $"?ClientId={clientId}"))
             .WithAutomaticReconnect()
             .Build();
 
         // Use once at OnConnectedAsync hub event
-        hubConnection.On<string>("SetClientId", (guid) =>
+        hubConnection.On<string>("SetClientId", guid =>
         {
             var id = fileService?.GetClientId() ?? string.Empty;
             

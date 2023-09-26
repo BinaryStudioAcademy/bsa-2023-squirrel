@@ -4,13 +4,7 @@ namespace Squirrel.ConsoleApp.BL.Services;
 
 public class ClientIdFileService : IClientIdFileService
 {
-    private static string ClientIdFilePath
-    {
-        get
-        {
-            return FilePathHelperService.GetClientIdFilePath();
-        }
-    }
+    private static string ClientIdFilePath => FilePathHelperService.GetClientIdFilePath();
 
     public string GetClientId()
     {

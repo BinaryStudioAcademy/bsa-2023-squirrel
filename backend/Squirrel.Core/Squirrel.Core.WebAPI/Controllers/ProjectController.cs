@@ -50,13 +50,13 @@ public class ProjectController : ControllerBase
     }
     
     [HttpGet("team/{projectId}")]
-    public async Task<ActionResult<List<UserDto>>> GetProjectUsersAsync(int projectId)
+    public async Task<ActionResult<ICollection<UserDto>>> GetProjectUsersAsync(int projectId)
     {
         return Ok(await _projectService.GetProjectUsersAsync(projectId));
     }
 
     [HttpGet("all")]
-    public async Task<ActionResult<List<ProjectResponseDto>>> GetAllUserProjectsAsync()
+    public async Task<ActionResult<ICollection<ProjectResponseDto>>> GetAllUserProjectsAsync()
     {
         return Ok(await _projectService.GetAllUserProjectsAsync());
     }

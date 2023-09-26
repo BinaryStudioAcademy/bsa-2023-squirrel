@@ -6,12 +6,12 @@ internal static class GetTables
         @"SELECT TABLE_SCHEMA [Schema], TABLE_NAME [Name] FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' ORDER BY 'SCHEMA', 'NAME'";
 
     public static string GetTableDataQueryScript(string schema, string name, int rowsCount) =>
-        @$"SELECT TOP ({rowsCount}) '{schema}' AS [Schema], '{name}' AS [Name], (SELECT COUNT(*) FROM [{schema}].[{name}]) AS TotalRows, * FROM [{schema}].[{name}]";
+        @"SELECT TOP (@rowsCount) @schema AS [Schema], @name AS [Name], (SELECT COUNT(*) FROM [@schema].[@name]) AS TotalRows, * FROM [@schema].[@name]";
 
     public static string GetTableStructureScript(string schema, string table) =>
-        @$"
-              DECLARE @TableSchema NVARCHAR(100) = '{schema}';
-              DECLARE @TableName NVARCHAR(100) = '{table}'; 
+        @"
+              DECLARE @TableSchema NVARCHAR(100) = @schema;
+              DECLARE @TableName NVARCHAR(100) = @table; 
 
               SELECT	OBJECT_SCHEMA_NAME(syso.id) [Schema],
 		                syso.name [Name],
@@ -43,13 +43,12 @@ internal static class GetTables
 
               WHERE	syso.type = 'U' AND syso.name != 'sysdiagrams' AND syso.name = @TableName AND OBJECT_SCHEMA_NAME(syso.id) = @TableSchema
 
-              ORDER BY [ColumnOrder]; 
-            ";
+              ORDER BY [ColumnOrder];";
 
     public static string GetTableChecksAndUniqueConstraintsScript(string schema, string name) =>
-        @$"
-                DECLARE @TableSchema NVARCHAR(100) = '{schema}';
-                DECLARE @TableName NVARCHAR(100) = '{name}'; 
+        @"
+                DECLARE @TableSchema NVARCHAR(100) = @schema;
+                DECLARE @TableName NVARCHAR(100) = @name; 
                 
                 SELECT TC.TABLE_SCHEMA [Schema],	
                       TC.TABLE_NAME [Name],

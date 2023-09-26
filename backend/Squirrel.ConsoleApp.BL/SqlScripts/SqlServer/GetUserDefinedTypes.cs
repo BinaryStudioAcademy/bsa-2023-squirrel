@@ -117,8 +117,8 @@ WHERE userDefinedTypes.is_user_defined = 1
     public static string GetUserDefinedTableTypesStructureScript =>
 @"
 SELECT	
-    	SCHEMA_NAME(systt.schema_id) [UserTypeSchema],
-        systt.name [UserTableTypeName],
+    	SCHEMA_NAME(systt.schema_id) [Schema],
+        systt.name [Name],
 		sysc.name [ColumnName],
 		sysc.colorder [ColumnOrder],
 		syst.name [DataType],

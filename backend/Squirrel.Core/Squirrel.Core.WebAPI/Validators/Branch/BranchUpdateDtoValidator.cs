@@ -10,6 +10,6 @@ public class BranchUpdateDtoValidator : AbstractValidator<BranchUpdateDto>
         RuleFor(x => x.Name)
             .MinimumLength(3)
             .MaximumLength(200)
-            .Matches(BranchDtoValidator.BranchNameRegex);
+            .Matches(ValidationRegExes.BranchName);
     }
 }

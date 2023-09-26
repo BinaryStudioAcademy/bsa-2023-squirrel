@@ -13,6 +13,6 @@ public class ProjectDtoValidator : AbstractValidator<ProjectDto>
         RuleFor(x => x.Name)!
             .MinimumLength(3)!
             .MaximumLength(50)
-            .Must(x => Regex.IsMatch(x, @"^(?![\u0410-\u044F\u0400-\u04FF]).*$"));
+            .Matches(ValidationRegExes.NoCyrillic);
     }
 }

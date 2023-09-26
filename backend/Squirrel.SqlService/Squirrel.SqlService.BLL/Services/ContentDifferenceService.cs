@@ -7,9 +7,9 @@ using Squirrel.Shared.DTO.DatabaseItem;
 using Squirrel.Shared.DTO.Text;
 using Squirrel.SqlService.BLL.Interfaces;
 using Squirrel.Shared.DTO;
+using Squirrel.Shared.DTO.Table;
 using Squirrel.Shared.DTO.Function;
 using Squirrel.Shared.DTO.Procedure;
-using Squirrel.Shared.DTO.Table;
 using Squirrel.Shared.DTO.View;
 using Blob = Squirrel.AzureBlobStorage.Models.Blob;
 

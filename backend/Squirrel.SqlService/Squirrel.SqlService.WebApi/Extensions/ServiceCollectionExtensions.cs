@@ -21,6 +21,10 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IDbItemsRetrievalService, DbItemsRetrievalService>();
         services.AddScoped<IChangesLoaderService, ChangesLoaderService>();
         services.AddScoped<IContentDifferenceService, ContentDifferenceService>();
+        services.AddSingleton<IProcessReceivedDataService, ProcessReceivedDataService>();
+        services.AddSingleton<ResultObserver>();
+        services.AddScoped<ICommitFilesService, CommitFilesService>();
+
         services.AddScoped<ISqlFormatterService, SqlFormatterService>(_ =>
             new SqlFormatterService(configuration.GetSection("PythonExePath")!.Value));
     }

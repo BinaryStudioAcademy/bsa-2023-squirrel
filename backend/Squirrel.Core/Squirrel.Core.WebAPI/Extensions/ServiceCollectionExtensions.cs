@@ -30,6 +30,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IProjectService, ProjectService>();
         services.AddScoped<IDatabaseItemsService, DatabaseItemsService>();
         services.AddScoped<IProjectDatabaseService, ProjectDatabaseService>();
+        services.AddScoped<ICommitService, CommitService>();
         services.AddScoped<IImageService, ImageService>();
         services.AddScoped<IScriptService, ScriptService>();
         services.AddScoped<IConsoleConnectService, ConsoleConnectService>();

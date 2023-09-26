@@ -48,9 +48,6 @@ public abstract class BaseDbService : IDatabaseService
 
     private QueryResultTable BuildTable(DbDataReader reader)
     {
-        // to display 'null' in empty cells in results table on UI
-        const string nullValue = "null";
-
         var fieldCount = reader.FieldCount;
         var columnNames = Enumerable.Range(0, fieldCount).Select(reader.GetName).ToArray();
         var result = new QueryResultTable(columnNames);
@@ -60,8 +57,8 @@ public abstract class BaseDbService : IDatabaseService
             var row = new List<string>(fieldCount);
             for (int i = 0; i < fieldCount; i++)
             {
-                var value = reader.IsDBNull(i) ? nullValue : reader[i].ToString();
-                row.Add(value ?? nullValue);
+                var value = reader.IsDBNull(i) ? string.Empty : (reader[i].ToString() ?? string.Empty);
+                row.Add(value);
             }
             result.AddRow(row.ToArray());
         }

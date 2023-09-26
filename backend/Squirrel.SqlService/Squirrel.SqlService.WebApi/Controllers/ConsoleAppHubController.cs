@@ -2,12 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Squirrel.ConsoleApp.Models;
+using Squirrel.Core.Common.DTO.Script;
 using Squirrel.Shared.DTO.ConsoleAppHub;
 using Squirrel.Shared.DTO.Definition;
 using Squirrel.Shared.DTO.Function;
 using Squirrel.Shared.DTO.Procedure;
 using Squirrel.Shared.DTO.Table;
-using Squirrel.Core.Common.DTO.Script;
 using Squirrel.Shared.DTO.View;
 using Squirrel.SqlService.BLL.Hubs;
 using Squirrel.SqlService.BLL.Interfaces;

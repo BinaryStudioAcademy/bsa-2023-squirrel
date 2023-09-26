@@ -2,4 +2,10 @@
 
 public enum FileType
 {
+    Table,
+    Type,
+    Constraint,
+    StoredProcedure,
+    Function,
+    View
 }

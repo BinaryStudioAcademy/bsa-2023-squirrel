@@ -13,7 +13,6 @@ namespace Squirrel.Core.BLL.Services;
 
 public sealed class ScriptService : BaseService, IScriptService
 {
-    private const string SqlServiceUrl = "SqlServiceUrl";
     private const string ExecuteScriptRoutePrefix = "/api/ConsoleAppHub/execute-script";
     private const string FormatScriptRoutePrefix = "/api/Script/format";
     private readonly IConfiguration _configuration;
@@ -63,12 +62,12 @@ public sealed class ScriptService : BaseService, IScriptService
     public async Task<ScriptContentDto> GetFormattedSqlAsync(InboundScriptDto inboundScriptDto)
     {
         return await _httpClientService.SendAsync<InboundScriptDto, ScriptContentDto>
-            ($"{_configuration[SqlServiceUrl]}{FormatScriptRoutePrefix}", inboundScriptDto, HttpMethod.Put);
+            ($"{_configuration[SqlServiceUrlSection]}{FormatScriptRoutePrefix}", inboundScriptDto, HttpMethod.Put);
     }
 
     public async Task<QueryResultTable> ExecuteSqlScriptAsync(InboundScriptDto inboundScriptDto)
     {
         return await _httpClientService.SendAsync<InboundScriptDto, QueryResultTable>
-           ($"{_configuration[SqlServiceUrl]}{ExecuteScriptRoutePrefix}", inboundScriptDto, HttpMethod.Post);
+           ($"{_configuration[SqlServiceUrlSection]}{ExecuteScriptRoutePrefix}", inboundScriptDto, HttpMethod.Post);
     }
 }

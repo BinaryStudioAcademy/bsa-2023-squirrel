@@ -12,7 +12,7 @@ public class CommitConfig : IEntityTypeConfiguration<Commit>
         builder.Property(x => x.CreatedBy).IsRequired();
         builder.Property(x => x.CreatedAt)
                .IsRequired()
-               .HasDefaultValueSql("getutcdate()")
+               .HasDefaultValueSql(SquirrelCoreContext.SqlGetDateFunction)
                .ValueGeneratedOnAdd();
 
         builder.HasMany(x => x.CommitFiles)

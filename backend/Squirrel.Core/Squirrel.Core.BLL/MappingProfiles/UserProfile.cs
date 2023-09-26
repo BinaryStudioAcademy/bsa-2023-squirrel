@@ -9,7 +9,7 @@ public sealed class UserProfile : Profile
 {
     public UserProfile()
     {
-        CreateMap<User, UserDto>().AfterMap<BuildAvatarLinkAction>()!.ReverseMap();
-        CreateMap<User, UserProfileDto>().AfterMap<BuildAvatarLinkAction>().ReverseMap();
+        CreateMap<User, UserDto>()!.AfterMap<BuildAvatarLinkAction>()!.ReverseMap();
+        CreateMap<User, UserProfileDto>()!.AfterMap<BuildAvatarLinkAction>()!.ReverseMap();
     }
 }

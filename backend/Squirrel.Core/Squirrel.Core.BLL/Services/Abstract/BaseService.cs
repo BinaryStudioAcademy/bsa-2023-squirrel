@@ -5,6 +5,7 @@ namespace Squirrel.Core.BLL.Services.Abstract;
 
 public abstract class BaseService
 {
+    internal const string SqlServiceUrlSection = "SqlServiceUrl";
     private protected readonly SquirrelCoreContext _context;
     private protected readonly IMapper _mapper;
 

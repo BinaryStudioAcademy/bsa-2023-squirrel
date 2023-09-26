@@ -21,6 +21,10 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IDbItemsRetrievalService, DbItemsRetrievalService>();
         services.AddScoped<IChangesLoaderService, ChangesLoaderService>();
         services.AddScoped<IContentDifferenceService, ContentDifferenceService>();
+        services.AddSingleton<IProcessReceivedDataService, ProcessReceivedDataService>();
+        services.AddSingleton<ResultObserver>();
+        services.AddScoped<ICommitFilesService, CommitFilesService>();
+
         services.AddScoped<ISqlFormatterService, SqlFormatterService>(_ =>
             new SqlFormatterService(configuration.GetSection("PythonExePath")!.Value));
     }
@@ -38,10 +42,13 @@ public static class ServiceCollectionExtensions
 
     public static void AddMongoDbService(this IServiceCollection services, IConfiguration configuration)
     {
-        services.Configure<MongoDatabaseConnectionSettings>(configuration.GetSection("MongoDatabase")!);
+        var mongoDatabaseSection = "MongoDatabase";
+        var collectionName = "UserCollection";
+        
+        services.Configure<MongoDatabaseConnectionSettings>(configuration.GetSection(mongoDatabaseSection)!);
 
         services.AddTransient<IMongoService<User>>(s =>
             new MongoService<User>(s.GetRequiredService<IOptions<MongoDatabaseConnectionSettings>>(),
-                "UserCollection"));
+                collectionName));
     }
 }

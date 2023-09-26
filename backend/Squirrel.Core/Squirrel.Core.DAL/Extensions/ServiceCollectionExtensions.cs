@@ -9,7 +9,8 @@ public static class ServiceCollectionExtensions
 {
     public static void AddSquirrelCoreContext(this IServiceCollection services, IConfiguration configuration)
     {
-        var connectionsString = configuration.GetConnectionString("SquirrelCoreDBConnection");
+        var squirrelCoreDbConnectionString = "SquirrelCoreDBConnection";
+        var connectionsString = configuration.GetConnectionString(squirrelCoreDbConnectionString);
         services.AddDbContext<SquirrelCoreContext>(options =>
             options.UseSqlServer(
                 connectionsString,

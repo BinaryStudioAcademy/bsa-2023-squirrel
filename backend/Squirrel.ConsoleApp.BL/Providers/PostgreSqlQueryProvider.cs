@@ -26,15 +26,15 @@ public class PostgreSqlQueryProvider : BaseProvider, IDbQueryProvider
 
     public ParameterizedSqlCommand GetStoredProceduresNamesQuery() => new(GetStoredProceduresNamesScript, new List<SqlParameter>());
 
-    public ParameterizedSqlCommand GetStoredProcedureDefinitionQuery(string storedProcedureSchemaString,
+    public ParameterizedSqlCommand GetStoredProcedureDefinitionQuery(string storedProcedureSchema,
         string storedProcedureName)
     {
         var storedProcedureSchemaStringParameter = GetParameter(
-            nameof(storedProcedureSchemaString), storedProcedureSchemaString, SqlDbType.NVarChar);
+            nameof(storedProcedureSchema), storedProcedureSchema, SqlDbType.NVarChar);
         var storedProcedureNameParameter = GetParameter(
             nameof(storedProcedureName), storedProcedureName, SqlDbType.NVarChar);
         
-        return new ParameterizedSqlCommand(GetStoredProcedureDefinitionScript(storedProcedureSchemaString, storedProcedureName), new[]
+        return new ParameterizedSqlCommand(GetStoredProcedureDefinitionScript(storedProcedureSchema, storedProcedureName), new[]
         {
             storedProcedureSchemaStringParameter, storedProcedureNameParameter
         });

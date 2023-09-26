@@ -9,7 +9,8 @@ public class StaticFilesController : Controller
 {
     private const string ConsoleSetupFilePathSection = "ConsoleSetupFilePath";
     private const string OctetStreamMimeTypeName = "application/octet-stream";
-    private const string ConsoleSetupFileName = "SquirrelSetup.exe";
+    private const string WindowsConsoleSetupFileName = "SquirrelSetup.exe";
+    private const string MacOSConsoleSetupFileName = "SquirrelSetup";
     private readonly IConfiguration _configuration;
 
     public StaticFilesController(IConfiguration configuration)
@@ -20,18 +21,18 @@ public class StaticFilesController : Controller
     [HttpGet("squirrel-installer/{operatingSystem}"), DisableRequestSizeLimit]
     public async Task<IActionResult> DownloadSquirrelInstallerAsync(OperatingSystem operatingSystem)
     {
-        // Path will be updated using 'operatingSystem' after task 152
-        var filePath = _configuration[ConsoleSetupFilePathSection];
+        var fileForOSType = operatingSystem == OperatingSystem.Windows ? WindowsConsoleSetupFileName : MacOSConsoleSetupFileName;
+        
+        var filePath = $"{_configuration[ConsoleSetupFilePathSection]}/{fileForOSType}";
 
         if (!System.IO.File.Exists(filePath))
         {
             return NotFound();
         }
 
-        // FileDownloadName will be updated using 'operatingSystem' after task 152
         return File(
             await System.IO.File.ReadAllBytesAsync(filePath),
             OctetStreamMimeTypeName,
-            ConsoleSetupFileName);
+            fileForOSType);
     }
 }

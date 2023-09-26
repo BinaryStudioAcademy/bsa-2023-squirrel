@@ -34,7 +34,7 @@ public sealed class ProjectService : BaseService, IProjectService
         var createdProject = (await _context.Projects.AddAsync(projectEntity)).Entity;
         await _context.SaveChangesAsync();
 
-        var defaultBranch = await _branchService.AddBranchAsync(createdProject.Id ,newProjectDto.DefaultBranch);
+        var defaultBranch = await _branchService.AddBranchAsync(createdProject.Id, newProjectDto.DefaultBranch);
         createdProject.DefaultBranchId = defaultBranch.Id;
         await _context.SaveChangesAsync();
 
@@ -48,7 +48,7 @@ public sealed class ProjectService : BaseService, IProjectService
         foreach (var user in usersDtos)
         {
             var userEntity = await _context.Users.FindAsync(user.Id);
-            if (userEntity == null)
+            if (userEntity is null)
             {
                 throw new EntityNotFoundException(nameof(User));
             }
@@ -100,7 +100,7 @@ public sealed class ProjectService : BaseService, IProjectService
         await _context.SaveChangesAsync();
     }
 
-    public async Task<List<UserDto>> GetProjectUsersAsync(int projectId)
+    public async Task<ICollection<UserDto>> GetProjectUsersAsync(int projectId)
     {
         var project = await _context.Projects
             .Include(p => p.Users)
@@ -115,7 +115,7 @@ public sealed class ProjectService : BaseService, IProjectService
         return _mapper.Map<List<UserDto>>(projectUsers);
     }
 
-    public async Task<List<ProjectResponseDto>> GetAllUserProjectsAsync()
+    public async Task<ICollection<ProjectResponseDto>> GetAllUserProjectsAsync()
     {
         var currentUserId = _userIdGetter.GetCurrentUserId();
         var userProjects = await _context.Projects

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using Squirrel.AzureBlobStorage.Interfaces;
@@ -13,7 +12,8 @@ namespace Squirrel.Core.BLL.Services;
 
 public class ImageService : IImageService
 {
-    private const int MaxFileLenght = 5 * 1024 * 1024;
+    private const int Megabyte = 1024 * 1024;
+    private const int MaxFileLength = 5 * Megabyte;
     private readonly string[] _fileTypes = { "image/png", "image/jpeg" };
     private readonly SquirrelCoreContext _context;
     private readonly IBlobStorageService _blobStorageService;
@@ -35,7 +35,7 @@ public class ImageService : IImageService
     {
         ValidateImage(avatar);
 
-        var userEntity = await _userService.GetUserByIdInternal(_userIdGetter.GetCurrentUserId());
+        var userEntity = await _userService.GetUserByIdInternalAsync(_userIdGetter.GetCurrentUserId());
 
         var content = await CropAvatar(avatar);
         var guid = userEntity.AvatarUrl ?? Guid.NewGuid().ToString();
@@ -46,7 +46,7 @@ public class ImageService : IImageService
             Content = content
         };
 
-        await (userEntity.AvatarUrl == null
+        await (userEntity.AvatarUrl is null
             ? _blobStorageService.UploadAsync(_blobStorageOptions.ImagesContainer, blob)
             : _blobStorageService.UpdateAsync(_blobStorageOptions.ImagesContainer, blob));
 
@@ -56,8 +56,8 @@ public class ImageService : IImageService
 
     public async Task DeleteAvatarAsync()
     {
-        var userEntity = await _userService.GetUserByIdInternal(_userIdGetter.GetCurrentUserId());
-        if (userEntity.AvatarUrl == null)
+        var userEntity = await _userService.GetUserByIdInternalAsync(_userIdGetter.GetCurrentUserId());
+        if (userEntity.AvatarUrl is null)
         {
             throw new EntityNotFoundException(nameof(User.AvatarUrl));
         }
@@ -89,9 +89,9 @@ public class ImageService : IImageService
             throw new InvalidFileFormatException(string.Join(", ", _fileTypes));
         }
 
-        if (image.Length > MaxFileLenght)
+        if (image.Length > MaxFileLength)
         {
-            throw new LargeFileException($"{MaxFileLenght / (1024 * 1024)} MB");
+            throw new LargeFileException($"{MaxFileLength / Megabyte} MB");
         }
     }
 }

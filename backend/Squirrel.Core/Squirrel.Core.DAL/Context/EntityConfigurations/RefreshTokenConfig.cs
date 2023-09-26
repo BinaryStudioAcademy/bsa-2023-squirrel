@@ -12,7 +12,7 @@ public sealed class RefreshTokenConfig : IEntityTypeConfiguration<RefreshToken>
         builder.Property(x => x.ExpiresAt).IsRequired();
         builder.Property(x => x.CreatedAt)
                .IsRequired()
-               .HasDefaultValueSql("getutcdate()")
+               .HasDefaultValueSql(SquirrelCoreContext.SqlGetDateFunction)
                .ValueGeneratedOnAdd();
         
         builder.HasOne(x => x.User);

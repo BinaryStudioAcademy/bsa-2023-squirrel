@@ -1,6 +1,4 @@
-﻿using Squirrel.Shared.DTO.DatabaseItem;
-
-namespace Squirrel.SqlService.BLL.Interfaces;
+﻿namespace Squirrel.SqlService.BLL.Interfaces;
 
 public interface IChangesLoaderService
 {

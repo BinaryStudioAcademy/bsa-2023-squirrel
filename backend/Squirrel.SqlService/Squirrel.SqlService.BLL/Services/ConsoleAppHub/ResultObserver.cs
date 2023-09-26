@@ -1,10 +1,11 @@
-﻿using Squirrel.ConsoleApp.Models;
+﻿using System.Collections.Concurrent;
+using Squirrel.ConsoleApp.Models;
 using Squirrel.Shared.Exceptions;
-using System.Collections.Concurrent;
+using Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
 
 namespace Squirrel.SqlService.BLL.Services.ConsoleAppHub;
 
-public class ResultObserver
+public sealed class ResultObserver : IResultObserver
 {
     private readonly ConcurrentDictionary<Guid, TaskCompletionSource<QueryResultTable>> _pendingRequests = new();
     private const int SecondsToTimeout = 45;
@@ -17,7 +18,7 @@ public class ResultObserver
             throw new QueryAlreadyExistException(queryId);
         }
 
-        _ = RemoveIfNotSet(queryId);
+        _ = RemoveIfNotSetAsync(queryId);
 
         return tcs;
     }
@@ -34,7 +35,7 @@ public class ResultObserver
         }
     }
 
-    private async Task RemoveIfNotSet(Guid queryId)
+    private async Task RemoveIfNotSetAsync(Guid queryId)
     {
         await Task.Delay(TimeSpan.FromSeconds(SecondsToTimeout));
         if (_pendingRequests.TryRemove(queryId, out var removedTcs))

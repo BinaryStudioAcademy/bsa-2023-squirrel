@@ -1,6 +1,4 @@
-using Squirrel.Shared.DTO;
-
-namespace Squirrel.SqlService.BLL.Models.DTO.View;
+namespace Squirrel.Shared.DTO.View;
 
 public class ViewDetailInfo : BaseDbItem
 {

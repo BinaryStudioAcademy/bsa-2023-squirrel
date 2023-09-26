@@ -2,7 +2,7 @@
 
 public sealed class SideBySideDiffResultDto
 {
-    public List<DiffLineResult> OldTextLines { get; set; } = new();
-    public List<DiffLineResult> NewTextLines { get; set; } = new();
+    public ICollection<DiffLineResult> OldTextLines { get; set; } = new List<DiffLineResult>();
+    public ICollection<DiffLineResult> NewTextLines { get; set; } = new List<DiffLineResult>();
     public bool HasDifferences { get; set; }
 }

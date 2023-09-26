@@ -10,7 +10,10 @@
 
     <div class="nav">
         <div>
-            <app-button class="margin-right" text="Commit" variant="outline-primary" width="120px"></app-button>
+            <app-button
+                (buttonOnClick)="commit()"
+                [isDisabled]="!validateCommit()"
+                class="margin-right" text="Commit" variant="outline-primary" width="120px"></app-button>
             <app-button text="Push" variant="outline-primary" width="120px"></app-button>
         </div>
         <div>

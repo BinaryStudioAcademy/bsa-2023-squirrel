@@ -19,44 +19,44 @@ public class ProjectController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<ProjectResponseDto>> AddProject([FromBody] NewProjectDto newProjectDto)
+    public async Task<ActionResult<ProjectResponseDto>> AddProjectAsync([FromBody] NewProjectDto newProjectDto)
     {
         return Ok(await _projectService.AddProjectAsync(newProjectDto));
     }
     
     [HttpPut("{projectId}/members")]
-    public async Task<ActionResult<ProjectResponseDto>> AddUsersToProject(int projectId, [FromBody] List<UserDto> usersDtos)
+    public async Task<ActionResult<ProjectResponseDto>> AddUsersToProjectAsync(int projectId, [FromBody] List<UserDto> usersDtos)
     {
         return Ok(await _projectService.AddUsersToProjectAsync(projectId, usersDtos));
     }
 
     [HttpPut("{projectId}")]
-    public async Task<ActionResult<ProjectResponseDto>> UpdateProject(int projectId, [FromBody] UpdateProjectDto updateProjectDto)
+    public async Task<ActionResult<ProjectResponseDto>> UpdateProjectAsync(int projectId, [FromBody] UpdateProjectDto updateProjectDto)
     {
         return Ok(await _projectService.UpdateProjectAsync(projectId, updateProjectDto));
     }
 
     [HttpDelete("{projectId}")]
-    public async Task<IActionResult> DeleteProject(int projectId)
+    public async Task<IActionResult> DeleteProjectAsync(int projectId)
     {
         await _projectService.DeleteProjectAsync(projectId);
         return NoContent();
     }
 
     [HttpGet("{projectId}")]
-    public async Task<ActionResult<ProjectResponseDto>> GetProject(int projectId)
+    public async Task<ActionResult<ProjectResponseDto>> GetProjectAsync(int projectId)
     {
         return Ok(await _projectService.GetProjectAsync(projectId));
     }
     
     [HttpGet("team/{projectId}")]
-    public async Task<ActionResult<List<UserDto>>> GetProjectUsers(int projectId)
+    public async Task<ActionResult<ICollection<UserDto>>> GetProjectUsersAsync(int projectId)
     {
         return Ok(await _projectService.GetProjectUsersAsync(projectId));
     }
 
     [HttpGet("all")]
-    public async Task<ActionResult<List<ProjectResponseDto>>> GetAllUserProjects()
+    public async Task<ActionResult<ICollection<ProjectResponseDto>>> GetAllUserProjectsAsync()
     {
         return Ok(await _projectService.GetAllUserProjectsAsync());
     }

@@ -12,6 +12,8 @@ namespace Squirrel.Core.Common.JWT;
 
 public sealed class JwtFactory : IJwtFactory
 {
+    public const string IdClaimName = "id";
+    private const string UserNameClaimName = "username";
     private readonly JwtIssuerOptions _jwtOptions;
     private readonly JwtSecurityTokenHandler _jwtSecurityTokenHandler;
 
@@ -33,7 +35,7 @@ public sealed class JwtFactory : IJwtFactory
             new Claim(JwtRegisteredClaimNames.Email, email),
             new Claim(JwtRegisteredClaimNames.Jti, await _jwtOptions.JtiGenerator()),
             new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(_jwtOptions.IssuedAt).ToString(), ClaimValueTypes.Integer64),
-            identity.FindFirst("id")
+            identity.FindFirst(IdClaimName)
         };
 
         var jwt = new JwtSecurityToken(
@@ -59,15 +61,15 @@ public sealed class JwtFactory : IJwtFactory
             throw new InvalidAccessTokenException();
         }
 
-        return int.Parse(claimsPrincipal.Claims.First(c => c.Type == "id").Value);
+        return int.Parse(claimsPrincipal.Claims.First(c => c.Type == IdClaimName).Value);
     }
 
     private static ClaimsIdentity GenerateClaimsIdentity(int id, string userName)
     {
         return new ClaimsIdentity(new GenericIdentity(userName, "Token"), new[]
         {
-            new Claim("id", id.ToString()),
-            new Claim("username", userName)
+            new Claim(IdClaimName, id.ToString()),
+            new Claim(UserNameClaimName, userName)
         });
     }
 

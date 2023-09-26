@@ -8,30 +8,33 @@ namespace Squirrel.ConsoleApp.Extensions;
 
 public static class ApplicationBuilderExtensions
 {
+    private const string SignalRSettingsSection = "SignalRSettings";
+    private const string HubConnectionUrl = "HubConnectionUrl";
+    
     public static void InitializeFileSettings(this IApplicationBuilder app)
     {
         var fileService = app.ApplicationServices.GetRequiredService<IConnectionFileService>();
-        fileService?.CreateInitFile();
+        fileService.CreateInitFile();
     }
 
     public static void RegisterHubs(this IApplicationBuilder app, IConfiguration config)
     {
         var fileService = app.ApplicationServices.GetRequiredService<IClientIdFileService>();
 
-        var _clientId = fileService?.GetClientId() ?? string.Empty;
-        ClientIdOutput(_clientId);
+        var clientId = fileService?.GetClientId() ?? string.Empty;
+        ClientIdOutput(clientId);
         
-        var _hubConnection = new HubConnectionBuilder()
-            .WithUrl(Path.Combine(config.GetSection("SignalRSettings")["HubConnectionUrl"], $"?ClientId={_clientId}"))
+        var hubConnection = new HubConnectionBuilder()
+            .WithUrl(Path.Combine(config.GetSection(SignalRSettingsSection)[HubConnectionUrl], $"?ClientId={clientId}"))
             .WithAutomaticReconnect()
             .Build();
 
         // Use once at OnConnectedAsync hub event
-        _hubConnection.On<string>("SetClientId", (guid) =>
+        hubConnection.On<string>("SetClientId", guid =>
         {
-            var _clientId = fileService?.GetClientId() ?? string.Empty;
+            var id = fileService?.GetClientId() ?? string.Empty;
             
-            if (!string.IsNullOrEmpty(_clientId))
+            if (!string.IsNullOrEmpty(id))
             {
                 return;
             }
@@ -40,9 +43,9 @@ public static class ApplicationBuilderExtensions
             ClientIdOutput(guid);
         });
 
-        _hubConnection.RegisterActions(app);
+        hubConnection.RegisterActions(app);
 
-        _hubConnection.StartAsync();
+        hubConnection.StartAsync();
     }
 
     private static void ClientIdOutput(string clientId)

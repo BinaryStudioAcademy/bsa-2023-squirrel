@@ -2,17 +2,16 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Squirrel.ConsoleApp.Models;
+using Squirrel.Core.Common.DTO.Script;
 using Squirrel.Shared.DTO.ConsoleAppHub;
 using Squirrel.Shared.DTO.Definition;
 using Squirrel.Shared.DTO.Function;
 using Squirrel.Shared.DTO.Procedure;
 using Squirrel.Shared.DTO.Table;
-using Squirrel.Core.Common.DTO.Script;
+using Squirrel.Shared.DTO.View;
 using Squirrel.SqlService.BLL.Hubs;
 using Squirrel.SqlService.BLL.Interfaces;
 using Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
-using Squirrel.SqlService.BLL.Models.DTO.View;
-using Squirrel.SqlService.BLL.Services.ConsoleAppHub;
 
 namespace Squirrel.SqlService.WebApi.Controllers;
 
@@ -21,13 +20,13 @@ namespace Squirrel.SqlService.WebApi.Controllers;
 public class ConsoleAppHubController : ControllerBase
 {
     private readonly IHubContext<ConsoleAppHub, IExecuteOnClientSide> _hubContext;
-    private readonly ResultObserver _resultObserver;
+    private readonly IResultObserver _resultObserver;
     private readonly IMapper _mapper;
     private readonly ISqlFormatterService _sqlFormatterService;
     private readonly (Guid queryId, TaskCompletionSource<QueryResultTable> tcs) _queryParameters;
 
     public ConsoleAppHubController(IHubContext<ConsoleAppHub, IExecuteOnClientSide> hubContext, ISqlFormatterService sqlFormatterService,
-        ResultObserver resultObserver, IMapper mapper)
+        IResultObserver resultObserver, IMapper mapper)
     {
         _hubContext = hubContext;
         _resultObserver = resultObserver;
@@ -36,13 +35,6 @@ public class ConsoleAppHubController : ControllerBase
         _queryParameters = RegisterQuery();
     }
 
-    private (Guid queryId, TaskCompletionSource<QueryResultTable> tcs) RegisterQuery()
-    {
-        var queryId = Guid.NewGuid();
-        var tcs = _resultObserver.Register(queryId);
-        return (queryId, tcs);
-    }
-    
     [HttpPost("all-tables-names")]
     public async Task<ActionResult<TableNamesDto>> GetAllTablesNamesAsync([FromBody] QueryParameters queryParameters)
     {
@@ -67,7 +59,7 @@ public class ConsoleAppHubController : ControllerBase
     }
     
     [HttpPost("stored-procedure-definition")]
-    public async Task<ActionResult> GetStoredProcedureDefinitionAsync([FromBody] QueryParameters queryParameters)
+    public async Task<IActionResult> GetStoredProcedureDefinitionAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId)
             .GetStoredProcedureDefinitionAsync(_queryParameters.queryId, queryParameters.FilterSchema,
@@ -146,7 +138,7 @@ public class ConsoleAppHubController : ControllerBase
     }
     
     [HttpPost("user-defined-types-with-defaults-and-rules-and-definition")]
-    public async Task<ActionResult> GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync(
+    public async Task<IActionResult> GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync(
         [FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId)
@@ -155,7 +147,7 @@ public class ConsoleAppHubController : ControllerBase
     }
     
     [HttpPost("user-defined-table-types")]
-    public async Task<ActionResult> GetUserDefinedTableTypesAsync([FromBody] QueryParameters queryParameters)
+    public async Task<IActionResult> GetUserDefinedTableTypesAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId)
             .GetUserDefinedTableTypesAsync(_queryParameters.queryId);
@@ -163,7 +155,7 @@ public class ConsoleAppHubController : ControllerBase
     }
     
     [HttpPost("db-connect")]
-    public async Task<ActionResult> ConnectToDb([FromBody] RemoteConnect remoteConnect)
+    public async Task<IActionResult> ConnectToDbAsync([FromBody] RemoteConnect remoteConnect)
     {
         await _hubContext.Clients.User(remoteConnect.ClientId)
             .RemoteConnectAsync(_queryParameters.queryId, remoteConnect.DbConnection);
@@ -178,5 +170,12 @@ public class ConsoleAppHubController : ControllerBase
                          .ExecuteScriptAsync(_queryParameters.queryId, formattedScript.Content!);
         
         return Ok(await _queryParameters.tcs.Task);
+    }
+    
+    private (Guid queryId, TaskCompletionSource<QueryResultTable> tcs) RegisterQuery()
+    {
+        var queryId = Guid.NewGuid();
+        var tcs = _resultObserver.Register(queryId);
+        return (queryId, tcs);
     }
 }

@@ -12,7 +12,7 @@ public class ChangeRecordConfig : IEntityTypeConfiguration<ChangeRecord>
         builder.Property(x => x.CreatedBy).IsRequired();
         builder.Property(x => x.CreatedAt)
                .IsRequired()
-               .HasDefaultValueSql("getutcdate()")
+               .HasDefaultValueSql(SquirrelCoreContext.SqlGetDateFunction)
                .ValueGeneratedOnAdd();
 
         builder.HasOne(x => x.User)

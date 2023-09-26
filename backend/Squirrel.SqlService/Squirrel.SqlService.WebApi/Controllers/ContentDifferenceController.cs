@@ -16,7 +16,7 @@ public sealed class ContentDifferenceController : ControllerBase
     }
 
     [HttpGet("{commitId}/{tempBlobId}")]
-    public async Task<ActionResult<List<DatabaseItemContentCompare>>> GetContentDiffsAsync(int commitId, Guid tempBlobId)
+    public async Task<ActionResult<ICollection<DatabaseItemContentCompare>>> GetContentDiffsAsync(int commitId, Guid tempBlobId)
     {
         return Ok(await _contentDifferenceService.GetContentDiffsAsync(commitId, tempBlobId));
     }

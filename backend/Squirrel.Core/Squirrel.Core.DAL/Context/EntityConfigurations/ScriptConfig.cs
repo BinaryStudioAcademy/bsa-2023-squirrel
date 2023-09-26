@@ -14,11 +14,11 @@ public sealed class ScriptConfig : IEntityTypeConfiguration<Script>
         builder.Property(x => x.CreatedBy).IsRequired();
         builder.Property(x => x.UpdatedAt)
                .IsRequired()
-               .HasDefaultValueSql("getutcdate()")
+               .HasDefaultValueSql(SquirrelCoreContext.SqlGetDateFunction)
                .ValueGeneratedOnAddOrUpdate();
         builder.Property(x => x.CreatedAt)
                .IsRequired()
-               .HasDefaultValueSql("getutcdate()")
+               .HasDefaultValueSql(SquirrelCoreContext.SqlGetDateFunction)
                .ValueGeneratedOnAdd();
 
         builder.HasOne(x => x.LastUpdatedBy)

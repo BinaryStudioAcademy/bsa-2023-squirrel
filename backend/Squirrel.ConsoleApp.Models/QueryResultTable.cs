@@ -23,7 +23,6 @@ public class QueryResultTable
         RowCount++;
     }
 
-    // Just for debugging
     public override string ToString()
     {
         var res = new StringBuilder(string.Join("  |  ", ColumnNames));

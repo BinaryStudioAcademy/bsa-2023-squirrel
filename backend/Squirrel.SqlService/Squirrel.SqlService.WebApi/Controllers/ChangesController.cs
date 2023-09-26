@@ -15,7 +15,7 @@ public sealed class ChangesController : ControllerBase
     }
 
     [HttpPost("{clientId}")]
-    public async Task<ActionResult> SaveChangesToBlob([FromBody] Guid changeId, Guid clientId)
+    public async Task<IActionResult> SaveChangesToBlobAsync([FromBody] Guid changeId, Guid clientId)
     {
         await _changesLoaderService.LoadChangesToBlobAsync(changeId, clientId);
 

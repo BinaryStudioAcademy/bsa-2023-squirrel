@@ -52,9 +52,12 @@ export class MainComponent extends BaseComponent implements OnInit, OnDestroy {
         if (!projectId) {
             this.notificationService.error('wrong route');
             this.router.navigateByUrl('/projects');
+            this.projectService.currentProjectId = 0;
 
             return;
         }
+
+        this.projectService.currentProjectId = Number(projectId);
 
         this.projectService
             .getProject(projectId)

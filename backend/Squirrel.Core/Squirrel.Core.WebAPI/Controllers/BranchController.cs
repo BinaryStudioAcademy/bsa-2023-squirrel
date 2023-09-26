@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.Common.DTO.Branch;
 
 namespace Squirrel.Core.WebAPI.Controllers;
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class BranchController : ControllerBase
 {
     private readonly IBranchService _branchService;

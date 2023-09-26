@@ -21,6 +21,11 @@
         <div class="invalid-feedback" *ngIf="control.errors?.['required']">
             Please enter a {{ label === '' ? name : (label | titlecase) }}
         </div>
+
+        <div class="invalid-feedback" *ngIf="control.errors?.['noCyrillic']">
+            Only Latin letters, digits, special characters and spaces are allowed
+        </div>
+
         <div class="invalid-feedback" *ngIf="control.errors?.['minlength']">
             {{ label === '' ? name : (label | titlecase) }} must be at least
             {{control.errors?.['minlength'].requiredLength}} characters

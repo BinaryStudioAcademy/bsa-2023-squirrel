@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { BranchService } from '@core/services/branch.service';
 import { CommitService } from '@core/services/commit.service';
 import { EventService } from '@core/services/event.service';
+import { NotificationService } from '@core/services/notification.service';
 import { ProjectService } from '@core/services/project.service';
 import { SpinnerService } from '@core/services/spinner.service';
 import { TablesService } from '@core/services/tables.service';
@@ -14,6 +15,7 @@ import { DatabaseItemContent } from 'src/app/models/database-items/database-item
 import { DatabaseItemType } from 'src/app/models/database-items/database-item-type';
 import { ItemCategory } from 'src/app/models/database-items/item-category';
 import { QueryParameters } from 'src/app/models/sql-service/query-parameters';
+import { TableColumnInfo } from 'src/app/models/table-structure/table-columns';
 
 @Component({
     selector: 'app-code',
@@ -23,7 +25,7 @@ import { QueryParameters } from 'src/app/models/sql-service/query-parameters';
 export class CodeComponent implements OnInit, OnDestroy {
     public selectedItems: TreeNode[] = [];
 
-    public selectedItem: DatabaseItemContent | undefined;
+    public selectedItem: DatabaseItemContent<any> | undefined;
 
     public form: FormGroup;
 
@@ -43,6 +45,7 @@ export class CodeComponent implements OnInit, OnDestroy {
         private spinner: SpinnerService,
         private formBuilder: FormBuilder,
         private tableService: TablesService,
+        private notificationService: NotificationService,
     ) {
         this.eventService.changesLoadedEvent$.pipe(takeUntil(this.unsubscribe$)).subscribe((x) => {
             if (x !== undefined) {
@@ -69,12 +72,12 @@ export class CodeComponent implements OnInit, OnDestroy {
         this.selectedItems = event.originalStructure;
     }
 
-    public onItemSelected(item: DatabaseItemContent): void {
+    public onItemSelected(item: DatabaseItemContent<any>): void {
         if (`${item.schema}.${item.name}` === `${this.selectedItem?.schema}.${this.selectedItem?.name}`) {
             return;
         }
 
-        this.selectItem(item);
+        this.selectedItemUpdate(item);
     }
 
     private updateEditorContent(content: string): void {
@@ -83,7 +86,7 @@ export class CodeComponent implements OnInit, OnDestroy {
         });
     }
 
-    private selectItem(item: DatabaseItemContent): void {
+    private selectedItemUpdate(item: DatabaseItemContent<any>): void {
         this.selectedItem = item;
         this.updateEditorContent(this.selectedItem.content);
         this.form.markAsPristine();
@@ -134,7 +137,7 @@ export class CodeComponent implements OnInit, OnDestroy {
         }
     }
 
-    public selectTable(selectedItem: DatabaseItemContent) {
+    public selectTable(selectedItem: DatabaseItemContent<any>) {
         const query: QueryParameters = {
             clientId: this.guid,
             filterSchema: selectedItem.schema,
@@ -143,11 +146,18 @@ export class CodeComponent implements OnInit, OnDestroy {
         };
 
         this.tableService
-            .getAllTablesNames(query)
+            .getTableStructure(query)
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe({
                 next: (item) => {
-                    this.selectItem = item;
+                    const table: DatabaseItemContent<TableColumnInfo[]> = {
+                        name: item.name,
+                        type: DatabaseItemType.Table,
+                        schema: item.schema,
+                        content: item.columns,
+                    };
+
+                    this.selectedItem = table;
                 },
                 error: () => {
                     this.notificationService.error('fail connect to db');

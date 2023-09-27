@@ -1,8 +1,8 @@
 import { DatabaseItemType } from './database-item-type';
 
-export interface DatabaseItemContent {
+export interface DatabaseItemContent<T> {
     name: string;
     type: DatabaseItemType;
     schema: string;
-    content: string;
+    content: T;
 }

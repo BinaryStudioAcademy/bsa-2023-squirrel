@@ -25,7 +25,7 @@ public class TableController : ControllerBase
     }
 
     [HttpPost("table-structure")]
-    public async Task<ActionResult<TableNamesDto>> GetTableStructureAsync(QueryParameters queryParameters)
+    public async Task<ActionResult<TableStructureDto>> GetTableStructureAsync(QueryParameters queryParameters)
     {
         return Ok(await _tableService.GetTableStructureAsync(queryParameters));
     }

@@ -42,7 +42,7 @@ public class DbItemsRetrievalService : IDbItemsRetrievalService
         var functionDetailsResult = await GetAllFunctionDetailsAsync(clientId);
         var viewsDetailsResult = await GetAllViewDetailsAsync(clientId);
 
-        var dbStructureResult = new DbStructureDto()
+        var dbStructureResult = new DbStructureDto
         {
             DbTableStructures = structuresResult.ToList(),
             DbConstraints = constraintsResult.ToList(),

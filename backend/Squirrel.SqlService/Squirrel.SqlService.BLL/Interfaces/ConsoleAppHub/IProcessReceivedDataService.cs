@@ -5,7 +5,6 @@ public interface IProcessReceivedDataService
 {
     // Actions
     Task AllTablesNamesProcessReceivedDataAsync(Guid queryId, QueryResultTable queryResultTable);
-    Task TableDataProcessReceivedDataAsync(Guid queryId, QueryResultTable queryResultTable);
 
     Task AllStoredProceduresNamesProcessReceivedDataAsync(Guid queryId, QueryResultTable queryResultTable);
 

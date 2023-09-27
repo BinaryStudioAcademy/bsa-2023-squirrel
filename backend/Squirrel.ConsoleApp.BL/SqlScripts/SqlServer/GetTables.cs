@@ -5,9 +5,6 @@ internal static class GetTables
     public static string GetTablesNamesScript =>
         @"SELECT TABLE_SCHEMA [Schema], TABLE_NAME [Name] FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' ORDER BY 'SCHEMA', 'NAME'";
 
-    public static string GetTableDataQueryScript(string schema, string name, int rowsCount) =>
-        @"SELECT TOP (@rowsCount) @schema AS [Schema], @name AS [Name], (SELECT COUNT(*) FROM [@schema].[@name]) AS TotalRows, * FROM [@schema].[@name]";
-
     public static string GetTableStructureScript(string schema, string table) =>
         @"
               DECLARE @TableSchema NVARCHAR(100) = @schema;

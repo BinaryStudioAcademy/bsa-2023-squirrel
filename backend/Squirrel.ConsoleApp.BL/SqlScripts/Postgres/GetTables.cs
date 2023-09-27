@@ -5,9 +5,6 @@ internal static class GetTables
     public static string GetTablesNamesScript =>
         @"SELECT schemaname AS ""schema"", tablename AS ""name"" FROM pg_catalog.pg_tables WHERE schemaname NOT IN ('pg_catalog', 'information_schema')";
 
-    public static string GetTableDataQueryScript(string schema, string name, int rowsCount) =>
-        $"SELECT '{schema}' AS schema, '{name}' AS name, (SELECT COUNT(*) FROM \"{schema}\".\"{name}\") AS TotalRows, t.* FROM \"{schema}\".\"{name}\" t LIMIT {rowsCount}";
-
     public static string GetTableStructureScript(string schema, string name) =>
         @"
             with column_description_table as (

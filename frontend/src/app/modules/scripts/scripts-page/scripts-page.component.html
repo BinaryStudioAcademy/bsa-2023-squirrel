@@ -1,10 +1,15 @@
 <div class="container" [class.padding-bottom]="currentScriptResult || currentScriptError">
     <div class="main-content" *ngIf="scripts.length > 0">
         <div class="scripts-sector">
-            <ul cdkListbox [cdkListboxValue]="scripts" class="listbox bordered">
-                <li class="option" *ngFor="let script of scripts" [cdkOption]="script"
+            <app-input [width]="'100%'"
+                       [placeholder]="'Search...'"
+                       [formControl]="$any(form.controls['search'])"
+                       (input)="filterScripts()">
+            </app-input>
+            <ul cdkListbox [cdkListboxValue]="filteredScripts" class="listbox bordered">
+                <li class="option" *ngFor="let script of filteredScripts" [cdkOption]="script"
                     [class.selected-option]="selectedScript?.id === script.id"
-                    [class.unsaved]="form.dirty && selectedScript?.id === script.id">
+                    [class.unsaved]="form.controls['scriptContent'].dirty && selectedScript?.id === script.id">
                     <app-script [script]="script" (click)="onScriptSelected(script)"></app-script>
                 </li>
             </ul>

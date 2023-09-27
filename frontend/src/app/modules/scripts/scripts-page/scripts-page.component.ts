@@ -31,6 +31,8 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, CanCo
 
     public scripts: ScriptDto[] = [];
 
+    public filteredScripts: ScriptDto[] = [];
+
     public selectedScript: ScriptDto | undefined;
 
     public scriptErrors: { [scriptId: number]: ScriptErrorDto } = {};
@@ -76,7 +78,7 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, CanCo
     }
 
     public canDeactivate(): Observable<boolean> | boolean {
-        if (this.form.dirty) {
+        if (this.form.get('scriptContent')?.dirty) {
             const dialogRef = this.dialog.open(ConfirmationDialogComponent);
 
             return dialogRef.afterClosed();
@@ -90,7 +92,7 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, CanCo
             return;
         }
 
-        if (this.form.dirty) {
+        if (this.form.get('scriptContent')?.dirty) {
             const dialogRef = this.dialog.open(ConfirmationDialogComponent);
 
             dialogRef.afterClosed().subscribe((confirmed) => {
@@ -226,6 +228,11 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, CanCo
         }, 0);
     }
 
+    public filterScripts() {
+        this.filteredScripts = this.scripts.filter(s =>
+            s.fileName.includes(this.form.value.search) || s.id === this.selectedScript?.id);
+    }
+
     @HostListener('window:scroll')
     public onScroll(): void {
         const element = this.elementRef.nativeElement.querySelector('app-script-result');
@@ -257,6 +264,7 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, CanCo
     private initializeForm(): void {
         this.form = this.formBuilder.group({
             scriptContent: [this.selectedScript?.content],
+            search: [''],
         });
     }
 
@@ -282,6 +290,7 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, CanCo
             if (selectedScriptId) {
                 this.selectedScript = this.scripts.find((s) => s.id === selectedScriptId);
             }
+            this.filterScripts();
             this.spinner.hide();
         });
     }

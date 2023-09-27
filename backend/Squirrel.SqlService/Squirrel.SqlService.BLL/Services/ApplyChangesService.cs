@@ -33,7 +33,7 @@ public class ApplyChangesService : IApplyChangesService
 
     public async Task ApplyChanges(ApplyChangesDto applyChangesDto, int commitId)
     {
-        var currentDbStructure = await _dbItemsRetrievalService.GetAllDbStructureAsync(Guid.Parse(applyChangesDto.ClientId!));
+        var currentDbStructure = await _dbItemsRetrievalService.GetAllDbStructureAsync(guid);
         var contentDifferenceList = await _contentDifferenceService.GetContentDiffsAsync(commitId, currentDbStructure, true);
         if (!contentDifferenceList.Any())
         {

@@ -14,6 +14,7 @@ using Squirrel.Shared.DTO.UserDefinedType.DataType;
 using Squirrel.Shared.DTO.UserDefinedType.TableType;
 using Squirrel.Shared.DTO.View;
 using Blob = Squirrel.AzureBlobStorage.Models.Blob;
+using Squirrel.Core.DAL.Entities;
 
 namespace Squirrel.SqlService.BLL.Services;
 
@@ -66,36 +67,34 @@ public class ContentDifferenceService : IContentDifferenceService
         await CompareDbItemsContentAsync(dbStructure.DbUserDefinedTableTypeDetailsDto.Tables, containers, commitId, DatabaseItemType.UserDefinedTableType,
             differenceList, markedBlobIds, isReverse);
         
-        var tableContainer = GetContainerName(commitId, DatabaseItemType.Table);
-        await CompareUnmarkedBlobsContentAsync<TableStructureDto>(DatabaseItemType.Table, tableContainer, differenceList, markedBlobIds, isReverse);
+        await CompareUnmarkedBlobsContentAsync<TableStructureDto>(DatabaseItemType.Table, containers, commitId, differenceList, markedBlobIds, isReverse);
         
-        var constraintContainer = GetContainerName(commitId, DatabaseItemType.Constraint);
-        await CompareUnmarkedConstraintBlobsContentAsync(DatabaseItemType.Constraint, constraintContainer, differenceList, markedBlobIds, isReverse);
+        await CompareUnmarkedConstraintBlobsContentAsync(DatabaseItemType.Constraint, containers, commitId, differenceList, markedBlobIds, isReverse);
         
-        var functionContainer = GetContainerName(commitId, DatabaseItemType.Function);
-        await CompareUnmarkedBlobsContentAsync<FunctionDetailInfo>(DatabaseItemType.Function, functionContainer, differenceList, markedBlobIds, isReverse);
+        await CompareUnmarkedBlobsContentAsync<FunctionDetailInfo>(DatabaseItemType.Function, containers, commitId, differenceList, markedBlobIds, isReverse);
         
-        var spContainer = GetContainerName(commitId, DatabaseItemType.StoredProcedure);
-        await CompareUnmarkedBlobsContentAsync<ProcedureDetailInfo>(DatabaseItemType.StoredProcedure, spContainer, differenceList, markedBlobIds, isReverse);
+        await CompareUnmarkedBlobsContentAsync<ProcedureDetailInfo>(DatabaseItemType.StoredProcedure, containers, commitId, differenceList, markedBlobIds, isReverse);
 
-        var viewContainer = GetContainerName(commitId, DatabaseItemType.View);
-        await CompareUnmarkedBlobsContentAsync<ViewDetailInfo>(DatabaseItemType.View, viewContainer, differenceList, markedBlobIds, isReverse);
+        await CompareUnmarkedBlobsContentAsync<ViewDetailInfo>(DatabaseItemType.View, containers, commitId, differenceList, markedBlobIds, isReverse);
 
-        var udDataTypeContainer = GetContainerName(commitId, DatabaseItemType.UserDefinedDataType);
-        await CompareUnmarkedBlobsContentAsync<UserDefinedDataTypeDetailInfo>(DatabaseItemType.UserDefinedDataType, 
-            udDataTypeContainer, differenceList, markedBlobIds, isReverse);
+        await CompareUnmarkedBlobsContentAsync<UserDefinedDataTypeDetailInfo>(DatabaseItemType.UserDefinedDataType,
+            containers, commitId, differenceList, markedBlobIds, isReverse);
 
-        var udTableTypeContainer = GetContainerName(commitId, DatabaseItemType.UserDefinedTableType);
         await CompareUnmarkedBlobsContentAsync<UserDefinedTableDetailsDto>(DatabaseItemType.UserDefinedTableType,
-            udTableTypeContainer, differenceList, markedBlobIds, isReverse);
+            containers, commitId, differenceList, markedBlobIds, isReverse);
         
         return differenceList;
     }
 
-    private async Task CompareUnmarkedBlobsContentAsync<T>(DatabaseItemType itemType, string containerName, List<DatabaseItemContentCompare> differenceList,
+    private async Task CompareUnmarkedBlobsContentAsync<T>(DatabaseItemType itemType, ICollection<string> containers, int commitId, List<DatabaseItemContentCompare> differenceList,
         List<string> markedBlobIds, bool isReverse) where T : BaseDbItem
     {
-        var blobs = await _blobStorageService.GetAllBlobsByContainerNameAsync(containerName);
+        ICollection<Blob> blobs = new List<Blob>();
+        var dbItemContainer = containers.FirstOrDefault(cont => cont == GetContainerName(commitId, itemType));
+        if (dbItemContainer is not null)
+        {
+            blobs = await _blobStorageService.GetAllBlobsByContainerNameAsync(dbItemContainer);
+        }
         var unmarkedBlobs = blobs.Where(blob => !markedBlobIds.Contains(blob.Id));
         foreach (var blob in unmarkedBlobs)
         {
@@ -103,10 +102,15 @@ public class ContentDifferenceService : IContentDifferenceService
         }
     }
 
-    private async Task CompareUnmarkedConstraintBlobsContentAsync(DatabaseItemType itemType, string containerName, 
+    private async Task CompareUnmarkedConstraintBlobsContentAsync(DatabaseItemType itemType, ICollection<string> containers, int commitId, 
         List<DatabaseItemContentCompare> differenceList, ICollection<string> markedBlobIds, bool isReverse)
     {
-        var blobs = await _blobStorageService.GetAllBlobsByContainerNameAsync(containerName);
+        ICollection<Blob> blobs = new List<Blob>();
+        var dbItemContainer = containers.FirstOrDefault(cont => cont == GetContainerName(commitId, itemType));
+        if (dbItemContainer is not null)
+        {
+            blobs = await _blobStorageService.GetAllBlobsByContainerNameAsync(dbItemContainer);
+        }
         var unmarkedBlobs = blobs.Where(blob => !markedBlobIds.Contains(blob.Id));
         foreach (var blob in unmarkedBlobs)
         {

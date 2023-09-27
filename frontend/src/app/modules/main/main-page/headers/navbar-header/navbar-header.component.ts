@@ -170,6 +170,6 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
 
     public loadCommitChanges() {
         this.spinner.show();
-        this.commitChangesService.getContentDiffs(1, this.currentChangesGuId);
+        this.commitChangesService.getContentDiffs(27, this.currentChangesGuId);
     }
 }

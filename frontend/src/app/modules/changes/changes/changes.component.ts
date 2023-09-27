@@ -157,6 +157,8 @@ export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy
                 return ItemCategory.View;
             case DatabaseItemType.Constraint:
                 return ItemCategory.Constraint;
+            case DatabaseItemType.Type:
+                return ItemCategory.Type;
             default:
                 return 'Unknown category';
         }

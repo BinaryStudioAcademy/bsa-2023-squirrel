@@ -55,13 +55,10 @@ export class CreateBranchModalComponent extends BaseComponent implements OnInit 
     }
 
     public createBranch(): void {
-        if (!this.branchForm.valid) {
-            return;
-        }
         this.spinner.show();
 
         const branch: CreateBranchDto = {
-            name: this.branchForm.value.branchName,
+            name: BranchNameFormatter.trimBranchName(this.branchForm.value.branchName),
             parentId: this.branchForm.value.selectedParent,
         };
 

@@ -118,6 +118,7 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, CanCo
     }
 
     public saveScript(): void {
+        console.log(this.selectedScript?.content);
         if (!this.selectedScript) {
             return;
         }

@@ -25,6 +25,8 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 import { ProfileMenuComponent } from './components/profile-menu/profile-menu.component';
 import { TreeComponent } from './components/tree/tree.component';
 import { EmailOverflowDirective } from './directives/email-overflow.directive';
+import { CodeEditorComponent } from './components/code-editor/code-editor.component';
+import {CodemirrorModule} from "@ctrl/ngx-codemirror";
 
 @NgModule({
     imports: [
@@ -39,6 +41,7 @@ import { EmailOverflowDirective } from './directives/email-overflow.directive';
         }),
         MatMenuModule,
         MatTooltipModule,
+        CodemirrorModule,
     ],
     declarations: [
         LoadingSpinnerComponent,
@@ -57,6 +60,7 @@ import { EmailOverflowDirective } from './directives/email-overflow.directive';
         EmailOverflowDirective,
         InfoTooltipComponent,
         CodeComponent,
+        CodeEditorComponent,
     ],
     exports: [
         CommonModule,
@@ -82,6 +86,7 @@ import { EmailOverflowDirective } from './directives/email-overflow.directive';
         EmailOverflowDirective,
         InfoTooltipComponent,
         CodeComponent,
+        CodeEditorComponent,
     ],
 })
 export class SharedModule {}

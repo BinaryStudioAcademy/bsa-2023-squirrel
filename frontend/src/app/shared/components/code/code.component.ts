@@ -26,7 +26,7 @@ export class CodeComponent implements OnChanges {
         if (changes['textPair']) {
             const codeTable = this.el.nativeElement.querySelector('#code-table');
 
-            codeTable.innerHTML = ''; // Очищаємо вміст перед вставкою нового тексту
+            codeTable.innerHTML = '';
 
             for (let i = 0; i < this.textPair.newTextLines.length; i++) {
                 const oldText = this.textPair.oldTextLines[i];

@@ -109,7 +109,7 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, CanCo
         const dialogRef: any = this.dialog.open(CreateScriptModalComponent, {
             panelClass: 'custom-dialog-container',
             width: '450px',
-            height: '370px',
+            height: '250px',
         });
 
         dialogRef.componentInstance.scriptCreated.subscribe((newScript: ScriptDto) => {

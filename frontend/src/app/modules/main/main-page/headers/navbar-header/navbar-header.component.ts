@@ -43,7 +43,6 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
         { displayName: 'Settings', path: './settings' },
     ];
 
-    // eslint-disable-next-line no-empty-function
     constructor(
         private branchService: BranchService,
         public dialog: MatDialog,
@@ -107,10 +106,8 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
     }
 
     public getCurrentDatabase() {
-        this.sharedProject.currentDb$.pipe(
-            takeUntil(this.unsubscribe$),
-        ).subscribe({
-            next: currentDb => {
+        this.sharedProject.currentDb$.pipe(takeUntil(this.unsubscribe$)).subscribe({
+            next: (currentDb) => {
                 this.selectedDatabase = currentDb!;
             },
         });
@@ -127,16 +124,17 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
 
         this.spinner.show();
 
-        this.changesService.loadChangesRequest(this.selectedDatabase.guid)
+        this.changesService
+            .loadChangesRequest(this.selectedDatabase.guid)
             .pipe(
                 takeUntil(this.unsubscribe$),
                 finalize(() => this.spinner.hide()),
             )
             .subscribe({
-                next: (event) => {
-                    this.eventService.changesSaved(event);
+                next: (changesGuid) => {
+                    this.eventService.changesSaved(changesGuid);
                     // eslint-disable-next-line no-console
-                    console.log(event);
+                    console.log(changesGuid);
                 },
                 error: (error) => {
                     // eslint-disable-next-line no-console
@@ -146,10 +144,9 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
                 },
             });
 
-        this.databaseItemsService.getAllItems(this.selectedDatabase.guid)
-            .pipe(
-                takeUntil(this.unsubscribe$),
-            )
+        this.databaseItemsService
+            .getAllItems(this.selectedDatabase.guid)
+            .pipe(takeUntil(this.unsubscribe$))
             .subscribe({
                 next: (event) => {
                     this.eventService.changesLoaded(event);

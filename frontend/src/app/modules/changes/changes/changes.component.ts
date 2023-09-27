@@ -22,7 +22,7 @@ import { TextPairDifferenceDto } from 'src/app/models/text-pair/text-pair-differ
 export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy {
     public textPair: TextPairDifferenceDto;
 
-    public guid: string;
+    public currentChangesGuid: string;
 
     public items: TreeNode[];
 
@@ -41,14 +41,14 @@ export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy
     ) {
         super();
         this.initMockedDifferences();
-        this.eventService.changesLoadedEvent$.pipe(takeUntil(this.unsubscribe$)).subscribe((x) => {
-            if (x !== undefined) {
-                this.items = this.mapDbItems(x);
+        this.eventService.changesLoadedEvent$.pipe(takeUntil(this.unsubscribe$)).subscribe((dbItems) => {
+            if (dbItems) {
+                this.items = this.mapDbItems(dbItems);
             }
         });
-        eventService.changesSavedEvent$.pipe(takeUntil(this.unsubscribe$)).subscribe((x) => {
-            if (x !== undefined) {
-                this.guid = x;
+        eventService.changesSavedEvent$.pipe(takeUntil(this.unsubscribe$)).subscribe((guid) => {
+            if (guid) {
+                this.currentChangesGuid = guid;
             }
         });
     }
@@ -58,7 +58,7 @@ export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy
     }
 
     public validateCommit() {
-        if (!this.guid) {
+        if (!this.currentChangesGuid) {
             return false;
         }
         if (!(this.message.length > 0 && this.message.length <= 300)) {
@@ -72,17 +72,18 @@ export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy
     }
 
     public commit() {
+        this.spinner.show();
+
         const branchId = this.branchService.getCurrentBranch(this.currentProjectId);
         const commit = {
             branchId,
             postScript: '',
             preScript: '',
             selectedItems: this.selectedItems,
-            changesGuid: this.guid,
+            changesGuid: this.currentChangesGuid,
             message: this.message,
         } as CreateCommitDto;
 
-        this.spinner.show();
         this.commitService
             .commit(commit)
             .pipe(takeUntil(this.unsubscribe$), finalize(this.spinner.hide))

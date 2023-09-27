@@ -9,7 +9,7 @@
                 </li>
             </ul>
         </div>
-        <div class="editor-sector">
+        <div class="editor-sector" *ngIf="selectedScript">
             <app-code-editor [formControl]="$any(form.controls['scriptContent'])" [name]="selectedScript?.fileName"></app-code-editor>
         </div>
     </div>

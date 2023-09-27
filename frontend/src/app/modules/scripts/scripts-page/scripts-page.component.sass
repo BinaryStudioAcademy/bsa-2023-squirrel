@@ -69,8 +69,17 @@
     padding: 35px
 
 .unsaved
-    font-style: italic
-    font-weight: $bold-weight
+    position: relative
+    &:after
+        content: ''
+        height: 100%
+        width: 6px
+        background-color: lighten(red, 20%)
+        position: absolute
+        top: 0
+        right: 0
+        border-radius: 0 5px 5px 0
+
 
 .to-top-btn
     position: fixed

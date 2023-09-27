@@ -7,7 +7,7 @@ public interface IBranchService
 {
     Task<BranchDto> AddBranchAsync(int projectId, BranchCreateDto branchDto);
     BranchDto[] GetAllBranches(int projectId);
-    Task<int> GetLastBranchCommit(int branchId);
+    Task<int> GetLastBranchCommitAsync(int branchId);
     Task<BranchDto> UpdateBranchAsync(int branchId, BranchUpdateDto branchUpdateDto);
     Task DeleteBranchAsync(int branchId);
 }

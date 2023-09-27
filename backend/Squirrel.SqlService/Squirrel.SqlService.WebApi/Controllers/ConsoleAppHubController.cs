@@ -8,6 +8,8 @@ using Squirrel.Shared.DTO.Definition;
 using Squirrel.Shared.DTO.Function;
 using Squirrel.Shared.DTO.Procedure;
 using Squirrel.Shared.DTO.Table;
+using Squirrel.Shared.DTO.UserDefinedType.DataType;
+using Squirrel.Shared.DTO.UserDefinedType.TableType;
 using Squirrel.Shared.DTO.View;
 using Squirrel.SqlService.BLL.Hubs;
 using Squirrel.SqlService.BLL.Interfaces;
@@ -51,12 +53,12 @@ public class ConsoleAppHubController : ControllerBase
     }
     
     [HttpPost("stored-procedure-definition")]
-    public async Task<IActionResult> GetStoredProcedureDefinitionAsync([FromBody] QueryParameters queryParameters)
+    public async Task<ActionResult<RoutineDefinitionDto>> GetStoredProcedureDefinitionAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId)
             .GetStoredProcedureDefinitionAsync(_queryParameters.queryId, queryParameters.FilterSchema,
                 queryParameters.FilterName);
-        return Ok(await _queryParameters.tcs.Task);
+        return Ok(_mapper.Map<RoutineDefinitionDto>(await _queryParameters.tcs.Task));
     }
     
     [HttpPost("all-functions-names")]
@@ -130,20 +132,20 @@ public class ConsoleAppHubController : ControllerBase
     }
     
     [HttpPost("user-defined-types-with-defaults-and-rules-and-definition")]
-    public async Task<IActionResult> GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync(
+    public async Task<ActionResult<UserDefinedDataTypeDetailsDto>> GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync(
         [FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId)
             .GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync(_queryParameters.queryId);
-        return Ok(await _queryParameters.tcs.Task);
+        return Ok(_mapper.Map<UserDefinedDataTypeDetailsDto>(await _queryParameters.tcs.Task));
     }
     
     [HttpPost("user-defined-table-types")]
-    public async Task<IActionResult> GetUserDefinedTableTypesAsync([FromBody] QueryParameters queryParameters)
+    public async Task<ActionResult<UserDefinedTables>> GetUserDefinedTableTypesAsync([FromBody] QueryParameters queryParameters)
     {
         await _hubContext.Clients.User(queryParameters.ClientId)
             .GetUserDefinedTableTypesAsync(_queryParameters.queryId);
-        return Ok(await _queryParameters.tcs.Task);
+        return Ok(_mapper.Map<UserDefinedTables>(await _queryParameters.tcs.Task));
     }
     
     [HttpPost("db-connect")]

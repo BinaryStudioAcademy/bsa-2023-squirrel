@@ -10,7 +10,7 @@ public class TableColumnInfo
     public int? Precision { get; set; }
     public int? Scale { get; set; }
     public int? MaxLength { get; set; }
-    public bool? IsNullsAllowed { get; set; }
+    public bool? IsAllowNulls  { get; set; }
     public bool? IsIdentity { get; set; }
     public bool? IsPrimaryKey { get; set; }
     public bool? IsForeignKey { get; set; }

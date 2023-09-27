@@ -100,7 +100,7 @@ public static class HubConnectionExtensions
         hubConnection.On("GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync", async (Guid queryId) =>
         {
             var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
-            await hubConnection.InvokeAsync("ProcessReceivedDataFromClientSide", queryId,
+            await hubConnection.InvokeAsync("ProcessReceivedDataFromClientSideAsync", queryId,
                 "GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync",
                 await getActionsService.GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync());
         });

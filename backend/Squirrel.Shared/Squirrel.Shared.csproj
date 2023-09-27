@@ -19,4 +19,8 @@
       <ProjectReference Include="..\Squirrel.Core\Squirrel.Core.DAL\Squirrel.Core.DAL.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="DTO\UserDefinedType\TableType\" />
+    </ItemGroup>
+
 </Project>

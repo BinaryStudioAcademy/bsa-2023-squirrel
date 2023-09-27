@@ -1,5 +1,8 @@
 <mat-dialog-content>
-    <h4 class="mat-h4">Create Project</h4>
+    <div class="modal-header">
+        <h4>Create Project</h4>
+        <app-close-btn (buttonOnClick)="close()"></app-close-btn>
+    </div>
     <div class="input-container">
         <app-input [placeholder]="'Enter the name of your project'"
                    [formControl]="$any(projectForm.controls['projectName'])"

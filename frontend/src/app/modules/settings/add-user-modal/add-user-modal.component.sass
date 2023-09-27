@@ -1,3 +1,5 @@
+@import "/src/styles/reusable"
+
 .container
     display: flex
     flex-direction: column
@@ -8,6 +10,16 @@
     flex-direction: column
     height: 100%
     justify-content: space-between
+
+.modal-header
+    display: flex
+    justify-content: space-between
+    align-items: center
+
+h4
+    margin: 0
+    font-size: 24px
+    @extend .title
 
 .dropdown-users
     height: 270px
@@ -24,7 +36,4 @@
 
 .action-buttons
     display: flex
-    flex-direction: row
-    gap: 20px
-    align-items: flex-end
     margin-top: 10px

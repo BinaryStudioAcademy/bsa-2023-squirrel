@@ -1,5 +1,9 @@
 <div class="container">
     <div class="content">
+        <div class="modal-header">
+            <h4>Add members</h4>
+            <app-close-btn (buttonOnClick)="close()"></app-close-btn>
+        </div>
         <div class="dropdown-users" *ngIf="isDropdownVisible">
             <app-dropdown-select
                 [width]="'100%'"
@@ -32,9 +36,6 @@
                         (buttonOnClick)="addUser()"
                         [isDisabled]="selectedUsers.length === 0"
             >
-            </app-button>
-
-            <app-button text="Close" width="100%" variant="outline-secondary" (mousedown)="close()">
             </app-button>
         </div>
     </div>

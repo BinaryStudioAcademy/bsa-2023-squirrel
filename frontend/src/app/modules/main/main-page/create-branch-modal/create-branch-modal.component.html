@@ -1,5 +1,8 @@
 <mat-dialog-content>
-    <h4 class="mat-h4">Create Branch</h4>
+    <div class="modal-header">
+        <h4>Create Branch</h4>
+        <app-close-btn (buttonOnClick)="close()"></app-close-btn>
+    </div>
     <div class="input-container">
         <app-input [placeholder]="'Enter the name of your branch'"
                    [formControl]="$any(branchForm.controls['branchName'])" [label]="'Branch name'"
@@ -18,8 +21,5 @@
 <mat-dialog-actions class="modal-buttons">
     <app-button text="Create" width="100%" variant="outline-primary" [isDisabled]="branchForm.invalid"
                 (click)="createBranch()">
-    </app-button>
-
-    <app-button text="Close" width="100%" variant="outline-secondary" (click)="close()">
     </app-button>
 </mat-dialog-actions>

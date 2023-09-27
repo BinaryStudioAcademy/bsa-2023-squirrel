@@ -1,0 +1,18 @@
+<div class="container">
+    <div class="main-content">
+        <app-tree [asCheckList]="true" [treeData]="items" (selectionChange)="selectionChanged($event)"></app-tree>
+
+        <div class="code-sector">
+            <p>{{ selectedItem?.schema + '.' + selectedItem?.name }}</p>
+            <textarea class="editor bordered" [formControl]="$any(form.controls['codeContent'])">
+ {{ selectedItem?.content }} </textarea
+            >
+        </div>
+    </div>
+</div>
+
+<div class="nav">
+    <div>
+        <app-button class="margin-right" text="Push" variant="outline-primary" width="120px"></app-button>
+    </div>
+</div>

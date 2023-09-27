@@ -58,7 +58,7 @@ internal static class GetTables
 				-- MaxLength (do we need it?)
 				col.numeric_precision as Precision,
 				col.numeric_scale as Scale,
-			    case when col.is_nullable = 'YES' then 'True' else 'False' end as AllowNulls,
+			    case when col.is_nullable = 'YES' then 'True' else 'False' end as IsNullsAllowed,
 				case when col.is_identity = 'YES' then 'True' else 'False' end as Identity,
 				case when 'PRIMARY KEY' = any(kct.constraints_type) then 'True' else 'False' end as PrimaryKey,
 				case when 'FOREIGN KEY' = any(kct.constraints_type) then 'True' else 'False' end as ForeignKey,

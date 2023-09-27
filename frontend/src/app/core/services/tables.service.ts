@@ -10,9 +10,13 @@ export class TablesService {
     private readonly tableRoutePrefix = '/api/table';
 
     // eslint-disable-next-line no-empty-function
-    constructor(private httpService: HttpInternalService) { }
+    constructor(private httpService: HttpInternalService) {}
 
     public getAllTablesNames(query: QueryParameters) {
         return this.httpService.postRequest(this.tableRoutePrefix, query);
+    }
+
+    public getTableStructure(query: QueryParameters):  {
+        return this.httpService.postRequest(`${this.tableRoutePrefix}/table-structure`, query);
     }
 }

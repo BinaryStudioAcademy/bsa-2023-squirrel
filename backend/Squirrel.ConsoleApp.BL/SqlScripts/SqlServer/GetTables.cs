@@ -24,7 +24,7 @@ internal static class GetTables
 		                sysc.scale [Scale], 
 		                CASE WHEN syst.name IN ('binary','varbinary','char','nchar','varchar','nvarchar') OR syst.status = 1 
 			                THEN sysc.prec ELSE NULL END [MaxLength],  
-		                CASE WHEN sysc.isnullable = 1 THEN 'True' ELSE 'False' END [AllowNulls],   
+		                CASE WHEN sysc.isnullable = 1 THEN 'True' ELSE 'False' END [IsNullsAllowed],   
 		                CASE WHEN sysc.[status] = 128 THEN 'True' ELSE 'False' END [Identity],
 		                CASE WHEN sysc.colstat = 1 THEN 'True' ELSE 'False' END [PrimaryKey],  
 		                CASE WHEN fkc.parent_object_id IS NULL THEN 'False' ELSE 'True' END [ForeignKey],   

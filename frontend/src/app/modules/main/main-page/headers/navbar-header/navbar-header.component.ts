@@ -107,10 +107,8 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
     }
 
     public getCurrentDatabase() {
-        this.sharedProject.currentDb$.pipe(
-            takeUntil(this.unsubscribe$),
-        ).subscribe({
-            next: currentDb => {
+        this.sharedProject.currentDb$.pipe(takeUntil(this.unsubscribe$)).subscribe({
+            next: (currentDb) => {
                 this.selectedDatabase = currentDb!;
             },
         });
@@ -127,7 +125,8 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
 
         this.spinner.show();
 
-        this.changesService.loadChangesRequest(this.selectedDatabase.guid)
+        this.changesService
+            .loadChangesRequest(this.selectedDatabase.guid)
             .pipe(
                 takeUntil(this.unsubscribe$),
                 finalize(() => this.spinner.hide()),
@@ -146,15 +145,14 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
                 },
             });
 
-        this.databaseItemsService.getAllItems(this.selectedDatabase.guid)
-            .pipe(
-                takeUntil(this.unsubscribe$),
-            )
+        this.databaseItemsService
+            .getAllItems(this.selectedDatabase.guid)
+            .pipe(takeUntil(this.unsubscribe$))
             .subscribe({
-                next: (event) => {
-                    this.eventService.changesLoaded(event);
+                next: (databaseItems) => {
+                    this.eventService.changesLoaded(databaseItems);
                     // eslint-disable-next-line no-console
-                    console.log(event);
+                    console.log(databaseItems);
                 },
                 error: (error) => {
                     // eslint-disable-next-line no-console

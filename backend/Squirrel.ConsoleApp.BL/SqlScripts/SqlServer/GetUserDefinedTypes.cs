@@ -11,7 +11,7 @@ SELECT	SCHEMA_NAME(userDefinedTypes.schema_id) [Schema],
 			THEN userDefinedTypes.max_length ELSE NULL END [MaxLength],
 		userDefinedTypes.precision [Precision],
 		userDefinedTypes.scale [Scale],
-		CASE WHEN userDefinedTypes.is_nullable = 1 THEN 'True' ELSE 'False' END [AllowNulls],
+		CASE WHEN userDefinedTypes.is_nullable = 1 THEN 'True' ELSE 'False' END [IsAllowNulls],
 		CASE WHEN userDefinedTypes.is_table_type = 1 THEN 'True' ELSE 'False' END [IsTable],
 		CASE WHEN userDefinedTypeProperties.IsTableType = 1 
 			THEN N'CREATE TYPE ' + QUOTENAME(sch.name) + '.' + QUOTENAME(userDefinedTypes.name) + ' AS TABLE (' 
@@ -128,7 +128,7 @@ SELECT
 		sysc.prec [Precision],   
 		sysc.scale [Scale],
 		syscmnts.text [Default],
-		CASE WHEN sysc.isnullable = 1 THEN 'True' ELSE 'False' END [AllowNulls],
+		CASE WHEN sysc.isnullable = 1 THEN 'True' ELSE 'False' END [IsAllowNulls],
 		CASE WHEN sysc.[status] = 128 THEN 'True' ELSE 'False' END [IsIdentity],
 		CASE WHEN sysc.colstat = 1 THEN 'True' ELSE 'False' END [IsPrimaryKey]
 FROM [sys].[syscolumns] as sysc

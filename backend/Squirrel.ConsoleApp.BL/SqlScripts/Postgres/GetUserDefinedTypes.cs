@@ -11,7 +11,7 @@ internal static class GetUserDefinedTypes
 				d.character_maximum_length as MaxLength,
 				d.numeric_precision as Precision,
 				d.numeric_scale as Scale,
-				t.typnotnull as AllowNulls,
+				t.typnotnull as IsAllowNulls,
 				d.domain_default as default,
 				dc.constraint_name as ConstraintName,
 				cc.check_clause as ConstraintDefinition
@@ -99,7 +99,7 @@ internal static class GetUserDefinedTypes
         		attrs.character_maximum_length as MaxLength,
         		attrs.numeric_precision as Precision, 
         		attrs.numeric_scale as Scale,
-                case when attrs.is_nullable = 'YES' then 'True' else 'False' end as AllowNulls
+                case when attrs.is_nullable = 'YES' then 'True' else 'False' end as IsAllowNulls
         		
             from cols 
         	left join information_schema.attributes as attrs

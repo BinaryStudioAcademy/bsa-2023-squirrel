@@ -13,7 +13,7 @@
 .main-content
     display: flex
     gap: 25px
-    height: 60vh
+    height: 65vh
 
 .sector
     background-color: $project-background-color
@@ -24,7 +24,7 @@
     @extend .sector
     display: flex
     flex-direction: column
-    width: 25%
+    width: calc(25% - 25px)
     height: 100%
 
 .listbox
@@ -47,6 +47,12 @@
     width: 75%
     height: 100%
 
+    .no-selected-script
+        height: 100%
+        display: flex
+        justify-content: center
+        align-items: center
+
 .buttons-sector
     margin-top: 20px
     display: flex
@@ -59,7 +65,7 @@
 .editor
     flex-grow: 1
     padding: 10px
-    height: 60vh
+    height: 100%
     resize: none
 
 .spacing-div
@@ -74,7 +80,7 @@
         content: ''
         height: 100%
         width: 6px
-        background-color: lighten(red, 20%)
+        background-color: lighten($text-danger, 20%)
         position: absolute
         top: 0
         right: 0
@@ -85,3 +91,10 @@
     position: fixed
     bottom: 20px
     right: 25px
+
+.no-scripts
+    height: 60vh
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-items: center

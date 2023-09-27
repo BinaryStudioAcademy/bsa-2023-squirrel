@@ -107,16 +107,18 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, CanCo
         this.selectScript(script);
     }
 
-    public openCreateModal(): void {
-        const dialogRef: any = this.dialog.open(CreateScriptModalComponent, {
-            panelClass: 'custom-dialog-container',
-            width: '450px',
-            height: '370px',
-        });
+    public createScript() {
+        if (this.form.get('scriptContent')?.dirty) {
+            const dialogRef = this.dialog.open(ConfirmationDialogComponent);
 
-        dialogRef.componentInstance.scriptCreated.subscribe((newScript: ScriptDto) => {
-            this.loadScripts(newScript.id);
-        });
+            dialogRef.afterClosed().subscribe((confirmed) => {
+                if (confirmed) {
+                    this.openCreateModal();
+                }
+            });
+        } else {
+            this.openCreateModal();
+        }
     }
 
     public saveScript(): void {
@@ -239,6 +241,19 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, CanCo
         const elementRect = element.getBoundingClientRect();
 
         this.isToTopBtnShowed = elementRect.top < 0;
+    }
+
+    private openCreateModal(): void {
+        const dialogRef: any = this.dialog.open(CreateScriptModalComponent, {
+            panelClass: 'custom-dialog-container',
+            width: '450px',
+            height: '370px',
+        });
+
+        dialogRef.componentInstance.scriptCreated.subscribe((newScript: ScriptDto) => {
+            this.loadScripts(newScript.id);
+            this.selectScript(newScript);
+        });
     }
 
     private removeLastErrorForSelectedScript(): void {

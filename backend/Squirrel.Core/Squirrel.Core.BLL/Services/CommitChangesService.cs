@@ -9,21 +9,20 @@ namespace Squirrel.Core.BLL.Services;
 
 public sealed class CommitChangesService: BaseService, ICommitChangesService
 {
-    private readonly IUserIdGetter _userIdGetter;
+    private const string ChangesRoutePrefix = "/api/ContentDifference/";
     private readonly IHttpClientService _httpClientService;
     private readonly IConfiguration _configuration;
 
-    public CommitChangesService(SquirrelCoreContext context, IMapper mapper, IHttpClientService httpClientService, IUserIdGetter userIdGetter, IConfiguration configuration)
+    public CommitChangesService(SquirrelCoreContext context, IMapper mapper, IHttpClientService httpClientService, IConfiguration configuration)
         : base(context, mapper)
     {
         _httpClientService = httpClientService;
-        _userIdGetter = userIdGetter;
         _configuration = configuration;
     }
     
     public async Task<List<DatabaseItemContentCompare>> GetContentDiffsAsync(int commitId, Guid tempBlobId)
     {
         return await _httpClientService.GetAsync<List<DatabaseItemContentCompare>>(
-            $"{_configuration["SqlServiceUrl"]}/api/ContentDifference/{commitId}/{tempBlobId}");
+            $"{_configuration[SqlServiceUrlSection]}{ChangesRoutePrefix}{commitId}/{tempBlobId}");
     }
 }

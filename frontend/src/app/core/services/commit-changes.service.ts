@@ -13,7 +13,7 @@ export class CommitChangesService {
 
     private contentChangesSubject = new BehaviorSubject<DatabaseItemContentCompare[]>([]);
 
-    contentChanges$ = this.contentChangesSubject.asObservable();
+    public contentChanges$ = this.contentChangesSubject.asObservable();
 
     // eslint-disable-next-line no-empty-function
     constructor(

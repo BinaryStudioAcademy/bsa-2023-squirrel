@@ -25,7 +25,7 @@ import { DatabaseItemContentCompare } from '../../../models/database-items/datab
 export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy {
     public textPair: TextPairDifferenceDto;
 
-    contentChanges: DatabaseItemContentCompare[] = [];
+    public contentChanges: DatabaseItemContentCompare[] = [];
 
     public guid: string;
 

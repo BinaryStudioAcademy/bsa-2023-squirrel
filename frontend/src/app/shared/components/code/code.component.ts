@@ -24,6 +24,10 @@ export class CodeComponent implements OnChanges {
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes['textPair']) {
+            const codeTable = this.el.nativeElement.querySelector('#code-table');
+
+            codeTable.innerHTML = ''; // Очищаємо вміст перед вставкою нового тексту
+
             for (let i = 0; i < this.textPair.newTextLines.length; i++) {
                 const oldText = this.textPair.oldTextLines[i];
                 const newText = this.textPair.newTextLines[i];
@@ -31,18 +35,20 @@ export class CodeComponent implements OnChanges {
                 if (newText.type === ChangeTypeEnum.unchanged) {
                     const line = this.createLine(newText.position);
 
-                    this.createCodeLine(line, newText.text);
+                    this.createCodeLine(line, this.replaceLineBreaks(newText.text));
                 }
-                if ((newText.type === ChangeTypeEnum.inserted || newText.type === ChangeTypeEnum.modified)
-                && newText.position !== -1) {
+                if (
+                    (newText.type === ChangeTypeEnum.inserted || newText.type === ChangeTypeEnum.modified) &&
+                    newText.position !== -1
+                ) {
                     const line = this.createLine(newText.position, '+');
 
-                    this.createCodeLine(line, newText.text, this.insertColor);
+                    this.createCodeLine(line, this.replaceLineBreaks(newText.text), this.insertColor);
                 }
                 if (oldText.type === ChangeTypeEnum.deleted || newText.type === ChangeTypeEnum.modified) {
                     const line = this.createLine(oldText.position, '-');
 
-                    this.createCodeLine(line, oldText.text, this.deleteColor);
+                    this.createCodeLine(line, this.replaceLineBreaks(oldText.text), this.deleteColor);
                 }
             }
         }
@@ -55,9 +61,7 @@ export class CodeComponent implements OnChanges {
 
         this.renderer.setStyle(parent, 'background-color', backgroundColor);
 
-        const elText = this.renderer.createText(text);
-
-        this.renderer.appendChild(td, elText);
+        td.innerHTML = text;
 
         this.renderer.appendChild(parent, td);
     }
@@ -87,5 +91,11 @@ export class CodeComponent implements OnChanges {
         this.renderer.appendChild(container, tr);
 
         return tr;
+    }
+
+    private replaceLineBreaks(text: string): string {
+        const newText = text.replace(/(\\r\\n|\\r|\\n)/g, '<br>');
+
+        return newText.replace(/(\\t)/g, '&emsp;');
     }
 }

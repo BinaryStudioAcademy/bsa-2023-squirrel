@@ -29,9 +29,13 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
 
     public currentChangesGuId: string;
 
+    public currentBranchId: number;
+
     public isSettingsEnabled: boolean = false;
 
     public currentProjectId: number;
+
+    public lastCommitId: number;
 
     public selectedBranch: BranchDto;
 
@@ -100,8 +104,8 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
     }
 
     public getCurrentBranch() {
-        const currentBranchId = this.branchService.getCurrentBranch(this.currentProjectId);
-        const currentBranch = this.branches.find((x) => x.id === currentBranchId);
+        this.currentBranchId = this.branchService.getCurrentBranch(this.currentProjectId);
+        const currentBranch = this.branches.find((x) => x.id === this.currentBranchId);
 
         return currentBranch ? this.branches.indexOf(currentBranch) : 0;
     }
@@ -150,6 +154,19 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
                 },
             });
 
+        this.branchService.getLastCommitId(this.currentBranchId)
+            .pipe(
+                takeUntil(this.unsubscribe$),
+            )
+            .subscribe({
+                next: (lastCommitId) => {
+                    this.lastCommitId = lastCommitId;
+                },
+                error: () => {
+                    this.notificationService.error('An error occurred while attempting to load last commit');
+                },
+            });
+
         this.databaseItemsService.getAllItems(this.selectedDatabase.guid)
             .pipe(
                 takeUntil(this.unsubscribe$),
@@ -170,6 +187,6 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
 
     public loadCommitChanges() {
         this.spinner.show();
-        this.commitChangesService.getContentDiffs(27, this.currentChangesGuId);
+        this.commitChangesService.getContentDiffs(this.lastCommitId, this.currentChangesGuId);
     }
 }

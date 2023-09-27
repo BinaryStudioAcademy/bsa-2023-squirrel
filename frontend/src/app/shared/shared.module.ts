@@ -25,6 +25,7 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 import { ProfileMenuComponent } from './components/profile-menu/profile-menu.component';
 import { TreeComponent } from './components/tree/tree.component';
 import { EmailOverflowDirective } from './directives/email-overflow.directive';
+import { CloseBtnComponent } from './components/close-btn/close-btn.component';
 
 @NgModule({
     imports: [
@@ -57,6 +58,7 @@ import { EmailOverflowDirective } from './directives/email-overflow.directive';
         EmailOverflowDirective,
         InfoTooltipComponent,
         CodeComponent,
+        CloseBtnComponent,
     ],
     exports: [
         CommonModule,
@@ -82,6 +84,7 @@ import { EmailOverflowDirective } from './directives/email-overflow.directive';
         EmailOverflowDirective,
         InfoTooltipComponent,
         CodeComponent,
+        CloseBtnComponent,
     ],
 })
 export class SharedModule {}

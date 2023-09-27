@@ -13,14 +13,11 @@ export class ProjectCardComponent implements OnInit {
 
     public engineLogoImage: string = '';
 
+    public DBE = DbEngine;
+
     private postgresSqlLogo: string = '/assets/postgresql.svg';
 
     private sqlServerLogo: string = '/assets/sqlserver.svg';
-
-    public DBE = DbEngine;
-
-    // eslint-disable-next-line @typescript-eslint/no-useless-constructor,no-empty-function,@typescript-eslint/no-empty-function
-    constructor() {}
 
     ngOnInit(): void {
         this.initializeProjectCard();

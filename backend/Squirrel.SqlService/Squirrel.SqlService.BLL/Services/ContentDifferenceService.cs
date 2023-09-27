@@ -1,5 +1,6 @@
 using System.Text;
 using Microsoft.Extensions.Configuration;
+using Microsoft.SqlServer.TransactSql.ScriptDom;
 using Newtonsoft.Json;
 using Squirrel.AzureBlobStorage.Interfaces;
 using Squirrel.Shared.Enums;
@@ -10,6 +11,8 @@ using Squirrel.Shared.DTO;
 using Squirrel.Shared.DTO.Table;
 using Squirrel.Shared.DTO.Function;
 using Squirrel.Shared.DTO.Procedure;
+using Squirrel.Shared.DTO.UserDefinedType.DataType;
+using Squirrel.Shared.DTO.UserDefinedType.TableType;
 using Squirrel.Shared.DTO.View;
 using Blob = Squirrel.AzureBlobStorage.Models.Blob;
 
@@ -21,12 +24,15 @@ public class ContentDifferenceService : IContentDifferenceService
     private readonly IBlobStorageService _blobStorageService;
     private readonly IConfiguration _configuration;
     private readonly ITextService _textService;
+    private readonly IDbItemsRetrievalService _dbItemsRetrievalService;
 
-    public ContentDifferenceService(IBlobStorageService blobStorageService, IConfiguration configuration, ITextService textService)
+    public ContentDifferenceService(IBlobStorageService blobStorageService, IConfiguration configuration, ITextService textService, 
+        IDbItemsRetrievalService dbItemsRetrievalService)
     {
         _blobStorageService = blobStorageService;
         _textService = textService;
         _configuration = configuration;
+        _dbItemsRetrievalService = dbItemsRetrievalService;
     }
 
     public async Task<ICollection<DatabaseItemContentCompare>> GetContentDiffsAsync(int commitId, Guid tempBlobId)
@@ -51,6 +57,8 @@ public class ContentDifferenceService : IContentDifferenceService
         await CompareDbItemsContentAsync(dbStructure.DbFunctionDetails!.Details, containers, commitId, DatabaseItemType.Function, differenceList, markedBlobIds);
         await CompareDbItemsContentAsync(dbStructure.DbProcedureDetails!.Details, containers, commitId, DatabaseItemType.StoredProcedure, differenceList, markedBlobIds);
         await CompareDbItemsContentAsync(dbStructure.DbViewsDetails!.Details, containers, commitId, DatabaseItemType.View, differenceList, markedBlobIds);
+        await CompareDbItemsContentAsync(dbStructure.DbUserDefinedDataTypeDetailsDto.Details, containers, commitId,
+            DatabaseItemType.UserDefinedDataType, differenceList, markedBlobIds);
 
         await CompareUnmarkedBlobsContentAsync<TableStructureDto>(DatabaseItemType.Table, containers, commitId, differenceList, markedBlobIds);
         

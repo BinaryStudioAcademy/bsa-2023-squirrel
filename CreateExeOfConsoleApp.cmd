@@ -1,6 +1,6 @@
 
 :: Setting common parameters
-SET outputDir=.\ExecutableFiles
+SET outputDir=.\ExecutableFiles\WinOS
 SET exeFileName=Squirrel.ConsoleApp
 SET exeCustomFileNamePrefix=Squirrel
 SET pathToSln=.\backend\Squirrel.ConsoleApp.sln

@@ -8,7 +8,6 @@
     padding-bottom: 70px
 
 .bordered
-    border: 1px solid $black
     border-radius: 5px
 
 .main-content
@@ -16,7 +15,13 @@
     gap: 25px
     height: 60vh
 
+.sector
+    background-color: $project-background-color
+    padding: 10px
+    border-radius: 10px
+
 .scripts-sector
+    @extend .sector
     display: flex
     flex-direction: column
     overflow-y: auto
@@ -30,12 +35,15 @@
     margin: 0
 
 .option
+    background-color: $bg-input
+    border-radius: 5px
     position: relative
 
 .selected-option
-    background: $dark-shadow
+    background-color: darken($bg-input, 5%)
 
 .editor-sector
+    @extend .sector
     width: 75%
     height: 100%
 

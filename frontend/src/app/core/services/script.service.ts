@@ -12,9 +12,7 @@ import { HttpInternalService } from './http-internal.service';
 export class ScriptService {
     private readonly scriptRoutePrefix = '/api/script';
 
-    constructor(private httpService: HttpInternalService) {
-        // Intentionally left empty for dependency injection purposes only
-    }
+    constructor(private httpService: HttpInternalService) { }
 
     public getAllScripts(projectId: number): Observable<ScriptDto[]> {
         return this.httpService.getRequest(`${this.scriptRoutePrefix}/${projectId}/all`);

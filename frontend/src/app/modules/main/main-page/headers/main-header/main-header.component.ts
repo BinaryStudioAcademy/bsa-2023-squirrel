@@ -22,9 +22,7 @@ export class MainHeaderComponent implements OnInit {
         private sharedProject: SharedProjectService,
         public dialog: MatDialog,
         private databaseService: DatabaseService,
-    ) {
-        // Intentionally left empty for dependency injection purposes only
-    }
+    ) { }
 
     public ngOnInit() {
         this.loadProject();

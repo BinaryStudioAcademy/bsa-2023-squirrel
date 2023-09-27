@@ -14,9 +14,7 @@ export class ConfirmationModalComponent {
         @Inject(MAT_DIALOG_DATA) public confirmationModalData: ConfirmationModalInterface,
         public confirmationModalRef: MatDialogRef<ConfirmationModalComponent>,
         public spinnerService: SpinnerService,
-    ) {
-        // do nothing
-    }
+    ) { }
 
     public handleConfirmationModalSubmit() {
         this.spinnerService.show();

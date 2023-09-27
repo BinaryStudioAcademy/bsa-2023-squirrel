@@ -15,9 +15,7 @@ import { HttpInternalService } from './http-internal.service';
 export class ProjectService {
     private readonly projectsApiUrl = '/api/project';
 
-    constructor(private httpService: HttpInternalService) {
-        // Intentionally left empty for dependency injection purposes only
-    }
+    constructor(private httpService: HttpInternalService) { }
 
     public addProject(newProject: NewProjectDto): Observable<ProjectResponseDto> {
         return this.httpService.postRequest<ProjectResponseDto>(this.projectsApiUrl, newProject);

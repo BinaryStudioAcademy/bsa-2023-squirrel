@@ -7,9 +7,7 @@ import { SettingsService } from '@core/services/settings.service';
     styleUrls: ['./settings-page.component.sass'],
 })
 export class SettingsPageComponent {
-    constructor(private settingsService: SettingsService) {
-        // Intentionally left empty for dependency injection purposes only
-    }
+    constructor(private settingsService: SettingsService) { }
 
     get activeTab(): string {
         return this.settingsService.activeTab;

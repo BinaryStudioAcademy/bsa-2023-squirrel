@@ -11,9 +11,7 @@ import { HttpInternalService } from './http-internal.service';
 export class BranchService {
     private routePrefix = '/api/branch';
 
-    constructor(private httpService: HttpInternalService) {
-        // Intentionally left empty for dependency injection purposes only
-    }
+    constructor(private httpService: HttpInternalService) { }
 
     public getAllBranches(projectId: number) {
         return this.httpService.getRequest<BranchDto[]>(`${this.routePrefix}/${projectId}`);

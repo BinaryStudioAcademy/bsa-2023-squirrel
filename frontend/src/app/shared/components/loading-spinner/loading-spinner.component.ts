@@ -6,9 +6,7 @@ import { SpinnerService } from '@core/services/spinner.service';
     templateUrl: './loading-spinner.component.html',
 })
 export class LoadingSpinnerComponent {
-    constructor(public spinnerService: SpinnerService) {
-        // Intentionally left empty for dependency injection purposes only
-    }
+    constructor(public spinnerService: SpinnerService) { }
 
     @Input() public isOverlay: boolean;
 

@@ -58,9 +58,7 @@ export class DropdownSelectComponent<T> implements OnInit {
         return this.element.nativeElement.querySelector('.dropdown-list');
     }
 
-    constructor(private element: ElementRef, private sanitizer: DomSanitizer) {
-        // Intentionally left empty for dependency injection purposes only
-    }
+    constructor(private element: ElementRef, private sanitizer: DomSanitizer) { }
 
     public ngOnInit(): void {
         this.internalOptions = [...this.options];

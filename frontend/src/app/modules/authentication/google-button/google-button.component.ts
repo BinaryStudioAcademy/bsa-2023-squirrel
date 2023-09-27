@@ -16,9 +16,7 @@ export class GoogleButtonComponent implements AfterViewInit {
 
     public width: string;
 
-    constructor(private authService: AuthService, private spinner: SpinnerService, private elementRef: ElementRef) {
-        // Intentionally left empty for dependency injection purposes only
-    }
+    constructor(private authService: AuthService, private spinner: SpinnerService, private elementRef: ElementRef) { }
 
     public ngAfterViewInit(): void {
         this.spinner.show();

@@ -7,9 +7,7 @@ import { FilesDownloaderService } from '@core/services/files-downloader.service'
     styleUrls: ['./sidebar.component.sass'],
 })
 export class SidebarComponent {
-    constructor(private filesDownloader: FilesDownloaderService) {
-        // Intentionally left empty for dependency injection purposes only
-    }
+    constructor(private filesDownloader: FilesDownloaderService) { }
 
     public downloadApp() {
         this.filesDownloader.downloadSquirrelInstaller();

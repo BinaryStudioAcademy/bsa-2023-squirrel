@@ -14,9 +14,7 @@ export class FilesDownloaderService {
 
     private readonly staticFilesRoutePrefix = '/api/staticfiles';
 
-    constructor(private httpClient: HttpInternalService, private notificationService: NotificationService) {
-        // Intentionally left empty for dependency injection purposes only
-    }
+    constructor(private httpClient: HttpInternalService, private notificationService: NotificationService) { }
 
     public downloadSquirrelInstaller() {
         this.httpClient.getFullBlobRequest(`${this.staticFilesRoutePrefix}/squirrel-installer`)

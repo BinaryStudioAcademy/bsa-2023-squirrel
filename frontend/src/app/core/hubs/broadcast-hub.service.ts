@@ -16,9 +16,7 @@ export class BroadcastHubService {
 
     private subscriptions: Subscription[] = [];
 
-    constructor(private hubFactory: SignalRHubFactoryService) {
-        // Intentionally left empty for dependency injection purposes only
-    }
+    constructor(private hubFactory: SignalRHubFactoryService) { }
 
     async start() {
         this.hubConnection = this.hubFactory.createHub(this.hubUrl);

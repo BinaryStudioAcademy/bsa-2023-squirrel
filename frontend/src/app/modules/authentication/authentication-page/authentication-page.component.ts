@@ -7,7 +7,5 @@ import { SpinnerService } from '@core/services/spinner.service';
     styleUrls: ['./authentication-page.component.sass'],
 })
 export class AuthenticationPageComponent {
-    constructor(private spinnerService: SpinnerService) {
-        // Intentionally left empty for dependency injection purposes only
-    }
+    constructor(private spinnerService: SpinnerService) { }
 }

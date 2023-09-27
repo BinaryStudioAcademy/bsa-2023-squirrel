@@ -5,9 +5,7 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
-    constructor(private authService: AuthService) {
-        // Intentionally left empty for dependency injection purposes only
-    }
+    constructor(private authService: AuthService) { }
 
     intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
         const accessToken = this.authService.getAccessToken();

@@ -12,9 +12,7 @@ export class ErrorInterceptor implements HttpInterceptor {
 
     private readonly forbiddenErrorStatusCode = 403;
 
-    constructor(private authService: AuthService) {
-        // Intentionally left empty for dependency injection purposes only
-    }
+    constructor(private authService: AuthService) { }
 
     intercept(request: HttpRequest<unknown>, next: HttpHandler) {
         return next.handle(request).pipe(

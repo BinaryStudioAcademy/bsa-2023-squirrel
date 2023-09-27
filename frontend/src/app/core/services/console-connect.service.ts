@@ -10,9 +10,7 @@ import { DbConnection } from '../../models/console/db-connection';
 export class ConsoleConnectService {
     public baseUrl: string = environment.consoleUrl;
 
-    constructor(private http: HttpClient) {
-        // Intentionally left empty for dependency injection purposes only
-    }
+    constructor(private http: HttpClient) { }
 
     public connect(dbConnection: DbConnection) {
         return this.http.post<string>(`${this.baseUrl}/setting/connect`, dbConnection);

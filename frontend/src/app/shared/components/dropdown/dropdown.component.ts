@@ -50,9 +50,7 @@ export class DropdownComponent<T> implements OnChanges {
 
     constructor(
         private elementRef: ElementRef,
-    ) {
-        // Intentionally left empty for dependency injection purposes only
-    }
+    ) { }
 
     public ngOnChanges(changes: SimpleChanges) {
         if (changes['options'] || changes['selectedByDefault']) {

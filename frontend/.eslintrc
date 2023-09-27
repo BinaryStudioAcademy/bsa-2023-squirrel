@@ -83,7 +83,7 @@
                         "argsIgnorePattern": "^_+$"
                     }
                 ],
-                "no-empty": "error",
+                "no-empty": ["error", { "allow": ["constructors"] }],
                 "import/no-unresolved": "off",
                 "curly": ["error", "all"],
                 "newline-before-return": "error",

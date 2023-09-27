@@ -9,9 +9,7 @@ import { SettingsService } from '@core/services/settings.service';
 export class SettingsMenuComponent implements OnInit {
     activeTab: string = 'general';
 
-    constructor(private settingsService: SettingsService) {
-        // Intentionally left empty for dependency injection purposes only
-    }
+    constructor(private settingsService: SettingsService) { }
 
     public setActiveTab(tabName: string): void {
         this.settingsService.setActiveTab(tabName);

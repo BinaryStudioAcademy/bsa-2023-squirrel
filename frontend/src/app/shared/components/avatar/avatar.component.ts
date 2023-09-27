@@ -36,9 +36,7 @@ export class AvatarComponent implements OnInit {
         this.initializeAvatar();
     }
 
-    constructor(private hslGenerator: HSLGenerator) {
-        // Intentionally left empty for dependency injection purposes only
-    }
+    constructor(private hslGenerator: HSLGenerator) { }
 
     private initializeAvatar(): void {
         this.hostStyle = {

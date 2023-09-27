@@ -11,9 +11,7 @@ export class HttpInternalService {
 
     public headers = new HttpHeaders();
 
-    constructor(private httpClient: HttpClient) {
-        // Intentionally left empty; dependency injection only.
-    }
+    constructor(private httpClient: HttpClient) { }
 
     /**
      * Retrieve the current headers configuration.

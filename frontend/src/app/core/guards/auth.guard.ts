@@ -6,9 +6,7 @@ import { AuthService } from '@core/services/auth.service';
     providedIn: 'root',
 })
 export class AuthGuard implements CanActivate, CanActivateChild {
-    constructor(private authService: AuthService, private router: Router) {
-        // Intentionally left empty for dependency injection purposes only
-    }
+    constructor(private authService: AuthService, private router: Router) { }
 
     public canActivate(route: ActivatedRouteSnapshot) {
         return this.checkForActivation(route);

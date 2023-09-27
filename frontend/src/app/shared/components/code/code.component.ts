@@ -19,9 +19,7 @@ export class CodeComponent implements OnChanges {
 
     private deleteColor: string = 'rgba(248,81,73,0.3)';
 
-    constructor(private renderer: Renderer2, private el: ElementRef) {
-        // Intentionally left empty for dependency injection purposes only
-    }
+    constructor(private renderer: Renderer2, private el: ElementRef) { }
 
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes['textPair']) {

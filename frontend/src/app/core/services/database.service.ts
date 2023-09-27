@@ -10,9 +10,7 @@ import { NewDatabaseDto } from '../../models/database/new-database-dto';
 export class DatabaseService {
     private readonly databaseApiUrl = '/api/projectDatabase';
 
-    constructor(private httpService: HttpInternalService) {
-        // Intentionally left empty for dependency injection purposes only
-    }
+    constructor(private httpService: HttpInternalService) { }
 
     public addDatabase(newDatabase: NewDatabaseDto) {
         return this.httpService.postRequest<DatabaseInfoDto>(this.databaseApiUrl, newDatabase);

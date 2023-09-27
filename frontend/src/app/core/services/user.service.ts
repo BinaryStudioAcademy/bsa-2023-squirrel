@@ -13,9 +13,7 @@ import { HttpInternalService } from './http-internal.service';
 export class UserService {
     private readonly routePrefix = '/api/user';
 
-    constructor(private httpService: HttpInternalService) {
-        // Intentionally left empty for dependency injection purposes only
-    }
+    constructor(private httpService: HttpInternalService) { }
 
     public updateUserNames(dto: UpdateUserNamesDto): Observable<UserProfileDto> {
         return this.httpService.putRequest<UserProfileDto>(`${this.routePrefix}/update-names`, dto);

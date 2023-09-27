@@ -32,9 +32,7 @@ export class AuthService {
         private spinner: SpinnerService,
         private userService: UserService,
         private eventService: EventService,
-    ) {
-        // Intentionally left empty for dependency injection purposes only
-    }
+    ) { }
 
     private currentUser: UserDto | undefined;
 

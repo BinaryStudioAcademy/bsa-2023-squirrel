@@ -11,9 +11,7 @@ export class LoadChangesService {
 
     private readonly loadChangesRoutePrefix = '/api/changerecords';
 
-    constructor(private httpClient: HttpInternalService) {
-        // Intentionally left empty for dependency injection purposes only
-    }
+    constructor(private httpClient: HttpInternalService) { }
 
     public loadChangesRequest() {
         return this.httpClient.postRequest<string>(`${this.loadChangesRoutePrefix}`, null!);

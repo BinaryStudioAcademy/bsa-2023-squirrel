@@ -10,9 +10,7 @@ export class EmailOverflowDirective implements AfterViewInit {
 
     private overflowSeparator: string = '...';
 
-    constructor(private el: ElementRef, private renderer: Renderer2) {
-        // Intentionally left empty for dependency injection purposes only
-    }
+    constructor(private el: ElementRef, private renderer: Renderer2) { }
 
     public ngAfterViewInit(): void {
         this.truncate();

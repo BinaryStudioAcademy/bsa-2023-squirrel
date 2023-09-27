@@ -27,9 +27,7 @@ export class CreateDbModalComponent implements OnInit {
         private databaseService: DatabaseService,
         private notificationService: NotificationService,
         public dialogRef: MatDialogRef<CreateDbModalComponent>,
-    ) {
-        // Intentionally left empty for dependency injection purposes only
-    }
+    ) { }
 
     public ngOnInit() {
         this.initializeForm();

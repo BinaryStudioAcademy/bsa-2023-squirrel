@@ -5,9 +5,7 @@ import { ToastrService } from 'ngx-toastr';
     providedIn: 'root',
 })
 export class NotificationService {
-    constructor(private toastr: ToastrService) {
-        // Intentionally left empty for dependency injection purposes only
-    }
+    constructor(private toastr: ToastrService) { }
 
     public info(content: string, title?: string) {
         this.toastr.info(content, title);

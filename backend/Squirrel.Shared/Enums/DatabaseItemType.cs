@@ -7,5 +7,7 @@ public enum DatabaseItemType
     Constraint,
     StoredProcedure,
     Function,
-    View
+    View,
+    UserDefinedDataType,
+    UserDefinedTableType
 }

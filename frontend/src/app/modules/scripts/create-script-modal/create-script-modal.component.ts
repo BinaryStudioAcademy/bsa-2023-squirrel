@@ -37,7 +37,6 @@ export class CreateScriptModalComponent extends BaseComponent implements OnInit 
     public initForm(): void {
         this.newScriptForm = this.formBuilder.group({
             scriptName: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(100)]],
-            // fileName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
         });
     }
 

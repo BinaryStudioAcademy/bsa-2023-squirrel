@@ -15,7 +15,6 @@ export class CommitChangesService {
 
     public contentChanges$ = this.contentChangesSubject.asObservable();
 
-    // eslint-disable-next-line no-empty-function
     constructor(
         private httpService: HttpInternalService,
         private notificationService: NotificationService,

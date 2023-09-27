@@ -33,7 +33,7 @@ public sealed class BranchService : BaseService, IBranchService
         return _mapper.Map<BranchDto>(createdBranch);
     }
 
-    public async Task<int> GetLastBranchCommit(int branchId)
+    public async Task<int> GetLastBranchCommitAsync(int branchId)
     {
         var lastCommit = await _context.BranchCommits
             .Where(commit => commit.BranchId == branchId && commit.IsHead)

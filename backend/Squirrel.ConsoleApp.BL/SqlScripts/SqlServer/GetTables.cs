@@ -6,7 +6,7 @@ internal static class GetTables
         @"SELECT TABLE_SCHEMA [Schema], TABLE_NAME [Name] FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' ORDER BY 'SCHEMA', 'NAME'";
 
     public static string GetTableDataQueryScript(string schema, string name, int rowsCount) =>
-        @"
+	    @"
 			DECLARE @FullTableName NVARCHAR(MAX) = QUOTENAME(@schema) + '.' + QUOTENAME(@name);
 			DECLARE @sql NVARCHAR(MAX);
 			SET @sql = 'SELECT TOP (' + CONVERT(NVARCHAR(MAX), @rowsCount) + ') ''' + @schema + ''' AS [Schema], ''' + @name + 
@@ -30,10 +30,10 @@ internal static class GetTables
 		                sysc.scale [Scale], 
 		                CASE WHEN syst.name IN ('binary','varbinary','char','nchar','varchar','nvarchar') OR syst.status = 1 
 			                THEN sysc.prec ELSE NULL END [MaxLength],  
-		                CASE WHEN sysc.isnullable = 1 THEN 'True' ELSE 'False' END [AllowNulls],   
-		                CASE WHEN sysc.[status] = 128 THEN 'True' ELSE 'False' END [Identity],
-		                CASE WHEN sysc.colstat = 1 THEN 'True' ELSE 'False' END [PrimaryKey],  
-		                CASE WHEN fkc.parent_object_id IS NULL THEN 'False' ELSE 'True' END [ForeignKey],   
+		                CASE WHEN sysc.isnullable = 1 THEN 'True' ELSE 'False' END [IsAllowNulls],   
+		                CASE WHEN sysc.[status] = 128 THEN 'True' ELSE 'False' END [isIdentity],
+		                CASE WHEN sysc.colstat = 1 THEN 'True' ELSE 'False' END [isPrimaryKey],  
+		                CASE WHEN fkc.parent_object_id IS NULL THEN 'False' ELSE 'True' END [isForeignKey],   
 		                CASE WHEN fkc.parent_object_id IS NULL THEN NULL ELSE obj.name END [RelatedTable],
 		                COL_NAME(fkc.parent_object_id, fkc.parent_column_id) [RelatedTableColumn],
 		                OBJECT_SCHEMA_NAME(fkc.referenced_object_id) [RelatedTableSchema],

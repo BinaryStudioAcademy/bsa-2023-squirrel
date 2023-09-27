@@ -19,9 +19,6 @@ export class ProjectCardComponent implements OnInit {
 
     private sqlServerLogo: string = '/assets/sqlserver.svg';
 
-    // eslint-disable-next-line @typescript-eslint/no-useless-constructor,no-empty-function,@typescript-eslint/no-empty-function
-    constructor() {}
-
     ngOnInit(): void {
         this.initializeProjectCard();
     }

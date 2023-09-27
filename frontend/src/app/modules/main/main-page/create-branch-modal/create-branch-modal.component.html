@@ -17,7 +17,7 @@
 </mat-dialog-content>
 <mat-dialog-actions class="modal-buttons">
     <app-button text="Create" width="100%" variant="outline-secondary" [isDisabled]="branchForm.invalid"
-                (click)="createBranch()">
+                (buttonOnClick)="createBranch()">
     </app-button>
 
     <app-button text="Close" width="100%" variant="outline-secondary" (click)="close()">

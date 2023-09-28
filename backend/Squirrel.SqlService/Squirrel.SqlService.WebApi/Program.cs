@@ -22,7 +22,11 @@ builder.Services.AddSquirrelCoreContext(builder.Configuration);
 builder.Services.ConfigureCors(builder.Configuration);
 builder.Services.AddMongoDbService(builder.Configuration);
 builder.Services.AddAzureBlobStorage(builder.Configuration);
-builder.Services.AddSignalR();
+builder.Services.AddSignalR(o =>
+{
+    o.EnableDetailedErrors = true;
+    o.MaximumReceiveMessageSize = 1024 * 300;
+});
 builder.Services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 builder.Services.RegisterCustomServices(builder.Configuration);
 builder.Services.AddAutoMapper();

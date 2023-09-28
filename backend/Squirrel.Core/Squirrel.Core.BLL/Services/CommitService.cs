@@ -74,7 +74,6 @@ public class CommitService : BaseService, ICommitService
             throw new EntityNotFoundException(nameof(branchCommit));
         }
         branchCommit.IsHead = true;
-        _context.BranchCommits.Update(branchCommit);
         // Save changes
         await _context.SaveChangesAsync();
         return _mapper.Map<CommitDto>(entity);

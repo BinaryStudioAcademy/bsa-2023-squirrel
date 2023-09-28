@@ -5,6 +5,7 @@ using Squirrel.Core.BLL.Services.Abstract;
 using Squirrel.Core.Common.DTO.Branch;
 using Squirrel.Core.DAL.Context;
 using Squirrel.Core.DAL.Entities;
+using Squirrel.Core.DAL.Entities.JoinEntities;
 using Squirrel.Shared.Exceptions;
 
 namespace Squirrel.Core.BLL.Services;
@@ -31,6 +32,21 @@ public sealed class BranchService : BaseService, IBranchService
 
         return _mapper.Map<BranchDto>(createdBranch);
     }
+
+    public async Task<int> GetLastBranchCommitAsync(int branchId)
+    {
+        var lastCommit = await _context.BranchCommits
+            .Where(commit => commit.BranchId == branchId && commit.IsHead)
+            .FirstOrDefaultAsync();
+
+        if (lastCommit is null)
+        {
+            throw new EntityNotFoundException();
+        }
+
+        return lastCommit.Id;
+    }
+
 
     public BranchDto[] GetAllBranches(int projectId)
     {

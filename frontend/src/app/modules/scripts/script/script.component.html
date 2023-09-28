@@ -1,4 +1,14 @@
 <div class="script-container">
-    <app-avatar size="30" [imgLink]="avatarUrl"></app-avatar>
-    <p class="script-content">{{script.title}}</p>
+    <div class="script-content">
+        <app-avatar size="30" [imgLink]="avatarUrl"></app-avatar>
+        <p class="script-name">{{script.title}}</p>
+    </div>
+    <div class="edit-section">
+        <div class="btn-sector">
+            <button mat-icon-button (click)="$event.stopPropagation()">
+                <fa-icon class="trash-icon" [icon]="trashIcon"></fa-icon>
+            </button>
+        </div>
+
+    </div>
 </div>

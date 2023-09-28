@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
 import { ScriptDto } from 'src/app/models/scripts/script-dto';
 
@@ -12,6 +13,5 @@ export class ScriptComponent {
 
     @Input() public avatarUrl: string = 'assets/profile_icon.svg';
 
-    // eslint-disable-next-line @typescript-eslint/no-useless-constructor, no-empty-function, @typescript-eslint/no-empty-function
-    constructor() {}
+    public trashIcon = faTrash;
 }

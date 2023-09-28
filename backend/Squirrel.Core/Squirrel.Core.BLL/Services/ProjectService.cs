@@ -75,7 +75,7 @@ public sealed class ProjectService : BaseService, IProjectService
 
         if (existingProject!.CreatedBy == userEntity.Id)
         {
-            throw new UserCannotBeRemovedException();
+            throw new InvalidPermissionsException();
         }
 
         existingProject!.Users.Remove(userEntity);

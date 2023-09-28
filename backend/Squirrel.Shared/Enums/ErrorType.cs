@@ -18,5 +18,5 @@ public enum ErrorType
     InvalidQuery,
     QueryExpired,
     HttpRequest,
-    UserCannotBeRemoved
+    InvalidPermission
 }

@@ -11,8 +11,6 @@ import { ScriptDto } from 'src/app/models/scripts/script-dto';
 export class ScriptComponent {
     @Input() public script: ScriptDto;
 
-    @Input() public avatarUrl: string = 'assets/profile_icon.svg';
-
     @Output() public delete = new EventEmitter();
 
     public trashIcon = faTrash;

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { BranchDto } from 'src/app/models/branch/branch-dto';
 import { CreateBranchDto } from 'src/app/models/branch/create-branch-dto';
+import { MergeBranchDto } from 'src/app/models/branch/merge-branch-dto';
 
 import { HttpInternalService } from './http-internal.service';
 
@@ -32,5 +33,9 @@ export class BranchService {
 
     public getCurrentBranch(projectId: number) {
         return Number(localStorage.getItem(`currentBranch_${projectId}`));
+    }
+
+    public mergeBranch(dto: MergeBranchDto) {
+        return this.httpService.postRequest<BranchDto>(`${this.routePrefix}/merge`, dto);
     }
 }

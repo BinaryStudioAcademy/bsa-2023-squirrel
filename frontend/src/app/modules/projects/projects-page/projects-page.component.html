@@ -2,19 +2,29 @@
     <div class="sidebar">
         <app-sidebar></app-sidebar>
     </div>
+    <div class="upper-panel-container">
+        <h3 class="mat-h3">Projects</h3>
+        <app-button
+            class="create-button"
+            text="Create Project"
+            width="100%"
+            variant="filled"
+            (click)="openCreateModal()"
+        >
+        </app-button>
+    </div>
     <div class="projects-sector">
-        <div class="upper-panel-container">
-            <h3 class="mat-h3">Projects</h3>
+        <div class="horizontal-separator"></div>
+        <div *ngIf="!isLoading && projects.length === 0" class="no-content">
+            <h4 class="mat-h4">No project is available for you.<br>Ask your teammates to add you or create a new one</h4>
             <app-button
                 class="create-button"
                 text="Create Project"
                 width="100%"
                 variant="filled"
-                (click)="openCreateModal()"
-            >
+                (buttonOnClick)="openCreateModal()">
             </app-button>
         </div>
-        <div class="horizontal-separator"></div>
         <div class="card-container">
             <app-project-card (click)="chooseProject(project)"
                               *ngFor="let project of projects"
@@ -22,4 +32,5 @@
             </app-project-card>
         </div>
     </div>
+    
 </div>

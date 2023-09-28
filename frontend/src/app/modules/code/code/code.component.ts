@@ -1,39 +1,43 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { BaseComponent } from '@core/base/base.component';
 import { BranchService } from '@core/services/branch.service';
 import { CommitService } from '@core/services/commit.service';
+import { CommitChangesService } from '@core/services/commit-changes.service';
 import { EventService } from '@core/services/event.service';
-import { NotificationService } from '@core/services/notification.service';
 import { ProjectService } from '@core/services/project.service';
 import { SpinnerService } from '@core/services/spinner.service';
-import { TablesService } from '@core/services/tables.service';
 import { TreeNode } from '@shared/components/tree/models/TreeNode.model';
-import { Subject, takeUntil } from 'rxjs';
+import { finalize, takeUntil } from 'rxjs';
 
+import { CreateCommitDto } from 'src/app/models/commit/create-commit-dto';
 import { DatabaseItem } from 'src/app/models/database-items/database-item';
 import { DatabaseItemContent } from 'src/app/models/database-items/database-item-content';
 import { DatabaseItemType } from 'src/app/models/database-items/database-item-type';
 import { ItemCategory } from 'src/app/models/database-items/item-category';
-import { QueryParameters } from 'src/app/models/sql-service/query-parameters';
-import { TableColumnInfo } from 'src/app/models/table-structure/table-columns';
+import { LineDifferenceDto } from 'src/app/models/text-pair/line-difference-dto';
+import { TextPairDifferenceDto } from 'src/app/models/text-pair/text-pair-difference-dto';
+
+import { DatabaseItemContentCompare } from '../../../models/database-items/database-item-content-compare';
 
 @Component({
-    selector: 'app-code',
+    selector: 'app-changes',
     templateUrl: './code.component.html',
     styleUrls: ['./code.component.sass'],
 })
-export class CodeComponent implements OnInit, OnDestroy {
-    public selectedItems: TreeNode[] = [];
+export class CodeComponent extends BaseComponent implements OnInit, OnDestroy {
+    public textPair: TextPairDifferenceDto;
 
-    public selectedItem: DatabaseItemContent<any> | undefined;
+    public selectedItem: DatabaseItemContent[] = [];
 
-    public form: FormGroup;
+    public contentChanges: DatabaseItemContentCompare[] = [];
 
     public guid: string;
 
     public items: TreeNode[];
 
-    private unsubscribe$ = new Subject<void>();
+    public selectedItems: TreeNode[] = [];
+
+    public message: string = '';
 
     private currentProjectId: number;
 
@@ -43,10 +47,9 @@ export class CodeComponent implements OnInit, OnDestroy {
         private commitService: CommitService,
         private projectService: ProjectService,
         private spinner: SpinnerService,
-        private formBuilder: FormBuilder,
-        private tableService: TablesService,
-        private notificationService: NotificationService,
+        private commitChangesService: CommitChangesService,
     ) {
+        super();
         this.eventService.changesLoadedEvent$.pipe(takeUntil(this.unsubscribe$)).subscribe((x) => {
             if (x !== undefined) {
                 this.items = this.mapDbItems(x);
@@ -61,35 +64,62 @@ export class CodeComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.currentProjectId = this.projectService.currentProjectId;
+        this.commitChangesService.contentChanges$.pipe(takeUntil(this.unsubscribe$)).subscribe((changes) => {
+            this.contentChanges = changes;
+        });
     }
 
-    public ngOnDestroy(): void {
-        this.unsubscribe$.next();
-        this.unsubscribe$.complete();
+    getTextFromLines(lines: LineDifferenceDto[]): string {
+        return lines.map((line) => line.text).join('\n');
+    }
+
+    public validateCommit() {
+        if (!this.guid) {
+            return false;
+        }
+        if (!(this.message.length > 0 && this.message.length <= 300)) {
+            return false;
+        }
+        if (!this.selectedItems.some((x) => x.children?.some((y) => y.selected))) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public commit() {
+        const branchId = this.branchService.getCurrentBranch(this.currentProjectId);
+        const commit = {
+            branchId,
+            postScript: '',
+            preScript: '',
+            selectedItems: this.selectedItems,
+            changesGuid: this.guid,
+            message: this.message,
+        } as CreateCommitDto;
+
+        this.spinner.show();
+        this.commitService
+            .commit(commit)
+            .pipe(takeUntil(this.unsubscribe$), finalize(this.spinner.hide))
+            .subscribe((x) => {
+                // eslint-disable-next-line no-console
+                console.log(x.body);
+                this.items.forEach((parent) => {
+                    if (parent.children) {
+                        parent.children = parent.children.filter((item) => !item.selected);
+                    }
+                });
+                this.items = this.items.filter((item) => !item.selected && item.children && item.children?.length > 0);
+            });
     }
 
     public selectionChanged(event: { selectedNodes: TreeNode[]; originalStructure: TreeNode[] }) {
         this.selectedItems = event.originalStructure;
     }
 
-    public onItemSelected(item: DatabaseItemContent<any>): void {
-        if (`${item.schema}.${item.name}` === `${this.selectedItem?.schema}.${this.selectedItem?.name}`) {
-            return;
-        }
-
-        this.selectedItemUpdate(item);
-    }
-
-    private updateEditorContent(content: string): void {
-        this.form.patchValue({
-            scriptContent: content,
-        });
-    }
-
-    private selectedItemUpdate(item: DatabaseItemContent<any>): void {
-        this.selectedItem = item;
-        this.updateEditorContent(this.selectedItem.content);
-        this.form.markAsPristine();
+    public messageChanged(message: string) {
+        this.message = message;
     }
 
     private mapDbItems(items: DatabaseItem[]): TreeNode[] {
@@ -135,39 +165,5 @@ export class CodeComponent implements OnInit, OnDestroy {
             default:
                 return 'Unknown category';
         }
-    }
-
-    public selectTable(selectedItem: DatabaseItemContent<any>) {
-        const query: QueryParameters = {
-            clientId: this.guid,
-            filterSchema: selectedItem.schema,
-            filterName: selectedItem.name,
-            filterRowsCount: 100,
-        };
-
-        this.tableService
-            .getTableStructure(query)
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe({
-                next: (item) => {
-                    const table: DatabaseItemContent<TableColumnInfo[]> = {
-                        name: item.name,
-                        type: DatabaseItemType.Table,
-                        schema: item.schema,
-                        content: item.columns,
-                    };
-
-                    this.selectedItem = table;
-                },
-                error: () => {
-                    this.notificationService.error('fail connect to db');
-                },
-            });
-    }
-
-    private initializeForm(): void {
-        this.form = this.formBuilder.group({
-            selectedItem: [this.selectedItem?.content],
-        });
     }
 }

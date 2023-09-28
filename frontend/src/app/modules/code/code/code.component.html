@@ -1,18 +1,31 @@
 <div class="container">
     <div class="main-content">
-        <app-tree [asCheckList]="true" [treeData]="items" (selectionChange)="selectionChanged($event)"></app-tree>
-
-        <div class="code-sector">
-            <p>{{ selectedItem?.schema + '.' + selectedItem?.name }}</p>
-            <textarea class="editor bordered" [formControl]="$any(form.controls['codeContent'])">
- {{ selectedItem?.content }} </textarea
-            >
+        <app-tree
+            [asCheckList]="true"
+            [treeData]="items"
+            (selectionChange)="selectionChanged($event)"
+            (messageChange)="messageChanged($event)"></app-tree>
+        <div class="changes-content">
+            <div *ngFor="let changes of contentChanges" class="solution-sector">
+                <textarea>{{ getTextFromLines(changes.sideBySideDiff.newTextLines) }}</textarea>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="nav">
-    <div>
-        <app-button class="margin-right" text="Apply" variant="outline-primary" width="120px"></app-button>
+    <div class="nav">
+        <div>
+            <app-button
+                (buttonOnClick)="commit()"
+                [isDisabled]="!validateCommit()"
+                class="margin-right"
+                text="Commit"
+                variant="outline-primary"
+                width="120px"></app-button>
+            <app-button text="Push" variant="outline-primary" width="120px"></app-button>
+        </div>
+        <div>
+            <app-button class="margin-right" text="Static data" variant="outline-primary" width="155px"></app-button>
+            <app-button text="pre/post-commit script" variant="outline-primary" width="240px"></app-button>
+        </div>
     </div>
 </div>

@@ -5,8 +5,9 @@ import { BaseComponent } from '@core/base/base.component';
 import { NotificationService } from '@core/services/notification.service';
 import { ProjectService } from '@core/services/project.service';
 import { SharedProjectService } from '@core/services/shared-project.service';
+import { SpinnerService } from '@core/services/spinner.service';
 import { CreateProjectModalComponent } from '@modules/projects/create-project-modal/create-project-modal.component';
-import { takeUntil } from 'rxjs';
+import { finalize, takeUntil } from 'rxjs';
 
 import { ProjectResponseDto } from 'src/app/models/projects/project-response-dto';
 
@@ -18,12 +19,15 @@ import { ProjectResponseDto } from 'src/app/models/projects/project-response-dto
 export class ProjectsPageComponent extends BaseComponent implements OnInit {
     public projects: ProjectResponseDto[] = [];
 
+    public isLoading = false;
+
     constructor(
         public dialog: MatDialog,
         private projectService: ProjectService,
         private notificationService: NotificationService,
         private router: Router,
         private sharedProject: SharedProjectService,
+        private spinner: SpinnerService,
     ) {
         super();
     }
@@ -33,9 +37,17 @@ export class ProjectsPageComponent extends BaseComponent implements OnInit {
     }
 
     public loadProjects(): void {
+        this.spinner.show();
+        this.isLoading = true;
         this.projectService
             .getAllUserProjects()
-            .pipe(takeUntil(this.unsubscribe$))
+            .pipe(
+                takeUntil(this.unsubscribe$),
+                finalize(() => {
+                    this.spinner.hide();
+                    this.isLoading = false;
+                }),
+            )
             .subscribe(
                 (projects: ProjectResponseDto[]) => {
                     this.projects = projects;

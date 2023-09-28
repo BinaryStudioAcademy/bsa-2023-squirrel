@@ -20,9 +20,6 @@ public class GetActionsService : IGetActionsService
     public async Task<QueryResultTable> GetAllTablesNamesAsync()
         => await _databaseService.ExecuteQueryAsync(_queryProvider.GetTablesNamesQuery());
 
-    public async Task<QueryResultTable> GetTableDataAsync(string schema, string name, int rowsCount)
-        => await _databaseService.ExecuteQueryAsync(_queryProvider.GetTableDataQuery(schema, name, rowsCount));
-
     public async Task<QueryResultTable> GetAllStoredProceduresNamesAsync()
         => await _databaseService.ExecuteQueryAsync(_queryProvider.GetStoredProceduresNamesQuery());
 

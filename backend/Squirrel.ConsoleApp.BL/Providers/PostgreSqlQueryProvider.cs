@@ -12,18 +12,6 @@ public class PostgreSqlQueryProvider : BaseProvider, IDbQueryProvider
 {
     public ParameterizedSqlCommand GetTablesNamesQuery() => new(GetTablesNamesScript, new List<SqlParameter>());
 
-    public ParameterizedSqlCommand GetTableDataQuery(string schema, string name, int rowsCount)
-    {
-        var schemaParameter = GetParameter(nameof(schema), schema, SqlDbType.NVarChar);
-        var nameParameter = GetParameter(nameof(name), name, SqlDbType.NVarChar);
-        var rowsParameter = GetParameter(nameof(rowsCount), rowsCount, SqlDbType.Int);
-        
-        return new ParameterizedSqlCommand(GetTableDataQueryScript(schema, name, rowsCount), new[]
-        {
-            schemaParameter, nameParameter, rowsParameter
-        });
-    }
-
     public ParameterizedSqlCommand GetStoredProceduresNamesQuery() => new(GetStoredProceduresNamesScript, new List<SqlParameter>());
 
     public ParameterizedSqlCommand GetStoredProcedureDefinitionQuery(string storedProcedureSchema,

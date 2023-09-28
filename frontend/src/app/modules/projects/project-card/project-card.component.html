@@ -11,15 +11,17 @@
     <div class="project-name">
         {{ project.name }}
     </div>
-    <div class="project-tag-container">
-        <div class="project-tag" *ngFor="let tag of project.tags.slice(0, 2)">
-            {{ tag.name }}
-        </div>
-    </div>
     <div class="project-description-container">
         <div class="project-description">
             {{ project.description }}
         </div>
+        <div class="secondary-info-container">
+            <div class="project-tag-container">
+                <div class="project-tag" *ngFor="let tag of project.tags.slice(0, 2)">
+                    {{ tag.name }}
+                </div>            
+            </div>
+            <div class="project-date">{{ project.createdAt | date : 'dd-MM-yyyy' }}</div>
+        </div>
     </div>
-    <div class="project-date">{{ project.createdAt | date : 'dd-MM-yyyy' }}</div>
 </div>

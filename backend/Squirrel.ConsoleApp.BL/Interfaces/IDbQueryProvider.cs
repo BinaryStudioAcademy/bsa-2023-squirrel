@@ -5,7 +5,6 @@ namespace Squirrel.ConsoleApp.BL.Interfaces;
 public interface IDbQueryProvider
 {
     ParameterizedSqlCommand GetTablesNamesQuery();
-    ParameterizedSqlCommand GetTableDataQuery(string schema, string tableName, int rowsCount);
 
     ParameterizedSqlCommand GetStoredProceduresNamesQuery();
     ParameterizedSqlCommand GetStoredProcedureDefinitionQuery(string storedProcedureSchema, string storedProcedureName);

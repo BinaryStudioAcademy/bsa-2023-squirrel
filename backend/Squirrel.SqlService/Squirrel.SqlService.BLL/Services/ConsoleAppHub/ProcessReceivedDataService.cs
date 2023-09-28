@@ -28,12 +28,6 @@ public class ProcessReceivedDataService : IProcessReceivedDataService
         await ShowResult(queryId, queryResultTable);
     }
 
-    public async Task TableDataProcessReceivedDataAsync(Guid queryId, QueryResultTable queryResultTable)
-    {
-        _resultObserver.SetResult(queryId, queryResultTable);
-        await ShowResult(queryId, queryResultTable);
-    }
-
     public async Task AllStoredProceduresNamesProcessReceivedDataAsync(Guid queryId, QueryResultTable queryResultTable)
     {
         _resultObserver.SetResult(queryId, queryResultTable);

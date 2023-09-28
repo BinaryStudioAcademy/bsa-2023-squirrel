@@ -12,4 +12,5 @@ public interface IProjectService
     Task<ProjectResponseDto> AddUsersToProjectAsync(int projectId, List<UserDto> usersDtos);
     Task<ICollection<UserDto>> GetProjectUsersAsync(int projectId);
     Task<ICollection<ProjectResponseDto>> GetAllUserProjectsAsync();
+    Task<bool> RemoveUserFromProjectAsync(int projectId, UserDto userDto);
 }

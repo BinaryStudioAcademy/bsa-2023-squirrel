@@ -5,9 +5,6 @@ internal static class GetTables
     public static string GetTablesNamesScript =>
         @"SELECT schemaname AS ""schema"", tablename AS ""name"" FROM pg_catalog.pg_tables WHERE schemaname NOT IN ('pg_catalog', 'information_schema')";
 
-    public static string GetTableDataQueryScript(string schema, string name, int rowsCount) =>
-        $"SELECT '{schema}' AS schema, '{name}' AS name, (SELECT COUNT(*) FROM \"{schema}\".\"{name}\") AS TotalRows, t.* FROM \"{schema}\".\"{name}\" t LIMIT {rowsCount}";
-
     public static string GetTableStructureScript(string schema, string name) =>
         @"
             with column_description_table as (
@@ -58,10 +55,10 @@ internal static class GetTables
 				-- MaxLength (do we need it?)
 				col.numeric_precision as Precision,
 				col.numeric_scale as Scale,
-			    case when col.is_nullable = 'YES' then 'True' else 'False' end as AllowNulls,
-				case when col.is_identity = 'YES' then 'True' else 'False' end as Identity,
-				case when 'PRIMARY KEY' = any(kct.constraints_type) then 'True' else 'False' end as PrimaryKey,
-				case when 'FOREIGN KEY' = any(kct.constraints_type) then 'True' else 'False' end as ForeignKey,
+			    case when col.is_nullable = 'YES' then 'True' else 'False' end as IsAllowNulls,
+				case when col.is_identity = 'YES' then 'True' else 'False' end as isIdentity,
+				case when 'PRIMARY KEY' = any(kct.constraints_type) then 'True' else 'False' end as isPrimaryKey,
+				case when 'FOREIGN KEY' = any(kct.constraints_type) then 'True' else 'False' end as isForeignKey,
 				ccu.column_name as RelatedTableColumn,
 				pk_tc.table_name as RelatedTable,
 				pk_tc.table_schema as RelatedTableSchema,

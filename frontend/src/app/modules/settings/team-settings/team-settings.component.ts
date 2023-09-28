@@ -46,7 +46,7 @@ export class TeamSettingsComponent extends BaseComponent implements OnInit {
 
     ngOnInit(): void {
         this.sharedProjectService.project$.subscribe({
-            next: project => {
+            next: (project) => {
                 if (project) {
                     this.project = project;
                     this.getUsers();
@@ -74,25 +74,18 @@ export class TeamSettingsComponent extends BaseComponent implements OnInit {
 
     getUsers() {
         this.spinner.show();
-        this.projectService.getProjectUsers(this.project.id)
+        this.projectService
+            .getProjectUsers(this.project.id)
             .pipe(
                 takeUntil(this.unsubscribe$),
                 finalize(() => this.spinner.hide()),
             )
             .subscribe({
-                error: err => {
+                error: (err) => {
                     this.notificationService.error(err.message);
                 },
-                next: projectUsers => {
+                next: (projectUsers) => {
                     this.users = projectUsers;
-                    this.users.push({
-                        id: 1,
-                        userName: "john_doe",
-                        firstName: "John",
-                        lastName: "Doexxxxxxxxxxxxxxxxxssssx",
-                        email: "john.doe@example.com",
-                        avatarUrl: ""
-                    },)
                 },
             });
     }
@@ -108,18 +101,16 @@ export class TeamSettingsComponent extends BaseComponent implements OnInit {
     public removeUser(userToRemove: UserDto): void {
         this.projectService
             .removeUserFromProject(this.project.id, userToRemove)
-            .pipe(
-                takeUntil(this.unsubscribe$),
-            )
+            .pipe(takeUntil(this.unsubscribe$))
             .subscribe({
                 next: () => {
                     this.notificationService.info('User removed successfully');
-                    this.users = this.users.filter(user => user.id !== userToRemove.id);
+                    this.users = this.users.filter((user) => user.id !== userToRemove.id);
                     this.filterOptions();
                 },
                 error: () => {
                     this.notificationService.error('Failed to remove user');
                 },
-    });
+            });
     }
 }

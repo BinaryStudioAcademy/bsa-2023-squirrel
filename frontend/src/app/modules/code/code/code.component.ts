@@ -10,13 +10,12 @@ import { TreeNode } from '@shared/components/tree/models/TreeNode.model';
 import { takeUntil } from 'rxjs';
 
 import { DatabaseItem } from 'src/app/models/database-items/database-item';
-import { DatabaseItemContent } from 'src/app/models/database-items/database-item-content';
-import { DatabaseItemType, DatabaseItemTypeName } from 'src/app/models/database-items/database-item-type';
+import { DatabaseItemType } from 'src/app/models/database-items/database-item-type';
+import { DatabaseItemTypeName } from 'src/app/models/database-items/database-item-type-name';
 import { ItemCategory } from 'src/app/models/database-items/item-category';
 import { TableColumnInfo } from 'src/app/models/table-structure/table-columns';
 import { TableStructureDto } from 'src/app/models/table-structure/table-structure-dto';
 import { LineDifferenceDto } from 'src/app/models/text-pair/line-difference-dto';
-import { TextPairDifferenceDto } from 'src/app/models/text-pair/text-pair-difference-dto';
 
 import { DatabaseItemContentCompare } from '../../../models/database-items/database-item-content-compare';
 
@@ -26,17 +25,13 @@ import { DatabaseItemContentCompare } from '../../../models/database-items/datab
     styleUrls: ['./code.component.sass'],
 })
 export class CodeComponent extends BaseComponent implements OnInit, OnDestroy {
-    public textPair: TextPairDifferenceDto;
-
-    public selectedItem: DatabaseItemContent[] = [];
+    public allContentChanges: DatabaseItemContentCompare[] = [];
 
     public DatabaseItemTypeName = DatabaseItemTypeName;
 
     public selectedContentChanges: DatabaseItemContentCompare[] = [];
 
-    public allContentChanges: DatabaseItemContentCompare[] = [];
-
-    public guid: string;
+    public currentChangesGuid: string;
 
     public items: TreeNode[];
 
@@ -62,7 +57,7 @@ export class CodeComponent extends BaseComponent implements OnInit, OnDestroy {
         });
         eventService.changesSavedEvent$.pipe(takeUntil(this.unsubscribe$)).subscribe((x) => {
             if (x !== undefined) {
-                this.guid = x;
+                this.currentChangesGuid = x;
             }
         });
     }

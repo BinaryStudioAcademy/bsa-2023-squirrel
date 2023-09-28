@@ -58,6 +58,31 @@ public sealed class ProjectService : BaseService, IProjectService
         return _mapper.Map<ProjectResponseDto>(existingProject);
     }
 
+    public async Task<bool> RemoveUserFromProjectAsync(int projectId, UserDto userDto)
+    {
+        var existingProject = await _context.Projects.Include(u => u.Users)
+            .FirstAsync(project => project.Id == projectId);
+
+        ValidateProject(existingProject);
+
+        var userEntity = await _context.Users.FindAsync(userDto.Id)
+            ?? throw new EntityNotFoundException(nameof(User));
+
+        if (!existingProject!.Users.Any(user => user.Id == userEntity.Id))
+        {
+            throw new EntityNotFoundException(nameof(User));
+        }
+
+        if (existingProject!.CreatedBy == userEntity.Id)
+        {
+            throw new InvalidPermissionsException();
+        }
+
+        existingProject!.Users.Remove(userEntity);
+
+        return (await _context.SaveChangesAsync()) > 0;
+    }
+
     public async Task<ProjectResponseDto> UpdateProjectAsync(int projectId, UpdateProjectDto updateProjectDto)
     {
         var existingProject = await _context.Projects
@@ -84,7 +109,7 @@ public sealed class ProjectService : BaseService, IProjectService
         ValidateProject(project);
 
         var mappedProject = _mapper.Map<ProjectResponseDto>(project);
-        
+
         mappedProject.IsAuthor = project!.CreatedBy == currentUserId;
 
         return mappedProject;

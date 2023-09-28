@@ -1,0 +1,33 @@
+<div class="rounded-container">
+    <div class="header">
+        <h5>Branches</h5>
+        <app-button [height]="'100%'" [text]="'Create Branch'"></app-button>
+    </div>
+    <div class="actions">
+        <div class="inputs-container">
+            <app-input [width]="'100%'" [placeholder]="'Search...'" [formControl]="$any(searchForm.controls['search'])">
+            </app-input>
+            <app-dropdown-select
+                [width]="'100%'"
+                [placeholder]="'Branch type'"
+                [options]="dropdownItems"
+                [placeholderId]="0"
+                (valueChange)="onBranchTypeSelectionChange($event)">
+            </app-dropdown-select>
+        </div>
+    </div>
+    <div class="table">
+        <div class="table-headers">
+            <p class="first">Branch</p>
+            <p class="second">Behind | Ahead</p>
+            <p class="third">Updated</p>
+            <p class="fourth">Actions</p>
+        </div>
+        <div class="table-content">
+            <div class="branch-container" *ngFor="let branch of branches">
+                <hr class="line" />
+                <app-branch [branch]="branch"></app-branch>
+            </div>
+        </div>
+    </div>
+</div>

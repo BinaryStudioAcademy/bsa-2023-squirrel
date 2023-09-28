@@ -6,6 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
@@ -21,6 +22,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
         MatChipsModule,
         MatDialogModule,
         MatTableModule,
+        MatMenuModule,
     ],
     exports: [
         CommonModule,
@@ -32,6 +34,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
         MatChipsModule,
         MatDialogModule,
         MatTableModule,
+        MatMenuModule,
     ],
 })
 export class MaterialModule {}

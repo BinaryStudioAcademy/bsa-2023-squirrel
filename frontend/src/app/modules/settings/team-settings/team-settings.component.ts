@@ -96,4 +96,22 @@ export class TeamSettingsComponent extends BaseComponent implements OnInit {
     public filterOptions(): UserDto[] {
         return this.users.filter((option) => this.filter?.call(this, option, this.searchForm.get('search')!.value));
     }
+
+    public removeUser(userToRemove: UserDto): void {
+        this.projectService
+            .removeUserFromProject(this.project.id, userToRemove)
+            .pipe(
+                takeUntil(this.unsubscribe$),
+            )
+            .subscribe({
+                next: () => {
+                    this.notificationService.info('User removed successfully');
+                    this.users = this.users.filter(user => user.id !== userToRemove.id);
+                    this.filterOptions();
+                },
+                error: () => {
+                    this.notificationService.error('Failed to remove user');
+                },
+    });
+    }
 }

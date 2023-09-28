@@ -11,5 +11,5 @@
     <div class="user-name"><span class="user-name-content">{{ user.firstName }}&nbsp;{{ user.lastName }}</span></div>
     <div class="user-email">{{ user.email }}</div>
 
-    <a href="" class="link-remove">Remove</a>
+    <a class="link-remove" *ngIf="isRemoveAvailable" (click)="handleClick()">Remove</a>
 </div>

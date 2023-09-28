@@ -53,4 +53,8 @@ export class ProjectService {
     public getProjectUsers(projectId: number): Observable<UserDto[]> {
         return this.httpService.getRequest<UserDto[]>(`${this.projectsApiUrl}/team/${projectId}`);
     }
+
+    public removeUserFromProject(projectId: number, user: UserDto): Observable<boolean> {
+        return this.httpService.putRequest<boolean>(`${this.projectsApiUrl}/${projectId}/remove-member`, user);
+    }
 }

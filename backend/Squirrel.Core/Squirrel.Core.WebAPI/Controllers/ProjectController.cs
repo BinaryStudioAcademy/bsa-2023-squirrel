@@ -30,6 +30,12 @@ public class ProjectController : ControllerBase
         return Ok(await _projectService.AddUsersToProjectAsync(projectId, usersDtos));
     }
 
+    [HttpPut("{projectId}/remove-member")]
+    public async Task<ActionResult<bool>> RemoveUserFromProjectAsync(int projectId, [FromBody] UserDto userDto)
+    {
+        return Ok(await _projectService.RemoveUserFromProjectAsync(projectId, userDto));
+    }
+
     [HttpPut("{projectId}")]
     public async Task<ActionResult<ProjectResponseDto>> UpdateProjectAsync(int projectId, [FromBody] UpdateProjectDto updateProjectDto)
     {

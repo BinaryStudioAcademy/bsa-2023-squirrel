@@ -14,7 +14,7 @@
 
     <div class="card-container">
         <app-user-card *ngFor="let user of filterOptions()" [user]="user"
-            [isRemoveAvailable]="currentProjectOwner!.id !== user.id"></app-user-card>
+            [isRemoveAvailable]="currentProjectOwner!.id !== user.id" (removeOnClick)="removeUser(user)"></app-user-card>
     </div>
 
 </div>

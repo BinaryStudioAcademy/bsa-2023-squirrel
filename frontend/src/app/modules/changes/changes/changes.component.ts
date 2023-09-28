@@ -27,6 +27,8 @@ export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy
 
     public contentChanges: DatabaseItemContentCompare[] = [];
 
+    public showContentChanges: DatabaseItemContentCompare[] = [];
+
     public guid: string;
 
     public items: TreeNode[];
@@ -112,7 +114,20 @@ export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy
     }
 
     public selectionChanged(event: { selectedNodes: TreeNode[]; originalStructure: TreeNode[]; }) {
+        this.showSelectedChanges(event.selectedNodes);
         this.selectedItems = event.originalStructure;
+    }
+
+    public showSelectedChanges(selectedChanges: TreeNode[]) {
+        this.showContentChanges = [];
+        for (let i = 0; i < selectedChanges.length; i++) {
+            const selectedName = selectedChanges[i].name;
+            const matchingContentChange = this.contentChanges.find(contentChange => contentChange.itemName === selectedName);
+
+            if (matchingContentChange) {
+                this.showContentChanges.push(matchingContentChange);
+            }
+        }
     }
 
     public messageChanged(message: string) {

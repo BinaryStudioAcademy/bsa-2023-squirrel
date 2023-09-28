@@ -25,12 +25,12 @@ export class BranchListComponent {
         this.branches = this.getBranches();
     }
 
-    getBranchTypes() {
+    public getBranchTypes() {
         // TODO: fetch data from server, remove placeholder data
         return ['All', 'Open', 'Merged'];
     }
 
-    onBranchTypeSelectionChange($event: any) {
+    public onBranchTypeSelectionChange($event: any) {
         // TODO: add filter logic
         // eslint-disable-next-line no-console
         console.log($event);

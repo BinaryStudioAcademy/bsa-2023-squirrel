@@ -16,12 +16,15 @@ public sealed class ScriptService : BaseService, IScriptService
     private const string ExecuteScriptRoutePrefix = "/api/ConsoleAppHub/execute-script";
     private const string FormatScriptRoutePrefix = "/api/Script/format";
     private readonly IConfiguration _configuration;
+    private readonly IUserIdGetter _userIdGetter;
     private readonly IHttpClientService _httpClientService;
 
-    public ScriptService(SquirrelCoreContext context, IMapper mapper, IHttpClientService httpClientService, IConfiguration configuration) : base(context, mapper)
+    public ScriptService(SquirrelCoreContext context, IMapper mapper, IHttpClientService httpClientService,
+        IConfiguration configuration, IUserIdGetter userIdGetter) : base(context, mapper)
     {
         _httpClientService = httpClientService;
         _configuration = configuration;
+        _userIdGetter = userIdGetter;
     }
 
     public async Task<ScriptDto> CreateScriptAsync(CreateScriptDto dto, int authorId)
@@ -49,8 +52,8 @@ public sealed class ScriptService : BaseService, IScriptService
     public async Task<ICollection<ScriptDto>> GetAllScriptsAsync(int projectId)
     {
         var scripts = await _context.Scripts
-                                    .Where(x => x.ProjectId == projectId)
-                                    .ToListAsync();
+            .Where(x => x.ProjectId == projectId)
+            .ToListAsync();
 
         return _mapper.Map<List<ScriptDto>>(scripts);
     }
@@ -72,13 +75,17 @@ public sealed class ScriptService : BaseService, IScriptService
     public async Task<QueryResultTable> ExecuteSqlScriptAsync(InboundScriptDto inboundScriptDto)
     {
         return await _httpClientService.SendAsync<InboundScriptDto, QueryResultTable>
-           ($"{_configuration[SqlServiceUrlSection]}{ExecuteScriptRoutePrefix}", inboundScriptDto, HttpMethod.Post);
+            ($"{_configuration[SqlServiceUrlSection]}{ExecuteScriptRoutePrefix}", inboundScriptDto, HttpMethod.Post);
     }
-    
+
     private async Task<Script> GetScriptByIdInternalAsync(int scriptId)
     {
-        var scriptEntity = await _context.Scripts.FindAsync(scriptId);
-        if (scriptEntity is null)
+        var scriptEntity = await _context.Scripts
+            .Include(s => s.Project)
+            .ThenInclude(p => p.Users)
+            .FirstOrDefaultAsync(s => s.Id == scriptId);
+
+        if (scriptEntity is null || scriptEntity.Project.Users.Any(u => u.Id == _userIdGetter.GetCurrentUserId()))
         {
             throw new EntityNotFoundException();
         }

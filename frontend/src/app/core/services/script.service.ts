@@ -38,7 +38,7 @@ export class ScriptService {
         return this.httpService.postRequest(`${this.scriptRoutePrefix}/execute`, dto);
     }
 
-    public deleteScript(scriptId: number){
+    public deleteScript(scriptId: number) {
         return this.httpService.deleteRequest(`${this.scriptRoutePrefix}/${scriptId}`);
     }
 }

@@ -1,12 +1,19 @@
-<div class="general-settings-form">
-    <div class="input-container">
-        <app-input [formControl]="$any(projectForm.controls['projectName'])" [label]="'Project name'"></app-input>
+<div class="edit-project-tab">
+    <div class="edit-tag">Edit project
     </div>
-    <div class="text-area-container">
-        <label class="description-label">Description</label>
-        <textarea [formControl]="$any(projectForm.controls['description'])"
-            placeholder="Write description" class="description-msg-input" rows="4"></textarea>
+
+    <div class="project-name-tag">Project name</div>
+
+    <div class="project-name-input-container">
+        <app-input [formControl]="$any(projectForm.controls['projectName'])"></app-input>
     </div>
+
+    <div class="project-description-tag">Description</div>
+
+    <div class="project-description-input-container">
+        <app-input [formControl]="$any(projectForm.controls['description'])"></app-input>
+    </div>
+
     <div class="button-container">
         <app-button text="Save" width="100%" variant="outline-primary" [isDisabled]="projectForm.invalid"
                     (buttonOnClick)="onSaveClick()">

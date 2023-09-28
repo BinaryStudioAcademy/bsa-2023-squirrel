@@ -66,13 +66,14 @@ public class CommitService : BaseService, ICommitService
         }
         // Update commit to be HEAD
         var branchCommit = await _context.BranchCommits
-            .FirstOrDefaultAsync(x => x.BranchId == branchEntity.Id);
+            .FirstOrDefaultAsync(x => 
+                x.CommitId == entity.Id && 
+                x.BranchId == branchEntity.Id);
         if (branchCommit is null)
         {
-            throw new EntityNotFoundException(nameof(branchEntity));
+            throw new EntityNotFoundException(nameof(branchCommit));
         }
         branchCommit.IsHead = true;
-        _context.BranchCommits.Update(branchCommit);
         // Save changes
         await _context.SaveChangesAsync();
         return _mapper.Map<CommitDto>(entity);

@@ -8,7 +8,6 @@ public interface IExecuteOnClientSide
 
     // Actions
     Task GetAllTablesNamesAsync(Guid queryId);
-    Task GetTableDataAsync(Guid queryId, string schema, string tableName, int rowsCount);
     Task GetAllStoredProceduresNamesAsync(Guid queryId);
     Task GetAllFunctionsNamesAsync(Guid queryId);
 

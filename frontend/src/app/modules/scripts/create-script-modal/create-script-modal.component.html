@@ -1,20 +1,24 @@
-    <div class="header">
-        <h4 class="header-title">Create new script</h4>
-        <app-close-btn (buttonOnClick)="close()"></app-close-btn>
+<div class="header">
+    <h4 class="header-title">Create new script</h4>
+    <app-close-btn (buttonOnClick)="close()"></app-close-btn>
+</div>
+<mat-dialog-content>
+    <div class="input-container">
+        <app-input
+            class="input"
+            placeholder="Enter the name of your script"
+            [formControl]="$any(newScriptForm.controls['scriptName'])"
+            label="Script name">
+        </app-input>
     </div>
-    <mat-dialog-content>
-        <div class="input-container">
-            <app-input class="input" placeholder="Enter the name of your script"
-                       [formControl]="$any(newScriptForm.controls['scriptName'])" label="Script name">
-            </app-input>
-            <app-input class="input" placeholder="Enter the file name" [formControl]="$any(newScriptForm.controls['fileName'])"
-                       label="File name">
-            </app-input>
-        </div>
-    </mat-dialog-content>
+</mat-dialog-content>
 
-    <mat-dialog-actions class="modal-buttons">
-        <app-button text="Create" width="100%" variant="outline-primary" [isDisabled]="newScriptForm.invalid"
-                    (buttonOnClick)="createScript()">
-        </app-button>
-    </mat-dialog-actions>
+<mat-dialog-actions class="modal-buttons">
+    <app-button
+        text="Create"
+        width="100%"
+        variant="outline-secondary"
+        [isDisabled]="newScriptForm.invalid"
+        (buttonOnClick)="createScript()">
+    </app-button>
+</mat-dialog-actions>

@@ -8,5 +8,4 @@ public class QueryParameters
     public string ClientId { get; set; } = string.Empty;
     public string FilterSchema { get; set; } = string.Empty;
     public string FilterName { get; set; } = string.Empty;
-    public int FilterRowsCount { get; set; }
 }

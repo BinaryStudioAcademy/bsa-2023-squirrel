@@ -1,13 +1,20 @@
-<div class="user-list">
-    <app-button
-        class="add-button"
-        text="Add members"
-        width="130px"
-        height="55px"
-        padding=""
-        variant="outline-primary"
-        (click)="OpenAddUserModal()"
-    >
-    </app-button>
-    <app-user-card *ngFor="let user of users" [user]="user"></app-user-card>
+<div class="team-tab">
+    <div class="team-heading">
+        Team</div>
+
+    <div class="add-member-button" style="width: 145px; height: 45px; right: 30px; top: 70px; position: absolute;">
+        <app-button class="add-button" text="Add members" width="130px" height="55px" padding=""
+            variant="outline-primary" (click)="OpenAddUserModal()">
+        </app-button>
+    </div>
+    <div class="search-bar">
+        <app-input [width]="'100%'" [placeholder]="'Search...'" [formControl]="$any(searchForm.controls['search'])" (keydown.enter)="filterOptions()">
+        </app-input>
+    </div>
+
+    <div class="card-container">
+        <app-user-card *ngFor="let user of filterOptions()" [user]="user"
+            [isRemoveAvailable]="currentProjectOwner!.id !== user.id" (removeOnClick)="removeUser(user)"></app-user-card>
+    </div>
+
 </div>

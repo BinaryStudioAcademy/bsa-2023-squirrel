@@ -18,6 +18,10 @@ export class BranchService {
         return this.httpService.getRequest<BranchDto[]>(`${this.routePrefix}/${projectId}`);
     }
 
+    public getLastCommitId(branchId: number) {
+        return this.httpService.getRequest<number>(`${this.routePrefix}/lastcommit/${branchId}`);
+    }
+
     public addBranch(projectId: number, dto: CreateBranchDto) {
         return this.httpService.postRequest<BranchDto>(`${this.routePrefix}/${projectId}`, dto);
     }

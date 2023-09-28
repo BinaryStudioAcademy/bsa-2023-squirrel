@@ -31,7 +31,7 @@ export class InputComponent implements ControlValueAccessor {
 
     public writeValue(): void {}
 
-    get control(): FormControl {
+    public get control(): FormControl {
         return this.ngControl.control as FormControl;
     }
 }

@@ -6,11 +6,8 @@
             (selectionChange)="selectionChanged($event)"
             (messageChange)="messageChanged($event)"></app-tree>
         <div class="changes-content">
-            <div *ngFor="let changes of contentChanges" class="solution-sector">
-                <app-code
-                    [textPair]="changes.sideBySideDiff"
-                    [height]="'100%'"
-                    [header]="changes.schemaName + '.' + changes.itemName"></app-code>
+            <div *ngFor="let changes of selectedContentChanges" class="solution-sector">
+                <app-code [textPair]="changes.sideBySideDiff" [height]="'100%'" [header]="changes.schemaName + '.' + changes.itemName" ></app-code>
             </div>
         </div>
     </div>

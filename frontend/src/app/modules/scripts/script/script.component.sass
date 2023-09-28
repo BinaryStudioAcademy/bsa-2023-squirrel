@@ -1,14 +1,41 @@
 @import "/src/styles/color"
+@import "/src/styles/reusable"
 
-mat-card-content
-    overflow: hidden
-    text-overflow: ellipsis
+.script-container
+    height: 60px
+    display: flex
+    justify-content: space-between
+    padding: 10px 5px
+    margin-bottom: 5px
+    &:hover
+        .btn-sector
+            display: block
 
-mat-card
-    background: $light-shadow
+.script-content
     display: flex
     align-items: center
-    gap: 10px
+    width: 85%
+
+.edit-section
+    display: flex
+    justify-content: center
+    width: 15%
+
+.script-name
+    overflow: hidden
+    text-overflow: ellipsis
+    @extend .title
+    margin: 0
 
 app-avatar
     display: inline
+
+.trash-icon
+    font-size: 16px
+
+.btn-sector
+    display: none
+
+.file
+    height: 20px
+    margin-right: 10px

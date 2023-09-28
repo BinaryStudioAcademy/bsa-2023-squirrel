@@ -50,10 +50,9 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
         { displayName: 'Settings', path: './settings' },
     ];
 
-    // eslint-disable-next-line no-empty-function
     constructor(
-        private branchService: BranchService,
         public dialog: MatDialog,
+        private branchService: BranchService,
         private route: ActivatedRoute,
         private sharedProject: SharedProjectService,
         private changesService: LoadChangesService,
@@ -66,7 +65,7 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
         super();
     }
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.route.params.subscribe((params) => {
             this.currentProjectId = params['id'];
         });
@@ -110,7 +109,7 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
         return currentBranch ? this.branches.indexOf(currentBranch) : 0;
     }
 
-    filterBranch(item: BranchDto, value: string) {
+    public filterBranch(item: BranchDto, value: string) {
         return item.name.includes(value);
     }
 

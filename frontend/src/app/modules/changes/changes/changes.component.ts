@@ -13,7 +13,6 @@ import { CreateCommitDto } from 'src/app/models/commit/create-commit-dto';
 import { DatabaseItem } from 'src/app/models/database-items/database-item';
 import { DatabaseItemType } from 'src/app/models/database-items/database-item-type';
 import { ItemCategory } from 'src/app/models/database-items/item-category';
-import { TextPairDifferenceDto } from 'src/app/models/text-pair/text-pair-difference-dto';
 
 import { DatabaseItemContentCompare } from '../../../models/database-items/database-item-content-compare';
 
@@ -23,11 +22,11 @@ import { DatabaseItemContentCompare } from '../../../models/database-items/datab
     styleUrls: ['./changes.component.sass'],
 })
 export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy {
-    public textPair: TextPairDifferenceDto;
+    public allContentChanges: DatabaseItemContentCompare[] = [];
 
-    public contentChanges: DatabaseItemContentCompare[] = [];
+    public selectedContentChanges: DatabaseItemContentCompare[] = [];
 
-    public guid: string;
+    public currentChangesGuid: string;
 
     public items: TreeNode[];
 
@@ -46,20 +45,16 @@ export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy
         private commitChangesService: CommitChangesService,
     ) {
         super();
-        this.eventService.changesLoadedEvent$
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe((x) => {
-                if (x !== undefined) {
-                    this.items = this.mapDbItems(x);
-                }
-            });
-        eventService.changesSavedEvent$
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe((x) => {
-                if (x !== undefined) {
-                    this.guid = x;
-                }
-            });
+        this.eventService.changesLoadedEvent$.pipe(takeUntil(this.unsubscribe$)).subscribe((x) => {
+            if (x !== undefined) {
+                this.items = this.mapDbItems(x);
+            }
+        });
+        eventService.changesSavedEvent$.pipe(takeUntil(this.unsubscribe$)).subscribe((x) => {
+            if (x !== undefined) {
+                this.currentChangesGuid = x;
+            }
+        });
     }
 
     public ngOnInit(): void {
@@ -67,18 +62,18 @@ export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy
         this.commitChangesService.contentChanges$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((changes) => {
-                this.contentChanges = changes;
+                this.allContentChanges = changes;
             });
     }
 
     public validateCommit() {
-        if (!this.guid) {
+        if (!this.currentChangesGuid) {
             return false;
         }
         if (!(this.message.length > 0 && this.message.length <= 300)) {
             return false;
         }
-        if (!this.selectedItems.some(x => x.children?.some(y => y.selected))) {
+        if (!this.selectedItems.some((x) => x.children?.some((y) => y.selected))) {
             return false;
         }
 
@@ -86,33 +81,48 @@ export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy
     }
 
     public commit() {
+        this.spinner.show();
+
         const branchId = this.branchService.getCurrentBranch(this.currentProjectId);
         const commit = {
             branchId,
             postScript: '',
             preScript: '',
             selectedItems: this.selectedItems,
-            changesGuid: this.guid,
+            changesGuid: this.currentChangesGuid,
             message: this.message,
         } as CreateCommitDto;
 
-        this.spinner.show();
-        this.commitService.commit(commit)
+        this.commitService
+            .commit(commit)
             .pipe(takeUntil(this.unsubscribe$), finalize(this.spinner.hide))
-            .subscribe(x => {
+            .subscribe((x) => {
                 // eslint-disable-next-line no-console
                 console.log(x.body);
-                this.items.forEach(parent => {
+                this.items.forEach((parent) => {
                     if (parent.children) {
-                        parent.children = parent.children.filter(item => !item.selected);
+                        parent.children = parent.children.filter((item) => !item.selected);
                     }
                 });
-                this.items = this.items.filter(item => !item.selected && item.children && item.children?.length > 0);
+                this.items = this.items.filter((item) => !item.selected && item.children && item.children?.length > 0);
             });
     }
 
     public selectionChanged(event: { selectedNodes: TreeNode[]; originalStructure: TreeNode[]; }) {
+        this.addSelectedChanges(event.selectedNodes);
         this.selectedItems = event.originalStructure;
+    }
+
+    public addSelectedChanges(selectedChanges: TreeNode[]) {
+        this.selectedContentChanges = [];
+        for (let i = 0; i < selectedChanges.length; i++) {
+            const selectedName = selectedChanges[i].name;
+            const matchingContentChange = this.allContentChanges.find(contentChange => contentChange.itemName === selectedName);
+
+            if (matchingContentChange) {
+                this.selectedContentChanges.push(matchingContentChange);
+            }
+        }
     }
 
     public messageChanged(message: string) {
@@ -138,7 +148,7 @@ export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy
         });
         const tree = [] as TreeNode[];
 
-        Object.values(typeMap).forEach(x => {
+        Object.values(typeMap).forEach((x) => {
             tree.push(x);
         });
 

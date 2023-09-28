@@ -227,10 +227,11 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, CanCo
 
     @HostListener('window:scroll')
     public onScroll(): void {
-        const element = this.elementRef.nativeElement.querySelector('app-script-result');
-        const elementRect = element.getBoundingClientRect();
+        const element = this.elementRef.nativeElement.querySelector('app-script-result') as HTMLElement | null;
 
-        this.isToTopBtnShowed = elementRect.top < 0;
+        if (element) {
+            this.isToTopBtnShowed = element.getBoundingClientRect().top < 0;
+        }
     }
 
     private removeLastErrorForSelectedScript(): void {

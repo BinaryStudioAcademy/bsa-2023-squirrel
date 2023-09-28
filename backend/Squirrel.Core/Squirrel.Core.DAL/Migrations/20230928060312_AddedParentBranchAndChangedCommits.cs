@@ -4,7 +4,7 @@
 
 namespace Squirrel.Core.DAL.Migrations
 {
-    public partial class UpdateCommit : Migration
+    public partial class AddedParentBranchAndChangedCommits : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -28,10 +28,36 @@ namespace Squirrel.Core.DAL.Migrations
                 type: "nvarchar(max)",
                 nullable: false,
                 defaultValue: "");
+
+            migrationBuilder.AddColumn<int>(
+                name: "ParentBranchId",
+                table: "Branches",
+                type: "int",
+                nullable: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Branches_ParentBranchId",
+                table: "Branches",
+                column: "ParentBranchId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Branches_Branches_ParentBranchId",
+                table: "Branches",
+                column: "ParentBranchId",
+                principalTable: "Branches",
+                principalColumn: "Id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Branches_Branches_ParentBranchId",
+                table: "Branches");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Branches_ParentBranchId",
+                table: "Branches");
+
             migrationBuilder.DropColumn(
                 name: "IsSaved",
                 table: "Commits");
@@ -43,6 +69,10 @@ namespace Squirrel.Core.DAL.Migrations
             migrationBuilder.DropColumn(
                 name: "PreScript",
                 table: "Commits");
+
+            migrationBuilder.DropColumn(
+                name: "ParentBranchId",
+                table: "Branches");
         }
     }
 }

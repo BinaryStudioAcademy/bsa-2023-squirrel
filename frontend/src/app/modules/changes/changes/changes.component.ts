@@ -27,7 +27,7 @@ export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy
 
     public contentChanges: DatabaseItemContentCompare[] = [];
 
-    public guid: string;
+    public currentChangesGuid: string;
 
     public items: TreeNode[];
 
@@ -46,39 +46,33 @@ export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy
         private commitChangesService: CommitChangesService,
     ) {
         super();
-        this.eventService.changesLoadedEvent$
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe((x) => {
-                if (x !== undefined) {
-                    this.items = this.mapDbItems(x);
-                }
-            });
-        eventService.changesSavedEvent$
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe((x) => {
-                if (x !== undefined) {
-                    this.guid = x;
-                }
-            });
+        this.eventService.changesLoadedEvent$.pipe(takeUntil(this.unsubscribe$)).subscribe((x) => {
+            if (x !== undefined) {
+                this.items = this.mapDbItems(x);
+            }
+        });
+        eventService.changesSavedEvent$.pipe(takeUntil(this.unsubscribe$)).subscribe((x) => {
+            if (x !== undefined) {
+                this.currentChangesGuid = x;
+            }
+        });
     }
 
     public ngOnInit(): void {
         this.currentProjectId = this.projectService.currentProjectId;
-        this.commitChangesService.contentChanges$
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe((changes) => {
-                this.contentChanges = changes;
-            });
+        this.commitChangesService.contentChanges$.pipe(takeUntil(this.unsubscribe$)).subscribe((changes) => {
+            this.contentChanges = changes;
+        });
     }
 
     public validateCommit() {
-        if (!this.guid) {
+        if (!this.currentChangesGuid) {
             return false;
         }
         if (!(this.message.length > 0 && this.message.length <= 300)) {
             return false;
         }
-        if (!this.selectedItems.some(x => x.children?.some(y => y.selected))) {
+        if (!this.selectedItems.some((x) => x.children?.some((y) => y.selected))) {
             return false;
         }
 
@@ -86,32 +80,34 @@ export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy
     }
 
     public commit() {
+        this.spinner.show();
+
         const branchId = this.branchService.getCurrentBranch(this.currentProjectId);
         const commit = {
             branchId,
             postScript: '',
             preScript: '',
             selectedItems: this.selectedItems,
-            changesGuid: this.guid,
+            changesGuid: this.currentChangesGuid,
             message: this.message,
         } as CreateCommitDto;
 
-        this.spinner.show();
-        this.commitService.commit(commit)
+        this.commitService
+            .commit(commit)
             .pipe(takeUntil(this.unsubscribe$), finalize(this.spinner.hide))
-            .subscribe(x => {
+            .subscribe((x) => {
                 // eslint-disable-next-line no-console
                 console.log(x.body);
-                this.items.forEach(parent => {
+                this.items.forEach((parent) => {
                     if (parent.children) {
-                        parent.children = parent.children.filter(item => !item.selected);
+                        parent.children = parent.children.filter((item) => !item.selected);
                     }
                 });
-                this.items = this.items.filter(item => !item.selected && item.children && item.children?.length > 0);
+                this.items = this.items.filter((item) => !item.selected && item.children && item.children?.length > 0);
             });
     }
 
-    public selectionChanged(event: { selectedNodes: TreeNode[]; originalStructure: TreeNode[]; }) {
+    public selectionChanged(event: { selectedNodes: TreeNode[]; originalStructure: TreeNode[] }) {
         this.selectedItems = event.originalStructure;
     }
 
@@ -138,7 +134,7 @@ export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy
         });
         const tree = [] as TreeNode[];
 
-        Object.values(typeMap).forEach(x => {
+        Object.values(typeMap).forEach((x) => {
             tree.push(x);
         });
 

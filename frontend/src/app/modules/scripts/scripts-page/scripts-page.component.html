@@ -25,7 +25,7 @@
             </div>
             <app-code-editor *ngIf="selectedScript"
                              [formControl]="$any(form.controls['scriptContent'])"
-                             [name]="selectedScript?.fileName">
+                             [name]="selectedScript.fileName">
             </app-code-editor>
         </div>
     </div>

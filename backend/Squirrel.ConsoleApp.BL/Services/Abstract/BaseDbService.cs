@@ -33,7 +33,7 @@ public abstract class BaseDbService : IDatabaseService
 
     private protected async Task<QueryResultTable> ExecuteQueryFromConnectionInternalAsync(DbConnection connection, ParameterizedSqlCommand query)
     {
-        using var command = CreateCommandInternal(connection, query);
+        await using var command = CreateCommandInternal(connection, query);
         command.CommandTimeout = 45;
 
         await connection.OpenAsync();

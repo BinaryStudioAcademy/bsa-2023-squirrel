@@ -9,6 +9,13 @@
             <div *ngFor="let changes of selectedContentChanges" class="solution-sector">
                 <h2>{{ DatabaseItemTypeName[changes.itemType] }}: {{ changes.schemaName }}.{{ changes.itemName }}</h2>
                 <textarea>{{ formatContent(changes.itemType, changes.sideBySideDiff.newTextLines) }}</textarea>
+
+                <app-code-editor
+                    [formControl]="$any(form.controls['scriptContent'])"
+                    [name]="
+                        DatabaseItemTypeName[changes.itemType] + ': ' + changes.schemaName + '.' + changes.itemName
+                    ">
+                </app-code-editor>
             </div>
         </div>
     </div>

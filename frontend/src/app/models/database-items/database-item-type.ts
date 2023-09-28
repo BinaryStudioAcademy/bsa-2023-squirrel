@@ -4,5 +4,5 @@ export enum DatabaseItemType {
     Constraint,
     StoredProcedure,
     Function,
-    View,
+    View
 }

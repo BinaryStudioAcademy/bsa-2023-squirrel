@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { BaseComponent } from '@core/base/base.component';
 import { BranchService } from '@core/services/branch.service';
 import { CommitService } from '@core/services/commit.service';
@@ -26,6 +27,8 @@ import { DatabaseItemContentCompare } from '../../../models/database-items/datab
 })
 export class CodeComponent extends BaseComponent implements OnInit, OnDestroy {
     public allContentChanges: DatabaseItemContentCompare[] = [];
+
+    public form: FormGroup;
 
     public DatabaseItemTypeName = DatabaseItemTypeName;
 
@@ -91,6 +94,29 @@ export class CodeComponent extends BaseComponent implements OnInit, OnDestroy {
         }
     }
 
+    public selectionChanged(event: { selectedNodes: TreeNode[]; originalStructure: TreeNode[] }) {
+        this.addSelectedChanges(event.selectedNodes);
+        this.selectedItems = event.originalStructure;
+    }
+
+    public addSelectedChanges(selectedChanges: TreeNode[]) {
+        this.selectedContentChanges = [];
+        for (let i = 0; i < selectedChanges.length; i++) {
+            const selectedName = selectedChanges[i].name;
+            const matchingContentChange = this.allContentChanges.find(
+                (contentChange) => contentChange.itemName === selectedName,
+            );
+
+            if (matchingContentChange) {
+                this.selectedContentChanges.push(matchingContentChange);
+            }
+        }
+    }
+
+    public messageChanged(message: string) {
+        this.message = message;
+    }
+
     private cleanUpText(text: string): string {
         return text.replace(/\\"/g, '"').replace(/\\n/g, '\n');
     }
@@ -128,29 +154,6 @@ export class CodeComponent extends BaseComponent implements OnInit, OnDestroy {
 
     private formatDefinition(content: any): string {
         return content.Definition;
-    }
-
-    public selectionChanged(event: { selectedNodes: TreeNode[]; originalStructure: TreeNode[] }) {
-        this.addSelectedChanges(event.selectedNodes);
-        this.selectedItems = event.originalStructure;
-    }
-
-    public addSelectedChanges(selectedChanges: TreeNode[]) {
-        this.selectedContentChanges = [];
-        for (let i = 0; i < selectedChanges.length; i++) {
-            const selectedName = selectedChanges[i].name;
-            const matchingContentChange = this.allContentChanges.find(
-                (contentChange) => contentChange.itemName === selectedName,
-            );
-
-            if (matchingContentChange) {
-                this.selectedContentChanges.push(matchingContentChange);
-            }
-        }
-    }
-
-    public messageChanged(message: string) {
-        this.message = message;
     }
 
     private mapDbItems(items: DatabaseItem[]): TreeNode[] {

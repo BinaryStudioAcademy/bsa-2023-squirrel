@@ -15,7 +15,7 @@
                 <li class="option" *ngFor="let script of filteredScripts" [cdkOption]="script"
                     [class.selected-option]="selectedScript?.id === script.id"
                     [class.unsaved]="form.controls['scriptContent'].dirty && selectedScript?.id === script.id">
-                    <app-script [script]="script" (click)="onScriptSelected(script)"></app-script>
+                    <app-script [script]="script" (click)="onScriptSelected(script)" (delete)="deleteScript(script.id)"></app-script>
                 </li>
             </ul>
         </div>

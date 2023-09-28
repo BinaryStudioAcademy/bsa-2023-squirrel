@@ -235,6 +235,26 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, CanCo
             s.fileName.includes(this.form.value.search) || s.id === this.selectedScript?.id);
     }
 
+    public deleteScript(scriptId: number) {
+        this.scriptService.deleteScript(scriptId)
+            .pipe(
+                takeUntil(this.unsubscribe$),
+                finalize(() => this.spinner.hide()),
+            )
+            .subscribe({
+                next: () => {
+                    this.notification.info('Script successfully deleted');
+                    this.scripts.splice(this.scripts.findIndex(s => s.id === scriptId), 1);
+                    this.filterScripts();
+                    this.selectedScript = undefined;
+                    this.form.markAsPristine();
+                },
+                error: err => {
+                    this.notification.error(err.message);
+                },
+            });
+    }
+
     @HostListener('window:scroll')
     public onScroll(): void {
         const element = this.elementRef.nativeElement.querySelector('app-script-result');

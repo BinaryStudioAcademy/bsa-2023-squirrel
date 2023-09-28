@@ -36,11 +36,7 @@ public sealed class ScriptService : BaseService, IScriptService
 
     public async Task<ScriptDto> UpdateScriptAsync(ScriptDto dto, int editorId)
     {
-        var script = await _context.Scripts.FindAsync(dto.Id);
-        if (script is null)
-        {
-            throw new EntityNotFoundException();
-        }
+        var script = await GetScriptByIdInternalAsync(dto.Id);
 
         _mapper.Map(dto, script);
         script.LastUpdatedByUserId = editorId;
@@ -59,6 +55,14 @@ public sealed class ScriptService : BaseService, IScriptService
         return _mapper.Map<List<ScriptDto>>(scripts);
     }
 
+    public async Task DeleteScriptAsync(int scriptId)
+    {
+        var script = await GetScriptByIdInternalAsync(scriptId);
+
+        _context.Remove(script);
+        await _context.SaveChangesAsync();
+    }
+
     public async Task<ScriptContentDto> GetFormattedSqlAsync(InboundScriptDto inboundScriptDto)
     {
         return await _httpClientService.SendAsync<InboundScriptDto, ScriptContentDto>
@@ -69,5 +73,16 @@ public sealed class ScriptService : BaseService, IScriptService
     {
         return await _httpClientService.SendAsync<InboundScriptDto, QueryResultTable>
            ($"{_configuration[SqlServiceUrlSection]}{ExecuteScriptRoutePrefix}", inboundScriptDto, HttpMethod.Post);
+    }
+    
+    private async Task<Script> GetScriptByIdInternalAsync(int scriptId)
+    {
+        var scriptEntity = await _context.Scripts.FindAsync(scriptId);
+        if (scriptEntity is null)
+        {
+            throw new EntityNotFoundException();
+        }
+
+        return scriptEntity;
     }
 }

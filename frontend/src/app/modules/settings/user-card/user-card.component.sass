@@ -8,6 +8,7 @@
     background: white
     border-radius: 10px
     cursor: pointer
+    align-content: center
 
 .user-card-top
     width: 250px
@@ -30,38 +31,44 @@
     position: absolute
 
 .user-name
-    width: 130px
+    width: fit-content
+    max-width: 150px
     height: 20px
-    top: 64px
-    position: absolute
+    margin-top: 34px
+    margin-left: auto
+    margin-right: auto
+    position: relative
     opacity: 0.50
-    left: 50%
-    transform: translateX(-50%)
-    overflow-x: hidden
+    overflow: hidden
+    white-space: nowrap
+    text-overflow: ellipsis
 
 .user-name-content
-    color: #282828
+    color: $text-main
     font-size: 12px
     font-weight: $bold-weight
 
 .user-email
-    left: 47px
-    top: 85px
-    position: absolute
+    margin-top: 0
+    margin-left: auto
+    margin-right: auto
+    position: relative
+    width: fit-content
+    max-width: 150px
     opacity: 0.50
-    color: #282828
+    color: $text-main
     font-size: 12px
     font-weight: $normal-weight
-    left: 50%
-    transform: translateX(-50%)
-    word-wrap: break-word
+    overflow: hidden
+    white-space: nowrap
+    text-overflow: ellipsis
 
 .link-remove
     width: 50px
     right: 12px
     bottom: 13px
     position: absolute
-    color: #282828
+    color: $text-main
     font-size: 12px
     font-weight: $normal-weight
     text-decoration: none

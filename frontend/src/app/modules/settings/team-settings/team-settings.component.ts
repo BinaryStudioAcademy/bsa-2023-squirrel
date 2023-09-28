@@ -85,6 +85,14 @@ export class TeamSettingsComponent extends BaseComponent implements OnInit {
                 },
                 next: projectUsers => {
                     this.users = projectUsers;
+                    this.users.push({
+                        id: 1,
+                        userName: "john_doe",
+                        firstName: "John",
+                        lastName: "Doexxxxxxxxxxxxxxxxxssssx",
+                        email: "john.doe@example.com",
+                        avatarUrl: ""
+                    },)
                 },
             });
     }

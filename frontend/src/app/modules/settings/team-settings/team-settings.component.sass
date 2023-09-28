@@ -1,19 +1,22 @@
+@import "/src/styles/color"
+@import "/src/styles/weights"
+    
 .team-tab
     width: 87%
     height: 407px
     left: 115px
     top: 492px
     position: absolute
-    background: #FAFBFF
+    background: $project-background-color
     border-radius: 15px
 
 .team-heading
     left: 52px
     top: 25px
     position: absolute
-    color: #282828
+    color: $text-main
     font-size: 18px
-    font-weight: 500
+    font-weight: $medium-weight
     word-wrap: break-word
 
 .add-member-button
@@ -26,16 +29,17 @@
 .search-bar
     width: 247px
     height: 45px
-    background: #d5ddec
+    background: $bg-input
     border-radius: 10px
     left: 48px
     top: 70px
     position: absolute
 
 .card-container
+    max-height: 200px
     margin-top: 145px
     margin-left: 45px
     display: grid
-    grid-template-columns: repeat(4, minmax(200px, 1fr))
-    gap: 100px 50px
-    margin-bottom: 30px
+    grid-template-columns: repeat(3, minmax(200px, 1fr))
+    gap: 50px 50px
+    overflow-y: scroll

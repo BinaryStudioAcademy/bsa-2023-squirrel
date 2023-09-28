@@ -1,14 +1,10 @@
 @import "/src/styles/reusable"
 
-.modal-header
-    display: flex
-    justify-content: space-between
-    align-items: center
+.header
+    @extend .modal-header
 
-h4
-    margin: 0
-    font-size: 24px
-    @extend .title
+.header-title
+    @extend .modal-title
 
 .full-width
     width: 100%

@@ -111,11 +111,10 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, OnDes
 
         this.selectScript(script);
     }
-  
-    public openCreateModal(): void {
-        const dialogRef: any = this.dialog.open(CreateScriptModalComponent, {
-            width: '450px',
-        });
+
+    public createScript() {
+        if (this.form.get('scriptContent')?.dirty) {
+            const dialogRef = this.dialog.open(ConfirmationDialogComponent);
 
             dialogRef.afterClosed().subscribe((confirmed) => {
                 if (confirmed) {

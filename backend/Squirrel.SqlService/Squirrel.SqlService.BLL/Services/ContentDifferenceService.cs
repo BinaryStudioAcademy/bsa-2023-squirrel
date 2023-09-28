@@ -14,7 +14,6 @@ using Squirrel.Shared.DTO.UserDefinedType.DataType;
 using Squirrel.Shared.DTO.UserDefinedType.TableType;
 using Squirrel.Shared.DTO.View;
 using Blob = Squirrel.AzureBlobStorage.Models.Blob;
-using Squirrel.Core.DAL.Entities;
 
 namespace Squirrel.SqlService.BLL.Services;
 

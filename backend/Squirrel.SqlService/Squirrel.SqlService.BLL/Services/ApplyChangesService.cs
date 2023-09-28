@@ -1,11 +1,17 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using MongoDB.Bson;
+using Newtonsoft.Json;
 using Squirrel.ConsoleApp.Models;
 using Squirrel.Core.Common.DTO.Script;
 using Squirrel.Shared.DTO;
 using Squirrel.Shared.DTO.DatabaseItem;
+using Squirrel.Shared.DTO.Function;
+using Squirrel.Shared.DTO.Procedure;
+using Squirrel.Shared.DTO.View;
 using Squirrel.Shared.Enums;
 using Squirrel.SqlService.BLL.Interfaces;
 using Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
+using System.Text;
 using ConsoleHub = Squirrel.SqlService.BLL.Hubs.ConsoleAppHub;
 
 
@@ -33,7 +39,7 @@ public class ApplyChangesService : IApplyChangesService
 
     public async Task ApplyChanges(ApplyChangesDto applyChangesDto, int commitId)
     {
-        var currentDbStructure = await _dbItemsRetrievalService.GetAllDbStructureAsync(guid);
+        var currentDbStructure = await _dbItemsRetrievalService.GetAllDbStructureAsync(Guid.Parse(applyChangesDto.ClientId!));
         var contentDifferenceList = await _contentDifferenceService.GetContentDiffsAsync(commitId, currentDbStructure, true);
         if (!contentDifferenceList.Any())
         {
@@ -51,22 +57,131 @@ public class ApplyChangesService : IApplyChangesService
             {
                 continue;
             }
-            if (contentCompare.ItemType == DatabaseItemType.Function || contentCompare.ItemType == DatabaseItemType.StoredProcedure)
+            if (contentCompare.ItemType == DatabaseItemType.Function)
             {
-                var changes = contentCompare.SideBySideDiff.NewTextLines.FirstOrDefault();
-                if (changes.Type == DiffPlex.DiffBuilder.Model.ChangeType.Modified)
-                {
-                    var alterScript = GetRoutineAlterScript(changes.Text);
-                    await ExecuteScript(applyChangesDto, alterScript);
-                }
+                await ExecuteApplyChangesRoutinesViewsAsync<FunctionDetailInfo>(contentCompare, applyChangesDto, DatabaseItemType.Function);
+            }
+            if (contentCompare.ItemType == DatabaseItemType.StoredProcedure)
+            {
+                await ExecuteApplyChangesRoutinesViewsAsync<ProcedureDetailInfo>(contentCompare, applyChangesDto, DatabaseItemType.Procedure);
+            }
+            if (contentCompare.ItemType == DatabaseItemType.View)
+            {
+                await ExecuteApplyChangesRoutinesViewsAsync<ViewDetailInfo>(contentCompare, applyChangesDto, DatabaseItemType.View);
             }
         }
     }
 
-    private string GetRoutineAlterScript(string modifiedScript)
+    private async Task ExecuteApplyChangesRoutinesViewsAsync<T>(DatabaseItemContentCompare contentCompare, ApplyChangesDto applyChangesDto, DatabaseItemType dbItemType) where T : BaseDbItemWithDefinition
     {
-        return modifiedScript.Replace("CREATE", "CREATE OR ALTER", true, null);
+        var newChanges = contentCompare.SideBySideDiff!.NewTextLines.FirstOrDefault() ?? throw new ArgumentNullException(nameof(contentCompare.SideBySideDiff.NewTextLines));
+        var oldChanges = contentCompare.SideBySideDiff.OldTextLines.FirstOrDefault() ?? throw new ArgumentNullException(nameof(contentCompare.SideBySideDiff.OldTextLines));
+        if (newChanges.Type == DiffPlex.DiffBuilder.Model.ChangeType.Modified)
+        {
+            if (newChanges.Text == "null")
+            {
+                var dropScript = $"DROP {dbItemType} IF EXISTS [{contentCompare.SchemaName}].[{contentCompare.ItemName}]";
+                await ExecuteScript(applyChangesDto, dropScript);
+            }
+            else
+            {
+                var itemDetailsDto = JsonConvert.DeserializeObject<T>(newChanges.Text)!;
+                var alterScript = itemDetailsDto.Definition.Replace("CREATE", "CREATE OR ALTER", true, null);
+                await ExecuteScript(applyChangesDto, alterScript);
+            }
+        }
+        if (newChanges.Type == DiffPlex.DiffBuilder.Model.ChangeType.Inserted)
+        {
+            if (oldChanges.Text is null)
+            {
+                var itemDetailsDto = JsonConvert.DeserializeObject<T>(newChanges.Text)!;
+                await ExecuteScript(applyChangesDto, itemDetailsDto.Definition);
+            }
+        }
     }
+
+    //private async Task ExecuteApplyFunctionChangesAsync(DatabaseItemContentCompare contentCompare, ApplyChangesDto applyChangesDto)
+    //{
+    //    var newChanges = contentCompare.SideBySideDiff!.NewTextLines.FirstOrDefault() ?? throw new ArgumentNullException(nameof(contentCompare.SideBySideDiff.NewTextLines));
+    //    var oldChanges = contentCompare.SideBySideDiff.OldTextLines.FirstOrDefault() ?? throw new ArgumentNullException(nameof(contentCompare.SideBySideDiff.OldTextLines));
+    //    if (newChanges.Type == DiffPlex.DiffBuilder.Model.ChangeType.Modified)
+    //    {
+    //        if (newChanges.Text == "null")
+    //        {
+    //            var dropScript = $"DROP FUNCTION IF EXISTS [{contentCompare.SchemaName}].[{contentCompare.ItemName}]";
+    //            await ExecuteScript(applyChangesDto, dropScript);
+    //        }
+    //        else
+    //        {
+    //            var itemDetailsDto = JsonConvert.DeserializeObject<FunctionDetailInfo>(newChanges.Text)!;
+    //            var alterScript = itemDetailsDto.Definition.Replace("CREATE", "CREATE OR ALTER", true, null);
+    //            await ExecuteScript(applyChangesDto, alterScript);
+    //        }
+    //    }
+    //    if (newChanges.Type == DiffPlex.DiffBuilder.Model.ChangeType.Inserted)
+    //    {
+    //        if (oldChanges.Text is null)
+    //        {
+    //            var itemDetailsDto = JsonConvert.DeserializeObject<FunctionDetailInfo>(newChanges.Text)!;
+    //            await ExecuteScript(applyChangesDto, itemDetailsDto.Definition);
+    //        }
+    //    }
+    //}
+    //private async Task ExecuteApplySpChangesAsync(DatabaseItemContentCompare contentCompare, ApplyChangesDto applyChangesDto)
+    //{
+    //    var newChanges = contentCompare.SideBySideDiff!.NewTextLines.FirstOrDefault() ?? throw new ArgumentNullException(nameof(contentCompare.SideBySideDiff.NewTextLines));
+    //    var oldChanges = contentCompare.SideBySideDiff.OldTextLines.FirstOrDefault() ?? throw new ArgumentNullException(nameof(contentCompare.SideBySideDiff.OldTextLines));
+    //    if (newChanges.Type == DiffPlex.DiffBuilder.Model.ChangeType.Modified)
+    //    {
+    //        if (newChanges.Text == "null")
+    //        {
+    //            var dropScript = $"DROP PROCEDURE IF EXISTS [{contentCompare.SchemaName}].[{contentCompare.ItemName}]";
+    //            await ExecuteScript(applyChangesDto, dropScript);
+    //        }
+    //        else
+    //        {
+    //            var itemDetailsDto = JsonConvert.DeserializeObject<ProcedureDetailInfo>(newChanges.Text)!;
+    //            var alterScript = itemDetailsDto.Definition.Replace("CREATE", "CREATE OR ALTER", true, null);
+    //            await ExecuteScript(applyChangesDto, alterScript);
+    //        }
+    //    }
+    //    if (newChanges.Type == DiffPlex.DiffBuilder.Model.ChangeType.Inserted)
+    //    {
+    //        if (oldChanges.Text is null)
+    //        {
+    //            var itemDetailsDto = JsonConvert.DeserializeObject<ProcedureDetailInfo>(newChanges.Text)!;
+    //            await ExecuteScript(applyChangesDto, itemDetailsDto.Definition);
+    //        }
+    //    }
+    //}
+
+    //private async Task ExecuteApplyViewChangesAsync(DatabaseItemContentCompare contentCompare, ApplyChangesDto applyChangesDto)
+    //{
+    //    var newChanges = contentCompare.SideBySideDiff!.NewTextLines.FirstOrDefault() ?? throw new ArgumentNullException(nameof(contentCompare.SideBySideDiff.NewTextLines));
+    //    var oldChanges = contentCompare.SideBySideDiff.OldTextLines.FirstOrDefault() ?? throw new ArgumentNullException(nameof(contentCompare.SideBySideDiff.OldTextLines));
+    //    if (newChanges.Type == DiffPlex.DiffBuilder.Model.ChangeType.Modified)
+    //    {
+    //        if (newChanges.Text == "null")
+    //        {
+    //            var dropScript = $"DROP VIEW IF EXISTS [{contentCompare.SchemaName}].[{contentCompare.ItemName}]";
+    //            await ExecuteScript(applyChangesDto, dropScript);
+    //        }
+    //        else
+    //        {
+    //            var itemDetailsDto = JsonConvert.DeserializeObject<ViewDetailInfo>(newChanges.Text)!;
+    //            var alterScript = itemDetailsDto.Definition.Replace("CREATE", "CREATE OR ALTER", true, null);
+    //            await ExecuteScript(applyChangesDto, alterScript);
+    //        }
+    //    }
+    //    if (newChanges.Type == DiffPlex.DiffBuilder.Model.ChangeType.Inserted)
+    //    {
+    //        if (oldChanges.Text is null)
+    //        {
+    //            var itemDetailsDto = JsonConvert.DeserializeObject<ViewDetailInfo>(newChanges.Text)!;
+    //            await ExecuteScript(applyChangesDto, itemDetailsDto.Definition);
+    //        }
+    //    }
+    //}
 
     private async Task ExecuteScript(ApplyChangesDto applyChangesDto, string script)
     {
@@ -74,6 +189,7 @@ public class ApplyChangesService : IApplyChangesService
         await _hubContext.Clients.User(applyChangesDto.ClientId!)
                          .ExecuteScriptAsync(_queryParameters.queryId, formattedScript.Content!);
     }
+
     private (Guid queryId, TaskCompletionSource<QueryResultTable> tcs) RegisterQuery()
     {
         var queryId = Guid.NewGuid();

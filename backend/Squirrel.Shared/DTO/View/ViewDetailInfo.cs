@@ -1,6 +1,5 @@
 namespace Squirrel.Shared.DTO.View;
 
-public class ViewDetailInfo : BaseDbItem
+public class ViewDetailInfo : BaseDbItemWithDefinition
 {
-    public string Definition { get; set; } = null!;
 }

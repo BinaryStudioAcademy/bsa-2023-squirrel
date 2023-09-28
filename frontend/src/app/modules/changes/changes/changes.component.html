@@ -2,7 +2,7 @@
     <div class="main-content">
         <app-tree [asCheckList]="true" [treeData]="items" (selectionChange)="selectionChanged($event)" (messageChange)="messageChanged($event)"></app-tree>
         <div class="changes-content">
-            <div *ngFor="let changes of showContentChanges" class="solution-sector">
+            <div *ngFor="let changes of selectedContentChanges" class="solution-sector">
                 <app-code [textPair]="changes.sideBySideDiff" [height]="'100%'" [header]="changes.schemaName + '.' + changes.itemName" ></app-code>
             </div>
         </div>

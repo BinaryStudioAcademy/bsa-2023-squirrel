@@ -13,7 +13,6 @@ import { CreateCommitDto } from 'src/app/models/commit/create-commit-dto';
 import { DatabaseItem } from 'src/app/models/database-items/database-item';
 import { DatabaseItemType } from 'src/app/models/database-items/database-item-type';
 import { ItemCategory } from 'src/app/models/database-items/item-category';
-import { TextPairDifferenceDto } from 'src/app/models/text-pair/text-pair-difference-dto';
 
 import { DatabaseItemContentCompare } from '../../../models/database-items/database-item-content-compare';
 
@@ -23,11 +22,9 @@ import { DatabaseItemContentCompare } from '../../../models/database-items/datab
     styleUrls: ['./changes.component.sass'],
 })
 export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy {
-    public textPair: TextPairDifferenceDto;
+    public allContentChanges: DatabaseItemContentCompare[] = [];
 
-    public contentChanges: DatabaseItemContentCompare[] = [];
-
-    public showContentChanges: DatabaseItemContentCompare[] = [];
+    public selectedContentChanges: DatabaseItemContentCompare[] = [];
 
     public guid: string;
 
@@ -69,7 +66,7 @@ export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy
         this.commitChangesService.contentChanges$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((changes) => {
-                this.contentChanges = changes;
+                this.allContentChanges = changes;
             });
     }
 
@@ -114,18 +111,18 @@ export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy
     }
 
     public selectionChanged(event: { selectedNodes: TreeNode[]; originalStructure: TreeNode[]; }) {
-        this.showSelectedChanges(event.selectedNodes);
+        this.addSelectedChanges(event.selectedNodes);
         this.selectedItems = event.originalStructure;
     }
 
-    public showSelectedChanges(selectedChanges: TreeNode[]) {
-        this.showContentChanges = [];
+    public addSelectedChanges(selectedChanges: TreeNode[]) {
+        this.selectedContentChanges = [];
         for (let i = 0; i < selectedChanges.length; i++) {
             const selectedName = selectedChanges[i].name;
-            const matchingContentChange = this.contentChanges.find(contentChange => contentChange.itemName === selectedName);
+            const matchingContentChange = this.allContentChanges.find(contentChange => contentChange.itemName === selectedName);
 
             if (matchingContentChange) {
-                this.showContentChanges.push(matchingContentChange);
+                this.selectedContentChanges.push(matchingContentChange);
             }
         }
     }

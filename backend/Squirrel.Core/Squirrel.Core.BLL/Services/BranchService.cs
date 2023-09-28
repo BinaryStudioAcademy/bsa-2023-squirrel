@@ -19,13 +19,14 @@ public sealed class BranchService : BaseService, IBranchService
     {
         var branch = _mapper.Map<Branch>(branchDto);
         branch.ProjectId = projectId;
+        branch.IsActive = true;
 
         await EnsureUniquenessAsync(branch.Name, projectId);
 
         var createdBranch = (await _context.Branches.AddAsync(branch)).Entity;
         if (branchDto.ParentId is not null)
         {
-            await InheritBranchInternalAsync(createdBranch, branchDto.ParentId ?? 0);
+            await InheritBranchInternalAsync(createdBranch, branchDto.ParentId ?? default);
         }
         await _context.SaveChangesAsync();
 
@@ -68,12 +69,12 @@ public sealed class BranchService : BaseService, IBranchService
         return _mapper.Map<BranchDto>(updatedEntity);
     }
 
-    private async Task InheritBranchInternalAsync(Branch branch, int parentId) 
+    private async Task InheritBranchInternalAsync(Branch branch, int parentId)
     {
-        var parent = await _context.Branches.FirstOrDefaultAsync(x => x.Id == parentId)
-                     ?? throw new EntityNotFoundException();
-
-        branch.BranchCommits = parent.BranchCommits;
+        if (await _context.Branches.AnyAsync(x => x.Id == parentId && branch.ProjectId == x.ProjectId))
+        {
+            branch.ParentBranchId = parentId;
+        }
     }
 
     private async Task EnsureUniquenessAsync(string branchName, int projectId)

@@ -14,6 +14,7 @@ public sealed class ProjectService : BaseService, IProjectService
 {
     private readonly IUserIdGetter _userIdGetter;
     private readonly IBranchService _branchService;
+    
     public ProjectService(SquirrelCoreContext context, IMapper mapper, IUserIdGetter userIdGetter,
         IBranchService branchService)
         : base(context, mapper)
@@ -21,7 +22,6 @@ public sealed class ProjectService : BaseService, IProjectService
         _userIdGetter = userIdGetter;
         _branchService = branchService;
     }
-
 
     public async Task<ProjectResponseDto> AddProjectAsync(NewProjectDto newProjectDto)
     {

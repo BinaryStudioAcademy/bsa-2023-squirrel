@@ -67,6 +67,10 @@ public class ApplyChangesService : IApplyChangesService
             }
             if (contentCompare.ItemType == DatabaseItemType.Table)
             {
+                if (contentCompare.SchemaName is null || contentCompare.ItemName is null)
+                {
+                    continue;
+                }
                 await ExecuteApplyChangesTablesAsync(contentCompare, applyChangesDto, DatabaseItemType.Table);
             }
         }

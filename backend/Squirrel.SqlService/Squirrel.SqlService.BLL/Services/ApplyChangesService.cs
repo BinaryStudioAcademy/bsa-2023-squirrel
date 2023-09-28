@@ -11,6 +11,7 @@ using Squirrel.Shared.Enums;
 using Squirrel.SqlService.BLL.Interfaces;
 using Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
 using System.Text;
+using System.Text.RegularExpressions;
 using ConsoleHub = Squirrel.SqlService.BLL.Hubs.ConsoleAppHub;
 
 
@@ -43,6 +44,7 @@ public class ApplyChangesService : IApplyChangesService
         {
             throw new Exception("List of Database changes is empty");
         }
+        List<string> fkConstraintScripts = new List<string>();
         foreach (var contentCompare in contentDifferenceList)
         {
             if (contentCompare.SideBySideDiff is null)
@@ -71,12 +73,18 @@ public class ApplyChangesService : IApplyChangesService
                 {
                     continue;
                 }
-                await ExecuteApplyChangesTablesAsync(contentCompare, applyChangesDto, DatabaseItemType.Table);
+                
+                await ExecuteApplyChangesTablesAsync(contentCompare, applyChangesDto, DatabaseItemType.Table, fkConstraintScripts);
             }
+        }
+        foreach (string script in fkConstraintScripts)
+        {
+            await ExecuteScriptAsync(applyChangesDto, script);
         }
     }
 
-    private async Task ExecuteApplyChangesRoutinesViewsAsync<T>(DatabaseItemContentCompare contentCompare, ApplyChangesDto applyChangesDto, DatabaseItemType dbItemType) where T : BaseDbItemWithDefinition
+    private async Task ExecuteApplyChangesRoutinesViewsAsync<T>(DatabaseItemContentCompare contentCompare, ApplyChangesDto applyChangesDto, 
+        DatabaseItemType dbItemType) where T : BaseDbItemWithDefinition
     {
         var newChanges = contentCompare.SideBySideDiff!.NewTextLines.FirstOrDefault() ?? throw new ArgumentNullException(nameof(contentCompare.SideBySideDiff.NewTextLines));
         var oldChanges = contentCompare.SideBySideDiff.OldTextLines.FirstOrDefault() ?? throw new ArgumentNullException(nameof(contentCompare.SideBySideDiff.OldTextLines));
@@ -90,7 +98,8 @@ public class ApplyChangesService : IApplyChangesService
             else
             {
                 var itemDetailsDto = JsonConvert.DeserializeObject<T>(newChanges.Text)!;
-                var alterScript = itemDetailsDto.Definition.Replace("CREATE", "CREATE OR ALTER", true, null);
+                var regex = new Regex("create", RegexOptions.IgnoreCase);
+                var alterScript = regex.Replace(itemDetailsDto.Definition, "CREATE OR ALTER", 1);
                 await ExecuteScriptAsync(applyChangesDto, alterScript);
             }
         }
@@ -104,7 +113,8 @@ public class ApplyChangesService : IApplyChangesService
         }
     }
 
-    private async Task ExecuteApplyChangesTablesAsync(DatabaseItemContentCompare contentCompare, ApplyChangesDto applyChangesDto, DatabaseItemType dbItemType)
+    private async Task ExecuteApplyChangesTablesAsync(DatabaseItemContentCompare contentCompare, ApplyChangesDto applyChangesDto, 
+        DatabaseItemType dbItemType, List<string> fkConstraintScripts)
     {
         var newChanges = contentCompare.SideBySideDiff!.NewTextLines.FirstOrDefault() ?? throw new ArgumentNullException(nameof(contentCompare.SideBySideDiff.NewTextLines));
         var oldChanges = contentCompare.SideBySideDiff.OldTextLines.FirstOrDefault() ?? throw new ArgumentNullException(nameof(contentCompare.SideBySideDiff.OldTextLines));
@@ -117,6 +127,7 @@ public class ApplyChangesService : IApplyChangesService
                 var dropScript = $"DROP {dbItemType} IF EXISTS [{contentCompare.SchemaName}].[{contentCompare.ItemName}]";
                 await ExecuteScriptAsync(applyChangesDto, dropScript);
             }
+            //TODO Add logic for alter table
             //else
             //{
             //    var tableStructureDto = JsonConvert.DeserializeObject<TableStructureDto>(newChanges.Text)!;
@@ -129,12 +140,13 @@ public class ApplyChangesService : IApplyChangesService
             if (oldChanges.Text is null)
             {
                 var tableStructureDto = JsonConvert.DeserializeObject<TableStructureDto>(newChanges.Text)!;
-                await ExecuteScriptAsync(applyChangesDto, GenerateCreateTableScript(contentCompare.SchemaName, contentCompare.ItemName, tableStructureDto));
+                var cre = GenerateCreateTableScript(contentCompare.SchemaName, contentCompare.ItemName, tableStructureDto, fkConstraintScripts);
+                await ExecuteScriptAsync(applyChangesDto, cre);
             }
         }
     }
 
-    private string GenerateCreateTableScript(string tableSchema, string tableName, TableStructureDto tableStructure)
+    private string GenerateCreateTableScript(string tableSchema, string tableName, TableStructureDto tableStructure, List<string> fkConstraintScripts)
     {
         StringBuilder createScript = new StringBuilder($"CREATE TABLE [{tableSchema}].[{tableName}] (");
         foreach (var column in tableStructure.Columns)
@@ -144,7 +156,7 @@ public class ApplyChangesService : IApplyChangesService
             AppendTableColumnPrimaryKey(createScript, column);
             AppendTableColumnNull(createScript, column);
             createScript.Append(',');
-            AppendTableColumnFK(createScript, column);
+            AddTableColumnFKScript(fkConstraintScripts, column, tableSchema, tableName);
         }
         createScript.AppendLine(");");
         return createScript.ToString();
@@ -155,7 +167,14 @@ public class ApplyChangesService : IApplyChangesService
         string[] variableTypes = {"binary", "varbinary", "char", "nchar", "varchar", "nvarchar" };
         if (variableTypes.Contains(column.DataType))
         {
-            createScript.Append($"{column.DataType} ({column.MaxLength}) ");
+            if (column.MaxLength < 1)
+            {
+                createScript.Append($"{column.DataType} (MAX) ");
+            }
+            else
+            {
+                createScript.Append($"{column.DataType} ({column.MaxLength}) ");
+            }
         }
         else
         {
@@ -186,12 +205,12 @@ public class ApplyChangesService : IApplyChangesService
         }
     }
 
-    private void AppendTableColumnFK(StringBuilder createScript, TableColumnInfo column)
+    private void AddTableColumnFKScript(List<string> fkConstraintScripts, TableColumnInfo column, string tableSchema, string tableName)
     {
         if (column.IsForeignKey ?? false)
         {
-            createScript.AppendLine($"FOREIGN KEY ({column.ColumnName}) " +
-                $"REFERENCES [{column.RelatedTableSchema}].[{column.RelatedTable}] ({column.RelatedTableColumn}),");
+            fkConstraintScripts.Add($"ALTER TABLE [{tableSchema}].[{tableName}] ADD FOREIGN KEY ({column.ColumnName})" +
+                $" REFERENCES [{column.RelatedTableSchema}].[{column.RelatedTable}] ({column.RelatedTableColumn});");
         }
     }
 

@@ -1,9 +1,10 @@
 ﻿using Squirrel.Core.DAL.Entities.Common;
+using Squirrel.Core.DAL.Entities.Common.AuditEntity;
 using Squirrel.Core.DAL.Entities.JoinEntities;
 
 namespace Squirrel.Core.DAL.Entities;
 
-public sealed class Branch : Entity<int>
+public sealed class Branch : AuditEntity<int>
 {
     public string Name { get; set; } = string.Empty;
     public bool IsActive { get; set; } = true;

@@ -20,6 +20,7 @@ public class CommitService : BaseService, ICommitService
     private readonly IUserIdGetter _userIdGetter;
     private readonly IConfiguration _configuration;
     private readonly IUserService _userService;
+    private readonly IBranchService _branchService;
 
     public CommitService(
         SquirrelCoreContext context,
@@ -27,12 +28,14 @@ public class CommitService : BaseService, ICommitService
         IHttpClientService httpClientService,
         IUserIdGetter userIdGetter,
         IConfiguration configuration,
-        IUserService userService) : base(context, mapper)
+        IUserService userService,
+        IBranchService branchService) : base(context, mapper)
     {
         _httpClientService = httpClientService;
         _userIdGetter = userIdGetter;
         _configuration = configuration;
         _userService = userService;
+        _branchService = branchService;
     }
 
     public async Task<CommitDto> CreateCommitAsync(CreateCommitDto dto)
@@ -48,7 +51,7 @@ public class CommitService : BaseService, ICommitService
         var savedCommitFiles = await SaveFilesAsync(dto.ChangesGuid, commit.Id, dto.SelectedItems);
         var updatedCommit = AddFilesToCommit(commit, savedCommitFiles);
         
-        var (headBranchCommit, isHeadOnAnotherBranch) = await FindHeadBranchCommitAsync(branchEntity);
+        var (headBranchCommit, isHeadOnAnotherBranch) = await _branchService.FindHeadBranchCommitAsync(branchEntity);
         if (headBranchCommit is not null)
         {
             var commitParent = new CommitParent
@@ -75,27 +78,6 @@ public class CommitService : BaseService, ICommitService
         await _context.SaveChangesAsync();
         
         return _mapper.Map<CommitDto>(updatedCommit)!;
-    }
-
-    private async Task<(BranchCommit?, bool)> FindHeadBranchCommitAsync(Branch branch)
-    {
-        var currentBranch = branch;
-        var isHeadOnAnotherBranch = false;
-        while (currentBranch is not null)
-        {
-            var headBranchCommit = currentBranch.BranchCommits.FirstOrDefault(x => x.IsHead);
-            if (headBranchCommit is not null)
-            {
-                return headBranchCommit.IsHead ? (headBranchCommit, isHeadOnAnotherBranch) : throw new Exception("Last commit should be head!");
-            }
-            currentBranch = await _context.Branches
-                                          .Include(x => x.BranchCommits)
-                                          .ThenInclude(x => x.Commit)
-                                          .FirstOrDefaultAsync(x => x.Id == currentBranch.ParentBranchId);
-            isHeadOnAnotherBranch = true;
-        }
-
-        return (null, isHeadOnAnotherBranch);
     }
 
     private async Task<ICollection<CommitFileDto>> SaveFilesAsync(string changesGuid, int commitId, ICollection<TreeNodeDto> nodes)

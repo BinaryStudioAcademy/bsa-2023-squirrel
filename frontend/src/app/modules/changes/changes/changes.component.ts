@@ -27,7 +27,7 @@ export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy
 
     public contentChanges: DatabaseItemContentCompare[] = [];
 
-    public guid: string;
+    public currentChangesGuid: string;
 
     public items: TreeNode[];
 
@@ -46,39 +46,33 @@ export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy
         private commitChangesService: CommitChangesService,
     ) {
         super();
-        this.eventService.changesLoadedEvent$
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe((x) => {
-                if (x !== undefined) {
-                    this.items = this.mapDbItems(x);
-                }
-            });
-        eventService.changesSavedEvent$
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe((x) => {
-                if (x !== undefined) {
-                    this.guid = x;
-                }
-            });
+        this.eventService.changesLoadedEvent$.pipe(takeUntil(this.unsubscribe$)).subscribe((x) => {
+            if (x !== undefined) {
+                this.items = this.mapDbItems(x);
+            }
+        });
+        eventService.changesSavedEvent$.pipe(takeUntil(this.unsubscribe$)).subscribe((x) => {
+            if (x !== undefined) {
+                this.currentChangesGuid = x;
+            }
+        });
     }
 
     public ngOnInit(): void {
         this.currentProjectId = this.projectService.currentProjectId;
-        this.commitChangesService.contentChanges$
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe((changes) => {
-                this.contentChanges = changes;
-            });
+        this.commitChangesService.contentChanges$.pipe(takeUntil(this.unsubscribe$)).subscribe((changes) => {
+            this.contentChanges = changes;
+        });
     }
 
     public validateCommit() {
-        if (!this.guid) {
+        if (!this.currentChangesGuid) {
             return false;
         }
         if (!(this.message.length > 0 && this.message.length <= 300)) {
             return false;
         }
-        if (!this.selectedItems.some(x => x.children?.some(y => y.selected))) {
+        if (!this.selectedItems.some((x) => x.children?.some((y) => y.selected))) {
             return false;
         }
 

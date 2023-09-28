@@ -33,19 +33,39 @@ public sealed class BranchService : BaseService, IBranchService
 
         return _mapper.Map<BranchDto>(createdBranch);
     }
-
-    public async Task<int> GetLastBranchCommitAsync(int branchId)
+    
+    public async Task<(BranchCommit?, bool)> FindHeadBranchCommitAsync(Branch branch)
     {
-        var lastCommit = await _context.BranchCommits
-            .Where(commit => commit.BranchId == branchId && commit.IsHead)
-            .FirstOrDefaultAsync();
+        var currentBranch = branch;
+        var isHeadOnAnotherBranch = false;
+        while (currentBranch is not null)
+        {
+            var headBranchCommit = currentBranch.BranchCommits.FirstOrDefault(x => x.IsHead);
+            if (headBranchCommit is not null)
+            {
+                return headBranchCommit.IsHead ? (headBranchCommit, isHeadOnAnotherBranch) : throw new Exception("Last commit should be head!");
+            }
+            currentBranch = await _context.Branches
+                                          .Include(x => x.BranchCommits)
+                                          .ThenInclude(x => x.Commit)
+                                          .FirstOrDefaultAsync(x => x.Id == currentBranch.ParentBranchId);
+            isHeadOnAnotherBranch = true;
+        }
 
-        if (lastCommit is null)
+        return (null, isHeadOnAnotherBranch);
+    }
+
+    public async Task<int?> GetLastBranchCommitIdAsync(int branchId)
+    {
+        var branch = await _context.Branches
+                                   .Include(x => x.BranchCommits)
+                                   .FirstOrDefaultAsync(x => x.Id == branchId);
+        if (branch is null)
         {
             throw new EntityNotFoundException();
         }
 
-        return lastCommit.Id;
+        return (await FindHeadBranchCommitAsync(branch)).Item1?.Id;
     }
 
 

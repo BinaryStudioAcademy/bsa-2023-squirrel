@@ -9,7 +9,6 @@ namespace Squirrel.Core.BLL.Services;
 public class TableService : ITableService
 {
     private const string AllTableNamesRoutePrefix = "/api/ConsoleAppHub/all-tables-names";
-
     private readonly IHttpClientService _httpClientService;
     private readonly IConfiguration _configuration;
 

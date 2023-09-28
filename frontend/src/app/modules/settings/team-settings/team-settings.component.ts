@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { BaseComponent } from '@core/base/base.component';
+import { AuthService } from '@core/services/auth.service';
 import { NotificationService } from '@core/services/notification.service';
 import { ProjectService } from '@core/services/project.service';
 import { SharedProjectService } from '@core/services/shared-project.service';
 import { SpinnerService } from '@core/services/spinner.service';
 import { AddUserModalComponent } from '@modules/settings/add-user-modal/add-user-modal.component';
+import { UserPredicates } from '@shared/helpers/user-predicates';
 import { finalize, takeUntil } from 'rxjs';
 
 import { ProjectResponseDto } from '../../../models/projects/project-response-dto';
 import { UserDto } from '../../../models/user/user-dto';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { AuthService } from '@core/services/auth.service';
-import { UserPredicates } from '@shared/helpers/user-predicates';
 
 @Component({
     selector: 'app-team-settings-menu',

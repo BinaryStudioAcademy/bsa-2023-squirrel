@@ -68,6 +68,45 @@ public sealed class BranchService : BaseService, IBranchService
         return (await FindHeadBranchCommitAsync(branch)).Item1?.Id;
     }
 
+    public async Task<BranchDto> MergeBranchAsync(int sourceId, int destId)
+    {
+        var source = await GetFullBranchEntityAsync(sourceId) ?? throw new EntityNotFoundException(nameof(Branch), sourceId);
+        var dest = await GetFullBranchEntityAsync(destId) ?? throw new EntityNotFoundException(nameof(Branch), destId);
+
+        BranchCommit? lastCommit = null;
+        DateTime createdAt = source.CreatedAt;
+        bool isOriginal = true;
+        while (source is not null && source.Id != dest.Id) 
+        {
+            foreach (var commit in source.Commits.Where(x => isOriginal ? true : x.CreatedAt <= createdAt))
+            {
+                var branchCommit = new BranchCommit
+                {
+                    CommitId = commit.Id,
+                    BranchId = dest.Id,
+                    IsMerged = true
+                };
+                dest.BranchCommits.Add(branchCommit);
+                lastCommit = branchCommit;
+            }
+            source = await GetFullBranchEntityAsync(source.ParentBranchId ?? 0);
+        }
+        if(lastCommit is not null)
+        {
+            lastCommit.IsHead = true;
+            var previousHead = await FindHeadBranchCommitAsync(dest);
+            if (previousHead.Item2 && previousHead.Item1 is not null)
+            {
+                previousHead.Item1.IsHead = false;
+                _context.BranchCommits.Update(previousHead.Item1);
+            }            
+        }
+        var entity = _context.Branches.Update(dest).Entity;
+        await _context.SaveChangesAsync();
+
+        return _mapper.Map<BranchDto>(entity);
+    }
+
 
     public BranchDto[] GetAllBranches(int projectId)
     {
@@ -103,6 +142,17 @@ public sealed class BranchService : BaseService, IBranchService
 
         await _context.SaveChangesAsync();
         return _mapper.Map<BranchDto>(updatedEntity);
+    }
+
+    private async Task<Branch?> GetFullBranchEntityAsync(int branchId)
+    {
+        return await _context.Branches
+            .AsSplitQuery()
+            .Include(x => x.Commits)
+            .Include(x => x.ParentBranch)
+            .Include(x => x.BranchCommits)
+                .ThenInclude(x => x.Commit)
+            .FirstOrDefaultAsync(x => x.Id == branchId);
     }
 
     private async Task InheritBranchInternalAsync(Branch branch, int parentId)

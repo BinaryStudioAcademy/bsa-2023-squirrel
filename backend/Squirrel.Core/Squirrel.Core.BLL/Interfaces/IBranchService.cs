@@ -12,4 +12,5 @@ public interface IBranchService
     Task<(BranchCommit?, bool)> FindHeadBranchCommitAsync(Branch branch);
     Task<BranchDto> UpdateBranchAsync(int branchId, BranchUpdateDto branchUpdateDto);
     Task DeleteBranchAsync(int branchId);
+    Task<BranchDto> MergeBranchAsync(int sourceId, int destId);
 }

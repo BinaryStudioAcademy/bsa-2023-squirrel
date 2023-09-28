@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { BaseComponent } from '@core/base/base.component';
@@ -26,7 +26,7 @@ import { CreateScriptModalComponent } from '../create-script-modal/create-script
     templateUrl: './scripts-page.component.html',
     styleUrls: ['./scripts-page.component.sass'],
 })
-export class ScriptsPageComponent extends BaseComponent implements OnInit, CanComponentDeactivate {
+export class ScriptsPageComponent extends BaseComponent implements OnInit, OnDestroy, CanComponentDeactivate {
     public form: FormGroup;
 
     public scripts: ScriptDto[] = [];
@@ -58,7 +58,6 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, CanCo
         private spinner: SpinnerService,
         private sharedProject: SharedProjectService,
         private notification: NotificationService,
-        private elementRef: ElementRef,
     ) {
         super();
     }
@@ -75,6 +74,12 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, CanCo
         this.loadScripts();
         this.initializeForm();
         this.loadCurrentDb();
+        this.registerScroll();
+    }
+
+    public override ngOnDestroy() {
+        super.ngOnDestroy();
+        this.removeScroll();
     }
 
     public canDeactivate(): Observable<boolean> | boolean {
@@ -255,12 +260,26 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, CanCo
             });
     }
 
-    @HostListener('window:scroll')
-    public onScroll(): void {
-        const element = this.elementRef.nativeElement.querySelector('app-script-result');
-        const elementRect = element.getBoundingClientRect();
+    private onScroll() {
+        const element = document.querySelector('app-script-result');
+        const elementRect = element?.getBoundingClientRect();
 
+        if (!elementRect) {
+            return;
+        }
         this.isToTopBtnShowed = elementRect.top < 0;
+    }
+
+    private registerScroll() {
+        this.parentScroll?.addEventListener('scroll', this.onScroll.bind(this));
+    }
+
+    private removeScroll() {
+        this.parentScroll?.removeEventListener('scroll', this.onScroll.bind(this));
+    }
+
+    private get parentScroll() {
+        return document.getElementById('parent-scroll');
     }
 
     private openCreateModal(): void {

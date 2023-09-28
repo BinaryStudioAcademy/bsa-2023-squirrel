@@ -15,7 +15,8 @@
                 <li class="option" *ngFor="let script of filteredScripts" [cdkOption]="script"
                     [class.selected-option]="selectedScript?.id === script.id"
                     [class.unsaved]="form.controls['scriptContent'].dirty && selectedScript?.id === script.id">
-                    <app-script [script]="script" (click)="onScriptSelected(script)" (delete)="deleteScript(script.id)"></app-script>
+                    <app-script [script]="script" (click)="onScriptSelected(script)"
+                                (delete)="deleteScript(script.id)"></app-script>
                 </li>
             </ul>
         </div>
@@ -33,12 +34,12 @@
     <div class="buttons-sector">
         <app-button variant="outline-primary" text="Create new" (buttonOnClick)="createScript()"></app-button>
         <div class="buttons-container">
-                <app-button variant="outline-secondary" text="Format" [isDisabled]="!selectedScript"
-                            (buttonOnClick)="formatScript()"></app-button>
-                <app-button variant="outline-primary" text="Execute" [isDisabled]="!selectedScript"
-                            (buttonOnClick)="executeScript()"></app-button>
-                <app-button variant="outline-primary" text="Save" [isDisabled]="!selectedScript || !form.dirty"
-                            (buttonOnClick)="saveScript()"></app-button>
+            <app-button variant="outline-secondary" text="Format" [isDisabled]="!selectedScript"
+                        (buttonOnClick)="formatScript()"></app-button>
+            <app-button variant="outline-primary" text="Execute" [isDisabled]="!selectedScript"
+                        (buttonOnClick)="executeScript()"></app-button>
+            <app-button variant="outline-primary" text="Save" [isDisabled]="!selectedScript || !form.dirty"
+                        (buttonOnClick)="saveScript()"></app-button>
         </div>
     </div>
 
@@ -50,7 +51,8 @@
                        [scriptTitle]="selectedScript?.title ?? ''">
     </app-script-result>
 
-    <app-button class="to-top-btn" *ngIf="isToTopBtnShowed" (buttonOnClick)="scrollToResult(true)" variant="filled">
+    <app-button [class.d-block]="isToTopBtnShowed" class="to-top-btn" (buttonOnClick)="scrollToResult(true)" variant="filled">
         <fa-icon [icon]=" arrowUp" style="color: white"></fa-icon>
     </app-button>
+
 </div>

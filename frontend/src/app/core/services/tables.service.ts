@@ -1,8 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpInternalService } from '@core/services/http-internal.service';
-import { Observable } from 'rxjs';
-
-import { TableStructureDto } from 'src/app/models/table-structure/table-structure-dto';
 
 import { QueryParameters } from '../../models/sql-service/query-parameters';
 
@@ -17,9 +14,5 @@ export class TablesService {
 
     public getAllTablesNames(query: QueryParameters) {
         return this.httpService.postRequest(this.tableRoutePrefix, query);
-    }
-
-    public getTableStructure(query: QueryParameters): Observable<TableStructureDto> {
-        return this.httpService.postRequest(`${this.tableRoutePrefix}/table-structure`, query);
     }
 }

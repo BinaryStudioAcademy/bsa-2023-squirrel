@@ -20,13 +20,6 @@ public static class HubConnectionExtensions
                 await getActionsService.GetAllTablesNamesAsync());
         });
 
-        hubConnection.On("GetTableDataAsync", async (Guid queryId, string schema, string tableName, int rowsCount) =>
-        {
-            var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();
-            await hubConnection.InvokeAsync("ProcessReceivedDataFromClientSideAsync", queryId, "GetTableDataAsync",
-                await getActionsService.GetTableDataAsync(schema, tableName, rowsCount));
-        });
-
         hubConnection.On("GetAllStoredProceduresNamesAsync", async (Guid queryId) =>
         {
             var getActionsService = app.ApplicationServices.GetRequiredService<IGetActionsService>();

@@ -7,13 +7,14 @@ import { EventService } from '@core/services/event.service';
 import { ProjectService } from '@core/services/project.service';
 import { SpinnerService } from '@core/services/spinner.service';
 import { TreeNode } from '@shared/components/tree/models/TreeNode.model';
-import { finalize, takeUntil } from 'rxjs';
+import { takeUntil } from 'rxjs';
 
-import { CreateCommitDto } from 'src/app/models/commit/create-commit-dto';
 import { DatabaseItem } from 'src/app/models/database-items/database-item';
 import { DatabaseItemContent } from 'src/app/models/database-items/database-item-content';
-import { DatabaseItemType } from 'src/app/models/database-items/database-item-type';
+import { DatabaseItemType, DatabaseItemTypeName } from 'src/app/models/database-items/database-item-type';
 import { ItemCategory } from 'src/app/models/database-items/item-category';
+import { TableColumnInfo } from 'src/app/models/table-structure/table-columns';
+import { TableStructureDto } from 'src/app/models/table-structure/table-structure-dto';
 import { LineDifferenceDto } from 'src/app/models/text-pair/line-difference-dto';
 import { TextPairDifferenceDto } from 'src/app/models/text-pair/text-pair-difference-dto';
 
@@ -29,7 +30,11 @@ export class CodeComponent extends BaseComponent implements OnInit, OnDestroy {
 
     public selectedItem: DatabaseItemContent[] = [];
 
-    public contentChanges: DatabaseItemContentCompare[] = [];
+    public DatabaseItemTypeName = DatabaseItemTypeName;
+
+    public selectedContentChanges: DatabaseItemContentCompare[] = [];
+
+    public allContentChanges: DatabaseItemContentCompare[] = [];
 
     public guid: string;
 
@@ -65,57 +70,88 @@ export class CodeComponent extends BaseComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.currentProjectId = this.projectService.currentProjectId;
         this.commitChangesService.contentChanges$.pipe(takeUntil(this.unsubscribe$)).subscribe((changes) => {
-            this.contentChanges = changes;
+            this.allContentChanges = changes;
         });
     }
 
-    getTextFromLines(lines: LineDifferenceDto[]): string {
-        return lines.map((line) => line.text).join('\n');
+    public formatContent(itemType: DatabaseItemType, contentLines: LineDifferenceDto[]): string {
+        const contentText = contentLines.map((line) => line.text).join('\n');
+
+        switch (itemType) {
+            case DatabaseItemType.Table: {
+                const table: TableStructureDto = JSON.parse(contentText);
+
+                return this.formatTable(table);
+            }
+
+            case DatabaseItemType.Constraint:
+                return this.formatConstraint(JSON.parse(contentText));
+            case DatabaseItemType.Type:
+            case DatabaseItemType.Function:
+            case DatabaseItemType.StoredProcedure:
+            case DatabaseItemType.View:
+                return this.formatDefinition(JSON.parse(contentText));
+            default:
+                return this.cleanUpText(contentText);
+        }
     }
 
-    public validateCommit() {
-        if (!this.guid) {
-            return false;
-        }
-        if (!(this.message.length > 0 && this.message.length <= 300)) {
-            return false;
-        }
-        if (!this.selectedItems.some((x) => x.children?.some((y) => y.selected))) {
-            return false;
-        }
-
-        return true;
+    private cleanUpText(text: string): string {
+        return text.replace(/\\"/g, '"').replace(/\\n/g, '\n');
     }
 
-    public commit() {
-        const branchId = this.branchService.getCurrentBranch(this.currentProjectId);
-        const commit = {
-            branchId,
-            postScript: '',
-            preScript: '',
-            selectedItems: this.selectedItems,
-            changesGuid: this.guid,
-            message: this.message,
-        } as CreateCommitDto;
+    private formatTable(table: TableStructureDto): string {
+        return table.Columns.map(this.formatColumn).join('\n\n');
+    }
 
-        this.spinner.show();
-        this.commitService
-            .commit(commit)
-            .pipe(takeUntil(this.unsubscribe$), finalize(this.spinner.hide))
-            .subscribe((x) => {
-                // eslint-disable-next-line no-console
-                console.log(x.body);
-                this.items.forEach((parent) => {
-                    if (parent.children) {
-                        parent.children = parent.children.filter((item) => !item.selected);
-                    }
-                });
-                this.items = this.items.filter((item) => !item.selected && item.children && item.children?.length > 0);
-            });
+    private formatColumn(column: TableColumnInfo): string {
+        const columnDetails: string[] = [];
+
+        columnDetails.push(`Column Name: ${column.ColumnName}`);
+        columnDetails.push(`Column Order: ${column.ColumnOrder}`);
+        columnDetails.push(`Data Type: ${column.DataType}`);
+        columnDetails.push(`User Defined: ${column.IsUserDefined}`);
+        columnDetails.push(`Default: ${column.Default}`);
+        columnDetails.push(`Precision: ${column.Precision}`);
+        columnDetails.push(`Scale: ${column.Scale}`);
+        columnDetails.push(`Max Length: ${column.MaxLength}`);
+        columnDetails.push(`Allow Nulls: ${column.IsAllowNulls}`);
+        columnDetails.push(`Identity: ${column.IsIdentity}`);
+        columnDetails.push(`Primary Key: ${column.IsPrimaryKey}`);
+        columnDetails.push(`Foreign Key: ${column.IsForeignKey}`);
+        columnDetails.push(`Related Table Schema: ${column.RelatedTableSchema}`);
+        columnDetails.push(`Related Table: ${column.RelatedTable}`);
+        columnDetails.push(`Related Table Column: ${column.RelatedTableColumn}`);
+        columnDetails.push(`Description: ${column.Description}`);
+
+        return columnDetails.join('\n');
+    }
+
+    private formatConstraint(content: any): string {
+        return `ConstraintName: ${content.ConstraintName}\nColumns: ${content.Columns}\nCheckClause: ${content.CheckClause}`;
+    }
+
+    private formatDefinition(content: any): string {
+        return content.Definition;
     }
 
     public selectionChanged(event: { selectedNodes: TreeNode[]; originalStructure: TreeNode[] }) {
+        this.addSelectedChanges(event.selectedNodes);
         this.selectedItems = event.originalStructure;
+    }
+
+    public addSelectedChanges(selectedChanges: TreeNode[]) {
+        this.selectedContentChanges = [];
+        for (let i = 0; i < selectedChanges.length; i++) {
+            const selectedName = selectedChanges[i].name;
+            const matchingContentChange = this.allContentChanges.find(
+                (contentChange) => contentChange.itemName === selectedName,
+            );
+
+            if (matchingContentChange) {
+                this.selectedContentChanges.push(matchingContentChange);
+            }
+        }
     }
 
     public messageChanged(message: string) {

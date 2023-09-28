@@ -15,9 +15,9 @@ export class CodeComponent implements OnChanges {
 
     @Input() header: string = 'Solution';
 
-    private insertColor: string = 'rgba(63,185,80,0.5)';
+    private insertColor: string = 'rgb(197,255,214)';
 
-    private deleteColor: string = 'rgba(248,81,73,0.3)';
+    private deleteColor: string = 'rgba(255,126,127,0.3)';
 
     // eslint-disable-next-line no-empty-function
     constructor(private renderer: Renderer2, private el: ElementRef) {}

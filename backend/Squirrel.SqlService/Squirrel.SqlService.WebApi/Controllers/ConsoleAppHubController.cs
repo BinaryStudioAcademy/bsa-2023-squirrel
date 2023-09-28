@@ -44,14 +44,6 @@ public class ConsoleAppHubController : ControllerBase
         return Ok(_mapper.Map<TableNamesDto>(await _queryParameters.tcs.Task));
     }
     
-    [HttpPost("table-data")]
-    public async Task<ActionResult<TableDataDto>> GetTableDataAsync([FromBody] QueryParameters queryParameters)
-    {
-        await _hubContext.Clients.User(queryParameters.ClientId).GetTableDataAsync(_queryParameters.queryId,
-            queryParameters.FilterSchema, queryParameters.FilterName, queryParameters.FilterRowsCount);
-        return Ok(_mapper.Map<TableDataDto>(await _queryParameters.tcs.Task));
-    }
-    
     [HttpPost("all-stored-procedures-names")]
     public async Task<ActionResult<ProcedureNamesDto>> GetAllStoredProceduresNamesAsync([FromBody] QueryParameters queryParameters)
     {

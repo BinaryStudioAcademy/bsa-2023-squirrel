@@ -1,4 +1,14 @@
-<mat-card>
-    <app-avatar size="30" [imgLink]="avatarUrl"></app-avatar>
-    <mat-card-content>{{script.title}}</mat-card-content>
-</mat-card>
+<div class="script-container">
+    <div class="script-content">
+        <img class="file" src="assets/file-icon.svg" alt="file">
+        <p class="script-name">{{script.title}}</p>
+    </div>
+    <div class="edit-section">
+        <div class="btn-sector">
+            <button mat-icon-button (click)="deleteScript($event)">
+                <fa-icon class="trash-icon" [icon]="trashIcon"></fa-icon>
+            </button>
+        </div>
+
+    </div>
+</div>

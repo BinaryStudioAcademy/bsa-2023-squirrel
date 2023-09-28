@@ -37,4 +37,8 @@ export class ScriptService {
     public executeScript(dto: ExecuteScriptDto): Observable<ScriptResultDto> {
         return this.httpService.postRequest(`${this.scriptRoutePrefix}/execute`, dto);
     }
+
+    public deleteScript(scriptId: number) {
+        return this.httpService.deleteRequest(`${this.scriptRoutePrefix}/${scriptId}`);
+    }
 }

@@ -46,7 +46,7 @@ public class DbItemsRetrievalService : IDbItemsRetrievalService
         var udtDataTypeDetailsResult = await GetAllUdtDataTypeDetails(clientId);
         var udtTableTypeDetailsResult = await GetAllUdtTableTypeDetails(clientId);
 
-        var dbStructureResult = new DbStructureDto()
+        var dbStructureResult = new DbStructureDto
         {
             DbTableStructures = structuresResult.ToList(),
             DbConstraints = constraintsResult.ToList(),

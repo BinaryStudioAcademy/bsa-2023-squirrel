@@ -5,15 +5,6 @@ internal static class GetTables
     public static string GetTablesNamesScript =>
         @"SELECT TABLE_SCHEMA [Schema], TABLE_NAME [Name] FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' ORDER BY 'SCHEMA', 'NAME'";
 
-    public static string GetTableDataQueryScript(string schema, string name, int rowsCount) =>
-	    @"
-			DECLARE @FullTableName NVARCHAR(MAX) = QUOTENAME(@schema) + '.' + QUOTENAME(@name);
-			DECLARE @sql NVARCHAR(MAX);
-			SET @sql = 'SELECT TOP (' + CONVERT(NVARCHAR(MAX), @rowsCount) + ') ''' + @schema + ''' AS [Schema], ''' + @name + 
-			    ''' AS [Name], (SELECT COUNT(*) FROM ' + @FullTableName + ') AS TotalRows, * 
-			FROM ' + @FullTableName;
-			EXEC sp_executesql @sql;";
-
     public static string GetTableStructureScript(string schema, string table) =>
         @"
               DECLARE @TableSchema NVARCHAR(100) = @schema;

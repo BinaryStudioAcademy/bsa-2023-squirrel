@@ -1,0 +1,88 @@
+@import "/src/styles/color"
+@import "/src/styles/reusable"
+@import "/src/styles/weights"
+    
+.rounded-container
+    border-radius: 10px
+    background: $project-background-color
+    min-width: 650px
+    margin: 22px
+    .header
+        padding: 15px 15px 10px 15px
+        font-size: 18px
+        font-style: normal
+        font-weight: $semi-bold-weight
+        color: $text-main
+        h5
+            font-size: 18px
+            @extend .title
+
+.header
+    display: flex
+    justify-content: space-between
+    align-items: center
+
+.inputs-container
+    @extend .actions
+    align-items: flex-end
+    flex-wrap: nowrap
+    margin-left: 0
+    > *
+        min-width: 100px
+        margin-bottom: 5px
+
+.actions
+    margin-left: 11px
+    margin-bottom: 5px
+    display: flex
+    flex-direction: row
+    align-items: center
+    flex-wrap: wrap
+    > *:not(last-child)
+        padding-right: 25px
+
+.table
+    margin-left: 32px
+    margin-right: 32px
+
+.branch-container
+    display: flex
+    flex-direction: column
+    .line
+        border: 1px solid $line-color
+        padding: 0
+        margin: 0
+    &:first-child
+        .line
+            border: 1px solid $line-dark-color
+
+.table-headers
+    display: flex
+    justify-content: space-between
+    color: $text-gray
+    font-size: 14px
+    font-style: normal
+    font-weight: $semi-bold-weight
+    >*
+        margin: 0
+    >.first
+        flex: 40
+    >.second
+        flex: 20
+        text-align: center
+    >.third
+        flex: 20
+        text-align: center
+    >.fourth
+        flex: 20
+        text-align: center
+
+.table-content
+    display: flex
+    flex-direction: column
+
+.search-input
+    width: 289px
+
+.dropdown-input
+    width: 194px

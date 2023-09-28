@@ -19,7 +19,7 @@ const routes: Routes = [
             },
             {
                 path: 'branches',
-                component: NotFoundComponent,
+                loadChildren: () => import('../branches/branches.module').then((m) => m.BranchesModule),
             },
             {
                 path: 'scripts',

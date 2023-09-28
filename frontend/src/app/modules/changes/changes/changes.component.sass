@@ -4,14 +4,22 @@
 
 .main-content
     display: flex
-    max-height: 550px   
+    app-tree
+        height: 600px
+        width: 20%
+
+.changes-content
+    width: 80%
+    height: 600px
+    overflow-y: scroll
 
 .solution-sector
-    width: 100%
+    width: 98%
     border-radius: 10px
     background-color: $project-background-color
     padding: 10px
     display: flex
+    flex-direction: column
     margin-left: 10px
     app-code
         width: 100%

@@ -37,6 +37,13 @@ public sealed class ScriptController : ControllerBase
     {
         return Ok(await _scriptService.UpdateScriptAsync(dto, _userIdGetter.GetCurrentUserId()));
     }
+    
+    [HttpDelete("{scriptId}")]
+    public async Task<ActionResult> DeleteScriptAsync(int scriptId)
+    {
+        await _scriptService.DeleteScriptAsync(scriptId);
+        return NoContent();
+    }
 
     /// <summary>
     /// Find errors and format provided SQL script

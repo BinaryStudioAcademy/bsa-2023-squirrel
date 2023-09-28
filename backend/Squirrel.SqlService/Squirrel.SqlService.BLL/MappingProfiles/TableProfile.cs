@@ -27,13 +27,6 @@ public sealed class TableProfile : Profile
             .ForMember(dest => dest.Constraints, opt => opt.MapFrom(src 
                 => src.Rows.Select(row => MapToObject<Constraint>(src.ColumnNames.Select(e => e.ToLower()).ToList(), row))));
 
-        CreateMap<QueryResultTable, TableDataDto>()!
-            .ForMember(dest => dest.Schema, opt => opt.MapFrom(src => src.Rows.Any() ? src.Rows[0][0] : null))!
-            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Rows.Any() ? src.Rows[0][1] : null))!
-            .ForMember(dest => dest.TotalRows, opt => opt.MapFrom(src => src.Rows.Any() ? int.Parse(src.Rows[0][2]) : 0))!
-            .ForMember(dest => dest.Rows, opt => opt.MapFrom(src
-                => src.Rows.Select(row => MapToDataRow(src.ColumnNames, row))));
-
         CreateMap<Table, DatabaseItem>()!
            .ForMember(dest => dest.Type, opt => opt.MapFrom(src => DatabaseItemType.Table));
     }

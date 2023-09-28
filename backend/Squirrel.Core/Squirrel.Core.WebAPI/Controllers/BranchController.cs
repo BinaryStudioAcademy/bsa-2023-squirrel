@@ -34,6 +34,12 @@ public class BranchController : ControllerBase
         return Ok(await _branchService.AddBranchAsync(projectId, dto));
     }
 
+    [HttpPost("merge")]
+    public async Task<ActionResult<BranchDto>> MergeBranch([FromBody] MergeBranchDto dto)
+    {
+        return Ok(await _branchService.MergeBranchAsync(dto.SourceId, dto.DestinationId));
+    }
+
     [HttpPut("{branchId}")]
     public async Task<ActionResult<BranchDto>> UpdateBranchAsync(int branchId, [FromBody] BranchUpdateDto dto)
     {

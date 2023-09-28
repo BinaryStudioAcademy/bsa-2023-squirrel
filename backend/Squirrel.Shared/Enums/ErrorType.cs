@@ -17,5 +17,6 @@ public enum ErrorType
     SqlSyntax,
     InvalidQuery,
     QueryExpired,
-    HttpRequest
+    HttpRequest,
+    InvalidPermission
 }

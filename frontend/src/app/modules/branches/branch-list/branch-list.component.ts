@@ -36,7 +36,7 @@ export class BranchListComponent {
         console.log($event);
     }
 
-    getBranches() {
+    public getBranches() {
         const user = {
             id: 1,
             avatarUrl: 'https://picsum.photos/200',

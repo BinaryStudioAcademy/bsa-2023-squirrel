@@ -38,10 +38,15 @@ namespace Squirrel.Core.DAL.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<int?>("ParentBranchId")
+                        .HasColumnType("int");
+
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ParentBranchId");
 
                     b.HasIndex("ProjectId");
 
@@ -610,11 +615,17 @@ namespace Squirrel.Core.DAL.Migrations
 
             modelBuilder.Entity("Squirrel.Core.DAL.Entities.Branch", b =>
                 {
+                    b.HasOne("Squirrel.Core.DAL.Entities.Branch", "ParentBranch")
+                        .WithMany()
+                        .HasForeignKey("ParentBranchId");
+
                     b.HasOne("Squirrel.Core.DAL.Entities.Project", "Project")
                         .WithMany("Branches")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.Navigation("ParentBranch");
 
                     b.Navigation("Project");
                 });

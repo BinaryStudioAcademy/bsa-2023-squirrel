@@ -6,6 +6,7 @@ using Squirrel.Core.BLL.Services.Abstract;
 using Squirrel.Core.Common.DTO.Commit;
 using Squirrel.Core.DAL.Context;
 using Squirrel.Core.DAL.Entities;
+using Squirrel.Core.DAL.Entities.JoinEntities;
 using Squirrel.Shared.DTO.CommitFile;
 using Squirrel.Shared.DTO.SelectedItems;
 using Squirrel.Shared.Enums;
@@ -19,6 +20,7 @@ public class CommitService : BaseService, ICommitService
     private readonly IUserIdGetter _userIdGetter;
     private readonly IConfiguration _configuration;
     private readonly IUserService _userService;
+    private readonly IBranchService _branchService;
 
     public CommitService(
         SquirrelCoreContext context,
@@ -26,57 +28,56 @@ public class CommitService : BaseService, ICommitService
         IHttpClientService httpClientService,
         IUserIdGetter userIdGetter,
         IConfiguration configuration,
-        IUserService userService) : base(context, mapper)
+        IUserService userService,
+        IBranchService branchService) : base(context, mapper)
     {
         _httpClientService = httpClientService;
         _userIdGetter = userIdGetter;
         _configuration = configuration;
         _userService = userService;
+        _branchService = branchService;
     }
 
     public async Task<CommitDto> CreateCommitAsync(CreateCommitDto dto)
     {
-        // Create commit
         var currentUserId = _userIdGetter.GetCurrentUserId();
         var user = await _userService.GetUserByIdInternalAsync(currentUserId);
-
         var commit = _mapper.Map<Commit>(dto);
-        commit.Author = user;
+        commit!.Author = user;
 
         var branchEntity = await GetBranchInternalAsync(dto.BranchId);
-
         await AddCommitToBranchAsync(branchEntity, commit);
 
-        var items = await SaveFilesAsync(dto.ChangesGuid, commit.Id, dto.SelectedItems);
-        // Update commit with saved files
-        var entity = AddFilesToCommit(commit, items);
-        // Add parent commit, if exist
-        var head = branchEntity.BranchCommits.FirstOrDefault(x => x.IsHead);
-        if (head is not null)
+        var savedCommitFiles = await SaveFilesAsync(dto.ChangesGuid, commit.Id, dto.SelectedItems);
+        var updatedCommit = AddFilesToCommit(commit, savedCommitFiles);
+        
+        var (headBranchCommit, isHeadOnAnotherBranch) = await _branchService.FindHeadBranchCommitAsync(branchEntity);
+        if (headBranchCommit is not null)
         {
             var commitParent = new CommitParent
             {
-                Commit = entity,
-                ParentCommit = head.Commit,
+                Commit = updatedCommit,
+                ParentCommit = headBranchCommit.Commit,
             };
-            _context.CommitParents.Add(commitParent);
-
-            head.IsHead = false;
-            _context.BranchCommits.Update(head);
+            await _context.CommitParents.AddAsync(commitParent);
+        
+            headBranchCommit.IsHead = isHeadOnAnotherBranch;
+            _context.BranchCommits.Update(headBranchCommit);
         }
-        // Update commit to be HEAD
+        
         var branchCommit = await _context.BranchCommits
-            .FirstOrDefaultAsync(x => 
-                x.CommitId == entity.Id && 
+            .FirstOrDefaultAsync(x =>
+                x.CommitId == updatedCommit.Id &&
                 x.BranchId == branchEntity.Id);
         if (branchCommit is null)
         {
             throw new EntityNotFoundException(nameof(branchCommit));
         }
         branchCommit.IsHead = true;
-        // Save changes
+        _context.BranchCommits.Update(branchCommit);
         await _context.SaveChangesAsync();
-        return _mapper.Map<CommitDto>(entity);
+        
+        return _mapper.Map<CommitDto>(updatedCommit)!;
     }
 
     private async Task<ICollection<CommitFileDto>> SaveFilesAsync(string changesGuid, int commitId, ICollection<TreeNodeDto> nodes)
@@ -120,7 +121,7 @@ public class CommitService : BaseService, ICommitService
     {
         foreach (var section in nodes)
         {
-            var children = section.Children.Where(x => x.Selected == true);
+            var children = section.Children.Where(x => x.Selected);
             switch (section.Name)
             {
                 case ItemCategory.Function:

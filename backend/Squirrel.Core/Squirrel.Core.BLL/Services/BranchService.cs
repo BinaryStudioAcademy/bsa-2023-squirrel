@@ -20,31 +20,52 @@ public sealed class BranchService : BaseService, IBranchService
     {
         var branch = _mapper.Map<Branch>(branchDto);
         branch.ProjectId = projectId;
+        branch.IsActive = true;
 
         await EnsureUniquenessAsync(branch.Name, projectId);
 
         var createdBranch = (await _context.Branches.AddAsync(branch)).Entity;
         if (branchDto.ParentId is not null)
         {
-            await InheritBranchInternalAsync(createdBranch, branchDto.ParentId ?? 0);
+            await InheritBranchInternalAsync(createdBranch, branchDto.ParentId ?? default);
         }
         await _context.SaveChangesAsync();
 
         return _mapper.Map<BranchDto>(createdBranch);
     }
-
-    public async Task<int> GetLastBranchCommitAsync(int branchId)
+    
+    public async Task<(BranchCommit?, bool)> FindHeadBranchCommitAsync(Branch branch)
     {
-        var lastCommit = await _context.BranchCommits
-            .Where(commit => commit.BranchId == branchId && commit.IsHead)
-            .FirstOrDefaultAsync();
+        var currentBranch = branch;
+        var isHeadOnAnotherBranch = false;
+        while (currentBranch is not null)
+        {
+            var headBranchCommit = currentBranch.BranchCommits.FirstOrDefault(x => x.IsHead);
+            if (headBranchCommit is not null)
+            {
+                return headBranchCommit.IsHead ? (headBranchCommit, isHeadOnAnotherBranch) : throw new Exception("Last commit should be head!");
+            }
+            currentBranch = await _context.Branches
+                                          .Include(x => x.BranchCommits)
+                                          .ThenInclude(x => x.Commit)
+                                          .FirstOrDefaultAsync(x => x.Id == currentBranch.ParentBranchId);
+            isHeadOnAnotherBranch = true;
+        }
 
-        if (lastCommit is null)
+        return (null, isHeadOnAnotherBranch);
+    }
+
+    public async Task<int?> GetLastBranchCommitIdAsync(int branchId)
+    {
+        var branch = await _context.Branches
+                                   .Include(x => x.BranchCommits)
+                                   .FirstOrDefaultAsync(x => x.Id == branchId);
+        if (branch is null)
         {
             throw new EntityNotFoundException();
         }
 
-        return lastCommit.Id;
+        return (await FindHeadBranchCommitAsync(branch)).Item1?.Id;
     }
 
 
@@ -84,12 +105,12 @@ public sealed class BranchService : BaseService, IBranchService
         return _mapper.Map<BranchDto>(updatedEntity);
     }
 
-    private async Task InheritBranchInternalAsync(Branch branch, int parentId) 
+    private async Task InheritBranchInternalAsync(Branch branch, int parentId)
     {
-        var parent = await _context.Branches.FirstOrDefaultAsync(x => x.Id == parentId)
-                     ?? throw new EntityNotFoundException();
-
-        branch.BranchCommits = parent.BranchCommits;
+        if (await _context.Branches.AnyAsync(x => x.Id == parentId && branch.ProjectId == x.ProjectId))
+        {
+            branch.ParentBranchId = parentId;
+        }
     }
 
     private async Task EnsureUniquenessAsync(string branchName, int projectId)

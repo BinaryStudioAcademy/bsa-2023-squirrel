@@ -1,18 +1,19 @@
 <div class="container">
     <div class="main-content">
-        <app-tree [asCheckList]="true" [treeData]="items" (selectionChange)="selectionChanged($event)"
-            (messageChange)="messageChanged($event)">
-        </app-tree>
-        <div class="solution-sector">
-            <app-code [textPair]="textPair" height="100%" header="Solution"></app-code>
+        <app-tree [asCheckList]="true" [treeData]="items" (selectionChange)="selectionChanged($event)" (messageChange)="messageChanged($event)"></app-tree>
+        <div class="changes-content">
+            <div *ngFor="let changes of contentChanges" class="solution-sector">
+                <app-code [textPair]="changes.sideBySideDiff" [height]="'100%'" [header]="changes.schemaName + '.' + changes.itemName" ></app-code>
+            </div>
         </div>
     </div>
 
     <div class="nav">
         <div>
-            <app-button (buttonOnClick)="commit()" [isDisabled]="!validateCommit()" class="margin-right" text="Commit"
-                variant="outline-primary" width="120px">
-            </app-button>
+            <app-button
+                (buttonOnClick)="commit()"
+                [isDisabled]="!validateCommit()"
+                class="margin-right" text="Commit" variant="outline-primary" width="120px"></app-button>
             <app-button text="Push" variant="outline-primary" width="120px"></app-button>
         </div>
         <div>
@@ -21,3 +22,4 @@
         </div>
     </div>
 </div>
+

@@ -103,7 +103,6 @@ export class MainHeaderComponent extends BaseComponent implements OnInit {
             clientId: this.currentDb.guid,
             filterSchema: '',
             filterName: '',
-            filterRowsCount: 1,
         };
 
         this.tableService

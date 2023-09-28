@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { BaseComponent } from '@core/base/base.component';
 import { BranchService } from '@core/services/branch.service';
+import { CommitChangesService } from '@core/services/commit-changes.service';
 import { DatabaseItemsService } from '@core/services/database-items.service';
 import { EventService } from '@core/services/event.service';
 import { LoadChangesService } from '@core/services/load-changes.service';
@@ -26,9 +27,15 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
 
     @ViewChild('modalContent') modalContent: TemplateRef<any>;
 
+    public currentChangesGuId: string;
+
+    public currentBranchId: number;
+
     public isSettingsEnabled: boolean = false;
 
     public currentProjectId: number;
+
+    public lastCommitId: number;
 
     public selectedBranch: BranchDto;
 
@@ -51,6 +58,7 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
         private changesService: LoadChangesService,
         private notificationService: NotificationService,
         private databaseItemsService: DatabaseItemsService,
+        private commitChangesService: CommitChangesService,
         private spinner: SpinnerService,
         private eventService: EventService,
     ) {
@@ -95,8 +103,8 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
     }
 
     public getCurrentBranch() {
-        const currentBranchId = this.branchService.getCurrentBranch(this.currentProjectId);
-        const currentBranch = this.branches.find((x) => x.id === currentBranchId);
+        this.currentBranchId = this.branchService.getCurrentBranch(this.currentProjectId);
+        const currentBranch = this.branches.find((x) => x.id === this.currentBranchId);
 
         return currentBranch ? this.branches.indexOf(currentBranch) : 0;
     }
@@ -131,10 +139,10 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
                 finalize(() => this.spinner.hide()),
             )
             .subscribe({
-                next: (changesGuid) => {
-                    this.eventService.changesSaved(changesGuid);
-                    // eslint-disable-next-line no-console
-                    console.log(changesGuid);
+                next: (event) => {
+                    this.eventService.changesSaved(event);
+                    this.currentChangesGuId = event;
+                    this.loadCommitChanges();
                 },
                 error: (error) => {
                     // eslint-disable-next-line no-console
@@ -144,9 +152,23 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
                 },
             });
 
-        this.databaseItemsService
-            .getAllItems(this.selectedDatabase.guid)
-            .pipe(takeUntil(this.unsubscribe$))
+        this.branchService.getLastCommitId(this.currentBranchId)
+            .pipe(
+                takeUntil(this.unsubscribe$),
+            )
+            .subscribe({
+                next: (lastCommitId) => {
+                    this.lastCommitId = lastCommitId;
+                },
+                error: () => {
+                    this.notificationService.error('An error occurred while attempting to load last commit');
+                },
+            });
+
+        this.databaseItemsService.getAllItems(this.selectedDatabase.guid)
+            .pipe(
+                takeUntil(this.unsubscribe$),
+            )
             .subscribe({
                 next: (event) => {
                     this.eventService.changesLoaded(event);
@@ -159,5 +181,10 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
                     this.notificationService.error('An error occurred while attempting to load list of db items');
                 },
             });
+    }
+
+    public loadCommitChanges() {
+        this.spinner.show();
+        this.commitChangesService.getContentDiffs(this.lastCommitId, this.currentChangesGuId);
     }
 }

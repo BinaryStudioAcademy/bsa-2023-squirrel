@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { UserDto } from '../../../models/user/user-dto';
 
@@ -9,4 +9,12 @@ import { UserDto } from '../../../models/user/user-dto';
 })
 export class UserCardComponent {
     @Input() user: UserDto;
+
+    @Input() public isRemoveAvailable: boolean = true;
+
+    @Output() removeOnClick: EventEmitter<void> = new EventEmitter<void>();
+
+    public handleClick(): void {
+        this.removeOnClick.emit();
+    }
 }

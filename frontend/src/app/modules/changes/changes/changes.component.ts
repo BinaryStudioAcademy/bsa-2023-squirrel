@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BaseComponent } from '@core/base/base.component';
 import { BranchService } from '@core/services/branch.service';
 import { CommitService } from '@core/services/commit.service';
+import { CommitChangesService } from '@core/services/commit-changes.service';
 import { EventService } from '@core/services/event.service';
 import { ProjectService } from '@core/services/project.service';
 import { SpinnerService } from '@core/services/spinner.service';
@@ -14,6 +15,8 @@ import { DatabaseItemType } from 'src/app/models/database-items/database-item-ty
 import { ItemCategory } from 'src/app/models/database-items/item-category';
 import { TextPairDifferenceDto } from 'src/app/models/text-pair/text-pair-difference-dto';
 
+import { DatabaseItemContentCompare } from '../../../models/database-items/database-item-content-compare';
+
 @Component({
     selector: 'app-changes',
     templateUrl: './changes.component.html',
@@ -22,7 +25,9 @@ import { TextPairDifferenceDto } from 'src/app/models/text-pair/text-pair-differ
 export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy {
     public textPair: TextPairDifferenceDto;
 
-    public currentChangesGuid: string;
+    public contentChanges: DatabaseItemContentCompare[] = [];
+
+    public guid: string;
 
     public items: TreeNode[];
 
@@ -38,33 +43,42 @@ export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy
         private commitService: CommitService,
         private projectService: ProjectService,
         private spinner: SpinnerService,
+        private commitChangesService: CommitChangesService,
     ) {
         super();
-        this.initMockedDifferences();
-        this.eventService.changesLoadedEvent$.pipe(takeUntil(this.unsubscribe$)).subscribe((dbItems) => {
-            if (dbItems) {
-                this.items = this.mapDbItems(dbItems);
-            }
-        });
-        eventService.changesSavedEvent$.pipe(takeUntil(this.unsubscribe$)).subscribe((guid) => {
-            if (guid) {
-                this.currentChangesGuid = guid;
-            }
-        });
+        this.eventService.changesLoadedEvent$
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((x) => {
+                if (x !== undefined) {
+                    this.items = this.mapDbItems(x);
+                }
+            });
+        eventService.changesSavedEvent$
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((x) => {
+                if (x !== undefined) {
+                    this.guid = x;
+                }
+            });
     }
 
     public ngOnInit(): void {
         this.currentProjectId = this.projectService.currentProjectId;
+        this.commitChangesService.contentChanges$
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((changes) => {
+                this.contentChanges = changes;
+            });
     }
 
     public validateCommit() {
-        if (!this.currentChangesGuid) {
+        if (!this.guid) {
             return false;
         }
         if (!(this.message.length > 0 && this.message.length <= 300)) {
             return false;
         }
-        if (!this.selectedItems.some((x) => x.children?.some((y) => y.selected))) {
+        if (!this.selectedItems.some(x => x.children?.some(y => y.selected))) {
             return false;
         }
 
@@ -150,329 +164,5 @@ export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy
             default:
                 return 'Unknown category';
         }
-    }
-
-    private initMockedDifferences() {
-        const json = `{
-        "oldTextLines": [
-          {
-            "type": 0,
-            "position": 1,
-            "text": "The quick brown fox jumps over the lazy dog.",
-            "subPieces": []
-          },
-          {
-            "type": 1,
-            "position": 2,
-            "text": "A lazy brown dog is jumped over by the quick fox.",
-            "subPieces": []
-          },
-          {
-            "type": 0,
-            "position": 3,
-            "text": "An agile fox swiftly leaps past a lethargic dog.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 5,
-            "text": "A fast fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          }
-        ],
-        "newTextLines": [
-          {
-            "type": 0,
-            "position": 1,
-            "text": "The quick brown fox jumps over the lazy dog.",
-            "subPieces": []
-          },
-          {
-            "type": 3,
-            "position": -1,
-            "text": null,
-            "subPieces": []
-          },
-          {
-            "type": 0,
-            "position": 2,
-            "text": "An agile fox swiftly leaps past a lethargic dog.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 3,
-            "text": "The white fox jumps over the indolent canine.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          },
-          {
-            "type": 4,
-            "position": 4,
-            "text": "A fox gracefully clears the slumbering hound.",
-            "subPieces": []
-          }
-        ],
-        "hasDifferences": true
-      }`;
-
-        this.textPair = JSON.parse(json);
     }
 }

@@ -139,9 +139,9 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
                 finalize(() => this.spinner.hide()),
             )
             .subscribe({
-                next: (event) => {
-                    this.eventService.changesSaved(event);
-                    this.currentChangesGuId = event;
+                next: (changeGuid) => {
+                    this.eventService.changesSaved(changeGuid);
+                    this.currentChangesGuId = changeGuid;
                     this.loadCommitChanges();
                 },
                 error: (error) => {

@@ -31,13 +31,12 @@ internal class GetObjects
         @"SELECT SCHEMA_NAME(schema_id) [Schema], NAME [Name] FROM SYS.OBJECTS WHERE TYPE_DESC = 'VIEW'";
 
     public static string GetViewDefinitionScript(string viewSchema, string viewName) =>
-        @$"
+        @"
                 SELECT M.definition [Definition] 
 
                 FROM INFORMATION_SCHEMA.VIEWS V INNER JOIN sys.sql_modules M ON M.object_id = OBJECT_ID(V.TABLE_NAME)
 
-                WHERE V.TABLE_SCHEMA = @viewSchema AND TABLE_NAME = @viewName'
-            ";
+                WHERE V.TABLE_SCHEMA = @viewSchema AND TABLE_NAME = @viewName";
 
     public static string GetStoredProceduresScript =>
         @"

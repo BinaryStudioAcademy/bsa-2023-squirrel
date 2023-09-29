@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 import { DatabaseItem } from 'src/app/models/database-items/database-item';
 import { UserDto } from 'src/app/models/user/user-dto';
@@ -8,22 +8,22 @@ import { UserDto } from 'src/app/models/user/user-dto';
     providedIn: 'root',
 })
 export class EventService {
-    public userChangedEvent$: Observable<UserDto | undefined>;
+    private onChangesSaved = new BehaviorSubject<string | undefined>(undefined);
 
-    public changesLoadedEvent$: Observable<DatabaseItem[] | undefined>;
+    private onUserChanged = new BehaviorSubject<UserDto | undefined>(undefined);
 
-    public changesSavedEvent$: Observable<string | undefined>;
+    private onChangesLoaded = new BehaviorSubject<DatabaseItem[] | undefined>(undefined);
 
-    private onChangesSaved = new Subject<string | undefined>();
+    get userChangedEvent$() {
+        return this.onUserChanged.asObservable();
+    }
 
-    private onUserChanged = new Subject<UserDto | undefined>();
+    get changesLoadedEvent$() {
+        return this.onChangesLoaded.asObservable();
+    }
 
-    private onChangesLoaded = new Subject<DatabaseItem[] | undefined>();
-
-    constructor() {
-        this.userChangedEvent$ = this.onUserChanged.asObservable();
-        this.changesLoadedEvent$ = this.onChangesLoaded.asObservable();
-        this.changesSavedEvent$ = this.onChangesSaved.asObservable();
+    get changesSavedEvent$() {
+        return this.onChangesSaved.asObservable();
     }
 
     public changesLoaded(item: DatabaseItem[] | undefined) {

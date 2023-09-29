@@ -1,5 +1,6 @@
 @import "/src/styles/color"
 @import "/src/styles/weights"
+@import "~font-awesome/css/font-awesome.css"
 
 .container
     display: flex
@@ -15,7 +16,7 @@
 .tree-container
   display: flex
   flex-direction: column
-  max-height: 60%
+  max-height: 100%
   margin: 10px
   gap: 10px
 
@@ -28,6 +29,8 @@
   margin-left: 10px
   font-weight: $semi-bold-weight
   overflow: hidden
+  white-space: normal
+  word-wrap: break-word
 
 .tree-item-children
   margin-left: 20px
@@ -54,3 +57,5 @@
   font-size: 16px
   border-radius: 10px
 
+.fa.fa-folder-open
+  margin-right: 5px

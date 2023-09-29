@@ -36,9 +36,7 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
 
     public isSettingsEnabled: boolean = false;
 
-    public currentProjectId: number;
-
-    public currentProject: ProjectResponseDto;
+    public currentProject: ProjectResponseDto = {} as ProjectResponseDto;
 
     public lastCommitId: number;
 
@@ -73,10 +71,10 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
 
     public ngOnInit(): void {
         this.route.params.subscribe((params) => {
-            this.currentProjectId = params['id'];
+            this.currentProject.id = params['id'];
         });
         this.branchService
-            .getAllBranches(this.currentProjectId)
+            .getAllBranches(this.currentProject.id)
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((branches) => {
                 this.branches = branches;
@@ -90,17 +88,18 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
                 }
             },
         });
+        this.getCurrentDatabase();
     }
 
     public onBranchSelected(value: any) {
         this.selectedBranch = value;
-        this.branchService.selectBranch(this.currentProjectId, value.id);
+        this.branchService.selectBranch(this.currentProject.id, value.id);
     }
 
     public openBranchModal() {
         const dialogRef = this.dialog.open(CreateBranchModalComponent, {
             width: '500px',
-            data: { projectId: this.currentProjectId, branches: this.branches },
+            data: { projectId: this.currentProject.id, branches: this.branches },
         });
 
         dialogRef.componentInstance.branchCreated.subscribe((branch) => {
@@ -110,7 +109,7 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
     }
 
     public getCurrentBranch() {
-        this.currentBranchId = this.branchService.getCurrentBranch(this.currentProjectId);
+        this.currentBranchId = this.branchService.getCurrentBranch(this.currentProject.id);
         const currentBranch = this.branches.find((x) => x.id === this.currentBranchId);
 
         return currentBranch ? this.branches.indexOf(currentBranch) : 0;
@@ -129,8 +128,6 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
     }
 
     public loadChanges() {
-        this.getCurrentDatabase();
-
         if (!this.selectedDatabase) {
             this.notificationService.error('No database currently selected');
 
@@ -194,16 +191,17 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
     }
 
     public applyDb() {
-        const branchId = this.currentBranchId;
-
-        this.getCurrentDatabase();
+        this.spinner.show();
         const applyChangesDto: ApplyChangesDto = {
             clientId: this.selectedDatabase.guid,
             dbEngine: this.currentProject.dbEngine,
         };
 
-        this.applyChangesService.applyChanges(applyChangesDto, branchId)
-            .pipe(takeUntil(this.unsubscribe$))
+        this.applyChangesService.applyChanges(applyChangesDto, this.currentBranchId)
+            .pipe(
+                takeUntil(this.unsubscribe$),
+                finalize(() => this.spinner.hide()),
+            )
             .subscribe({
                 next: () => {
                     this.notificationService.info('Changes successfully applied');

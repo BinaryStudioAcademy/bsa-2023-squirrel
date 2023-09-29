@@ -5,5 +5,7 @@ namespace Squirrel.SqlService.BLL.Interfaces
     public interface IContentDifferenceService
     {
         Task<ICollection<DatabaseItemContentCompare>> GetContentDiffsAsync(int commitId, Guid tempBlobId);
+        Task<string> GetContentAsync(Guid blobId);
+
     }
 }

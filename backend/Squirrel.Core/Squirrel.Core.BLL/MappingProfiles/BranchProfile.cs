@@ -10,5 +10,8 @@ public sealed class BranchProfile : Profile
     {
         CreateMap<Branch, BranchDto>()!.ReverseMap();
         CreateMap<Branch, BranchCreateDto>()!.ReverseMap();
+        CreateMap<Branch, BranchDetailsDto>()
+            .ForMember(x => x.LastUpdatedBy, s => s.MapFrom(x => x.Author))
+            .ForMember(x => x.UpdatedAt, s => s.MapFrom(x => x.CreatedAt));
     }
 }

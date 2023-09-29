@@ -14,6 +14,8 @@ export class EventService {
 
     private onChangesLoaded = new BehaviorSubject<DatabaseItem[] | undefined>(undefined);
 
+    private onBranchChanged = new BehaviorSubject<number | undefined>(undefined);
+
     get userChangedEvent$() {
         return this.onUserChanged.asObservable();
     }
@@ -26,6 +28,10 @@ export class EventService {
         return this.onChangesSaved.asObservable();
     }
 
+    get branchChangedEvent$() {
+        return this.onBranchChanged.asObservable();
+    }
+
     public changesLoaded(item: DatabaseItem[] | undefined) {
         this.onChangesLoaded.next(item);
     }
@@ -36,5 +42,9 @@ export class EventService {
 
     public changesSaved(guid: string | undefined) {
         this.onChangesSaved.next(guid);
+    }
+
+    public branchChanged(branchId: number | undefined) {
+        this.onBranchChanged.next(branchId);
     }
 }

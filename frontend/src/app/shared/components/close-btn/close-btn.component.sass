@@ -1,0 +1,28 @@
+@import "/src/styles/color"
+
+.close
+    cursor: pointer
+    width: 45px
+    height: 45px
+    border-radius: 25px
+    position: relative
+
+    &:hover
+        background-color: $light-gray
+
+    &:after, &:before
+        content: ''
+        height: 4px
+        width: 30px
+        border-radius: 2px
+        background-color: $arrow-color
+        position: absolute
+        top: 50%
+        left: 50%
+        transform: translate(-50%, 0%)
+
+    &:after
+        transform: translate(-50%, -25%) rotate(45deg)
+
+    &:before
+        transform: translate(-50%, -25%) rotate(-45deg)

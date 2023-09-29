@@ -132,26 +132,6 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
 
         this.spinner.show();
 
-        this.changesService
-            .loadChangesRequest(this.selectedDatabase.guid)
-            .pipe(
-                takeUntil(this.unsubscribe$),
-                finalize(() => this.spinner.hide()),
-            )
-            .subscribe({
-                next: (event) => {
-                    this.eventService.changesSaved(event);
-                    this.currentChangesGuId = event;
-                    this.loadCommitChanges();
-                },
-                error: (error) => {
-                    // eslint-disable-next-line no-console
-                    console.log(error);
-
-                    this.notificationService.error('An error occurred while attempting to load changes');
-                },
-            });
-
         this.branchService
             .getLastCommitId(this.currentBranchId)
             .pipe(takeUntil(this.unsubscribe$))
@@ -164,18 +144,31 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
                 },
             });
 
+        this.changesService
+            .loadChangesRequest(this.selectedDatabase.guid)
+            .pipe(
+                takeUntil(this.unsubscribe$),
+                finalize(() => this.spinner.hide()),
+            )
+            .subscribe({
+                next: (changeGuid) => {
+                    this.eventService.changesSaved(changeGuid);
+                    this.currentChangesGuId = changeGuid;
+                    this.loadCommitChanges();
+                },
+                error: () => {
+                    this.notificationService.error('An error occurred while attempting to load changes');
+                },
+            });
+
         this.databaseItemsService
             .getAllItems(this.selectedDatabase.guid)
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe({
                 next: (event) => {
                     this.eventService.changesLoaded(event);
-                    // eslint-disable-next-line no-console
-                    console.log(event);
                 },
-                error: (error) => {
-                    // eslint-disable-next-line no-console
-                    console.log(error);
+                error: () => {
                     this.notificationService.error('An error occurred while attempting to load list of db items');
                 },
             });

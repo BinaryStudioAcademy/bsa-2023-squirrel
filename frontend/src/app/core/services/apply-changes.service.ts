@@ -14,9 +14,6 @@ export class ApplyChangesService {
     constructor(private httpService: HttpInternalService) { }
 
     public applyChanges(applyChangesDto: ApplyChangesDto, branchId: number) {
-        console.log(applyChangesDto);
-        console.log(branchId);
-
         return this.httpService.postRequest<DatabaseDto[]>(`${this.applyChangesApiUrl}/${branchId}`, applyChangesDto);
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.Text;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Squirrel.AzureBlobStorage.Interfaces;
 using Squirrel.AzureBlobStorage.Models;
@@ -7,25 +8,26 @@ using Squirrel.Shared.DTO.CommitFile;
 using Squirrel.Shared.DTO.SelectedItems;
 using Squirrel.Shared.Enums;
 using Squirrel.SqlService.BLL.Interfaces;
-using System.Text;
 
 namespace Squirrel.SqlService.BLL.Services;
+
 public class CommitFilesService : ICommitFilesService
 {
+    private const string UserDbChangesBlobContainerNameSection = "UserDbChangesBlobContainerName";
     private readonly string _containerName;
     private readonly IBlobStorageService _blobService;
 
     public CommitFilesService(IBlobStorageService blobService, IConfiguration configuration)
     {
         _blobService = blobService;
-        _containerName = configuration.GetRequiredSection("UserDbChangesBlobContainerName").Value;
+        _containerName = configuration.GetRequiredSection(UserDbChangesBlobContainerNameSection).Value;
     }
 
     public async Task<ICollection<CommitFileDto>> SaveSelectedFilesAsync(SelectedItemsDto selectedItems)
     {
         var staged = await GetStagedAsync(selectedItems.Guid);
         var saved = new List<CommitFileDto>();
-        foreach (var selected in selectedItems.StoredProcedures) 
+        foreach (var selected in selectedItems.StoredProcedures)
         {
             var item = staged.DbProcedureDetails?.Details.FirstOrDefault(x => x.Name == selected);
             var file = await SaveFileAsync(item, selectedItems.CommitId, DatabaseItemType.StoredProcedure);
@@ -71,7 +73,7 @@ public class CommitFilesService : ICommitFilesService
         }
     }
 
-    private async Task<CommitFileDto?> SaveFileAsync<T>(T? item, int commitId, DatabaseItemType type) where T: BaseDbItem
+    private async Task<CommitFileDto?> SaveFileAsync<T>(T? item, int commitId, DatabaseItemType type) where T : BaseDbItem
     {
         if (item is null)
         {
@@ -104,7 +106,6 @@ public class CommitFilesService : ICommitFilesService
     private async Task<DbStructureDto> GetStagedAsync(string changesGuid)
     {
         var blob = await _blobService.DownloadAsync(_containerName, changesGuid);
-
         var json = Encoding.UTF8.GetString(blob.Content ?? throw new ArgumentNullException());
         
         return JsonConvert.DeserializeObject<DbStructureDto>(json) ?? throw new JsonException($"{nameof(DbStructureDto)} deserialized as null!");

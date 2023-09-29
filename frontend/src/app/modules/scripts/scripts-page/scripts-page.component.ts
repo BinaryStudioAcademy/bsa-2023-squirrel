@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { BaseComponent } from '@core/base/base.component';
@@ -26,10 +26,12 @@ import { CreateScriptModalComponent } from '../create-script-modal/create-script
     templateUrl: './scripts-page.component.html',
     styleUrls: ['./scripts-page.component.sass'],
 })
-export class ScriptsPageComponent extends BaseComponent implements OnInit, CanComponentDeactivate {
+export class ScriptsPageComponent extends BaseComponent implements OnInit, OnDestroy, CanComponentDeactivate {
     public form: FormGroup;
 
     public scripts: ScriptDto[] = [];
+
+    public filteredScripts: ScriptDto[] = [];
 
     public selectedScript: ScriptDto | undefined;
 
@@ -56,7 +58,6 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, CanCo
         private spinner: SpinnerService,
         private sharedProject: SharedProjectService,
         private notification: NotificationService,
-        private elementRef: ElementRef,
     ) {
         super();
     }
@@ -73,10 +74,16 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, CanCo
         this.loadScripts();
         this.initializeForm();
         this.loadCurrentDb();
+        this.registerScroll();
+    }
+
+    public override ngOnDestroy() {
+        super.ngOnDestroy();
+        this.removeScroll();
     }
 
     public canDeactivate(): Observable<boolean> | boolean {
-        if (this.form.dirty) {
+        if (this.form.get('scriptContent')?.dirty) {
             const dialogRef = this.dialog.open(ConfirmationDialogComponent);
 
             return dialogRef.afterClosed();
@@ -90,7 +97,7 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, CanCo
             return;
         }
 
-        if (this.form.dirty) {
+        if (this.form.get('scriptContent')?.dirty) {
             const dialogRef = this.dialog.open(ConfirmationDialogComponent);
 
             dialogRef.afterClosed().subscribe((confirmed) => {
@@ -105,15 +112,18 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, CanCo
         this.selectScript(script);
     }
 
-    public openCreateModal(): void {
-        const dialogRef: any = this.dialog.open(CreateScriptModalComponent, {
-            panelClass: 'custom-dialog-container',
-            width: '450px',
-        });
+    public createScript() {
+        if (this.form.get('scriptContent')?.dirty) {
+            const dialogRef = this.dialog.open(ConfirmationDialogComponent);
 
-        dialogRef.componentInstance.scriptCreated.subscribe((newScript: ScriptDto) => {
-            this.loadScripts(newScript.id);
-        });
+            dialogRef.afterClosed().subscribe((confirmed) => {
+                if (confirmed) {
+                    this.openCreateModal();
+                }
+            });
+        } else {
+            this.openCreateModal();
+        }
     }
 
     public saveScript(): void {
@@ -225,12 +235,63 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, CanCo
         }, 0);
     }
 
-    @HostListener('window:scroll')
-    public onScroll(): void {
-        const element = this.elementRef.nativeElement.querySelector('app-script-result');
-        const elementRect = element.getBoundingClientRect();
+    public filterScripts() {
+        this.filteredScripts = this.scripts.filter(s =>
+            s.fileName.includes(this.form.value.search) || s.id === this.selectedScript?.id);
+    }
 
+    public deleteScript(scriptId: number) {
+        this.scriptService.deleteScript(scriptId)
+            .pipe(
+                takeUntil(this.unsubscribe$),
+                finalize(() => this.spinner.hide()),
+            )
+            .subscribe({
+                next: () => {
+                    this.notification.info('Script successfully deleted');
+                    this.scripts.splice(this.scripts.findIndex(s => s.id === scriptId), 1);
+                    this.filterScripts();
+                    this.selectedScript = undefined;
+                    this.form.markAsPristine();
+                },
+                error: err => {
+                    this.notification.error(err.message);
+                },
+            });
+    }
+
+    private onScroll() {
+        const element = document.querySelector('app-script-result');
+        const elementRect = element?.getBoundingClientRect();
+
+        if (!elementRect) {
+            return;
+        }
         this.isToTopBtnShowed = elementRect.top < 0;
+    }
+
+    private registerScroll() {
+        this.parentScroll?.addEventListener('scroll', this.onScroll.bind(this));
+    }
+
+    private removeScroll() {
+        this.parentScroll?.removeEventListener('scroll', this.onScroll.bind(this));
+    }
+
+    private get parentScroll() {
+        return document.getElementById('parent-scroll');
+    }
+
+    private openCreateModal(): void {
+        const dialogRef: any = this.dialog.open(CreateScriptModalComponent, {
+            panelClass: 'custom-dialog-container',
+            width: '450px',
+        });
+
+        dialogRef.componentInstance.scriptCreated.subscribe((newScript: ScriptDto) => {
+            this.loadScripts(newScript.id);
+            this.selectScript(newScript);
+        });
     }
 
     private removeLastErrorForSelectedScript(): void {
@@ -256,6 +317,7 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, CanCo
     private initializeForm(): void {
         this.form = this.formBuilder.group({
             scriptContent: [this.selectedScript?.content],
+            search: [''],
         });
     }
 
@@ -281,6 +343,7 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, CanCo
             if (selectedScriptId) {
                 this.selectedScript = this.scripts.find((s) => s.id === selectedScriptId);
             }
+            this.filterScripts();
             this.spinner.hide();
         });
     }

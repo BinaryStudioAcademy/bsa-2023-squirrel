@@ -10,7 +10,6 @@ using Squirrel.Shared.DTO.View;
 using Squirrel.Shared.Enums;
 using Squirrel.SqlService.BLL.Interfaces;
 using Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
-using System.Text;
 using System.Text.RegularExpressions;
 using ConsoleHub = Squirrel.SqlService.BLL.Hubs.ConsoleAppHub;
 
@@ -22,18 +21,21 @@ public class ApplyChangesService : IApplyChangesService
     private readonly IContentDifferenceService _contentDifferenceService;
     private readonly IDbItemsRetrievalService _dbItemsRetrievalService;
     private readonly ISqlFormatterService _sqlFormatterService;
+    private readonly ICreateTableScriptService _createTableScriptService;
     private readonly IResultObserver _resultObserver;
     private (Guid queryId, TaskCompletionSource<QueryResultTable> tcs) _queryParameters;
     private readonly IHubContext<ConsoleHub, IExecuteOnClientSide> _hubContext;
 
     public ApplyChangesService(IContentDifferenceService contentDifferenceService, IDbItemsRetrievalService dbItemsRetrievalService, 
-        IHubContext<ConsoleHub, IExecuteOnClientSide> hubContext, IResultObserver resultObserver, ISqlFormatterService sqlFormatterService)
+        IHubContext<ConsoleHub, IExecuteOnClientSide> hubContext, IResultObserver resultObserver, ISqlFormatterService sqlFormatterService, 
+        ICreateTableScriptService createTableScriptService)
     {
         _contentDifferenceService = contentDifferenceService;
         _dbItemsRetrievalService = dbItemsRetrievalService;
         _resultObserver = resultObserver;
         _hubContext = hubContext;
         _sqlFormatterService = sqlFormatterService;
+        _createTableScriptService = createTableScriptService;
     }
 
     public async Task ApplyChanges(ApplyChangesDto applyChangesDto, int commitId)
@@ -131,7 +133,7 @@ public class ApplyChangesService : IApplyChangesService
             //else
             //{
             //    var tableStructureDto = JsonConvert.DeserializeObject<TableStructureDto>(newChanges.Text)!;
-            //    var alterScript = GenerateCreateTableScript(contentCompare.SchemaName, contentCompare.ItemName, tableStructureDto);
+            //    var alterScript = GenerateAlterTableScript(contentCompare.SchemaName, contentCompare.ItemName, tableStructureDto);
             //    await ExecuteScriptAsync(applyChangesDto, alterScript);
             //}
         }
@@ -140,77 +142,9 @@ public class ApplyChangesService : IApplyChangesService
             if (oldChanges.Text is null)
             {
                 var tableStructureDto = JsonConvert.DeserializeObject<TableStructureDto>(newChanges.Text)!;
-                var cre = GenerateCreateTableScript(contentCompare.SchemaName, contentCompare.ItemName, tableStructureDto, fkConstraintScripts);
-                await ExecuteScriptAsync(applyChangesDto, cre);
+                var createTableScript = _createTableScriptService.GenerateCreateTableScript(contentCompare.SchemaName, contentCompare.ItemName, tableStructureDto, fkConstraintScripts);
+                await ExecuteScriptAsync(applyChangesDto, createTableScript);
             }
-        }
-    }
-
-    private string GenerateCreateTableScript(string tableSchema, string tableName, TableStructureDto tableStructure, List<string> fkConstraintScripts)
-    {
-        StringBuilder createScript = new StringBuilder($"CREATE TABLE [{tableSchema}].[{tableName}] (");
-        foreach (var column in tableStructure.Columns)
-        {
-            createScript.AppendLine($"{column.ColumnName} ");
-            AppendTableColumnDataType(createScript, column);
-            AppendTableColumnPrimaryKey(createScript, column);
-            AppendTableColumnNull(createScript, column);
-            createScript.Append(',');
-            AddTableColumnFKScript(fkConstraintScripts, column, tableSchema, tableName);
-        }
-        createScript.AppendLine(");");
-        return createScript.ToString();
-    }
-
-    private void AppendTableColumnDataType(StringBuilder createScript, TableColumnInfo column)
-    {
-        string[] variableTypes = {"binary", "varbinary", "char", "nchar", "varchar", "nvarchar" };
-        if (variableTypes.Contains(column.DataType))
-        {
-            if (column.MaxLength < 1)
-            {
-                createScript.Append($"{column.DataType} (MAX) ");
-            }
-            else
-            {
-                createScript.Append($"{column.DataType} ({column.MaxLength}) ");
-            }
-        }
-        else
-        {
-            createScript.Append($"{column.DataType} ");
-        }
-    }
-    private void AppendTableColumnPrimaryKey(StringBuilder createScript, TableColumnInfo column)
-    {
-        if (column.IsPrimaryKey ?? false)
-        {
-            createScript.Append("PRIMARY KEY ");
-        }
-        if (column.IsIdentity ?? false)
-        {
-            createScript.Append("IDENTITY (1, 1) ");
-        }
-    }
-
-    private void AppendTableColumnNull(StringBuilder createScript, TableColumnInfo column)
-    {
-        if (column.IsAllowNulls ?? false)
-        {
-            createScript.Append("NULL");
-        }
-        else
-        {
-            createScript.Append("NOT NULL");
-        }
-    }
-
-    private void AddTableColumnFKScript(List<string> fkConstraintScripts, TableColumnInfo column, string tableSchema, string tableName)
-    {
-        if (column.IsForeignKey ?? false)
-        {
-            fkConstraintScripts.Add($"ALTER TABLE [{tableSchema}].[{tableName}] ADD FOREIGN KEY ({column.ColumnName})" +
-                $" REFERENCES [{column.RelatedTableSchema}].[{column.RelatedTable}] ({column.RelatedTableColumn});");
         }
     }
 

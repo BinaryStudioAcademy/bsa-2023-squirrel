@@ -22,6 +22,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IChangesLoaderService, ChangesLoaderService>();
         services.AddScoped<IContentDifferenceService, ContentDifferenceService>();
         services.AddScoped<IApplyChangesService, ApplyChangesService>();
+        services.AddScoped<ICreateTableScriptService, CreateTableScriptService>();
         services.AddSingleton<IProcessReceivedDataService, ProcessReceivedDataService>();
         services.AddSingleton<ResultObserver>();
         services.AddScoped<ICommitFilesService, CommitFilesService>();

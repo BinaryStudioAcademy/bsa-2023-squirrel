@@ -10,7 +10,6 @@ import { TreeNode } from '@shared/components/tree/models/tree-node.model';
 import { finalize, takeUntil } from 'rxjs';
 
 import { CreateCommitDto } from 'src/app/models/commit/create-commit-dto';
-import { DatabaseItem } from 'src/app/models/database-items/database-item';
 import { DatabaseItemType } from 'src/app/models/database-items/database-item-type';
 import { ItemCategory } from 'src/app/models/database-items/item-category';
 
@@ -45,11 +44,6 @@ export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy
         private commitChangesService: CommitChangesService,
     ) {
         super();
-        this.eventService.changesLoadedEvent$.pipe(takeUntil(this.unsubscribe$)).subscribe((x) => {
-            if (x !== undefined) {
-                this.items = this.mapDbItems(x);
-            }
-        });
         eventService.changesSavedEvent$.pipe(takeUntil(this.unsubscribe$)).subscribe((x) => {
             if (x !== undefined) {
                 this.currentChangesGuid = x;
@@ -60,7 +54,10 @@ export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy
     public ngOnInit(): void {
         this.currentProjectId = this.projectService.currentProjectId;
         this.commitChangesService.contentChanges$.pipe(takeUntil(this.unsubscribe$)).subscribe((changes) => {
-            this.allContentChanges = changes;
+            this.allContentChanges = changes.filter(
+                (x) => x.sideBySideDiff.hasDifferences || x.inLineDiff.hasDifferences,
+            );
+            this.items = this.mapDbItems(this.allContentChanges);
         });
     }
 
@@ -127,23 +124,25 @@ export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy
         this.message = message;
     }
 
-    private mapDbItems(items: DatabaseItem[]): TreeNode[] {
+    private mapDbItems(items: DatabaseItemContentCompare[]): TreeNode[] {
         const typeMap: { [type: string]: TreeNode } = {};
 
-        items.forEach((item) => {
-            const { name, type } = item;
+        items
+            .filter((x) => x.inLineDiff || x.sideBySideDiff)
+            .forEach((item) => {
+                const { itemName, itemType } = item;
 
-            if (!typeMap[type]) {
-                typeMap[type] = {
-                    name: this.getSectionName(type),
-                    children: [],
-                };
-            }
-            typeMap[type].children?.push({
-                name,
-                selected: false,
+                if (!typeMap[itemType]) {
+                    typeMap[itemType] = {
+                        name: this.getSectionName(itemType),
+                        children: [],
+                    };
+                }
+                typeMap[itemType].children?.push({
+                    name: itemName,
+                    selected: false,
+                });
             });
-        });
         const tree = [] as TreeNode[];
 
         Object.values(typeMap).forEach((x) => {

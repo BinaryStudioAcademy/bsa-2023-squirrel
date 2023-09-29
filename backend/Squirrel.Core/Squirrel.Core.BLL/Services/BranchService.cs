@@ -70,26 +70,19 @@ public sealed class BranchService : BaseService, IBranchService
 
     public async Task<BranchDto> MergeBranchAsync(int sourceId, int destId)
     {
-        var source = await GetFullBranchEntityAsync(sourceId) ?? throw new EntityNotFoundException(nameof(Branch), sourceId);
         var dest = await GetFullBranchEntityAsync(destId) ?? throw new EntityNotFoundException(nameof(Branch), destId);
 
         BranchCommit? lastCommit = null;
-        DateTime createdAt = source.CreatedAt;
-        bool isOriginal = true;
-        while (source is not null && source.Id != dest.Id) 
+        foreach (var commit in await GetCommitsFromBranchInternalAsync(sourceId, destId))
         {
-            foreach (var commit in source.Commits.Where(x => isOriginal ? true : x.CreatedAt <= createdAt))
+            var branchCommit = new BranchCommit
             {
-                var branchCommit = new BranchCommit
-                {
-                    CommitId = commit.Id,
-                    BranchId = dest.Id,
-                    IsMerged = true
-                };
-                dest.BranchCommits.Add(branchCommit);
-                lastCommit = branchCommit;
-            }
-            source = await GetFullBranchEntityAsync(source.ParentBranchId ?? 0);
+                CommitId = commit.Id,
+                BranchId = dest.Id,
+                IsMerged = true
+            };
+            dest.BranchCommits.Add(branchCommit);
+            lastCommit = branchCommit;
         }
         if(lastCommit is not null)
         {
@@ -105,6 +98,26 @@ public sealed class BranchService : BaseService, IBranchService
         await _context.SaveChangesAsync();
 
         return _mapper.Map<BranchDto>(entity);
+    }
+
+    public async Task<List<Commit>> GetCommitsFromBranchInternalAsync(int branchId, int destinationId)
+    {
+        var source = await GetFullBranchEntityAsync(branchId) ?? throw new EntityNotFoundException(nameof(Branch), branchId);
+        DateTime createdAt = source.CreatedAt;
+        bool isOriginal = true;
+        List<Commit> commits = new List<Commit>();
+
+        while (source is not null && source.Id != destinationId)
+        {
+            foreach (var commit in source.Commits
+                .Where(x => isOriginal ? true : x.CreatedAt <= createdAt)
+                .OrderByDescending(x => x.CreatedAt))
+            {
+                commits.Add(commit);
+            }
+            source = await GetFullBranchEntityAsync(source.ParentBranchId ?? 0);
+        }
+        return commits;
     }
 
 

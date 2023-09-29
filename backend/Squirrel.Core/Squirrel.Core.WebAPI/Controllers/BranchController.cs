@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Squirrel.Core.BLL.Interfaces;
 using Squirrel.Core.Common.DTO.Branch;
+using Squirrel.Core.Common.DTO.Commit;
+using Squirrel.Core.DAL.Entities;
 
 namespace Squirrel.Core.WebAPI.Controllers;
 [Route("api/[controller]")]
@@ -10,10 +13,12 @@ namespace Squirrel.Core.WebAPI.Controllers;
 public class BranchController : ControllerBase
 {
     private readonly IBranchService _branchService;
+    private readonly IMapper _mapper;
 
-    public BranchController(IBranchService branchService)
+    public BranchController(IBranchService branchService, IMapper mapper)
     {
         _branchService = branchService;
+        _mapper = mapper;
     }
 
     [HttpGet("{projectId}")]
@@ -27,6 +32,12 @@ public class BranchController : ControllerBase
     {
         return Ok(await _branchService.GetLastBranchCommitIdAsync(branchId));
     }
+
+    [HttpGet("{branchId}/{destId}")]
+    public async Task<ActionResult<Commit>> GetTestCommits(int branchId, int destId)
+    {
+        return Ok(_mapper.Map<List<CommitDto>>(await _branchService.GetCommitsFromBranchInternalAsync(branchId, destId)));
+    } 
 
     [HttpPost("{projectId}")]
     public async Task<ActionResult<BranchDto>> AddBranchAsync(int projectId, [FromBody] BranchCreateDto dto) 

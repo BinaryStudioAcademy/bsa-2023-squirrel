@@ -26,6 +26,7 @@ import { LoadingSpinnerComponent } from './components/loading-spinner/loading-sp
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { ProfileMenuComponent } from './components/profile-menu/profile-menu.component';
 import { TreeComponent } from './components/tree/tree.component';
+import { TreeOneComponent } from './components/tree-one/tree-one.component';
 import { EmailOverflowDirective } from './directives/email-overflow.directive';
 
 @NgModule({
@@ -56,6 +57,7 @@ import { EmailOverflowDirective } from './directives/email-overflow.directive';
         ConfirmationModalComponent,
         DropdownComponent,
         TreeComponent,
+        TreeOneComponent,
         CheckboxComponent,
         EmailOverflowDirective,
         InfoTooltipComponent,
@@ -82,6 +84,7 @@ import { EmailOverflowDirective } from './directives/email-overflow.directive';
         ConfirmationModalComponent,
         DropdownComponent,
         TreeComponent,
+        TreeOneComponent,
         CheckboxComponent,
         EmailOverflowDirective,
         InfoTooltipComponent,

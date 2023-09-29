@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { BaseComponent } from '@core/base/base.component';
 import { BranchService } from '@core/services/branch.service';
 import { CommitService } from '@core/services/commit.service';
@@ -32,13 +32,13 @@ export class CodeComponent extends BaseComponent implements OnInit, OnDestroy {
 
     public DatabaseItemTypeName = DatabaseItemTypeName;
 
-    public selectedContentChanges: DatabaseItemContentCompare[] = [];
+    public selectedItem: TreeNode | null = null;
+
+    public selectedContent: DatabaseItemContentCompare | null = null;
 
     public currentChangesGuid: string;
 
     public items: TreeNode[];
-
-    public selectedItems: TreeNode[] = [];
 
     public message: string = '';
 
@@ -50,29 +50,56 @@ export class CodeComponent extends BaseComponent implements OnInit, OnDestroy {
         private commitService: CommitService,
         private projectService: ProjectService,
         private spinner: SpinnerService,
+        private formBuilder: FormBuilder,
         private commitChangesService: CommitChangesService,
     ) {
         super();
-        this.eventService.changesLoadedEvent$.pipe(takeUntil(this.unsubscribe$)).subscribe((x) => {
-            if (x !== undefined) {
-                this.items = this.mapDbItems(x);
-            }
-        });
-        eventService.changesSavedEvent$.pipe(takeUntil(this.unsubscribe$)).subscribe((x) => {
-            if (x !== undefined) {
-                this.currentChangesGuid = x;
-            }
-        });
     }
 
     public ngOnInit(): void {
+        this.loadChanges();
         this.currentProjectId = this.projectService.currentProjectId;
         this.commitChangesService.contentChanges$.pipe(takeUntil(this.unsubscribe$)).subscribe((changes) => {
             this.allContentChanges = changes;
         });
+        this.initializeForm();
     }
 
-    public formatContent(itemType: DatabaseItemType, contentLines: LineDifferenceDto[]): string {
+    public selectionChanged(selectedOne: TreeNode) {
+        this.selectedItem = selectedOne;
+        this.showSelectedContent();
+    }
+
+    private showSelectedContent(): void {
+        if (this.selectedItem) {
+            const matchingContentChange = this.allContentChanges.find(
+                (contentChange) => contentChange.itemName === this.selectedItem?.name,
+            );
+
+            this.selectedContent = matchingContentChange || null;
+        } else {
+            this.selectedContent = null;
+        }
+
+        this.initEditorContent();
+    }
+
+    private initEditorContent(): void {
+        if (this.selectedContent && this.selectedContent.itemType) {
+            const content = this.formatContent(
+                this.selectedContent.itemType,
+                this.selectedContent.sideBySideDiff.newTextLines,
+            );
+
+            this.form = this.formBuilder.group({
+                scriptContent: [content],
+            });
+        } else {
+            // Handle the case when selectedContent or its properties do not exist
+        }
+    }
+
+    private formatContent(itemType: DatabaseItemType, contentLines: LineDifferenceDto[]): string {
         const contentText = contentLines.map((line) => line.text).join('\n');
 
         switch (itemType) {
@@ -92,29 +119,6 @@ export class CodeComponent extends BaseComponent implements OnInit, OnDestroy {
             default:
                 return this.cleanUpText(contentText);
         }
-    }
-
-    public selectionChanged(event: { selectedNodes: TreeNode[]; originalStructure: TreeNode[] }) {
-        this.addSelectedChanges(event.selectedNodes);
-        this.selectedItems = event.originalStructure;
-    }
-
-    public addSelectedChanges(selectedChanges: TreeNode[]) {
-        this.selectedContentChanges = [];
-        for (let i = 0; i < selectedChanges.length; i++) {
-            const selectedName = selectedChanges[i].name;
-            const matchingContentChange = this.allContentChanges.find(
-                (contentChange) => contentChange.itemName === selectedName,
-            );
-
-            if (matchingContentChange) {
-                this.selectedContentChanges.push(matchingContentChange);
-            }
-        }
-    }
-
-    public messageChanged(message: string) {
-        this.message = message;
     }
 
     private cleanUpText(text: string): string {
@@ -154,6 +158,13 @@ export class CodeComponent extends BaseComponent implements OnInit, OnDestroy {
 
     private formatDefinition(content: any): string {
         return content.Definition;
+    }
+
+    private initializeForm(): void {
+        this.form = this.formBuilder.group({
+            scriptContent: [''],
+            search: [''],
+        });
     }
 
     private mapDbItems(items: DatabaseItem[]): TreeNode[] {
@@ -199,5 +210,18 @@ export class CodeComponent extends BaseComponent implements OnInit, OnDestroy {
             default:
                 return 'Unknown category';
         }
+    }
+
+    private loadChanges(): void {
+        this.eventService.changesLoadedEvent$.pipe(takeUntil(this.unsubscribe$)).subscribe((x) => {
+            if (x !== undefined) {
+                this.items = this.mapDbItems(x);
+            }
+        });
+        this.eventService.changesSavedEvent$.pipe(takeUntil(this.unsubscribe$)).subscribe((x) => {
+            if (x !== undefined) {
+                this.currentChangesGuid = x;
+            }
+        });
     }
 }

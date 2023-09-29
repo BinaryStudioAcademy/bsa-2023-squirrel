@@ -1,0 +1,22 @@
+<div class="container-background container" [ngStyle]="{ height: height }">
+    <div class="tree-container">
+        <input class="search-input" type="text" placeholder="Search..." (input)="filterTree($event)" />
+
+        <ul class="tree-items">
+            <li *ngFor="let category of filteredTreeData" class="tree-item">
+                <div class="parent-tree-item">
+                    <span>{{ category.name }}</span>
+                </div>
+                <ul class="tree-item-children">
+                    <li
+                        *ngFor="let subcategory of category.children"
+                        class="tree-item child-tree-item"
+                        [class.selected]="subcategory.selected"
+                        (click)="toggleSelect(subcategory)">
+                        {{ subcategory.name }}
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>

@@ -96,6 +96,6 @@ export class CodeComponent implements OnChanges {
     private replaceLineBreaks(text: string): string {
         const newText = text.replace(/(\\r\\n|\\r|\\n)/g, '<br>');
 
-        return newText.replace(/(\\t)/g, '&emsp;');
+        return newText.replace(/(\t)/g, '&emsp;');
     }
 }

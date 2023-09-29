@@ -1,6 +1,7 @@
 <div class="container">
     <h5 class="heading" *ngIf="project">{{ project.name }}</h5>
-    <app-dropdown class="dropdown" [options]="dbNames" [width]="250" (selectedValueChanged)="onDatabaseSelected($event)"></app-dropdown>
-    <app-button (buttonOnClick)="openCreateModal()" text="+" height="30px" width="35px" padding="" variant="outline-secondary"></app-button>
+    <app-dropdown [options]="dbNames" [width]="250" (selectedValueChanged)="onDatabaseSelected($event)"
+        (buttonClicked)="openCreateModal()" [isButtonIncluded]="true">
+    </app-dropdown>
 </div>
 <div class="horizontal-separator"></div>

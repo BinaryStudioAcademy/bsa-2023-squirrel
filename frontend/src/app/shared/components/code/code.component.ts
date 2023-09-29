@@ -15,7 +15,7 @@ export class CodeComponent implements OnChanges {
 
     @Input() header: string = 'Solution';
 
-    private insertColor: string = 'rgb(197,255,214)';
+    private insertColor: string = 'rgb(197,255,214,0.3)';
 
     private deleteColor: string = 'rgba(255,126,127,0.3)';
 

@@ -12,6 +12,7 @@ public sealed class HttpClientService : IHttpClientService
     public HttpClientService()
     {
         _httpClient = new HttpClient();
+        _httpClient.Timeout = TimeSpan.FromMinutes(3);
     }
 
     public async Task<TResponse> GetAsync<TResponse>(string requestUrl)

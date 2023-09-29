@@ -7,20 +7,20 @@ internal static class GetTables
 
     public static string GetTableStructureScript(string schema, string table) =>
         @"
-              DECLARE @TableSchema NVARCHAR(100) = @schema;
-              DECLARE @TableName NVARCHAR(100) = @table; 
+                DECLARE @TableSchema NVARCHAR(100) = @schema;
+                DECLARE @TableName NVARCHAR(100) = @table; 
 
-              SELECT	OBJECT_SCHEMA_NAME(syso.id) [Schema],
+                SELECT	OBJECT_SCHEMA_NAME(syso.id) [Schema],
 		                syso.name [Name],
 		                sysc.name [ColumnName],
 		                sysc.colorder [ColumnOrder],   
 		                syst.name [DataType],
 		                CASE WHEN syst.status = 1 THEN 'True' ELSE 'False' END [IsUserDefined],
-                        syscmnts.text [Default],
+		                syscmnts.text [Default],
 		                sysc.prec [Precision],   
-		                sysc.scale [Scale], 
+		                sysc.scale [Scale],
 		                CASE WHEN syst.name IN ('binary','varbinary','char','nchar','varchar','nvarchar') OR syst.status = 1 
-			                THEN sysc.prec ELSE NULL END [MaxLength],  
+			                THEN sysc.prec ELSE NULL END [MaxLength],
 		                CASE WHEN sysc.isnullable = 1 THEN 'True' ELSE 'False' END [IsAllowNulls],   
 		                CASE WHEN sysc.[status] = 128 THEN 'True' ELSE 'False' END [isIdentity],
 		                CASE WHEN keyCol.COLUMN_NAME IS NOT NULL THEN 'True' ELSE 'False' END [isPrimaryKey],  

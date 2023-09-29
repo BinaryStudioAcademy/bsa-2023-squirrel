@@ -1,0 +1,70 @@
+@import "/src/styles/color"
+@import "/src/styles/weights"
+@import "~font-awesome/css/font-awesome.css"
+
+.container
+    display: flex
+    flex-direction: column
+    justify-content: space-between
+    width: 100%
+    min-width: 250px
+    border-radius: 8px
+
+.container-background
+  background-color: $container-grey
+
+.tree-container
+  display: flex
+  flex-direction: column
+  max-height: 100%
+  margin: 10px
+  gap: 10px
+  padding-bottom: 25px
+
+.tree-items
+  max-height: 100%
+  overflow-y: auto
+
+.tree-item
+  list-style: none
+  margin-left: 10px
+  font-weight: $semi-bold-weight
+  overflow: hidden
+  white-space: normal
+  word-wrap: break-word
+
+.tree-item-children
+  margin-left: 20px
+
+.parent-tree-item
+    font-size: 16px
+    margin: 15px 0
+
+.child-tree-item
+    margin-bottom: 10px
+    padding: 5px 8px
+    cursor: pointer
+
+.child-tree-item.selected
+    background-color: $dark-grey
+    position: relative
+    &:after
+        content: ''
+        height: 100%
+        width: 4px
+        background-color: darken($dark-grey, 20%)
+        position: absolute
+        top: 0
+        left: 0
+        border-radius: 5px 0 0 5px
+
+.search-input
+  background-color: $dark-grey
+  width: 100%
+  border: none
+  padding: 12px
+  font-size: 16px
+  border-radius: 10px
+
+.fa.fa-folder-open
+  margin-right: 5px

@@ -10,6 +10,8 @@ import { ControlValueAccessor, FormControl, NgControl } from '@angular/forms';
 export class CodeEditorComponent implements ControlValueAccessor {
     @Input() name: string | undefined;
 
+    @Input() readOnly: boolean = false;
+
     public codeMirrorOptions: any = {
         mode: 'text/x-mysql',
         indentWithTabs: true,
@@ -22,20 +24,18 @@ export class CodeEditorComponent implements ControlValueAccessor {
         autoCloseBrackets: true,
         matchBrackets: true,
         lint: true,
+        readOnly: this.readOnly,
     };
 
     constructor(@Self() public ngControl: NgControl) {
         this.ngControl.valueAccessor = this;
     }
 
-    public registerOnChange(): void {
-    }
+    public registerOnChange(): void {}
 
-    public registerOnTouched(): void {
-    }
+    public registerOnTouched(): void {}
 
-    public writeValue(): void {
-    }
+    public writeValue(): void {}
 
     public get control(): FormControl {
         return this.ngControl.control as FormControl;

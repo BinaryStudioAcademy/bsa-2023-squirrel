@@ -8,11 +8,21 @@
         <div class="inputs-container">
             <app-input [width]="'100%'" [placeholder]="'Search...'" [formControl]="$any(searchForm.controls['search'])">
             </app-input>
-            <app-dropdown-select [width]="'100%'" [placeholder]="'Branch type'" [options]="dropdownItems"
-                [placeholderId]="0">
+            <app-dropdown-select
+                [width]="'100%'"
+                [placeholder]="'Branch type'"
+                [options]="dropdownItems"
+                [placeholderId]="0"
+                (valueChange)="onBranchTypeSelectionChange($event)">
             </app-dropdown-select>
-            <app-dropdown-select [width]="'100%'" [placeholder]="'Author'" [options]="dropdownAuthors"
-                [template]="usertemplate" [chipTemplate]="chiptemplate" [filterPredicate]="filter">
+            <app-dropdown-select
+                [width]="'100%'"
+                [placeholder]="'Author'"
+                [options]="dropdownAuthors"
+                [template]="usertemplate"
+                [chipTemplate]="chiptemplate"
+                [filterPredicate]="filter"
+                (valueChange)="onAuthorSelectionChange($event)">
             </app-dropdown-select>
         </div>
         <div class="checkbox">

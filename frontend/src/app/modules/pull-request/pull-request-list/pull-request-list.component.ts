@@ -117,12 +117,12 @@ export class PullRequestListComponent {
         return UserPredicates.findByFullNameOrUsernameOrEmail(item, value);
     }
 
-    onAuthorSelectionChange($event: any) {
+    onAuthorSelectionChange() {
         // TODO: add filter logic, remove log
         // eslint-disable-next-line no-console
     }
 
-    onBranchTypeSelectionChange($event: any) {
+    onBranchTypeSelectionChange() {
         // TODO: add filter logic, remove log
         // eslint-disable-next-line no-console
     }

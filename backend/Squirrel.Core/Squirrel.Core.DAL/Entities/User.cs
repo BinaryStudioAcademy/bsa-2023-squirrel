@@ -17,6 +17,7 @@ public sealed class User : Entity<int>
     public bool IsGoogleAuth { get; set; }
 
     public ICollection<Commit> Commits { get; set; } = new List<Commit>();
+    public ICollection<Branch> Branches { get; set; } = new List<Branch>();
     public ICollection<Comment> Comments { get; set; } = new List<Comment>();
     public ICollection<PullRequest> PullRequests { get; set; } = new List<PullRequest>();
     public ICollection<UserProject> UserProjects { get; set; } = new List<UserProject>();

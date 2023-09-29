@@ -34,7 +34,7 @@
     <div class="buttons-sector">
         <app-button variant="outline-primary" text="Create new" (buttonOnClick)="createScript()"></app-button>
         <div class="buttons-container">
-            <app-button variant="outline-secondary" text="Format" [isDisabled]="!selectedScript"
+            <app-button variant="outline-primary" text="Format" [isDisabled]="!selectedScript"
                         (buttonOnClick)="formatScript()"></app-button>
             <app-button variant="outline-primary" text="Execute" [isDisabled]="!selectedScript"
                         (buttonOnClick)="executeScript()"></app-button>

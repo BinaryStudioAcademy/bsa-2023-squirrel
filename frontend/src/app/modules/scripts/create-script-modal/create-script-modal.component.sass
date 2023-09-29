@@ -1,12 +1,10 @@
+@import "/src/styles/reusable"
+
 .header
-    font-family: 'Montserrat SemiBold', sans-serif
-    font-size: 24px
+    @extend .modal-header
 
-.modal-buttons
-    gap: 5%
+.header-title
+    @extend .modal-title
 
-.container
-    height: 100%
-    display: flex
-    flex-direction: column
-    justify-content: space-around
+.input
+    @extend .input-errors-padding

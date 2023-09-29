@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Text;
+using AutoMapper;
 using Microsoft.AspNetCore.SignalR;
 using Squirrel.ConsoleApp.Models;
 using Squirrel.Shared.DTO;
@@ -20,13 +21,15 @@ public class DbItemsRetrievalService : IDbItemsRetrievalService
     private readonly IHubContext<Hubs.ConsoleAppHub, IExecuteOnClientSide> _hubContext;
     private readonly IResultObserver _resultObserver;
     private readonly IMapper _mapper;
+    private readonly ICreateTableScriptService _createTableScriptService;
 
     public DbItemsRetrievalService(IHubContext<Hubs.ConsoleAppHub, IExecuteOnClientSide> hubContext,
-        IResultObserver resultObserver, IMapper mapper)
+        IResultObserver resultObserver, IMapper mapper, ICreateTableScriptService createTableScriptService)
     {
         _hubContext = hubContext;
         _resultObserver = resultObserver;
         _mapper = mapper;
+        _createTableScriptService = createTableScriptService;
     }
 
     private (Guid queryId, TaskCompletionSource<QueryResultTable> tcs) RegisterQuery()
@@ -92,6 +95,7 @@ public class DbItemsRetrievalService : IDbItemsRetrievalService
         var tableNames = await GetTableNamesAsync(clientId);
 
         List<TableStructureDto> tablesStructuresResults = new();
+        List<string> fkConstraintScripts = new();
 
         foreach (var table in tableNames.Tables)
         {
@@ -108,6 +112,12 @@ public class DbItemsRetrievalService : IDbItemsRetrievalService
                 .GetTableStructureAsync(queryParametersRequest.queryId, queryParameters.FilterSchema, queryParameters.FilterName);
 
             var tableStructureResult = _mapper.Map<TableStructureDto>(await queryParametersRequest.tcs.Task);
+
+            var partialDefinition = _createTableScriptService.GenerateCreateTableScript(tableStructureResult.Schema,
+                tableStructureResult.Name, tableStructureResult, fkConstraintScripts);
+            
+            tableStructureResult.Definition = _createTableScriptService.ConcatForeignKeysConstraintScripts(
+                new StringBuilder(partialDefinition), fkConstraintScripts);;
 
             tablesStructuresResults.Add(tableStructureResult);
         }

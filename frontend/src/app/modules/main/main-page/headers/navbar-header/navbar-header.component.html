@@ -10,6 +10,7 @@
         </ul>
     </nav>
     <div class="right-container">
+        <app-button text="Apply Database" variant="outline-primary" (buttonOnClick)="applyDb()"></app-button>
         <app-dropdown
             [selectedByDefault]="getCurrentBranch()"
             [width]="300"

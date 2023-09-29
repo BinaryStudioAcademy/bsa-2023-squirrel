@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/c
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { BaseComponent } from '@core/base/base.component';
+import { ApplyChangesService } from '@core/services/apply-changes.service';
 import { BranchService } from '@core/services/branch.service';
 import { CommitChangesService } from '@core/services/commit-changes.service';
 import { DatabaseItemsService } from '@core/services/database-items.service';
@@ -15,6 +16,8 @@ import { finalize, takeUntil } from 'rxjs';
 import { BranchDto } from 'src/app/models/branch/branch-dto';
 import { DatabaseDto } from 'src/app/models/database/database-dto';
 
+import { ApplyChangesDto } from '../../../../../models/apply-changes/apply-changes-dto';
+import { ProjectResponseDto } from '../../../../../models/projects/project-response-dto';
 import { CreateBranchModalComponent } from '../../create-branch-modal/create-branch-modal.component';
 
 @Component({
@@ -34,6 +37,8 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
     public isSettingsEnabled: boolean = false;
 
     public currentProjectId: number;
+
+    public currentProject: ProjectResponseDto;
 
     public lastCommitId: number;
 
@@ -61,6 +66,7 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
         private commitChangesService: CommitChangesService,
         private spinner: SpinnerService,
         private eventService: EventService,
+        private applyChangesService: ApplyChangesService,
     ) {
         super();
     }
@@ -80,6 +86,7 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
             next: (project) => {
                 if (project) {
                     this.isSettingsEnabled = project.isAuthor;
+                    this.currentProject = project;
                 }
             },
         });
@@ -184,5 +191,26 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
     public loadCommitChanges() {
         this.spinner.show();
         this.commitChangesService.getContentDiffs(this.lastCommitId, this.currentChangesGuId);
+    }
+
+    public applyDb() {
+        const branchId = this.currentBranchId;
+
+        this.getCurrentDatabase();
+        const applyChangesDto: ApplyChangesDto = {
+            clientId: this.selectedDatabase.guid,
+            dbEngine: this.currentProject.dbEngine,
+        };
+
+        this.applyChangesService.applyChanges(applyChangesDto, branchId)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe({
+                next: () => {
+                    this.notificationService.info('Changes successfully applied');
+                },
+                error: err => {
+                    this.notificationService.error(err.message);
+                },
+            });
     }
 }

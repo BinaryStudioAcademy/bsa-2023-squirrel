@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/c
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { BaseComponent } from '@core/base/base.component';
+import { ApplyChangesService } from '@core/services/apply-changes.service';
 import { BranchService } from '@core/services/branch.service';
 import { CommitChangesService } from '@core/services/commit-changes.service';
 import { DatabaseItemsService } from '@core/services/database-items.service';
@@ -15,6 +16,8 @@ import { finalize, takeUntil } from 'rxjs';
 import { BranchDto } from 'src/app/models/branch/branch-dto';
 import { DatabaseDto } from 'src/app/models/database/database-dto';
 
+import { ApplyChangesDto } from '../../../../../models/apply-changes/apply-changes-dto';
+import { ProjectResponseDto } from '../../../../../models/projects/project-response-dto';
 import { CreateBranchModalComponent } from '../../create-branch-modal/create-branch-modal.component';
 
 @Component({
@@ -33,7 +36,7 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
 
     public isSettingsEnabled: boolean = false;
 
-    public currentProjectId: number;
+    public currentProject: ProjectResponseDto = {} as ProjectResponseDto;
 
     public lastCommitId: number;
 
@@ -61,16 +64,17 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
         private commitChangesService: CommitChangesService,
         private spinner: SpinnerService,
         private eventService: EventService,
+        private applyChangesService: ApplyChangesService,
     ) {
         super();
     }
 
     public ngOnInit(): void {
         this.route.params.subscribe((params) => {
-            this.currentProjectId = params['id'];
+            this.currentProject.id = params['id'];
         });
         this.branchService
-            .getAllBranches(this.currentProjectId)
+            .getAllBranches(this.currentProject.id)
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((branches) => {
                 this.branches = branches;
@@ -80,20 +84,22 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
             next: (project) => {
                 if (project) {
                     this.isSettingsEnabled = project.isAuthor;
+                    this.currentProject = project;
                 }
             },
         });
+        this.getCurrentDatabase();
     }
 
     public onBranchSelected(value: any) {
         this.selectedBranch = value;
-        this.branchService.selectBranch(this.currentProjectId, value.id);
+        this.branchService.selectBranch(this.currentProject.id, value.id);
     }
 
     public openBranchModal() {
         const dialogRef = this.dialog.open(CreateBranchModalComponent, {
             width: '500px',
-            data: { projectId: this.currentProjectId, branches: this.branches },
+            data: { projectId: this.currentProject.id, branches: this.branches },
         });
 
         dialogRef.componentInstance.branchCreated.subscribe((branch) => {
@@ -103,7 +109,7 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
     }
 
     public getCurrentBranch() {
-        this.currentBranchId = this.branchService.getCurrentBranch(this.currentProjectId);
+        this.currentBranchId = this.branchService.getCurrentBranch(this.currentProject.id);
         const currentBranch = this.branches.find((x) => x.id === this.currentBranchId);
 
         return currentBranch ? this.branches.indexOf(currentBranch) : 0;
@@ -122,8 +128,6 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
     }
 
     public loadChanges() {
-        this.getCurrentDatabase();
-
         if (!this.selectedDatabase) {
             this.notificationService.error('No database currently selected');
 
@@ -131,26 +135,6 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
         }
 
         this.spinner.show();
-
-        this.changesService
-            .loadChangesRequest(this.selectedDatabase.guid)
-            .pipe(
-                takeUntil(this.unsubscribe$),
-                finalize(() => this.spinner.hide()),
-            )
-            .subscribe({
-                next: (event) => {
-                    this.eventService.changesSaved(event);
-                    this.currentChangesGuId = event;
-                    this.loadCommitChanges();
-                },
-                error: (error) => {
-                    // eslint-disable-next-line no-console
-                    console.log(error);
-
-                    this.notificationService.error('An error occurred while attempting to load changes');
-                },
-            });
 
         this.branchService
             .getLastCommitId(this.currentBranchId)
@@ -164,18 +148,31 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
                 },
             });
 
+        this.changesService
+            .loadChangesRequest(this.selectedDatabase.guid)
+            .pipe(
+                takeUntil(this.unsubscribe$),
+                finalize(() => this.spinner.hide()),
+            )
+            .subscribe({
+                next: (changeGuid) => {
+                    this.eventService.changesSaved(changeGuid);
+                    this.currentChangesGuId = changeGuid;
+                    this.loadCommitChanges();
+                },
+                error: () => {
+                    this.notificationService.error('An error occurred while attempting to load changes');
+                },
+            });
+
         this.databaseItemsService
             .getAllItems(this.selectedDatabase.guid)
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe({
-                next: (databaseItems) => {
-                    this.eventService.changesLoaded(databaseItems);
-                    // eslint-disable-next-line no-console
-                    console.log(databaseItems);
+                next: (event) => {
+                    this.eventService.changesLoaded(event);
                 },
-                error: (error) => {
-                    // eslint-disable-next-line no-console
-                    console.log(error);
+                error: () => {
                     this.notificationService.error('An error occurred while attempting to load list of db items');
                 },
             });
@@ -184,5 +181,27 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
     public loadCommitChanges() {
         this.spinner.show();
         this.commitChangesService.getContentDiffs(this.lastCommitId, this.currentChangesGuId);
+    }
+
+    public applyDb() {
+        this.spinner.show();
+        const applyChangesDto: ApplyChangesDto = {
+            clientId: this.selectedDatabase.guid,
+            dbEngine: this.currentProject.dbEngine,
+        };
+
+        this.applyChangesService.applyChanges(applyChangesDto, this.currentBranchId)
+            .pipe(
+                takeUntil(this.unsubscribe$),
+                finalize(() => this.spinner.hide()),
+            )
+            .subscribe({
+                next: () => {
+                    this.notificationService.info('Changes successfully applied');
+                },
+                error: err => {
+                    this.notificationService.error(err.message);
+                },
+            });
     }
 }

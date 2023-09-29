@@ -64,7 +64,7 @@ public sealed class BranchService : BaseService, IBranchService
         return (null, isHeadOnAnotherBranch);
     }
 
-    public async Task<int?> GetLastBranchCommitIdAsync(int branchId)
+    public async Task<int> GetLastBranchCommitIdAsync(int branchId)
     {
         var branch = await _context.Branches
                                    .Include(x => x.BranchCommits)
@@ -74,7 +74,7 @@ public sealed class BranchService : BaseService, IBranchService
             throw new EntityNotFoundException();
         }
 
-        return (await FindHeadBranchCommitAsync(branch)).Item1?.Id;
+        return (await FindHeadBranchCommitAsync(branch)).Item1?.Id ?? default;
     }
 
     public async Task<BranchDto> MergeBranchAsync(int sourceId, int destId)
@@ -94,7 +94,7 @@ public sealed class BranchService : BaseService, IBranchService
             lastCommit = branchCommit;
         }
 
-        if(lastCommit is not null)
+        if (lastCommit is not null)
         {
             lastCommit.IsHead = true;
             var previousHead = await FindHeadBranchCommitAsync(dest);
@@ -102,7 +102,7 @@ public sealed class BranchService : BaseService, IBranchService
             {
                 previousHead.Item1.IsHead = false;
                 _context.BranchCommits.Update(previousHead.Item1);
-            }            
+            }
         }
 
         var entity = _context.Branches.Update(dest).Entity;
@@ -133,8 +133,7 @@ public sealed class BranchService : BaseService, IBranchService
 
         return commits;
     }
-
-
+    
     public BranchDto[] GetAllBranches(int projectId)
     {
         var branches = _context.Branches.Where(x => x.ProjectId == projectId);

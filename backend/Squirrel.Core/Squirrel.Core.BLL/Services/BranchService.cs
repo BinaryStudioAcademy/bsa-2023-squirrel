@@ -64,10 +64,17 @@ public sealed class BranchService : BaseService, IBranchService
         return (null, isHeadOnAnotherBranch);
     }
 
-    public async Task<int?> GetLastBranchCommitIdAsync(int branchId)
+    public async Task<int> GetLastBranchCommitIdAsync(int branchId)
     {
-        var commits = await GetCommitsFromBranchInternalAsync(branchId, default);
-        return commits.FirstOrDefault()?.Id ?? default;
+        var branch = await _context.Branches
+                                   .Include(x => x.BranchCommits)
+                                   .FirstOrDefaultAsync(x => x.Id == branchId);
+        if (branch is null)
+        {
+            throw new EntityNotFoundException();
+        }
+
+        return (await FindHeadBranchCommitAsync(branch)).Item1?.Id ?? default;
     }
 
     public async Task<BranchDto> MergeBranchAsync(int sourceId, int destId)

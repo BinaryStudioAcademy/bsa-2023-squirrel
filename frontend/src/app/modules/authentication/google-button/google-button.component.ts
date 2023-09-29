@@ -64,8 +64,6 @@ export class GoogleButtonComponent implements AfterViewInit {
     }
 
     private handleCredentialResponse(response: CredentialResponse) {
-        // eslint-disable-next-line no-console
-        console.log(`Encoded JWT ID token: ${response.credential}`);
         this.authService.signInViaGoogle(response);
     }
 }

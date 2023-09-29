@@ -120,12 +120,10 @@ export class PullRequestListComponent {
     onAuthorSelectionChange($event: any) {
         // TODO: add filter logic, remove log
         // eslint-disable-next-line no-console
-        console.log($event);
     }
 
     onBranchTypeSelectionChange($event: any) {
         // TODO: add filter logic, remove log
         // eslint-disable-next-line no-console
-        console.log($event);
     }
 }

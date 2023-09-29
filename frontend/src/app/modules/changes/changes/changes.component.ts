@@ -92,8 +92,6 @@ export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy
             .commit(commit)
             .pipe(takeUntil(this.unsubscribe$), finalize(this.spinner.hide))
             .subscribe((x) => {
-                // eslint-disable-next-line no-console
-                console.log(x.body);
                 this.items.forEach((parent) => {
                     if (parent.children) {
                         parent.children = parent.children.filter((item) => !item.selected);
@@ -128,8 +126,6 @@ export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy
 
     private mapDbItems(items: DatabaseItemContentCompare[]): TreeNode[] {
         const typeMap: { [type: string]: TreeNode } = {};
-
-        console.log(items);
 
         items
             .filter((x) => x.inLineDiff || x.sideBySideDiff)

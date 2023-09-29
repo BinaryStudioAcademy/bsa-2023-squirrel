@@ -291,7 +291,7 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, OnDes
     }
 
     private openCreateModal(): void {
-        const dialogRef: any = this.dialog.open(CreateScriptModalComponent, {
+        const dialogRef = this.dialog.open(CreateScriptModalComponent, {
             panelClass: 'custom-dialog-container',
             width: '450px',
         });

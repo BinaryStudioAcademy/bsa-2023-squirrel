@@ -15,22 +15,18 @@ export class CommitChangesService {
 
     public contentChanges$ = this.contentChangesSubject.asObservable();
 
-    constructor(
-        private httpService: HttpInternalService,
-        private notificationService: NotificationService,
-        // eslint-disable-next-line no-empty-function
-    ) {}
+    constructor(private httpService: HttpInternalService, private notificationService: NotificationService) {}
 
     public getContentDiffs(commitId: number, tempBlobId: string): void {
         this.httpService
             .getRequest<DatabaseItemContentCompare[]>(`${this.commitChangesRoute}/${commitId}/${tempBlobId}`)
-            .subscribe(
-                (contentChanges) => {
+            .subscribe({
+                next: (contentChanges) => {
                     this.contentChangesSubject.next(contentChanges);
                 },
-                (error) => {
+                error: (error) => {
                     this.notificationService.error(error.message);
                 },
-            );
+            });
     }
 }

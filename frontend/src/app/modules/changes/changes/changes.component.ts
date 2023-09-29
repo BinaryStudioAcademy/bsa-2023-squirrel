@@ -6,7 +6,7 @@ import { CommitChangesService } from '@core/services/commit-changes.service';
 import { EventService } from '@core/services/event.service';
 import { ProjectService } from '@core/services/project.service';
 import { SpinnerService } from '@core/services/spinner.service';
-import { TreeNode } from '@shared/components/tree/models/TreeNode.model';
+import { TreeNode } from '@shared/components/tree/models/tree-node.model';
 import { finalize, takeUntil } from 'rxjs';
 
 import { CreateCommitDto } from 'src/app/models/commit/create-commit-dto';
@@ -59,11 +59,9 @@ export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy
 
     public ngOnInit(): void {
         this.currentProjectId = this.projectService.currentProjectId;
-        this.commitChangesService.contentChanges$
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe((changes) => {
-                this.allContentChanges = changes;
-            });
+        this.commitChangesService.contentChanges$.pipe(takeUntil(this.unsubscribe$)).subscribe((changes) => {
+            this.allContentChanges = changes;
+        });
     }
 
     public validateCommit() {
@@ -97,8 +95,6 @@ export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy
             .commit(commit)
             .pipe(takeUntil(this.unsubscribe$), finalize(this.spinner.hide))
             .subscribe((x) => {
-                // eslint-disable-next-line no-console
-                console.log(x.body);
                 this.items.forEach((parent) => {
                     if (parent.children) {
                         parent.children = parent.children.filter((item) => !item.selected);
@@ -108,7 +104,7 @@ export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy
             });
     }
 
-    public selectionChanged(event: { selectedNodes: TreeNode[]; originalStructure: TreeNode[]; }) {
+    public selectionChanged(event: { selectedNodes: TreeNode[]; originalStructure: TreeNode[] }) {
         this.addSelectedChanges(event.selectedNodes);
         this.selectedItems = event.originalStructure;
     }
@@ -117,7 +113,9 @@ export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy
         this.selectedContentChanges = [];
         for (let i = 0; i < selectedChanges.length; i++) {
             const selectedName = selectedChanges[i].name;
-            const matchingContentChange = this.allContentChanges.find(contentChange => contentChange.itemName === selectedName);
+            const matchingContentChange = this.allContentChanges.find(
+                (contentChange) => contentChange.itemName === selectedName,
+            );
 
             if (matchingContentChange) {
                 this.selectedContentChanges.push(matchingContentChange);

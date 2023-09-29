@@ -37,6 +37,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IConsoleConnectService, ConsoleConnectService>();
         services.AddScoped<ITableService, TableService>();
         services.AddScoped<IChangeRecordService, ChangeRecordService>();
+        services.AddScoped<IApplyChangesService, ApplyChangesService>();
         
         services.AddTransient<IDbStructureSaverService, DbStructureSaverService>();
 

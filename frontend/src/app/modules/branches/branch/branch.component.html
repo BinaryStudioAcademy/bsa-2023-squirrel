@@ -4,8 +4,8 @@
     </div>
     <div class="behind-ahead">
         <div class="text-info">
-            <div class="behind" [style.width]="calculateFilling()">{{branch.behind}}</div>
-            <div class="ahead">{{branch.ahead}}</div>
+            <div class="behind" *ngIf="branch.behind> 0" [style.width]="calculateFilling()">{{branch.behind}}</div>
+            <div class="ahead" *ngIf="branch.ahead > 0">{{branch.ahead}}</div>
         </div>
         <div class="progress-container">
             <div class="filling" [style.width]="calculateFilling()"></div>
@@ -13,7 +13,7 @@
     </div>
     <div class="activity main-text">
         <div class="updated-by" *ngIf="branch.lastUpdatedBy">
-            <img class="avatar" src="{{branch.lastUpdatedBy.avatarUrl}}"/>
+            <app-avatar class="avatar" [imgLink]="branch.lastUpdatedBy.avatarUrl" [userName]="branch.lastUpdatedBy.firstName + ' ' + branch.lastUpdatedBy.lastName"></app-avatar>
             {{calculateTime(branch.updatedAt)}}
         </div>
     </div>

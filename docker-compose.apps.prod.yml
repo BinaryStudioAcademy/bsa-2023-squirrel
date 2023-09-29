@@ -13,10 +13,6 @@ services:
             ASPNETCORE_ENVIRONMENT: 'Production'
         env_file:
             - /etc/environment
-        volumes:
-           - ./resources:/app/Resources
-           - ./logs:/app/Logs
-
 
     squirrel_notifier:
         image: alinasielina/squirrel_notifier:latest
@@ -43,8 +39,6 @@ services:
             ASPNETCORE_ENVIRONMENT: 'Production'
         env_file:
             - /etc/environment
-        volumes:
-            - ./logs:/app/Logs
 
     squirrel_frontend:
         depends_on:

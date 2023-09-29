@@ -132,6 +132,18 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
 
         this.spinner.show();
 
+        this.branchService
+            .getLastCommitId(this.currentBranchId)
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe({
+                next: (lastCommitId) => {
+                    this.lastCommitId = lastCommitId;
+                },
+                error: () => {
+                    this.notificationService.error('An error occurred while attempting to load last commit');
+                },
+            });
+
         this.changesService
             .loadChangesRequest(this.selectedDatabase.guid)
             .pipe(
@@ -149,18 +161,6 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
                     console.log(error);
 
                     this.notificationService.error('An error occurred while attempting to load changes');
-                },
-            });
-
-        this.branchService
-            .getLastCommitId(this.currentBranchId)
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe({
-                next: (lastCommitId) => {
-                    this.lastCommitId = lastCommitId;
-                },
-                error: () => {
-                    this.notificationService.error('An error occurred while attempting to load last commit');
                 },
             });
 

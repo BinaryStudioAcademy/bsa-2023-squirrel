@@ -14,16 +14,21 @@ export class EventService {
 
     public changesSavedEvent$: Observable<string | undefined>;
 
+    public branchChangedEvent$: Observable<number | undefined>;
+
     private onChangesSaved = new Subject<string | undefined>();
 
     private onUserChanged = new Subject<UserDto | undefined>();
 
     private onChangesLoaded = new Subject<DatabaseItem[] | undefined>();
 
+    private onBranchChanged = new Subject<number | undefined>();
+
     constructor() {
         this.userChangedEvent$ = this.onUserChanged.asObservable();
         this.changesLoadedEvent$ = this.onChangesLoaded.asObservable();
         this.changesSavedEvent$ = this.onChangesSaved.asObservable();
+        this.branchChangedEvent$ = this.onBranchChanged.asObservable();
     }
 
     public changesLoaded(item: DatabaseItem[] | undefined) {
@@ -36,5 +41,9 @@ export class EventService {
 
     public changesSaved(guid: string | undefined) {
         this.onChangesSaved.next(guid);
+    }
+
+    public branchChanged(branchId: number | undefined) {
+        this.onBranchChanged.next(branchId);
     }
 }

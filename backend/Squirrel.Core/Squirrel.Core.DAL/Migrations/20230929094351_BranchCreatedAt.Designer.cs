@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Squirrel.Core.DAL.Context;
 
@@ -11,9 +12,10 @@ using Squirrel.Core.DAL.Context;
 namespace Squirrel.Core.DAL.Migrations
 {
     [DbContext(typeof(SquirrelCoreContext))]
-    partial class SquirrelCoreContextModelSnapshot : ModelSnapshot
+    [Migration("20230929094351_BranchCreatedAt")]
+    partial class BranchCreatedAt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,6 +31,9 @@ namespace Squirrel.Core.DAL.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("AuthorId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
@@ -54,7 +59,7 @@ namespace Squirrel.Core.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedBy");
+                    b.HasIndex("AuthorId");
 
                     b.HasIndex("ParentBranchId");
 
@@ -626,10 +631,8 @@ namespace Squirrel.Core.DAL.Migrations
             modelBuilder.Entity("Squirrel.Core.DAL.Entities.Branch", b =>
                 {
                     b.HasOne("Squirrel.Core.DAL.Entities.User", "Author")
-                        .WithMany("Branches")
-                        .HasForeignKey("CreatedBy")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("AuthorId");
 
                     b.HasOne("Squirrel.Core.DAL.Entities.Branch", "ParentBranch")
                         .WithMany()
@@ -936,8 +939,6 @@ namespace Squirrel.Core.DAL.Migrations
 
             modelBuilder.Entity("Squirrel.Core.DAL.Entities.User", b =>
                 {
-                    b.Navigation("Branches");
-
                     b.Navigation("ChangeRecords");
 
                     b.Navigation("Comments");

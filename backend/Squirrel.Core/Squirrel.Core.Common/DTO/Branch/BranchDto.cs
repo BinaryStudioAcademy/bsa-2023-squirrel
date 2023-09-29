@@ -1,6 +1,6 @@
 ﻿namespace Squirrel.Core.Common.DTO.Branch;
 
-public sealed class BranchDto
+public class BranchDto
 {
     public int Id { get; set; }
     public string Name { get; set; } = null!;

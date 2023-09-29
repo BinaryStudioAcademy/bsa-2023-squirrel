@@ -27,6 +27,12 @@ public sealed class UserConfig : IEntityTypeConfiguration<User>
                .IsRequired()
                .OnDelete(DeleteBehavior.NoAction);
 
+        builder.HasMany(x => x.Branches)
+                .WithOne(x => x.Author)
+                .HasForeignKey(x => x.CreatedBy)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.NoAction);
+
         builder.HasMany(x => x.Commits)
                .WithOne(x => x.Author)
                .HasForeignKey(x => x.CreatedBy)

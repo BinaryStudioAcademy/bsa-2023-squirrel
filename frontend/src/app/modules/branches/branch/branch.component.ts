@@ -12,7 +12,12 @@ export class BranchComponent {
     @Input() public branch: BranchDetailsDto;
 
     public calculateTime(date: Date): string {
-        return moment(date).startOf('seconds').fromNow();
+        const mDate = new Date(date);
+        const time = mDate.getTime();
+
+        const localDate = new Date(time - mDate.getTimezoneOffset() * 60 * 1000);
+
+        return moment(localDate).startOf('seconds').fromNow();
     }
 
     public calculateFilling(): string {

@@ -15,7 +15,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddSingleton<IResultObserver, ResultObserver>();
         services.AddSingleton<IProcessReceivedDataService, ProcessReceivedDataService>();
-        
+
         services.AddScoped<ITextService, TextService>();
         services.AddScoped<IDependencyAnalyzer, DependencyAnalyzer>();
         services.AddScoped<IDbItemsRetrievalService, DbItemsRetrievalService>();
@@ -24,7 +24,6 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IApplyChangesService, ApplyChangesService>();
         services.AddScoped<ICreateTableScriptService, CreateTableScriptService>();
         services.AddSingleton<IProcessReceivedDataService, ProcessReceivedDataService>();
-        services.AddSingleton<ResultObserver>();
         services.AddScoped<ICommitFilesService, CommitFilesService>();
 
         services.AddScoped<ISqlFormatterService, SqlFormatterService>(_ =>
@@ -46,7 +45,7 @@ public static class ServiceCollectionExtensions
     {
         var mongoDatabaseSection = "MongoDatabase";
         var collectionName = "UserCollection";
-        
+
         services.Configure<MongoDatabaseConnectionSettings>(configuration.GetSection(mongoDatabaseSection)!);
 
         services.AddTransient<IMongoService<User>>(s =>

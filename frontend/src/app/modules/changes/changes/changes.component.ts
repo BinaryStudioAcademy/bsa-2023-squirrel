@@ -13,7 +13,6 @@ import { CreateCommitDto } from 'src/app/models/commit/create-commit-dto';
 import { DatabaseItem } from 'src/app/models/database-items/database-item';
 import { DatabaseItemType } from 'src/app/models/database-items/database-item-type';
 import { ItemCategory } from 'src/app/models/database-items/item-category';
-import { TextPairDifferenceDto } from 'src/app/models/text-pair/text-pair-difference-dto';
 
 import { DatabaseItemContentCompare } from '../../../models/database-items/database-item-content-compare';
 
@@ -23,9 +22,9 @@ import { DatabaseItemContentCompare } from '../../../models/database-items/datab
     styleUrls: ['./changes.component.sass'],
 })
 export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy {
-    public textPair: TextPairDifferenceDto;
+    public allContentChanges: DatabaseItemContentCompare[] = [];
 
-    public contentChanges: DatabaseItemContentCompare[] = [];
+    public selectedContentChanges: DatabaseItemContentCompare[] = [];
 
     public currentChangesGuid: string;
 
@@ -60,9 +59,11 @@ export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy
 
     public ngOnInit(): void {
         this.currentProjectId = this.projectService.currentProjectId;
-        this.commitChangesService.contentChanges$.pipe(takeUntil(this.unsubscribe$)).subscribe((changes) => {
-            this.contentChanges = changes;
-        });
+        this.commitChangesService.contentChanges$
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((changes) => {
+                this.allContentChanges = changes;
+            });
     }
 
     public validateCommit() {
@@ -107,8 +108,21 @@ export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy
             });
     }
 
-    public selectionChanged(event: { selectedNodes: TreeNode[]; originalStructure: TreeNode[] }) {
+    public selectionChanged(event: { selectedNodes: TreeNode[]; originalStructure: TreeNode[]; }) {
+        this.addSelectedChanges(event.selectedNodes);
         this.selectedItems = event.originalStructure;
+    }
+
+    public addSelectedChanges(selectedChanges: TreeNode[]) {
+        this.selectedContentChanges = [];
+        for (let i = 0; i < selectedChanges.length; i++) {
+            const selectedName = selectedChanges[i].name;
+            const matchingContentChange = this.allContentChanges.find(contentChange => contentChange.itemName === selectedName);
+
+            if (matchingContentChange) {
+                this.selectedContentChanges.push(matchingContentChange);
+            }
+        }
     }
 
     public messageChanged(message: string) {

@@ -6,7 +6,7 @@
     display: flex
     flex-direction: column
     justify-content: space-between
-    width: 13vw
+    width: 100%
     min-width: 250px
     border-radius: 8px
 
@@ -19,6 +19,7 @@
   max-height: 100%
   margin: 10px
   gap: 10px
+  padding-bottom: 25px
 
 .tree-items
   max-height: 100%
@@ -41,13 +42,21 @@
 
 .child-tree-item
     margin-bottom: 10px
+    padding: 5px 8px
+    cursor: pointer
 
 .child-tree-item.selected
-    font-weight: bold
     background-color: $dark-grey
-
-.child-tree-item:last-child
-    margin-bottom: 25px
+    position: relative
+    &:after
+        content: ''
+        height: 100%
+        width: 4px
+        background-color: darken($dark-grey, 20%)
+        position: absolute
+        top: 0
+        left: 0
+        border-radius: 5px 0 0 5px
 
 .search-input
   background-color: $dark-grey

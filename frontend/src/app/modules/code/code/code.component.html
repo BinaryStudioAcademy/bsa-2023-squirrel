@@ -5,6 +5,7 @@
             <app-code-editor
                 *ngIf="selectedContent"
                 [formControl]="$any(form.controls['scriptContent'])"
+                [readOnly]="true"
                 [name]="
                     DatabaseItemTypeName[selectedContent.itemType] +
                     ': ' +

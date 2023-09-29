@@ -1,12 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { BaseComponent } from '@core/base/base.component';
-import { BranchService } from '@core/services/branch.service';
-import { CommitService } from '@core/services/commit.service';
 import { CommitChangesService } from '@core/services/commit-changes.service';
 import { EventService } from '@core/services/event.service';
-import { ProjectService } from '@core/services/project.service';
-import { SpinnerService } from '@core/services/spinner.service';
 import { TreeNode } from '@shared/components/tree/models/TreeNode.model';
 import { takeUntil } from 'rxjs';
 
@@ -42,14 +38,8 @@ export class CodeComponent extends BaseComponent implements OnInit, OnDestroy {
 
     public message: string = '';
 
-    private currentProjectId: number;
-
     constructor(
         private eventService: EventService,
-        private branchService: BranchService,
-        private commitService: CommitService,
-        private projectService: ProjectService,
-        private spinner: SpinnerService,
         private formBuilder: FormBuilder,
         private commitChangesService: CommitChangesService,
     ) {
@@ -58,7 +48,6 @@ export class CodeComponent extends BaseComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.loadChanges();
-        this.currentProjectId = this.projectService.currentProjectId;
         this.commitChangesService.contentChanges$.pipe(takeUntil(this.unsubscribe$)).subscribe((changes) => {
             this.allContentChanges = changes;
         });
@@ -85,7 +74,7 @@ export class CodeComponent extends BaseComponent implements OnInit, OnDestroy {
     }
 
     private initEditorContent(): void {
-        if (this.selectedContent && this.selectedContent.itemType) {
+        if (this.selectedContent) {
             const content = this.formatContent(
                 this.selectedContent.itemType,
                 this.selectedContent.sideBySideDiff.newTextLines,
@@ -95,7 +84,9 @@ export class CodeComponent extends BaseComponent implements OnInit, OnDestroy {
                 scriptContent: [content],
             });
         } else {
-            // Handle the case when selectedContent or its properties do not exist
+            this.form = this.formBuilder.group({
+                scriptContent: ['Selected Content not found'],
+            });
         }
     }
 
@@ -163,7 +154,6 @@ export class CodeComponent extends BaseComponent implements OnInit, OnDestroy {
     private initializeForm(): void {
         this.form = this.formBuilder.group({
             scriptContent: [''],
-            search: [''],
         });
     }
 

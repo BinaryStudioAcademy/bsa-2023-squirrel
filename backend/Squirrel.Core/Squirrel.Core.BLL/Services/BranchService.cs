@@ -53,6 +53,7 @@ public sealed class BranchService : BaseService, IBranchService
             {
                 return headBranchCommit.IsHead ? (headBranchCommit, isHeadOnAnotherBranch) : throw new Exception("Last commit should be head!");
             }
+
             currentBranch = await _context.Branches
                                           .Include(x => x.BranchCommits)
                                           .ThenInclude(x => x.Commit)
@@ -103,6 +104,7 @@ public sealed class BranchService : BaseService, IBranchService
                 _context.BranchCommits.Update(previousHead.Item1);
             }            
         }
+
         var entity = _context.Branches.Update(dest).Entity;
         await _context.SaveChangesAsync();
 
@@ -124,9 +126,11 @@ public sealed class BranchService : BaseService, IBranchService
             {
                 commits.Add(commit);
             }
+
             isOriginal = false;
             source = await GetFullBranchEntityAsync(source.ParentBranchId ?? default);
         }
+
         return commits;
     }
 

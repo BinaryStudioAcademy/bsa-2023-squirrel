@@ -17,10 +17,10 @@ public class ApplyChangesController: ControllerBase
         _applyChangesService = applyChangesService;
     }
     
-    [HttpPost("{commitId}")]
-    public async Task<ActionResult> ApplyChangesAsync([FromBody] ApplyChangesDto applyChangesDto, int commitId)
+    [HttpPost("{branchId}")]
+    public async Task<ActionResult> ApplyChangesAsync([FromBody] ApplyChangesDto applyChangesDto, int branchId)
     {
-        await _applyChangesService.ApplyChanges(applyChangesDto, commitId);
+        await _applyChangesService.ApplyChanges(applyChangesDto, branchId);
         return Ok();
     }
 }

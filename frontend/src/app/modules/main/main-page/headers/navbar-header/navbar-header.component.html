@@ -24,6 +24,7 @@
         <ng-template #branchtemplate let-item>
            <div class="branch-template">{{ item.name }}</div>
         </ng-template>
+        <app-button text="Apply Database" variant="outline-primary" (buttonOnClick)="applyDb()"></app-button>
         <app-button text="Load latest changes" variant="outline-primary" class="align-right" (buttonOnClick)="loadChanges()"></app-button>
     </div>
 </div>

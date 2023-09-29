@@ -1,10 +1,9 @@
 ﻿using Squirrel.Core.DAL.Enums;
+using Squirrel.Core.Common.DTO.Script;
 
 namespace Squirrel.SqlService.BLL.Interfaces;
 
 public interface ISqlFormatterService
 {
-    string GetFormattedSql(string inputSql, DbEngine dbEngine);
-    string FormatMsSqlServer(string inputSQL);
-    string FormatPostgreSql(string inputSql);
+    ScriptContentDto GetFormattedSql(DbEngine dbEngine, string inputSql);
 }

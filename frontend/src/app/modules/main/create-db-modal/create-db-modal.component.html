@@ -1,54 +1,83 @@
-<div class="modal-header">
-    <h4 class="modal-heading">Connect to Data Base</h4>
-    <div class="close" (mousedown)="close()"></div>
+<div class="header">
+    <h4 class="header-title">Connect to Data Base</h4>
+    <app-close-btn (buttonOnClick)="close()"></app-close-btn>
 </div>
 
 <app-barrier></app-barrier>
-<form id="dbForm" [formGroup]="dbForm" (ngSubmit)="addDataBase()" class="db-form">
-    <div class="input-wrapper">
-        <label class="modal-label">Db Name</label>
-        <app-input class="input" [formControl]="$any(dbForm.controls['dbName'])"
-                   name="dbName"
-                   placeholder="Enter db Name">
-        </app-input>
-    </div>
+<form id="dbForm" [formGroup]="dbForm"
+      (ngSubmit)="dbForm.value['localhost'] ? addDataBase() : addDataBaseRemote()"
+      class="db-form">
+    <mat-dialog-content>
+        <div class="input-wrapper">
+            <label class="modal-label">Db Name</label>
+            <app-input [formControl]="$any(dbForm.controls['dbName'])"
+                       name="dbName"
+                       placeholder="Enter db Name">
+            </app-input>
+        </div>
 
-    <app-barrier></app-barrier>
+        <app-barrier></app-barrier>
 
-    <div class="input-wrapper">
-        <label class="modal-label">Server Name</label>
-        <app-input class="input" [formControl]="$any(dbForm.controls['serverName'])"
-                   name="server name"
-                   placeholder="Enter Server name">
-        </app-input>
-    </div>
+        <div class="input-wrapper">
+            <label class="modal-label">Server Name</label>
+            <app-input class="input" [formControl]="$any(dbForm.controls['serverName'])"
+                       name="server name"
+                       placeholder="Enter Server name">
+            </app-input>
+        </div>
 
-    <div class="input-wrapper">
-        <label class="modal-label">Port</label>
-        <app-input class="input" [formControl]="$any(dbForm.controls['port'])"
-                   placeholder="Enter port">
-        </app-input>
-    </div>
+        <div class="input-wrapper">
+            <label class="modal-label">Port</label>
+            <app-input class="input" [formControl]="$any(dbForm.controls['port'])"
+                       placeholder="Enter port">
+            </app-input>
+        </div>
 
-    <div class="input-wrapper">
+        <div class="input-wrapper">
 
-        <label class="modal-label">Username<app-info-tooltip text="leave empty for Trusted Connection"></app-info-tooltip></label>
-        <app-input class="input" [formControl]="$any(dbForm.controls['username'])"
-                   placeholder="Enter username">
-        </app-input>
-    </div>
+            <label class="modal-label">Username
+                <app-info-tooltip text="leave empty for Trusted Connection"></app-info-tooltip>
+            </label>
+            <app-input class="input" [formControl]="$any(dbForm.controls['username'])"
+                       placeholder="Enter username">
+            </app-input>
+        </div>
 
-    <div class="input-wrapper">
+        <div class="input-wrapper">
+            <label class="modal-label">Password
+                <app-info-tooltip text="leave empty for Trusted Connection"></app-info-tooltip>
+            </label>
+            <app-input class="input" [formControl]="$any(dbForm.controls['password'])"
+                       type="password"
+                       placeholder="Enter db password">
+            </app-input>
+        </div>
 
-        <label class="modal-label">Password<app-info-tooltip text="leave empty for Trusted Connection"></app-info-tooltip></label>
-        <app-input class="input" [formControl]="$any(dbForm.controls['password'])"
-                   type="password"
-                   placeholder="Enter db password">
-        </app-input>
-    </div>
+        <app-checkbox [label]="'Integrated Security'"
+                      [isChecked]="integratedSecurity"
+                      (change)="integratedSecurity = !integratedSecurity">>
+        </app-checkbox>
+
+        <ng-container *ngIf="!dbForm.value['localhost']">
+            <app-barrier></app-barrier>
+            <div class="input-wrapper">
+                <label class="modal-label">Key
+                    <app-info-tooltip text="check key in console app"></app-info-tooltip>
+                </label>
+                <app-input class="input" [formControl]="$any(dbForm.controls['guid'])"
+                           name="key"
+                           placeholder="Enter key">
+                </app-input>
+            </div>
+        </ng-container>
+    </mat-dialog-content>
 
     <div class="modal-footer">
-        <app-checkbox label="Connect to local db" (change)="changeLocalHost()"></app-checkbox>
+        <div class="toggle">
+            <mat-slide-toggle formControlName="localhost" (change)="changeLocalHost()"></mat-slide-toggle>
+            <p>{{dbForm.value['localhost'] ? 'local db' : 'remote db'}}</p>
+        </div>
+
         <div class="btn-group">
             <app-button [isDisabled]="dbForm.invalid" text="Save"></app-button>
         </div>

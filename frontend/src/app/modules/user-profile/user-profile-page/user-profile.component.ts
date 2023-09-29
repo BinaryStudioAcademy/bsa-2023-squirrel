@@ -1,6 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BaseComponent } from '@core/base/base.component';
+import { AuthService } from '@core/services/auth.service';
+import { EventService } from '@core/services/event.service';
 import { NotificationService } from '@core/services/notification.service';
 import { SpinnerService } from '@core/services/spinner.service';
 import { UserService } from '@core/services/user.service';
@@ -9,9 +11,10 @@ import { ValidationsFn } from '@shared/helpers/validations-fn';
 import { finalize, takeUntil } from 'rxjs';
 
 import { UpdateUserNamesDto } from 'src/app/models/user/update-user-names-dto';
-import { UpdateUserNotificationsDto } from 'src/app/models/user/update-user-notifications-dto';
 import { UpdateUserPasswordDto } from 'src/app/models/user/update-user-password-dto';
 import { UserProfileDto } from 'src/app/models/user/user-profile-dto';
+
+import { UserDto } from '../../../models/user/user-dto';
 
 @Component({
     selector: 'app-user-profile',
@@ -29,6 +32,8 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
 
     public currentUser: UserProfileDto;
 
+    public userForUpdateService: UserDto | undefined;
+
     public userNamesForm: FormGroup = new FormGroup({});
 
     public passwordForm: FormGroup = new FormGroup({});
@@ -44,6 +49,8 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
         private userService: UserService,
         private notificationService: NotificationService,
         private spinner: SpinnerService,
+        private eventService: EventService,
+        public authService: AuthService,
     ) {
         super();
     }
@@ -54,6 +61,13 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
 
     private fetchCurrentUser() {
         this.spinner.show();
+
+        this.authService
+            .getUser()
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((user) => {
+                this.userForUpdateService = user;
+            });
 
         this.userService
             .getUserProfile()
@@ -75,7 +89,6 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
     private initializeForms() {
         this.initUserNamesForm();
         this.initChangePasswordForm();
-        this.initNotificationsValue();
     }
 
     private initUserNamesForm() {
@@ -117,11 +130,6 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
         });
     }
 
-    private initNotificationsValue() {
-        this.isSquirrelNotificationEnabled = this.currentUser.squirrelNotification;
-        this.isEmailNotificationEnabled = this.currentUser.emailNotification;
-    }
-
     public updateUserNames() {
         if (!this.userNamesForm.valid) {
             this.notificationService.error('Update Names Form is invalid');
@@ -144,6 +152,7 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
                     this.currentUser = user;
                     this.spinner.hide();
                     this.notificationService.info('Names successfully updated');
+                    this.updateServiceInfo(userData);
                     this.initUserNamesForm();
                 },
                 error: (error) => {
@@ -151,6 +160,20 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
                     this.notificationService.error(error.message);
                 },
             });
+    }
+
+    public updateServiceInfo(user: UpdateUserNamesDto) {
+        const userUpdateService: UserDto = {
+            userName: user.userName,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            avatarUrl: this.currentUser?.avatarUrl || '',
+            id: this.userForUpdateService!.id,
+            email: this.userForUpdateService!.email,
+        };
+
+        this.authService.setCurrentUser(userUpdateService);
+        this.eventService.userChanged(userUpdateService);
     }
 
     public updateUserPassword() {
@@ -176,30 +199,6 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
                     this.spinner.hide();
                     this.notificationService.info('Password successfully updated');
                     this.initChangePasswordForm();
-                },
-                error: (error) => {
-                    this.spinner.hide();
-                    this.notificationService.error(error.message);
-                },
-            });
-    }
-
-    public updateUserNotifications() {
-        this.spinner.show();
-        const userData: UpdateUserNotificationsDto = {
-            squirrelNotification: this.isSquirrelNotificationEnabled,
-            emailNotification: this.isEmailNotificationEnabled,
-        };
-
-        this.userService
-            .updateUserNotifications(userData)
-            .pipe(takeUntil(this.unsubscribe$))
-            .subscribe({
-                next: (user) => {
-                    this.currentUser = user;
-                    this.spinner.hide();
-                    this.notificationService.info('Notifications successfully updated');
-                    this.initNotificationsValue();
                 },
                 error: (error) => {
                     this.spinner.hide();

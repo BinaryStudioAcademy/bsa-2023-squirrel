@@ -1,11 +1,17 @@
 <mat-dialog-content>
-    <h4 class="mat-h4">Create Project</h4>
+    <div class="header">
+        <h4 class="header-title">Create Project</h4>
+        <app-close-btn (buttonOnClick)="close()"></app-close-btn>
+    </div>
     <div class="input-container">
         <app-input [placeholder]="'Enter the name of your project'"
-            [formControl]="$any(projectForm.controls['projectName'])" [label]="'Project name'">
+                   [formControl]="$any(projectForm.controls['projectName'])"
+                   [label]="'Project name'">
         </app-input>
         <app-input [placeholder]="'Enter default branch name'"
-            [formControl]="$any(projectForm.controls['defaultBranchName'])" [label]="'Default branch'">
+                   [formControl]="$any(projectForm.controls['defaultBranchName'])"
+                   [label]="'Default branch'"
+                   (input)="replaceSpacesWithHyphens($event)">
         </app-input>
     </div>
     <div class="drop-down-container">
@@ -19,7 +25,8 @@
     </div>
 </mat-dialog-content>
 <mat-dialog-actions class="modal-buttons">
-    <app-button text="Create" width="100%" variant="outline-secondary" [isDisabled]="projectForm.invalid"
+    <app-button text="Create" width="100%" variant="outline-primary"
+        [isDisabled]="projectForm.invalid"
         (buttonOnClick)="createProject()">
     </app-button>
 

@@ -1,0 +1,82 @@
+@import "/src/styles/color"
+@import '/src/styles/global'
+@import "/src/styles/weights"
+
+.container
+    display: flex
+    width: 100%
+    justify-content: space-between
+    align-items: center
+    > *:not(:last-child)
+        margin-right: 15px
+
+.main-text
+    margin: 3px
+    font-size: 14px
+    font-style: normal
+    font-weight: $normal-weight
+    color: $text-main
+
+.summary
+    display: flex
+    align-items: center
+    flex: 40
+
+.behind-ahead
+    flex: 20
+    display: flex
+    justify-content: center
+    flex-direction: column
+    .text-info
+        display: flex
+        > *
+            padding: 5px
+        .behind
+            display: flex
+            justify-content: flex-end
+        .ahead
+            display: flex
+            justify-content: flex-start
+
+    .progress-container
+        width: 100%
+        height: 10px
+        background-color: $primary-color
+        overflow: hidden
+        border-radius: 5px
+
+    .filling
+        height: 100%
+        background-color: $grey
+
+.activity
+    flex: 20
+    display: flex
+    .updated-by
+        display: flex
+        justify-content: center
+        align-items: center
+
+.actions
+    flex: 20
+    display: flex
+    justify-content: center
+
+.avatar
+    margin: 15px
+
+.primary-info
+    display: flex
+    align-items: center
+    font-weight: $medium-weight
+
+.primary-info > *:not(:last-child)
+        margin-right: 12px
+
+.more
+    width: 25px
+    height: 25px
+    cursor: pointer
+
+::ng-deep .mat-menu-item
+    padding-left: 10px

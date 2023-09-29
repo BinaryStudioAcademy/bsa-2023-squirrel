@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { AngularDelegate, ModalController } from '@ionic/angular';
 import { SharedModule } from '@shared/shared.module';
 
@@ -14,7 +15,7 @@ import { MainRoutingModule } from './main-routing.module';
 
 @NgModule({
     declarations: [MainComponent, MainHeaderComponent, NavbarHeaderComponent, CreateBranchModalComponent, CreateDbModalComponent],
-    imports: [SharedModule, MainRoutingModule, MatSelectModule, MatButtonModule, MatDialogModule],
+    imports: [SharedModule, MainRoutingModule, MatSelectModule, MatButtonModule, MatDialogModule, MatSlideToggleModule],
     providers: [ModalController, AngularDelegate],
 })
 export class MainModule {}

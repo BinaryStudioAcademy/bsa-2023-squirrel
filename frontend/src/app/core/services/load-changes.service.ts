@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 import { HttpInternalService } from './http-internal.service';
 
@@ -13,7 +13,7 @@ export class LoadChangesService {
 
     constructor(private httpClient: HttpInternalService) { }
 
-    public loadChangesRequest() {
-        return this.httpClient.postRequest<string>(`${this.loadChangesRoutePrefix}`, null!);
+    public loadChangesRequest(guid: string): Observable<string> {
+        return this.httpClient.postRequest<string>(`${this.loadChangesRoutePrefix}/${guid}`, null!);
     }
 }

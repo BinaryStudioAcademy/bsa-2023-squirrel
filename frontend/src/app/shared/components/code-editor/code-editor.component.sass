@@ -1,0 +1,47 @@
+@import "/src/styles/color"
+@import "/src/styles/reusable"
+
+.code-container
+    height: 100%
+
+.code-header
+    height: 40px
+    background-color: $bg-input
+    display: flex
+    align-items: center
+    padding: 0 25px
+    border-radius: 5px 5px 0 0
+    h4
+        margin: 0
+        font-size: 24px
+        @extend .title
+        overflow: hidden
+        text-overflow: ellipsis
+
+.CodeMirror
+    height: calc(100% - 40px)
+    font-family: inherit
+    font-size: 16px
+    border-radius: 0 0 0 5px
+
+.CodeMirror-gutters
+    border: none
+    background-color: $bg-input
+
+.CodeMirror-linenumber
+    font-family: monospace
+
+.cm-keyword
+    font-weight: 500
+    color: #3C26E6 !important
+
+.cm-comment
+    color: #e79408 !important
+
+.cm-type
+    color: #b11e00 !important
+
+.cm-string
+    color: #036e03 !important
+.cm-number
+    color: #009898 !important

@@ -13,6 +13,8 @@ export class ConsoleConnectService {
     constructor(private http: HttpClient) { }
 
     public connect(dbConnection: DbConnection) {
-        return this.http.post<string>(`${this.baseUrl}/setting/connect`, dbConnection);
+        return this.http.post(`${this.baseUrl}/setting/connect`, dbConnection, {
+            responseType: 'text',
+        });
     }
 }

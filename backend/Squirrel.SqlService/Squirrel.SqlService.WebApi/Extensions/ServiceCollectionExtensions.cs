@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using Squirrel.Core.DAL.Entities;
 using Squirrel.SqlService.BLL.Interfaces;
 using Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
@@ -14,19 +13,27 @@ public static class ServiceCollectionExtensions
 {
     public static void RegisterCustomServices(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddSingleton<IResultObserver, ResultObserver>();
+        services.AddSingleton<IProcessReceivedDataService, ProcessReceivedDataService>();
+        
         services.AddScoped<ITextService, TextService>();
         services.AddScoped<IDependencyAnalyzer, DependencyAnalyzer>();
         services.AddScoped<IDbItemsRetrievalService, DbItemsRetrievalService>();
         services.AddScoped<IChangesLoaderService, ChangesLoaderService>();
-
+        services.AddScoped<IContentDifferenceService, ContentDifferenceService>();
+        services.AddScoped<IApplyChangesService, ApplyChangesService>();
+        services.AddScoped<ICreateTableScriptService, CreateTableScriptService>();
         services.AddSingleton<IProcessReceivedDataService, ProcessReceivedDataService>();
-        services.AddScoped<ISqlFormatterService, SqlFormatterService>(provider => 
-        new SqlFormatterService(configuration.GetSection("PythonExePath").Value));
+        services.AddSingleton<ResultObserver>();
+        services.AddScoped<ICommitFilesService, CommitFilesService>();
+
+        services.AddScoped<ISqlFormatterService, SqlFormatterService>(_ =>
+            new SqlFormatterService(configuration.GetSection("PythonExePath")!.Value));
     }
 
     public static void ConfigureCors(this IServiceCollection services, IConfiguration configuration)
     {
-        var allowedOrigin = configuration.GetRequiredSection("CoreWebAPIDomain").Value;
+        var allowedOrigin = configuration.GetRequiredSection("CoreWebAPIDomain")!.Value;
         services.AddCors(options =>
             options.AddDefaultPolicy(policy =>
                 policy
@@ -37,9 +44,13 @@ public static class ServiceCollectionExtensions
 
     public static void AddMongoDbService(this IServiceCollection services, IConfiguration configuration)
     {
-        services.Configure<MongoDatabaseConnectionSettings>(configuration.GetSection("MongoDatabase"));
+        var mongoDatabaseSection = "MongoDatabase";
+        var collectionName = "UserCollection";
+        
+        services.Configure<MongoDatabaseConnectionSettings>(configuration.GetSection(mongoDatabaseSection)!);
 
         services.AddTransient<IMongoService<User>>(s =>
-            new MongoService<User>(s.GetRequiredService<IOptions<MongoDatabaseConnectionSettings>>(), "UserCollection"));
+            new MongoService<User>(s.GetRequiredService<IOptions<MongoDatabaseConnectionSettings>>(),
+                collectionName));
     }
 }

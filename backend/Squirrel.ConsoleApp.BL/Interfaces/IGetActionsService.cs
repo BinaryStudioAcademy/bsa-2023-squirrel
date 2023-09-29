@@ -5,7 +5,6 @@ namespace Squirrel.ConsoleApp.BL.Interfaces;
 public interface IGetActionsService
 {
     Task<QueryResultTable> GetAllTablesNamesAsync();
-    Task<QueryResultTable> GetTableDataAsync(string schema, string name, int rowsCount);
 
     Task<QueryResultTable> GetAllStoredProceduresNamesAsync();
     Task<QueryResultTable> GetStoredProcedureDefinitionAsync(string storedProcedureSchema, string storedProcedureName);
@@ -25,4 +24,5 @@ public interface IGetActionsService
 
     Task<QueryResultTable> GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync();
     Task<QueryResultTable> GetUserDefinedTableTypesAsync();
+    Task<QueryResultTable> ExecuteScriptAsync(string scriptContent);
 }

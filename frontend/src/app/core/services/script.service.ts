@@ -2,7 +2,10 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { CreateScriptDto } from 'src/app/models/scripts/create-script-dto';
+import { ExecuteScriptDto } from 'src/app/models/scripts/execute-script-dto';
+import { ScriptContentDto } from 'src/app/models/scripts/script-content-dto';
 import { ScriptDto } from 'src/app/models/scripts/script-dto';
+import { ScriptResultDto } from 'src/app/models/scripts/script-result-dto';
 
 import { HttpInternalService } from './http-internal.service';
 
@@ -24,5 +27,17 @@ export class ScriptService {
 
     public updateScript(dto: ScriptDto): Observable<ScriptDto> {
         return this.httpService.putRequest(this.scriptRoutePrefix, dto);
+    }
+
+    public formatScript(dto: ExecuteScriptDto): Observable<ScriptContentDto> {
+        return this.httpService.putRequest(`${this.scriptRoutePrefix}/format`, dto);
+    }
+
+    public executeScript(dto: ExecuteScriptDto): Observable<ScriptResultDto> {
+        return this.httpService.postRequest(`${this.scriptRoutePrefix}/execute`, dto);
+    }
+
+    public deleteScript(scriptId: number) {
+        return this.httpService.deleteRequest(`${this.scriptRoutePrefix}/${scriptId}`);
     }
 }

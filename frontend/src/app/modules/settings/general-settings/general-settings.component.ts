@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { BaseComponent } from '@core/base/base.component';
 import { NotificationService } from '@core/services/notification.service';
 import { ProjectService } from '@core/services/project.service';
 import { SharedProjectService } from '@core/services/shared-project.service';
 import { SpinnerService } from '@core/services/spinner.service';
+import { ValidationsFn } from '@shared/helpers/validations-fn';
 import { takeUntil, tap } from 'rxjs';
 
 import { ProjectResponseDto } from '../../../models/projects/project-response-dto';
@@ -27,8 +27,6 @@ export class GeneralSettingsComponent extends BaseComponent implements OnInit {
         private spinner: SpinnerService,
         private projectService: ProjectService,
         private notificationService: NotificationService,
-        private router: Router,
-        private route: ActivatedRoute,
     ) {
         super();
     }
@@ -46,8 +44,12 @@ export class GeneralSettingsComponent extends BaseComponent implements OnInit {
 
     public createForm() {
         this.projectForm = this.fb.group({
-            projectName: [this.project.name, [Validators.required, Validators.maxLength(50)]],
-            description: [this.project.description],
+            projectName: [this.project.name, [
+                Validators.required,
+                Validators.minLength(3),
+                Validators.maxLength(50),
+                ValidationsFn.noCyrillic()]],
+            description: [this.project.description, [Validators.maxLength(1000)]],
         });
     }
 

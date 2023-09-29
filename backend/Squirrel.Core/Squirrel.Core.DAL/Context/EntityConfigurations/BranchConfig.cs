@@ -13,6 +13,19 @@ public sealed class BranchConfig : IEntityTypeConfiguration<Branch>
         builder.Property(x => x.IsActive).IsRequired();
         builder.Property(x => x.ProjectId).IsRequired();
 
+        builder.Property(x => x.CreatedAt)
+               .IsRequired()
+               .HasDefaultValueSql(SquirrelCoreContext.SqlGetDateFunction)
+               .ValueGeneratedOnAdd();
+
+        builder.Property(x => x.CreatedBy)
+                .IsRequired(false);
+
+        builder.HasOne(x => x.ParentBranch)
+               .WithMany()
+               .HasForeignKey(x => x.ParentBranchId)
+               .IsRequired(false);
+
         builder.HasMany(x => x.PullRequestsFromThisBranch)
                .WithOne(x => x.SourceBranch)
                .HasForeignKey(x => x.SourceBranchId)

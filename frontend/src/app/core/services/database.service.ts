@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpInternalService } from '@core/services/http-internal.service';
 
+import { DatabaseDto } from '../../models/database/database-dto';
 import { DatabaseInfoDto } from '../../models/database/database-info-dto';
 import { NewDatabaseDto } from '../../models/database/new-database-dto';
 
@@ -17,6 +18,6 @@ export class DatabaseService {
     }
 
     public getAllDatabases(projectId: number) {
-        return this.httpService.getRequest<DatabaseInfoDto[]>(`${this.databaseApiUrl}/all/${projectId}`);
+        return this.httpService.getRequest<DatabaseDto[]>(`${this.databaseApiUrl}/all/${projectId}`);
     }
 }

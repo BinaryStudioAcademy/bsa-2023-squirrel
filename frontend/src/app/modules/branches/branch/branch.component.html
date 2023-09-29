@@ -1,0 +1,32 @@
+<div class="container">
+    <div class="summary main-text">
+        {{ branch.name }}
+    </div>
+    <div class="behind-ahead">
+        <div class="text-info">
+            <div class="behind" *ngIf="branch.behind> 0" [style.width]="calculateFilling()">{{branch.behind}}</div>
+            <div class="ahead" *ngIf="branch.ahead > 0">{{branch.ahead}}</div>
+        </div>
+        <div class="progress-container">
+            <div class="filling" [style.width]="calculateFilling()"></div>
+        </div>
+    </div>
+    <div class="activity main-text">
+        <div class="updated-by" *ngIf="branch.lastUpdatedBy">
+            <app-avatar class="avatar" [imgLink]="branch.lastUpdatedBy.avatarUrl" [userName]="branch.lastUpdatedBy.firstName + ' ' + branch.lastUpdatedBy.lastName"></app-avatar>
+            {{calculateTime(branch.updatedAt)}}
+        </div>
+    </div>
+    <div class="actions">
+        <img class="more" [matMenuTriggerFor]="menu" src="assets/more-horizontal.svg"/>
+        <mat-menu #menu="matMenu">
+            <button class="menu-item" mat-menu-item>
+                <span>Edit</span>
+            </button>
+            <button class="menu-item" mat-menu-item>
+                <span>Delete</span>
+            </button>
+        </mat-menu>
+    </div>
+</div>
+

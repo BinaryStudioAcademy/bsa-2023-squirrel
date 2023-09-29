@@ -3,23 +3,20 @@
         <h4 class="login-heading">Sign In</h4>
 
         <div class="additional-sing-in">
-            <app-button class="margin-top" text="Sign In with GitHub" variant="outline-primary" width="100%">
-            </app-button>
             <app-google-button authType="signin_with"></app-google-button>
         </div>
 
         <app-barrier [text]="'or'"></app-barrier>
 
         <form class="login-form" (ngSubmit)="loginForm.valid && login()">
-            <app-input [formControl]="$any(loginForm.controls['email'])" [label]="'email'"
+            <app-input class="input email" [formControl]="$any(loginForm.controls['email'])" [label]="'email'"
                 placeholder="Enter your Email">
             </app-input>
 
-            <div class="input-wrapper">
+            <div class="input input-wrapper">
                 <app-input [formControl]="$any(loginForm.controls['password'])" [label]="'password'" [type]="'password'"
                     placeholder="Enter your Password">
                 </app-input>
-                <a class="forgot-password-link" href="">Forget password</a>
             </div>
 
             <app-button class="margin-top" [isDisabled]="loginForm.invalid" text="Sing In" variant="filled"

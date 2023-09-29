@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 
 import { TreeNode } from './models/tree-node.model';
 
@@ -7,28 +7,33 @@ import { TreeNode } from './models/tree-node.model';
     templateUrl: './tree.component.html',
     styleUrls: ['./tree.component.sass'],
 })
-export class TreeComponent implements OnInit {
+export class TreeComponent implements OnInit, OnChanges {
     @Input() public asCheckList: boolean = false;
 
     @Input() public height: string = '100%';
 
     @Output() public selectionChange = new EventEmitter<{ selectedNodes: TreeNode[]; originalStructure: TreeNode[] }>();
 
-    @Input() public treeData: TreeNode[] = [
-        {
-            name: 'Category 1',
-            children: [{ name: 'Subcategory 1.1' }, { name: 'Subcategory 1.2' }],
-        },
-        {
-            name: 'Category 2',
-            children: [{ name: 'Subcategory 2.1' }, { name: 'Subcategory 2.2' }],
-        },
-    ];
+    @Output() public messageChange = new EventEmitter<string>();
+
+    @Input() public treeData: TreeNode[] = [];
 
     public filteredTreeData: TreeNode[] = [];
 
+    public message: string;
+
     public ngOnInit(): void {
         this.filteredTreeData = this.treeData;
+    }
+
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (changes['treeData']) {
+            this.filteredTreeData = this.treeData;
+        }
+    }
+
+    public messageChanged() {
+        this.messageChange.emit(this.message);
     }
 
     public filterTree(event: Event): void {

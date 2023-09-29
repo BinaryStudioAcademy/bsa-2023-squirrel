@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { UpdateUserNamesDto } from 'src/app/models/user/update-user-names-dto';
-import { UpdateUserNotificationsDto } from 'src/app/models/user/update-user-notifications-dto';
 import { UpdateUserPasswordDto } from 'src/app/models/user/update-user-password-dto';
 import { UserDto } from 'src/app/models/user/user-dto';
 import { UserProfileDto } from 'src/app/models/user/user-profile-dto';
@@ -21,10 +20,6 @@ export class UserService {
 
     public updateUserPassword(dto: UpdateUserPasswordDto): Observable<void> {
         return this.httpService.putRequest<void>(`${this.routePrefix}/update-password`, dto);
-    }
-
-    public updateUserNotifications(dto: UpdateUserNotificationsDto): Observable<UserProfileDto> {
-        return this.httpService.putRequest<UserProfileDto>(`${this.routePrefix}/update-notifications`, dto);
     }
 
     public getUserFromToken(): Observable<UserDto> {

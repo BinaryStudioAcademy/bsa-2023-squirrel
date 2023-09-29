@@ -49,6 +49,10 @@ export class AuthService {
             );
     }
 
+    public setCurrentUser(user: UserDto) {
+        this.currentUser = user;
+    }
+
     public signOut = () => {
         localStorage.removeItem(this.accessTokenKey);
         localStorage.removeItem(this.refreshTokenKey);

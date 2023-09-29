@@ -1,0 +1,18 @@
+<div class="script-result">
+    <p class="result-message">
+        Last result from query "{{ scriptTitle }}"
+        at {{ scriptResult.date | date : 'medium' }}:
+    </p>
+    <div class="table-wrapper">
+        <table class="result-table" mat-table [dataSource]="scriptResult.rows">
+            <ng-container *ngFor="let columnName of scriptResult.columnNames" [matColumnDef]="columnName">
+                <th class="cell column-header" mat-header-cell *matHeaderCellDef>{{ columnName }}</th>
+                <td class="cell" mat-cell *matCellDef="let element">
+                    {{ element[scriptResult.columnNames.indexOf(columnName)] }}
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="scriptResult.columnNames"></tr>
+            <tr mat-row *matRowDef="let row; columns: scriptResult.columnNames"></tr>
+        </table>
+    </div>
+</div>

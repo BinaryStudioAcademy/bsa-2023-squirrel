@@ -6,6 +6,7 @@ import { BranchService } from '@core/services/branch.service';
 import { NotificationService } from '@core/services/notification.service';
 import { SpinnerService } from '@core/services/spinner.service';
 import { BranchNameFormatter } from '@shared/helpers/branch-name-formatter';
+import { ValidationsFn } from '@shared/helpers/validations-fn';
 import { catchError, Observable, of, takeUntil, tap } from 'rxjs';
 
 import { BranchDto } from 'src/app/models/branch/branch-dto';
@@ -51,19 +52,16 @@ export class CreateBranchModalComponent extends BaseComponent implements OnInit 
                 Validators.required,
                 Validators.minLength(3),
                 Validators.maxLength(200),
-                Validators.pattern(/^[A-Za-z0-9- _@]*$/)]],
+                ValidationsFn.branchNameMatch()]],
             selectedParent: ['', Validators.required],
         });
     }
 
     public createBranch(): void {
-        if (!this.branchForm.valid) {
-            return;
-        }
         this.spinner.show();
 
         const branch: CreateBranchDto = {
-            name: BranchNameFormatter.formatBranchName(this.branchForm.value.branchName),
+            name: BranchNameFormatter.trimBranchName(this.branchForm.value.branchName),
             parentId: this.branchForm.value.selectedParent,
         };
 
@@ -96,5 +94,11 @@ export class CreateBranchModalComponent extends BaseComponent implements OnInit 
 
     public close(): void {
         this.dialogRef.close();
+    }
+
+    public replaceSpacesWithHyphens(event: Event) {
+        const inputElement = event.target as HTMLInputElement;
+
+        inputElement.value = BranchNameFormatter.formatBranchName(inputElement.value);
     }
 }

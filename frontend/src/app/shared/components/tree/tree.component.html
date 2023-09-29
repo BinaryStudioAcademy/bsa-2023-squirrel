@@ -27,6 +27,6 @@
     </div>
     <div class="commit-msg-form">
         <label class="commit-label">Commit message</label>
-        <textarea class="commit-msg-input" placeholder="Type your commit message here..." rows="4"></textarea>
+        <textarea class="commit-msg-input" placeholder="Type your commit message here..." rows="4" [(ngModel)]="message" (ngModelChange)="messageChanged()"></textarea>
     </div>
 </div>

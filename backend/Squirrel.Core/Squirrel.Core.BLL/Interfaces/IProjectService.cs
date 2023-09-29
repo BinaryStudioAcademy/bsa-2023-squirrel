@@ -10,6 +10,7 @@ public interface IProjectService
     Task DeleteProjectAsync(int projectId);
     Task<ProjectResponseDto> GetProjectAsync(int projectId);
     Task<ProjectResponseDto> AddUsersToProjectAsync(int projectId, List<UserDto> usersDtos);
-    Task<List<UserDto>> GetProjectUsersAsync(int projectId);
-    Task<List<ProjectResponseDto>> GetAllUserProjectsAsync();
+    Task<ICollection<UserDto>> GetProjectUsersAsync(int projectId);
+    Task<ICollection<ProjectResponseDto>> GetAllUserProjectsAsync();
+    Task<bool> RemoveUserFromProjectAsync(int projectId, UserDto userDto);
 }

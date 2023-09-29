@@ -41,6 +41,7 @@ export class MainComponent extends BaseComponent implements OnInit, OnDestroy {
     public override ngOnDestroy() {
         this.broadcastHub.stop();
         this.sharedProject.setProject(null);
+        this.sharedProject.setCurrentDb(null);
         super.ngOnDestroy();
     }
 
@@ -51,21 +52,27 @@ export class MainComponent extends BaseComponent implements OnInit, OnDestroy {
         if (!projectId) {
             this.notificationService.error('wrong route');
             this.router.navigateByUrl('/projects');
+            this.projectService.currentProjectId = 0;
 
             return;
         }
 
-        this.projectService.getProject(projectId)
+        this.projectService.currentProjectId = Number(projectId);
+
+        this.projectService
+            .getProject(projectId)
             .pipe(
                 takeUntil(this.unsubscribe$),
                 finalize(() => this.spinner.hide()),
             )
             .subscribe({
-                next: project => {
-                    this.project = project;
-                    this.sharedProject.setProject(project);
+                next: (project) => {
+                    if (project) {
+                        this.project = project;
+                        this.sharedProject.setProject(project);
+                    }
                 },
-                error: err => {
+                error: (err) => {
                     this.notificationService.error(err.message);
                     this.router.navigateByUrl('projects');
                 },

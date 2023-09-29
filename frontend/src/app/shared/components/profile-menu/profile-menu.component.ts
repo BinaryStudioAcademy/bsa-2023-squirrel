@@ -14,8 +14,18 @@ import { UserDto } from 'src/app/models/user/user-dto';
 export class ProfileMenuComponent extends BaseComponent implements OnInit, OnDestroy {
     public currentUser: UserDto | undefined;
 
+    public iconSource = 'assets/logout_icon_black.svg';
+
     constructor(private authService: AuthService, private eventService: EventService) {
         super();
+    }
+
+    public onMouseOver() {
+        this.iconSource = 'assets/logout_icon_blue.svg';
+    }
+
+    public onMouseOut() {
+        this.iconSource = 'assets/logout_icon_black.svg';
     }
 
     public signOut() {

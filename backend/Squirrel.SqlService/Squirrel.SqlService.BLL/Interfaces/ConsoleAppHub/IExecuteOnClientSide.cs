@@ -1,30 +1,33 @@
-﻿namespace Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
+﻿using Squirrel.Shared.DTO.ConsoleAppHub;
+
+namespace Squirrel.SqlService.BLL.Interfaces.ConsoleAppHub;
 
 public interface IExecuteOnClientSide
 {
     Task SetClientId(string guid);
 
     // Actions
-    Task GetAllTablesNamesAsync(string clientId);
-    Task GetTableDataAsync(string clientId, string schema, string tableName, int rowsCount);
+    Task GetAllTablesNamesAsync(Guid queryId);
+    Task GetAllStoredProceduresNamesAsync(Guid queryId);
+    Task GetAllFunctionsNamesAsync(Guid queryId);
 
-    Task GetAllStoredProceduresNamesAsync(string clientId);
-    Task GetStoredProcedureDefinitionAsync(string clientId, string schemaName, string storedProcedureName);
+    Task GetStoredProcedureDefinitionAsync(Guid queryId, string schemaName, string storedProcedureName);
+    
+    Task GetFunctionDefinitionAsync(Guid queryId, string schemaName, string functionName);
 
-    Task GetAllFunctionsNamesAsync(string clientId);
-    Task GetFunctionDefinitionAsync(string clientId, string schemaName, string functionName);
+    Task GetAllViewsNamesAsync(Guid queryId);
+    Task GetViewDefinitionAsync(Guid queryId, string schemaName, string viewName);
 
-    Task GetAllViewsNamesAsync(string clientId);
-    Task GetViewDefinitionAsync(string clientId, string viewName);
+    Task GetTableStructureAsync(Guid queryId, string schema, string tableName);
+    Task GetTableChecksAndUniqueConstraintsAsync(Guid queryId, string schema, string tableName);
 
-    Task GetTableStructureAsync(string clientId, string schema, string tableName);
-    Task GetTableChecksAndUniqueConstraintsAsync(string clientId, string schema, string tableName);
+    Task GetStoredProceduresWithDetailAsync(Guid queryId);
+    Task GetFunctionsWithDetailAsync(Guid queryId);
+    Task GetViewsWithDetailAsync(Guid queryId);
 
-    Task GetStoredProceduresWithDetailAsync(string clientId);
-    Task GetFunctionsWithDetailAsync(string clientId);
-    Task GetViewsWithDetailAsync(string clientId);
+    Task GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync(Guid queryId);
+    Task GetUserDefinedTableTypesAsync(Guid queryId);
+    Task RemoteConnectAsync(Guid queryId, ConnectionString connectionString);
 
-    Task GetUserDefinedTypesWithDefaultsAndRulesAndDefinitionAsync(string clientId);
-    Task GetUserDefinedTableTypesAsync(string clientId);
+    Task ExecuteScriptAsync(Guid queryId, string scriptContent);
 }
-

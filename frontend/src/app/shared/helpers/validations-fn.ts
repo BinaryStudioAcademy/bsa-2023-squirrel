@@ -39,4 +39,22 @@ export class ValidationsFn {
             (/(?=.*[a-z])/.test(control.value)
                 ? null : { lowerExist: true });
     }
+
+    static noCyrillic(): ValidatorFn {
+        return (control: AbstractControl) =>
+            (/^(?![\u0410-\u044F\u0400-\u04FF]).*$/.test(control.value)
+                ? null : { noCyrillic: true });
+    }
+
+    static branchNameMatch(): ValidatorFn {
+        return (control: AbstractControl) =>
+            (/^[A-Za-z0-9- _@]*$/.test(control.value)
+                ? null : { branchNameMatch: true });
+    }
+
+    static projectNameMatch(): ValidatorFn {
+        return (control: AbstractControl) =>
+            (/^[!-~\s]*$/.test(control.value) && !/\s{2,}/.test(control.value)
+                ? null : { projectNameMatch: true });
+    }
 }

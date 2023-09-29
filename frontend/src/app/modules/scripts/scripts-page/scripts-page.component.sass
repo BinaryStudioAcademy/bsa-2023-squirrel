@@ -1,39 +1,57 @@
 @import "/src/styles/color"
+@import "/src/styles/weights"
 
 .container
     margin: 10px
 
+.padding-bottom
+    padding-bottom: 70px
+
 .bordered
-    border: 1px solid $black
     border-radius: 5px
 
 .main-content
     display: flex
     gap: 25px
+    height: 65vh
+
+.sector
+    background-color: $project-background-color
+    padding: 10px
+    border-radius: 10px
 
 .scripts-sector
+    @extend .sector
     display: flex
     flex-direction: column
-    overflow-y: auto
-    width: 25%
-    height: 60vh
+    width: calc(25% - 25px)
+    height: 100%
 
 .listbox
+    overflow-y: auto
     list-style: none
-    padding: 0
-    margin: 0
+    cursor: pointer
+    padding: 10px
+    margin-top: 10px
 
 .option
+    background-color: $bg-input
+    border-radius: 5px
     position: relative
 
 .selected-option
-    background: $dark-shadow
+    background-color: darken($bg-input, 5%)
 
 .editor-sector
-    display: flex
+    @extend .sector
     width: 75%
     height: 100%
-    align-items: flex-start
+
+    .no-selected-script
+        height: 100%
+        display: flex
+        justify-content: center
+        align-items: center
 
 .buttons-sector
     margin-top: 20px
@@ -44,8 +62,43 @@
     display: flex
     gap: 20px
 
-textarea
+.editor
     flex-grow: 1
     padding: 10px
-    height: 60vh
+    height: 100%
     resize: none
+
+.spacing-div
+    display: flex
+    justify-content: center
+    align-items: center
+    padding: 35px
+
+.unsaved
+    position: relative
+    &:after
+        content: ''
+        height: 100%
+        width: 6px
+        background-color: lighten($text-danger, 20%)
+        position: absolute
+        top: 0
+        right: 0
+        border-radius: 0 5px 5px 0
+
+
+.to-top-btn
+    display: none
+    position: fixed
+    bottom: 20px
+    right: 25px
+
+.no-scripts
+    height: 60vh
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-items: center
+
+.d-block
+    display: block

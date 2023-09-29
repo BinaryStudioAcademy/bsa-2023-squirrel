@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { saveAs } from 'file-saver';
 import { Subject, takeUntil } from 'rxjs';
 
+import { OperatingSystem } from 'src/app/models/downloads/operating-system';
+
 import { HttpInternalService } from './http-internal.service';
 import { NotificationService } from './notification.service';
 
@@ -16,8 +18,9 @@ export class FilesDownloaderService {
 
     constructor(private httpClient: HttpInternalService, private notificationService: NotificationService) { }
 
-    public downloadSquirrelInstaller() {
-        this.httpClient.getFullBlobRequest(`${this.staticFilesRoutePrefix}/squirrel-installer`)
+    public downloadSquirrelInstaller(os: OperatingSystem): void {
+        this.httpClient
+            .getFullBlobRequest(`${this.staticFilesRoutePrefix}/squirrel-installer/${os}`)
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe({
                 next: (event: HttpResponse<Blob>) => {

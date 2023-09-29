@@ -30,6 +30,14 @@ namespace Squirrel.Core.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getutcdate()");
+
+                    b.Property<int?>("CreatedBy")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -38,10 +46,17 @@ namespace Squirrel.Core.DAL.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<int?>("ParentBranchId")
+                        .HasColumnType("int");
+
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatedBy");
+
+                    b.HasIndex("ParentBranchId");
 
                     b.HasIndex("ProjectId");
 
@@ -132,10 +147,21 @@ namespace Squirrel.Core.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsSaved")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Message")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("PostScript")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PreScript")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -599,11 +625,25 @@ namespace Squirrel.Core.DAL.Migrations
 
             modelBuilder.Entity("Squirrel.Core.DAL.Entities.Branch", b =>
                 {
+                    b.HasOne("Squirrel.Core.DAL.Entities.User", "Author")
+                        .WithMany("Branches")
+                        .HasForeignKey("CreatedBy")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Squirrel.Core.DAL.Entities.Branch", "ParentBranch")
+                        .WithMany()
+                        .HasForeignKey("ParentBranchId");
+
                     b.HasOne("Squirrel.Core.DAL.Entities.Project", "Project")
                         .WithMany("Branches")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.Navigation("Author");
+
+                    b.Navigation("ParentBranch");
 
                     b.Navigation("Project");
                 });
@@ -896,6 +936,8 @@ namespace Squirrel.Core.DAL.Migrations
 
             modelBuilder.Entity("Squirrel.Core.DAL.Entities.User", b =>
                 {
+                    b.Navigation("Branches");
+
                     b.Navigation("ChangeRecords");
 
                     b.Navigation("Comments");

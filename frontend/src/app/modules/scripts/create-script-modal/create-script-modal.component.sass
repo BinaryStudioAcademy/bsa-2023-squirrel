@@ -1,7 +1,10 @@
-.header
-    font-family: 'Montserrat SemiBold', sans-serif
-    font-size: 24px
+@import "/src/styles/reusable"
 
-.modal-buttons
-    margin-top: 20px
-    gap: 5%
+.header
+    @extend .modal-header
+
+.header-title
+    @extend .modal-title
+
+.input
+    @extend .input-errors-padding

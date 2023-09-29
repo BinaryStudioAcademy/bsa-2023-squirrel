@@ -3,7 +3,12 @@
 public enum DatabaseItemType
 {
     Table,
+    Type,
+    Constraint,
     StoredProcedure,
     Function,
-    View
+    View,
+    UserDefinedDataType,
+    UserDefinedTableType,
+    Procedure
 }

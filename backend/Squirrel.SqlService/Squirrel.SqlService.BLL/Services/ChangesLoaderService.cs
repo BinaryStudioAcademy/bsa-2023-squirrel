@@ -1,15 +1,15 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.Text;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Squirrel.AzureBlobStorage.Interfaces;
 using Squirrel.AzureBlobStorage.Models;
 using Squirrel.SqlService.BLL.Interfaces;
-using System.Text;
 
 namespace Squirrel.SqlService.BLL.Services;
 
 public class ChangesLoaderService : IChangesLoaderService
 {
-    // mocked data for now
+    private const string UserDbChangesBlobContainerNameSection = "UserDbChangesBlobContainerName";
     private readonly IDbItemsRetrievalService _dbItemsRetrievalService;
     private readonly IBlobStorageService _blobStorageService;
     private readonly IConfiguration _configuration;
@@ -21,25 +21,21 @@ public class ChangesLoaderService : IChangesLoaderService
         _configuration = configuration;
     }
 
-    public async Task LoadChangesToBlobAsync(Guid changeId)
+    public async Task LoadChangesToBlobAsync(Guid changeId, Guid clientId)
     {
-        // TODO get actual db structure
-        var dbStructure = _dbItemsRetrievalService.GetAllItems();
-
-        // Serialize the dbStructure to a JSON string
+        var dbStructure = await _dbItemsRetrievalService.GetAllDbStructureAsync(clientId);
         var jsonString = JsonConvert.SerializeObject(dbStructure);
-
-        // Convert the JSON string to a byte array using UTF-8 encoding
-        byte[] contentBytes = Encoding.UTF8.GetBytes(jsonString);
+        var contentBytes = Encoding.UTF8.GetBytes(jsonString);
+        var jsonMimeType = "application/json";
 
         var blob = new Blob
         {
             Id = changeId.ToString(),
-            ContentType = "application/json",
+            ContentType = jsonMimeType,
             Content = contentBytes
         };
 
-        var containerName = _configuration["UserDbChangesBlobContainerName"];
+        var containerName = _configuration[UserDbChangesBlobContainerNameSection];
 
         await _blobStorageService.UploadAsync(containerName, blob);
     }

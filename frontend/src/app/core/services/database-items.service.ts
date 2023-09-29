@@ -13,7 +13,7 @@ export class DatabaseItemsService {
 
     constructor(private httpService: HttpInternalService) { }
 
-    public getAllItems(): Observable<DatabaseItem[]> {
-        return this.httpService.getRequest<DatabaseItem[]>(this.databaseItemsRoutePrefix);
+    public getAllItems(clientId: string): Observable<DatabaseItem[]> {
+        return this.httpService.getRequest<DatabaseItem[]>(`${this.databaseItemsRoutePrefix}/${clientId}`);
     }
 }

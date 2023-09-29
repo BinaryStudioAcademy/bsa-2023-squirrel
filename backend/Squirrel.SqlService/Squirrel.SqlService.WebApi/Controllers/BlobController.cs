@@ -16,27 +16,27 @@ public class BlobController : ControllerBase
     }
 
     [HttpGet("{containerName}/{blobId}")]
-    public async Task<ActionResult<Blob>> GetBlob(string containerName, string blobId)
+    public async Task<ActionResult<Blob>> GetBlobAsync(string containerName, string blobId)
     {
         return Ok(await _blobService.DownloadAsync(containerName, blobId));
     }
 
     [HttpPost("{containerName}")]
-    public async Task<ActionResult> UploadBlob(string containerName, [FromBody] Blob blob)
+    public async Task<IActionResult> UploadBlobAsync(string containerName, [FromBody] Blob blob)
     {
         await _blobService.UploadAsync(containerName, blob);
         return Ok();
     }
 
     [HttpPut("{containerName}")]
-    public async Task<ActionResult> UpdateBlob(string containerName, [FromBody] Blob blob)
+    public async Task<IActionResult> UpdateBlobAsync(string containerName, [FromBody] Blob blob)
     {
         await _blobService.UpdateAsync(containerName, blob);
         return Ok();
     }
 
     [HttpDelete("{containerName}/{blobId}")]
-    public async Task<ActionResult> DeleteBlob(string containerName, string blobId)
+    public async Task<IActionResult> DeleteBlobAsync(string containerName, string blobId)
     {
         await _blobService.DeleteAsync(containerName, blobId);
         return NoContent();

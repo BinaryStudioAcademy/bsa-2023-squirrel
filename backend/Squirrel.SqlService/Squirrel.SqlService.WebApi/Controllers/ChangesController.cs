@@ -14,10 +14,11 @@ public sealed class ChangesController : ControllerBase
         _changesLoaderService = changesLoaderService;
     }
 
-    [HttpPost]
-    public async Task<ActionResult> SaveChangesToBlob([FromBody] Guid changeId)
+    [HttpPost("{clientId}")]
+    public async Task<IActionResult> SaveChangesToBlobAsync([FromBody] Guid changeId, Guid clientId)
     {
-        await _changesLoaderService.LoadChangesToBlobAsync(changeId);
+        await _changesLoaderService.LoadChangesToBlobAsync(changeId, clientId);
+
         return Ok();
     }
 }

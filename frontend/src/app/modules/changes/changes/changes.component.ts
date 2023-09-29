@@ -91,7 +91,7 @@ export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy
         this.commitService
             .commit(commit)
             .pipe(takeUntil(this.unsubscribe$), finalize(this.spinner.hide))
-            .subscribe((x) => {
+            .subscribe(() => {
                 this.items.forEach((parent) => {
                     if (parent.children) {
                         parent.children = parent.children.filter((item) => !item.selected);

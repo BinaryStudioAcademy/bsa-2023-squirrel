@@ -156,7 +156,7 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
                     this.currentChangesGuId = changeGuid;
                     this.loadCommitChanges();
                 },
-                error: (error) => {
+                error: () => {
                     this.notificationService.error('An error occurred while attempting to load changes');
                 },
             });
@@ -168,7 +168,7 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
                 next: (event) => {
                     this.eventService.changesLoaded(event);
                 },
-                error: (error) => {
+                error: () => {
                     this.notificationService.error('An error occurred while attempting to load list of db items');
                 },
             });

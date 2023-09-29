@@ -37,25 +37,54 @@ public class ContentDifferenceService : IContentDifferenceService
     {
         var containers = await _blobStorageService.GetContainersByPrefixAsync(commitId.ToString());
         var dbStructure = await GetTempBlobContentAsync(tempBlobId);
-        return await GetTextPairFromBlobsAsync(commitId, containers, dbStructure, isReverse);
+        return await GetTextPairFromBlobsAsync(commitId, containers, dbStructure, isReverse, false);
     }
 
-    public async Task<ICollection<DatabaseItemContentCompare>> GetContentDiffsAsync(int commitId, DbStructureDto oldDbStructure, 
-        bool isReverse = false)
+    public async Task<ICollection<DatabaseItemContentCompare>> GetContentDiffsAsync(int commitId,
+        DbStructureDto oldDbStructure,
+        bool isReverse = false, bool isGetOneLineContent = false)
     {
         var containers = await _blobStorageService.GetContainersByPrefixAsync(commitId.ToString());
-        return await GetTextPairFromBlobsAsync(commitId, containers, oldDbStructure, isReverse);
+        return await GetTextPairFromBlobsAsync(commitId, containers, oldDbStructure, isReverse, isGetOneLineContent);
     }
 
     private async Task<ICollection<DatabaseItemContentCompare>> GetTextPairFromBlobsAsync(int commitId,
-        ICollection<string> containers, DbStructureDto dbStructure, bool isReverse)
+        ICollection<string> containers, DbStructureDto dbStructure, bool isReverse, bool isGetOneLineContent)
     {
         var differenceList = new List<DatabaseItemContentCompare>();
         var markedBlobIds = new List<string>();
         
+        if (isGetOneLineContent)
+        {
+            await CompareDbItemsContentAsync(dbStructure.DbTableStructures!, containers, commitId,
+                DatabaseItemType.Table, differenceList, markedBlobIds, isReverse);
+            
+            await CompareDbItemsContentAsync(dbStructure.DbFunctionDetails!.Details, containers, commitId, 
+                DatabaseItemType.Function, differenceList, markedBlobIds, isReverse);
+          
+            await CompareDbItemsContentAsync(dbStructure.DbProcedureDetails!.Details, containers, commitId, 
+                DatabaseItemType.StoredProcedure, differenceList, markedBlobIds, isReverse);
         
-        
-        await CompareDbItemsDefinitionAsync(dbStructure.DbTableStructures!, containers, commitId,
+            await CompareDbItemsContentAsync(dbStructure.DbViewsDetails!.Details, containers, commitId, 
+                DatabaseItemType.View, differenceList, markedBlobIds, isReverse);
+            
+            //
+            await CompareUnmarkedBlobsContentAsync<TableStructureDto>(DatabaseItemType.Table, containers, commitId, 
+                differenceList, markedBlobIds, isReverse);
+
+            await CompareUnmarkedBlobsContentAsync<FunctionDetailInfo>(DatabaseItemType.Function, containers, commitId,
+                differenceList, markedBlobIds, isReverse);
+         
+            await CompareUnmarkedBlobsContentAsync<ProcedureDetailInfo>(DatabaseItemType.StoredProcedure, containers, 
+                commitId, differenceList, markedBlobIds, isReverse);
+         
+            await CompareUnmarkedBlobsContentAsync<ViewDetailInfo>(DatabaseItemType.View, containers, commitId,
+                differenceList, markedBlobIds, isReverse);
+            
+        }
+        else
+        {
+            await CompareDbItemsDefinitionAsync(dbStructure.DbTableStructures!, containers, commitId,
             DatabaseItemType.Table, differenceList, markedBlobIds, isReverse);
         
         // * Diff for constraints * 
@@ -104,7 +133,8 @@ public class ContentDifferenceService : IContentDifferenceService
          // * Diff for user defined table type *
          // await CompareUnmarkedBlobsContentAsync<UserDefinedTableDetailsDto>(DatabaseItemType.UserDefinedTableType,
          //     containers, commitId, differenceList, markedBlobIds);
-         
+        }
+        
         return differenceList;
     }
     

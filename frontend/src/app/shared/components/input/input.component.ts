@@ -25,11 +25,17 @@ export class InputComponent implements ControlValueAccessor {
         this.ngControl.valueAccessor = this;
     }
 
-    public registerOnChange(): void {}
+    public registerOnChange(): void {
+        // Implement this to register a callback function when the input value changes
+    }
 
-    public registerOnTouched(): void {}
+    public registerOnTouched(): void {
+        // Implement this to register a callback function when the input is touched.
+    }
 
-    public writeValue(): void {}
+    public writeValue(): void {
+        // Implement this to write a new value to the input
+    }
 
     public get control(): FormControl {
         return this.ngControl.control as FormControl;

@@ -28,6 +28,7 @@
             "parser": "@typescript-eslint/parser",
             "rules": {
                 "no-shadow": "off",
+                "no-empty-function": ["error", { "allow": ["constructors"] }],
                 "@angular-eslint/directive-selector": [
                     "error",
                     {
@@ -83,7 +84,7 @@
                         "argsIgnorePattern": "^_+$"
                     }
                 ],
-                "no-empty": ["error", { "allow": ["constructors"] }],
+                "no-empty": "error",
                 "import/no-unresolved": "off",
                 "curly": ["error", "all"],
                 "newline-before-return": "error",

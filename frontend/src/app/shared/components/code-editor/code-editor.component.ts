@@ -29,12 +29,15 @@ export class CodeEditorComponent implements ControlValueAccessor {
     }
 
     public registerOnChange(): void {
+        // Implement this to register a callback function when the input value changes
     }
 
     public registerOnTouched(): void {
+        // Implement this to register a callback function when the input is touched.
     }
 
     public writeValue(): void {
+        // Implement this to write a new value to the input
     }
 
     public get control(): FormControl {

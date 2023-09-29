@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BaseComponent } from '@core/base/base.component';
 import { BroadcastHubService } from '@core/hubs/broadcast-hub.service';
+import { CommitChangesService } from '@core/services/commit-changes.service';
 import { EventService } from '@core/services/event.service';
 import { NotificationService } from '@core/services/notification.service';
 import { ProjectService } from '@core/services/project.service';
@@ -10,7 +11,6 @@ import { SpinnerService } from '@core/services/spinner.service';
 import { finalize, takeUntil } from 'rxjs';
 
 import { ProjectResponseDto } from 'src/app/models/projects/project-response-dto';
-import {CommitChangesService} from "@core/services/commit-changes.service";
 
 @Component({
     selector: 'app-home',

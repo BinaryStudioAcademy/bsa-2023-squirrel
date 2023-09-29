@@ -14,4 +14,5 @@ public interface IBranchService
     Task DeleteBranchAsync(int branchId);
     Task<BranchDto> MergeBranchAsync(int sourceId, int destId);
     Task<ICollection<Commit>> GetCommitsFromBranchInternalAsync(int branchId, int destinationId);
+    Task<ICollection<BranchDetailsDto>> GetAllBranchDetailsAsync(int projectId, int selectedBranch);
 }

@@ -138,6 +138,28 @@ public sealed class BranchService : BaseService, IBranchService
         return _mapper.Map<BranchDto[]>(branches);
     }
 
+    public async Task<ICollection<BranchDetailsDto>> GetAllBranchDetailsAsync(int projectId, int selectedBranch)
+    {
+        var entities = _context.Branches
+            .Include(x => x.Author)
+            .Where(x => x.ProjectId == projectId);
+        var branches = _mapper.Map<List<BranchDetailsDto>>(entities);
+
+        var selectedBranchCommits = await GetCommitsFromBranchInternalAsync(selectedBranch, 0);
+        foreach (var branch in branches)
+        {
+            var branchCommits = await GetCommitsFromBranchInternalAsync(branch.Id, 0);
+            var aheadCommits = branchCommits.Where(x => !selectedBranchCommits.Any(y => y.Id == x.Id));
+
+            var behindCommits = selectedBranchCommits.Where(x => !branchCommits.Any(y => y.Id == x.Id));
+
+            branch.Ahead = aheadCommits.Count();
+            branch.Behind = behindCommits.Count();
+        }
+
+        return branches;
+    }
+
     public async Task DeleteBranchAsync(int branchId)
     {
         var entity = await _context.Branches.FirstOrDefaultAsync(x => x.Id == branchId);

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { BaseComponent } from '@core/base/base.component';
 import { BranchService } from '@core/services/branch.service';
+import { EventService } from '@core/services/event.service';
 import { NotificationService } from '@core/services/notification.service';
 import { ProjectService } from '@core/services/project.service';
 import { SpinnerService } from '@core/services/spinner.service';
@@ -38,6 +39,7 @@ export class BranchListComponent extends BaseComponent implements OnInit {
         private projectService: ProjectService,
         private spinner: SpinnerService,
         private notificationService: NotificationService,
+        private eventService: EventService,
     ) {
         super();
         this.dropdownItems = this.getBranchTypes();
@@ -49,6 +51,12 @@ export class BranchListComponent extends BaseComponent implements OnInit {
     public ngOnInit(): void {
         this.getBranchesList();
         this.getBranches();
+        this.eventService.branchChangedEvent$
+            .pipe(takeUntil(this.unsubscribe$)).subscribe((x) => {
+                if (x !== undefined) {
+                    this.getBranches();
+                }
+            });
     }
 
     public getBranchTypes() {

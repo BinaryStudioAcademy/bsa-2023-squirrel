@@ -73,8 +73,8 @@ export class BranchListComponent extends BaseComponent implements OnInit {
         this.branchService
             .getAllBranches(this.projectService.currentProjectId)
             .pipe(takeUntil(this.unsubscribe$))
-            .subscribe((resp) => {
-                this.branchList = resp;
+            .subscribe((branches) => {
+                this.branchList = branches;
             });
     }
 

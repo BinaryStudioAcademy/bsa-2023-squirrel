@@ -12,14 +12,22 @@ namespace Squirrel.Core.BLL.Services;
 
 public sealed class BranchService : BaseService, IBranchService
 {
-    public BranchService(SquirrelCoreContext context, IMapper mapper) : base(context, mapper)
+    private readonly IUserIdGetter _userIdGetter;
+    private readonly IUserService _userService;
+    public BranchService(SquirrelCoreContext context, IMapper mapper, IUserIdGetter userIdGetter, IUserService userService) : base(context, mapper)
     {
+        _userIdGetter = userIdGetter;
+        _userService = userService;
     }
 
     public async Task<BranchDto> AddBranchAsync(int projectId, BranchCreateDto branchDto)
     {
+        var userId = _userIdGetter.GetCurrentUserId();
+        var user = await _userService.GetUserByIdInternalAsync(userId) ?? throw new EntityNotFoundException(nameof(User), userId);
+
         var branch = _mapper.Map<Branch>(branchDto);
         branch.ProjectId = projectId;
+        branch.CreatedBy = userId;
         branch.IsActive = true;
 
         await EnsureUniquenessAsync(branch.Name, projectId);
@@ -72,7 +80,7 @@ public sealed class BranchService : BaseService, IBranchService
     {
         var dest = await GetFullBranchEntityAsync(destId) ?? throw new EntityNotFoundException(nameof(Branch), destId);
 
-        BranchCommit? lastCommit = null;
+        BranchCommit? lastCommit = default;
         foreach (var commit in await GetCommitsFromBranchInternalAsync(sourceId, destId))
         {
             var branchCommit = new BranchCommit
@@ -84,6 +92,7 @@ public sealed class BranchService : BaseService, IBranchService
             dest.BranchCommits.Add(branchCommit);
             lastCommit = branchCommit;
         }
+
         if(lastCommit is not null)
         {
             lastCommit.IsHead = true;
@@ -100,12 +109,12 @@ public sealed class BranchService : BaseService, IBranchService
         return _mapper.Map<BranchDto>(entity);
     }
 
-    public async Task<List<Commit>> GetCommitsFromBranchInternalAsync(int branchId, int destinationId)
+    public async Task<ICollection<Commit>> GetCommitsFromBranchInternalAsync(int branchId, int destinationId)
     {
         var source = await GetFullBranchEntityAsync(branchId) ?? throw new EntityNotFoundException(nameof(Branch), branchId);
-        DateTime createdAt = source.CreatedAt;
-        bool isOriginal = true;
-        List<Commit> commits = new List<Commit>();
+        var createdAt = source.CreatedAt;
+        var isOriginal = true;
+        var commits = new List<Commit>();
 
         while (source is not null && source.Id != destinationId)
         {
@@ -115,7 +124,8 @@ public sealed class BranchService : BaseService, IBranchService
             {
                 commits.Add(commit);
             }
-            source = await GetFullBranchEntityAsync(source.ParentBranchId ?? 0);
+            isOriginal = false;
+            source = await GetFullBranchEntityAsync(source.ParentBranchId ?? default);
         }
         return commits;
     }

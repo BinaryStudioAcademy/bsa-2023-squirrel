@@ -13,12 +13,10 @@ namespace Squirrel.Core.WebAPI.Controllers;
 public class BranchController : ControllerBase
 {
     private readonly IBranchService _branchService;
-    private readonly IMapper _mapper;
 
-    public BranchController(IBranchService branchService, IMapper mapper)
+    public BranchController(IBranchService branchService)
     {
         _branchService = branchService;
-        _mapper = mapper;
     }
 
     [HttpGet("{projectId}")]
@@ -32,12 +30,6 @@ public class BranchController : ControllerBase
     {
         return Ok(await _branchService.GetLastBranchCommitIdAsync(branchId));
     }
-
-    [HttpGet("{branchId}/{destId}")]
-    public async Task<ActionResult<Commit>> GetTestCommits(int branchId, int destId)
-    {
-        return Ok(_mapper.Map<List<CommitDto>>(await _branchService.GetCommitsFromBranchInternalAsync(branchId, destId)));
-    } 
 
     [HttpPost("{projectId}")]
     public async Task<ActionResult<BranchDto>> AddBranchAsync(int projectId, [FromBody] BranchCreateDto dto) 

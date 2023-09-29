@@ -9,8 +9,5 @@ public class MergeBranchDtoValidator: AbstractValidator<MergeBranchDto>
     {
         RuleFor(x => x.SourceId)
             .NotEqual(x => x.DestinationId);
-
-        RuleFor(x => x.DestinationId)
-            .NotEqual(x => x.SourceId);
     }
 }

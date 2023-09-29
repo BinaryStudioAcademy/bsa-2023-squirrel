@@ -25,6 +25,12 @@ public class BranchController : ControllerBase
         return Ok(_branchService.GetAllBranches(projectId));
     }
 
+    [HttpGet("{projectId}/{sourceId}")]
+    public async Task<ActionResult<List<BranchDetailsDto>>> GetAllBranchDetails(int projectId, int sourceId)
+    {
+        return Ok(await _branchService.GetAllBranchDetailsAsync(projectId, sourceId));
+    }
+
     [HttpGet("lastcommit/{branchId}")]
     public async Task<ActionResult<int?>> GetLastBranchCommit(int branchId)
     {

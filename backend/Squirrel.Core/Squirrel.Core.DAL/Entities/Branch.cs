@@ -13,6 +13,7 @@ public sealed class Branch : AuditEntity<int>
     public int? ParentBranchId { get; set; }
     public Project Project { get; set; } = null!;
     public Branch? ParentBranch { get; set; }
+    public User? Author { get; set; } = null!;
     public ICollection<Commit> Commits { get; set; } = new List<Commit>();
     public ICollection<BranchCommit> BranchCommits { get; set; } = new List<BranchCommit>();
     public ICollection<PullRequest> PullRequestsFromThisBranch { get; set; } = new List<PullRequest>();

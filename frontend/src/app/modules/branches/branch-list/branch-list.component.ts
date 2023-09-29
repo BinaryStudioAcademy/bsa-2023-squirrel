@@ -3,12 +3,13 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { BaseComponent } from '@core/base/base.component';
 import { BranchService } from '@core/services/branch.service';
+import { NotificationService } from '@core/services/notification.service';
 import { ProjectService } from '@core/services/project.service';
-import { takeUntil } from 'rxjs';
+import { SpinnerService } from '@core/services/spinner.service';
+import { finalize, takeUntil } from 'rxjs';
 
 import { BranchDetailsDto } from 'src/app/models/branch/branch-details-dto';
 import { BranchDto } from 'src/app/models/branch/branch-dto';
-import { UserDto } from 'src/app/models/user/user-dto';
 
 import { BranchMergeModalComponent } from '../branch-merge-modal/branch-merge-modal.component';
 
@@ -22,38 +23,47 @@ export class BranchListComponent extends BaseComponent implements OnInit {
 
     public branches: BranchDetailsDto[];
 
+    public filteredBranches: BranchDetailsDto[];
+
     public searchForm: FormGroup = new FormGroup({});
 
     private branchList: BranchDto[] = [];
+
+    private previousSelection: string[] = [];
 
     constructor(
         private fb: FormBuilder,
         private dialog: MatDialog,
         private branchService: BranchService,
         private projectService: ProjectService,
+        private spinner: SpinnerService,
+        private notificationService: NotificationService,
     ) {
         super();
         this.dropdownItems = this.getBranchTypes();
         this.searchForm = this.fb.group({
             search: ['', []],
         });
-
-        this.branches = this.getBranches();
     }
 
     public ngOnInit(): void {
         this.getBranchesList();
+        this.getBranches();
     }
 
     public getBranchTypes() {
-        // TODO: fetch data from server, remove placeholder data
-        return ['All', 'Open', 'Merged'];
+        return ['All', 'Active'];
     }
 
-    public onBranchTypeSelectionChange($event: any) {
-        // TODO: add filter logic
-        // eslint-disable-next-line no-console
-        console.log($event);
+    public onBranchTypeSelectionChange($event: string[]) {
+        this.previousSelection = $event;
+        if ($event.some(x => x === 'All')) {
+            this.filteredBranches = this.branches;
+        }
+
+        if ($event.some(x => x === 'Active')) {
+            this.filteredBranches = this.branches.filter((x) => x.isActive);
+        }
     }
 
     public openMergeDialog() {
@@ -79,31 +89,25 @@ export class BranchListComponent extends BaseComponent implements OnInit {
     }
 
     public getBranches() {
-        const user = {
-            id: 1,
-            avatarUrl: 'https://picsum.photos/200',
-            email: 'test@test.test',
-            firstName: 'John',
-            lastName: 'Smith',
-            userName: 'Johnny',
-        } as UserDto;
-        const date = new Date(1478708162000);
-        const branches = [];
+        this.spinner.show();
+        const projectId = this.projectService.currentProjectId;
 
-        for (let i = 0; i < 15; i++) {
-            const branch = {
-                name: 'task/fix-empty-list-generation',
-                isActive: true,
-                lastUpdatedBy: user,
-                ahead: Number((Math.random() * 5).toFixed(0)),
-                behind: Number((Math.random() * 5).toFixed(0)),
-                createdAt: date,
-                updatedAt: date,
-            } as BranchDetailsDto;
-
-            branches.push(branch);
-        }
-
-        return branches;
+        this.branchService
+            .getAllBranchDetails(projectId, this.branchService.getCurrentBranch(projectId))
+            .pipe(
+                takeUntil(this.unsubscribe$),
+                finalize(() => {
+                    this.spinner.hide();
+                }),
+            )
+            .subscribe(
+                (branches: BranchDetailsDto[]) => {
+                    this.branches = branches;
+                    this.onBranchTypeSelectionChange(this.previousSelection);
+                },
+                () => {
+                    this.notificationService.error('Failed to load branches');
+                },
+            );
     }
 }

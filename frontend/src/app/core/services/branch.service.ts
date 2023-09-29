@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 
+import { BranchDetailsDto } from 'src/app/models/branch/branch-details-dto';
 import { BranchDto } from 'src/app/models/branch/branch-dto';
 import { CreateBranchDto } from 'src/app/models/branch/create-branch-dto';
 import { MergeBranchDto } from 'src/app/models/branch/merge-branch-dto';
@@ -17,6 +18,10 @@ export class BranchService {
 
     public getAllBranches(projectId: number) {
         return this.httpService.getRequest<BranchDto[]>(`${this.routePrefix}/${projectId}`);
+    }
+
+    public getAllBranchDetails(projectId: number, selectedBranchId: number) {
+        return this.httpService.getRequest<BranchDetailsDto[]>(`${this.routePrefix}/${projectId}/${selectedBranchId}`);
     }
 
     public getLastCommitId(branchId: number) {

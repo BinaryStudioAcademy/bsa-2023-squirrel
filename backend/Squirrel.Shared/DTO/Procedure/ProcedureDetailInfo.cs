@@ -1,6 +1,5 @@
 namespace Squirrel.Shared.DTO.Procedure;
 
-public class ProcedureDetailInfo : BaseDbItem
+public class ProcedureDetailInfo : BaseDbItemWithDefinition
 {
-    public string Definition { get; set; } = null!;
 }

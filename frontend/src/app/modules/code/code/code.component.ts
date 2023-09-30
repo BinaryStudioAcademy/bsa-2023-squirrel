@@ -10,8 +10,6 @@ import { DatabaseItem } from 'src/app/models/database-items/database-item';
 import { DatabaseItemType } from 'src/app/models/database-items/database-item-type';
 import { DatabaseItemTypeName } from 'src/app/models/database-items/database-item-type-name';
 import { ItemCategory } from 'src/app/models/database-items/item-category';
-import { TableColumnInfo } from 'src/app/models/table-structure/table-columns';
-import { TableStructureDto } from 'src/app/models/table-structure/table-structure-dto';
 import { LineDifferenceDto } from 'src/app/models/text-pair/line-difference-dto';
 
 import { DatabaseItemContentCompare } from '../../../models/database-items/database-item-content-compare';
@@ -24,19 +22,17 @@ import { DatabaseItemContentCompare } from '../../../models/database-items/datab
 export class CodeComponent extends BaseComponent implements OnInit, OnDestroy {
     public allContentChanges: DatabaseItemContentCompare[] = [];
 
+    public selectedContent: DatabaseItemContentCompare | null = null;
+
+    public items: TreeNode[];
+
+    public selectedItem: TreeNode | null = null;
+
     public form: FormGroup;
 
     public DatabaseItemTypeName = DatabaseItemTypeName;
 
-    public selectedItem: TreeNode | null = null;
-
-    public selectedContent: DatabaseItemContentCompare | null = null;
-
     public currentChangesGuid: string;
-
-    public items: TreeNode[];
-
-    public message: string = '';
 
     constructor(
         private eventService: EventService,
@@ -75,10 +71,7 @@ export class CodeComponent extends BaseComponent implements OnInit, OnDestroy {
 
     private initEditorContent(): void {
         if (this.selectedContent) {
-            const content = this.formatContent(
-                this.selectedContent.itemType,
-                this.selectedContent.sideBySideDiff.newTextLines,
-            );
+            const content = this.formatContent(this.selectedContent.sideBySideDiff.newTextLines);
 
             this.form = this.formBuilder.group({
                 scriptContent: [content],
@@ -90,65 +83,8 @@ export class CodeComponent extends BaseComponent implements OnInit, OnDestroy {
         }
     }
 
-    private formatContent(itemType: DatabaseItemType, contentLines: LineDifferenceDto[]): string {
-        const contentText = contentLines.map((line) => line.text).join('\n');
-
-        switch (itemType) {
-            case DatabaseItemType.Table: {
-                const table: TableStructureDto = JSON.parse(contentText);
-
-                return this.formatTable(table);
-            }
-
-            case DatabaseItemType.Constraint:
-                return this.formatConstraint(JSON.parse(contentText));
-            case DatabaseItemType.Type:
-            case DatabaseItemType.Function:
-            case DatabaseItemType.StoredProcedure:
-            case DatabaseItemType.View:
-                return this.formatDefinition(JSON.parse(contentText));
-            default:
-                return this.cleanUpText(contentText);
-        }
-    }
-
-    private cleanUpText(text: string): string {
-        return text.replace(/\\"/g, '"').replace(/\\n/g, '\n');
-    }
-
-    private formatTable(table: TableStructureDto): string {
-        return table.Columns.map(this.formatColumn).join('\n\n');
-    }
-
-    private formatColumn(column: TableColumnInfo): string {
-        const columnDetails: string[] = [];
-
-        columnDetails.push(`Column Name: ${column.ColumnName}`);
-        columnDetails.push(`Column Order: ${column.ColumnOrder}`);
-        columnDetails.push(`Data Type: ${column.DataType}`);
-        columnDetails.push(`User Defined: ${column.IsUserDefined}`);
-        columnDetails.push(`Default: ${column.Default}`);
-        columnDetails.push(`Precision: ${column.Precision}`);
-        columnDetails.push(`Scale: ${column.Scale}`);
-        columnDetails.push(`Max Length: ${column.MaxLength}`);
-        columnDetails.push(`Allow Nulls: ${column.IsAllowNulls}`);
-        columnDetails.push(`Identity: ${column.IsIdentity}`);
-        columnDetails.push(`Primary Key: ${column.IsPrimaryKey}`);
-        columnDetails.push(`Foreign Key: ${column.IsForeignKey}`);
-        columnDetails.push(`Related Table Schema: ${column.RelatedTableSchema}`);
-        columnDetails.push(`Related Table: ${column.RelatedTable}`);
-        columnDetails.push(`Related Table Column: ${column.RelatedTableColumn}`);
-        columnDetails.push(`Description: ${column.Description}`);
-
-        return columnDetails.join('\n');
-    }
-
-    private formatConstraint(content: any): string {
-        return `ConstraintName: ${content.ConstraintName}\nColumns: ${content.Columns}\nCheckClause: ${content.CheckClause}`;
-    }
-
-    private formatDefinition(content: any): string {
-        return content.Definition;
+    private formatContent(contentLines: LineDifferenceDto[]): string {
+        return contentLines.map((line) => line.text).join('\n');
     }
 
     private initializeForm(): void {

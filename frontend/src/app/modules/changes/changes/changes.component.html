@@ -1,25 +1,20 @@
 <div class="container">
     <div class="main-content">
-        <app-tree [asCheckList]="true" [treeData]="items" (selectionChange)="selectionChanged($event)" (messageChange)="messageChanged($event)"></app-tree>
+        <app-tree [asCheckList]="true" [treeData]="items" (selectionChange)="selectionChanged($event)"
+            (messageChange)="messageChanged($event)">
+        </app-tree>
         <div class="changes-content">
             <div *ngFor="let changes of selectedContentChanges" class="solution-sector">
-                <app-code [textPair]="changes.sideBySideDiff" [height]="'100%'" [header]="changes.schemaName + '.' + changes.itemName" ></app-code>
+                <app-code *ngIf="changes.sideBySideDiff" [textPair]="changes.sideBySideDiff" [height]="'100%'"
+                    [header]="changes.schemaName + '.' + changes.itemName">
+                </app-code>
             </div>
         </div>
     </div>
 
     <div class="nav">
-        <div>
-            <app-button
-                (buttonOnClick)="commit()"
-                [isDisabled]="!validateCommit()"
-                class="margin-right" text="Commit" variant="outline-primary" width="120px"></app-button>
-            <app-button text="Push" variant="outline-primary" width="120px"></app-button>
-        </div>
-        <div>
-            <app-button class="margin-right" text="Static data" variant="outline-primary" width="155px"></app-button>
-            <app-button text="pre/post-commit script" variant="outline-primary" width="240px"></app-button>
-        </div>
+        <app-button (buttonOnClick)="commit()" [isDisabled]="!validateCommit()" text="Commit" variant="outline-primary"
+            width="100%">
+        </app-button>
     </div>
 </div>
-

@@ -15,6 +15,7 @@ import { AvatarComponent } from './components/avatar/avatar.component';
 import { BarrierComponent } from './components/barrier/barrier.component';
 import { ButtonComponent } from './components/button/button.component';
 import { CheckboxComponent } from './components/checkbox/checkbox.component';
+import { CloseBtnComponent } from './components/close-btn/close-btn.component';
 import { CodeComponent } from './components/code/code.component';
 import { CodeEditorComponent } from './components/code-editor/code-editor.component';
 import { ConfirmationModalComponent } from './components/confirmation-modal/confirmation-modal.component';
@@ -26,6 +27,7 @@ import { LoadingSpinnerComponent } from './components/loading-spinner/loading-sp
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { ProfileMenuComponent } from './components/profile-menu/profile-menu.component';
 import { TreeComponent } from './components/tree/tree.component';
+import { TreeOneComponent } from './components/tree-one/tree-one.component';
 import { EmailOverflowDirective } from './directives/email-overflow.directive';
 
 @NgModule({
@@ -56,10 +58,12 @@ import { EmailOverflowDirective } from './directives/email-overflow.directive';
         ConfirmationModalComponent,
         DropdownComponent,
         TreeComponent,
+        TreeOneComponent,
         CheckboxComponent,
         EmailOverflowDirective,
         InfoTooltipComponent,
         CodeComponent,
+        CloseBtnComponent,
         CodeEditorComponent,
     ],
     exports: [
@@ -82,10 +86,12 @@ import { EmailOverflowDirective } from './directives/email-overflow.directive';
         ConfirmationModalComponent,
         DropdownComponent,
         TreeComponent,
+        TreeOneComponent,
         CheckboxComponent,
         EmailOverflowDirective,
         InfoTooltipComponent,
         CodeComponent,
+        CloseBtnComponent,
         CodeEditorComponent,
     ],
 })

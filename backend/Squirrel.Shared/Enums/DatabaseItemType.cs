@@ -9,5 +9,6 @@ public enum DatabaseItemType
     Function,
     View,
     UserDefinedDataType,
-    UserDefinedTableType
+    UserDefinedTableType,
+    Procedure
 }

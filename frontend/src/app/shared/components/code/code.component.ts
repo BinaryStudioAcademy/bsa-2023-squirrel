@@ -15,7 +15,7 @@ export class CodeComponent implements OnChanges {
 
     @Input() header: string = 'Solution';
 
-    private insertColor: string = 'rgb(197,255,214)';
+    private insertColor: string = 'rgb(197,255,214,0.3)';
 
     private deleteColor: string = 'rgba(255,126,127,0.3)';
 
@@ -96,6 +96,6 @@ export class CodeComponent implements OnChanges {
     private replaceLineBreaks(text: string): string {
         const newText = text.replace(/(\\r\\n|\\r|\\n)/g, '<br>');
 
-        return newText.replace(/(\\t)/g, '&emsp;');
+        return newText.replace(/(\t)/g, '&emsp;');
     }
 }

@@ -92,7 +92,6 @@ export class MainHeaderComponent extends BaseComponent implements OnInit {
                 next: (databases) => {
                     this.databases = databases;
                     this.dbNames = databases.map((database) => database.dbName);
-                    this.selectDb(databases[0]);
                 },
             });
     }

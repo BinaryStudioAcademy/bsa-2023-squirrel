@@ -19,18 +19,12 @@
             [template]="branchtemplate"
             [filterPredicate]="filterBranch"
             [options]="branches"
-            [includeButton]="true"></app-dropdown>
+            [includeButton]="true">
+        </app-dropdown>
         <ng-template #branchtemplate let-item>
            <div class="branch-template">{{ item.name }}</div>
         </ng-template>
-        <app-button (buttonOnClick)="openBranchModal()" text="+" height="30px" width="35px" padding="" variant="outline-secondary"></app-button>
+        <app-button text="Apply Database" variant="outline-primary" (buttonOnClick)="applyDb()"></app-button>
         <app-button text="Load latest changes" variant="outline-primary" class="align-right" (buttonOnClick)="loadChanges()"></app-button>
     </div>
 </div>
-
-<ng-template #modalContent>
-    <p>Hello world!</p>
-    <mat-dialog-actions>
-        <button mat-button mat-dialog-close>Cancel</button>
-    </mat-dialog-actions>
-</ng-template>

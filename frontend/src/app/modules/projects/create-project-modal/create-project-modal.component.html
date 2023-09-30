@@ -4,11 +4,15 @@
         <app-close-btn (buttonOnClick)="close()"></app-close-btn>
     </div>
     <div class="input-container">
-        <app-input [placeholder]="'Enter the name of your project'"
+        <app-input
+                   class="input project-name"
+                   [placeholder]="'Enter the name of your project'"
                    [formControl]="$any(projectForm.controls['projectName'])"
                    [label]="'Project name'">
         </app-input>
-        <app-input [placeholder]="'Enter default branch name'"
+        <app-input
+                   class="input branch-name"
+                   [placeholder]="'Enter default branch name'"
                    [formControl]="$any(projectForm.controls['defaultBranchName'])"
                    [label]="'Default branch'"
                    (input)="replaceSpacesWithHyphens($event)">

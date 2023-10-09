@@ -1,7 +1,7 @@
 /* eslint-disable function-paren-newline */
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 
-import { TreeNode } from '../tree/models/TreeNode.model';
+import { TreeNode } from '../tree/models/tree-node.model';
 
 @Component({
     selector: 'app-tree-one',

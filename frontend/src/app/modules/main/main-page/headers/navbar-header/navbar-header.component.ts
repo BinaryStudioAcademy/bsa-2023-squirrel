@@ -91,7 +91,7 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
         this.getCurrentDatabase();
     }
 
-    public onBranchSelected(value: any) {
+    public onBranchSelected(value: BranchDto) {
         this.selectedBranch = value;
         this.branchService.selectBranch(this.currentProject.id, value.id);
     }
@@ -190,7 +190,8 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
             dbEngine: this.currentProject.dbEngine,
         };
 
-        this.applyChangesService.applyChanges(applyChangesDto, this.currentBranchId)
+        this.applyChangesService
+            .applyChanges(applyChangesDto, this.currentBranchId)
             .pipe(
                 takeUntil(this.unsubscribe$),
                 finalize(() => this.spinner.hide()),
@@ -199,7 +200,7 @@ export class NavbarHeaderComponent extends BaseComponent implements OnInit, OnDe
                 next: () => {
                     this.notificationService.info('Changes successfully applied');
                 },
-                error: err => {
+                error: (err) => {
                     this.notificationService.error(err.message);
                 },
             });

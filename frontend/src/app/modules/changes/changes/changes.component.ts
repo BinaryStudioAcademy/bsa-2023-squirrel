@@ -6,7 +6,7 @@ import { CommitChangesService } from '@core/services/commit-changes.service';
 import { EventService } from '@core/services/event.service';
 import { ProjectService } from '@core/services/project.service';
 import { SpinnerService } from '@core/services/spinner.service';
-import { TreeNode } from '@shared/components/tree/models/TreeNode.model';
+import { TreeNode } from '@shared/components/tree/models/tree-node.model';
 import { finalize, takeUntil } from 'rxjs';
 
 import { CreateCommitDto } from 'src/app/models/commit/create-commit-dto';

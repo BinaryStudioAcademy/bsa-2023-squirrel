@@ -44,7 +44,7 @@ export class TeamSettingsComponent extends BaseComponent implements OnInit {
         });
     }
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.sharedProjectService.project$.subscribe({
             next: (project) => {
                 if (project) {
@@ -62,7 +62,7 @@ export class TeamSettingsComponent extends BaseComponent implements OnInit {
             });
     }
 
-    public OpenAddUserModal(): void {
+    public openAddUserModal(): void {
         const dialogRef = this.dialog.open(AddUserModalComponent, {
             width: '500px',
             height: '50%',
@@ -72,7 +72,7 @@ export class TeamSettingsComponent extends BaseComponent implements OnInit {
         dialogRef.componentInstance.userAdded.subscribe(() => this.getUsers());
     }
 
-    getUsers() {
+    private getUsers() {
         this.spinner.show();
         this.projectService
             .getProjectUsers(this.project.id)

@@ -8,7 +8,7 @@
                     <app-checkbox
                         *ngIf="asCheckList"
                         [label]="category.name"
-                        [checked]="category.selected"
+                        [isChecked]="category.selected"
                         (change)="toggleSelect(category)"></app-checkbox>
                     <span *ngIf="!asCheckList">{{ category.name }}</span>
                 </div>
@@ -17,7 +17,7 @@
                         <app-checkbox
                             *ngIf="asCheckList"
                             [label]="subcategory.name"
-                            [checked]="subcategory.selected"
+                            [isChecked]="subcategory.selected"
                             (change)="toggleSelect(subcategory)"></app-checkbox>
                         <span *ngIf="!asCheckList">{{ subcategory.name }}</span>
                     </li>

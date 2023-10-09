@@ -1,7 +1,6 @@
-/* eslint-disable function-paren-newline */
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 
-import { TreeNode } from './models/TreeNode.model';
+import { TreeNode } from './models/tree-node.model';
 
 @Component({
     selector: 'app-tree',
@@ -9,25 +8,25 @@ import { TreeNode } from './models/TreeNode.model';
     styleUrls: ['./tree.component.sass'],
 })
 export class TreeComponent implements OnInit, OnChanges {
-    @Input() asCheckList: boolean = false;
+    @Input() public asCheckList: boolean = false;
 
-    @Input() height: string = '100%';
+    @Input() public height: string = '100%';
 
-    @Output() selectionChange = new EventEmitter<{ selectedNodes: TreeNode[]; originalStructure: TreeNode[] }>();
+    @Output() public selectionChange = new EventEmitter<{ selectedNodes: TreeNode[]; originalStructure: TreeNode[] }>();
 
-    @Output() messageChange = new EventEmitter<string>();
+    @Output() public messageChange = new EventEmitter<string>();
 
-    @Input() treeData: TreeNode[] = [];
+    @Input() public treeData: TreeNode[] = [];
 
     public filteredTreeData: TreeNode[] = [];
 
     public message: string;
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.filteredTreeData = this.treeData;
     }
 
-    ngOnChanges(changes: SimpleChanges): void {
+    public ngOnChanges(changes: SimpleChanges): void {
         if (changes['treeData']) {
             this.filteredTreeData = this.treeData;
         }
@@ -50,8 +49,7 @@ export class TreeComponent implements OnInit, OnChanges {
             .map((category) => ({
                 name: category.name,
                 children: category.children?.filter((subcategory) =>
-                    subcategory.name.toLowerCase().includes(searchTerm.toLowerCase()),
-                ),
+                    subcategory.name.toLowerCase().includes(searchTerm.toLowerCase())),
             }))
             .filter((category) => category.children?.length && category.children?.length > 0);
     }

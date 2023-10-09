@@ -17,7 +17,6 @@ export class BranchService {
     constructor(
         private httpService: HttpInternalService,
         private eventService: EventService,
-        // eslint-disable-next-line no-empty-function
     ) { }
 
     public getAllBranches(projectId: number) {

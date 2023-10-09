@@ -14,18 +14,16 @@ export class ConfirmationModalComponent {
         @Inject(MAT_DIALOG_DATA) public confirmationModalData: ConfirmationModalInterface,
         public confirmationModalRef: MatDialogRef<ConfirmationModalComponent>,
         public spinnerService: SpinnerService,
-    ) {
-        // do nothing
-    }
+    ) { }
 
-    handleConfirmationModalSubmit() {
+    public handleConfirmationModalSubmit() {
         this.spinnerService.show();
         this.confirmationModalData.callbackMethod();
         this.spinnerService.hide();
         this.confirmationModalRef.close();
     }
 
-    closeConfirmationModal(): void {
+    public closeConfirmationModal(): void {
         this.confirmationModalRef.close();
     }
 }

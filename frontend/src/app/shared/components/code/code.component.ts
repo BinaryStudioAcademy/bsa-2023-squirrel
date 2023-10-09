@@ -9,20 +9,19 @@ import { TextPairDifferenceDto } from 'src/app/models/text-pair/text-pair-differ
     styleUrls: ['./code.component.sass'],
 })
 export class CodeComponent implements OnChanges {
-    @Input() textPair: TextPairDifferenceDto;
+    @Input() public textPair: TextPairDifferenceDto;
 
-    @Input() height: string = '100%';
+    @Input() public height: string = '100%';
 
-    @Input() header: string = 'Solution';
+    @Input() public header: string = 'Solution';
 
     private insertColor: string = 'rgb(197,255,214,0.3)';
 
     private deleteColor: string = 'rgba(255,126,127,0.3)';
 
-    // eslint-disable-next-line no-empty-function
-    constructor(private renderer: Renderer2, private el: ElementRef) {}
+    constructor(private renderer: Renderer2, private el: ElementRef) { }
 
-    ngOnChanges(changes: SimpleChanges): void {
+    public ngOnChanges(changes: SimpleChanges): void {
         if (changes['textPair']) {
             const codeTable = this.el.nativeElement.querySelector('#code-table');
 

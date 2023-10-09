@@ -4,20 +4,19 @@ import { AfterViewInit, Directive, ElementRef, Input, Renderer2 } from '@angular
     selector: '[appEmailOverflow]',
 })
 export class EmailOverflowDirective implements AfterViewInit {
-    @Input() appEmailOverflow: number = 8;
+    @Input() public appEmailOverflow: number = 8;
 
     private length = this.appEmailOverflow;
 
     private overflowSeparator: string = '...';
 
-    // eslint-disable-next-line no-empty-function
-    constructor(private el: ElementRef, private renderer: Renderer2) {}
+    constructor(private el: ElementRef, private renderer: Renderer2) { }
 
-    ngAfterViewInit(): void {
+    public ngAfterViewInit(): void {
         this.truncate();
     }
 
-    truncate() {
+    private truncate() {
         const element = this.el.nativeElement;
 
         const text = (element.innerText as string).split('@');

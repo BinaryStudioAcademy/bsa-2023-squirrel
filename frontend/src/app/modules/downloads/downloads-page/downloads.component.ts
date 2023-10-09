@@ -10,7 +10,6 @@ import { OperatingSystem } from 'src/app/models/downloads/operating-system';
     styleUrls: ['./downloads.component.sass'],
 })
 export class DownloadsComponent {
-    // eslint-disable-next-line no-empty-function
     constructor(private filesDownloader: FilesDownloaderService) {}
 
     public OS = OperatingSystem;

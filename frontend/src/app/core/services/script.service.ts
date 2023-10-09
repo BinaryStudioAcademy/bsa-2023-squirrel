@@ -15,8 +15,7 @@ import { HttpInternalService } from './http-internal.service';
 export class ScriptService {
     private readonly scriptRoutePrefix = '/api/script';
 
-    // eslint-disable-next-line no-empty-function
-    constructor(private httpService: HttpInternalService) {}
+    constructor(private httpService: HttpInternalService) { }
 
     public getAllScripts(projectId: number): Observable<ScriptDto[]> {
         return this.httpService.getRequest(`${this.scriptRoutePrefix}/${projectId}/all`);

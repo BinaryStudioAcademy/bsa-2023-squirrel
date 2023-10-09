@@ -30,7 +30,7 @@ export class CreateScriptModalComponent extends BaseComponent implements OnInit 
         super();
     }
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.initForm();
     }
 

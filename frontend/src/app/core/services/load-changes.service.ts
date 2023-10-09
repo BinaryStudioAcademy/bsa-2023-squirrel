@@ -11,9 +11,7 @@ export class LoadChangesService {
 
     private readonly loadChangesRoutePrefix = '/api/changerecords';
 
-    constructor(private httpClient: HttpInternalService) {
-        // eslint-disable-next-line no-empty-function
-    }
+    constructor(private httpClient: HttpInternalService) { }
 
     public loadChangesRequest(guid: string): Observable<string> {
         return this.httpClient.postRequest<string>(`${this.loadChangesRoutePrefix}/${guid}`, null!);

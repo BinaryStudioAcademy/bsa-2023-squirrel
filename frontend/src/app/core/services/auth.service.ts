@@ -31,8 +31,8 @@ export class AuthService {
         private ngZone: NgZone,
         private spinner: SpinnerService,
         private userService: UserService,
-        private eventService: EventService, // eslint-disable-next-line no-empty-function
-    ) {}
+        private eventService: EventService,
+    ) { }
 
     private currentUser: UserDto | undefined;
 
@@ -40,7 +40,7 @@ export class AuthService {
         return this.currentUser
             ? of(this.currentUser)
             : this.userService.getUserFromToken().pipe(
-                map((resp: any) => {
+                map((resp: UserDto) => {
                     this.currentUser = resp;
                     this.eventService.userChanged(this.currentUser);
 

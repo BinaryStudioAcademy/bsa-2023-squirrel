@@ -9,7 +9,7 @@ import { ProjectResponseDto } from '../../../models/projects/project-response-dt
     styleUrls: ['./project-card.component.sass'],
 })
 export class ProjectCardComponent implements OnInit {
-    @Input() project: ProjectResponseDto;
+    @Input() public project: ProjectResponseDto;
 
     public engineLogoImage: string = '';
 
@@ -23,7 +23,7 @@ export class ProjectCardComponent implements OnInit {
         this.initializeProjectCard();
     }
 
-    initializeProjectCard(): void {
+    private initializeProjectCard(): void {
         this.engineLogoImage =
             this.project.dbEngine === DbEngine.PostgreSQL ? this.postgresSqlLogo : this.sqlServerLogo;
     }

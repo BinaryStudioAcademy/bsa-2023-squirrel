@@ -38,7 +38,7 @@ export class MainHeaderComponent extends BaseComponent implements OnInit {
         super();
     }
 
-    ngOnInit() {
+    public ngOnInit() {
         this.loadProject();
     }
 

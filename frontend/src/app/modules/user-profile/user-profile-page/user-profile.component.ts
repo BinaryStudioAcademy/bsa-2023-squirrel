@@ -22,9 +22,9 @@ import { UserDto } from '../../../models/user/user-dto';
     styleUrls: ['./user-profile.component.sass'],
 })
 export class UserProfileComponent extends BaseComponent implements OnInit, OnDestroy {
-    public squirrelNotification: boolean;
+    public isSquirrelNotificationEnabled: boolean;
 
-    public emailNotification: boolean;
+    public isEmailNotificationEnabled: boolean;
 
     public penIcon = faPen;
 
@@ -38,7 +38,9 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
 
     public passwordForm: FormGroup = new FormGroup({});
 
-    private readonly maxFileLength = 5 * 1024 * 1024;
+    private readonly megabyteLength = 1048576;
+
+    private readonly maxFileLength = 5242880;
 
     private readonly allowedTypes = ['image/png', 'image/jpeg'];
 
@@ -73,15 +75,15 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
                 takeUntil(this.unsubscribe$),
                 finalize(() => this.spinner.hide()),
             )
-            .subscribe(
-                (userProfile) => {
+            .subscribe({
+                next: (userProfile) => {
                     this.currentUser = userProfile;
                     this.initializeForms();
                 },
-                () => {
+                error: () => {
                     this.notificationService.error('Failed to fetch current user');
                 },
-            );
+            });
     }
 
     private initializeForms() {
@@ -145,19 +147,19 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
         this.userService
             .updateUserNames(userData)
             .pipe(takeUntil(this.unsubscribe$))
-            .subscribe(
-                (user) => {
+            .subscribe({
+                next: (user) => {
                     this.currentUser = user;
                     this.spinner.hide();
                     this.notificationService.info('Names successfully updated');
                     this.updateServiceInfo(userData);
                     this.initUserNamesForm();
                 },
-                (error) => {
+                error: (error) => {
                     this.spinner.hide();
                     this.notificationService.error(error.message);
                 },
-            );
+            });
     }
 
     public updateServiceInfo(user: UpdateUserNamesDto) {
@@ -192,17 +194,17 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
         this.userService
             .updateUserPassword(userData)
             .pipe(takeUntil(this.unsubscribe$))
-            .subscribe(
-                () => {
+            .subscribe({
+                next: () => {
                     this.spinner.hide();
                     this.notificationService.info('Password successfully updated');
                     this.initChangePasswordForm();
                 },
-                (error) => {
+                error: (error) => {
                     this.spinner.hide();
                     this.notificationService.error(error.message);
                 },
-            );
+            });
     }
 
     public onFileChange(event: Event) {
@@ -234,7 +236,7 @@ export class UserProfileComponent extends BaseComponent implements OnInit, OnDes
 
     public fileValidate(file: File) {
         if (file.size > this.maxFileLength) {
-            this.notificationService.error(`The file size should not exceed ${this.maxFileLength / (1024 * 1024)}MB`);
+            this.notificationService.error(`The file size should not exceed ${this.maxFileLength / this.megabyteLength}MB`);
 
             return false;
         }

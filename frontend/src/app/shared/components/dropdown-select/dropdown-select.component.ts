@@ -17,26 +17,26 @@ import { DomSanitizer } from '@angular/platform-browser';
     templateUrl: './dropdown-select.component.html',
     styleUrls: ['./dropdown-select.component.sass'],
 })
-export class DropdownSelectComponent implements OnInit {
-    @Input() options: any[];
+export class DropdownSelectComponent<T> implements OnInit {
+    @Input() public options: T[];
 
-    @Input() selectedIds: number[] = [];
+    @Input() public selectedIds: number[] = [];
 
-    @Input() placeholderId?: number;
+    @Input() public placeholderId?: number;
 
-    @Input() height: string = '45px';
+    @Input() public height: string = '45px';
 
-    @Input() width: string = '200px';
+    @Input() public width: string = '200px';
 
-    @Input() placeholder: string = 'Select...';
+    @Input() public placeholder: string = 'Select...';
 
-    @Input() template: TemplateRef<any>;
+    @Input() public template: TemplateRef<T>;
 
-    @Input() chipTemplate: TemplateRef<any>;
+    @Input() public chipTemplate: TemplateRef<T>;
 
-    @Input() filterPredicate?: (item: any, value: string) => boolean;
+    @Input() public filterPredicate?: (item: T, value: string) => boolean;
 
-    @Output() valueChange = new EventEmitter();
+    @Output() public valueChange = new EventEmitter();
 
     @ViewChild('inputTrigger') inputElement: ElementRef;
 
@@ -44,24 +44,23 @@ export class DropdownSelectComponent implements OnInit {
 
     private currentId: number = -1;
 
-    public internalOptions: any[];
+    public internalOptions: T[];
 
-    public filteredOptions: any[];
+    public filteredOptions: T[];
 
-    public selectedOptions: any[];
+    public selectedOptions: T[];
 
-    public currentValue: any;
+    public currentValue: T;
 
-    public dropdownOpen: boolean = false;
+    public isDropdownOpen: boolean = false;
 
     public get dropdownElement(): Element {
         return this.element.nativeElement.querySelector('.dropdown-list');
     }
 
-    // eslint-disable-next-line no-empty-function
-    constructor(private element: ElementRef, private sanitizer: DomSanitizer) {}
+    constructor(private element: ElementRef, private sanitizer: DomSanitizer) { }
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.internalOptions = [...this.options];
         this.filteredOptions = this.internalOptions;
         this.selectedOptions = [];
@@ -71,41 +70,41 @@ export class DropdownSelectComponent implements OnInit {
         }
     }
 
-    onInputChanged() {
+    public onInputChanged() {
         this.filteredOptions = this.filter(this.input);
-        if (!this.dropdownOpen) {
+        if (!this.isDropdownOpen) {
             this.toggleDropdown();
         }
     }
 
     // To close dropdown, if user clicked outside of it
     @HostListener('document:click', ['$event'])
-    onClick(event: Event): void {
+    public onClick(event: Event): void {
         if (!this.element.nativeElement.contains(event.target)) {
             this.closeDropdown();
         }
     }
 
-    focusToInput() {
+    public focusToInput() {
         this.inputElement.nativeElement.focus();
     }
 
-    closeDropdown() {
+    private closeDropdown() {
         this.dropdownElement.setAttribute('aria-expanded', 'false');
-        this.dropdownOpen = false;
+        this.isDropdownOpen = false;
     }
 
-    sanitize(value: any) {
-        return this.sanitizer.sanitize(SecurityContext.HTML, value);
+    public sanitize(value: unknown) {
+        return this.sanitizer.sanitize(SecurityContext.HTML, value as string);
     }
 
-    selectByIndex(i: number) {
+    private selectByIndex(i: number) {
         const value = this.internalOptions[i];
 
         this.select(value);
     }
 
-    select(value: any) {
+    public select(value: T) {
         if (this.internalOptions.indexOf(value) === this.placeholderId) {
             this.selectedOptions = [value];
         } else {
@@ -119,7 +118,7 @@ export class DropdownSelectComponent implements OnInit {
         this.valueChange.emit(this.selectedOptions);
     }
 
-    ensurePlaceholderBehavior() {
+    private ensurePlaceholderBehavior() {
         if (this.placeholderId === undefined) {
             return;
         }
@@ -132,21 +131,21 @@ export class DropdownSelectComponent implements OnInit {
         }
     }
 
-    isSelected(option: any) {
+    public isSelected(option: T) {
         return this.selectedOptions.some((x) => x === option);
     }
 
-    toggleDropdown() {
-        this.dropdownOpen = !this.dropdownOpen;
-        this.dropdownElement.setAttribute('aria-expanded', this.dropdownOpen ? 'true' : 'false');
+    public toggleDropdown() {
+        this.isDropdownOpen = !this.isDropdownOpen;
+        this.dropdownElement.setAttribute('aria-expanded', this.isDropdownOpen ? 'true' : 'false');
     }
 
-    filter(filter: string) {
+    private filter(filter: string) {
         if (filter) {
             return this.internalOptions.filter(
                 this.filterPredicate
                     ? (option) => this.filterPredicate?.call(this, option, filter)
-                    : (option) => option.toLowerCase().indexOf(filter.toLowerCase()) >= 0,
+                    : (option) => (option as unknown as string).toLowerCase().indexOf(filter.toLowerCase()) >= 0,
             );
         }
 
@@ -155,8 +154,8 @@ export class DropdownSelectComponent implements OnInit {
 
     // To allow keyboard manipulations
     @HostListener('document:keydown', ['$event'])
-    handleKeyPressedEvents($event: KeyboardEvent) {
-        if (!this.dropdownOpen) {
+    public handleKeyPressedEvents($event: KeyboardEvent) {
+        if (!this.isDropdownOpen) {
             return;
         }
         if (

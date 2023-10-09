@@ -6,18 +6,17 @@ import { SpinnerService } from '@core/services/spinner.service';
     templateUrl: './loading-spinner.component.html',
 })
 export class LoadingSpinnerComponent {
-    // eslint-disable-next-line no-empty-function
-    constructor(public spinnerService: SpinnerService) {}
+    constructor(public spinnerService: SpinnerService) { }
 
-    @Input() overlay: boolean;
+    @Input() public isOverlay: boolean;
 
-    @Input() size = '20px';
+    @Input() public size = '20px';
 
-    @Input() top = '30%';
+    @Input() public top = '30%';
 
-    @Input() left = '49%';
+    @Input() public left = '49%';
 
-    @Input() position = 'absolute';
+    @Input() public position = 'absolute';
 
-    @Input() margin = '100px auto';
+    @Input() public margin = '100px auto';
 }

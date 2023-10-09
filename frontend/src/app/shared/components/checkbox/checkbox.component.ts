@@ -6,14 +6,14 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
     styleUrls: ['./checkbox.component.sass'],
 })
 export class CheckboxComponent {
-    @Input() label: string = '';
+    @Input() public label: string = '';
 
-    @Input() checked: boolean | undefined = false;
+    @Input() public isChecked: boolean | undefined = false;
 
-    @Output() checkedChange: EventEmitter<boolean> = new EventEmitter<boolean>();
+    @Output() public checkedChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     public onCheckboxChange(): void {
-        this.checked = !this.checked;
-        this.checkedChange.emit(this.checked);
+        this.isChecked = !this.isChecked;
+        this.checkedChange.emit(this.isChecked);
     }
 }

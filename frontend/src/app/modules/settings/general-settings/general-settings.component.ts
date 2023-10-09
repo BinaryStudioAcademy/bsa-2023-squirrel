@@ -31,7 +31,7 @@ export class GeneralSettingsComponent extends BaseComponent implements OnInit {
         super();
     }
 
-    ngOnInit() {
+    public ngOnInit() {
         this.sharedProjectService.project$.subscribe({
             next: project => {
                 if (project) {
@@ -53,7 +53,7 @@ export class GeneralSettingsComponent extends BaseComponent implements OnInit {
         });
     }
 
-    onSaveClick(): void {
+    public onSaveClick(): void {
         this.spinner.show();
 
         this.project.name = this.projectForm.value.projectName;
@@ -72,14 +72,14 @@ export class GeneralSettingsComponent extends BaseComponent implements OnInit {
                 takeUntil(this.unsubscribe$),
                 tap(() => this.spinner.hide()),
             )
-            .subscribe(
-                () => {
+            .subscribe({
+                next: () => {
                     this.notificationService.info('Project updated successfully');
                 },
-                () => {
+                error: () => {
                     this.notificationService.error('Failed to update project');
                 },
-            );
+            });
 
         this.spinner.hide();
     }

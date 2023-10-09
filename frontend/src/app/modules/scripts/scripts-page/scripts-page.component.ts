@@ -142,7 +142,10 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, OnDes
 
         this.scriptService
             .updateScript(script)
-            .pipe(tap({ next: () => this.spinner.hide() }), takeUntil(this.unsubscribe$))
+            .pipe(
+                takeUntil(this.unsubscribe$),
+                tap(() => this.spinner.hide()),
+            )
             .subscribe({
                 next: (updatedScript: ScriptDto) => {
                     this.selectedScript = updatedScript;
@@ -236,12 +239,14 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, OnDes
     }
 
     public filterScripts() {
-        this.filteredScripts = this.scripts.filter(s =>
-            s.fileName.includes(this.form.value.search) || s.id === this.selectedScript?.id);
+        this.filteredScripts = this.scripts.filter(
+            (s) => s.fileName.includes(this.form.value.search) || s.id === this.selectedScript?.id,
+        );
     }
 
     public deleteScript(scriptId: number) {
-        this.scriptService.deleteScript(scriptId)
+        this.scriptService
+            .deleteScript(scriptId)
             .pipe(
                 takeUntil(this.unsubscribe$),
                 finalize(() => this.spinner.hide()),
@@ -249,12 +254,15 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, OnDes
             .subscribe({
                 next: () => {
                     this.notification.info('Script successfully deleted');
-                    this.scripts.splice(this.scripts.findIndex(s => s.id === scriptId), 1);
+                    this.scripts.splice(
+                        this.scripts.findIndex((s) => s.id === scriptId),
+                        1,
+                    );
                     this.filterScripts();
                     this.selectedScript = undefined;
                     this.form.markAsPristine();
                 },
-                error: err => {
+                error: (err) => {
                     this.notification.error(err.message);
                 },
             });
@@ -283,7 +291,7 @@ export class ScriptsPageComponent extends BaseComponent implements OnInit, OnDes
     }
 
     private openCreateModal(): void {
-        const dialogRef: any = this.dialog.open(CreateScriptModalComponent, {
+        const dialogRef = this.dialog.open(CreateScriptModalComponent, {
             panelClass: 'custom-dialog-container',
             width: '450px',
         });

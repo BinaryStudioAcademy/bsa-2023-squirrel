@@ -6,7 +6,7 @@ import { Component, Input } from '@angular/core';
     styleUrls: ['./barrier.component.sass'],
 })
 export class BarrierComponent {
-    @Input() text?: string;
+    @Input() public text?: string;
 
-    @Input() width?: string;
+    @Input() public width?: string;
 }

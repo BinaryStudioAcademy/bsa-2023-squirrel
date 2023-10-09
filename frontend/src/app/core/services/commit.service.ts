@@ -10,8 +10,7 @@ import { HttpInternalService } from './http-internal.service';
 export class CommitService {
     private routePrefix = '/api/commit';
 
-    // eslint-disable-next-line no-empty-function
-    constructor(private httpService: HttpInternalService) { }
+    constructor(private httpService: HttpInternalService) {}
 
     public commit(dto: CreateCommitDto) {
         return this.httpService.postFullRequest(`${this.routePrefix}`, dto);

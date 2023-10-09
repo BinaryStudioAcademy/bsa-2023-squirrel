@@ -35,7 +35,7 @@ export class CreateProjectModalComponent extends BaseComponent implements OnInit
         super();
     }
 
-    ngOnInit() {
+    public ngOnInit() {
         this.createForm();
     }
 
@@ -76,16 +76,16 @@ export class CreateProjectModalComponent extends BaseComponent implements OnInit
                 takeUntil(this.unsubscribe$),
                 tap(() => this.spinner.hide()),
             )
-            .subscribe(
-                (createdProject: ProjectDto) => {
+            .subscribe({
+                next: (createdProject: ProjectDto) => {
                     this.dialogRef.close(createdProject);
                     this.notificationService.info('Project created successfully');
                     this.projectCreated.emit(createdProject);
                 },
-                () => {
+                error: () => {
                     this.notificationService.error('Failed to create project');
                 },
-            );
+            });
     }
 
     public close(): void {

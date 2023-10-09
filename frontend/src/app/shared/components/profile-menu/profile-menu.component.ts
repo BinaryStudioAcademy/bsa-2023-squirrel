@@ -14,25 +14,25 @@ import { UserDto } from 'src/app/models/user/user-dto';
 export class ProfileMenuComponent extends BaseComponent implements OnInit, OnDestroy {
     public currentUser: UserDto | undefined;
 
-    iconSource = 'assets/logout_icon_black.svg';
+    public iconSource = 'assets/logout_icon_black.svg';
 
     constructor(private authService: AuthService, private eventService: EventService) {
         super();
     }
 
-    onMouseOver() {
+    public onMouseOver() {
         this.iconSource = 'assets/logout_icon_blue.svg';
     }
 
-    onMouseOut() {
+    public onMouseOut() {
         this.iconSource = 'assets/logout_icon_black.svg';
     }
 
-    signOut() {
+    public signOut() {
         this.authService.signOut();
     }
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.authService
             .getUser()
             .pipe(takeUntil(this.unsubscribe$))

@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { BaseComponent } from '@core/base/base.component';
 import { CommitChangesService } from '@core/services/commit-changes.service';
 import { EventService } from '@core/services/event.service';
-import { TreeNode } from '@shared/components/tree/models/TreeNode.model';
+import { TreeNode } from '@shared/components/tree/models/tree-node.model';
 import { takeUntil } from 'rxjs';
 
 import { DatabaseItem } from 'src/app/models/database-items/database-item';

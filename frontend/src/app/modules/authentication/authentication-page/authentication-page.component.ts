@@ -7,6 +7,5 @@ import { SpinnerService } from '@core/services/spinner.service';
     styleUrls: ['./authentication-page.component.sass'],
 })
 export class AuthenticationPageComponent {
-    // eslint-disable-next-line no-empty-function
-    constructor(private spinnerService: SpinnerService) {}
+    constructor(private spinnerService: SpinnerService) { }
 }

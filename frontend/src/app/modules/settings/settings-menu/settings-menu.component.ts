@@ -9,15 +9,14 @@ import { SettingsService } from '@core/services/settings.service';
 export class SettingsMenuComponent implements OnInit {
     activeTab: string = 'general';
 
-    // eslint-disable-next-line no-empty-function
-    constructor(private settingsService: SettingsService) {}
+    constructor(private settingsService: SettingsService) { }
 
-    setActiveTab(tabName: string): void {
+    public setActiveTab(tabName: string): void {
         this.settingsService.setActiveTab(tabName);
         this.activeTab = tabName;
     }
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.activeTab = this.settingsService.activeTab;
     }
 }

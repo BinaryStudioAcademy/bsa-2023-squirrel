@@ -17,8 +17,7 @@ export class ProjectService {
 
     private readonly projectsApiUrl = '/api/project';
 
-    // eslint-disable-next-line no-empty-function
-    constructor(private httpService: HttpInternalService) {}
+    constructor(private httpService: HttpInternalService) { }
 
     public addProject(newProject: NewProjectDto): Observable<ProjectResponseDto> {
         return this.httpService.postRequest<ProjectResponseDto>(this.projectsApiUrl, newProject);

@@ -11,6 +11,7 @@ import { catchError, Observable, of, takeUntil, tap } from 'rxjs';
 
 import { BranchDto } from 'src/app/models/branch/branch-dto';
 import { CreateBranchDto } from 'src/app/models/branch/create-branch-dto';
+import { ErrorDetailsDto } from 'src/app/models/error/error-details-dto';
 
 @Component({
     selector: 'app-create-branch-modal',
@@ -26,6 +27,8 @@ export class CreateBranchModalComponent extends BaseComponent implements OnInit 
 
     public branchForm: FormGroup;
 
+    private readonly invalidTokenErrorType = 7;
+
     constructor(
         public dialogRef: MatDialogRef<CreateBranchModalComponent>,
         private fb: FormBuilder,
@@ -39,7 +42,7 @@ export class CreateBranchModalComponent extends BaseComponent implements OnInit 
         this.projectId = data.projectId;
     }
 
-    ngOnInit() {
+    public ngOnInit() {
         this.createForm();
     }
 
@@ -65,8 +68,8 @@ export class CreateBranchModalComponent extends BaseComponent implements OnInit 
         this.branchService
             .addBranch(this.projectId, branch)
             .pipe(
-                catchError((error: any): Observable<BranchDto | null> => {
-                    if (error.errorType === 7) {
+                catchError((error: ErrorDetailsDto): Observable<BranchDto | null> => {
+                    if (error.errorType === this.invalidTokenErrorType) {
                         this.notificationService.error(error.message);
                     } else {
                         this.notificationService.error('Failed to create branch');

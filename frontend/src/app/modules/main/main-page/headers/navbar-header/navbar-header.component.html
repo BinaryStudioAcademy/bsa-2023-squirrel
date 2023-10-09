@@ -3,26 +3,20 @@
         <ul class="navbar-list">
             <li *ngFor="let navLink of navLinks" class="navbar-item">
                 <a routerLink="{{ navLink.path }}" routerLinkActive="active" class="navbar-link"
-                   *ngIf="navLink.path !== './settings' || (navLink.path === './settings' && isSettingsEnabled)">
+                    *ngIf="navLink.path !== './settings' || (navLink.path === './settings' && isSettingsEnabled)">
                     {{ navLink.displayName }}
                 </a>
             </li>
         </ul>
     </nav>
     <div class="right-container">
-        <app-dropdown
-            [selectedByDefault]="getCurrentBranch()"
-            [width]="300"
-            (selectedValueChanged)="onBranchSelected($event)"
-            (buttonClicked)="openBranchModal()"
-            [dropdownIcon]="'assets/git-branch.svg'"
-            [template]="branchtemplate"
-            [filterPredicate]="filterBranch"
-            [options]="branches"
-            [includeButton]="true">
+        <app-dropdown [selectedByDefault]="getCurrentBranch()" [width]="300"
+            (selectedValueChanged)="onBranchSelected($event)" (buttonClicked)="openBranchModal()"
+            [dropdownIcon]="'assets/git-branch.svg'" [template]="branchtemplate" [filterPredicate]="filterBranch"
+            [options]="branches" [isButtonIncluded]="true">
         </app-dropdown>
         <ng-template #branchtemplate let-item>
-           <div class="branch-template">{{ item.name }}</div>
+            <div class="branch-template">{{ item.name }}</div>
         </ng-template>
         <app-button text="Apply Database" variant="outline-primary" (buttonOnClick)="applyDb()"></app-button>
         <app-button text="Load latest changes" variant="outline-primary" class="align-right" (buttonOnClick)="loadChanges()"></app-button>

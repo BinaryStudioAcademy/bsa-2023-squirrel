@@ -11,8 +11,7 @@ import { HttpInternalService } from './http-internal.service';
 export class DatabaseItemsService {
     private readonly databaseItemsRoutePrefix = '/api/databaseitems';
 
-    // eslint-disable-next-line no-empty-function
-    constructor(private httpService: HttpInternalService) {}
+    constructor(private httpService: HttpInternalService) { }
 
     public getAllItems(clientId: string): Observable<DatabaseItem[]> {
         return this.httpService.getRequest<DatabaseItem[]>(`${this.databaseItemsRoutePrefix}/${clientId}`);

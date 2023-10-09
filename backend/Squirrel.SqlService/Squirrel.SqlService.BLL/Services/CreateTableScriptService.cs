@@ -1,4 +1,4 @@
-﻿using Squirrel.Shared.DTO.Table;
+using Squirrel.Shared.DTO.Table;
 using Squirrel.SqlService.BLL.Interfaces;
 using System.Text;
 
@@ -24,6 +24,17 @@ public class CreateTableScriptService: ICreateTableScriptService
         }
         createScript.AppendLine(");");
         AppendPrimaryKey(createScript, primaryKeyColumns, tableSchema, tableName);
+        
+        return createScript.ToString();
+    }
+
+    public string ConcatForeignKeysConstraintScripts(StringBuilder createScript, List<string> fkConstraintScripts)
+    {
+        foreach (var fkConstraint in fkConstraintScripts)
+        {
+            createScript.AppendLine(fkConstraint);
+        }
+
         return createScript.ToString();
     }
 

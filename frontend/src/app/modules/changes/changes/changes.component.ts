@@ -54,10 +54,16 @@ export class ChangesComponent extends BaseComponent implements OnInit, OnDestroy
     public ngOnInit(): void {
         this.currentProjectId = this.projectService.currentProjectId;
         this.commitChangesService.contentChanges$.pipe(takeUntil(this.unsubscribe$)).subscribe((changes) => {
-            this.allContentChanges = changes.filter(
-                (x) => x.sideBySideDiff.hasDifferences || x.inLineDiff.hasDifferences,
+            const filteredChanges = changes.filter(
+                (x) =>
+                    (x.sideBySideDiff.hasDifferences || x.inLineDiff.hasDifferences) &&
+                    x.itemName &&
+                    x.schemaName &&
+                    x.itemType < 6,
             );
-            this.items = this.mapDbItems(this.allContentChanges);
+
+            this.allContentChanges = filteredChanges;
+            this.items = this.mapDbItems(filteredChanges);
         });
     }
 

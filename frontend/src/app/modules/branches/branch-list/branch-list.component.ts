@@ -76,6 +76,7 @@ export class BranchListComponent extends BaseComponent implements OnInit {
 
     public openMergeDialog() {
         const dialogRef = this.dialog.open(BranchMergeModalComponent, {
+            width: '400px',
             data: {
                 projectId: this.projectService.currentProjectId,
                 branches: this.branchList },

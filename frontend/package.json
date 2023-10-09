@@ -35,6 +35,7 @@
         "codemirror": "^5.65.15",
         "eslint-plugin-prettier": "^4.2.1",
         "file-saver": "^2.0.5",
+        "font-awesome": "^4.7.0",
         "moment": "^2.29.4",
         "ngx-toastr": "^15.2.2",
         "rxjs": "^7.5.6",

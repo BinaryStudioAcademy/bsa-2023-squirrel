@@ -1,6 +1,6 @@
-﻿namespace Squirrel.Shared.DTO;
+namespace Squirrel.Shared.DTO;
 
-public class BaseDbItemWithDefinition : BaseDbItem
+public class BaseDbItemWithDefinition: BaseDbItem
 {
-    public string Definition { get; set; } = null!;
+    public string Definition { get; set; } = string.Empty;
 }

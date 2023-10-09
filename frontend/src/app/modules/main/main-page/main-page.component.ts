@@ -2,6 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BaseComponent } from '@core/base/base.component';
 import { BroadcastHubService } from '@core/hubs/broadcast-hub.service';
+import { CommitChangesService } from '@core/services/commit-changes.service';
+import { EventService } from '@core/services/event.service';
 import { NotificationService } from '@core/services/notification.service';
 import { ProjectService } from '@core/services/project.service';
 import { SharedProjectService } from '@core/services/shared-project.service';
@@ -26,6 +28,8 @@ export class MainComponent extends BaseComponent implements OnInit, OnDestroy {
         private notificationService: NotificationService,
         private spinner: SpinnerService,
         private sharedProject: SharedProjectService,
+        private eventService: EventService,
+        private commitChangesService: CommitChangesService,
     ) {
         super();
     }
@@ -42,6 +46,9 @@ export class MainComponent extends BaseComponent implements OnInit, OnDestroy {
         this.broadcastHub.stop();
         this.sharedProject.setProject(null);
         this.sharedProject.setCurrentDb(null);
+        this.eventService.changesLoaded(undefined);
+        this.eventService.changesSaved(undefined);
+        this.commitChangesService.clearContentChanges();
         super.ngOnDestroy();
     }
 

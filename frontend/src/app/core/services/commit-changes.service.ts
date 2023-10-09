@@ -29,4 +29,8 @@ export class CommitChangesService {
                 },
             });
     }
+
+    public clearContentChanges() {
+        this.contentChangesSubject.next([]);
+    }
 }

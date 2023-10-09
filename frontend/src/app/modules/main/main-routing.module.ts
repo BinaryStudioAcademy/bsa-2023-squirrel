@@ -27,7 +27,7 @@ const routes: Routes = [
             },
             {
                 path: 'code',
-                component: NotFoundComponent,
+                loadChildren: () => import('../code/code.module').then((m) => m.CodeModule),
             },
             {
                 path: 'settings',

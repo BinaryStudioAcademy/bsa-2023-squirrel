@@ -41,7 +41,7 @@ public class ApplyChangesService : IApplyChangesService
     public async Task ApplyChanges(ApplyChangesDto applyChangesDto, int commitId)
     {
         var currentDbStructure = await _dbItemsRetrievalService.GetAllDbStructureAsync(Guid.Parse(applyChangesDto.ClientId!));
-        var contentDifferenceList = await _contentDifferenceService.GetContentDiffsAsync(commitId, currentDbStructure, true);
+        var contentDifferenceList = await _contentDifferenceService.GetContentDiffsAsync(commitId, currentDbStructure, true, true);
         if (!contentDifferenceList.Any())
         {
             throw new Exception("List of Database changes is empty");

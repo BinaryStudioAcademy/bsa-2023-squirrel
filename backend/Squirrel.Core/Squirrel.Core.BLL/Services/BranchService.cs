@@ -48,7 +48,7 @@ public sealed class BranchService : BaseService, IBranchService
         var isHeadOnAnotherBranch = false;
         while (currentBranch is not null)
         {
-            var headBranchCommit = currentBranch.BranchCommits.FirstOrDefault(x => x.IsHead);
+            var headBranchCommit = currentBranch.BranchCommits.LastOrDefault(x => x.IsHead);
             if (headBranchCommit is not null)
             {
                 return headBranchCommit.IsHead ? (headBranchCommit, isHeadOnAnotherBranch) : throw new Exception("Last commit should be head!");
@@ -74,7 +74,7 @@ public sealed class BranchService : BaseService, IBranchService
             throw new EntityNotFoundException();
         }
 
-        return (await FindHeadBranchCommitAsync(branch)).Item1?.Id ?? default;
+        return (await FindHeadBranchCommitAsync(branch)).Item1?.CommitId ?? default;
     }
 
     public async Task<BranchDto> MergeBranchAsync(int sourceId, int destId)
@@ -122,7 +122,7 @@ public sealed class BranchService : BaseService, IBranchService
         {
             foreach (var commit in source.Commits
                 .Where(x => isOriginal ? true : x.CreatedAt <= createdAt)
-                .OrderByDescending(x => x.CreatedAt))
+                .OrderBy(x => x.CreatedAt))
             {
                 commits.Add(commit);
             }

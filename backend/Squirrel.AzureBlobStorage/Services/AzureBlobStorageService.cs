@@ -69,6 +69,33 @@ public class AzureBlobStorageService : IBlobStorageService
 
         return await blobClient.DeleteIfExistsAsync();
     }
+    
+    public async Task CopyContainerAsync(string sourceContainerName, string destinationContainerName)
+    {
+        var sourceContainerClient = _blobServiceClient.GetBlobContainerClient(sourceContainerName);
+        var destinationContainerClient = _blobServiceClient.GetBlobContainerClient(destinationContainerName);
+
+        if (!await sourceContainerClient.ExistsAsync())
+        {
+            throw new InvalidOperationException($"Source container '{sourceContainerName}' does not exist.");
+        }
+
+        if (!await destinationContainerClient.ExistsAsync())
+        {
+            await destinationContainerClient.CreateIfNotExistsAsync();
+        }
+
+        var blobsPages = sourceContainerClient.GetBlobsAsync().AsPages();
+        await foreach (var blobPage in blobsPages)
+        {
+            foreach (var blobItem in blobPage.Values)
+            {
+                var blob = await DownloadAsync(sourceContainerName, blobItem.Name);
+                
+                await UploadAsync(destinationContainerName, blob);
+            }
+        }
+    }
 
     public async Task<ICollection<Blob>> GetAllBlobsByContainerNameAsync(string containerName)
     {

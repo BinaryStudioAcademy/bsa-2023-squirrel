@@ -3,6 +3,6 @@
 public sealed class ProjectDatabaseDto
 {
     public string DbName { get; set; } = string.Empty;
-    public Guid Guid { get; set; }
+    public string Guid { get; set; } = null!;
     public int ProjectId { get; set; }
 }

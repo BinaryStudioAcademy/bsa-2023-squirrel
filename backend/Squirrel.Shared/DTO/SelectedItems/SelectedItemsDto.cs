@@ -3,6 +3,7 @@
 public class SelectedItemsDto
 {
     public string Guid { get; set; } = null!;
+    public int PreviousHeadCommitId { get; set; }
     public int CommitId { get; set; }
     public List<string> StoredProcedures { get; set; } = new();
     public List<string> Tables { get; set; } = new();

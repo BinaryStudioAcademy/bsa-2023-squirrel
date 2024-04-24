@@ -45,10 +45,12 @@ public class CommitService : BaseService, ICommitService
         var commit = _mapper.Map<Commit>(dto);
         commit!.Author = user;
 
+        var previousHeadCommitId = await _branchService.GetLastBranchCommitIdAsync(dto.BranchId);
         var branchEntity = await GetBranchInternalAsync(dto.BranchId);
         await AddCommitToBranchAsync(branchEntity, commit);
 
-        var savedCommitFiles = await SaveFilesAsync(dto.ChangesGuid, commit.Id, dto.SelectedItems);
+        var savedCommitFiles = await SaveFilesAsync(dto.ChangesGuid, commit.Id, 
+            previousHeadCommitId, dto.SelectedItems);
         var updatedCommit = AddFilesToCommit(commit, savedCommitFiles);
         
         var (headBranchCommit, isHeadOnAnotherBranch) = await _branchService.FindHeadBranchCommitAsync(branchEntity);
@@ -80,12 +82,15 @@ public class CommitService : BaseService, ICommitService
         return _mapper.Map<CommitDto>(updatedCommit)!;
     }
 
-    private async Task<ICollection<CommitFileDto>> SaveFilesAsync(string changesGuid, int commitId, ICollection<TreeNodeDto> nodes)
+    private async Task<ICollection<CommitFileDto>> SaveFilesAsync(string changesGuid, int commitId,
+        int previousHeadCommitId, ICollection<TreeNodeDto> nodes)
     {
+        
         var selectedDto = new SelectedItemsDto
         {
             Guid = changesGuid,
-            CommitId = commitId
+            CommitId = commitId,
+            PreviousHeadCommitId = previousHeadCommitId
         };
 
         MapTreeNodes(selectedDto, nodes);
